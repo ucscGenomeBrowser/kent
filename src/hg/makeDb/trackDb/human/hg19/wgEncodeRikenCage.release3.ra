@@ -1,19 +1,20 @@
 track wgEncodeRikenCage
 compositeTrack on
 shortLabel RIKEN CAGE Loc
-longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
+longLabel RNA Subwhole cellular CAGE Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views TssHmm=TSS_HMM_Clusters MinusRawSignal=Minus_Signal PlusRawSignal=Plus_Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1hESC=H1hESC&nbsp;(Tier_1) aK562=K562&nbsp;(Tier_1) bHeLaS3=HeLaS3&nbsp;(Tier_2) bHepG2=HepG2&nbsp;(Tier_2) bHUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ CD20=CD20+ CD34MOBILIZED=CD34+&#95;Mobilized HAOAF=HAoAF HAOEC=HAoEC HCH=HCH HFDPC=HFDPC HMSCAT=hMSC-AT HMEPC=HMEpC HMSCBM=hMSC-BM HMSCUC=hMSC-UC HOB=HOB HPCPL=HPC-PL HPIEPC=HPIEpC HSAVEC=HSaVEC HVMF=HVMF HWP=HWP IMR90=IMR90 MCF7=MCF7 MONOCD14=Monocytes-CD14+ NHDF=NHDF NHEK=NHEK NHEMFM2=NHEM.f&#95;M2 NHEMM2=NHEM&#95;M2 PROSTATE=Prostate SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
-subGroup5 rep Rep rep0=Gen0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
-subGroup6 rank Replicate rank1=1st rank2=2nd None=Pooled
-dimensions dimensionY=cellType dimensionC=rnaExtract dimensionX=localization dimensionB=rank
-dimensionCchecked pAP,pAM
-dimensionBchecked rank1,None
+subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
+subGroup6 rank Replicate rank1=1st rank2=2nd none=Pooled
+dimensions dimensionY=cellType dimensionC=rnaExtract dimensionX=localization dimensionB=rank 
+dimensionCchecked pAP,pAM,total
+dimensionBchecked rank1,rank2,none
+dimensionDchecked rep0,rep1,rep2,rep3,rep4,Pooled
 filterComposite dimC=multi dimB=multi
-sortOrder  cellType=+ localization=+ rnaExtract=+ view=- rank=+ rep=+ 
+sortOrder  cellType=+ localization=+ rnaExtract=+ view=- rank=+
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -56,7 +57,6 @@ html wgEncodeRikenCage.release3
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
         # was wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters cricket Wed May  4 14:37:28 2011
-
 
         track wgEncodeRikenCageHuvecCytosolPamPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
@@ -504,8 +504,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562ChromatinTotalPlusClusters cricket Wed May  4 14:37:31 2011
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapPlusClusters
-        #subTrack wgEncodeRikenCageViewPlusSignal on
+        #track wgEncodeRikenCageK562CytosolPapPlusClusters         #subTrack wgEncodeRikenCageViewPlusSignal on
         #shortLabel K562 cyto pA+ + 0
         #longLabel K562 cytosol polyA+ CAGE Plus start sites Generation 0 from ENCODE/RIKEN
         #subGroups view=PlusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -767,15 +766,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel A549 cyto pA+ + 3
-        longLabel A549 cytosol polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel A549 cytosol polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=A549 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 433645.000000
         # subId=6595 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 nucl pA+ + 2
-        longLabel IMR90 nucleus polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel IMR9 nucl pA+ + 2
+        longLabel IMR90 nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 3183440.000000
         # subId=6593 dateSubmitted=2012-03-30
@@ -783,7 +782,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HVMF cell pA+ + 1
-        longLabel HVMF cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel HVMF whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HVMF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 306733.000000
         # subId=6594 dateSubmitted=2012-03-30
@@ -791,7 +790,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HOB cell pA+ + 1
-        longLabel HOB cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel HOB whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HOB localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 419082.000000
         # subId=6596 dateSubmitted=2012-03-30
@@ -799,7 +798,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH nucl pA+ + 4
-        longLabel SK-N-SH nucleus polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel SK-N-SH nucleus polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 6268380.000000
         # subId=6597 dateSubmitted=2012-03-30
@@ -807,7 +806,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cell pA+ + 3
-        longLabel SK-N-SH cell polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel SK-N-SH whole cell polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=cell rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 887052.000000
         # subId=6598 dateSubmitted=2012-03-30
@@ -815,15 +814,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SkMC cell pA+ + 2
-        longLabel SkMC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel SkMC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKMC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1959460.000000
         # subId=6599 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HAoEC cell pA+ + 1
-        longLabel HAoEC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HAoE cell pA+ + 1
+        longLabel HAoEC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HAOEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 338792.000000
         # subId=6600 dateSubmitted=2012-03-30
@@ -831,23 +830,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HWP cell pA+ + 1
-        longLabel HWP cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel HWP whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HWP localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 1109870.000000
         # subId=6601 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-AT cell pA+ + 2
-        longLabel hMSC-AT cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel hMAT cell pA+ + 2
+        longLabel hMSC-AT whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 282008.000000
         # subId=6602 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel NHEM.f_M2 cell pA+ + 1
-        longLabel NHEM.f M2 cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel NHEf cell pA+ + 1
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 292095.000000
         # subId=6603 dateSubmitted=2012-03-30
@@ -855,7 +854,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel MCF7 cyto pA+ + 4
-        longLabel MCF-7 cytosol polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel MCF-7 cytosol polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 855095.000000
         # subId=6604 dateSubmitted=2012-03-30
@@ -863,7 +862,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH nucl pA+ + 3
-        longLabel SK-N-SH nucleus polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel SK-N-SH nucleus polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 8311110.000000
         # subId=6613 dateSubmitted=2012-03-30
@@ -871,15 +870,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SkMC cell pA+ + 1
-        longLabel SkMC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel SkMC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKMC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 2539200.000000
         # subId=6606 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HAoAF cell pA+ + 1
-        longLabel HAoAF cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HAoA cell pA+ + 1
+        longLabel HAoAF whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HAOAF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 287700.000000
         # subId=6607 dateSubmitted=2012-03-30
@@ -887,23 +886,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel A549 nucl pA+ + 3
-        longLabel A549 nucleus polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel A549 nucleus polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=A549 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 1173940.000000
         # subId=6608 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HSaVEC cell pA+ + 1
-        longLabel HSaVEC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HSaV cell pA+ + 1
+        longLabel HSaVEC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 327488.000000
         # subId=6609 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HPIEpC cell pA+ + 1
-        longLabel HPIEpC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HPIE cell pA+ + 1
+        longLabel HPIEpC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 124010.000000
         # subId=6610 dateSubmitted=2012-03-30
@@ -911,15 +910,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HVMF cell pA+ + 2
-        longLabel HVMF cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel HVMF whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HVMF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 403417.000000
         # subId=6611 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmepcCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HMEpC cell pA+ + 1
-        longLabel HMEpC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HMEp cell pA+ + 1
+        longLabel HMEpC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 399895.000000
         # subId=6612 dateSubmitted=2012-03-30
@@ -927,31 +926,31 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel MCF7 nucl pA+ + 3
-        longLabel MCF-7 nucleus polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel MCF-7 nucleus polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 3821720.000000
         # subId=6586 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel Monocytes-CD14+ cell pA+ + 1
-        longLabel Monocytes-CD14+ cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel CD14 cell pA+ + 1
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 820733.000000
         # subId=6587 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 cyto pA+ + 1
-        longLabel IMR90 cytosol polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel IMR9 cyto pA+ + 1
+        longLabel IMR90 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 321560.000000
         # subId=6588 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 nucl pA+ + 1
-        longLabel IMR90 nucleus polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel IMR9 nucl pA+ + 1
+        longLabel IMR90 nucleus polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 1385910.000000
         # subId=6589 dateSubmitted=2012-03-30
@@ -959,7 +958,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cyto pA+ + 4
-        longLabel SK-N-SH cytosol polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel SK-N-SH cytosol polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 435685.000000
         # subId=6590 dateSubmitted=2012-03-30
@@ -967,23 +966,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel MCF7 nucl pA+ + 4
-        longLabel MCF-7 nucleus polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel MCF-7 nucleus polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 749609.000000
         # subId=6591 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel NHEM_M2 cell pA+ + 2
-        longLabel NHEM M2 cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel NHEM cell pA+ + 2
+        longLabel NHEM M2 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 537322.000000
         # subId=6592 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HAoEC cell pA+ + 2
-        longLabel HAoEC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HAoE cell pA+ + 2
+        longLabel HAoEC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HAOEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 158652.000000
         # subId=6614 dateSubmitted=2012-03-30
@@ -991,7 +990,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cyto pA+ + 3
-        longLabel SK-N-SH cytosol polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel SK-N-SH cytosol polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 282291.000000
         # subId=6615 dateSubmitted=2012-03-30
@@ -999,7 +998,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapPlusRawRep3
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel MCF7 cyto pA+ + 3
-        longLabel MCF-7 cytosol polyA+ Plus start sites Rep 3 from ENCODE/RIKEN
+        longLabel MCF-7 cytosol polyA+ CAGE Plus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 569406.000000
         # subId=6616 dateSubmitted=2012-03-30
@@ -1007,63 +1006,63 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HWP cell pA+ + 2
-        longLabel HWP cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel HWP whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HWP localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 339385.000000
         # subId=6617 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel CD34+_Mobilized cell pA+ + 1
-        longLabel CD34+ Mobilized cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel CD34 cell pA+ + 1
+        longLabel CD34+ Mobilized whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=CD34MOBILIZED localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 1103090.000000
         # subId=6618 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HPIEpC cell pA+ + 2
-        longLabel HPIEpC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HPIE cell pA+ + 2
+        longLabel HPIEpC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 23015.000000
         # subId=6620 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel Monocytes-CD14+ cell pA+ + 2
-        longLabel Monocytes-CD14+ cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel CD14 cell pA+ + 2
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1237250.000000
         # subId=6621 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-BM cell pA+ + 2
-        longLabel hMSC-BM cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel hMBM cell pA+ + 2
+        longLabel hMSC-BM whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 104869.000000
         # subId=6622 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HPC-PL cell pA+ + 1
-        longLabel HPC-PL cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HPCP cell pA+ + 1
+        longLabel HPC-PL whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HPCPL localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 799831.000000
         # subId=6623 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-BM cell pA+ + 1
-        longLabel hMSC-BM cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel hMBM cell pA+ + 1
+        longLabel hMSC-BM whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 191480.000000
         # subId=6624 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel CD20+ cell pA+ + 1
-        longLabel CD20+ cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel CD20 cell pA+ + 1
+        longLabel CD20+ whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=CD20 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 671911.000000
         # subId=6625 dateSubmitted=2012-03-30
@@ -1071,7 +1070,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel A549 cyto pA+ + 4
-        longLabel A549 cytosol polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel A549 cytosol polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=A549 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 812641.000000
         # subId=6626 dateSubmitted=2012-03-30
@@ -1079,31 +1078,31 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel A549 nucl pA+ + 4
-        longLabel A549 nucleus polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel A549 nucleus polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=A549 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 1054460.000000
         # subId=6627 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HPC-PL cell pA+ + 2
-        longLabel HPC-PL cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HPCP cell pA+ + 2
+        longLabel HPC-PL whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HPCPL localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1135900.000000
         # subId=6628 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HFDPC cell pA+ + 2
-        longLabel HFDPC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HFDP cell pA+ + 2
+        longLabel HFDPC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HFDPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 11953.000000
         # subId=6629 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HAoAF cell pA+ + 2
-        longLabel HAoAF cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HAoA cell pA+ + 2
+        longLabel HAoAF whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HAOAF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 210605.000000
         # subId=6630 dateSubmitted=2012-03-30
@@ -1111,7 +1110,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel NHDF cell pA+ + 1
-        longLabel NHDF cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel NHDF whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHDF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 1361520.000000
         # subId=6631 dateSubmitted=2012-03-30
@@ -1119,15 +1118,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cell pA+ + 4
-        longLabel SK-N-SH cell polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel SK-N-SH whole cell polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSH localization=cell rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 587460.000000
         # subId=6632 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-UC cell pA+ + 1
-        longLabel hMSC-UC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel hMUC cell pA+ + 1
+        longLabel hMSC-UC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 434574.000000
         # subId=6633 dateSubmitted=2012-03-30
@@ -1135,7 +1134,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel NHDF cell pA+ + 2
-        longLabel NHDF cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel NHDF whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHDF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1029360.000000
         # subId=6634 dateSubmitted=2012-03-30
@@ -1143,71 +1142,71 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HOB cell pA+ + 2
-        longLabel HOB cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel HOB whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HOB localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 480804.000000
         # subId=6636 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 cell pA+ + 1
-        longLabel IMR90 cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel IMR9 cell pA+ + 1
+        longLabel IMR90 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 321802.000000
         # subId=6637 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel NHEM.f_M2 cell pA+ + 2
-        longLabel NHEM.f M2 cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel NHEf cell pA+ + 2
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1081250.000000
         # subId=6638 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-UC cell pA+ + 2
-        longLabel hMSC-UC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel hMUC cell pA+ + 2
+        longLabel hMSC-UC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 795795.000000
         # subId=6639 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HSaVEC cell pA+ + 2
-        longLabel HSaVEC cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel HSaV cell pA+ + 2
+        longLabel HSaVEC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 211316.000000
         # subId=6640 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel HFDPC cell pA+ + 1
-        longLabel HFDPC cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel HFDP cell pA+ + 1
+        longLabel HFDPC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HFDPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 181563.000000
         # subId=6641 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 cyto pA+ + 2
-        longLabel IMR90 cytosol polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel IMR9 cyto pA+ + 2
+        longLabel IMR90 cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 466722.000000
         # subId=6642 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel IMR90 cell pA+ + 2
-        longLabel IMR90 cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel IMR9 cell pA+ + 2
+        longLabel IMR90 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=IMR90 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 284551.000000
         # subId=6643 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel hMSC-AT cell pA+ + 1
-        longLabel hMSC-AT cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel hMAT cell pA+ + 1
+        longLabel hMSC-AT whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 117818.000000
         # subId=6644 dateSubmitted=2012-03-30
@@ -1215,23 +1214,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HCH cell pA+ + 1
-        longLabel HCH cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel HCH whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HCH localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 26784.000000
         # subId=6645 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapPlusRawRep1
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel NHEM_M2 cell pA+ + 1
-        longLabel NHEM M2 cell polyA+ Plus start sites Rep 1 from ENCODE/RIKEN
+        shortLabel NHEM cell pA+ + 1
+        longLabel NHEM M2 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 3650890.000000
         # subId=6646 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
-        shortLabel CD20+ cell pA+ + 2
-        longLabel CD20+ cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        shortLabel CD20 cell pA+ + 2
+        longLabel CD20+ whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=CD20 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 870557.000000
         # subId=6647 dateSubmitted=2012-03-30
@@ -1239,7 +1238,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapPlusRawRep2
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel HCH cell pA+ + 2
-        longLabel HCH cell polyA+ Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel HCH whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=HCH localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 316529.000000
         # subId=6648 dateSubmitted=2012-03-30
@@ -1247,7 +1246,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhekNucleusPapPlusRawRep4
         parent wgEncodeRikenCageViewPlusSignal off
         shortLabel NHEK nucl pA+ + 4
-        longLabel NHEK nucleus polyA+ Plus start sites Rep 4 from ENCODE/RIKEN
+        longLabel NHEK nucleus polyA+ CAGE Plus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 244479.000000
         color 179,0,134
@@ -1331,8 +1330,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562ChromatinTotalMinusClusters cricket Wed May  4 14:37:26 2011
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapMinusClusters
-        #subTrack wgEncodeRikenCageViewMinusSignal on
+        #track wgEncodeRikenCageK562CytosolPapMinusClusters         #subTrack wgEncodeRikenCageViewMinusSignal on
         #shortLabel K562 cyto pA+ - 0
         #longLabel K562 cytosol polyA+ CAGE Minus start sites Generation 0 from ENCODE/RIKEN
         #subGroups view=MinusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -1536,7 +1534,7 @@ html wgEncodeRikenCage.release3
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel NHEK cyto pA+ - 1
         longLabel NHEK cytosol polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
+        subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 0.040000 52460.691406
         origAssembly hg19
         color 179,0,134
@@ -1997,15 +1995,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel A549 cyto pA+ - 3
-        longLabel A549 cytosol polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel A549 cytosol polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=A549 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 498770.000000
         # subId=6595 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 nucl pA+ - 2
-        longLabel IMR90 nucleus polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 nucl pA+ - 2
+        longLabel IMR90 nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 459987.000000
         # subId=6593 dateSubmitted=2012-03-30
@@ -2013,7 +2011,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HVMF cell pA+ - 1
-        longLabel HVMF cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HVMF whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HVMF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 677894.000000
         # subId=6594 dateSubmitted=2012-03-30
@@ -2021,7 +2019,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HOB cell pA+ - 1
-        longLabel HOB cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HOB whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HOB localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 416262.000000
         # subId=6596 dateSubmitted=2012-03-30
@@ -2029,7 +2027,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH nucl pA+ - 4
-        longLabel SK-N-SH nucleus polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH nucleus polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 370864.000000
         # subId=6597 dateSubmitted=2012-03-30
@@ -2037,7 +2035,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cell pA+ - 3
-        longLabel SK-N-SH cell polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH whole cell polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=cell rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 613972.000000
         # subId=6598 dateSubmitted=2012-03-30
@@ -2045,15 +2043,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SkMC cell pA+ - 2
-        longLabel SkMC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel SkMC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKMC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 569177.000000
         # subId=6599 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HAoEC cell pA+ - 1
-        longLabel HAoEC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoE cell pA+ - 1
+        longLabel HAoEC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HAOEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 450029.000000
         # subId=6600 dateSubmitted=2012-03-30
@@ -2061,23 +2059,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HWP cell pA+ - 1
-        longLabel HWP cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HWP whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HWP localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 456569.000000
         # subId=6601 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-AT cell pA+ - 2
-        longLabel hMSC-AT cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMAT cell pA+ - 2
+        longLabel hMSC-AT whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 235398.000000
         # subId=6602 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel NHEM.f_M2 cell pA+ - 1
-        longLabel NHEM.f M2 cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEf cell pA+ - 1
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 231182.000000
         # subId=6603 dateSubmitted=2012-03-30
@@ -2085,7 +2083,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel MCF7 cyto pA+ - 4
-        longLabel MCF-7 cytosol polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 cytosol polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 451589.000000
         # subId=6604 dateSubmitted=2012-03-30
@@ -2093,7 +2091,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH nucl pA+ - 3
-        longLabel SK-N-SH nucleus polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH nucleus polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 499385.000000
         # subId=6613 dateSubmitted=2012-03-30
@@ -2101,15 +2099,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SkMC cell pA+ - 1
-        longLabel SkMC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel SkMC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKMC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 462300.000000
         # subId=6606 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HAoAF cell pA+ - 1
-        longLabel HAoAF cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoA cell pA+ - 1
+        longLabel HAoAF whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HAOAF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 279795.000000
         # subId=6607 dateSubmitted=2012-03-30
@@ -2117,23 +2115,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel A549 nucl pA+ - 3
-        longLabel A549 nucleus polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel A549 nucleus polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=A549 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 376509.000000
         # subId=6608 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HSaVEC cell pA+ - 1
-        longLabel HSaVEC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HSaV cell pA+ - 1
+        longLabel HSaVEC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 313956.000000
         # subId=6609 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HPIEpC cell pA+ - 1
-        longLabel HPIEpC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HPIE cell pA+ - 1
+        longLabel HPIEpC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 133226.000000
         # subId=6610 dateSubmitted=2012-03-30
@@ -2141,15 +2139,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HVMF cell pA+ - 2
-        longLabel HVMF cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HVMF whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HVMF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 721790.000000
         # subId=6611 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmepcCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HMEpC cell pA+ - 1
-        longLabel HMEpC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HMEp cell pA+ - 1
+        longLabel HMEpC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 316549.000000
         # subId=6612 dateSubmitted=2012-03-30
@@ -2157,31 +2155,31 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel MCF7 nucl pA+ - 3
-        longLabel MCF-7 nucleus polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 nucleus polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 80830.000000
         # subId=6586 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel Monocytes-CD14+ cell pA+ - 1
-        longLabel Monocytes-CD14+ cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD14 cell pA+ - 1
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 886978.000000
         # subId=6587 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 cyto pA+ - 1
-        longLabel IMR90 cytosol polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cyto pA+ - 1
+        longLabel IMR90 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 215216.000000
         # subId=6588 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 nucl pA+ - 1
-        longLabel IMR90 nucleus polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 nucl pA+ - 1
+        longLabel IMR90 nucleus polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 214985.000000
         # subId=6589 dateSubmitted=2012-03-30
@@ -2189,7 +2187,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cyto pA+ - 4
-        longLabel SK-N-SH cytosol polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH cytosol polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 412276.000000
         # subId=6590 dateSubmitted=2012-03-30
@@ -2197,23 +2195,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel MCF7 nucl pA+ - 4
-        longLabel MCF-7 nucleus polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 nucleus polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 22476.000000
         # subId=6591 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel NHEM_M2 cell pA+ - 2
-        longLabel NHEM M2 cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEM cell pA+ - 2
+        longLabel NHEM M2 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 393098.000000
         # subId=6592 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HAoEC cell pA+ - 2
-        longLabel HAoEC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoE cell pA+ - 2
+        longLabel HAoEC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HAOEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 123389.000000
         # subId=6614 dateSubmitted=2012-03-30
@@ -2221,7 +2219,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cyto pA+ - 3
-        longLabel SK-N-SH cytosol polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH cytosol polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 406628.000000
         # subId=6615 dateSubmitted=2012-03-30
@@ -2229,7 +2227,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapMinusRawRep3
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel MCF7 cyto pA+ - 3
-        longLabel MCF-7 cytosol polyA+ CAGE Raw signal - Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 cytosol polyA+ CAGE Minus start sites Rep 3 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bigWig 1.000000 217567.000000
         # subId=6616 dateSubmitted=2012-03-30
@@ -2237,63 +2235,63 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HWP cell pA+ - 2
-        longLabel HWP cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HWP whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HWP localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 121326.000000
         # subId=6617 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel CD34+_Mobilized cell pA+ - 1
-        longLabel CD34+ Mobilized cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD34 cell pA+ - 1
+        longLabel CD34+ Mobilized whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=CD34MOBILIZED localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 690876.000000
         # subId=6618 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HPIEpC cell pA+ - 2
-        longLabel HPIEpC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HPIE cell pA+ - 2
+        longLabel HPIEpC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 17090.000000
         # subId=6620 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel Monocytes-CD14+ cell pA+ - 2
-        longLabel Monocytes-CD14+ cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel CD14 cell pA+ - 2
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 980048.000000
         # subId=6621 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-BM cell pA+ - 2
-        longLabel hMSC-BM cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMBM cell pA+ - 2
+        longLabel hMSC-BM whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 140620.000000
         # subId=6622 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HPC-PL cell pA+ - 1
-        longLabel HPC-PL cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HPCP cell pA+ - 1
+        longLabel HPC-PL whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HPCPL localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 636717.000000
         # subId=6623 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-BM cell pA+ - 1
-        longLabel hMSC-BM cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMBM cell pA+ - 1
+        longLabel hMSC-BM whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 170796.000000
         # subId=6624 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel CD20+ cell pA+ - 1
-        longLabel CD20+ cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD20 cell pA+ - 1
+        longLabel CD20+ whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=CD20 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 1631330.000000
         # subId=6625 dateSubmitted=2012-03-30
@@ -2301,7 +2299,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel A549 cyto pA+ - 4
-        longLabel A549 cytosol polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel A549 cytosol polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=A549 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 1901770.000000
         # subId=6626 dateSubmitted=2012-03-30
@@ -2309,31 +2307,31 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel A549 nucl pA+ - 4
-        longLabel A549 nucleus polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel A549 nucleus polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=A549 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 1460370.000000
         # subId=6627 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HPC-PL cell pA+ - 2
-        longLabel HPC-PL cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HPCP cell pA+ - 2
+        longLabel HPC-PL whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HPCPL localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 818934.000000
         # subId=6628 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HFDPC cell pA+ - 2
-        longLabel HFDPC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HFDP cell pA+ - 2
+        longLabel HFDPC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HFDPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 32954.000000
         # subId=6629 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HAoAF cell pA+ - 2
-        longLabel HAoAF cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoA cell pA+ - 2
+        longLabel HAoAF whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HAOAF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 189132.000000
         # subId=6630 dateSubmitted=2012-03-30
@@ -2341,7 +2339,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel NHDF cell pA+ - 1
-        longLabel NHDF cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel NHDF whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHDF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 592278.000000
         # subId=6631 dateSubmitted=2012-03-30
@@ -2349,15 +2347,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cell pA+ - 4
-        longLabel SK-N-SH cell polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH whole cell polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSH localization=cell rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 472679.000000
         # subId=6632 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-UC cell pA+ - 1
-        longLabel hMSC-UC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMUC cell pA+ - 1
+        longLabel hMSC-UC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 482416.000000
         # subId=6633 dateSubmitted=2012-03-30
@@ -2365,7 +2363,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel NHDF cell pA+ - 2
-        longLabel NHDF cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel NHDF whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHDF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 480018.000000
         # subId=6634 dateSubmitted=2012-03-30
@@ -2373,71 +2371,71 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HOB cell pA+ - 2
-        longLabel HOB cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HOB whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HOB localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 365921.000000
         # subId=6636 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 cell pA+ - 1
-        longLabel IMR90 cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cell pA+ - 1
+        longLabel IMR90 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 193625.000000
         # subId=6637 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel NHEM.f_M2 cell pA+ - 2
-        longLabel NHEM.f M2 cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEf cell pA+ - 2
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 555229.000000
         # subId=6638 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-UC cell pA+ - 2
-        longLabel hMSC-UC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMUC cell pA+ - 2
+        longLabel hMSC-UC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 546333.000000
         # subId=6639 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HSaVEC cell pA+ - 2
-        longLabel HSaVEC cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HSaV cell pA+ - 2
+        longLabel HSaVEC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 193247.000000
         # subId=6640 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel HFDPC cell pA+ - 1
-        longLabel HFDPC cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HFDP cell pA+ - 1
+        longLabel HFDPC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HFDPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 297676.000000
         # subId=6641 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 cyto pA+ - 2
-        longLabel IMR90 cytosol polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cyto pA+ - 2
+        longLabel IMR90 cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 251587.000000
         # subId=6642 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel IMR90 cell pA+ - 2
-        longLabel IMR90 cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cell pA+ - 2
+        longLabel IMR90 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=IMR90 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 297435.000000
         # subId=6643 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel hMSC-AT cell pA+ - 1
-        longLabel hMSC-AT cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMAT cell pA+ - 1
+        longLabel hMSC-AT whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 127223.000000
         # subId=6644 dateSubmitted=2012-03-30
@@ -2445,23 +2443,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HCH cell pA+ - 1
-        longLabel HCH cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HCH whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HCH localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 160519.000000
         # subId=6645 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapMinusRawRep1
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel NHEM_M2 cell pA+ - 1
-        longLabel NHEM M2 cell polyA+ CAGE Raw signal - Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEM cell pA+ - 1
+        longLabel NHEM M2 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bigWig 1.000000 663577.000000
         # subId=6646 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel CD20+ cell pA+ - 2
-        longLabel CD20+ cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel CD20 cell pA+ - 2
+        longLabel CD20+ whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=CD20 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 2021030.000000
         # subId=6647 dateSubmitted=2012-03-30
@@ -2469,7 +2467,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel HCH cell pA+ - 2
-        longLabel HCH cell polyA+ CAGE Raw signal - Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HCH whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=HCH localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bigWig 1.000000 1903340.000000
         # subId=6648 dateSubmitted=2012-03-30
@@ -2477,7 +2475,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhekNucleusPapMinusRawRep4
         parent wgEncodeRikenCageViewMinusSignal off
         shortLabel NHEK nucl pA+ - 4
-        longLabel NHEK nucleus polyA+ CAGE Raw signal - Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel NHEK nucleus polyA+ CAGE Minus start sites Rep 4 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bigWig 1.000000 780929.000000
         color 179,0,134
@@ -2514,7 +2512,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageNhekCytosolLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageGm12878CytosolPamAln
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel GM78 cyto pA- A 0
         longLabel GM12878 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=rep0 rank=rank1
@@ -2568,8 +2566,7 @@ html wgEncodeRikenCage.release3
 
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapAln
-        #subTrack wgEncodeRikenCageViewAlignments off
+        #track wgEncodeRikenCageK562CytosolPapAln         #subTrack wgEncodeRikenCageViewAlignments on
         #shortLabel K562 cyto pA+ A 0
         #longLabel K562 cytosol polyA+ CAGE Alignments Generation 0 from ENCODE/RIKEN
         #subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -2607,7 +2604,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageNhekNucleusLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageK562NucleusPamAln
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel K562 nucl pA- A 0
         longLabel K562 nucleus polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aK562 localization=nucleus rnaExtract=pAM rep=rep0 rank=rank1
@@ -2685,7 +2682,7 @@ html wgEncodeRikenCage.release3
         # subId=2381 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel H1ES cell pA+ A 1
         longLabel H1-hESC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
@@ -2775,7 +2772,7 @@ html wgEncodeRikenCage.release3
         # subId=2372 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel K562 cyto pA+ A 1
         longLabel K562 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
@@ -2815,7 +2812,7 @@ html wgEncodeRikenCage.release3
         # subId=2368 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel K562 nucl pA+ A 1
         longLabel K562 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
@@ -2885,7 +2882,7 @@ html wgEncodeRikenCage.release3
         # subId=2360 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel K562 cell pA+ A 1
         longLabel K562 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aK562 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
@@ -2945,7 +2942,7 @@ html wgEncodeRikenCage.release3
         # subId=2354 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPamAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel GM78 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=rep1 rank=rank1
@@ -2985,7 +2982,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageProstateCellLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageK562CytosolPamAln
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel K562 cyto pA- A 0
         longLabel K562 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAM rep=rep0 rank=rank1
@@ -2996,7 +2993,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562CytosolLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
         track wgEncodeRikenCageH1hescCellPamAln
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel H1ES cell pA- A 0
         longLabel H1-hESC whole cell polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aH1hESC localization=cell rnaExtract=pAM rep=rep0 rank=rank1
@@ -3130,7 +3127,7 @@ html wgEncodeRikenCage.release3
         # subId=3339 dateSubmitted=2011-01-19
 
         track wgEncodeRikenCageGm12878CellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel GM78 cell pA+ A 1
         longLabel GM12878 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
@@ -3139,7 +3136,7 @@ html wgEncodeRikenCage.release3
         # subId=3946 dateSubmitted=2011-04-29
 
         track wgEncodeRikenCageGm12878CytosolPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel GM78 cyto pA+ A 1
         longLabel GM12878 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
@@ -3148,7 +3145,7 @@ html wgEncodeRikenCage.release3
         # subId=3950 dateSubmitted=2011-04-29
 
         track wgEncodeRikenCageGm12878NucleusPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments off
+        subTrack wgEncodeRikenCageViewAlignments on
         shortLabel GM78 nucl pA+ A 1
         longLabel GM12878 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
@@ -3186,31 +3183,31 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel MCF7 nucl pA+ A 3
-        longLabel MCF-7 nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6551 dateSubmitted=2012-03-29
 
         track wgEncodeRikenCageMonocd14CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel Monocytes-CD14+ cell pA+ A 1
-        longLabel Monocytes-CD14+ cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD14 cell pA+ A 1
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6649 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 cyto pA+ A 1
-        longLabel IMR90 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cyto pA+ A 1
+        longLabel IMR90 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6650 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 nucl pA+ A 1
-        longLabel IMR90 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 nucl pA+ A 1
+        longLabel IMR90 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6651 dateSubmitted=2012-03-30
@@ -3218,7 +3215,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cyto pA+ A 4
-        longLabel SK-N-SH cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6652 dateSubmitted=2012-03-30
@@ -3226,15 +3223,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7NucleusPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel MCF7 nucl pA+ A 4
-        longLabel MCF-7 nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MCF7 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6653 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel NHEM_M2 cell pA+ A 2
-        longLabel NHEM M2 cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEM cell pA+ A 2
+        longLabel NHEM M2 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6654 dateSubmitted=2012-03-30
@@ -3242,15 +3239,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HVMF cell pA+ A 1
-        longLabel HVMF cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HVMF whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HVMF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6655 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 nucl pA+ A 2
-        longLabel IMR90 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 nucl pA+ A 2
+        longLabel IMR90 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=nucleus rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6656 dateSubmitted=2012-03-30
@@ -3258,7 +3255,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel A549 cyto pA+ A 3
-        longLabel A549 cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel A549 cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=A549 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6657 dateSubmitted=2012-03-30
@@ -3266,7 +3263,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HOB cell pA+ A 1
-        longLabel HOB cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HOB whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HOB localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6658 dateSubmitted=2012-03-30
@@ -3274,7 +3271,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SkMC cell pA+ A 2
-        longLabel SkMC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel SkMC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKMC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6659 dateSubmitted=2012-03-30
@@ -3282,7 +3279,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cell pA+ A 3
-        longLabel SK-N-SH cell polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH whole cell polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=cell rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6660 dateSubmitted=2012-03-30
@@ -3290,15 +3287,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH nucl pA+ A 4
-        longLabel SK-N-SH nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6661 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HAoEC cell pA+ A 1
-        longLabel HAoEC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoE cell pA+ A 1
+        longLabel HAoEC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HAOEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6662 dateSubmitted=2012-03-30
@@ -3306,23 +3303,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HWP cell pA+ A 1
-        longLabel HWP cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HWP whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HWP localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6663 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-AT cell pA+ A 2
-        longLabel hMSC-AT cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMAT cell pA+ A 2
+        longLabel hMSC-AT whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6664 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel NHEM.f_M2 cell pA+ A 1
-        longLabel NHEM.f M2 cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEf cell pA+ A 1
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6665 dateSubmitted=2012-03-30
@@ -3330,15 +3327,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel MCF7 cyto pA+ A 4
-        longLabel MCF-7 cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6667 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HAoAF cell pA+ A 1
-        longLabel HAoAF cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoA cell pA+ A 1
+        longLabel HAoAF whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HAOAF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6668 dateSubmitted=2012-03-30
@@ -3346,7 +3343,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSkmcCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SkMC cell pA+ A 1
-        longLabel SkMC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel SkMC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKMC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6669 dateSubmitted=2012-03-30
@@ -3354,23 +3351,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel A549 nucl pA+ A 3
-        longLabel A549 nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel A549 nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=A549 localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6670 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HSaVEC cell pA+ A 1
-        longLabel HSaVEC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HSaV cell pA+ A 1
+        longLabel HSaVEC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6671 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HPIEpC cell pA+ A 1
-        longLabel HPIEpC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HPIE cell pA+ A 1
+        longLabel HPIEpC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6672 dateSubmitted=2012-03-30
@@ -3378,15 +3375,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HVMF cell pA+ A 2
-        longLabel HVMF cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HVMF whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HVMF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6673 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmepcCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HMEpC cell pA+ A 1
-        longLabel HMEpC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HMEp cell pA+ A 1
+        longLabel HMEpC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMEPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6674 dateSubmitted=2012-03-30
@@ -3394,15 +3391,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshNucleusPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH nucl pA+ A 3
-        longLabel SK-N-SH nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH nucleus polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=nucleus rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6675 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HAoEC cell pA+ A 2
-        longLabel HAoEC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoE cell pA+ A 2
+        longLabel HAoEC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HAOEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6676 dateSubmitted=2012-03-30
@@ -3410,7 +3407,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCytosolPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cyto pA+ A 3
-        longLabel SK-N-SH cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6677 dateSubmitted=2012-03-30
@@ -3418,15 +3415,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CytosolPapAlnRep3
         parent wgEncodeRikenCageViewAlignments off
         shortLabel MCF7 cyto pA+ A 3
-        longLabel MCF-7 cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN #autogenerated
+        longLabel MCF-7 cytosol polyA+ CAGE Alignments Rep 3 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MCF7 localization=cytosol rnaExtract=pAP rep=rep3 rank=rank1
         type bam
         # subId=6678 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd34mobilizedCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel CD34+_Mobilized cell pA+ A 1
-        longLabel CD34+ Mobilized cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD34 cell pA+ A 1
+        longLabel CD34+ Mobilized whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=CD34MOBILIZED localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6679 dateSubmitted=2012-03-30
@@ -3434,55 +3431,55 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHwpCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HWP cell pA+ A 2
-        longLabel HWP cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HWP whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HWP localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6680 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HPIEpC cell pA+ A 2
-        longLabel HPIEpC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HPIE cell pA+ A 2
+        longLabel HPIEpC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HPIEPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6682 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel Monocytes-CD14+ cell pA+ A 2
-        longLabel Monocytes-CD14+ cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel CD14 cell pA+ A 2
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=MONOCD14 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6683 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-BM cell pA+ A 2
-        longLabel hMSC-BM cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMBM cell pA+ A 2
+        longLabel hMSC-BM whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6684 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HPC-PL cell pA+ A 1
-        longLabel HPC-PL cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HPCP cell pA+ A 1
+        longLabel HPC-PL whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HPCPL localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6685 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-BM cell pA+ A 1
-        longLabel hMSC-BM cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMBM cell pA+ A 1
+        longLabel hMSC-BM whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCBM localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6686 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel CD20+ cell pA+ A 1
-        longLabel CD20+ cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel CD20 cell pA+ A 1
+        longLabel CD20+ whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=CD20 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6687 dateSubmitted=2012-03-30
@@ -3490,7 +3487,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CytosolPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel A549 cyto pA+ A 4
-        longLabel A549 cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel A549 cytosol polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=A549 localization=cytosol rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6688 dateSubmitted=2012-03-30
@@ -3498,23 +3495,23 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549NucleusPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel A549 nucl pA+ A 4
-        longLabel A549 nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel A549 nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=A549 localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6689 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HPC-PL cell pA+ A 2
-        longLabel HPC-PL cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HPCP cell pA+ A 2
+        longLabel HPC-PL whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HPCPL localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6690 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HFDPC cell pA+ A 2
-        longLabel HFDPC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HFDP cell pA+ A 2
+        longLabel HFDPC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HFDPC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6691 dateSubmitted=2012-03-30
@@ -3522,15 +3519,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshCellPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cell pA+ A 4
-        longLabel SK-N-SH cell polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel SK-N-SH whole cell polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=SKNSH localization=cell rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         # subId=6692 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HAoAF cell pA+ A 2
-        longLabel HAoAF cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HAoA cell pA+ A 2
+        longLabel HAoAF whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HAOAF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6693 dateSubmitted=2012-03-30
@@ -3538,15 +3535,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHDF cell pA+ A 1
-        longLabel NHDF cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel NHDF whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHDF localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6694 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-UC cell pA+ A 1
-        longLabel hMSC-UC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMUC cell pA+ A 1
+        longLabel hMSC-UC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6695 dateSubmitted=2012-03-30
@@ -3554,7 +3551,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhdfCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHDF cell pA+ A 2
-        longLabel NHDF cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel NHDF whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHDF localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6696 dateSubmitted=2012-03-30
@@ -3562,71 +3559,71 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHobCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HOB cell pA+ A 2
-        longLabel HOB cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HOB whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HOB localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6698 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 cell pA+ A 1
-        longLabel IMR90 cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cell pA+ A 1
+        longLabel IMR90 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6699 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-UC cell pA+ A 2
-        longLabel hMSC-UC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel hMUC cell pA+ A 2
+        longLabel hMSC-UC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCUC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6700 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel NHEM.f_M2 cell pA+ A 2
-        longLabel NHEM.f M2 cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEf cell pA+ A 2
+        longLabel NHEM.f M2 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6701 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HSaVEC cell pA+ A 2
-        longLabel HSaVEC cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel HSaV cell pA+ A 2
+        longLabel HSaVEC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HSAVEC localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6702 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 cyto pA+ A 2
-        longLabel IMR90 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cyto pA+ A 2
+        longLabel IMR90 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=cytosol rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6703 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHfdpcCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HFDPC cell pA+ A 1
-        longLabel HFDPC cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel HFDP cell pA+ A 1
+        longLabel HFDPC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HFDPC localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6704 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel IMR90 cell pA+ A 2
-        longLabel IMR90 cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel IMR9 cell pA+ A 2
+        longLabel IMR90 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=IMR90 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6705 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel hMSC-AT cell pA+ A 1
-        longLabel hMSC-AT cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel hMAT cell pA+ A 1
+        longLabel hMSC-AT whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HMSCAT localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6706 dateSubmitted=2012-03-30
@@ -3634,15 +3631,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HCH cell pA+ A 1
-        longLabel HCH cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        longLabel HCH whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HCH localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6707 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapAlnRep1
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel NHEM_M2 cell pA+ A 1
-        longLabel NHEM M2 cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN #autogenerated
+        shortLabel NHEM cell pA+ A 1
+        longLabel NHEM M2 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHEMM2 localization=cell rnaExtract=pAP rep=rep1 rank=rank1
         type bam
         # subId=6708 dateSubmitted=2012-03-30
@@ -3650,15 +3647,15 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHchCellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HCH cell pA+ A 2
-        longLabel HCH cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        longLabel HCH whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=HCH localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6709 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapAlnRep2
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel CD20+ cell pA+ A 2
-        longLabel CD20+ cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN #autogenerated
+        shortLabel CD20 cell pA+ A 2
+        longLabel CD20+ whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=CD20 localization=cell rnaExtract=pAP rep=rep2 rank=rank2
         type bam
         # subId=6710 dateSubmitted=2012-03-30
@@ -3666,7 +3663,7 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhekNucleusPapAlnRep4
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA+ A 4
-        longLabel NHEK nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN #autogenerated
+        longLabel NHEK nucleus polyA+ CAGE Alignments Rep 4 from ENCODE/RIKEN 
         subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep4 rank=rank2
         type bam
         color 179,0,134
@@ -3681,8 +3678,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageA549CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel A549 cell pA+
-        longLabel A549 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=A549 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel A549 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=A549 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         # subId=5610 dateSubmitted=2012-02-10
@@ -3690,8 +3687,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageAg04450CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel AG50 cell pA+
-        longLabel AG04450 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=AG04450 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel AG04450 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=AG04450 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         # subId=5610 dateSubmitted=2012-02-10
@@ -3699,47 +3696,47 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageBjCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel BJ cell pA+
-        longLabel BJ cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=BJ localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel BJ whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=BJ localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageGm12878CellPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel GM78 cell pA+
-        longLabel GM12878 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel GM12878 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageGm12878CytosolPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel GM78 cyto pA+
         longLabel GM12878 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageGm12878NucleusPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel GM78 nucl pA+
         longLabel GM12878 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageH1hescCellPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel H1ES cell pA+
-        longLabel H1-hESC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel H1-hESC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,107,27
@@ -3748,8 +3745,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHelas3CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa cell pA+
-        longLabel HeLa-S3 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HeLa-S3 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,119,158
@@ -3759,7 +3756,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa cyto pA+
         longLabel HeLa-S3 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,119,158
@@ -3769,7 +3766,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa nucl pA+
         longLabel HeLa-S3 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,119,158
@@ -3778,8 +3775,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHepg2CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG cell pA+
-        longLabel HepG2 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HepG2 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -3789,7 +3786,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG cyto pA+
         longLabel HepG2 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -3799,7 +3796,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG nucl pA+
         longLabel HepG2 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -3808,8 +3805,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHuvecCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HUVE cell pA+
-        longLabel HUVEC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHUVEC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HUVEC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHUVEC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 224,75,0
@@ -3819,7 +3816,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HUVE cyto pA+
         longLabel HUVEC cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 224,75,0
@@ -3829,37 +3826,37 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HUVE nucl pA+
         longLabel HUVEC nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 224,75,0
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageK562CellPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel K562 cell pA+
-        longLabel K562 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel K562 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageK562CytosolPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel K562 cyto pA+
         longLabel K562 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageK562NucleusPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel K562 nucl pA+
         longLabel K562 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -3868,8 +3865,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageMcf7CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel MCF7 cell pA+
-        longLabel MCF-7 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=MCF7 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel MCF-7 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=MCF7 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         # subId=5610 dateSubmitted=2012-02-10
@@ -3877,8 +3874,8 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageNhekCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK cell pA+
-        longLabel NHEK cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel NHEK whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 179,0,134
@@ -3888,7 +3885,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK cyto pA+
         longLabel NHEK cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 179,0,134
@@ -3897,17 +3894,17 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageSknshraCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel SKRA cell pA+
-        longLabel SK-N-SH RA cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=SKNSHRA localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel SK-N-SH RA whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=SKNSHRA localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         # subId=5610 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageGm12878CytosolPamTssHmmV2
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel GM78 cyto pA-
         longLabel GM12878 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
@@ -3917,27 +3914,27 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel GM78 nlos tot
         longLabel GM12878 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=nucleolus rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleolus rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
         # subId=5609 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageGm12878NucleusPamTssHmmV2
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel GM78 nucl pA-
         longLabel GM12878 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 153,38,0
         # subId=5609 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageH1hescCellPamTssHmmV2
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel H1ES cell pA-
-        longLabel H1-hESC cell polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAM rep=Pooled rank=None
+        longLabel H1-hESC whole cell polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,107,27
@@ -3947,7 +3944,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa cyto pA-
         longLabel HeLa-S3 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,119,158
@@ -3957,7 +3954,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa nlos tot
         longLabel HeLa-S3 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleolus rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleolus rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 0,119,158
@@ -3967,7 +3964,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG cyto pA-
         longLabel HepG2 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -3977,7 +3974,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG nucl pA-
         longLabel HepG2 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -3987,27 +3984,27 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HUVE cyto pA-
         longLabel HUVEC cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 224,75,0
         # subId=5609 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageK562CytosolPamTssHmmV2
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel K562 cyto pA-
         longLabel K562 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
         # subId=5609 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageK562NucleusPamTssHmmV2
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel K562 nucl pA-
         longLabel K562 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -4017,7 +4014,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel K562 poly pA-
         longLabel K562 polysome polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=polysome rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=polysome rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -4027,7 +4024,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK cyto pA-
         longLabel NHEK cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 179,0,134
@@ -4037,7 +4034,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK nucl pA-
         longLabel NHEK nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 179,0,134
@@ -4047,7 +4044,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HepG nlos tot
         longLabel HepG2 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHepG2 localization=nucleolus rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleolus rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 189,0,157
@@ -4057,7 +4054,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel K562 chrm tot
         longLabel K562 chromatin total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=chromatin rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=chromatin rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -4067,7 +4064,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel K562 nlos tot
         longLabel K562 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -4077,7 +4074,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel K562 nplm tot
         longLabel K562 nucleoplasm total CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=aK562 localization=nucleoplasm rnaExtract=total rep=Pooled rank=None
+        subGroups view=TssHmm cellType=aK562 localization=nucleoplasm rnaExtract=total rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 46,0,184
@@ -4087,7 +4084,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK nucl pA+
         longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bed 6
         origAssembly hg19
         color 179,0,134
@@ -4095,41 +4092,41 @@ html wgEncodeRikenCage.release3
 
         track wgEncodeRikenCageHfdpcCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HFDPC cell pA+
-        longLabel HFDPC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HFDPC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HFDP cell pA+
+        longLabel HFDPC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HFDPC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6712 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemfm2CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel NHEM.f_M2 cell pA+
-        longLabel NHEM.f M2 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel NHEf cell pA+
+        longLabel NHEM.f M2 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEMFM2 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6713 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscatCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel hMSC-AT cell pA+
-        longLabel hMSC-AT cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HMSCAT localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel hMAT cell pA+
+        longLabel hMSC-AT whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HMSCAT localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6714 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageMonocd14CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel Monocytes-CD14+ cell pA+
-        longLabel Monocytes-CD14+ cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=MONOCD14 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel CD14 cell pA+
+        longLabel Monocytes-CD14+ whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=MONOCD14 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6715 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageSknshCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel SKSH cell pA+
-        longLabel SK-N-SH cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=SKNSH localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel SK-N-SH whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=SKNSH localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6717 dateSubmitted=2012-03-30
 
@@ -4137,23 +4134,23 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel A549 nucl pA+
         longLabel A549 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=A549 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=A549 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6719 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CytosolPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel IMR90 cyto pA+
+        shortLabel IMR9 cyto pA+
         longLabel IMR90 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=IMR90 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=IMR90 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6720 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90NucleusPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel IMR90 nucl pA+
+        shortLabel IMR9 nucl pA+
         longLabel IMR90 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=IMR90 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=IMR90 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6721 dateSubmitted=2012-03-30
 
@@ -4161,7 +4158,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel A549 cyto pA+
         longLabel A549 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=A549 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=A549 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6723 dateSubmitted=2012-03-30
 
@@ -4169,7 +4166,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel SKSH nucl pA+
         longLabel SK-N-SH nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=SKNSH localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=SKNSH localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6727 dateSubmitted=2012-03-30
 
@@ -4177,15 +4174,15 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel MCF7 cyto pA+
         longLabel MCF-7 cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=MCF7 localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=MCF7 localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6728 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhdfCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHDF cell pA+
-        longLabel NHDF cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHDF localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel NHDF whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHDF localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6730 dateSubmitted=2012-03-30
 
@@ -4193,23 +4190,23 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel SKSH cyto pA+
         longLabel SK-N-SH cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=SKNSH localization=cytosol rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=SKNSH localization=cytosol rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6734 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHchCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HCH cell pA+
-        longLabel HCH cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HCH localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HCH whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HCH localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6736 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHsavecCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HSaVEC cell pA+
-        longLabel HSaVEC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HSAVEC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HSaV cell pA+
+        longLabel HSaVEC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HSAVEC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6737 dateSubmitted=2012-03-30
 
@@ -4217,39 +4214,39 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel MCF7 nucl pA+
         longLabel MCF-7 nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=MCF7 localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=MCF7 localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6738 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageImr90CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel IMR90 cell pA+
-        longLabel IMR90 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=IMR90 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel IMR9 cell pA+
+        longLabel IMR90 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=IMR90 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6740 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd20CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel CD20+ cell pA+
-        longLabel CD20+ cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=CD20 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel CD20 cell pA+
+        longLabel CD20+ whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=CD20 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6744 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscbmCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel hMSC-BM cell pA+
-        longLabel hMSC-BM cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HMSCBM localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel hMBM cell pA+
+        longLabel hMSC-BM whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HMSCBM localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6711 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHobCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HOB cell pA+
-        longLabel HOB cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HOB localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HOB whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HOB localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6716 dateSubmitted=2012-03-30
 
@@ -4257,32 +4254,32 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HeLa nucl pA-
         longLabel HeLa-S3 nucleus polyA- CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bedRnaElements
         color 0,119,158
         # subId=6718 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmepcCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HMEpC cell pA+
-        longLabel HMEpC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HMEPC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HMEp cell pA+
+        longLabel HMEpC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HMEPC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6722 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHwpCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HWP cell pA+
-        longLabel HWP cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HWP localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HWP whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HWP localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6724 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageCd34mobilizedCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel CD34+_Mobilized cell pA+
-        longLabel CD34+ Mobilized cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=CD34MOBILIZED localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel CD34 cell pA+
+        longLabel CD34+ Mobilized whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=CD34MOBILIZED localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6725 dateSubmitted=2012-03-30
 
@@ -4290,7 +4287,7 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK nucl pA+
         longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=None
+        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         color 179,0,134
         # subId=6726 dateSubmitted=2012-03-30
@@ -4298,48 +4295,48 @@ html wgEncodeRikenCage.release3
         track wgEncodeRikenCageHvmfCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HVMF cell pA+
-        longLabel HVMF cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HVMF localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel HVMF whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HVMF localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6729 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpiepcCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HPIEpC cell pA+
-        longLabel HPIEpC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HPIEPC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HPIE cell pA+
+        longLabel HPIEpC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HPIEPC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6731 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageSkmcCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel SkMC cell pA+
-        longLabel SkMC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=SKMC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        longLabel SkMC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=SKMC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6732 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoecCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HAoEC cell pA+
-        longLabel HAoEC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HAOEC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HAoE cell pA+
+        longLabel HAoEC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HAOEC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6733 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHaoafCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HAoAF cell pA+
-        longLabel HAoAF cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HAOAF localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HAoA cell pA+
+        longLabel HAoAF whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HAOAF localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6735 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHmscucCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel hMSC-UC cell pA+
-        longLabel hMSC-UC cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HMSCUC localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel hMUC cell pA+
+        longLabel hMSC-UC whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HMSCUC localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6739 dateSubmitted=2012-03-30
 
@@ -4347,24 +4344,24 @@ html wgEncodeRikenCage.release3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel HUVE nucl pA-
         longLabel HUVEC nucleus polyA- CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=bHUVEC localization=nucleus rnaExtract=pAM rep=Pooled rank=None
+        subGroups view=TssHmm cellType=bHUVEC localization=nucleus rnaExtract=pAM rep=Pooled rank=none
         type bedRnaElements
         color 224,75,0
         # subId=6741 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageHpcplCellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel HPC-PL cell pA+
-        longLabel HPC-PL cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=HPCPL localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel HPCP cell pA+
+        longLabel HPC-PL whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=HPCPL localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6742 dateSubmitted=2012-03-30
 
         track wgEncodeRikenCageNhemm2CellPapTssHmm
         parent wgEncodeRikenCageViewTssHmm off
-        shortLabel NHEM_M2 cell pA+
-        longLabel NHEM M2 cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
-        subGroups view=TssHmm cellType=NHEMM2 localization=cell rnaExtract=pAP rep=Pooled rank=None
+        shortLabel NHEM cell pA+
+        longLabel NHEM M2 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEMM2 localization=cell rnaExtract=pAP rep=Pooled rank=none
         type bedRnaElements
         # subId=6743 dateSubmitted=2012-03-30
 
