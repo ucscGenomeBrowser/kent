@@ -13,7 +13,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001158
-dccRep 1
 expId 1158
 fileName wgEncodeRikenCageA549CellPapAlnRep1.bam,wgEncodeRikenCageA549CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -38,7 +37,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001158
-dccRep 2
 expId 1158
 fileName wgEncodeRikenCageA549CellPapAlnRep2.bam,wgEncodeRikenCageA549CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -63,7 +61,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001158
-dccRep 1
 expId 1158
 fileName wgEncodeRikenCageA549CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -88,7 +85,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001158
-dccRep 2
 expId 1158
 fileName wgEncodeRikenCageA549CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -113,7 +109,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001158
-dccRep 1
 expId 1158
 fileName wgEncodeRikenCageA549CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -138,7 +133,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001158
-dccRep 2
 expId 1158
 fileName wgEncodeRikenCageA549CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -163,7 +157,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001158
-dccRep 1
 expId 1158
 fileName wgEncodeRikenCageA549CellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -187,7 +180,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001158
-dccRep 2
 expId 1158
 fileName wgEncodeRikenCageA549CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -265,7 +257,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6657
 tableName wgEncodeRikenCageA549CytosolPapAlnRep3
 view Alignments
@@ -288,7 +280,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6688
 tableName wgEncodeRikenCageA549CytosolPapAlnRep4
 view Alignments
@@ -311,7 +303,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6595
 tableName wgEncodeRikenCageA549CytosolPapMinusRawRep3
 view MinusRawSignal
@@ -334,7 +326,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6626
 tableName wgEncodeRikenCageA549CytosolPapMinusRawRep4
 view MinusRawSignal
@@ -357,7 +349,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6595
 tableName wgEncodeRikenCageA549CytosolPapPlusRawRep3
 view PlusRawSignal
@@ -380,7 +372,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6626
 tableName wgEncodeRikenCageA549CytosolPapPlusRawRep4
 view PlusRawSignal
@@ -403,7 +395,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6434
 view RawData
 
@@ -425,7 +417,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6465
 view RawData
 
@@ -446,7 +438,7 @@ localization cytosol
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6723
 tableName wgEncodeRikenCageA549CytosolPapTssHmm
 view TssHmm
@@ -469,7 +461,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6670
 tableName wgEncodeRikenCageA549NucleusPapAlnRep3
 view Alignments
@@ -492,7 +484,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6689
 tableName wgEncodeRikenCageA549NucleusPapAlnRep4
 view Alignments
@@ -515,7 +507,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6608
 tableName wgEncodeRikenCageA549NucleusPapMinusRawRep3
 view MinusRawSignal
@@ -538,7 +530,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6627
 tableName wgEncodeRikenCageA549NucleusPapMinusRawRep4
 view MinusRawSignal
@@ -561,7 +553,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6608
 tableName wgEncodeRikenCageA549NucleusPapPlusRawRep3
 view PlusRawSignal
@@ -584,7 +576,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6627
 tableName wgEncodeRikenCageA549NucleusPapPlusRawRep4
 view PlusRawSignal
@@ -607,7 +599,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6447
 view RawData
 
@@ -629,7 +621,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6466
 view RawData
 
@@ -650,7 +642,7 @@ localization nucleus
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6719
 tableName wgEncodeRikenCageA549NucleusPapTssHmm
 view TssHmm
@@ -665,7 +657,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001159
-dccRep 1
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapAlnRep1.bam,wgEncodeRikenCageAg04450CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -690,7 +681,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001159
-dccRep 2
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapAlnRep2.bam,wgEncodeRikenCageAg04450CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -715,7 +705,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001159
-dccRep 1
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -740,7 +729,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001159
-dccRep 2
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -765,7 +753,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001159
-dccRep 1
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -790,7 +777,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001159
-dccRep 2
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -815,7 +801,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001159
-dccRep 1
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -839,7 +824,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001159
-dccRep 2
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -909,7 +893,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001160
-dccRep 1
 expId 1160
 fileName wgEncodeRikenCageBjCellPapAlnRep1.bam,wgEncodeRikenCageBjCellPapAlnRep1.bam.bai
 grant Gingeras
@@ -934,7 +917,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001160
-dccRep 2
 expId 1160
 fileName wgEncodeRikenCageBjCellPapAlnRep2.bam,wgEncodeRikenCageBjCellPapAlnRep2.bam.bai
 grant Gingeras
@@ -959,7 +941,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001160
-dccRep 1
 expId 1160
 fileName wgEncodeRikenCageBjCellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -984,7 +965,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001160
-dccRep 2
 expId 1160
 fileName wgEncodeRikenCageBjCellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -1009,7 +989,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001160
-dccRep 1
 expId 1160
 fileName wgEncodeRikenCageBjCellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -1034,7 +1013,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001160
-dccRep 2
 expId 1160
 fileName wgEncodeRikenCageBjCellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -1059,7 +1037,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001160
-dccRep 1
 expId 1160
 fileName wgEncodeRikenCageBjCellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -1083,7 +1060,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001160
-dccRep 2
 expId 1160
 fileName wgEncodeRikenCageBjCellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -1162,7 +1138,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6687
 tableName wgEncodeRikenCageCd20CellPapAlnRep1
 view Alignments
@@ -1186,7 +1162,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6710
 tableName wgEncodeRikenCageCd20CellPapAlnRep2
 view Alignments
@@ -1210,7 +1186,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6625
 tableName wgEncodeRikenCageCd20CellPapMinusRawRep1
 view MinusRawSignal
@@ -1234,7 +1210,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6647
 tableName wgEncodeRikenCageCd20CellPapMinusRawRep2
 view MinusRawSignal
@@ -1258,7 +1234,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6625
 tableName wgEncodeRikenCageCd20CellPapPlusRawRep1
 view PlusRawSignal
@@ -1282,7 +1258,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6647
 tableName wgEncodeRikenCageCd20CellPapPlusRawRep2
 view PlusRawSignal
@@ -1306,7 +1282,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6463
 view RawData
 
@@ -1329,7 +1305,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6487
 view RawData
 
@@ -1351,7 +1327,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6744
 tableName wgEncodeRikenCageCd20CellPapTssHmm
 view TssHmm
@@ -1374,7 +1350,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6679
 tableName wgEncodeRikenCageCd34mobilizedCellPapAlnRep1
 view Alignments
@@ -1397,7 +1373,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6618
 tableName wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1
 view MinusRawSignal
@@ -1420,7 +1396,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6618
 tableName wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1
 view PlusRawSignal
@@ -1443,7 +1419,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6457
 view RawData
 
@@ -1464,7 +1440,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6725
 tableName wgEncodeRikenCageCd34mobilizedCellPapTssHmm
 view TssHmm
@@ -1479,7 +1455,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 1
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapAlnRep1.bam,wgEncodeRikenCageGm12878CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -1504,7 +1479,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 2
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapAlnRep2.bam,wgEncodeRikenCageGm12878CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -1529,7 +1503,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 1
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -1554,7 +1527,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 2
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -1579,7 +1551,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 1
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -1604,7 +1575,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 2
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -1629,7 +1599,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 1
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapRawDataRep1.fastq.tgz
 grant Gingeras
@@ -1653,7 +1622,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
-dccRep 2
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapRawDataRep2.fastq.tgz
 grant Gingeras
@@ -1724,7 +1692,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam,wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -1751,7 +1718,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -1778,7 +1744,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -1804,7 +1769,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -1829,7 +1793,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamAln.bam,wgEncodeRikenCageGm12878CytosolPamAln.bam.bai
 grant Gingeras
@@ -1855,7 +1818,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -1881,7 +1843,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -1906,7 +1867,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamRawData.fastq.gz
 grant Gingeras
@@ -1929,7 +1889,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -1952,7 +1911,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000338
-dccRep 1
 expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -1996,7 +1954,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
-dccRep 1
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam,wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -2021,7 +1978,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
-dccRep 2
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam,wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam.bai
 grant Gingeras
@@ -2046,7 +2002,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
-dccRep 1
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -2071,7 +2026,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
-dccRep 2
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -2096,7 +2050,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
-dccRep 1
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -2121,7 +2074,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
-dccRep 2
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -2146,7 +2098,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
-dccRep 1
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapRawDataRep1.fastq.tgz
 grant Gingeras
@@ -2170,7 +2121,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
-dccRep 2
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapRawDataRep2.fastq.tgz
 grant Gingeras
@@ -2241,7 +2191,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalAln.bam,wgEncodeRikenCageGm12878NucleolusTotalAln.bam.bai
 grant Gingeras
@@ -2266,7 +2215,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
 grant Gingeras
@@ -2292,7 +2240,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalMinusSignal.bigWig
 grant Gingeras
@@ -2317,7 +2264,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
 grant Gingeras
@@ -2343,7 +2289,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalPlusSignal.bigWig
 grant Gingeras
@@ -2367,7 +2312,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalRawData.fastq.gz
 grant Gingeras
@@ -2390,7 +2334,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -2413,7 +2356,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000340
-dccRep 1
 expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -2456,7 +2398,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam,wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 grant Gingeras
@@ -2481,7 +2422,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1.bigWig
 grant Gingeras
@@ -2506,7 +2446,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1.bigWig
 grant Gingeras
@@ -2531,7 +2470,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaRawDataRep1.fastq.gz
 grant Gingeras
@@ -2556,7 +2494,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamAlnRep1.bam,wgEncodeRikenCageGm12878NucleusPamAlnRep1.bam.bai
 grant Gingeras
@@ -2580,7 +2517,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamMinusSignalRep1.bigWig
 grant Gingeras
@@ -2604,7 +2540,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamPlusSignalRep1.bigWig
 grant Gingeras
@@ -2628,7 +2563,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamRawDataRep1.fastq.gz
 grant Gingeras
@@ -2651,7 +2585,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamTssGencV7.gtf.gz
 grant Gingeras
@@ -2674,7 +2607,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000339
-dccRep 1
 expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -2718,7 +2650,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 1
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam,wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam.bai
 grant Gingeras
@@ -2743,7 +2674,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 2
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam,wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam.bai
 grant Gingeras
@@ -2768,7 +2698,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 1
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -2793,7 +2722,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 2
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -2818,7 +2746,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 1
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -2843,7 +2770,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 2
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -2868,7 +2794,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 1
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapRawDataRep1.fastq.tgz
 grant Gingeras
@@ -2892,7 +2817,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
-dccRep 2
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapRawDataRep2.fastq.tgz
 grant Gingeras
@@ -2963,7 +2887,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam,wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -2990,7 +2913,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -3017,7 +2939,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -3043,7 +2964,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -3068,7 +2988,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamAln.bam,wgEncodeRikenCageH1hescCellPamAln.bam.bai
 grant Gingeras
@@ -3094,7 +3013,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamMinusSignal.bigWig
 grant Gingeras
@@ -3120,7 +3038,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamPlusSignal.bigWig
 grant Gingeras
@@ -3145,7 +3062,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamRawData.fastq.gz
 grant Gingeras
@@ -3168,7 +3084,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamTssGencV7.gtf.gz
 grant Gingeras
@@ -3191,7 +3106,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000341
-dccRep 1
 expId 341
 fileName wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -3235,7 +3149,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapAlnRep1.bam,wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai
 grant Gingeras
@@ -3260,7 +3173,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapAlnRep2.bam,wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai
 grant Gingeras
@@ -3285,7 +3197,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -3311,7 +3222,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -3337,7 +3247,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -3362,7 +3271,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -3387,7 +3295,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -3413,7 +3320,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -3439,7 +3345,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -3464,7 +3369,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -3489,7 +3393,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 1
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -3513,7 +3416,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001138
-dccRep 2
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -3583,7 +3485,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam,wgEncodeRikenCageH1hescCytosolPapAlnRep2.bam.bai
 grant Gingeras
@@ -3608,7 +3509,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -3634,7 +3534,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -3659,7 +3558,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -3685,7 +3583,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -3710,7 +3607,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001139
-dccRep 2
 expId 1139
 fileName wgEncodeRikenCageH1hescCytosolPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -3734,7 +3630,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam,wgEncodeRikenCageH1hescNucleusPapAlnRep2.bam.bai
 grant Gingeras
@@ -3759,7 +3654,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -3785,7 +3679,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -3810,7 +3703,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -3836,7 +3728,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -3861,7 +3752,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001140
-dccRep 2
 expId 1140
 fileName wgEncodeRikenCageH1hescNucleusPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -3894,7 +3784,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6668
 tableName wgEncodeRikenCageHaoafCellPapAlnRep1
 view Alignments
@@ -3918,7 +3808,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6693
 tableName wgEncodeRikenCageHaoafCellPapAlnRep2
 view Alignments
@@ -3942,7 +3832,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6607
 tableName wgEncodeRikenCageHaoafCellPapMinusRawRep1
 view MinusRawSignal
@@ -3966,7 +3856,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6630
 tableName wgEncodeRikenCageHaoafCellPapMinusRawRep2
 view MinusRawSignal
@@ -3990,7 +3880,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6607
 tableName wgEncodeRikenCageHaoafCellPapPlusRawRep1
 view PlusRawSignal
@@ -4014,7 +3904,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6630
 tableName wgEncodeRikenCageHaoafCellPapPlusRawRep2
 view PlusRawSignal
@@ -4038,7 +3928,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6445
 view RawData
 
@@ -4061,7 +3951,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6471
 view RawData
 
@@ -4083,7 +3973,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6735
 tableName wgEncodeRikenCageHaoafCellPapTssHmm
 view TssHmm
@@ -4107,7 +3997,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6662
 tableName wgEncodeRikenCageHaoecCellPapAlnRep1
 view Alignments
@@ -4131,7 +4021,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6676
 tableName wgEncodeRikenCageHaoecCellPapAlnRep2
 view Alignments
@@ -4155,7 +4045,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6600
 tableName wgEncodeRikenCageHaoecCellPapMinusRawRep1
 view MinusRawSignal
@@ -4179,7 +4069,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6614
 tableName wgEncodeRikenCageHaoecCellPapMinusRawRep2
 view MinusRawSignal
@@ -4203,7 +4093,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6600
 tableName wgEncodeRikenCageHaoecCellPapPlusRawRep1
 view PlusRawSignal
@@ -4227,7 +4117,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6614
 tableName wgEncodeRikenCageHaoecCellPapPlusRawRep2
 view PlusRawSignal
@@ -4251,7 +4141,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6439
 view RawData
 
@@ -4274,7 +4164,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6454
 view RawData
 
@@ -4296,7 +4186,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6733
 tableName wgEncodeRikenCageHaoecCellPapTssHmm
 view TssHmm
@@ -4320,7 +4210,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6707
 tableName wgEncodeRikenCageHchCellPapAlnRep1
 view Alignments
@@ -4344,7 +4234,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6709
 tableName wgEncodeRikenCageHchCellPapAlnRep2
 view Alignments
@@ -4368,7 +4258,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6645
 tableName wgEncodeRikenCageHchCellPapMinusRawRep1
 view MinusRawSignal
@@ -4392,7 +4282,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6648
 tableName wgEncodeRikenCageHchCellPapMinusRawRep2
 view MinusRawSignal
@@ -4416,7 +4306,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6645
 tableName wgEncodeRikenCageHchCellPapPlusRawRep1
 view PlusRawSignal
@@ -4440,7 +4330,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6648
 tableName wgEncodeRikenCageHchCellPapPlusRawRep2
 view PlusRawSignal
@@ -4464,7 +4354,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6484
 view RawData
 
@@ -4487,7 +4377,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6486
 view RawData
 
@@ -4509,7 +4399,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6736
 tableName wgEncodeRikenCageHchCellPapTssHmm
 view TssHmm
@@ -4524,7 +4414,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapAlnRep1.bam,wgEncodeRikenCageHelas3CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -4549,7 +4438,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapAlnRep2.bam,wgEncodeRikenCageHelas3CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -4574,7 +4462,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -4600,7 +4487,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -4626,7 +4512,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -4651,7 +4536,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -4676,7 +4560,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -4702,7 +4585,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -4728,7 +4610,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -4753,7 +4634,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -4778,7 +4658,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 1
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -4802,7 +4681,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001146
-dccRep 2
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -4872,7 +4750,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam,wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -4898,7 +4775,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -4924,7 +4800,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -4950,7 +4825,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -4975,7 +4849,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamAln.bam,wgEncodeRikenCageHelas3CytosolPamAln.bam.bai
 grant Gingeras
@@ -4999,7 +4872,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -5023,7 +4895,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -5047,7 +4918,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamRawData.fastq.gz
 grant Gingeras
@@ -5070,7 +4940,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -5093,7 +4962,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001155
-dccRep 1
 expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -5137,7 +5005,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapAlnRep1.bam,wgEncodeRikenCageHelas3CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -5162,7 +5029,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapAlnRep2.bam,wgEncodeRikenCageHelas3CytosolPapAlnRep2.bam.bai
 grant Gingeras
@@ -5187,7 +5053,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -5213,7 +5078,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -5239,7 +5103,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -5264,7 +5127,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -5289,7 +5151,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -5315,7 +5176,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -5341,7 +5201,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -5366,7 +5225,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -5391,7 +5249,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 1
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -5415,7 +5272,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001144
-dccRep 2
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -5485,7 +5341,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalAln.bam,wgEncodeRikenCageHelas3NucleolusTotalAln.bam.bai
 grant Gingeras
@@ -5509,7 +5364,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters.bigWig
 grant Gingeras
@@ -5535,7 +5389,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalMinusSignal.bigWig
 grant Gingeras
@@ -5559,7 +5412,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters.bigWig
 grant Gingeras
@@ -5585,7 +5437,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalPlusSignal.bigWig
 grant Gingeras
@@ -5609,7 +5460,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalRawData.fastq.gz
 grant Gingeras
@@ -5632,7 +5482,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -5655,7 +5504,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001156
-dccRep 1
 expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -5707,7 +5555,7 @@ project wgEncode
 readType 1x36
 replicate 163
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6666
 tableName wgEncodeRikenCageHelas3NucleusPamAlnRep163
 view Alignments
@@ -5730,7 +5578,7 @@ project wgEncode
 readType 1x36
 replicate 163
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6605
 tableName wgEncodeRikenCageHelas3NucleusPamMinusRawRep163
 view MinusRawSignal
@@ -5753,7 +5601,7 @@ project wgEncode
 readType 1x36
 replicate 163
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6605
 tableName wgEncodeRikenCageHelas3NucleusPamPlusRawRep163
 view PlusRawSignal
@@ -5776,7 +5624,7 @@ project wgEncode
 readType 1x36
 replicate 163
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6444
 view RawData
 
@@ -5797,7 +5645,7 @@ localization nucleus
 project wgEncode
 readType 1x36
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6718
 tableName wgEncodeRikenCageHelas3NucleusPamTssHmm
 view TssHmm
@@ -5812,7 +5660,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapAlnRep1.bam,wgEncodeRikenCageHelas3NucleusPapAlnRep1.bam.bai
 grant Gingeras
@@ -5837,7 +5684,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapAlnRep2.bam,wgEncodeRikenCageHelas3NucleusPapAlnRep2.bam.bai
 grant Gingeras
@@ -5862,7 +5708,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -5888,7 +5733,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -5914,7 +5758,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -5939,7 +5782,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -5964,7 +5806,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -5990,7 +5831,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -6016,7 +5856,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -6041,7 +5880,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -6066,7 +5904,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 1
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -6090,7 +5927,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001145
-dccRep 2
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -6160,7 +5996,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapAlnRep1.bam,wgEncodeRikenCageHepg2CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -6185,7 +6020,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapAlnRep2.bam,wgEncodeRikenCageHepg2CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -6210,7 +6044,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -6236,7 +6069,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -6262,7 +6094,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -6287,7 +6118,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -6312,7 +6142,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -6338,7 +6167,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -6364,7 +6192,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -6389,7 +6216,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -6414,7 +6240,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 1
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -6438,7 +6263,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001149
-dccRep 2
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -6534,7 +6358,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam,wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -6561,7 +6384,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -6588,7 +6410,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -6614,7 +6435,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -6639,7 +6459,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamAln.bam,wgEncodeRikenCageHepg2CytosolPamAln.bam.bai
 grant Gingeras
@@ -6665,7 +6484,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -6691,7 +6509,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -6716,7 +6533,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamRawData.fastq.gz
 grant Gingeras
@@ -6739,7 +6555,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -6762,7 +6577,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000343
-dccRep 1
 expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -6806,7 +6620,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapAlnRep1.bam,wgEncodeRikenCageHepg2CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -6831,7 +6644,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapAlnRep2.bam,wgEncodeRikenCageHepg2CytosolPapAlnRep2.bam.bai
 grant Gingeras
@@ -6856,7 +6668,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -6882,7 +6693,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -6908,7 +6718,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -6933,7 +6742,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -6958,7 +6766,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -6984,7 +6791,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -7010,7 +6816,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -7035,7 +6840,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -7060,7 +6864,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 1
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -7084,7 +6887,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001147
-dccRep 2
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -7155,7 +6957,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalAln.bam,wgEncodeRikenCageHepg2NucleolusTotalAln.bam.bai
 grant Gingeras
@@ -7180,7 +6981,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalMinusClusters.bigWig
 grant Gingeras
@@ -7206,7 +7006,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalMinusSignal.bigWig
 grant Gingeras
@@ -7231,7 +7030,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters.bigWig
 grant Gingeras
@@ -7257,7 +7055,6 @@ dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalPlusSignal.bigWig
 grant Gingeras
@@ -7281,7 +7078,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalRawData.fastq.gz
 grant Gingeras
@@ -7304,7 +7100,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000344
-dccRep 1
 expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -7372,7 +7167,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam,wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -7399,7 +7193,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -7426,7 +7219,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -7452,7 +7244,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -7477,7 +7268,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamAln.bam,wgEncodeRikenCageHepg2NucleusPamAln.bam.bai
 grant Gingeras
@@ -7503,7 +7293,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamMinusSignal.bigWig
 grant Gingeras
@@ -7529,7 +7318,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamPlusSignal.bigWig
 grant Gingeras
@@ -7554,7 +7342,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamRawData.fastq.gz
 grant Gingeras
@@ -7577,7 +7364,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamTssGencV7.gtf.gz
 grant Gingeras
@@ -7600,7 +7386,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000345
-dccRep 1
 expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -7644,7 +7429,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapAlnRep1.bam,wgEncodeRikenCageHepg2NucleusPapAlnRep1.bam.bai
 grant Gingeras
@@ -7669,7 +7453,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapAlnRep2.bam,wgEncodeRikenCageHepg2NucleusPapAlnRep2.bam.bai
 grant Gingeras
@@ -7694,7 +7477,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -7720,7 +7502,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -7746,7 +7527,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -7771,7 +7551,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -7796,7 +7575,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -7822,7 +7600,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -7848,7 +7625,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -7873,7 +7649,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -7898,7 +7673,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 1
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -7922,7 +7696,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001148
-dccRep 2
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -8001,7 +7774,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6704
 tableName wgEncodeRikenCageHfdpcCellPapAlnRep1
 view Alignments
@@ -8025,7 +7798,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6691
 tableName wgEncodeRikenCageHfdpcCellPapAlnRep2
 view Alignments
@@ -8049,7 +7822,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6641
 tableName wgEncodeRikenCageHfdpcCellPapMinusRawRep1
 view MinusRawSignal
@@ -8073,7 +7846,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6629
 tableName wgEncodeRikenCageHfdpcCellPapMinusRawRep2
 view MinusRawSignal
@@ -8097,7 +7870,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6641
 tableName wgEncodeRikenCageHfdpcCellPapPlusRawRep1
 view PlusRawSignal
@@ -8121,7 +7894,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6629
 tableName wgEncodeRikenCageHfdpcCellPapPlusRawRep2
 view PlusRawSignal
@@ -8145,7 +7918,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6480
 view RawData
 
@@ -8168,7 +7941,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6468
 view RawData
 
@@ -8190,7 +7963,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6712
 tableName wgEncodeRikenCageHfdpcCellPapTssHmm
 view TssHmm
@@ -8214,7 +7987,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6674
 tableName wgEncodeRikenCageHmepcCellPapAlnRep1
 view Alignments
@@ -8238,7 +8011,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6612
 tableName wgEncodeRikenCageHmepcCellPapMinusRawRep1
 view MinusRawSignal
@@ -8262,7 +8035,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6612
 tableName wgEncodeRikenCageHmepcCellPapPlusRawRep1
 view PlusRawSignal
@@ -8286,7 +8059,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6452
 view RawData
 
@@ -8308,7 +8081,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6722
 tableName wgEncodeRikenCageHmepcCellPapTssHmm
 view TssHmm
@@ -8332,7 +8105,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6706
 tableName wgEncodeRikenCageHmscatCellPapAlnRep1
 view Alignments
@@ -8356,7 +8129,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6664
 tableName wgEncodeRikenCageHmscatCellPapAlnRep2
 view Alignments
@@ -8380,7 +8153,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6644
 tableName wgEncodeRikenCageHmscatCellPapMinusRawRep1
 view MinusRawSignal
@@ -8404,7 +8177,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6602
 tableName wgEncodeRikenCageHmscatCellPapMinusRawRep2
 view MinusRawSignal
@@ -8428,7 +8201,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6644
 tableName wgEncodeRikenCageHmscatCellPapPlusRawRep1
 view PlusRawSignal
@@ -8452,7 +8225,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6602
 tableName wgEncodeRikenCageHmscatCellPapPlusRawRep2
 view PlusRawSignal
@@ -8476,7 +8249,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6483
 view RawData
 
@@ -8499,7 +8272,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6442
 view RawData
 
@@ -8521,7 +8294,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6714
 tableName wgEncodeRikenCageHmscatCellPapTssHmm
 view TssHmm
@@ -8545,7 +8318,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6686
 tableName wgEncodeRikenCageHmscbmCellPapAlnRep1
 view Alignments
@@ -8569,7 +8342,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6684
 tableName wgEncodeRikenCageHmscbmCellPapAlnRep2
 view Alignments
@@ -8593,7 +8366,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6624
 tableName wgEncodeRikenCageHmscbmCellPapMinusRawRep1
 view MinusRawSignal
@@ -8617,7 +8390,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6622
 tableName wgEncodeRikenCageHmscbmCellPapMinusRawRep2
 view MinusRawSignal
@@ -8641,7 +8414,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6624
 tableName wgEncodeRikenCageHmscbmCellPapPlusRawRep1
 view PlusRawSignal
@@ -8665,7 +8438,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6622
 tableName wgEncodeRikenCageHmscbmCellPapPlusRawRep2
 view PlusRawSignal
@@ -8689,7 +8462,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6464
 view RawData
 
@@ -8712,7 +8485,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6462
 view RawData
 
@@ -8734,7 +8507,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6711
 tableName wgEncodeRikenCageHmscbmCellPapTssHmm
 view TssHmm
@@ -8758,7 +8531,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6695
 tableName wgEncodeRikenCageHmscucCellPapAlnRep1
 view Alignments
@@ -8782,7 +8555,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6700
 tableName wgEncodeRikenCageHmscucCellPapAlnRep2
 view Alignments
@@ -8806,7 +8579,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6633
 tableName wgEncodeRikenCageHmscucCellPapMinusRawRep1
 view MinusRawSignal
@@ -8830,7 +8603,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6639
 tableName wgEncodeRikenCageHmscucCellPapMinusRawRep2
 view MinusRawSignal
@@ -8854,7 +8627,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6633
 tableName wgEncodeRikenCageHmscucCellPapPlusRawRep1
 view PlusRawSignal
@@ -8878,7 +8651,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6639
 tableName wgEncodeRikenCageHmscucCellPapPlusRawRep2
 view PlusRawSignal
@@ -8902,7 +8675,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6472
 view RawData
 
@@ -8925,7 +8698,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6478
 view RawData
 
@@ -8947,7 +8720,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6739
 tableName wgEncodeRikenCageHmscucCellPapTssHmm
 view TssHmm
@@ -8971,7 +8744,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6658
 tableName wgEncodeRikenCageHobCellPapAlnRep1
 view Alignments
@@ -8995,7 +8768,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6698
 tableName wgEncodeRikenCageHobCellPapAlnRep2
 view Alignments
@@ -9019,7 +8792,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6596
 tableName wgEncodeRikenCageHobCellPapMinusRawRep1
 view MinusRawSignal
@@ -9043,7 +8816,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6636
 tableName wgEncodeRikenCageHobCellPapMinusRawRep2
 view MinusRawSignal
@@ -9067,7 +8840,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6596
 tableName wgEncodeRikenCageHobCellPapPlusRawRep1
 view PlusRawSignal
@@ -9091,7 +8864,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6636
 tableName wgEncodeRikenCageHobCellPapPlusRawRep2
 view PlusRawSignal
@@ -9115,7 +8888,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6436
 view RawData
 
@@ -9138,7 +8911,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6475
 view RawData
 
@@ -9160,7 +8933,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6716
 tableName wgEncodeRikenCageHobCellPapTssHmm
 view TssHmm
@@ -9184,7 +8957,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6685
 tableName wgEncodeRikenCageHpcplCellPapAlnRep1
 view Alignments
@@ -9208,7 +8981,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6690
 tableName wgEncodeRikenCageHpcplCellPapAlnRep2
 view Alignments
@@ -9232,7 +9005,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6623
 tableName wgEncodeRikenCageHpcplCellPapMinusRawRep1
 view MinusRawSignal
@@ -9256,7 +9029,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6628
 tableName wgEncodeRikenCageHpcplCellPapMinusRawRep2
 view MinusRawSignal
@@ -9280,7 +9053,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6623
 tableName wgEncodeRikenCageHpcplCellPapPlusRawRep1
 view PlusRawSignal
@@ -9304,7 +9077,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6628
 tableName wgEncodeRikenCageHpcplCellPapPlusRawRep2
 view PlusRawSignal
@@ -9328,7 +9101,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6461
 view RawData
 
@@ -9351,7 +9124,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6467
 view RawData
 
@@ -9373,7 +9146,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6742
 tableName wgEncodeRikenCageHpcplCellPapTssHmm
 view TssHmm
@@ -9397,7 +9170,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6672
 tableName wgEncodeRikenCageHpiepcCellPapAlnRep1
 view Alignments
@@ -9421,7 +9194,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6682
 tableName wgEncodeRikenCageHpiepcCellPapAlnRep2
 view Alignments
@@ -9445,7 +9218,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6610
 tableName wgEncodeRikenCageHpiepcCellPapMinusRawRep1
 view MinusRawSignal
@@ -9469,7 +9242,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6620
 tableName wgEncodeRikenCageHpiepcCellPapMinusRawRep2
 view MinusRawSignal
@@ -9493,7 +9266,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6610
 tableName wgEncodeRikenCageHpiepcCellPapPlusRawRep1
 view PlusRawSignal
@@ -9517,7 +9290,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6620
 tableName wgEncodeRikenCageHpiepcCellPapPlusRawRep2
 view PlusRawSignal
@@ -9541,7 +9314,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6449
 view RawData
 
@@ -9564,7 +9337,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6459
 view RawData
 
@@ -9586,7 +9359,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6731
 tableName wgEncodeRikenCageHpiepcCellPapTssHmm
 view TssHmm
@@ -9610,7 +9383,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6671
 tableName wgEncodeRikenCageHsavecCellPapAlnRep1
 view Alignments
@@ -9634,7 +9407,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6702
 tableName wgEncodeRikenCageHsavecCellPapAlnRep2
 view Alignments
@@ -9658,7 +9431,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6609
 tableName wgEncodeRikenCageHsavecCellPapMinusRawRep1
 view MinusRawSignal
@@ -9682,7 +9455,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6640
 tableName wgEncodeRikenCageHsavecCellPapMinusRawRep2
 view MinusRawSignal
@@ -9706,7 +9479,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6609
 tableName wgEncodeRikenCageHsavecCellPapPlusRawRep1
 view PlusRawSignal
@@ -9730,7 +9503,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6640
 tableName wgEncodeRikenCageHsavecCellPapPlusRawRep2
 view PlusRawSignal
@@ -9754,7 +9527,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6448
 view RawData
 
@@ -9777,7 +9550,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6479
 view RawData
 
@@ -9799,7 +9572,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6737
 tableName wgEncodeRikenCageHsavecCellPapTssHmm
 view TssHmm
@@ -9814,7 +9587,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapAlnRep1.bam,wgEncodeRikenCageHuvecCellPapAlnRep1.bam.bai
 grant Gingeras
@@ -9839,7 +9611,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapAlnRep2.bam,wgEncodeRikenCageHuvecCellPapAlnRep2.bam.bai
 grant Gingeras
@@ -9864,7 +9635,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -9890,7 +9660,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -9916,7 +9685,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -9941,7 +9709,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -9966,7 +9733,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -9992,7 +9758,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -10018,7 +9783,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -10043,7 +9807,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -10068,7 +9831,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 1
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -10092,7 +9854,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001141
-dccRep 2
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -10163,7 +9924,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam,wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -10190,7 +9950,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -10217,7 +9976,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -10243,7 +10001,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -10268,7 +10025,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamAln.bam,wgEncodeRikenCageHuvecCytosolPamAln.bam.bai
 grant Gingeras
@@ -10294,7 +10050,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -10320,7 +10075,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -10345,7 +10099,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamRawData.fastq.gz
 grant Gingeras
@@ -10368,7 +10121,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -10391,7 +10143,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000342
-dccRep 1
 expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -10435,7 +10186,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapAlnRep3.bam,wgEncodeRikenCageHuvecCytosolPapAlnRep3.bam.bai
 grant Gingeras
@@ -10460,7 +10210,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapAlnRep4.bam,wgEncodeRikenCageHuvecCytosolPapAlnRep4.bam.bai
 grant Gingeras
@@ -10485,7 +10234,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3.bigWig
 grant Gingeras
@@ -10511,7 +10259,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4.bigWig
 grant Gingeras
@@ -10537,7 +10284,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3.bigWig
 grant Gingeras
@@ -10562,7 +10308,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4.bigWig
 grant Gingeras
@@ -10587,7 +10332,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3.bigWig
 grant Gingeras
@@ -10613,7 +10357,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4.bigWig
 grant Gingeras
@@ -10639,7 +10382,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep3.bigWig
 grant Gingeras
@@ -10664,7 +10406,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep4.bigWig
 grant Gingeras
@@ -10689,7 +10430,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 1
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapRawDataRep3.fastq.gz
 grant Gingeras
@@ -10713,7 +10453,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001142
-dccRep 2
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapRawDataRep4.fastq.gz
 grant Gingeras
@@ -10791,7 +10530,7 @@ project wgEncode
 readType 1x36
 replicate 162
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6697
 tableName wgEncodeRikenCageHuvecNucleusPamAlnRep162
 view Alignments
@@ -10814,7 +10553,7 @@ project wgEncode
 readType 1x36
 replicate 162
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6635
 tableName wgEncodeRikenCageHuvecNucleusPamMinusRawRep162
 view MinusRawSignal
@@ -10837,7 +10576,7 @@ project wgEncode
 readType 1x36
 replicate 162
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6635
 tableName wgEncodeRikenCageHuvecNucleusPamPlusRawRep162
 view PlusRawSignal
@@ -10860,7 +10599,7 @@ project wgEncode
 readType 1x36
 replicate 162
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6474
 view RawData
 
@@ -10881,7 +10620,7 @@ localization nucleus
 project wgEncode
 readType 1x36
 rnaExtract longNonPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 subId 6741
 tableName wgEncodeRikenCageHuvecNucleusPamTssHmm
 view TssHmm
@@ -10896,7 +10635,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapAlnRep3.bam,wgEncodeRikenCageHuvecNucleusPapAlnRep3.bam.bai
 grant Gingeras
@@ -10921,7 +10659,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapAlnRep4.bam,wgEncodeRikenCageHuvecNucleusPapAlnRep4.bam.bai
 grant Gingeras
@@ -10946,7 +10683,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3.bigWig
 grant Gingeras
@@ -10972,7 +10708,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4.bigWig
 grant Gingeras
@@ -10998,7 +10733,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3.bigWig
 grant Gingeras
@@ -11023,7 +10757,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4.bigWig
 grant Gingeras
@@ -11048,7 +10781,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3.bigWig
 grant Gingeras
@@ -11074,7 +10806,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4.bigWig
 grant Gingeras
@@ -11100,7 +10831,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep3.bigWig
 grant Gingeras
@@ -11125,7 +10855,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep4.bigWig
 grant Gingeras
@@ -11150,7 +10879,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 1
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapRawDataRep3.fastq.gz
 grant Gingeras
@@ -11174,7 +10902,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001143
-dccRep 2
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapRawDataRep4.fastq.gz
 grant Gingeras
@@ -11253,7 +10980,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6655
 tableName wgEncodeRikenCageHvmfCellPapAlnRep1
 view Alignments
@@ -11277,7 +11004,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6673
 tableName wgEncodeRikenCageHvmfCellPapAlnRep2
 view Alignments
@@ -11301,7 +11028,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6594
 tableName wgEncodeRikenCageHvmfCellPapMinusRawRep1
 view MinusRawSignal
@@ -11325,7 +11052,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6611
 tableName wgEncodeRikenCageHvmfCellPapMinusRawRep2
 view MinusRawSignal
@@ -11349,7 +11076,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6594
 tableName wgEncodeRikenCageHvmfCellPapPlusRawRep1
 view PlusRawSignal
@@ -11373,7 +11100,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6611
 tableName wgEncodeRikenCageHvmfCellPapPlusRawRep2
 view PlusRawSignal
@@ -11397,7 +11124,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6433
 view RawData
 
@@ -11420,7 +11147,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6450
 view RawData
 
@@ -11442,7 +11169,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6729
 tableName wgEncodeRikenCageHvmfCellPapTssHmm
 view TssHmm
@@ -11466,7 +11193,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6663
 tableName wgEncodeRikenCageHwpCellPapAlnRep1
 view Alignments
@@ -11490,7 +11217,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6680
 tableName wgEncodeRikenCageHwpCellPapAlnRep2
 view Alignments
@@ -11514,7 +11241,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6601
 tableName wgEncodeRikenCageHwpCellPapMinusRawRep1
 view MinusRawSignal
@@ -11538,7 +11265,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6617
 tableName wgEncodeRikenCageHwpCellPapMinusRawRep2
 view MinusRawSignal
@@ -11562,7 +11289,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6601
 tableName wgEncodeRikenCageHwpCellPapPlusRawRep1
 view PlusRawSignal
@@ -11586,7 +11313,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6617
 tableName wgEncodeRikenCageHwpCellPapPlusRawRep2
 view PlusRawSignal
@@ -11610,7 +11337,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6440
 view RawData
 
@@ -11633,7 +11360,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6456
 view RawData
 
@@ -11655,7 +11382,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6724
 tableName wgEncodeRikenCageHwpCellPapTssHmm
 view TssHmm
@@ -11679,7 +11406,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6699
 tableName wgEncodeRikenCageImr90CellPapAlnRep1
 view Alignments
@@ -11703,7 +11430,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6705
 tableName wgEncodeRikenCageImr90CellPapAlnRep2
 view Alignments
@@ -11727,7 +11454,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6637
 tableName wgEncodeRikenCageImr90CellPapMinusRawRep1
 view MinusRawSignal
@@ -11751,7 +11478,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6643
 tableName wgEncodeRikenCageImr90CellPapMinusRawRep2
 view MinusRawSignal
@@ -11775,7 +11502,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6637
 tableName wgEncodeRikenCageImr90CellPapPlusRawRep1
 view PlusRawSignal
@@ -11799,7 +11526,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6643
 tableName wgEncodeRikenCageImr90CellPapPlusRawRep2
 view PlusRawSignal
@@ -11823,7 +11550,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6476
 view RawData
 
@@ -11846,7 +11573,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6482
 view RawData
 
@@ -11868,7 +11595,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6740
 tableName wgEncodeRikenCageImr90CellPapTssHmm
 view TssHmm
@@ -11892,7 +11619,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6650
 tableName wgEncodeRikenCageImr90CytosolPapAlnRep1
 view Alignments
@@ -11916,7 +11643,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6703
 tableName wgEncodeRikenCageImr90CytosolPapAlnRep2
 view Alignments
@@ -11940,7 +11667,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6588
 tableName wgEncodeRikenCageImr90CytosolPapMinusRawRep1
 view MinusRawSignal
@@ -11964,7 +11691,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6642
 tableName wgEncodeRikenCageImr90CytosolPapMinusRawRep2
 view MinusRawSignal
@@ -11988,7 +11715,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6588
 tableName wgEncodeRikenCageImr90CytosolPapPlusRawRep1
 view PlusRawSignal
@@ -12012,7 +11739,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6642
 tableName wgEncodeRikenCageImr90CytosolPapPlusRawRep2
 view PlusRawSignal
@@ -12036,7 +11763,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6427
 view RawData
 
@@ -12059,7 +11786,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6481
 view RawData
 
@@ -12081,7 +11808,7 @@ localization cytosol
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6720
 tableName wgEncodeRikenCageImr90CytosolPapTssHmm
 view TssHmm
@@ -12105,7 +11832,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6651
 tableName wgEncodeRikenCageImr90NucleusPapAlnRep1
 view Alignments
@@ -12129,7 +11856,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6656
 tableName wgEncodeRikenCageImr90NucleusPapAlnRep2
 view Alignments
@@ -12153,7 +11880,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6589
 tableName wgEncodeRikenCageImr90NucleusPapMinusRawRep1
 view MinusRawSignal
@@ -12177,7 +11904,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6593
 tableName wgEncodeRikenCageImr90NucleusPapMinusRawRep2
 view MinusRawSignal
@@ -12201,7 +11928,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6589
 tableName wgEncodeRikenCageImr90NucleusPapPlusRawRep1
 view PlusRawSignal
@@ -12225,7 +11952,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6593
 tableName wgEncodeRikenCageImr90NucleusPapPlusRawRep2
 view PlusRawSignal
@@ -12249,7 +11976,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6428
 view RawData
 
@@ -12272,7 +11999,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6432
 view RawData
 
@@ -12294,7 +12021,7 @@ localization nucleus
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6721
 tableName wgEncodeRikenCageImr90NucleusPapTssHmm
 view TssHmm
@@ -12309,7 +12036,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapAlnRep1.bam,wgEncodeRikenCageK562CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -12334,7 +12060,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapAlnRep2.bam,wgEncodeRikenCageK562CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -12359,7 +12084,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -12385,7 +12109,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -12411,7 +12134,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -12436,7 +12158,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -12461,7 +12182,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -12487,7 +12207,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -12513,7 +12232,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -12538,7 +12256,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -12563,7 +12280,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 1
 expId 1150
 fileName wgEncodeRikenCageK562CellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -12587,7 +12303,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001150
-dccRep 2
 expId 1150
 fileName wgEncodeRikenCageK562CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -12658,7 +12373,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalAln.bam,wgEncodeRikenCageK562ChromatinTotalAln.bam.bai
 grant Gingeras
@@ -12684,7 +12398,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalMinusClusters.bigWig
 grant Gingeras
@@ -12711,7 +12424,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalMinusSignal.bigWig
 grant Gingeras
@@ -12737,7 +12449,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalPlusClusters.bigWig
 grant Gingeras
@@ -12764,7 +12475,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalPlusSignal.bigWig
 grant Gingeras
@@ -12789,7 +12499,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalRawData.fastq.gz
 grant Gingeras
@@ -12812,7 +12521,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000334
-dccRep 1
 expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -12880,7 +12588,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam,wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -12907,7 +12614,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -12934,7 +12640,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -12961,7 +12666,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData.csfasta.gz
 grant Gingeras
@@ -12986,7 +12690,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData2.csqual.gz
 grant Gingeras
@@ -13011,7 +12714,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamAln.bam,wgEncodeRikenCageK562CytosolPamAln.bam.bai
 grant Gingeras
@@ -13037,7 +12739,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -13063,7 +12764,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -13089,7 +12789,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamRawData.csfasta.gz
 grant Gingeras
@@ -13113,7 +12812,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamRawData2.csqual.gz
 grant Gingeras
@@ -13136,7 +12834,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -13159,7 +12856,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000329
-dccRep 1
 expId 329
 fileName wgEncodeRikenCageK562CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -13205,7 +12901,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapAln.bam,wgEncodeRikenCageK562CytosolPapAln.bam.bai
 grant Gingeras
@@ -13230,7 +12925,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapAlnRep1.bam,wgEncodeRikenCageK562CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -13255,7 +12949,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapAlnRep2.bam,wgEncodeRikenCageK562CytosolPapAlnRep2.bam.bai
 grant Gingeras
@@ -13281,7 +12974,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusClusters.bigWig
 grant Gingeras
@@ -13307,7 +12999,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -13333,7 +13024,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -13361,7 +13051,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusSignal.bigWig
 grant Gingeras
@@ -13385,7 +13074,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -13410,7 +13098,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -13436,7 +13123,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusClusters.bigWig
 grant Gingeras
@@ -13462,7 +13148,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -13488,7 +13173,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -13516,7 +13200,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusSignal.bigWig
 grant Gingeras
@@ -13540,7 +13223,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -13565,7 +13247,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -13591,7 +13272,6 @@ dateResubmitted 2010-09-23
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapRawData.fastq.gz
 grant Gingeras
@@ -13614,7 +13294,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 1
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -13638,7 +13317,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000332
-dccRep 2
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -13708,7 +13386,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccAccession wgEncodeEH000335
-dccRep 1
 expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalAln.bam,wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
 grant Gingeras
@@ -13732,7 +13409,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccAccession wgEncodeEH000335
-dccRep 1
 expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalMinusSignal.bigWig
 grant Gingeras
@@ -13756,7 +13432,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccAccession wgEncodeEH000335
-dccRep 1
 expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalPlusSignal.bigWig
 grant Gingeras
@@ -13780,7 +13455,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 dccAccession wgEncodeEH000335
-dccRep 1
 expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalRawData.fastq.gz
 grant Gingeras
@@ -13803,7 +13477,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000335
-dccRep 1
 expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -13871,7 +13544,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalAln.bam,wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 grant Gingeras
@@ -13897,7 +13569,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalMinusClusters.bigWig
 grant Gingeras
@@ -13924,7 +13595,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalMinusSignal.bigWig
 grant Gingeras
@@ -13950,7 +13620,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalPlusClusters.bigWig
 grant Gingeras
@@ -13977,7 +13646,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalPlusSignal.bigWig
 grant Gingeras
@@ -14002,7 +13670,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalRawData.fastq.gz
 grant Gingeras
@@ -14025,7 +13692,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000336
-dccRep 1
 expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalTssGencV7.gtf.gz
 grant Gingeras
@@ -14093,7 +13759,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam,wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -14119,7 +13784,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -14145,7 +13809,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -14171,7 +13834,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData.csfasta.gz
 grant Gingeras
@@ -14196,7 +13858,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData2.csqual.gz
 grant Gingeras
@@ -14221,7 +13882,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamAln.bam,wgEncodeRikenCageK562NucleusPamAln.bam.bai
 grant Gingeras
@@ -14246,7 +13906,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamMinusSignal.bigWig
 grant Gingeras
@@ -14271,7 +13930,6 @@ dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamPlusSignal.bigWig
 grant Gingeras
@@ -14296,7 +13954,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamRawData.csfasta.gz
 grant Gingeras
@@ -14320,7 +13977,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamRawData2.csqual.gz
 grant Gingeras
@@ -14343,7 +13999,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamTssGencV7.gtf.gz
 grant Gingeras
@@ -14366,7 +14021,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000330
-dccRep 1
 expId 330
 fileName wgEncodeRikenCageK562NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -14410,7 +14064,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapAlnRep1.bam,wgEncodeRikenCageK562NucleusPapAlnRep1.bam.bai
 grant Gingeras
@@ -14435,7 +14088,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapAlnRep2.bam,wgEncodeRikenCageK562NucleusPapAlnRep2.bam.bai
 grant Gingeras
@@ -14460,7 +14112,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -14486,7 +14137,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -14512,7 +14162,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -14537,7 +14186,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -14562,7 +14210,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -14588,7 +14235,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -14614,7 +14260,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -14639,7 +14284,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -14664,7 +14308,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 1
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -14688,7 +14331,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000333
-dccRep 2
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -14759,7 +14401,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam,wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -14786,7 +14427,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -14813,7 +14453,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -14839,7 +14478,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -14864,7 +14502,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamAln.bam,wgEncodeRikenCageK562PolysomePamAln.bam.bai
 grant Gingeras
@@ -14890,7 +14527,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamMinusSignal.bigWig
 grant Gingeras
@@ -14916,7 +14552,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamPlusSignal.bigWig
 grant Gingeras
@@ -14941,7 +14576,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamRawData.fastq.gz
 grant Gingeras
@@ -14964,7 +14598,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamTssGencV7.gtf.gz
 grant Gingeras
@@ -14987,7 +14620,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000337
-dccRep 1
 expId 337
 fileName wgEncodeRikenCageK562PolysomePamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -15031,7 +14663,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapAlnRep1.bam,wgEncodeRikenCageMcf7CellPapAlnRep1.bam.bai
 grant Gingeras
@@ -15056,7 +14687,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001151
-dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapAlnRep2.bam,wgEncodeRikenCageMcf7CellPapAlnRep2.bam.bai
 grant Gingeras
@@ -15081,7 +14711,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -15107,7 +14736,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
-dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapMinusRawRep2.bigWig
 grant Gingeras
@@ -15132,7 +14760,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -15157,7 +14784,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -15183,7 +14809,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
-dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapPlusRawRep2.bigWig
 grant Gingeras
@@ -15208,7 +14833,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -15233,7 +14857,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
-dccRep 1
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapRawDataRep1.fastq.tgz
 grant Gingeras
@@ -15257,7 +14880,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001151
-dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -15335,7 +14957,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6678
 tableName wgEncodeRikenCageMcf7CytosolPapAlnRep3
 view Alignments
@@ -15358,7 +14980,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6667
 tableName wgEncodeRikenCageMcf7CytosolPapAlnRep4
 view Alignments
@@ -15381,7 +15003,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6616
 tableName wgEncodeRikenCageMcf7CytosolPapMinusRawRep3
 view MinusRawSignal
@@ -15404,7 +15026,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6604
 tableName wgEncodeRikenCageMcf7CytosolPapMinusRawRep4
 view MinusRawSignal
@@ -15427,7 +15049,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6616
 tableName wgEncodeRikenCageMcf7CytosolPapPlusRawRep3
 view PlusRawSignal
@@ -15450,7 +15072,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6604
 tableName wgEncodeRikenCageMcf7CytosolPapPlusRawRep4
 view PlusRawSignal
@@ -15473,7 +15095,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6455
 view RawData
 
@@ -15495,7 +15117,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6443
 view RawData
 
@@ -15516,7 +15138,7 @@ localization cytosol
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6728
 tableName wgEncodeRikenCageMcf7CytosolPapTssHmm
 view TssHmm
@@ -15539,7 +15161,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6551
 tableName wgEncodeRikenCageMcf7NucleusPapAlnRep3
 view Alignments
@@ -15562,7 +15184,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6653
 tableName wgEncodeRikenCageMcf7NucleusPapAlnRep4
 view Alignments
@@ -15585,7 +15207,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6586
 tableName wgEncodeRikenCageMcf7NucleusPapMinusRawRep3
 view MinusRawSignal
@@ -15608,7 +15230,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6591
 tableName wgEncodeRikenCageMcf7NucleusPapMinusRawRep4
 view MinusRawSignal
@@ -15631,7 +15253,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6586
 tableName wgEncodeRikenCageMcf7NucleusPapPlusRawRep3
 view PlusRawSignal
@@ -15654,7 +15276,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6591
 tableName wgEncodeRikenCageMcf7NucleusPapPlusRawRep4
 view PlusRawSignal
@@ -15677,7 +15299,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6425
 view RawData
 
@@ -15699,7 +15321,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6430
 view RawData
 
@@ -15720,7 +15342,7 @@ localization nucleus
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6738
 tableName wgEncodeRikenCageMcf7NucleusPapTssHmm
 view TssHmm
@@ -15744,7 +15366,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6649
 tableName wgEncodeRikenCageMonocd14CellPapAlnRep1
 view Alignments
@@ -15768,7 +15390,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6683
 tableName wgEncodeRikenCageMonocd14CellPapAlnRep2
 view Alignments
@@ -15792,7 +15414,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6587
 tableName wgEncodeRikenCageMonocd14CellPapMinusRawRep1
 view MinusRawSignal
@@ -15816,7 +15438,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6621
 tableName wgEncodeRikenCageMonocd14CellPapMinusRawRep2
 view MinusRawSignal
@@ -15840,7 +15462,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6587
 tableName wgEncodeRikenCageMonocd14CellPapPlusRawRep1
 view PlusRawSignal
@@ -15864,7 +15486,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6621
 tableName wgEncodeRikenCageMonocd14CellPapPlusRawRep2
 view PlusRawSignal
@@ -15888,7 +15510,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6426
 view RawData
 
@@ -15911,7 +15533,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6460
 view RawData
 
@@ -15933,7 +15555,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6715
 tableName wgEncodeRikenCageMonocd14CellPapTssHmm
 view TssHmm
@@ -15957,7 +15579,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6694
 tableName wgEncodeRikenCageNhdfCellPapAlnRep1
 view Alignments
@@ -15981,7 +15603,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6696
 tableName wgEncodeRikenCageNhdfCellPapAlnRep2
 view Alignments
@@ -16005,7 +15627,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6631
 tableName wgEncodeRikenCageNhdfCellPapMinusRawRep1
 view MinusRawSignal
@@ -16029,7 +15651,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6634
 tableName wgEncodeRikenCageNhdfCellPapMinusRawRep2
 view MinusRawSignal
@@ -16053,7 +15675,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6631
 tableName wgEncodeRikenCageNhdfCellPapPlusRawRep1
 view PlusRawSignal
@@ -16077,7 +15699,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6634
 tableName wgEncodeRikenCageNhdfCellPapPlusRawRep2
 view PlusRawSignal
@@ -16101,7 +15723,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6469
 view RawData
 
@@ -16124,7 +15746,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6473
 view RawData
 
@@ -16146,7 +15768,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6730
 tableName wgEncodeRikenCageNhdfCellPapTssHmm
 view TssHmm
@@ -16161,7 +15783,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapAlnRep1.bam,wgEncodeRikenCageNhekCellPapAlnRep1.bam.bai
 grant Gingeras
@@ -16186,7 +15807,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapAlnRep2.bam,wgEncodeRikenCageNhekCellPapAlnRep2.bam.bai
 grant Gingeras
@@ -16211,7 +15831,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapMinusClustersRep1.bigWig
 grant Gingeras
@@ -16237,7 +15856,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapMinusClustersRep2.bigWig
 grant Gingeras
@@ -16263,7 +15881,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapMinusSignalRep1.bigWig
 grant Gingeras
@@ -16288,7 +15905,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -16313,7 +15929,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapPlusClustersRep1.bigWig
 grant Gingeras
@@ -16339,7 +15954,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapPlusClustersRep2.bigWig
 grant Gingeras
@@ -16365,7 +15979,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapPlusSignalRep1.bigWig
 grant Gingeras
@@ -16390,7 +16003,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -16415,7 +16027,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 1
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -16439,7 +16050,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001152
-dccRep 2
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapRawDataRep2.fastq.gz
 grant Gingeras
@@ -16510,7 +16120,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam,wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -16537,7 +16146,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -16564,7 +16172,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -16590,7 +16197,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -16615,7 +16221,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamAln.bam,wgEncodeRikenCageNhekCytosolPamAln.bam.bai
 grant Gingeras
@@ -16641,7 +16246,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamMinusSignal.bigWig
 grant Gingeras
@@ -16667,7 +16271,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamPlusSignal.bigWig
 grant Gingeras
@@ -16692,7 +16295,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamRawData.fastq.gz
 grant Gingeras
@@ -16715,7 +16317,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamTssGencV7.gtf.gz
 grant Gingeras
@@ -16738,7 +16339,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000346
-dccRep 1
 expId 346
 fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -16782,7 +16382,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapAlnRep3.bam,wgEncodeRikenCageNhekCytosolPapAlnRep3.bam.bai
 grant Gingeras
@@ -16807,7 +16406,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001153
-dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapAlnRep4.bam,wgEncodeRikenCageNhekCytosolPapAlnRep4.bam.bai
 grant Gingeras
@@ -16832,7 +16430,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapMinusClustersRep3.bigWig
 grant Gingeras
@@ -16858,7 +16455,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
-dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapMinusRawRep4.bigWig
 grant Gingeras
@@ -16883,7 +16479,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapMinusSignalRep3.bigWig
 grant Gingeras
@@ -16908,7 +16503,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapPlusClustersRep3.bigWig
 grant Gingeras
@@ -16934,7 +16528,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
-dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapPlusRawRep4.bigWig
 grant Gingeras
@@ -16959,7 +16552,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapPlusSignalRep3.bigWig
 grant Gingeras
@@ -16984,7 +16576,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001153
-dccRep 1
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapRawDataRep3.fastq.gz
 grant Gingeras
@@ -17008,7 +16599,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001153
-dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapRawDataRep4.fastq.gz
 grant Gingeras
@@ -17079,7 +16669,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam,wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -17106,7 +16695,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -17133,7 +16721,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -17159,7 +16746,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaRawData.fastq.gz
 grant Gingeras
@@ -17184,7 +16770,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamAln.bam,wgEncodeRikenCageNhekNucleusPamAln.bam.bai
 grant Gingeras
@@ -17210,7 +16795,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamMinusSignal.bigWig
 grant Gingeras
@@ -17236,7 +16820,6 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamPlusSignal.bigWig
 grant Gingeras
@@ -17261,7 +16844,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamRawData.fastq.gz
 grant Gingeras
@@ -17284,7 +16866,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamTssGencV7.gtf.gz
 grant Gingeras
@@ -17307,7 +16888,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000347
-dccRep 1
 expId 347
 fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
@@ -17351,7 +16931,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapAlnRep3.bam,wgEncodeRikenCageNhekNucleusPapAlnRep3.bam.bai
 grant Gingeras
@@ -17385,7 +16964,7 @@ project wgEncode
 readType 1x36
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 sex F
 subId 6681
 tableName wgEncodeRikenCageNhekNucleusPapAlnRep4
@@ -17401,7 +16980,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapMinusClustersRep3.bigWig
 grant Gingeras
@@ -17436,7 +17014,7 @@ project wgEncode
 readType 1x36
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 sex F
 subId 6619
 tableName wgEncodeRikenCageNhekNucleusPapMinusRawRep4
@@ -17452,7 +17030,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapMinusSignalRep3.bigWig
 grant Gingeras
@@ -17477,7 +17054,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapPlusClustersRep3.bigWig
 grant Gingeras
@@ -17512,7 +17088,7 @@ project wgEncode
 readType 1x36
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 sex F
 subId 6619
 tableName wgEncodeRikenCageNhekNucleusPapPlusRawRep4
@@ -17528,7 +17104,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapPlusSignalRep3.bigWig
 grant Gingeras
@@ -17553,7 +17128,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapRawDataRep3.fastq.gz
 grant Gingeras
@@ -17586,7 +17160,7 @@ project wgEncode
 readType 1x36
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 sex F
 subId 6458
 view RawData
@@ -17601,7 +17175,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001154
-dccRep 1
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssGencV7.gtf.gz
 grant Gingeras
@@ -17676,7 +17249,7 @@ localization nucleus
 project wgEncode
 readType 1x36
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
+platform Illumina_GA2x
 sex F
 subId 6726
 submittedDataVersion V4 - replaces old version 3 that had broken values
@@ -17702,7 +17275,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6665
 tableName wgEncodeRikenCageNhemfm2CellPapAlnRep1
 view Alignments
@@ -17726,7 +17299,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6701
 tableName wgEncodeRikenCageNhemfm2CellPapAlnRep2
 view Alignments
@@ -17750,7 +17323,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6603
 tableName wgEncodeRikenCageNhemfm2CellPapMinusRawRep1
 view MinusRawSignal
@@ -17774,7 +17347,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6638
 tableName wgEncodeRikenCageNhemfm2CellPapMinusRawRep2
 view MinusRawSignal
@@ -17798,7 +17371,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6603
 tableName wgEncodeRikenCageNhemfm2CellPapPlusRawRep1
 view PlusRawSignal
@@ -17822,7 +17395,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6638
 tableName wgEncodeRikenCageNhemfm2CellPapPlusRawRep2
 view PlusRawSignal
@@ -17846,7 +17419,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6441
 view RawData
 
@@ -17869,7 +17442,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6477
 view RawData
 
@@ -17891,7 +17464,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6713
 tableName wgEncodeRikenCageNhemfm2CellPapTssHmm
 view TssHmm
@@ -17915,7 +17488,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6708
 tableName wgEncodeRikenCageNhemm2CellPapAlnRep1
 view Alignments
@@ -17939,7 +17512,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6654
 tableName wgEncodeRikenCageNhemm2CellPapAlnRep2
 view Alignments
@@ -17963,7 +17536,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6646
 tableName wgEncodeRikenCageNhemm2CellPapMinusRawRep1
 view MinusRawSignal
@@ -17987,7 +17560,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6592
 tableName wgEncodeRikenCageNhemm2CellPapMinusRawRep2
 view MinusRawSignal
@@ -18011,7 +17584,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6646
 tableName wgEncodeRikenCageNhemm2CellPapPlusRawRep1
 view PlusRawSignal
@@ -18035,7 +17608,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6592
 tableName wgEncodeRikenCageNhemm2CellPapPlusRawRep2
 view PlusRawSignal
@@ -18059,7 +17632,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6485
 view RawData
 
@@ -18082,7 +17655,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6431
 view RawData
 
@@ -18104,7 +17677,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6743
 tableName wgEncodeRikenCageNhemm2CellPapTssHmm
 view TssHmm
@@ -18120,7 +17693,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam,wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
 grant Gingeras
@@ -18147,7 +17719,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
@@ -18174,7 +17745,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
@@ -18201,7 +17771,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
 grant Gingeras
@@ -18226,7 +17795,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
 grant Gingeras
@@ -18251,7 +17819,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellPamAln.bam,wgEncodeRikenCageProstateCellPamAln.bam.bai
 grant Gingeras
@@ -18277,7 +17844,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellPamMinusSignal.bigWig
 grant Gingeras
@@ -18303,7 +17869,6 @@ dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellPamPlusSignal.bigWig
 grant Gingeras
@@ -18329,7 +17894,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellPamRawData.csfasta.gz
 grant Gingeras
@@ -18353,7 +17917,6 @@ dateResubmitted 2010-09-24
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
-dccRep 1
 expId 331
 fileName wgEncodeRikenCageProstateCellPamRawData2.csqual.gz
 grant Gingeras
@@ -18385,7 +17948,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6669
 tableName wgEncodeRikenCageSkmcCellPapAlnRep1
 view Alignments
@@ -18409,7 +17972,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6659
 tableName wgEncodeRikenCageSkmcCellPapAlnRep2
 view Alignments
@@ -18433,7 +17996,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6606
 tableName wgEncodeRikenCageSkmcCellPapMinusRawRep1
 view MinusRawSignal
@@ -18457,7 +18020,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6599
 tableName wgEncodeRikenCageSkmcCellPapMinusRawRep2
 view MinusRawSignal
@@ -18481,7 +18044,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6606
 tableName wgEncodeRikenCageSkmcCellPapPlusRawRep1
 view PlusRawSignal
@@ -18505,7 +18068,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6599
 tableName wgEncodeRikenCageSkmcCellPapPlusRawRep2
 view PlusRawSignal
@@ -18529,7 +18092,7 @@ project wgEncode
 readType 1x50
 replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6446
 view RawData
 
@@ -18552,7 +18115,7 @@ project wgEncode
 readType 1x50
 replicate 2
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6435
 view RawData
 
@@ -18574,7 +18137,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6732
 tableName wgEncodeRikenCageSkmcCellPapTssHmm
 view TssHmm
@@ -18597,7 +18160,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6660
 tableName wgEncodeRikenCageSknshCellPapAlnRep3
 view Alignments
@@ -18620,7 +18183,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6692
 tableName wgEncodeRikenCageSknshCellPapAlnRep4
 view Alignments
@@ -18643,7 +18206,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6598
 tableName wgEncodeRikenCageSknshCellPapMinusRawRep3
 view MinusRawSignal
@@ -18666,7 +18229,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6632
 tableName wgEncodeRikenCageSknshCellPapMinusRawRep4
 view MinusRawSignal
@@ -18689,7 +18252,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6598
 tableName wgEncodeRikenCageSknshCellPapPlusRawRep3
 view PlusRawSignal
@@ -18712,7 +18275,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6632
 tableName wgEncodeRikenCageSknshCellPapPlusRawRep4
 view PlusRawSignal
@@ -18735,7 +18298,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6437
 view RawData
 
@@ -18757,7 +18320,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6470
 view RawData
 
@@ -18778,7 +18341,7 @@ localization cell
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6717
 tableName wgEncodeRikenCageSknshCellPapTssHmm
 view TssHmm
@@ -18801,7 +18364,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6677
 tableName wgEncodeRikenCageSknshCytosolPapAlnRep3
 view Alignments
@@ -18824,7 +18387,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6652
 tableName wgEncodeRikenCageSknshCytosolPapAlnRep4
 view Alignments
@@ -18847,7 +18410,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6615
 tableName wgEncodeRikenCageSknshCytosolPapMinusRawRep3
 view MinusRawSignal
@@ -18870,7 +18433,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6590
 tableName wgEncodeRikenCageSknshCytosolPapMinusRawRep4
 view MinusRawSignal
@@ -18893,7 +18456,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6615
 tableName wgEncodeRikenCageSknshCytosolPapPlusRawRep3
 view PlusRawSignal
@@ -18916,7 +18479,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6590
 tableName wgEncodeRikenCageSknshCytosolPapPlusRawRep4
 view PlusRawSignal
@@ -18939,7 +18502,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6453
 view RawData
 
@@ -18961,7 +18524,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6429
 view RawData
 
@@ -18982,7 +18545,7 @@ localization cytosol
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6734
 tableName wgEncodeRikenCageSknshCytosolPapTssHmm
 view TssHmm
@@ -19005,7 +18568,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6675
 tableName wgEncodeRikenCageSknshNucleusPapAlnRep3
 view Alignments
@@ -19028,7 +18591,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6661
 tableName wgEncodeRikenCageSknshNucleusPapAlnRep4
 view Alignments
@@ -19051,7 +18614,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6613
 tableName wgEncodeRikenCageSknshNucleusPapMinusRawRep3
 view MinusRawSignal
@@ -19074,7 +18637,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6597
 tableName wgEncodeRikenCageSknshNucleusPapMinusRawRep4
 view MinusRawSignal
@@ -19097,7 +18660,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6613
 tableName wgEncodeRikenCageSknshNucleusPapPlusRawRep3
 view PlusRawSignal
@@ -19120,7 +18683,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6597
 tableName wgEncodeRikenCageSknshNucleusPapPlusRawRep4
 view PlusRawSignal
@@ -19143,7 +18706,7 @@ project wgEncode
 readType 1x50
 replicate 3
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6451
 view RawData
 
@@ -19165,7 +18728,7 @@ project wgEncode
 readType 1x50
 replicate 4
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6438
 view RawData
 
@@ -19186,7 +18749,7 @@ localization nucleus
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
-seqPlatform Illumina_HiSeq_2000
+platform Illumina_HiSeq_2000
 subId 6727
 tableName wgEncodeRikenCageSknshNucleusPapTssHmm
 view TssHmm
@@ -19201,7 +18764,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001157
-dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapAlnRep1.bam,wgEncodeRikenCageSknshraCellPapAlnRep1.bam.bai
 grant Gingeras
@@ -19226,7 +18788,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001157
-dccRep 2
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapAlnRep2.bam,wgEncodeRikenCageSknshraCellPapAlnRep2.bam.bai
 grant Gingeras
@@ -19251,7 +18812,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
-dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapMinusRawRep1.bigWig
 grant Gingeras
@@ -19276,7 +18836,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001157
-dccRep 2
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapMinusSignalRep2.bigWig
 grant Gingeras
@@ -19301,7 +18860,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
-dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapPlusRawRep1.bigWig
 grant Gingeras
@@ -19326,7 +18884,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001157
-dccRep 2
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapPlusSignalRep2.bigWig
 grant Gingeras
@@ -19351,7 +18908,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001157
-dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapRawDataRep1.fastq.gz
 grant Gingeras
@@ -19375,7 +18931,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001157
-dccRep 2
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapRawDataRep2.fastq.gz
 grant Gingeras
