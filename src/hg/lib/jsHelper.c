@@ -763,7 +763,7 @@ static char *getString(char *str, int *posPtr)
 {
 // read a double-quote delimited string; we handle backslash escaping.
 // returns allocated string.
-char prevChar = 0;
+boolean escapeMode = FALSE;
 int i;
 struct dyString *ds = dyStringNew(1024);
 getSpecificChar('"', str, posPtr);
@@ -772,7 +772,7 @@ for(i = 0;; i++)
     char c = str[*posPtr + i];
     if(!c)
         errAbort("Premature end of string (missing trailing double-quote); string position '%d'", *posPtr);
-    else if(prevChar == '\\')
+    else if(escapeMode)
         {
         switch(c)
             {
@@ -787,14 +787,16 @@ for(i = 0;; i++)
                 break;
             }
         dyStringAppendC(ds, c);
-        prevChar = 0;   // watch out for edge case where this is an escaped backslash
+        escapeMode = FALSE;
         }
     else if(c == '"')
         break;
-    else if(c != '\\')
+    else if(c == '\\')
+        escapeMode = TRUE;
+    else
         {
         dyStringAppendC(ds, c);
-        prevChar = c;
+        escapeMode = FALSE;
         }
     }
 *posPtr += i;
