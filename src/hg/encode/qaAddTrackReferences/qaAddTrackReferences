@@ -102,8 +102,7 @@ def makeHtml(infoDict):
 <p>
 %s
 <a href="%s" target="_blank">
-%s
-</a>.
+%s</a>.
 <em>%s</em>. %s
 </p>
 """ % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr)
