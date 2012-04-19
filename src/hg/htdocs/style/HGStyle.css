@@ -47,6 +47,26 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
 
+
+/* Web section styles - for use with functions webNewSectionDiv and webEndSectionTablesDiv */
+.section {
+    background-color: #fffee8; 
+    border: 1px solid #888888;
+}
+
+.subsection {
+    padding:14px 13px 2px 14px;
+}
+
+.centeredStdTbl {
+    margin: 10px auto; width: 98%;
+}
+
+.stdTblHead {
+    background-color: #fcecc0;
+}
+
+
 /* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
 .subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
                 width:100%; text-align:left; vertical-align:bottom;
@@ -370,6 +390,8 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .hubError {color: #F00000;}
 
+/* END - hgHubConnect Styles */
+
 /* [+][-] buttons are no longer images but divs */
 .pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;
             display: inline-block; width:16px; height:16px; vertical-align: top;
@@ -381,4 +403,4 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 /* input[type=submit]:hover,input[type=button]:hover { color: #0000AA; border:2px outset #008800; } */
 /* img[src="../images/add_sm.gif"]:hover,img[src="../images/remove_sm.gif"]:hover { outline:#008800 outset 1px; } */
 
-/* END - hgHubConnect Styles */
+
