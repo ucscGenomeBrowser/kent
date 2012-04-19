@@ -297,7 +297,8 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     }
 if (c != '\0')
     {
-    reportWarn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]"
+	, lf->fileName, lf->lineIx,name, s, row);
     return FALSE;
     }
 *val = res;
@@ -325,7 +326,8 @@ while ((*p >= '0') && (*p <= '9'))
 /* test for invalid character, empty, or just a minus */
 if ((*p != '\0') || (p == p0))
     {
-    reportWarn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]"
+	, lf->fileName, lf->lineIx,name, s, row);
     return FALSE;
     }
 if (*s == '-')
@@ -366,7 +368,8 @@ if (strlen(s) > 0)
 	    }
 	else
 	    {
-	    reportWarn("Error [file=%s, line=%d]: chrom %s not found [%s]", lf->fileName, lf->lineIx, s, row);
+	    reportWarn("Error [file=%s, line=%d]: chrom %s not found [%s]"
+		, lf->fileName, lf->lineIx, s, row);
 	    return FALSE; // chrom not found
 	    }
 	}
@@ -392,9 +395,11 @@ for ( i = 0; s[i] ; ++i)
     if (!dnaChars[(int)s[i]])
 	{
 	if (s==row)
-	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", lf->fileName, lf->lineIx,name, s);
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)"
+		, lf->fileName, lf->lineIx,name, s);
 	else
-	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]"
+		, lf->fileName, lf->lineIx,name, s, row);
 	return 0;
 	}
     len++;
@@ -411,9 +416,11 @@ if (i == 0)
     }
 else if(privateData) { // PrivateData means sequence should be empty
     if (s==row)
-        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data", lf->fileName, lf->lineIx,name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data"
+	    , lf->fileName, lf->lineIx,name);
     else
-        reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", lf->fileName, lf->lineIx,name, row);
+        reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]"
+	    , lf->fileName, lf->lineIx,name, row);
     return 0;
     }
 return len;
@@ -532,7 +539,8 @@ if (i == 0)
 
 if (i != len)
     {
-    reportWarn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]", lf->fileName, lf->lineIx,len, s);
+    reportWarn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]"
+	, lf->fileName, lf->lineIx,len, s);
     return FALSE;
     }
 
@@ -548,7 +556,8 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!csQualChars[(int)s[i]])
 	{
-	reportWarn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", lf->fileName, lf->lineIx,s);
+	reportWarn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]"
+	    , lf->fileName, lf->lineIx,s);
 	return FALSE;
 	}
     }
@@ -560,14 +569,16 @@ if (i == 0)
 return TRUE;
 }
 
-boolean checkStartEnd(struct lineFile *lf, char *row, char *start, char *end, char *chrom, unsigned chromSize, unsigned *sVal, unsigned *eVal)
+boolean checkStartEnd(struct lineFile *lf, char *row, char *start, char *end, char *chrom,
+    unsigned chromSize, unsigned *sVal, unsigned *eVal)
 // Return TRUE if start and end are both >= 0,
 // and if start <= end
 // Also check end <= chromSize (special case circular chrM start <= chromSize)
 // start and end values are returned in sVal and eVal
 // Othewise print warning and return FALSE
 {
-verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, lf->lineIx, start, end, chrom, chromSize, row);
+verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n"
+    , __func__, __LINE__, lf->lineIx, start, end, chrom, chromSize, row);
 unsigned s, e;
 if (   !checkUnsigned(lf, row, start, &s, "chromStart")
     || !checkUnsigned(lf, row, end, &e, "chromEnd"))
@@ -576,9 +587,10 @@ if (   !checkUnsigned(lf, row, start, &s, "chromStart")
 *eVal = e;
 if (chromSize > 0)
     {
-    if (e > chromSize && (differentString(chrom, "chrM") || s > chromSize)) // passes test if end < chromSize or chrM and start < chromSize
+    if (e > chromSize && (differentString(chrom, "chrM")))
 	{
-        reportWarn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", lf->fileName, lf->lineIx,e, chrom, chromSize, row);
+        reportWarn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]"
+	    , lf->fileName, lf->lineIx,e, chrom, chromSize, row);
         return FALSE;
         }
     else
@@ -598,7 +610,8 @@ boolean checkPeak(struct lineFile *lf, char *row, char *peak, char *start, char 
 // Return TRUE if peak is >= 0 and <= (end-start)
 // Othewise print warning and return FALSE
 {
-verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, lf->lineIx, peak, start, end, row);
+verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n"
+    , __func__, __LINE__, lf->lineIx, peak, start, end, row);
 unsigned p, s, e;
 int i;
 if (!checkSigned(lf, row, peak, &i, "peak"))
@@ -612,7 +625,8 @@ if (   !checkUnsigned(lf, row, peak, &p, "peak")
     return FALSE;
 if (p > e - s)
     {
-    reportWarn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", lf->fileName, lf->lineIx,p, e - s, row);
+    reportWarn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]"
+	, lf->fileName, lf->lineIx,p, e - s, row);
     return FALSE;
     }
 return TRUE;
@@ -625,13 +639,15 @@ boolean checkIntBetween(struct lineFile *lf, char *row, char *val, char *name, i
 int i;
 if (!checkSigned(lf, row, val, &i, name))
     return FALSE;
-verbose(2,"[%s %3d] inputLine=%d [%s] -> [%d] [%s,%d..%d]\n", __func__, __LINE__, lf->lineIx, val, i, name, min, max);
+verbose(2,"[%s %3d] inputLine=%d [%s] -> [%d] [%s,%d..%d]\n"
+    , __func__, __LINE__, lf->lineIx, val, i, name, min, max);
 if (i >= min && i <= max)
     {
     verbose(2,"[%s %3d] min <= value <= max (%d <= %d <= %d)\n", __func__, __LINE__, min, i, max);
     return TRUE;
     }
-reportWarn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", lf->fileName, lf->lineIx,name, i, min, max, row);
+reportWarn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]"
+    , lf->fileName, lf->lineIx,name, i, min, max, row);
 return FALSE;
 }
 
@@ -660,7 +676,8 @@ if (strlen(strand) == 1 && (*strand == '+' || *strand == '-' || *strand == '.'))
     verbose(2,"[%s %3d] strand(%s)\n", __func__, __LINE__, strand);
     return TRUE;
     }
-reportWarn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", lf->fileName, lf->lineIx,strand, row);
+reportWarn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]"
+    , lf->fileName, lf->lineIx,strand, row);
 return FALSE;
 }
 
@@ -683,7 +700,8 @@ else
     n = chopByWhite(buf, words, wordSize);
 if (n != expected)
     {
-    reportWarn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", lf->fileName, lf->lineIx, n, expected, row);
+    reportWarn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]"
+	, lf->fileName, lf->lineIx, n, expected, row);
     return FALSE;
     }
 return TRUE;
@@ -748,7 +766,8 @@ if (strand == '-')
 
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
-    reportWarn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+    reportWarn("Error [file=%s, line=%d]: "
+	"sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
         lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
         chrom, chromStart, chromEnd, strand);
     return FALSE;
@@ -766,7 +785,8 @@ for (i=0 ; i < length; ++i)
     }
 if (mm > mismatches)
     {
-    reportWarn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
+    reportWarn("Error [file=%s, line=%d]: "
+	"too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
          lf->fileName, lf->lineIx, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
@@ -823,7 +843,8 @@ if (mmPerPair)
     {
     if (mm1 > mismatches || mm2 > mismatches)
         {
-        reportWarn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
+        reportWarn("Error [file=%s, line=%d]: "
+	"too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              lf->fileName, lf->lineIx, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -832,7 +853,8 @@ else
     {
     if (mm1+mm2 > mismatches)
         {
-        reportWarn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
+        reportWarn("Error [file=%s, line=%d]: "
+	"too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              lf->fileName, lf->lineIx, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -1260,8 +1282,7 @@ for(; chroms; chroms = chroms->next)
 	if (*size != chroms->size)
 	    {
 	    reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-		chroms->name,
-		*size, chroms->size);
+		chroms->name, *size, chroms->size);
 	    }
 	}
     }
@@ -1420,7 +1441,8 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
 
         if (mm > mismatches)
             {
-            reportWarn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+            reportWarn("Error [file=%s, line=%d]: "
+	    "too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
                 file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
             }
 
@@ -1430,7 +1452,8 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
             for (i = 0; i < checkLength; i++)
                 squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
-            reportWarn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+            reportWarn("Error [file=%s, line=%d]: "
+	    "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
                 file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
             }        
         }
@@ -1512,7 +1535,8 @@ else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos,
     {
     char *cigar = bamGetCigar(bam);
     if (showBadAlign)
-        reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
+        reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n"
+	    , bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
 
     ++(*errs);
     }
