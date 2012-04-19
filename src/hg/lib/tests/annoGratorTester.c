@@ -188,14 +188,20 @@ if (doAllTests || sameString(test, vcfEx2))
 
 if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
     {
-    // intron
+    // intron +
     dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 161480984, 161481058, TRUE);
 
-    // upstream
+    // upstream +
     dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 161473787, 161475284, TRUE);
 
-    // non-synonymous
+    // non-synonymous +
     dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 161476196, 161476223, TRUE);
+
+    // non-synonymous - chr22:17,264,528-17,264,606
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264528, 17264606, TRUE);
+
+    // synonymous - chr22:17,264,871-17,264,940
+    //dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264871, 17264940, TRUE);
     }
 return 0;
 }
