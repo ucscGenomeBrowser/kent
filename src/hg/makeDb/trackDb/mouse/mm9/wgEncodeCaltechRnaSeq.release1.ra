@@ -70,6 +70,17 @@ html wgEncodeCaltechRnaSeq.release1
         color 65,105,225
         # subId=6081 dateSubmitted=2012-03-19
 
+        track wgEncodeCaltechRnaSeqViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	subTrack wgEncodeCaltechRnaSeq
+	viewLimits 0:500
+	autoScale on
+	transformFunc NONE
+	windowingFunction mean+whiskers
+	maxHeightPixels 100:24:16
+
 	track wgEncodeCaltechRnaSeqViewAlignments
 	shortLabel Alignments
 	view Alignments
