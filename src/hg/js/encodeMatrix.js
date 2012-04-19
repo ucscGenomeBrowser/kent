@@ -22,7 +22,11 @@ var encodeMatrix = (function () {
         // Create panel of radio buttons for user to change search type
         // isFileSearch determines initial setting
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" onclick="encodeMatrix.setFileSearch(false);">tracks<input type="radio" name="searchType" id="searchFiles" value="files" onclick="encodeMatrix.setFileSearch(true);" >files');
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span>' +
+            '<input type="radio" name="searchType" id="searchTracks" value=' + 
+                    COOKIE_SEARCH_TRACKS + ' onclick="encodeMatrix.setFileSearch(false);">tracks' +
+            '<input type="radio" name="searchType" id="searchFiles" value=' + 
+                    COOKIE_SEARCH_FILES + ' onclick="encodeMatrix.setFileSearch(true);" >files');
         if (isFile) {
             $('#searchFiles').attr('checked', true);
         } else {
@@ -44,7 +48,7 @@ var encodeMatrix = (function () {
         isFileSearch: function () {
             // Check search type cookie to retain user choice
             // Defaults to track search if no cookie set
-            return $.cookie(COOKIE_SEARCH, COOKIE_SEARCH_FILES);
+            return ($.cookie(COOKIE_SEARCH) === COOKIE_SEARCH_FILES);
         },
 
         getSearchUrl: function () {
@@ -57,7 +61,7 @@ var encodeMatrix = (function () {
             var argsLen = arguments.length;
             var mdbVals = [];
 
-            if ($('input:radio[name=searchType]:checked').val() === "tracks") {
+            if ($('input:radio[name=searchType]:checked').val() === COOKIE_SEARCH_TRACKS) {
                 prog = 'hgTracks';
                 cartVar = 'hgt_tSearch';
             } else {
