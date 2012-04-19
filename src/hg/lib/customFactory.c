@@ -462,6 +462,7 @@ char *line;
 char *db = ctGenomeOrCurrent(track);
 char *lastChrom = NULL;
 int chromSize = -1;
+boolean newCustomTrackValidate = sameOk(cfgOption("newCustomTrackValidate"), "on");
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[bedKnownFields];
@@ -481,7 +482,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     struct bed *bed = NULL;
 
     /* Intended to replace old customTrackBed */
-    if (sameOk(cfgOption("newCustomTrackValidate"), "on"))
+    if (newCustomTrackValidate)
 	{
 	bed = customTrackBed(row, wordCount, chromSize, lf);
 	bed->chrom = hashStoreName(chromHash, row[0]);
