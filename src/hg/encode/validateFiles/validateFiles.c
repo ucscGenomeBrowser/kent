@@ -973,9 +973,9 @@ validateBedVariant(lf, BED_GRAPH);
 
 
 
-// Validate regular bed [3-15] . and  +
 
 void validateBed(struct lineFile *lf, int bedN, int bedP, struct asObject *as)
+// Validate regular bed [3-15] . and  +
 {
 char *row;
 int bufSize = 1024;  // bufSIze is max row length
