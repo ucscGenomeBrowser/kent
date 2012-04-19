@@ -774,8 +774,16 @@ for(i = 0;; i++)
         errAbort("Premature end of string (missing trailing double-quote); string position '%d'", *posPtr);
     else if(escapeMode)
         {
+        // We support escape sequences listed in https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/JSON
+        // except for Unicode which we cannot support in C-strings
         switch(c)
             {
+            case 'b':
+                c = '\b';
+                break;
+            case 'f':
+                c = '\f';
+                break;
             case 'n':
                 c = '\n';
                 break;
@@ -784,6 +792,12 @@ for(i = 0;; i++)
                 break;
             case 't':
                 c = '\t';
+                break;
+            case 'u':
+                errAbort("Unicode in JSON is unsupported");
+                break;
+            default:
+                // we don't need to convert \,/ or "
                 break;
             }
         dyStringAppendC(ds, c);
