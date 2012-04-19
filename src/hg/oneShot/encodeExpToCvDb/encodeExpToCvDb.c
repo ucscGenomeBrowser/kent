@@ -121,19 +121,24 @@ else
     }
 }
 
+struct mdbObj *getMdbList(char *database)
+/* Get list of metaDb objects for database. */
+{
+/* Grab list of all metaDb obj. */
+struct sqlConnection *conn = sqlConnect(database);
+struct mdbObj *mdbList = mdbObjsQueryAll(conn, metaTable);
+verbose(2, "%d objects in %s.%s\n", slCount(mdbList), database, metaTable);
+sqlDisconnect(&conn);
+return mdbList;
+}
 
-struct hash *mdbHashKeyedByExpId(char *database)
+struct hash *mdbHashKeyedByExpId(struct mdbObj *mdbList)
 /* Return a hash of mdbObjs keyed by the expId field (interpreted as a string 
  * rather than a number).  Note in general there will be multiple
  * values for one key in this hash. */
 {
-/* Grab list of all metaDb obj. */
-struct sqlConnection *conn = sqlConnect(database);
-struct mdbObj *mdb, *mdbList = mdbObjsQueryAll(conn, metaTable);
-verbose(2, "%d objects in %s.%s\n", slCount(mdbList), database, metaTable);
-sqlDisconnect(&conn);
-
 struct hash *hash = hashNew(18);
+struct mdbObj *mdb;
 for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     {
     char *id = mdbLookupField(mdb, "expId");
@@ -142,6 +147,7 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     }
 return hash;
 }
+
 
 struct series
 /* Represents a series of experiments of the same type done in the same lab. */
@@ -186,11 +192,72 @@ for (series = list; series != NULL; series = series->next)
 carefulClose(&f);
 }
 
-void encodeExpToTab(char *outExp, char *outSeries)
+
+void writeMdbListAsResults(struct mdbObj *mdbList, char *fileName)
+/* Write selected fields in list in tab-separated result format to file. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct mdbObj *mdb;
+for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
+    {
+    char *experiment = NULL;
+    char *replicate = NULL;
+    char *objType = NULL;
+    char *fileName = NULL;
+    char *md5sum = NULL;
+    char *tableName = NULL;
+    char *view = NULL;
+    char *dateSubmitted = NULL;
+    char *dateResubmitted = NULL;
+    char *dateUnrestricted = NULL;
+    struct mdbVar *v;
+    for (v = mdb->vars; v != NULL; v = v->next)
+	{
+	char *var = v->var, *val = v->val;
+	if (sameString(var, "expId"))
+	    experiment = val;
+	else if (sameString(var, "replicate"))
+	    replicate = val;
+	else if (sameString(var, "objType"))
+	    objType = val;
+	else if (sameString(var, "fileName"))
+	    fileName = val;
+	else if (sameString(var, "md5sum"))
+	    md5sum = val;
+	else if (sameString(var, "tableName"))
+	    tableName = val;
+	else if (sameString(var, "view"))
+	    view = val;
+	else if (sameString(var, "dateSubmitted"))
+	    dateSubmitted = val;
+	else if (sameString(var, "dateResubmitted"))
+	    dateResubmitted = val;
+	else if (sameString(var, "dateUnrestricted"))
+	    dateUnrestricted = val;
+	}
+    if (experiment != NULL)
+	{
+	fprintf(f, "%s\t", emptyForNull(experiment));
+	fprintf(f, "%s\t", emptyForNull(replicate));
+	fprintf(f, "%s\t", emptyForNull(view));
+	fprintf(f, "%s\t", emptyForNull(objType));
+	fprintf(f, "%s\t", emptyForNull(fileName));
+	fprintf(f, "%s\t", emptyForNull(md5sum));
+	fprintf(f, "%s\t", emptyForNull(tableName));
+	fprintf(f, "%s\t", emptyForNull(dateSubmitted));
+	fprintf(f, "%s\t", emptyForNull(dateResubmitted));
+	fprintf(f, "%s\n", emptyForNull(dateUnrestricted));
+	}
+    }
+carefulClose(&f);
+}
+
+void encodeExpToTab(char *outExp, char *outSeries, char *outResults)
 /* encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb. */
 {
 struct hash *optHash = optionalFieldsHash();
-struct hash *mdbHash = mdbHashKeyedByExpId(metaDb);
+struct mdbObj *mdbList = getMdbList(metaDb);
+struct hash *mdbHash = mdbHashKeyedByExpId(mdbList);
 struct hash *seriesHash = hashNew(0);
 struct series *seriesList = NULL;
 verbose(1, "read %d mdb objects from %s.%s\n", mdbHash->elCount, metaDb, metaTable);
@@ -315,6 +382,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 slReverse(&seriesList);
 writeSeriesList(outSeries, seriesList);
 
+/* Write out results to a separate file. */
+writeMdbListAsResults(mdbList, outResults);
+
 /* Clean up and go home. */
 carefulClose(&f);
 sqlFreeResult(&sr);
@@ -376,14 +446,39 @@ fprintf(f, "        return self.accession\n");
 fprintf(f, "\n");
 
 
+/* Write results model. */
+fprintf(f, "\n");
+fprintf(f, "class Result(models.Model):\n");
+fprintf(f, "    \"\"\"\n");
+fprintf(f, "    A result of an experiment - generally either a data file or a\n");
+fprintf(f, "    database table. Intermediate as well as final results may be found\n");
+fprintf(f, "    here.  Some results may be replicated a number of times\n");
+fprintf(f, "    \"\"\"\n");
+fprintf(f, "    experiment = models.ForeignKey(Experiment, db_column='experiment')\n");
+fprintf(f, "    replicate = models.CharField(max_length=50)\n");
+fprintf(f, "    view = models.CharField(max_length=50)\n");
+fprintf(f, "    objType = models.CharField(max_length=50)\n");
+fprintf(f, "    fileName = models.CharField(max_length=255)\n");
+fprintf(f, "    md5sum = models.CharField(max_length=33)\n");
+fprintf(f, "    tableName = models.CharField(max_length=100)\n");
+fprintf(f, "    dateSubmitted = models.CharField(max_length=40)\n");
+fprintf(f, "    dateResubmitted = models.CharField(max_length=40)\n");
+fprintf(f, "    dateUnrestricted = models.CharField(max_length=40)\n");
+fprintf(f, "\n");
+fprintf(f, "    class Meta:\n");
+fprintf(f, "        db_table = '%s%s'\n", cvDbPrefix, "results");
+fprintf(f, "\n");
+fprintf(f, "    def __unicode__(self):\n");
+fprintf(f, "        return self.fileName\n");
+fprintf(f, "\n");
 
 carefulClose(&f);
 }
 
-void encodeExpToCvDb(char *outExp, char *outSeries, char *outDjango)
+void encodeExpToCvDb(char *outExp, char *outSeries, char *outResults, char *outDjango)
 /* encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb. */
 {
-encodeExpToTab(outExp, outSeries);
+encodeExpToTab(outExp, outSeries, outResults);
 encodeExpToDjango(outDjango);
 }
 
@@ -391,9 +486,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-encodeExpToCvDb(argv[1], argv[2], argv[3]);
+encodeExpToCvDb(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
 
