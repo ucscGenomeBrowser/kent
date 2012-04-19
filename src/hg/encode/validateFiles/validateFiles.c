@@ -1568,7 +1568,8 @@ for(ii=0; ii < head->n_targets; ii++)
 	}
     }
 
-reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
+if (errs > 0)
+    reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
 
 if (!genome)
     return; // only check sequence if 2bit file specified
@@ -1689,6 +1690,7 @@ for (i = 0; i < numFiles ; ++i)
         }
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
+printf( "Error count 0\n");
 
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 
