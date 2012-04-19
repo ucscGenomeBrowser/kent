@@ -40,7 +40,7 @@ enrich genomic DNA for the segments bound by specific proteins &#40;the antigens
 recognized by the antibodies&#41; followed by massively parallel short read sequencing to 
 tag the enriched DNA segments. Sequencing is done on the Illumina GAIIx and HiSeq. 
 The sequence tags are mapped back to the mouse genome &#40;Langmead<EM> et al.</EM>, 2009&#41;, 
-and a graph of the enrichment for histone modifications are displayed as the &#34;Signal&#34;
+and a graph of the enrichment for histone modifications is displayed as the &#34;Signal&#34;
 track &#40;essentially the counts of mapped reads per interval&#41; and the deduced probable 
 binding sites from the MACS program &#40;Zhang <EM> et al. </EM>, 2008&#41; are shown in the &#34;Peaks&#34;
 track. Each experiment is associated with an input signal, which represents the control 
@@ -98,16 +98,16 @@ individual replicates are available by download.
 The resulting 36-nucleotide sequence reads &#40;fastq files&#41; were moved to a data 
 library in Galaxy, and the tools implemented in Galaxy were used for further processing 
 via workflows &#40;Blankenberg <EM>et al.</EM>, 2010&#41;. The reads were mapped to the mouse genome 
-&#40;mm9 assembly&#41; using the program bowtie &#40;Langmead <EM>et al.</EM>, 2009&#41;, and the files of 
+&#40;mm9 assembly&#41; using the program Bowtie &#40;Langmead <EM>et al.</EM>, 2009&#41;, and the files of 
 mapped reads for the ChIP sample and from the &#34;input&#34; control &#40;no antibody&#41; were 
 processed by MACs &#40;Zhang <EM>et al.</EM>, 2008&#41; to call peaks for occupancy by transcription 
-factors, using the parameters mfold=15, bandwidth=125. Since, the signal for some histone 
+factors, using the parameters mfold=15, bandwidth=125. Since the signal for some histone 
 modifications is not expected to be tightly localized &#40;compared to a transcription factor&#41;,
 peak calling programs may not be appropriate. Thus in addition, we provide wiggle 
 tracks with tag counts for every 10 bp segment. Per-replicate
 alignments and sequences are available for download at
 <A HREF="../cgi-bin/hgFileUi?db=mm9&amp;g=wgEncodePsuHistone"
- TARGET=_BLANK>downloads page</A>.
+ TARGET=_BLANK> the downloads page</A>.
 </P>
 
 <H2>Credits</H2>
@@ -134,80 +134,70 @@ title="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
 <p>
 Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A, Wernig M, Plath K <em>et al</em>.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/16630819" target="_blank">
-A bivalent chromatin structure marks key developmental genes in embryonic stem cells
-</a>.
+A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
 <em>Cell</em>. 2006 Apr 21;125(2):315-26.
 </p>
 
 <p>
 Blankenberg D, Gordon A, Von Kuster G, Coraor N, Taylor J, Nekrutenko A, Galaxy Team.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/20562416" target="_blank">
-Manipulation of FASTQ data with Galaxy
-</a>.
+Manipulation of FASTQ data with Galaxy</a>.
 <em>Bioinformatics</em>. 2010 Jul 15;26(14):1783-5.
 </p>
 
 <p>
 ENCODE Project Consortium, Birney E, Stamatoyannopoulos JA, Dutta A, Guig&#243; R, Gingeras TR, Margulies EH, Weng Z, Snyder M, Dermitzakis ET <em>et al</em>.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/17571346" target="_blank">
-Identification and analysis of functional elements in 1% of the human genome by the ENCODE pilot project
-</a>.
+Identification and analysis of functional elements in 1% of the human genome by the ENCODE pilot project</a>.
 <em>Nature</em>. 2007 Jun 14;447(7146):799-816.
 </p>
 
 <p>
 Heintzman ND, Stuart RK, Hon G, Fu Y, Ching CW, Hawkins RD, Barrera LO, Van Calcar S, Qu C, Ching KA <em>et al</em>.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/17277777" target="_blank">
-Distinct and predictive chromatin signatures of transcriptional promoters and enhancers in the human genome
-</a>.
+Distinct and predictive chromatin signatures of transcriptional promoters and enhancers in the human genome</a>.
 <em>Nat Genet</em>. 2007 Mar;39(3):311-8.
 </p>
 
 <p>
 Langmead B, Trapnell C, Pop M, Salzberg SL.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
-Ultrafast and memory-efficient alignment of short DNA sequences to the human genome
-</a>.
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
 <em>Genome Biol</em>. 2009;10(3):R25.
 </p>
 
 <p>
 M&#252;ller J, Hart CM, Francis NJ, Vargas ML, Sengupta A, Wild B, Miller EL, O'Connor MB, Kingston RE, Simon JA.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/12408864" target="_blank">
-Histone methyltransferase activity of a Drosophila Polycomb group repressor complex
-</a>.
+Histone methyltransferase activity of a Drosophila Polycomb group repressor complex</a>.
 <em>Cell</em>. 2002 Oct 18;111(2):197-208.
 </p>
 
 <p>
 Rando OJ, Chang HY.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/19317649" target="_blank">
-Genome-wide views of chromatin structure
-</a>.
+Genome-wide views of chromatin structure</a>.
 <em>Annu Rev Biochem</em>. 2009;78:245-71.
 </p>
 
 <p>
 Weiss MJ, Yu C, Orkin SH.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/9032291" target="_blank">
-Erythroid-cell-specific properties of transcription factor GATA-1 revealed by phenotypic rescue of a gene-targeted cell line
-</a>.
+Erythroid-cell-specific properties of transcription factor GATA-1 revealed by phenotypic rescue of a gene-targeted cell line</a>.
 <em>Mol Cell Biol</em>. 1997 Mar;17(3):1642-51.
 </p>
 
 <p>
 Welch JJ, Watts JA, Vakoc CR, Yao Y, Wang H, Hardison RC, Blobel GA, Chodosh LA, Weiss MJ.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/15297311" target="_blank">
-Global regulation of erythroid gene expression by transcription factor GATA-1
-</a>.
+Global regulation of erythroid gene expression by transcription factor GATA-1</a>.
 <em>Blood</em>. 2004 Nov 15;104(10):3136-47.
 </p>
 
 <p>
 Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W <em>et al</em>.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982" target="_blank">
-Model-based analysis of ChIP-Seq (MACS)
-</a>.
+Model-based analysis of ChIP-Seq (MACS)</a>.
 <em>Genome Biol</em>. 2008;9(9):R137.
 </p>
 
