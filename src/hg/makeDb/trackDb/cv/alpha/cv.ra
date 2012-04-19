@@ -15376,7 +15376,7 @@ label Insertion length
 description The length of the insertion for paired reads for RNA-seq experiments.
 searchable no
 cvDefined yes
-validate cv
+validate cv or None
 priority 166
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 requiredVars term,tag,type,description #Provisional
