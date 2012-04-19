@@ -1,3 +1,19 @@
+# Describes where an antibody is thought to bind
+class AbTarget(models.Model):
+    term = models.CharField("term", primaryKey=True, max_length=255)
+	# A relatively short label, no more than a few words
+    deprecated = models.CharField("deprecated", max_length=255, blank=True)
+	# If non-empty, the reason why this entry is obsolete.
+    description = models.TextField("description")
+	# Short description of antibody target
+    externalId = models.CharField("external id", max_length=255)
+	# Identifier for target, prefixed with source of ID, usually GeneCards
+    targetUrl = models.CharField("target url", max_length=255, blank=True)
+	# Web page associated with antibody target.
+
+    def __unicode__(self):
+        return self.term
+
 # Information on an antibody including where to get it and what it targets
 class Ab(models.Model):
     term = models.CharField("term", max_length=255)
@@ -8,7 +24,7 @@ class Ab(models.Model):
 	# If non-empty, the reason why this entry is obsolete.
     description = models.TextField("description")
 	# Short description of antibody itself.
-    target = models.CharField("target", max_length=255)
+    target = models.ForeignKey(AbTarget, "target", max_length=255)
 	# Molecular target of antibody.
     vendorName = models.CharField("vendor name", max_length=255)
 	# Name of vendor selling reagent.
@@ -31,17 +47,3 @@ class Ab(models.Model):
     def __unicode__(self):
         return self.term
 
-class AbTarget(models.Model):
-    term = models.CharField("term", max_length=255)
-	# A relatively short label, no more than a few words
-    deprecated = models.CharField("deprecated", max_length=255, blank=True)
-	# If non-empty, the reason why this entry is obsolete.
-    description = models.TextField("description")
-	# Short description of antibody target
-    externalId = models.CharField("external id", max_length=255)
-	# Identifier for target, prefixed with source of ID, usually GeneCards
-    targetUrl = models.CharField("target url", max_length=255, blank=True)
-	# Web page associated with antibody target.
-
-    def __unicode__(self):
-        return self.term
