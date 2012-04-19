@@ -102,15 +102,30 @@ var encodeMatrix = (function () {
 
             // show only spinner until data is retrieved
             $el.hide();
+            $('.helpLauncher').hide();
+            $('.xIcon').hide();
+
+            // setup click handlers for help controls
+            $('.xIcon').click(function() {
+                $('.helpText').toggle();
+                $('.helpLauncher').toggle();
+            });
+            $('.helpLauncher').click(function() {
+                $('.helpText').toggle();
+                $('.helpLauncher').toggle();
+            });
             spinner = showLoadingImage('spinner', true);
 
             // add radio buttons for search type to specified div on page
             addSearchPanel($('#searchTypePanel'), encodeMatrix.isFileSearch());
+
         },
 
     show: function ($el) {
         // Call after data loads to show display
         hideLoadingImage(spinner);
+        $('#spinner').remove();
+        $('.xIcon').show();
         $el.show();
         },
 

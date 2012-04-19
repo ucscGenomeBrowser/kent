@@ -23,6 +23,21 @@
         <span id="pageHeader" class="txt">Data Matrix</span>
         <span id="assemblyLabel"></span>
         <span id="spinner"></span>
+        <span id="expMatrixHelpIcon" title="Click for help" class="helpLauncher">Tell me about it...</span>
+    </div>
+    <div id="expMatrixHelpText" class="helpText">
+    <p>
+    <em>About the ENCODE  Experiment Matrix</em>
+<p>
+    The ENCODE Experiment Matrix is a set of web pages that visually summarize the types of data produced by the ENCODE project.  This page shows the number of experiments by cell type and assay.  The companion <a target=_blank href='encodeDataSummaryHuman.html'><strong>Experiment Summary</strong></a> page shows the number of experiments by assay type alone, and includes annotations that are cell-type independent (annotations on the reference genome).  The <a target=_blank href='encodeChipMatrixHuman.html'><strong>ChIP-seq Experiment Matrix</strong></a> page provides a more detailed view of the chromatin immunoprecipitation experiments, showing experiments by cell type and antibody target.
+<p>
+    An ENCODE experiment is defined as a biochemical assay and follow-on data analyses performed on a single cell type by a single lab.  An experiment will usually have multiple browser tracks to display differing views of the data (e.g. enrichment signal graph, peak calls), and multiple files to support analysis (e.g. sequence alignments in BAM format, signal graph in bigWig format), for multiple replicates.  Each ENCODE experiment has a unique accession assigned by the ENCODE Data Coordination Center (e.g. wgEncodeH00001).
+<p>
+    To display or download ENCODE data from this page, select <em>tracks</em> or <em>files</em> in the <img style='border: 1px solid gray;' height='17' width='164' src='/images/dataMatrixSearchPanel.png'> panel.  Then click the desired <img style='boredr: 1px solid gray;' height='17' width='20' src='/images/greenBox.png'> box in the matrix.  This will open a search window with the  <em>Track Search</em> or <em>File search</em> tool showing the full set of browser tracks or downloadable files for the experiments selected so you can configure viewing in the browser or refine the list of download files.
+<p>
+These pages are best viewed in Firefox, Chrome, or Safari browsers.
+    <br>
+    <span id='dataMatrixXIcon' title='Click to hide help' class="xIcon">&times;</span>
     </div>
     <!-- a consider using caption tag, since colspan=0 doesn't work cross-browser -->
     <table id="matrixTable"> 
