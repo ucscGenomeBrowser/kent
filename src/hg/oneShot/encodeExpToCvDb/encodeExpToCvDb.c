@@ -42,7 +42,7 @@ struct field
     };
 
 struct field expRequiredFields[] =
-/* Required fields in experiments table. */
+/* Required initial fields in experiments table. */
     {
     {"id",	    "IntegerField(primary_key=True)"},
     {"updateTime",  "CharField(max_length=40)"},   // replace with dateTime soon I hope
@@ -55,7 +55,7 @@ struct field expRequiredFields[] =
     };
 
 char *expOptionalFields[] = 
-/* Fields in experiment table, and for the most part also tables in cvDb. 
+/* Optional later fields in experiment table, and also tables in cvDb. 
  * The order of this array is the same as the order of the fields in experiment table. */
     {
     "ab",
@@ -143,18 +143,63 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 return hash;
 }
 
-void encodeExpToTab(char *outFile)
+struct series
+/* Represents a series of experiments of the same type done in the same lab. */
+    {
+    struct series *next;
+    char *name;	    /* Usually something like wgEncodeLabType */
+    char *dataType; /* Something like 'ChipSeq' */
+    char *grantee;  /* Who owns the series. */
+    };
+
+struct series *seriesFromMdb(struct mdbObj *mdb, char *name)
+/* Make up a series based on mdb - looping through it's vars looking for ones we want. */
+{
+struct mdbVar *v;
+struct series *series;
+AllocVar(series);
+series->name = cloneString(name);
+for (v = mdb->vars; v != NULL; v = v->next)
+    {
+    /* Look up table and term and change table name if need be */
+    char *var = v->var;
+    char *val = v->val;
+    if (sameString(var, "dataType")) 
+	 series->dataType = cloneString(val);
+    else if (sameString(var, "grant"))
+         series->grantee = cloneString(val);
+    }
+return series;
+}
+
+void writeSeriesList(char *fileName, struct series *list)
+/* Write out list to file in tab separated format, adding initial id field. */
+{
+FILE *f = mustOpen(fileName, "w");
+int id = 0;
+struct series *series;
+for (series = list; series != NULL; series = series->next)
+    {
+    fprintf(f, "%d\t%s\t%s\t%s\n", ++id, series->name,
+        emptyForNull(series->dataType), emptyForNull(series->grantee));
+    }
+carefulClose(&f);
+}
+
+void encodeExpToTab(char *outExp, char *outSeries)
 /* encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb. */
 {
 struct hash *optHash = optionalFieldsHash();
 struct hash *mdbHash = mdbHashKeyedByExpId(metaDb);
+struct hash *seriesHash = hashNew(0);
+struct series *seriesList = NULL;
 verbose(1, "read %d mdb objects from %s.%s\n", mdbHash->elCount, metaDb, metaTable);
 struct sqlConnection *expDbConn = sqlConnect(expDb);
 struct sqlConnection *cvDbConn = sqlConnect(cvDb);
 char query[256];
 safef(query, sizeof(query), "select * from %s", expTable);
 struct sqlResult *sr = sqlGetResult(expDbConn, query);
-FILE *f = mustOpen(outFile, "w");
+FILE *f = mustOpen(outExp, "w");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -234,6 +279,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
+    /* If we've got a composite, then make up a series record. */
+    if (composite != NULL)
+        {
+	assert(mdb != NULL);
+	struct series *series = hashFindVal(seriesHash, composite);
+	if (series == NULL)
+	    {
+	    series = seriesFromMdb(mdb, composite);
+	    hashAdd(seriesHash, composite, series);
+	    slAddHead(&seriesList, series);
+	    }
+	}
+
     /* Write out required fields.  Order of required fields
      * here needs to follow order in expRequiredFields. */
     fprintf(f, "%u", ee->ix);
@@ -252,6 +310,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* End output record. */
     fprintf(f, "\n");
     }
+
+/* Write out series list to a separate file. */
+slReverse(&seriesList);
+writeSeriesList(outSeries, seriesList);
+
+/* Clean up and go home. */
 carefulClose(&f);
 sqlFreeResult(&sr);
 sqlDisconnect(&expDbConn);
@@ -262,6 +326,26 @@ void encodeExpToDjango(char *outFile)
 /* Write out Django model declaration for encodeExp into outfile. */
 {
 FILE *f = mustOpen(outFile, "w");
+
+/* Write series model. */
+fprintf(f, "\n");
+fprintf(f, "class Series(models.Model):\n");
+fprintf(f, "    \"\"\"\n");
+fprintf(f, "    Represents a series of experiments of the same type done for\n");
+fprintf(f, "    the same project.\n");
+fprintf(f, "    \"\"\"\n");
+fprintf(f, "    term = models.CharField(max_length=50)\n");
+fprintf(f, "    dataType = models.CharField(max_length=40)\n");
+fprintf(f, "    grantee = models.CharField(max_length=255)\n");
+fprintf(f, "\n");
+fprintf(f, "    class Meta:\n");
+fprintf(f, "        db_table = '%s%s'\n", cvDbPrefix, "series");
+fprintf(f, "\n");
+fprintf(f, "    def __unicode__(self):\n");
+fprintf(f, "        return self.term\n");
+fprintf(f, "\n");
+
+/* Write experiment model. */
 fprintf(f, "\n");
 fprintf(f, "class Experiment(models.Model):\n");
 fprintf(f, "    \"\"\"\n");
@@ -290,13 +374,16 @@ fprintf(f, "\n");
 fprintf(f, "    def __unicode__(self):\n");
 fprintf(f, "        return self.accession\n");
 fprintf(f, "\n");
+
+
+
 carefulClose(&f);
 }
 
-void encodeExpToCvDb(char *outTab, char *outDjango, char *outSql)
+void encodeExpToCvDb(char *outExp, char *outSeries, char *outDjango)
 /* encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb. */
 {
-encodeExpToTab(outTab);
+encodeExpToTab(outExp, outSeries);
 encodeExpToDjango(outDjango);
 }
 
