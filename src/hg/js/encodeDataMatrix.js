@@ -170,25 +170,18 @@ $(function () {
                     'dataType' : dataType,
                     'cellType' : cellType
                 });
+                $td.attr('title', 'Click to select: ' + 
+                        encodeProject.getDataType(dataType).label +
+                        ' in ' + cellType +' cells');
 
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' + 
-                        encodeProject.getDataType($(this).data().dataType).label +
-                        ' ' + ' in ' + $(this).data().cellType +' cells');
-                });
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
-                    // NOTE: generating full search URL should be generalized & encapsulated
-                    var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-                    // TODO: encapsulate var names
-                    url +=
-                       ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
-                       '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                       '&hgt_mdbVar3=view&hgt_mdbVal3=Any'
-                       );
+                    var url = encodeMatrix.getSearchUrl(
+                                {'mdbVar': 'dataType', 'mdbVal': $(this).data().dataType},
+                                {'mdbVar': 'cell', 'mdbVal': $(this).data().cellType});
                     // specifying window name limits open window glut
-                    url += '&hgt_mdbVar4=[]';
-                    url += '&hgt_mdbVar5=[]';
-                    url += '&hgt_mdbVar6=[]';
                     window.open(url, "searchWindow");
                 });
             });

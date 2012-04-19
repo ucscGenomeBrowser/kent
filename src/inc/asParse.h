@@ -24,6 +24,15 @@ enum asTypes
    t_set,      /* set of symbolic values */
    };
 
+char *asTypesIntSizeDescription(enum asTypes type);
+/* Return description of integer size.  Do not free. */
+
+int asTypesIntSize(enum asTypes type);
+/* Return size in bytes of any integer type - short, long, unsigned, etc. */
+
+boolean asTypesIsUnsigned(enum asTypes type);
+/* Return TRUE if it's any integer type - short, long, unsigned, etc. */
+
 boolean asTypesIsInt(enum asTypes type);
 /* Return TRUE if it's any integer type - short, long, unsigned, etc. */
 
@@ -93,5 +102,15 @@ void asColumnFree(struct asColumn **as);
 
 void asColumnFreeList(struct asColumn **as);
 /* free a list of asColumn */
+
+struct asColumn *asColumnFind(struct asObject *as, char *name);
+/* Return column of given name from object, or NULL if not found. */
+
+boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asObject *as2, int numColumnsToCheck,
+ int *retNumColumnsSame, boolean abortOnDifference);
+/* Compare as-objects as1 and as2 making sure several important fields show they are the same name and type.
+ * If difference found, print it to stderr.  If abortOnDifference, errAbort.
+ * Othewise, return TRUE if the objects columns match through the first numColumnsToCheck fields. 
+ * If retNumColumnsSame is not NULL, then it will be set to the number of contiguous matching columns. */
 
 #endif /* ASPARSE_H */

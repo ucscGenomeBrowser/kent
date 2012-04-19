@@ -173,30 +173,26 @@ $(function () {
                     'target' : target,
                     'cellType' : cellType
                 });
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' +
-                                ($(this).data().target) + ' ' + ' in ' + 
-                                $(this).data().cellType +' cells');
-                });
+
+                $td.attr('title', 'Click to select: ' +  target +
+                        ' in ' + cellType +' cells');
+
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
                     var url, antibodyTarget;
+                    var antibodies = []; 
 
-                    // NOTE: generating full search URL should be generalized & encapsulated
-                    url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-                    url +=
-                       ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
-                       '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                       '&hgt_mdbVar3=antibody');
+                    // get list of antibodies for this protein target
                     antibodyTarget = encodeProject.getAntibodyTarget($(this).data().target);
-                    // TODO: html encode ?
                     $.each(antibodyTarget.antibodies, function (i, antibody) {
-                        url += ('&hgt_mdbVal3=' + antibody);
+                        antibodies.push(antibody);
                     });
-                    url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
-
-                    // remove extra rows
-                    url += '&hgt_mdbVar5=[]';
-                    url += '&hgt_mdbVar6=[]';
+                    url = encodeMatrix.getSearchUrl(
+                            {'mdbVar': 'dataType', 'mdbVal': 'ChipSeq'},
+                            {'mdbVar': 'cell', 'mdbVal': $(this).data().cellType},
+                            {'mdbVar': 'antibody', 'mdbVal': antibodies});
                     window.open(url, "searchWindow");
                 });
             });

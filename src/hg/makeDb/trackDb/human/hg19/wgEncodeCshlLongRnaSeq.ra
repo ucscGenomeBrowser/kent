@@ -3552,9 +3552,6 @@ noInherit on
     #scoreFilter 0
     #scoreFilterLimits 0:1000
     #noScoreFilter .
-	extraFields level=[f]FPKM \
-                signif=[f]IDR \
-				score2=[f]Raw_Score
 
         track wgEncodeCshlLongRnaSeqA549CellPamContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
@@ -4096,9 +4093,6 @@ noInherit on
     subTrack wgEncodeCshlLongRnaSeq
     scoreFilter 200
     scoreFilterLimits 0:100
-	extraFields level=[f]FPKM \
-				signif=[f]IDR \
-				score2=[f]Raw_Score
 
         track wgEncodeCshlLongRnaSeqA549CellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off

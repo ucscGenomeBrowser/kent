@@ -6,6 +6,7 @@
 # Project ID:  68323
 #    http://www.ncbi.nlm.nih.gov/bioproject/68323
 #    http://www.ncbi.nlm.nih.gov/nuccore?term=AFSB00000000[pacc]
+#    http://www.ncbi.nlm.nih.gov/nuccore/AFSB00000000.1
 #   Beijing Genomics Institute, Shenzhen
  
 # Whole Genome Shotgun sequencing project:
@@ -52,6 +53,19 @@
     zcat ucsc.fa.gz | grep "^>" | sort | head
     zcat ucsc.fa.gz | grep "^>" | sort | tail
     # head:tail =  JH165514:JH204779 
+    
+    # N50
+    mkdir N50
+    gunzip ucsc.fa.gz
+    faCount ucsc.fa | awk ' {print $1, $2}' | grep "^JH" > N50/chrom.sizes
+    n50.pl N50/chrom.sizes
+#	reading: N50/chrom.sizes
+#	contig count: 39266, total size: 2643961837, one half size: 1321980918
+# cumulative	N50 count	contig	contig size
+1321132235	501	JH170059	1603897
+1321980918 one half size
+1322735412	502	JH170231	1603177
+
 
 #########################################################################
 # Initial  database build (DONE - 2011-12-02 - Chin)
@@ -606,7 +620,7 @@ done
 
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - ( working 2012-01-04 - Chin)
+# all.joiner update, downloads and in pushQ - ( DONE 2012-04-18 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     # add hetGla after myoLuc
@@ -615,7 +629,6 @@ done
     mkdir /hive/data/genomes/hetGla1/goldenPath
     cd /hive/data/genomes/hetGla1/goldenPath
     makeDownloads.pl hetGla1 > do.log 2>&1
-XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/hetGla1/pushQ
@@ -628,9 +641,6 @@ XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
     # WARNING: hetGla1 does not have seq
     # WARNING: hetGla1 does not have extFile
     # 
-    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
-    # supporting and genbank tables) which tracks to assign these tables to:
-    #   ctgPos2
 
     #	copy it to hgwbeta
     scp -p hetGla1.pushQ.sql hgwbeta:/tmp

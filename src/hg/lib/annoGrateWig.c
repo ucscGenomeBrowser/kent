@@ -16,8 +16,6 @@ static void tidyUp(const struct annoRow *rowIn, struct annoRow **pOutList,
 uint start = max(rowIn->start, primaryStart);
 uint end = min(rowIn->end, primaryEnd);
 float *vector = rowIn->data;
-if (sameString(rowIn->chrom, "chr17_gl000206_random") && rowIn->start > 9000)
-    uglyf("woohoo.\n");
 while (end > start)
     {
     uint offset = start - rowIn->start;
