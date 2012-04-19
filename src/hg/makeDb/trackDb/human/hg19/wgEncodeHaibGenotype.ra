@@ -16,7 +16,6 @@ wgEncode 1
 type bed 9 + 
 itemRgb on
 visibility hide 
-extraFields logR=[f]LogR_Value
 noScoreFilter .
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1

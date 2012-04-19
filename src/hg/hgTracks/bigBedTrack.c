@@ -54,7 +54,7 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    if (track->limitedVis != tvDense)
+    if (actualVisibility(track) != tvDense)
 	{
 	int maxItems = maximumTrackItems(track) + 1;
 	result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
@@ -65,7 +65,7 @@ if (errCatchStart(errCatch))
 	    result = NULL;
 	    }
 	}
-    if (track->visibility == tvDense || track->limitedVis == tvDense)
+    if (actualVisibility(track) == tvDense)
 	{
 	AllocArray(track->summary, insideWidth);
 	if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))

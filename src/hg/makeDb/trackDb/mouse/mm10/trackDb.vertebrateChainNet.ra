@@ -4,7 +4,7 @@ shortLabel Vertebrate Chain/Net
 longLabel Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species aWallaby=Wallaby bTDevil=Tasmanian_devil cOpossum=Opossum dPlatypus=Platypus eBudgerigar=Budgerigar fZFinch=Zebra_finch gChicken=Chicken hTurkey=Turkey iLizard=Lizard jTurtle=Turtle kFrog=Frog lCoelacanth=Coelacanth  mACod=Atlantic_cod nZebrafish=Zebrafish oStickleback=Stickleback pFugu=Fugu qTetraodon=Tetraodon rTilapia=Tilapia sMedaka=Medaka tLamprey=Lamprey
-subGroup3 clade Clade aMeta=Metatheria bAves=Aves cEutel=Euteleostomi dTeleostei=Teleostei ePerco=Percomorpha fPetro=Petromyzon
+subGroup3 clade Clade aMamm=Mammalia bAves=Aves cEutel=Euteleostomi dTeleostei=Teleostei ePerco=Percomorpha fPetro=Petromyzon
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -29,7 +29,7 @@ html chainNet
 
         track chainMacEug2
         subTrack vertebrateChainNetViewchain on
-        subGroups view=chain species=aWallaby clade=aMeta
+        subGroups view=chain species=aWallaby clade=aMamm
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain macEug2
@@ -37,7 +37,7 @@ html chainNet
 
         track chainSarHar1
         subTrack vertebrateChainNetViewchain on
-        subGroups view=chain species=bTDevil clade=aMeta
+        subGroups view=chain species=bTDevil clade=aMamm
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain sarHar1
@@ -45,7 +45,7 @@ html chainNet
 
         track chainMonDom5
         subTrack vertebrateChainNetViewchain on
-        subGroups view=chain species=cOpossum clade=aMeta
+        subGroups view=chain species=cOpossum clade=aMamm
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain monDom5
@@ -53,7 +53,7 @@ html chainNet
 
         track chainOrnAna1
         subTrack vertebrateChainNetViewchain on
-        subGroups view=chain species=dPlatypus clade=aMeta
+        subGroups view=chain species=dPlatypus clade=aMamm
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain ornAna1
@@ -195,7 +195,7 @@ html chainNet
 
         track netMacEug2
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=aWallaby clade=aMeta
+        subGroups view=net species=aWallaby clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign macEug2 chainMacEug2
@@ -203,7 +203,7 @@ html chainNet
 
         track netSarHar1
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=bTDevil clade=aMeta
+        subGroups view=net species=bTDevil clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign sarHar1 chainSarHar1
@@ -211,7 +211,7 @@ html chainNet
 
         track netMonDom5
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=cOpossum clade=aMeta
+        subGroups view=net species=cOpossum clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign monDom5 chainMonDom5
@@ -219,7 +219,7 @@ html chainNet
 
         track netOrnAna1
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=dPlatypus clade=aMeta
+        subGroups view=net species=dPlatypus clade=aMamm
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ornAna1 chainOrnAna1
