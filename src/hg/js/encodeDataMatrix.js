@@ -110,7 +110,9 @@ $(function () {
                 // prune out datatypes with no experiments
                 if (dataTypeExps[dataType.term] !== undefined) {
                     $th = $('<th class="elementType"><div class="verticalText">' + 
-                                dataType.label + (dataType.term === 'ChipSeq' ? 
+                                dataType.label + 
+                                // add button to launch ChIP-seq (but suppress on IE)
+                                (dataType.term === 'ChipSeq' && !$.browser.msie ? 
                                 '&nbsp;&nbsp; <span title="Click to view ChIP-seq experiment matrix by antibody target" id="chipButton">view matrix</span>': '') + 
                                 '</div></th>');
                     if (!encodeProject.isIE8()) {
