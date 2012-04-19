@@ -128,6 +128,7 @@ dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -159,6 +160,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -190,6 +192,7 @@ dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -221,6 +224,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -312,6 +316,7 @@ dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -342,6 +347,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -372,6 +378,7 @@ dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -402,6 +409,7 @@ dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828369
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3845,6 +3853,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3876,6 +3885,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3907,6 +3917,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3938,6 +3949,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4029,6 +4041,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4059,6 +4072,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4089,6 +4103,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4119,6 +4134,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828352
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7160,6 +7176,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7191,6 +7208,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7222,6 +7240,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7253,6 +7272,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7344,6 +7364,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7374,6 +7395,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7404,6 +7426,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -7434,6 +7457,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828358
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8516,6 +8540,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8546,6 +8571,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8576,6 +8602,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8607,6 +8634,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8698,6 +8726,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8728,6 +8757,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8758,6 +8788,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -8788,6 +8819,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828357
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10660,6 +10692,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10691,6 +10724,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10722,6 +10756,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10753,6 +10788,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10844,6 +10880,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10874,6 +10911,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10904,6 +10942,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -10934,6 +10973,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828351
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12015,6 +12055,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12046,6 +12087,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12077,6 +12119,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12108,6 +12151,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12199,6 +12243,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12229,6 +12274,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12259,6 +12305,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -12289,6 +12336,7 @@ dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
+geoSampleAccession GSM828370
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -15341,6 +15389,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
+geoSampleAccession GSM828356
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -15372,6 +15421,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
+geoSampleAccession GSM828356
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -15433,6 +15483,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
+geoSampleAccession GSM828356
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -15463,6 +15514,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
+geoSampleAccession GSM828356
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -17145,4 +17197,4 @@ tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
 treatment None
 view Signal
 
-# MAGIC: -1327279966
+# MAGIC: -306471990
