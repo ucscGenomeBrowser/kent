@@ -8,7 +8,7 @@
 var encodeMatrix = (function () {
 
     // spinning image displayed during AJAX activity
-    var spinner;
+    var spinnerId = 'spinner';
 
     function addSearchPanel($div, isFile) {
         // Create panel of radio buttons for user to change search type
@@ -114,7 +114,7 @@ var encodeMatrix = (function () {
                 $('.helpText').toggle();
                 $('.helpLauncher').toggle();
             });
-            spinner = showLoadingImage('spinner', true);
+            showLoadingImage(spinnerId, true);
 
             // add radio buttons for search type to specified div on page
             addSearchPanel($('#searchTypePanel'), encodeMatrix.isFileSearch());
@@ -123,8 +123,7 @@ var encodeMatrix = (function () {
 
     show: function ($el) {
         // Call after data loads to show display
-        hideLoadingImage(spinner);
-        $('#spinner').remove();
+        hideLoadingImage(spinnerId);
         $('.xIcon').show();
         $el.show();
         },
