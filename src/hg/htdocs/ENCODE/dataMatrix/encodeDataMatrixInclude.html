@@ -8,6 +8,7 @@
     <script src="/js/jquery.js" type="text/javascript"></script>
     <script src="/js/jquery.floatheader.js" type="text/javascript"></script>
     <script src="/js/jquery.rotateTableCellContent.js" type="text/javascript"></script>
+    <script src="/js/jquery.cookie.js" type="text/javascript"></script>
     <script src="/js/utils.js" type="text/javascript"></script>
     <script src="/js/encodeProject.js" type="text/javascript"></script>
     <script src="/js/encodeMatrix.js" type="text/javascript"></script>
@@ -25,9 +26,9 @@
         <span id="spinner"></span>
         <span id="expMatrixHelpIcon" title="Click for help" class="helpLauncher">Tell me about it...</span>
     </div>
-    <div id="expMatrixHelpText" class="helpText">
-    <p>
-    <em>About the ENCODE  Experiment Matrix</em>
+    <div id="expMatrixHelpText" class="helpText wrapper">
+    <div class="bar"><h4 class="title">About the ENCODE Experiment Matrix</h4></div>
+    <div class="content">
 <p>
     The ENCODE Experiment Matrix is a set of web pages that visually summarize the types of data produced by the ENCODE project.  This page shows the number of experiments by cell type and assay.  The companion <a target=_blank href='encodeDataSummaryHuman.html'><strong>Experiment Summary</strong></a> page shows the number of experiments by assay type alone, and includes annotations that are cell-type independent (annotations on the reference genome).  The <a target=_blank href='encodeChipMatrixHuman.html'><strong>ChIP-seq Experiment Matrix</strong></a> page provides a more detailed view of the chromatin immunoprecipitation experiments, showing experiments by cell type and antibody target.
 <p>
@@ -38,7 +39,10 @@
 These pages are best viewed in Firefox, Chrome, or Safari browsers.
     <br>
     <span id='dataMatrixXIcon' title='Click to hide help' class="xIcon">&times;</span>
-    </div>
+    </div><!-- end content -->
+    </div><!-- end helpText -->
+</div><!-- end wrapper -->
+
     <!-- a consider using caption tag, since colspan=0 doesn't work cross-browser -->
     <table id="matrixTable"> 
         <thead>
