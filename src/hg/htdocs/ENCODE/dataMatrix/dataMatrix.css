@@ -80,15 +80,15 @@ table div.rotated {
 }
 
 .experiment a {
-text-decoration: none;
+    text-decoration: none;
 }
 
 .axisType a {
-text-decoration: none;
+    text-decoration: none;
 }
 
 .elementType a {
-text-decoration: none;
+    text-decoration: none;
 }
 
 #searchTypePanel {
@@ -102,6 +102,16 @@ text-decoration: none;
 #cellHeaderLabel {
     margin-top: 4em;
 }
+
+/*
+This will drop a white->blue gradient background on the header (if desired)
+.encodeHeader {
+    background: -moz-linear-gradient(left, #FFF, #004D99);
+    background: -webkit-gradient(linear, left center, right center, from(#FFF), to(#004D99));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#004D99', gradientType='1');
+}
+*/
+
 
 /* colored bullets on cell types based on karyotype CV field */
 
@@ -125,3 +135,37 @@ text-decoration: none;
     background-color: #EDEDED;
 }
 
+.helpText {
+    position: relative;
+    border: 1px solid gray;
+    background-color: #F7F7F7;
+    margin: 15px 15px 5px 15px;
+    padding: 0 1em;
+}
+
+.helpLauncher {
+    color: gray;
+    cursor: pointer;
+    font-size: medium;
+    position: absolute;
+    top; 0;
+    right: 0;
+    margin-right: 15px;
+    text-align: right;
+}
+
+.xIcon {
+    font-size: x-large;
+    color: #636363;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+#chipButton {
+    font-size: small;
+    cursor: pointer;
+    padding: 1px 4px 1px 4px;
+    border: 1px inset gray;
+}
