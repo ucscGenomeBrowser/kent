@@ -79,6 +79,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
 grant Myers
 insertLength None
 lab Caltech
+labExpId 11011
 localization cell
 md5sum 2ff540ecbc946ff623948c01e89a85bd
 origAssembly hg18
@@ -105,6 +106,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
 grant Myers
 insertLength None
 lab Caltech
+labExpId 11011
 localization cell
 md5sum 5cd378ef1832aabfc8461dd1384514d3
 origAssembly hg18
@@ -3830,6 +3832,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
 grant Myers
 insertLength None
 lab Caltech
+labExpId 11009
 localization cell
 md5sum f8d7f1c78cd33a55e5308b01b9384056
 origAssembly hg18
@@ -12005,6 +12008,7 @@ fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
 grant Myers
 insertLength None
 lab Caltech
+labExpId 11008
 localization cell
 md5sum e09ea52b7b37de7982296df6351f26ed
 origAssembly hg18
@@ -17197,4 +17201,4 @@ tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
 treatment None
 view Signal
 
-# MAGIC: -306644214
+# MAGIC: -297394682
