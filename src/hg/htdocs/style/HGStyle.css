@@ -52,6 +52,7 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 .section {
     background-color: #fffee8; 
     border: 1px solid #888888;
+    margin-bottom: 20px;
 }
 
 .subsection {
