@@ -53,6 +53,19 @@
     zcat ucsc.fa.gz | grep "^>" | sort | head
     zcat ucsc.fa.gz | grep "^>" | sort | tail
     # head:tail =  JH165514:JH204779 
+    
+    # N50
+    mkdir N50
+    gunzip ucsc.fa.gz
+    faCount ucsc.fa | awk ' {print $1, $2}' | grep "^JH" > N50/chrom.sizes
+    n50.pl N50/chrom.sizes
+#	reading: N50/chrom.sizes
+#	contig count: 39266, total size: 2643961837, one half size: 1321980918
+# cumulative	N50 count	contig	contig size
+1321132235	501	JH170059	1603897
+1321980918 one half size
+1322735412	502	JH170231	1603177
+
 
 #########################################################################
 # Initial  database build (DONE - 2011-12-02 - Chin)
