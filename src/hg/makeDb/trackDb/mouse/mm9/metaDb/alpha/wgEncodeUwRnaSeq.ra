@@ -2,6 +2,7 @@ metaObject wgEncodeUwRnaSeq
 objType composite
 composite wgEncodeUwRnaSeq
 expVars lab,dataType,cell,age,strain
+readType 1x50
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
 objType table
@@ -19,6 +20,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 8c2ddb0bd9c34adf71174758619d9a52,2662f3c2afc15b8bcbbaea162582f145
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -44,6 +46,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 2bb12c0e69933a5bcfb5f7b9af2073f6,68234e64e0f171cdbdceec991864d2f2
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -70,6 +73,7 @@ labVersion coverage
 localization cell
 md5sum 04a1876503325d39b64cb06ba508988e
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -96,6 +100,7 @@ labVersion coverage
 localization cell
 md5sum 781db6dd7edd43e6062a09245898db7a
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -122,6 +127,7 @@ labVersion coverage
 localization cell
 md5sum 5d5f0877152c175d5b2cf3bafecf2cf9
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -148,6 +154,7 @@ labVersion coverage
 localization cell
 md5sum 97c3bb6687affc7a07181ee786cc312e
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -173,6 +180,7 @@ labVersion 1
 localization cell
 md5sum c1110ad976f1dca3aa63bb59312b5d9f
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -197,6 +205,7 @@ labVersion 1
 localization cell
 md5sum 6f7a78eb5ad91004a46d5f317bd4e6c1
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -222,6 +231,7 @@ labVersion coverage
 localization cell
 md5sum 0b0b52eb1593a19dc5d53e7da121e95f
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -248,6 +258,7 @@ labVersion coverage
 localization cell
 md5sum 5a911d971dfaf3c2dc21e6c56629bdbf
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -273,6 +284,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 5bf20c41dc6578b4c8f407937f486b98,98a4f0435223c1c536baa93675afe54d
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -298,6 +310,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 242ed7c8e4b54d42c9e52f30d6e13438,a0ee9ababf32308104789c4e034ffece
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -324,6 +337,7 @@ labVersion coverage
 localization cell
 md5sum 5e85cd1a3af8cb56ed6d213cacdf2a5a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -350,6 +364,7 @@ labVersion coverage
 localization cell
 md5sum c35091673db5e74a30c6402855dfa02f
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -376,6 +391,7 @@ labVersion coverage
 localization cell
 md5sum 18278c72de99b754df9e2d94563a8b17
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -402,6 +418,7 @@ labVersion coverage
 localization cell
 md5sum 2718ccd501ae91f572966fb12da933d6
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -427,6 +444,7 @@ labVersion 1
 localization cell
 md5sum ab094b40e05e3444f983fbcb202e4d28
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -451,6 +469,7 @@ labVersion 1
 localization cell
 md5sum a48d88689756fe4f86d2ce15aa7f8a2f
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -476,6 +495,7 @@ labVersion coverage
 localization cell
 md5sum 32bf118a03e3841fec0f9392fb8f74eb
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -502,6 +522,7 @@ labVersion coverage
 localization cell
 md5sum 627c5374bc1b73e4d43983036ad8fcb6
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -527,6 +548,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum cda2ad8c54825f0ec59bd55868f14bcf,d484b8d6201bfc761782daea9b573137
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -553,6 +575,7 @@ labVersion coverage
 localization cell
 md5sum 1451ef89f38299e4d4a7c298aa83889a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -579,6 +602,7 @@ labVersion coverage
 localization cell
 md5sum 263d3293b585cb599f4586757ad40937
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -604,6 +628,7 @@ labVersion 1
 localization cell
 md5sum e28135bbfa76c2b15dbc0e1ea2f75d38
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -629,6 +654,7 @@ labVersion coverage
 localization cell
 md5sum d0546730d4333f43c2e64ec7de94bfee
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -654,6 +680,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 566364bb913334816132a480ea413f20,e4f6fb211ad50a2dc76366ff51c535d3
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -679,6 +706,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum c6e85857d5cdfb4494c789525528ce56,e4e731ae639d76093029e3ed2d5da59e
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -705,6 +733,7 @@ labVersion coverage
 localization cell
 md5sum c8d9d9098f10e383c070043fac2c4eb2
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -731,6 +760,7 @@ labVersion coverage
 localization cell
 md5sum 3f9c6b2ed835f7d7c365f99137a4d6d7
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -757,6 +787,7 @@ labVersion coverage
 localization cell
 md5sum 99e113bb221ed2ecf488d6b4defd9c1c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -783,6 +814,7 @@ labVersion coverage
 localization cell
 md5sum c3c449fa6dbcf7e9cd26181fee5bd9e0
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -808,6 +840,7 @@ labVersion 1
 localization cell
 md5sum 3f23860c17af0537680ad4d1716e2725
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -832,6 +865,7 @@ labVersion 1
 localization cell
 md5sum f847cad878217faab2af426cbcf4ed52
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -857,6 +891,7 @@ labVersion coverage
 localization cell
 md5sum 0010935a0faf3f4a34c7b485adb9d76c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -883,6 +918,7 @@ labVersion coverage
 localization cell
 md5sum 492551ee813ca4b4de7acea0056342e7
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -908,6 +944,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum c5e8cbeb750231b7efcbbf5f50673125,e6cbcfc9098347a2caa8a34334b5e216
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -933,6 +970,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum d264b6f7f2f269f7fdd6880123a14655,677148748f81663cf790920da746756f
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -959,6 +997,7 @@ labVersion coverage
 localization cell
 md5sum 6d08ebae7e63af40245fb549caee8175
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -985,6 +1024,7 @@ labVersion coverage
 localization cell
 md5sum 065d34b2ef0efd69f986c13410f3b9de
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1011,6 +1051,7 @@ labVersion coverage
 localization cell
 md5sum b608eeae6b909aee9784bdafb0cec764
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1037,6 +1078,7 @@ labVersion coverage
 localization cell
 md5sum b3ce2e9cbdbbb52fc943dc3a492284d7
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1062,6 +1104,7 @@ labVersion 1
 localization cell
 md5sum cd98107298ed5b846036ed1f3840251c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1086,6 +1129,7 @@ labVersion 1
 localization cell
 md5sum d06ee50448f580784772ab2767974fc3
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1111,6 +1155,7 @@ labVersion coverage
 localization cell
 md5sum ff00251450b9e2a8910ddc937903f197
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1137,6 +1182,7 @@ labVersion coverage
 localization cell
 md5sum 839009cd9dc1fed0a9a8fbc1405450b7
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1162,6 +1208,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 1e6277e2277ab1cb38c081797b1a345e,f3ca63f3603fdaf31711e2cb7e7e0d5d
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1187,6 +1234,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum dac0e890db8d462cb4e6d69788c7183e,b57bb08367b825105c1e0ef7d13c33f8
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1213,6 +1261,7 @@ labVersion coverage
 localization cell
 md5sum eb2e32d6deabe0caf06b8b282d151908
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1239,6 +1288,7 @@ labVersion coverage
 localization cell
 md5sum 26404cea56757f65ada5bdc93593f4a6
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1265,6 +1315,7 @@ labVersion coverage
 localization cell
 md5sum e75ed2aa4ab21e15199f2c282c3d5e0c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1291,6 +1342,7 @@ labVersion coverage
 localization cell
 md5sum 31ec49a143d7b40cd52e545812da244f
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1316,6 +1368,7 @@ labVersion 1
 localization cell
 md5sum a623d32f1aeaeb182a0de97ee9f3c755
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1340,6 +1393,7 @@ labVersion 1
 localization cell
 md5sum 88e8fc35659286f13c1ddb760cb8290d
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1365,6 +1419,7 @@ labVersion coverage
 localization cell
 md5sum ae93d2336c298c13b1acb7a6fc154572
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1391,6 +1446,7 @@ labVersion coverage
 localization cell
 md5sum e55a2a976af391e943696d0a7a3e5cb9
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1416,6 +1472,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum e1450bcae28036259937fa519d104337,0e00fe275bf59e79005e286ee2fb0b41
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1442,6 +1499,7 @@ labVersion coverage
 localization cell
 md5sum 64ba61897df8716cf6621e21095d5b8f
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1468,6 +1526,7 @@ labVersion coverage
 localization cell
 md5sum 320ac93731cd9db230346a2c0d9f8d48
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1493,6 +1552,7 @@ labVersion 1
 localization cell
 md5sum cdb9a07101c25d703da34fc2fb9ff2a8
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1518,6 +1578,7 @@ labVersion coverage
 localization cell
 md5sum b16b19d7f4ec4a54000daa4a306e62bb
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1543,6 +1604,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum b3ebdaeea2c848a7f45b94cb79939aa5,1ec4568fd16a584cf7c4dbdb3d83d464
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1568,6 +1630,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum aee426ea796d3a9395e3b166001743a3,849387ebd8a2f238dedd248b47fb7b65
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1594,6 +1657,7 @@ labVersion coverage
 localization cell
 md5sum d0be4671651b6a0fc238dbe360addac8
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1620,6 +1684,7 @@ labVersion coverage
 localization cell
 md5sum 677fee6ce42a4e3d44d873d4cb3dfdc1
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1646,6 +1711,7 @@ labVersion coverage
 localization cell
 md5sum f078ab42479604c97157d2e7b608e8d3
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1672,6 +1738,7 @@ labVersion coverage
 localization cell
 md5sum 863e0d55a06a903a83229b571c296ee4
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1697,6 +1764,7 @@ labVersion 1
 localization cell
 md5sum 2f866317ad262c1505ad49e1c2fef3a6
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1721,6 +1789,7 @@ labVersion 1
 localization cell
 md5sum 9928bc1ee90df12d84ee47b73636a9ee
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1746,6 +1815,7 @@ labVersion coverage
 localization cell
 md5sum f03dd0a4c956f5f61f4aabd2f9625366
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1772,6 +1842,7 @@ labVersion coverage
 localization cell
 md5sum 67768289a4975a7310ebc502967bc22e
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1797,6 +1868,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 810859a012e60ac608e4528084255fff,d2652cb132fb5e0b16dc4139ccc4886a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1822,6 +1894,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 72ecd91f046d71ed64f7628e27d0212d,ba4efea81c76ca6eeacb78293c0d8cf4
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1848,6 +1921,7 @@ labVersion coverage
 localization cell
 md5sum 09dc1cccc51987c39273fa3f27462bab
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1874,6 +1948,7 @@ labVersion coverage
 localization cell
 md5sum 5d8df951ac86b3fe500ca5e9ed2c466b
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1900,6 +1975,7 @@ labVersion coverage
 localization cell
 md5sum 298c632c8ff8e0c0b9fbee36027aba9d
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1926,6 +2002,7 @@ labVersion coverage
 localization cell
 md5sum 8e238999ec9765a02011e9ca6e75c8cb
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -1951,6 +2028,7 @@ labVersion 1
 localization cell
 md5sum a32e350c583da0548cefb71b452706e2
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -1975,6 +2053,7 @@ labVersion 1
 localization cell
 md5sum 2054c5caf17f4ad3e034d29b6d1098cb
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2000,6 +2079,7 @@ labVersion coverage
 localization cell
 md5sum b9e49642dc382aba9167f07d47069583
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2026,6 +2106,7 @@ labVersion coverage
 localization cell
 md5sum 7219875ececb9be87fdc41366b5780de
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2051,6 +2132,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 904d05999a187f05ce61aeb0e8a23c1e,3064c0377ac1b48dba807ce754d7919b
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2077,6 +2159,7 @@ labVersion coverage
 localization cell
 md5sum 8b782e61373bb3696612406bf83d4c25
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2103,6 +2186,7 @@ labVersion coverage
 localization cell
 md5sum d5e81f9dd3f26e5d1ea6156cb6f259a9
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2128,6 +2212,7 @@ labVersion 1
 localization cell
 md5sum 3ffcc7acd0afb49b0aa0baa36259240a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2153,6 +2238,7 @@ labVersion coverage
 localization cell
 md5sum e021fb44a8801cdfcb2c97b1bcd39ed5
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2178,6 +2264,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 3358d09ce185be58b71dde817351f614,a3bbe06530b9e79729a3bcea699c7524
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2204,6 +2291,7 @@ labVersion coverage
 localization cell
 md5sum 1114c17a74d0c575328bf70d1ce5d861
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2230,6 +2318,7 @@ labVersion coverage
 localization cell
 md5sum d081852fcc1eba2ca010eb4581521749
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2255,6 +2344,7 @@ labVersion 1
 localization cell
 md5sum 191eb8f5ef34c4083af0b947effd861b
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2280,6 +2370,7 @@ labVersion coverage
 localization cell
 md5sum b3255731fa2dfd5530cae7698035822b
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2305,6 +2396,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 4f3f007e1d947e850dac8dc26b6d864c,e3e487ee167dc24c62668b8d7fa19627
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2330,6 +2422,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 1b6a55f366997289f2c2d552a074bbfe,70237e99358805b76926b10fba65205b
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2356,6 +2449,7 @@ labVersion coverage
 localization cell
 md5sum d23f16573f49d12481ae7b6574db673f
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2382,6 +2476,7 @@ labVersion coverage
 localization cell
 md5sum 1c7505de52c14300d379a851012e32b1
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2408,6 +2503,7 @@ labVersion coverage
 localization cell
 md5sum cc6bd70e6a05c0fb77412852c0c7f0f1
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2434,6 +2530,7 @@ labVersion coverage
 localization cell
 md5sum 717026ddcfe428b34c2676c4f76548a3
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2459,6 +2556,7 @@ labVersion 1
 localization cell
 md5sum 524d76d68cce5edc7197d67c8d56f612
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2483,6 +2581,7 @@ labVersion 1
 localization cell
 md5sum ea77cc7d5649c68298801bf870cde71d
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2508,6 +2607,7 @@ labVersion coverage
 localization cell
 md5sum ace3f73eb171b470cd77b43b88dde052
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2534,6 +2634,7 @@ labVersion coverage
 localization cell
 md5sum 2496a685394fbb30ec50fd5f30489447
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2559,6 +2660,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 800233a28ddd873546ce800bdd43d3e7,3aaf79803212e95f57a8eeff02240359
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2584,6 +2686,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 3d99cf3047ada4bc7a10f85fc25b1c60,954a97fcb6c2f7f4b3f399aea90c6247
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2609,6 +2712,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 0902eca75035b45b5e255b04a5825192,4912883e6ca3de9c952e83771e849aba
 project wgEncode
+readType 1x50
 replicate 3
 rnaExtract polyA
 sex M
@@ -2634,6 +2738,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum a679d5ca11112f0a2340a8b692120ce7,7b254f34e4aec3f8574da7bb31312762
 project wgEncode
+readType 1x50
 replicate 4
 rnaExtract polyA
 sex M
@@ -2660,6 +2765,7 @@ labVersion coverage
 localization cell
 md5sum 302486b81b893b06dc6877621088dc73
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2686,6 +2792,7 @@ labVersion coverage
 localization cell
 md5sum 6010dd287c1befc3b4e7d7b5fc387584
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2712,6 +2819,7 @@ labVersion coverage
 localization cell
 md5sum 1bbfa4819200889ae7ea8b83619d5825
 project wgEncode
+readType 1x50
 replicate 3
 rnaExtract polyA
 sex M
@@ -2738,6 +2846,7 @@ labVersion coverage
 localization cell
 md5sum 6a8c097c8b752f943d19992fb9ae3dd2
 project wgEncode
+readType 1x50
 replicate 4
 rnaExtract polyA
 sex M
@@ -2764,6 +2873,7 @@ labVersion coverage
 localization cell
 md5sum 6ce8259423a6af57b62c189fc0e74608
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2790,6 +2900,7 @@ labVersion coverage
 localization cell
 md5sum d30c482c09be2b6b0bb83dfcbb95d8af
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2816,6 +2927,7 @@ labVersion coverage
 localization cell
 md5sum ab1da202fad36b518dc282ecd95a609c
 project wgEncode
+readType 1x50
 replicate 3
 rnaExtract polyA
 sex M
@@ -2842,6 +2954,7 @@ labVersion coverage
 localization cell
 md5sum 4b512ee4c87106b760566d7a252f2133
 project wgEncode
+readType 1x50
 replicate 4
 rnaExtract polyA
 sex M
@@ -2867,6 +2980,7 @@ labVersion 1
 localization cell
 md5sum 06c78e567651707689625b15c68b2199
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2891,6 +3005,7 @@ labVersion 1
 localization cell
 md5sum 4f03f1e296ecaf945e2df52fcc7559e1
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -2915,6 +3030,7 @@ labVersion 1
 localization cell
 md5sum c0d6d3d89be1c93fd553e0a79eb16d1c
 project wgEncode
+readType 1x50
 replicate 3
 rnaExtract polyA
 sex M
@@ -2939,6 +3055,7 @@ labVersion 1
 localization cell
 md5sum da5cc9e6c4fd3be38c3fba1bdf70c99f
 project wgEncode
+readType 1x50
 replicate 4
 rnaExtract polyA
 sex M
@@ -2964,6 +3081,7 @@ labVersion coverage
 localization cell
 md5sum 653a682b3c69ffe0f18eaaff4a8937e4
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -2990,6 +3108,7 @@ labVersion coverage
 localization cell
 md5sum 2e3c6073673353b3261aa2c19670f134
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3016,6 +3135,7 @@ labVersion coverage
 localization cell
 md5sum e4488ffcecf52b505496afdbf82bd0ed
 project wgEncode
+readType 1x50
 replicate 3
 rnaExtract polyA
 sex M
@@ -3042,6 +3162,7 @@ labVersion coverage
 localization cell
 md5sum 20e6a48a7781fb59ca0f9a628ac85e87
 project wgEncode
+readType 1x50
 replicate 4
 rnaExtract polyA
 sex M
@@ -3067,6 +3188,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum bd651ec179a8e4de73a6a3111b265512,ebb02d730ab7f6b03ec051f6dca90c51
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3093,6 +3215,7 @@ labVersion coverage
 localization cell
 md5sum ff768dcdfa80e3a4b0affd9ea5e617b2
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3119,6 +3242,7 @@ labVersion coverage
 localization cell
 md5sum f03a432b3cff40e38063fc88c0c966c5
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3144,6 +3268,7 @@ labVersion 1
 localization cell
 md5sum d31204d3b33a57913ffffc6f3b740126
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3169,6 +3294,7 @@ labVersion coverage
 localization cell
 md5sum 72bc805637a62008a4546b9d1d838f47
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3194,6 +3320,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum a889b13e40972ded082a9dfea68dd3c8,f79f829a2156bb6333cef54b02c50f96
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3220,6 +3347,7 @@ labVersion coverage
 localization cell
 md5sum e22ae3cbe3887ce90bd24c61798be095
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3246,6 +3374,7 @@ labVersion coverage
 localization cell
 md5sum fe1e37c50207a74f2fd0eade15aecd11
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3271,6 +3400,7 @@ labVersion 1
 localization cell
 md5sum 69d19e3b816599c3f270178ebfbc09b6
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3296,6 +3426,7 @@ labVersion coverage
 localization cell
 md5sum cfa7f318cfc8c873bb7fb7312c67d73a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3321,6 +3452,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 4d31095a827c62c21406dc6eac37360e,ef98ecf874c42beba74711db3278e7e0
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3347,6 +3479,7 @@ labVersion coverage
 localization cell
 md5sum 9f0c757c65f30e1f7c10100ed6d38daf
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3373,6 +3506,7 @@ labVersion coverage
 localization cell
 md5sum 16d65536b785edb8b701ea2416f74de8
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3398,6 +3532,7 @@ labVersion 1
 localization cell
 md5sum 6530e4e7013cf73d291f97cfd4243d94
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3423,6 +3558,7 @@ labVersion coverage
 localization cell
 md5sum a1000d051d6d226baf6d6862861ea3b9
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3448,6 +3584,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 26ae2bad9ae7f2b743227e93930626eb,c90f68948ed45f2959e8c24e5ce0e850
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3473,6 +3610,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 698cacf46787a02139c2fdce36dd5ae7,ee0b746eb51ba00343d6d65ba90c36da
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3499,6 +3637,7 @@ labVersion coverage
 localization cell
 md5sum 026c3cc61a588fbb7c5f20800b61cf28
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3525,6 +3664,7 @@ labVersion coverage
 localization cell
 md5sum da5f19b764c708b3bc1c3f6a0307653a
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3551,6 +3691,7 @@ labVersion coverage
 localization cell
 md5sum e1574854119b8745cfa0dd74e215f96d
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3577,6 +3718,7 @@ labVersion coverage
 localization cell
 md5sum 0f21f7b5d4b8a2e452d3b944e2979609
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3602,6 +3744,7 @@ labVersion 1
 localization cell
 md5sum 9720e46b10ab2335e84b04247eb20e1b
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3626,6 +3769,7 @@ labVersion 1
 localization cell
 md5sum 647184057ce3fd25c50af80af905e99c
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3651,6 +3795,7 @@ labVersion coverage
 localization cell
 md5sum 019c5b4c379a5b9ada8469ac0a2f7b7a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3677,6 +3822,7 @@ labVersion coverage
 localization cell
 md5sum 076fab6fb021650fda57001036e6bf1e
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3702,6 +3848,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 9ee0a352da5e68e807577a0537a103e4,c8fc571899d5c8f78e801eac6bf530d6
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3727,6 +3874,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum cb13f31768a12f88b8d328233cbc2e6d,1861abdfc6a886c0ef82364b5d717f1e
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3753,6 +3901,7 @@ labVersion coverage
 localization cell
 md5sum 4123551c105887c513922a5eabbdc895
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3779,6 +3928,7 @@ labVersion coverage
 localization cell
 md5sum 0bafacf4d06f758b5e0c8ee86edcad8c
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3805,6 +3955,7 @@ labVersion coverage
 localization cell
 md5sum 5442ddb6d04f16a5369a52579fe6b3d0
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3831,6 +3982,7 @@ labVersion coverage
 localization cell
 md5sum 31392e5808cdbd3328603b7fd234eac4
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3856,6 +4008,7 @@ labVersion 1
 localization cell
 md5sum e2f5a9f7554a53b300d5bbe6103e5de4
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3880,6 +4033,7 @@ labVersion 1
 localization cell
 md5sum 40223b5be71bbf89bc9b0d03695f0715
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3905,6 +4059,7 @@ labVersion coverage
 localization cell
 md5sum 806e970cefbcdc94be9c13179bb7bcfa
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -3931,6 +4086,7 @@ labVersion coverage
 localization cell
 md5sum ac640e83e5ca83987cb2d34f54d16ec0
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -3956,6 +4112,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 994c409b0393163db2631dfc9004b43d,c44d40dfc42f5234e1b32f9db0f7fb54
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex F
@@ -3981,6 +4138,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 94b8e2490cb3d7fed800c14f16ec681a,82d92f79e0ba40ba4e72054860fbe002
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex F
@@ -4007,6 +4165,7 @@ labVersion coverage
 localization cell
 md5sum 5e5e1af8f390c22691acfd3c4b9c9f72
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex F
@@ -4033,6 +4192,7 @@ labVersion coverage
 localization cell
 md5sum a611cd258de97d59a135e0da880e8f95
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex F
@@ -4059,6 +4219,7 @@ labVersion coverage
 localization cell
 md5sum ebb6efac56f19f778d8dcd8ea6ff9244
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex F
@@ -4085,6 +4246,7 @@ labVersion coverage
 localization cell
 md5sum 5d2fd4c2dc1305824b6c5c41844abe5c
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex F
@@ -4110,6 +4272,7 @@ labVersion 1
 localization cell
 md5sum 9d4459f98303991cbb30d6cafdb8b06a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex F
@@ -4134,6 +4297,7 @@ labVersion 1
 localization cell
 md5sum ca23a0a10a9c13f14a5241bc756a09fe
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex F
@@ -4159,6 +4323,7 @@ labVersion coverage
 localization cell
 md5sum 1c69dd6ede96192115a7d0dae2feaee6
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex F
@@ -4185,6 +4350,7 @@ labVersion coverage
 localization cell
 md5sum 2cee40dda48b2a3d8386254fba0e213d
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex F
@@ -4210,6 +4376,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 308bedff6f8114b79331e846a8e38415,ae463768cdcd4be57b1adbd118b1bcc3
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4235,6 +4402,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 79e4beb329a483ac4959def87bf3267c,1ae38bc1f4f815ea40ae48b532ceb3bc
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4261,6 +4429,7 @@ labVersion coverage
 localization cell
 md5sum efc0c02620e0e2bf5cd91c1d9ae95551
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4287,6 +4456,7 @@ labVersion coverage
 localization cell
 md5sum eb1468c50b6acd6332ce405d7fc057b7
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4313,6 +4483,7 @@ labVersion coverage
 localization cell
 md5sum e0d7fa64be15877d559b7ed6bb37fcd7
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4339,6 +4510,7 @@ labVersion coverage
 localization cell
 md5sum 72756550acadc94c360562993f3e94be
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4364,6 +4536,7 @@ labVersion 1
 localization cell
 md5sum e1d653a1c03d34735f834cead45d67d3
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4388,6 +4561,7 @@ labVersion 1
 localization cell
 md5sum 493878b9d772899c81922615cfade8be
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4413,6 +4587,7 @@ labVersion coverage
 localization cell
 md5sum 1301f9defe11a3f9f79f6e424d3d7b1c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4439,6 +4614,7 @@ labVersion coverage
 localization cell
 md5sum 2ebd0531c5ed74fd1f5dcdc19eac8b87
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4464,6 +4640,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 00569387c58640abba118271dc1e60db,63bc96b74ca8a7dc57649c5b4731bce0
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4490,6 +4667,7 @@ labVersion coverage
 localization cell
 md5sum 0898cee1755cf5c5c2f4034460d67efe
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4516,6 +4694,7 @@ labVersion coverage
 localization cell
 md5sum c1166c7333f5d7301a22e0a59c6cca34
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4541,6 +4720,7 @@ labVersion 1
 localization cell
 md5sum 9a0c01fd3e06074f22e7340471143b42
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4566,6 +4746,7 @@ labVersion coverage
 localization cell
 md5sum d14f8d2b03076bed03161766fe03208a
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4591,6 +4772,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum b1afe744eb76c97be1ddabd0b242a5f6,4db0c77537aec18cafbb690e07404e22
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4616,6 +4798,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 5d256d3c9d15263f090ec357cb5070ec,fee85991da7818c6696fb5e69dedead4
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4642,6 +4825,7 @@ labVersion coverage
 localization cell
 md5sum 04a07f5f7fb6911d77cd77ebd7a14313
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4668,6 +4852,7 @@ labVersion coverage
 localization cell
 md5sum 28b478e1ca233d3097e77bb80c260685
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4694,6 +4879,7 @@ labVersion coverage
 localization cell
 md5sum a06718257aea3ecc2073b708b35e7564
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4720,6 +4906,7 @@ labVersion coverage
 localization cell
 md5sum bdf7e621df1889f07f576cc7eb596b91
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4745,6 +4932,7 @@ labVersion 1
 localization cell
 md5sum fc3f834d6568a5d64ce35508d179c1a4
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4769,6 +4957,7 @@ labVersion 1
 localization cell
 md5sum a00fec779cc36208f9bda9b4f1f2aeb8
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4794,6 +4983,7 @@ labVersion coverage
 localization cell
 md5sum 6f58d48406fa6ee9cc7d99ffe99366ba
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4820,6 +5010,7 @@ labVersion coverage
 localization cell
 md5sum 41e1f84344d1d410c09c9af9c260e1e3
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -4845,6 +5036,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum e871195762aa1ab90ad180566ad79d86,f44e9e97a34ff791992186a94d120db5
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4871,6 +5063,7 @@ labVersion coverage
 localization cell
 md5sum 6953723d80dfd4bed8d746146efacab7
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4897,6 +5090,7 @@ labVersion coverage
 localization cell
 md5sum 8aae3a6508434b83deee82c66efa2422
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4922,6 +5116,7 @@ labVersion 1
 localization cell
 md5sum 1c1cb59ae8dd7e9be869b47427bcba05
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4947,6 +5142,7 @@ labVersion coverage
 localization cell
 md5sum abfb80877fbfd512b8c2fe76d632dfce
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4972,6 +5168,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum a1be9c1272ed1a5eb8bf5ec4aa105394,8cd2bc24acb4d5866eb51a15349e5e81
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -4997,6 +5194,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 647365df4111cceae38c88436483f02d,8c017b4c0e8b91ab2114bd70ef248e63
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5023,6 +5221,7 @@ labVersion coverage
 localization cell
 md5sum 12511c8b37cb47ae113ed424053b2cfd
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5049,6 +5248,7 @@ labVersion coverage
 localization cell
 md5sum ad32c1ad5029395b25e294c0c8b00305
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5075,6 +5275,7 @@ labVersion coverage
 localization cell
 md5sum e50bad441c66f1d979a59265b7bc92c6
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5101,6 +5302,7 @@ labVersion coverage
 localization cell
 md5sum 86640306f5156645347f0354fb6e1f7b
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5126,6 +5328,7 @@ labVersion 1
 localization cell
 md5sum 9ad1d9b25c8e5985567ae878605cc0ee
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5150,6 +5353,7 @@ labVersion 1
 localization cell
 md5sum 67c11efe541dfd9e2341fa56bd12b25a
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5175,6 +5379,7 @@ labVersion coverage
 localization cell
 md5sum be0208693db019d489c3120c850d247c
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5201,6 +5406,7 @@ labVersion coverage
 localization cell
 md5sum d0214cfa4d127450fe91dbac2fe4cafd
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5226,6 +5432,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum d5276ecca97692d29b57b21f588be2c5,fb7b053f59b3bf537476b6233d1aeb1f
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5251,6 +5458,7 @@ labVersion ABI BioScope v1.2.1
 localization cell
 md5sum 6243497f4887107ceb1b6af407bf4bdf,688d94351fe2555213f1905a32ddc6e4
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5277,6 +5485,7 @@ labVersion coverage
 localization cell
 md5sum 4906bc20fa799e7290dcefb7e3688deb
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5303,6 +5512,7 @@ labVersion coverage
 localization cell
 md5sum 611b176d6d83a80a77f4bed8775da24c
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5329,6 +5539,7 @@ labVersion coverage
 localization cell
 md5sum cf1ab17896dd89aead138dd4204a1f66
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5355,6 +5566,7 @@ labVersion coverage
 localization cell
 md5sum 246f4c99ffee9fb945bff6ef95ec4bc5
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5380,6 +5592,7 @@ labVersion 1
 localization cell
 md5sum 6b6df7cdae248c85cd2243b5b1a9e968
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5404,6 +5617,7 @@ labVersion 1
 localization cell
 md5sum 7bef5dd2bbdd038e3d26bdaf78bc5585
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5429,6 +5643,7 @@ labVersion coverage
 localization cell
 md5sum df288feee5ca1f6dfedc76ee6f7ff8e1
 project wgEncode
+readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
@@ -5455,6 +5670,7 @@ labVersion coverage
 localization cell
 md5sum 20870c623fe198aae16d641404594f62
 project wgEncode
+readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
@@ -5464,4 +5680,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 2039225162
+# MAGIC: -1732875902

@@ -5,6 +5,7 @@
 
 char *gpFxModifySequence(struct allele *allele, struct genePred *pred, 
     int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence)
+/* modify a transcript to what it'd be if the alternate allele were present */
 {
 //if ((pred->optFields & genePredExonFramesFld) == 0)
  //   genePredAddExonFrames(pred);
@@ -17,15 +18,23 @@ if (allele->length != allele->variant->chromEnd - allele->variant->chromStart)
     errAbort("only support alleles the same length as the reference");
 
 char *retSequence = cloneString(transcriptSequence->dna);
-memcpy(&transcriptSequence->dna[transcriptOffset], allele->sequence, 
+if (*pred->strand == '-')
+    transcriptOffset = transcriptSequence->size - (transcriptOffset + 1);
+
+// make the change in the sequence
+memcpy(&retSequence[transcriptOffset], allele->sequence, 
     allele->length);
 
 return retSequence;
 }
 
 char *getCodingSequence(struct genePred *pred, char *transcriptSequence)
+/* extract the CDS from a transcript */
 {
 int ii;
+
+if (*pred->strand == '-')
+    reverseComplement(transcriptSequence, strlen(transcriptSequence));
 
 // trim off the 5'
 char *ptr = transcriptSequence;
@@ -45,10 +54,16 @@ char *newString = cloneString(ptr);
 // trim off 3'
 newString[genePredCdsSize(pred)] = 0;
 
+if (*pred->strand == '-')
+    {
+    reverseComplement(transcriptSequence, strlen(transcriptSequence));
+    reverseComplement(newString, strlen(newString));
+    }
+
 return newString;
 }
 
-int firstChange(char *string1, char *string2)
+static int firstChange(char *string1, char *string2)
 /* return the position of the first difference between the two sequences */
 {
 int count = 0;
@@ -96,7 +111,9 @@ else
     AllocVar(effects);
     effects->so.soNumber = non_synonymous_variant;
     effects->so.sub.codingChange.transcript = cloneString(pred->name);
-    effects->so.sub.codingChange.exonNumber = exonNum;
+    if (*pred->strand == '-')
+	effects->so.sub.codingChange.exonNumber = exonNum;
+	effects->so.sub.codingChange.exonNumber = pred->exonCount - exonNum;
     effects->so.sub.codingChange.cDnaPosition = firstChange( newSequence, 
 	transcriptSequence->dna);
     effects->so.sub.codingChange.cdsPosition = firstChange( newCodingSequence,
