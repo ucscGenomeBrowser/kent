@@ -137,7 +137,6 @@ This will drop a white->blue gradient background on the header (if desired)
 
 .helpText {
     position: relative;
-    background-color: #F7F7F7;
     margin: 10px;
 }
 
@@ -166,4 +165,5 @@ This will drop a white->blue gradient background on the header (if desired)
     cursor: pointer;
     padding: 1px 4px 1px 4px;
     border: 1px inset gray;
+    background-color: #E0E0E0;
 }
