@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -e
 source `which qaConfig.csh`
 
 ########################################
@@ -97,7 +97,7 @@ sort -k1,1 -u $db.rawDataForUniProt.plus > $db.uniProtToUcscGenes.txt
 
 # make the new directory and copy the file there
 mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes
-cp $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
+cp -f $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
 
 # how big is the file
 set num=`wc -l $db.uniProtToUcscGenes.txt | awk '{print $1}'`
