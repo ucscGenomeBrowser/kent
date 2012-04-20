@@ -79,16 +79,32 @@ class Release(object):
     # def status(self):
         # '''A string representing the status of this release: alpha, beta, or public'''
         # return self._status
+    @property
+    def onAlpha(self):
+        return self._alpha
+    
+    @property
+    def onBeta(self):
+        return self._beta
+        
+    @property
+    def onPublic(self):
+        return self._public
     
     @property
     def files(self):
-        '''A dictionary of TrackFiles where the filename is the key'''
+        '''A dictionary of TrackFiles belonging to this release where the filename is the key'''
         return self._files
     
     def __init__(self, index, status, files):
         self._files = files
         self._index = index
-        self._status = status.split()
+        if (status.strip() == ''):
+            self._alpha = self._beta = self._public = 1
+        else:
+            self._alpha = 'alpha' in status.split(',')
+            self._beta = 'beta' in status.split(',')
+            self._public = 'public' in status.split(',')
     
 class CompositeTrack(object):
     '''
@@ -206,13 +222,14 @@ class CompositeTrack(object):
             return self._releaseObjects
         except AttributeError:
             self._releaseObjects = list()
-            count = 1
             
             omit = ['README.txt', 'md5sum.txt', 'md5sum.history', 'files.txt']
             
             maxcomposite = 0
             statuses = dict()
-            for line in open(self._trackDbDir):
+            for line in open(self._trackDbDir + 'trackDb.wgEncode.ra'):
+                if line.startswith('#') or line.strip() == '':
+                    continue
                 parts = line.split()
                 composite = parts[1]
                 places = ''
@@ -235,23 +252,25 @@ class CompositeTrack(object):
                 else:
                     lastplace = statuses[i]
                     
-            while(1):
-                releasepath = self.downloadsDirectory + ('release%d' % count) + '/'
+            # while(1):
+                # releasepath = self.downloadsDirectory + ('release%d' % count) + '/'
                 
-                if not os.path.exists(releasepath):
-                    break
+                # if not os.path.exists(releasepath):
+                    # break
                     
-                md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
-                releasefiles = dict()
+                # md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
+                # releasefiles = dict()
                 
-                for file in os.listdir(releasepath):
-                    if os.path.isfile(releasepath + file) and file not in omit:
-                        if md5s != None and file in md5s:
-                            releasefiles[file] = TrackFile(releasepath + file, md5s[file])
-                        else:
-                            releasefiles[file] = TrackFile(releasepath + file, None)
+                # for file in os.listdir(releasepath):
+                    # if os.path.isfile(releasepath + file) and file not in omit:
+                        # if md5s != None and file in md5s:
+                            # releasefiles[file] = TrackFile(releasepath + file, md5s[file])
+                        # else:
+                            # releasefiles[file] = TrackFile(releasepath + file, None)
+            for i in range(1, maxcomposite + 1):    
+                self._releaseObjects.append(Release(i, statuses[i], None))
                 
-                self._releaseObjects.append(Release(count, statuses[count], releasefiles))
+            return self._releaseObjects
     @property 
     def releases(self):
         '''A list of all files in the release directory of this composite'''

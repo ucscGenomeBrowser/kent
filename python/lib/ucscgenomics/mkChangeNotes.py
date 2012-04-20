@@ -61,7 +61,7 @@ class makeNotes(object):
         if state == 'new':
             (mdb, files, revokedset) = (self.newMdb, self.newReleaseFiles, self.revokedSet)
         elif state == 'old':
-            (mdb, files) = (self.oldMdb, self.oldReleaseFiles)
+            (mdb, files, revokedset) = (self.oldMdb, self.oldReleaseFiles, self.oldRevokedSet)
 
 ### If MySQLdb ever gets installed ###
 
@@ -577,7 +577,7 @@ class makeNotes(object):
                 sys.stderr.write("Scanning and parsing release directories\n")
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
-            (self.oldMdb, spam, eggs, self.oldAtticSet, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
+            (self.oldMdb, self.oldRevokedSet, self.oldRevokedFiles, self.oldAtticSet, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
             self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
 
