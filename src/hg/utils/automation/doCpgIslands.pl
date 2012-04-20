@@ -273,6 +273,7 @@ set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | 
 sed -e "s/14/\${C}/" \$HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
 hgLoadBed -sqlTable=cpgIslandExt.sql -tab $db cpgIslandExt cpgIsland.bed 
 checkTableCoords -verboseBlocks -table=cpgIslandExt $db
+featureBits $db cpgIslandExt >&fb.$db.cpgIslandExt.txt
 _EOF_
   );
   $bossScript->execute();
@@ -333,7 +334,7 @@ my $elapsedSeconds = $secondsEnd - $secondsStart;
 my $elapsedMinutes = int($elapsedSeconds/60);
 $elapsedSeconds -= $elapsedMinutes * 60;
 
-HgAutomate::verbose(1,
+&HgAutomate::verbose(1,
 	"\n *** All done !  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	"\n *** All done!$upThrough\n");
