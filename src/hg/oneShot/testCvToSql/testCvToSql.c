@@ -736,8 +736,8 @@ for (type = typeList; type != NULL; type = type->next)
     char *indent = "    ";
     char *typeSymbol = djangoClassName(type);
     char *typeDescription = getTypeDescription(type, typeOfTermHash);
-    fprintf(f, "# %s\n", typeDescription);
     fprintf(f, "class %s(models.Model):\n", typeSymbol);
+    fprintf(f, "%s\"\"\"%s\"\"\"\n", indent, typeDescription);
     struct stanzaField *field;
     for (field = type->fieldList; field != NULL; field = field->next)
         {

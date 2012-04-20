@@ -110,7 +110,11 @@ $(function () {
                 // prune out datatypes with no experiments
                 if (dataTypeExps[dataType.term] !== undefined) {
                     $th = $('<th class="elementType"><div class="verticalText">' + 
-                                dataType.label + '</div></th>');
+                                dataType.label + 
+                                // add button to launch ChIP-seq (but suppress on IE)
+                                (dataType.term === 'ChipSeq' && !$.browser.msie ? 
+                                '&nbsp;&nbsp; <span title="Click to view ChIP-seq experiment matrix by antibody target" id="chipButton">view matrix</span>': '') + 
+                                '</div></th>');
                     if (!encodeProject.isIE8()) {
                         // Suppress mouseOver under IE8 as QA noted flashing effect
                         $th.attr('title', dataType.description);
@@ -123,6 +127,12 @@ $(function () {
                 }
             });
         });
+
+        // add click handler to navigate to Chip-seq matrix
+        $('#chipButton').click(function() {
+            window.open('encodeChipMatrixHuman.html', 'matrixWindow');
+        });
+
         // adjust size of headers based on longest label length
         // empirically len/2 em's is right
         $('#columnHeaders th').css('height', (String((maxLen/2 + 2)).concat('em')));
@@ -190,7 +200,7 @@ $(function () {
 
     // initialize application
     encodeMatrix.start($matrixTable);
-
+    
     // load data from server and do callback
     encodeProject.loadAllFromServer(requests, handleServerData);
 });

@@ -38,7 +38,7 @@ sub processConfFile
         if ($line =~ m/^include\s+(.+)$/) {
             processConfFile($ref, $1, $profile);
         } else {
-            for my $name (qw(host user password)) {
+            for my $name (qw(host user password db)) {
                 if ($line =~ m/^$profile\.$name\s*=\s*(.+)/) {
                     $ref->{uc($name)} = $1;
                 }
@@ -51,16 +51,12 @@ sub processConfFile
 
 sub new
 {
-# $args{DB} is required
+# $args{DB} is required (unless supplied via a profile).
 # $args{PROFILE}: let's you select db profile (optional: defaults to "db").
 # $args{USER}, $args{PASSWORD} and $args{HOST} are optional (and override .hg.conf values).
     my ($class, %args) = (@_);
     my $ref = {};
-    if(!defined($args{DB})) {
-        die "Missing \$args{DB}";
-    }
-    my $dsn = "DBI:mysql:$args{DB}";
-    
+
     my $confFile = "";
     if ($ENV{HGDB_CONF}) {
         $confFile = "$ENV{HGDB_CONF}"
@@ -76,6 +72,10 @@ sub new
         # %args override values in conf file.
         $ref->{$_} = $args{$_};
     }
+    if(!defined($ref->{DB})) {
+        die "Missing \$args{DB}";
+    }
+    my $dsn = "DBI:mysql:$ref->{DB}";
     if($ref->{HOST}) {
         $dsn .= ";host=$ref->{HOST}";
     }
