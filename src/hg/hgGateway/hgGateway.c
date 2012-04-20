@@ -322,8 +322,10 @@ if (thisNodeStr)
         bits32 ip = 0;
         internetDottedQuadToIp(ipStr, &ip);
 
-        // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
-        safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
+        // We (sort-of) assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient;
+        // we do accomodate a range that is completely contained in another (to accomodate the hgroaming entry for testing);
+        // this is accomplished by "<= ipEnd" in the sql query.
+        safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1", ip, ip);
         char **row;
         struct sqlResult *sr = sqlGetResult(centralConn, query);
         int defaultNode = 1;
