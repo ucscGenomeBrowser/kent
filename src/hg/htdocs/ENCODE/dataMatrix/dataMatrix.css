@@ -137,10 +137,7 @@ This will drop a white->blue gradient background on the header (if desired)
 
 .helpText {
     position: relative;
-    border: 1px solid gray;
-    background-color: #F7F7F7;
-    margin: 15px 15px 5px 15px;
-    padding: 0 1em;
+    margin: 10px;
 }
 
 .helpLauncher {
@@ -160,7 +157,7 @@ This will drop a white->blue gradient background on the header (if desired)
     cursor: pointer;
     position: absolute;
     right: 5px;
-    bottom: 5px;
+    top: 0;
 }
 
 #chipButton {
@@ -168,4 +165,5 @@ This will drop a white->blue gradient background on the header (if desired)
     cursor: pointer;
     padding: 1px 4px 1px 4px;
     border: 1px inset gray;
+    background-color: #E0E0E0;
 }
