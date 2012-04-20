@@ -218,7 +218,7 @@ _EOF_
   close($fh);
 
   my $whatItDoes = "Run /scratch/data/cpgIslandExt/cpglh on masked sequence.";
-  my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $workhorse,
+  my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $paraHub,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 mkdir -p results
