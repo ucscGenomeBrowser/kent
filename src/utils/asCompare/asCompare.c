@@ -1,4 +1,4 @@
-/* bedToBigBed - Convert bed to bigBed.. */
+/* asCompare - Compare .as autoSql files. */
 #include "common.h"
 #include "options.h"
 #include "asParse.h"
