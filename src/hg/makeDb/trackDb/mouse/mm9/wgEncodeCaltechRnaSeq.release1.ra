@@ -107,9 +107,9 @@ html wgEncodeCaltechRnaSeq.release1
         # subId=6081 dateSubmitted=2012-04-16 dateReSubmitted=2012-04-18
 
         track wgEncodeCaltechRnaSeqViewSignal
-	shortLabel Signal
+	shortLabel Signal 
 	view Signal
-	visibility full
+	visibility hide
 	subTrack wgEncodeCaltechRnaSeq
 	viewLimits 0:500
 	autoScale on
