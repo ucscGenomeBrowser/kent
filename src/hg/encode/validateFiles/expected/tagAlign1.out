@@ -2,5 +2,5 @@ Error [file=input/tagAlign1.txt, line=1]: too many mismatches (found 3/25, maxim
 seq=[AAAAACACTGTAGACTTTCCNAGNN]
 gen=[aaaaacactgtagactttcccagta]
 
-Aborting ... found 1 errors in total
+Aborting .. found 1 error
 

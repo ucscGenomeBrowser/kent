@@ -18,12 +18,18 @@ if (allele->length != allele->variant->chromEnd - allele->variant->chromStart)
     errAbort("only support alleles the same length as the reference");
 
 char *retSequence = cloneString(transcriptSequence->dna);
+char *newAllele = cloneString(allele->sequence);
 if (*pred->strand == '-')
+    {
     transcriptOffset = transcriptSequence->size - (transcriptOffset + 1);
+    reverseComplement(newAllele, strlen(newAllele));
+    }
 
 // make the change in the sequence
-memcpy(&retSequence[transcriptOffset], allele->sequence, 
-    allele->length);
+memcpy(&retSequence[transcriptOffset], newAllele, allele->length);
+
+// clean up
+freeMem(newAllele);
 
 return retSequence;
 }
@@ -98,33 +104,50 @@ struct dnaSeq *newCodingDna = newDnaSeq(newCodingSequence,
     strlen(newCodingSequence), pred->name);
 aaSeq *newaa = translateSeq(newCodingDna, 0, FALSE);
 
-//transcript ID, exon number(s), cDNA position, CDS position, peptide position, alternate amino acids, alternate codons" 9
+struct gpFx *effects;
+AllocVar(effects);
+slAddHead(&effectsList, effects);
+effects->so.sub.codingChange.transcript = cloneString(pred->name);
+effects->so.sub.codingChange.cDnaPosition = firstChange( newSequence, 
+    transcriptSequence->dna);
+effects->so.sub.codingChange.cdsPosition = firstChange( newCodingSequence,
+    oldCodingSequence);
+if (*pred->strand == '-')
+    effects->so.sub.codingChange.exonNumber = pred->exonCount - exonNum;
+else
+    effects->so.sub.codingChange.exonNumber = exonNum;
+
+int codonPos = (effects->so.sub.codingChange.cdsPosition / 3) * 3;
+
+char buffer[100];
+safef(buffer, sizeof buffer, "%c%c%c > %c%c%c",
+    toupper(oldCodingSequence[codonPos + 0]),
+    toupper(oldCodingSequence[codonPos + 1]),
+    toupper(oldCodingSequence[codonPos + 2]),
+    toupper(newCodingSequence[codonPos + 0]),
+    toupper(newCodingSequence[codonPos + 1]),
+    toupper(newCodingSequence[codonPos + 2]));
+
+effects->so.sub.codingChange.codonChanges = cloneString(buffer);
 
 if (sameString(newaa->dna, oldaa->dna))
     {
     // synonymous change
+    effects->so.soNumber = synonymous_variant;
+    effects->so.sub.codingChange.pepPosition = 0;
+    effects->so.sub.codingChange.aaChanges = "";
     }
 else
     {
     // non-synonymous change
-    struct gpFx *effects;
-    AllocVar(effects);
     effects->so.soNumber = non_synonymous_variant;
-    effects->so.sub.codingChange.transcript = cloneString(pred->name);
-    if (*pred->strand == '-')
-	effects->so.sub.codingChange.exonNumber = exonNum;
-	effects->so.sub.codingChange.exonNumber = pred->exonCount - exonNum;
-    effects->so.sub.codingChange.cDnaPosition = firstChange( newSequence, 
-	transcriptSequence->dna);
-    effects->so.sub.codingChange.cdsPosition = firstChange( newCodingSequence,
-	oldCodingSequence);
+
     effects->so.sub.codingChange.pepPosition = firstChange( newaa->dna,
 	oldaa->dna);
-	    /*
-	    char *aaChanges;
-	    char *codonChanges;
-	    */
-    slAddHead(&effectsList, effects);
+    safef(buffer, sizeof buffer, "%c > %c",
+	toupper(oldaa->dna[effects->so.sub.codingChange.pepPosition]),
+	toupper(newaa->dna[effects->so.sub.codingChange.pepPosition]));
+    effects->so.sub.codingChange.aaChanges = cloneString(buffer);
     }
 
 return effectsList;

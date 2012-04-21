@@ -454,6 +454,8 @@ organism human
 description B cells CD20+ from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
+lineage mesoderm
+karyotype normal
 vendorName Rajinder Kaul, UW
 vendorId CD20+
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1294,6 +1296,8 @@ deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
+lineage mesoderm
+karyotype normal
 vendorName Heimfeld Lab, FHCRC
 vendorId CD20+
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
@@ -1310,6 +1314,8 @@ description B cells, caucasian, draw number 1, newly promoted to tier 2: not in 
 sex F
 age 43
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
@@ -1327,6 +1333,8 @@ description B cells, African American, draw number 1, newly promoted to tier 2: 
 sex F
 age 27
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
@@ -1344,6 +1352,8 @@ description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promote
 sex F
 age 27
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
@@ -15376,7 +15386,7 @@ label Insertion length
 description The length of the insertion for paired reads for RNA-seq experiments.
 searchable no
 cvDefined yes
-validate cv
+validate cv or None
 priority 166
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 requiredVars term,tag,type,description #Provisional
