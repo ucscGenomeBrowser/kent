@@ -38,6 +38,7 @@ by more than the threshold are never joined.
 #include "stdio.h"
 #include "math.h"
 #include "readseq.h"
+#include <stdlib.h>
 
 /********************* CONTROLS ********************/
 #define CPGSCORE  17   /* so that can compare with old cpg - this
@@ -50,28 +51,27 @@ by more than the threshold are never joined.
 int readSequence (FILE *fil, int *conv,
                          char **seq, char **id, char **desc, int *length) ;
 
-int findspans ( int start, int end, char *seq, char *seqname ) ;
+void findspans ( int start, int end, char *seq, char *seqname ) ;
 
 void getstats ( int start, int end, char *seq, char *seqname, int *ncpg, int *ngpc, int *ng, int *nc ) ;
 
 void usage (void)
 { 
-  fprintf (stderr, "Usage: cpg seqfilename\n") ;
-  exit (-1) ;
+  fprintf(stderr, "cpglh - calculate CpG Island data for cpgIslandExt tracks\n");
+  fprintf(stderr, "usage:\n    cpglh <sequence.fa>\n") ;
+  fprintf(stderr, "where <sequence.fa> is fasta sequence, must be more than\n");
+  fprintf(stderr, "   200 bases of legitimate sequence, not all N's\n");
+  exit (-1);
 }
 /*------------------------------------------------------*/
 int main (int argc, char **argv)
 { 
   
   char *seq, *seqname, *desc ;
-  int conv[] =   { 0, 1, 2, 3, 4 } ;
   
   int length ;
   int i ;
   static FILE *fil ;
-
-  char c, *cp ;
-  extern char* malloc() ;
 
   /*------------------------------------------------------*/  
   switch ( argc )
@@ -106,7 +106,7 @@ int main (int argc, char **argv)
   exit (0);
 }
 
-int findspans ( int start, int end, char *seq, char *seqname )
+void findspans ( int start, int end, char *seq, char *seqname )
 {
   int i ;
   int sc = 0 ;
@@ -123,7 +123,7 @@ int findspans ( int start, int end, char *seq, char *seqname )
   while ( i < end )  
     {
       lsc = sc ;
-      sc = ( end-1-i && seq[i]=='C' && seq[i+1]=='G' ) ? sc += CPGSCORE : --sc ;
+      sc += ( end-1-i && seq[i]=='C' && seq[i+1]=='G' ) ? CPGSCORE : -1 ;
       sc = sc < 0 ? 0 : sc ;
 /*      printf("%d \t %d \t%d \t %d \t%d \t%d\n", i, sc, lsc, imn, imx, mx) ; */
       if ( sc == 0 && lsc )  /* should threshold here */
