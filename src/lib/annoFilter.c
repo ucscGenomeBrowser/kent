@@ -112,46 +112,37 @@ return FALSE;
 
 static boolean singleFilter(struct annoFilter *filter, char *word)
 /* Apply filter to word, using autoSql column definitions to interpret word.
- * Return TRUE if filter fails. */
+ * Return TRUE if isExclude and filter passes, or if !isExclude and filter fails. */
 {
+boolean fail = FALSE;
 if (filter->op == afMatch)
-    {
-    if (!wildMatch((char *)(filter->values), word))
-	return TRUE;
-    }
+    fail = !wildMatch((char *)(filter->values), word);
 else if (filter->op == afNotMatch)
-    {
-    if (wildMatch((char *)(filter->values), word))
-	return TRUE;
-    }
+    fail = wildMatch((char *)(filter->values), word);
 else
     {
     // word is a number -- integer or floating point?
     enum asTypes type = filter->columnDef->lowType->type;
     if (type == t_double || t_float)
-	{
-	if (annoFilterDouble(filter, sqlDouble(word)))
-	    return TRUE;
-	}
+	fail = annoFilterDouble(filter, sqlDouble(word));
     else if (type == t_char || type == t_int || type == t_uint || type == t_short ||
 	     type == t_ushort || type == t_byte || type == t_ubyte ||
 	     type == t_off)
-	{
-	if (annoFilterLongLong(filter, sqlLongLong(word)))
-	    return TRUE;
-	}
+	fail = annoFilterLongLong(filter, sqlLongLong(word));
     else
 	errAbort("annoFilterRowFails: unexpected enum asTypes %d for numeric filter op %d",
 		 type, filter->op);
     }
+if ((filter->isExclude && !fail) || (!filter->isExclude && fail))
+    return TRUE;
 return FALSE;
 }
 
 boolean annoFilterRowFails(struct annoFilter *filterList, char **row, int rowSize,
 			   boolean *retRightJoin)
 /* Apply filters to row, using autoSql column definitions to interpret
- * each word of row.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
- * if a rightJoin filter has failed. */
+ * each word of row.  Return TRUE if any filter fails (or passes, if isExclude).
+ * Set retRightJoin to TRUE if a rightJoin filter has failed. */
 {
 if (filterList != NULL && slCount(filterList) != rowSize)
     errAbort("annoFilterRowFails: filterList length %d doesn't match rowSize %d",
@@ -185,16 +176,19 @@ return FALSE;
 
 boolean annoFilterWigValueFails(struct annoFilter *filterList, double value,
 				boolean *retRightJoin)
-/* Apply filters to value.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
- * if a rightJoin filter has failed. */
+/* Apply filters to value.  Return TRUE if any filter fails (or passes, if isExclude).
+ * Set retRightJoin to TRUE if a rightJoin filter has failed. */
 {
+if (retRightJoin != NULL)
+    *retRightJoin = FALSE;
 struct annoFilter *filter;
 // First pass: left-join filters (failure means omit this row from output);
 for (filter = filterList; filter != NULL; filter = filter->next)
     {
     if (filter->op == afNoFilter || filter->rightJoin)
 	continue;
-    if (annoFilterDouble(filter, value))
+    boolean fail = annoFilterDouble(filter, value);
+    if ((filter->isExclude && !fail) || (!filter->isExclude && fail))
 	return TRUE;
     }
 // Second pass: right-join filters (failure means omit not only this row, but the primary row too)
@@ -202,7 +196,8 @@ for (filter = filterList; filter != NULL; filter = filter->next)
     {
     if (filter->op == afNoFilter || !filter->rightJoin)
 	continue;
-    if (annoFilterDouble(filter, value))
+    boolean fail = annoFilterDouble(filter, value);
+    if ((filter->isExclude && !fail) || (!filter->isExclude && fail))
 	{
 	if (retRightJoin != NULL)
 	    *retRightJoin = TRUE;
