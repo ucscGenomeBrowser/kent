@@ -9,7 +9,7 @@ JQUERY_FILES=jquery.js jquery.tablednd.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js 
 
 JS_FILES=ajax.js autocomplete.js hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
-    hui.js utils.js ddcl.js subCfg.js \
+    hgVarAnnogrator.js hui.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js \
     ${JQUERY_FILES}
 

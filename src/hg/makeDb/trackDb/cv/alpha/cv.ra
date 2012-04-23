@@ -11858,6 +11858,11 @@ tag R1X25
 type readType
 description Single 25 nt reads
 
+term 1x30
+tag R1x30
+type readType
+description Single 30 nt read PROVISIONAL
+
 term 1x32
 tag R1X32
 type readType

@@ -6,6 +6,8 @@
 #ifndef DYSTRING_H	/* Wrapper to avoid including this twice. */
 #define DYSTRING_H
 
+#include "common.h"
+
 struct dyString
 /* Dynamically resizable string that you can do formatted
  * output to. */
