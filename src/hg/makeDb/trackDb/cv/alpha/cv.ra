@@ -454,6 +454,8 @@ organism human
 description B cells CD20+ from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
+lineage mesoderm
+karyotype normal
 vendorName Rajinder Kaul, UW
 vendorId CD20+
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1294,6 +1296,8 @@ deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
+lineage mesoderm
+karyotype normal
 vendorName Heimfeld Lab, FHCRC
 vendorId CD20+
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
@@ -1310,6 +1314,8 @@ description B cells, caucasian, draw number 1, newly promoted to tier 2: not in 
 sex F
 age 43
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
@@ -1327,6 +1333,8 @@ description B cells, African American, draw number 1, newly promoted to tier 2: 
 sex F
 age 27
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
@@ -1344,6 +1352,8 @@ description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promote
 sex F
 age 27
 tissue blood
+lineage mesoderm
+karyotype normal
 childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
@@ -4693,6 +4703,60 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 #formerly tier 3
+
+term MRT_G401.6
+tag MRTG401.6
+type Cell Line
+tier 3
+organism human
+description Malignant Renal Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue kidney
+vendorName ATCC 
+vendorId CRL-1441
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTG401.6_Crawford_protocol.pdf
+
+term MRT_A204.1
+tag MRTA204.1
+type Cell Line
+tier 3
+organism human
+description Malignant Rhabdoid tumor (MRT) line, rhabdomyosarcoma PROVISIONAL
+karyotype cancer
+lineage missing
+sex F
+tissue muscle
+vendorName ATCC
+vendorId HTB-82 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTA204.1_Crawford_protocol.pdf
+
+term MRT_TTC549
+tag MRTTTC549
+type Cell Line
+tier 3
+organism human
+description Malignant Hepatic Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue liver
+vendorName ATCC
+vendorId MRT_TTC549 PROVISIONAL 
+orderUrl missing
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
 
 term Myometr
 tag MYOMETR
@@ -11793,6 +11857,11 @@ term 1x25
 tag R1X25
 type readType
 description Single 25 nt reads
+
+term 1x30
+tag R1x30
+type readType
+description Single 30 nt read PROVISIONAL
 
 term 1x32
 tag R1X32
