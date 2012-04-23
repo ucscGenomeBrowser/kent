@@ -201,7 +201,7 @@ if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
     dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264528, 17264606, TRUE);
 
     // synonymous - chr22:17,264,871-17,264,940
-    //dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264871, 17264940, TRUE);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264871, 17264940, TRUE);
     }
 return 0;
 }
