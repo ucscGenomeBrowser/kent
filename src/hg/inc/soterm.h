@@ -41,7 +41,7 @@ struct soCall  // a single variant effect call
     uint    soNumber;           // Sequence Ontology Number
     union
 	{
-	struct     // (non)synonymous variant
+	struct codingChange     // (non)synonymous variant
 	    {
 	    char *transcript;
 	    uint exonNumber;
