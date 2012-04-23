@@ -4704,6 +4704,60 @@ tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 #formerly tier 3
 
+term MRT_G401.6
+tag MRTG401.6
+type Cell Line
+tier 3
+organism human
+description Malignant Renal Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue kidney
+vendorName ATCC 
+vendorId G401.6
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTG401.6_Crawford_protocol.pdf
+
+term MRT_A204.1
+tag MRTA204.1
+type Cell Line
+tier 3
+organism human
+description Malignant Rhabdoid tumor (MRT) line, rhabdomyosarcoma PROVISIONAL
+karyotype cancer
+lineage missing
+sex F
+tissue muscle
+vendorName ATCC
+vendorId A204.1
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTA204.1_Crawford_protocol.pdf
+
+term MRT_TTC549
+tag MRTTTC549
+type Cell Line
+tier 3
+organism human
+description Malignant Hepatic Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue liver
+vendorName ATCC
+vendorId MRT_TTC549 PROVISIONAL 
+orderUrl missing
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+
 term Myometr
 tag MYOMETR
 type Cell Line
