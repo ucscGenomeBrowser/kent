@@ -51,6 +51,8 @@ struct annoStreamer
     struct annoGratorQuery *query;	// The query object that owns this streamer.
     enum annoRowType rowType;
     int numCols;
+    struct annoFilter *filters;
+    struct annoColumn *columns;
 
     // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
@@ -58,8 +60,6 @@ struct annoStreamer
     uint regionStart;
     uint regionEnd;
     struct asObject *asObj;
-    struct annoFilter *filters;
-    struct annoColumn *columns;
     };
 
 // ---------------------- annoStreamer default methods -----------------------

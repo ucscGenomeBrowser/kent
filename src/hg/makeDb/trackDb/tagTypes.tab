@@ -96,7 +96,6 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
-extraFields bed
 fieldCount customTracks
 filePos *
 fileSortOrder *

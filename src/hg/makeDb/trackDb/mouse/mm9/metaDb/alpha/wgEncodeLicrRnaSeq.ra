@@ -3,6 +3,7 @@ objType composite
 composite wgEncodeLicrRnaSeq
 expVars lab,dataType,cell,age
 geoSeriesAccession GSE36026
+readType 1x36
 
 metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
 objType table
@@ -22,6 +23,7 @@ labVersion 7/28/2011 Lane 3A
 localization cell
 md5sum bd1fca8cbdc3ecb4f64c9f93e2d7daa4,4f0712dbb8dbdeed543d2f33f52778c5
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -51,6 +53,7 @@ labVersion 7/28/2011 Lane 3B
 localization cell
 md5sum 963a76ab96b12fd546d03321093aa0f5,81afcbe3e9f0290fd2d56e7237e4683b
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -80,6 +83,7 @@ labVersion 7/28/2011 Lane 3A
 localization cell
 md5sum 71effe3a387003e8c0431819493526d0
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -108,6 +112,7 @@ labVersion 7/28/2011 Lane 3B
 localization cell
 md5sum f04a858e704ec03f384c9f1bc2d2b851
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -136,6 +141,7 @@ labVersion 7/28/2011 Lane 3A
 localization cell
 md5sum b015398120b24950272979e0cf854068
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -165,6 +171,7 @@ labVersion 7/28/2011 Lane 3B
 localization cell
 md5sum 8c9e3f9611cea07c1d599c806e6e9366
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -194,6 +201,7 @@ labVersion 09/08/10 Lane 4G
 localization cell
 md5sum 14237a1ad3e88c4963346688087910d1,6af4b8e00935a5c2146ae5b5a3a13f6f
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -223,6 +231,7 @@ labVersion 09/08/10 Lane 4H
 localization cell
 md5sum 7ed3746b848be72621e6a4ccf231575f,d3a25f473d4d4668d9d440c6a65d831c
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -252,6 +261,7 @@ labVersion 09/08/10 Lane 4G
 localization cell
 md5sum 7866dd70110904c4ee5ebdd4a49f8e27
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -280,6 +290,7 @@ labVersion 09/08/10 Lane 4H
 localization cell
 md5sum 513fc20f81393c3814640cb228d21f53
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -308,6 +319,7 @@ labVersion 09/08/10 Lane 4G
 localization cell
 md5sum ce64fe300a9acf3ee7c343262a727686
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -337,6 +349,7 @@ labVersion 09/08/10 Lane 4H
 localization cell
 md5sum e5c308efc878a50f5fcbc811c6acbe48
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -366,6 +379,7 @@ labVersion 7/28/2011 Lane 2C
 localization cell
 md5sum 575960679611e95a112ad25cce8d37d3,dab3e8e4c9448fe51dcd6eda8852b301
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -395,6 +409,7 @@ labVersion 7/28/2011 Lane 2D
 localization cell
 md5sum 967ea81cc1d620c0605cdba4d0d093e1,0861e50f7a560881fd189a0e3ecb6d9f
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -424,6 +439,7 @@ labVersion 7/28/2011 Lane 2C
 localization cell
 md5sum 9238043c62a06dc70e610ff7518d93c8
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -452,6 +468,7 @@ labVersion 7/28/2011 Lane 2D
 localization cell
 md5sum 5f99c887606c5c36ee6097f2a45802ce
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -480,6 +497,7 @@ labVersion 7/28/2011 Lane 2C
 localization cell
 md5sum 983ff17ae22e2d5f336cb91267880f9f
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -509,6 +527,7 @@ labVersion 7/28/2011 Lane 2D
 localization cell
 md5sum 4ce99765b5d372651b286a4ab7cc501b
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -538,6 +557,7 @@ labVersion 03/16/10 Lane 2
 localization cell
 md5sum 8da723d235d2b5e19950f5d5ca45394e,d5a85a2216c7939b90316f8667512907
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -567,6 +587,7 @@ labVersion 03/16/10 Lane 3
 localization cell
 md5sum 5027d18a5bf6319620e935863a178d0e,d835d29b627a329e0baeec74bfcf7817
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -596,6 +617,7 @@ labVersion 03/16/10 Lane 2
 localization cell
 md5sum 5819b3b4814082f1782b45eab653ed87
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -624,6 +646,7 @@ labVersion 03/16/10 Lane 3
 localization cell
 md5sum b0df8596b406ec91b2e8ace2ede6d99a
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -652,6 +675,7 @@ labVersion 03/16/10 Lane 2
 localization cell
 md5sum 71ee574a9c5babdc89b6d31e3208ec1c
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -681,6 +705,7 @@ labVersion 03/16/10 Lane 3
 localization cell
 md5sum eb5d4ba1e556b406314a0440405afdd6
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -710,6 +735,7 @@ labVersion 03/15/10 Lane 1
 localization cell
 md5sum 6a770ca539e22727b255ab31d14d6630,8f8ac55627b64f3cd532ed7d92a787f3
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -739,6 +765,7 @@ labVersion 03/15/10 Lane 2
 localization cell
 md5sum ffb8bbd7bba53b1199d5357901e76086,a07a095bdb9fb742063641bd5c78451f
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -768,6 +795,7 @@ labVersion 03/15/10 Lane 1
 localization cell
 md5sum 03eabbcac55b4d2bebbb96b441aed5e6
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -796,6 +824,7 @@ labVersion 03/15/10 Lane 2
 localization cell
 md5sum a8456a098bead4280fef3baf3ee993d3
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -824,6 +853,7 @@ labVersion 03/15/10 Lane 1
 localization cell
 md5sum 24d2d8bbf679ed06b104a35dd4468c8d
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -853,6 +883,7 @@ labVersion 03/15/10 Lane 2
 localization cell
 md5sum df7047a4074e7c503f399bc8b3ee371d
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -882,6 +913,7 @@ labVersion 10/13/10 Lane 4A
 localization cell
 md5sum b3333bb37c9e71cc87bcdec4580c60d8,7e3b532ecf75e4e6504f77a5eabccc7a
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -911,6 +943,7 @@ labVersion 10/13/10 Lane 4B
 localization cell
 md5sum f9ed43263e65d56caf9d9010f87a0ea8,28bd15def9af947611341b37927357fe
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -940,6 +973,7 @@ labVersion 10/13/10 Lane 4A
 localization cell
 md5sum edb48bf4fb82087921900418443dd00a
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -968,6 +1002,7 @@ labVersion 10/13/10 Lane 4B
 localization cell
 md5sum 9d4bae7ff91cc0d361b1a1170ac7e5ab
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -996,6 +1031,7 @@ labVersion 10/13/10 Lane 4A
 localization cell
 md5sum 00c7fa9738e57fb7991375b94c534c49
 project wgEncode
+readType 1x30
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1025,6 +1061,7 @@ labVersion 10/13/10 Lane 4B
 localization cell
 md5sum bbc1c2c3d98cd45b98d77ab64a792be2
 project wgEncode
+readType 1x30
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1054,6 +1091,7 @@ labVersion 03/10/10 Lane 1
 localization cell
 md5sum f1ed78a6f5a5ad6653978b552d8fce89,f94072db798f77ab8bfbb31090c79939
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1083,6 +1121,7 @@ labVersion 03/10/10 Lane 2
 localization cell
 md5sum 14b61a5ef161c7db658efabd7ef0da38,815ae8f340492f2a06afcba5f3b41f2c
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1112,6 +1151,7 @@ labVersion 03/10/10 Lane 1
 localization cell
 md5sum 99cbc15c396e3600ac0b3cff719d3f93
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1140,6 +1180,7 @@ labVersion 03/10/10 Lane 2
 localization cell
 md5sum 58fcad2ea46f062f2ee5abdf34c5a52d
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1168,6 +1209,7 @@ labVersion 03/10/10 Lane 1
 localization cell
 md5sum e33675e476efe6ea90f7dd8e65c9ba8e
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1197,6 +1239,7 @@ labVersion 03/10/10 Lane 2
 localization cell
 md5sum b0ef01570f7f92ad10d44177c242189a
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1226,6 +1269,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum e9bc5abbe2ec6f48df29d8241b2593e8,56f6d50f61079b44ae62f4b86f50ad30
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1255,6 +1299,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum b05dd27a39b8e845f29bd8c52cf41aa9,5fd829d00fad2dcac46d3c2d65ed0a3c
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1284,6 +1329,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum 4d5ff150bf4e3cb2ca47c8e50b5da75f
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1312,6 +1358,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum 32ed42035e400ce4f19aeda63bda869b
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1340,6 +1387,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum b57b18b2cae5b693b8f1d20b3d362816
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1369,6 +1417,7 @@ labVersion 4/29/11 Lane 1
 localization cell
 md5sum 48450e8d2ef623134405f506738e00a0
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1398,6 +1447,7 @@ labVersion 03/15/10 Lane 3
 localization cell
 md5sum 22b8617e5391dcf7246784fe82c154bc,c86f3a70d91e0a6d2ecf96afc70fbc37
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1427,6 +1477,7 @@ labVersion 03/15/10 Lane 4
 localization cell
 md5sum eb4c39ed1151d670ea90e922ebec56ff,f394e17b499f259ae5fa6ab1cf7ee64d
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1456,6 +1507,7 @@ labVersion 03/15/10 Lane 3
 localization cell
 md5sum dfe9901f57b4c51be3dae81cdc9243f8
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1484,6 +1536,7 @@ labVersion 03/15/10 Lane 4
 localization cell
 md5sum 4855a4ff6cb5841b3e6736decadff926
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1512,6 +1565,7 @@ labVersion 03/15/10 Lane 3
 localization cell
 md5sum 711aa6d2a5d71b9ec4a839fdc2ff245a
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1541,6 +1595,7 @@ labVersion 03/15/10 Lane 4
 localization cell
 md5sum 6e0b660e33f18946a22654d2eadbf127
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1570,6 +1625,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum c6d4d2044d613b49ea4b889b5e3e4cee,643efdf8ae434fd655151303d9d95410
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1599,6 +1655,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum ffd7f0301812bd34d471dcf189bdee58,481926032b5ce6c3f94e3c0776149df4
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1628,6 +1685,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 8ffb7c21fc8be5a8b1d18713290feb7e
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1656,6 +1714,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum a814787e16176187a8aad81e9d31bb14
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1684,6 +1743,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 893e093e5b325e4f0db95b9a38569769
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1713,6 +1773,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 5a131579e8f7b5a852a68ba4eefcf191
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1742,6 +1803,7 @@ labVersion 03/02/10 Lane 3
 localization cell
 md5sum 8190233ef599431709351de3690fcffc,ffe95756d895aeec9b6a3ec09307f16e
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1771,6 +1833,7 @@ labVersion 03/02/10 Lane 4
 localization cell
 md5sum 633a3b0d8ab37f7cac048fa31d8ca554,2c606d5efeacecc64590c05aec3e0e0b
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1800,6 +1863,7 @@ labVersion 03/02/10 Lane 3
 localization cell
 md5sum 53cf8a074d19fe7e35a2452ca0279e46
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1828,6 +1892,7 @@ labVersion 03/02/10 Lane 4
 localization cell
 md5sum 8625db2109036d6a3479ef6e8fea4cc7
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1856,6 +1921,7 @@ labVersion 03/02/10 Lane 3
 localization cell
 md5sum 57f8d27282524c958afb7e74509f7680
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1885,6 +1951,7 @@ labVersion 03/02/10 Lane 4
 localization cell
 md5sum 78c781a976010183b614405f025fca3d
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -1914,6 +1981,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum dc5f293b35ae8d3ef4d0ee7c378f180c,9410629fd1ad68574325b5cad9cd97e1
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1943,6 +2011,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum e28e14cd8c5989dee7d0305b7b63fbc8,2b1d0b933dfa43fdb22b8007ffda9e23
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1972,6 +2041,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 038d8bdb835256918ab2282385634f39
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2000,6 +2070,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum ed3df0ffd0a983a43192a185f9c303dc
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2028,6 +2099,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 0860733c1c1d1708a5739ad48901cc88
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2057,6 +2129,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum bc28240925ec7cdc56ecab2b6568a107
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2086,6 +2159,7 @@ labVersion 03/10/10 Lane 5
 localization cell
 md5sum 49f7bf22c064adca9c1308b064367a85,9ccca606351138abc58b68a01f11bf4a
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2115,6 +2189,7 @@ labVersion 03/10/10 Lane 6
 localization cell
 md5sum 733c0c951014489448774e26775a6b7a,7e58d4676d8c7cbe19d70102bd2d0386
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2144,6 +2219,7 @@ labVersion 03/10/10 Lane 5
 localization cell
 md5sum a4a528fd6649f810c1cc8ad7fc11fe34
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2172,6 +2248,7 @@ labVersion 03/10/10 Lane 6
 localization cell
 md5sum 6afa489abdb28029dd0f1b7ef60bae84
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2200,6 +2277,7 @@ labVersion 03/10/10 Lane 5
 localization cell
 md5sum abadb1a9be3b5d34a086a3ca0072674a
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2229,6 +2307,7 @@ labVersion 03/10/10 Lane 6
 localization cell
 md5sum b69fa2d1e0b2ef18a9eea3839bbe921e
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2258,6 +2337,7 @@ labVersion 03/15/10 Lane 5
 localization cell
 md5sum 5a06b9f4580636592c7f92080da63f46,59e5e3eb4f542b22b3b6745e403c7ebe
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2287,6 +2367,7 @@ labVersion 03/15/10 Lane 6
 localization cell
 md5sum b479c86706e2f4c016c1872375b804db,65e2ddec8d81b43c5fa2e2a249ade4fd
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2316,6 +2397,7 @@ labVersion 03/15/10 Lane 5
 localization cell
 md5sum 54eae0eef0e787b78de0d49872f981e6
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2344,6 +2426,7 @@ labVersion 03/15/10 Lane 6
 localization cell
 md5sum 413c9682de4515e33ccaa12bd7843616
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2372,6 +2455,7 @@ labVersion 03/15/10 Lane 5
 localization cell
 md5sum 5c997df676cb190a35778bbc26128632
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2401,6 +2485,7 @@ labVersion 03/15/10 Lane 6
 localization cell
 md5sum 0b209d23076f5b60b37f1595f20654eb
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -2430,6 +2515,7 @@ labVersion 6/20/2011 Lane 2B
 localization cell
 md5sum 2e8a3f2b9724a3d862083f3115eff3c2,77c9f9de5e9ef2ea11aa43200eaff61d
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2459,6 +2545,7 @@ labVersion 6/20/2011 Lane 2C
 localization cell
 md5sum 791e677aa49a16f6c208dc130c53acbf,39b53a0e88533daf9ea6da3f6f1b8218
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2488,6 +2575,7 @@ labVersion 6/20/2011 Lane 2B
 localization cell
 md5sum 8990d1e53b79741ee44298422fbb0258
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2516,6 +2604,7 @@ labVersion 6/20/2011 Lane 2C
 localization cell
 md5sum ec6843ff71b67c099a8e56ff6aaf16fe
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2544,6 +2633,7 @@ labVersion 6/20/2011 Lane 2B
 localization cell
 md5sum e1bd689965cdd53a6be2c655da37298f
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2573,6 +2663,7 @@ labVersion 6/20/2011 Lane 2C
 localization cell
 md5sum d5ebb1771d180174b46cba8fac2097e0
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2602,6 +2693,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum a8aac341fecdd9c7bce105de85e20031,51b02c444e9f76e1ff580920af22c5fe
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2631,6 +2723,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum affcfcbec33ccbbece65ee59d6c88a2a,e93f6b57e9a42cdba5b40f209124519a
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2660,6 +2753,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 19a6a306e7bb62141ee00d27b3ba6625
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2688,6 +2782,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 5cfcfd6eaf4f75e48a25e9dee119c0b5
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2716,6 +2811,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 9024e49226534717484ac8ed239377b6
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2745,6 +2841,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 0f783d20dc68a52e0cc4ed027899017f
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2774,6 +2871,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum e091d59b8797814c483518ed0e7d78bb,1b34f8db618bf49b286d2c61139c60ca
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2803,6 +2901,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum 86678060673c7f5e83cd301965cf1fe7,e95d192cc7dca13645537a3502967984
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2832,6 +2931,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum 5b2f624dc42b226d8461c1c82cb1d920
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2860,6 +2960,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum 19e85fb6c780eb6f445b311914c190d0
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2888,6 +2989,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum 70b501dbc76d18577737bcea9d6b355b
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2917,6 +3019,7 @@ labVersion 10/13/10 Lane 4
 localization cell
 md5sum 75c8dfb2f48298668d1cc9179340a3f3
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2946,6 +3049,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum d82e15a0ceb3efa079caa32d0b86c25e,6fce46cf2165ffb9fdfbc45205157c11
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2975,6 +3079,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum fbae6aba896895a6d0b4989b00995e51,0b7ce668e48490c5edfaf1aa5dff5908
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3004,6 +3109,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum ea8698d83b606bbb092c17c3f557b239
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3032,6 +3138,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum 49f24776f4863e3d2395fc746cb857c8
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3060,6 +3167,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum 87261ee2a12fdf867bb14cd9df418faa
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3089,6 +3197,7 @@ labVersion 11/4/10 Lane 6
 localization cell
 md5sum 762bd69db0ed908a74ce6e76c905a8ba
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3118,6 +3227,7 @@ labVersion 03/10/10 Lane 3
 localization cell
 md5sum ff20f1d7352d444de01b67a93732eefe,d30f2b5d68b88c4689814362290271f3
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3147,6 +3257,7 @@ labVersion 03/10/10 Lane 4
 localization cell
 md5sum 92dfac8fda769647565582c9f44d46bb,13628f1af0f460d431621ac74d8a7841
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3176,6 +3287,7 @@ labVersion 03/10/10 Lane 3
 localization cell
 md5sum 9ce6c6db6166402c2e3f1e965b719c95
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3204,6 +3316,7 @@ labVersion 03/10/10 Lane 4
 localization cell
 md5sum 39c5c40d79fb0c23c851383347cbadb6
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3232,6 +3345,7 @@ labVersion 03/10/10 Lane 3
 localization cell
 md5sum b37dde6b4eb5262b7190fdd9e320a163
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3261,6 +3375,7 @@ labVersion 03/10/10 Lane 4
 localization cell
 md5sum 4d146616950d9ad69e93431a150f7bbd
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
@@ -3290,6 +3405,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum 4f7f7dd21ed0e075fa67c43946795929,fe648dd5fdbdbf5aca1e096dbd9c1e70
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3319,6 +3435,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum 7f6c47c0065b6231c1e42d8b122bf2d5,6036eb1b031ee0b811ca7752708bc143
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3348,6 +3465,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum 4066fb242a656e60ed90e79ddf931d42
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3376,6 +3494,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum 7df1048655192eab9419e3f42492571e
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3404,6 +3523,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum de2ee5d7cc4bf3d4b2a1b3bf025aaada
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3433,6 +3553,7 @@ labVersion 10/13/10 Lane 5
 localization cell
 md5sum e27ebfa9b1f7cac0649f1fb2759f0f3a
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3462,6 +3583,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 48c701d073912c839caa6cd0999c1868,19ee2342439d6385680de89efe5f8bbf
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3491,6 +3613,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 560959996ae63c5e2ab373dcd160cb97,e3999bdc0bd4c4d2cb250ebf49e31543
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3520,6 +3643,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 983ba7c9ddc7d5a06c0ae29bc62133e6
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3548,6 +3672,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 46c9943c82334e66230465be9997665d
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3576,6 +3701,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum bdbd36ccdffec3868b87b9e30e9f0cb5
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3605,6 +3731,7 @@ labVersion 10/13/10 Lane 6
 localization cell
 md5sum 0ba9c3caa4d4078da2c4cdc27dabf4b0
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3634,6 +3761,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 4f67120ea5ac8c37014222672c3e6dfa,b9f2dac3cfe8e27973f3bb9bd5312440
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3663,6 +3791,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 00d0743dbf08746aa75d8058f75542a2,553eb8966f4b6b0b0634e2272fe8747c
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3692,6 +3821,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum e667cac864958787f340aed78c20c3c6
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3720,6 +3850,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum d4de6a368cc0d3720bab59419a3db4b2
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3748,6 +3879,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum baeb6cc08ccf8eecaf52d749eeb742b2
 project wgEncode
+readType 1x36
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3777,6 +3909,7 @@ labVersion 11/10/10 Lane 5
 localization cell
 md5sum 7224c2cb40dcaa16b31394deb7b244a0
 project wgEncode
+readType 1x36
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -3788,4 +3921,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 1285021660
+# MAGIC: 1606971751

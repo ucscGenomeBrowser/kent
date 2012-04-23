@@ -98,7 +98,8 @@ struct genePred
 
 struct genePred *genePredLoad(char **row);
 /* Load a genePred from row fetched with select * from genePred
- * from database.  Dispose of this with genePredFree(). */
+ * from database.  Dispose of this with genePredFree(). 
+ * NOTE: cannabalizes the row argument */
 
 struct genePred *genePredLoadAll(char *fileName);
 /* Load all genePred from whitespace-separated file.
