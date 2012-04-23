@@ -5651,4 +5651,11 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/nomLeu2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+#####################################################################
+# tRNAs track (2010-03-12, Fan RE-BUILT)
+#
+    # Please refer to the generic tRNS track build documentation 
+    #   ~/kent/src/hg/makeDb/doc/tRNAsTrack.txt 
+    # for details about how the track was build.
+
 ##############################################################################
