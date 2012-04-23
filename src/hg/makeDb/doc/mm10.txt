@@ -5652,7 +5652,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 #####################################################################
-# tRNAs track (2010-03-12, Fan RE-BUILT)
+# tRNAs track (DONE 2012-04-02 Chin)
 #
     # Please refer to the generic tRNS track build documentation 
     #   ~/kent/src/hg/makeDb/doc/tRNAsTrack.txt 
