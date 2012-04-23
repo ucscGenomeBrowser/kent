@@ -4715,7 +4715,7 @@ lineage missing
 sex M
 tissue kidney
 vendorName ATCC 
-vendorId G401.6
+vendorId CRL-1441
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
@@ -4733,7 +4733,7 @@ lineage missing
 sex F
 tissue muscle
 vendorName ATCC
-vendorId A204.1
+vendorId HTB-82 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
