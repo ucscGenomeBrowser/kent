@@ -3383,18 +3383,18 @@ subId 956
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep1
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep1
 objType file
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep1.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep1.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep1.bam.bai
 grant Snyder
 lab USC
 md5sum 471cf6b88573c9becd318020fa9cd052,b8886bc0b75ff63a36812a57a56e3312
@@ -3405,18 +3405,18 @@ subId 5253
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep2
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep2
 objType file
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep2.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep2.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdAlnRep2.bam.bai
 grant Snyder
 lab USC
 md5sum c7f43718ec0e2d44cc8067f35ba9baeb,355cebb2213f004d09a13d32f06e0e1c
@@ -3427,18 +3427,18 @@ subId 5253
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdPk
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdPk
 objType table
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -3446,22 +3446,22 @@ md5sum 369ac24672ae5a40b65a3b720b85e9b7
 project wgEncode
 setType exp
 subId 5253
-tableName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdPk
+tableName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep1
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdRawDataRep1
 objType file
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 md5sum 09a04552cc538fedd0bc9e21c1398fc5
@@ -3472,18 +3472,18 @@ subId 5253
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdRawDataRep2
 objType file
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 md5sum 4934066e31cfec139a358f57f23dcc71
@@ -3494,18 +3494,18 @@ subId 5253
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdSig
+metaObject wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdSig
 objType table
 antibody IKZF1_(IkN)_(UCLA)
 cell GM12878
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
+control std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
-fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdSig.bigWig
+fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -3513,7 +3513,7 @@ md5sum 6d7e34e51d59f22fa463188b21197452
 project wgEncode
 setType exp
 subId 5253
-tableName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdSig
+tableName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdSig
 treatment None
 view Signal
 
@@ -58774,4 +58774,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1272679323
+# MAGIC: -524196233
