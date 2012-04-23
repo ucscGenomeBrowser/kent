@@ -741,6 +741,70 @@ tableName wgEncodeSydhTfbsA549Rad21IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm08714InputUcdAlnRep1
+objType file
+antibody Input
+cell GM08714
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId GM08714/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Freeze
+dateSubmitted 2012-04-19
+dateUnrestricted 2013-01-19
+fileName wgEncodeSydhTfbsGm08714InputUcdAlnRep1.bam,wgEncodeSydhTfbsGm08714InputUcdAlnRep1.bam.bai
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType input
+subId 6818
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm08714InputUcdRawDataRep1
+objType file
+antibody Input
+cell GM08714
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId GM08714/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Freeze
+dateSubmitted 2012-04-19
+dateUnrestricted 2013-01-19
+fileName wgEncodeSydhTfbsGm08714InputUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType input
+subId 6818
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm08714InputUcdSig
+objType table
+antibody Input
+cell GM08714
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId GM08714/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Freeze
+dateSubmitted 2012-04-19
+dateUnrestricted 2013-01-19
+fileName wgEncodeSydhTfbsGm08714InputUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 6818
+tableName wgEncodeSydhTfbsGm08714InputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsGm08714Znf274UcdAlnRep1
 objType file
 antibody ZNF274
@@ -58710,4 +58774,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1441219260
+# MAGIC: 1272679323
