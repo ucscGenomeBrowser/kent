@@ -1282,7 +1282,7 @@ dyStringAppend(dy,
 if (bedFieldCount >= 4)
     dyStringAppend(dy, "   string name;        \"Name of item.\"\n");
 if (bedFieldCount >= 5)
-    dyStringAppend(dy, "   int score;          \"Score (0-1000)\"\n");
+    dyStringAppend(dy, "   uint score;          \"Score (0-1000)\"\n");
 if (bedFieldCount >= 6)
     dyStringAppend(dy, "   char[1] strand;     \"+ or - for strand\"\n");
 if (bedFieldCount >= 7)
