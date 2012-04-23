@@ -774,7 +774,7 @@ for(i = 0;; i++)
         errAbort("Premature end of string (missing trailing double-quote); string position '%d'", *posPtr);
     else if(escapeMode)
         {
-        // We support escape sequences listed in https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/JSON
+        // We support escape sequences listed in http://www.json.org,
         // except for Unicode which we cannot support in C-strings
         switch(c)
             {
@@ -892,18 +892,28 @@ return (struct jsonElement *) ele;
 static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
 {
 int i;
+boolean integral = TRUE;
 for(i = 0;; i++)
     {
     char c = str[*posPtr + i];
-    if(!(c && (isdigit(c) || c == '.' || c == '-' || c == '+')))
+    if(c == 'e' || c == 'E' || c == '.')
+        integral = FALSE;
+    else if(!c || (!isdigit(c) && c != '-'))
         break;
     }
 char *val = cloneStringZ(str + *posPtr, i);
 *posPtr += i;
-if(strchr(val, '.') == NULL)
+if(integral)
     return (struct jsonElement *) newJsonNumber(sqlLongLong(val));
 else
-    return (struct jsonElement *) newJsonDouble(sqlDouble(val));
+    {
+    double d;
+    if(sscanf(val, "%lf", &d))
+        return (struct jsonElement *) newJsonDouble(d);
+    else
+        errAbort("Invalid JSON Double: %s; pos: %d", val, *posPtr + i);
+    }
+return NULL;
 }
 
 static struct jsonElement *jsonParseExpression(char *str, int *posPtr)

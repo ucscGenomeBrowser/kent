@@ -87,7 +87,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300SC584 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 139,69,19
+		color 86,180,233
 		# subId=1855 dateSubmitted=2010-07-08
 		# was wgEncodeSydhTfbsCh12P300IggrabPk cricket Tue Apr 19 11:41:13 2011
 
@@ -97,7 +97,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Max TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MAX cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 205,92,92
+		color 86,180,233
 		# subId=1859 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsCh12Rad21IggrabPk
@@ -106,7 +106,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Rad21 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=RAD21 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 218,165,32
+		color 86,180,233
 		# subId=1860 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsCh12Usf2IggmusPk
@@ -115,7 +115,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 USF2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=USF2 cellType=CH12 control=IGGMUS treatment=zNONE
 		type narrowPeak
-		color 255,215,0
+		color 86,180,233
 		# subId=1861 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsMelMaxIggrabPk
@@ -124,7 +124,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Max TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MAX cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 176,224,230
+		color 86,180,233
 		# subId=1863 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsMelP300sc584IggrabPk
@@ -133,7 +133,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300SC584 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 255,228,196
+		color 86,180,233
 		# subId=1864 dateSubmitted=2010-07-08
 		# was wgEncodeSydhTfbsMelP300IggrabPk cricket Tue Apr 19 11:41:13 2011
 
@@ -143,7 +143,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL USF2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=USF2 cellType=MEL control=IGGMUS treatment=zNONE
 		type narrowPeak
-		color 0,255,255
+		color 86,180,233
 		# subId=1865 dateSubmitted=2010-07-08
 
 		#track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk
@@ -152,7 +152,7 @@ html wgEncodeSydhTfbs.release3
 		#longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		#subGroups view=Peaks factor=CTCFb cellType=MEL control=IGGYALE treatment=DM2P5D
 		#type narrowPeak
-		#color 86,105,30
+		#color 86,180,233
 		# subId=3502 dateSubmitted=2011-02-03
 		# was wgEncodeSydhTfbsMelCtcfDmso20IggyalePk cricket Tue Apr 19 11:41:12 2011
 		# was wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyalePk wong Thu Jun  9 10:56:14 2011
@@ -163,7 +163,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Rad21 DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGRAB treatment=DM2P5D
 		type narrowPeak
-		color 192,192,192
+		color 86,180,233
 		# subId=3502 dateSubmitted=2011-02-03
 		# was wgEncodeSydhTfbsMelRad21Dmso20IggrabPk wong Thu Jun  9 10:56:15 2011
 
@@ -173,7 +173,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Rad21 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 240,128,128
+		color 86,180,233
 		# subId=2541 dateSubmitted=2010-10-20
 
 		track wgEncodeSydhTfbsMelNelfeIggrabPk
@@ -182,7 +182,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL NELFe TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=NELFE cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 127,255,0
+		color 86,180,233
 		# subId=2543 dateSubmitted=2010-10-20
 
 		track wgEncodeSydhTfbsMelCmybsc7874IggrabPk
@@ -191,7 +191,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL c-Myb TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=cMYBSC7874 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 139,0,139
+		color 86,180,233
 		# subId=2542 dateSubmitted=2010-10-27
 		# was wgEncodeSydhTfbsMelCmybh141IggrabPk cricket Tue Apr 19 11:41:14 2011
 
@@ -201,7 +201,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 135,206,235
+		color 86,180,233
 		# subId=3089 dateSubmitted=2010-12-10
 		# was wgEncodeSydhTfbsMelP300StdPk vsmalladi Wed Jun 29 08:39:09 2011
 		# was wgEncodeSydhTfbsMelP300IggrabPk vsmalladi Thu Sep 15 14:31:50 2011
@@ -212,7 +212,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=CTCFb cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 210,105,30
+		color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19
 
 		track wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk
@@ -221,7 +221,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 CHD2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=CHD2AB68301 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 205,133,63
+		color 86,180,233
 		# subId=3756 dateSubmitted=2011-03-15
 
 		track wgEncodeSydhTfbsCh12Mxi1af4185IggrabPk
@@ -230,7 +230,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Mxi1 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=Mxi1AF4185 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 215,191,216
+		color 86,180,233
 		# subId=3757 dateSubmitted=2011-03-15
 
 		track wgEncodeSydhTfbsCh12Pol2s2IggrabPk
@@ -239,7 +239,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Pol2(phoshoS2) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=POL2S2 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 192,192,192
+		color 86,180,233
 		# subId=3758 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsCh12Smc3ab9263IggrabPk
@@ -248,7 +248,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 SMC3 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=SMC3ab9263 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 233,150,122
+		color 86,180,233
 		# subId=3759 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsMelPol2s2IggrabPk
@@ -257,7 +257,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Pol2(phosphoS2) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=POL2S2 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 0,255,0
+		color 86,180,233
 		# subId=3762 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsMelMxi1af4185IggrabPk
@@ -266,7 +266,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Mxi1 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=Mxi1AF4185 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 255,105,180
+		color 86,180,233
 		# subId=3761 dateSubmitted=2011-03-16
 
 		track wgEncodeSydhTfbsMelChd2ab68301IggrabPk
@@ -275,7 +275,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL CHD2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=CHD2AB68301 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 128,128,0
+		color 86,180,233
 		# subId=3760 dateSubmitted=2011-03-16
 
 		track wgEncodeSydhTfbsMelSmc3ab9263IggrabPk
@@ -284,7 +284,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL SMC3 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=SMC3ab9263 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 30,144,25
+		color 86,180,233
 		# subId=3088 dateSubmitted=2011-04-20
 		# was wgEncodeSydhTfbsMelSmc3ab9263StdPk vsmalladi Wed Jun 29 08:48:00 2011
 
@@ -294,7 +294,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 BHLHE40 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=BHLHE40NB100 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 255,222,173
+		color 86,180,233
 		# subId=4002 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsCh12Mafkab50322IggrabPk
@@ -303,7 +303,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 MafK TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MafKab50322 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 127,255,212
+		color 86,180,233
 		# subId=4003 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsMelMafkab50322IggrabPk
@@ -312,7 +312,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL MafK TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MafKab50322 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 222,184,135
+		color 86,180,233
 		# subId=4004 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsCh12NelfeIggrabPk
@@ -321,7 +321,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 NELFe TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=NELFE cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 255,0,255
+		color 86,180,233
 		# subId=2540 dateSubmitted=2011-04-20
 
 		track wgEncodeSydhTfbsCh12CtcfbIggrabPk
@@ -330,7 +330,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 CTCF TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=CTCFb cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 107,142,35
+		color 86,180,233
 		# subId=4451 dateSubmitted=2011-06-29
 
 
@@ -340,7 +340,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 E2F4 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=E2F4 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 199,21,133
+		color 86,180,233
 		# subId=1153
 
 		track wgEncodeSydhTfbsCh12Pol2IggmusPk
@@ -349,16 +349,16 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Pol2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=POL2 cellType=CH12 control=IGGMUS treatment=zNONE
 		type narrowPeak
-		color 152,251,152
+		color 86,180,233
 		# subId=1155
 
 		track wgEncodeSydhTfbsCh12TbpIggmusPk
-    		parent wgEncodeSydhTfbsViewPeaks off
-    		shortLabel CH12 TBP Pk
+    	parent wgEncodeSydhTfbsViewPeaks off
+    	shortLabel CH12 TBP Pk
 		longLabel CH12 TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=CH12 control=IGGMUS treatment=zNONE
-    		type narrowPeak
-    		color 255,228,181
+    	subGroups view=Peaks factor=TBP cellType=CH12 control=IGGMUS treatment=zNONE
+    	type narrowPeak
+    	color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19
 
 
@@ -368,7 +368,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 c-Jun TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=cJUN cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 100,149,237
+		color 86,180,233
 		# subId=1157
 
 		track wgEncodeSydhTfbsCh12CmycIggrabPk
@@ -377,16 +377,16 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 c-Myc TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=cMYC cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 210,180,140
+		color 86,180,233
 		# subId=1159
 		
-    		track wgEncodeSydhTfbsMelTbpIggmusPk
-    		parent wgEncodeSydhTfbsViewPeaks off
-    		shortLabel MEL TBP Pk
+    	track wgEncodeSydhTfbsMelTbpIggmusPk
+    	parent wgEncodeSydhTfbsViewPeaks off
+    	shortLabel MEL TBP Pk
 		longLabel MEL TBP TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=MEL control=IGGMUS treatment=zNONE
-    		type narrowPeak
-    		color 64,224,208
+    	subGroups view=Peaks factor=TBP cellType=MEL control=IGGMUS treatment=zNONE
+    	type narrowPeak
+    	color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19
 	
 		track wgEncodeSydhTfbsMelPol2IggmusPk
@@ -395,25 +395,25 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Pol2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=POL2 cellType=MEL control=IGGMUS treatment=zNONE
 		type narrowPeak
-		color 186,85,211
+		color 86,180,233
 		# subId=1161
 
-    		track wgEncodeSydhTfbsMelCmycIggrabPk
-    		parent wgEncodeSydhTfbsViewPeaks off
-    		shortLabel MEL c-Myc Pk
+    	track wgEncodeSydhTfbsMelCmycIggrabPk
+    	parent wgEncodeSydhTfbsViewPeaks off
+    	shortLabel MEL c-Myc Pk
 		longLabel MEL c-Myc TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=cMYC cellType=MEL control=IGGRAB treatment=zNONE
-    		type narrowPeak
-    		color 65,105,225
+    	subGroups view=Peaks factor=cMYC cellType=MEL control=IGGRAB treatment=zNONE
+    	type narrowPeak
+    	color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19
 
-    		track wgEncodeSydhTfbsMelGata1IggratPk
-    		parent wgEncodeSydhTfbsViewPeaks
-    		shortLabel MEL GATA-1 Pk
+    	track wgEncodeSydhTfbsMelGata1IggratPk
+    	parent wgEncodeSydhTfbsViewPeaks
+    	shortLabel MEL GATA-1 Pk
 		longLabel MEL GATA-1 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGRAT treatment=zNONE
-    		type narrowPeak
-    		color 219,112,147
+    	subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGRAT treatment=zNONE
+    	type narrowPeak
+    	color 86,180,233
 		# subId=4610 dateSubmitted=2011-07-19		
 
 
@@ -423,7 +423,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL JunD TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=JUND cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 60,179,113
+		color 86,180,233
 		# subId=1192
 
 		track wgEncodeSydhTfbsMelE2f4IggrabPk
@@ -432,7 +432,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL E2F4 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=E2F4 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
-		color 255,218,185
+		color 86,180,233
 		# subId=1193
 
         track wgEncodeSydhTfbsCh12Ets1IggrabPk
@@ -441,7 +441,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 ETS1 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=ETS1 cellType=CH12 control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 65,105,225
+        color 86,180,233
         # subId=4852 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelPol2Dm2p5dIggrabPk
@@ -450,7 +450,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct Pol2 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=POL2 cellType=MEL control=IGGRAB treatment=DM2P5D
         type narrowPeak
-        color 188,143,143
+        color 86,180,233
         # subId=4853 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelUsf2IggrabPk
@@ -459,7 +459,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL USF2 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=USF2 cellType=MEL control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 0,206,209
+        color 86,180,233
         # subId=4854 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelCtcfbDm2p5dStdPk
@@ -468,7 +468,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct CTCF (SC-15914) std ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=CTCFb cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
-        color 147,112,219
+        color 86,180,233
         # subId=4928 dateSubmitted=2011-09-29
 
         track wgEncodeSydhTfbsCh12Corestsc30189IggrabPk
@@ -477,7 +477,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 COREST (sc30189) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=CORESTSC30189 cellType=CH12 control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 47,79,79
+        color 86,180,233
         # subId=5458 dateSubmitted=2012-02-27
 
         track wgEncodeSydhTfbsCh12Sin3anb6001263IggrabPk
@@ -486,7 +486,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 SIN3A (NB600-1263) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=SIN3ANB6001263 cellType=CH12 control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 255,160,122
+        color 86,180,233
         # subId=5459 dateSubmitted=2012-02-28
 
         track wgEncodeSydhTfbsMelSin3anb6001263IggrabPk
@@ -495,7 +495,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL SIN3A (NB600-1263) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=SIN3ANB6001263 cellType=MEL control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 0,100,0
+        color 86,180,233
         # subId=5471 dateSubmitted=2012-02-28
 
         track wgEncodeSydhTfbsMelGata1Dm2p5dStdPk
@@ -504,7 +504,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct GATA-1 std ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
-        color 240,230,140
+        color 86,180,233
         # subId=6557 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelMafkDm2p5dStdPk
@@ -513,7 +513,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct MafK (ab50322) std ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=MafKab50322 cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
-        color 0,0,255
+        color 86,180,233
         # subId=6558 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelZkscan1hpa006672IggrabPk
@@ -522,7 +522,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL ZKSCAN1 (HPA006672) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=ZKSCAN1HPA006672 cellType=MEL control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 244,164,96
+        color 86,180,233
         # subId=6559 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsCh12Ubfsc13125IggrabPk
@@ -531,7 +531,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 UBF (sc-13125) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=UBFSC13125 cellType=CH12 control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 95,158,160
+        color 86,180,233
         # subId=6560 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabPk
@@ -540,7 +540,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 ZKSCAN1 (HPA006672) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=ZKSCAN1HPA006672 cellType=CH12 control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 148,0,211
+        color 86,180,233
         # subId=6561 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsEse14MafkStdPk
@@ -549,7 +549,7 @@ html wgEncodeSydhTfbs.release3
         longLabel ES-E14 MafK (ab50322) std ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=MafKab50322 cellType=ESE14 control=STD treatment=zNONE
         type narrowPeak
-        color 0,0,0
+        color 65,105,225
         # subId=6583 dateSubmitted=2012-03-30
 
         track wgEncodeSydhTfbsMelEts1IggrabPk
@@ -558,7 +558,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL ETS1 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
         subGroups view=Peaks factor=ETS1 cellType=MEL control=IGGRAB treatment=zNONE
         type narrowPeak
-        color 255,127,80
+        color 86,180,233
         # subId=6565 dateSubmitted=2012-03-29
 
 	#####Signal Tracks###########
@@ -579,7 +579,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 IgG-rab Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1 66328
-		color 128,128,128
+		color 86,180,233
 		# subId=1125
 
 		track wgEncodeSydhTfbsCh12JundIggrabSig
@@ -597,7 +597,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 E2F4 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=E2F4 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1 79444
-		color 199,21,133
+		color 86,180,233
 		# subId=1153	
 
 	
@@ -607,7 +607,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 IgG-mus Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGMUS treatment=zNONE
 		type bigWig 1 71455
-		color 128,128,128
+		color 86,180,233
 		# subId=1154
 
 
@@ -617,7 +617,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Pol2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=POL2 cellType=CH12 control=IGGMUS treatment=zNONE
 		type bigWig 1 14925
-		color 152,251,152
+		color 86,180,233
 		# subId=1155
 
 		track wgEncodeSydhTfbsCh12TbpIggmusSig
@@ -626,7 +626,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 TBP TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=TBP cellType=CH12 control=IGGMUS treatment=zNONE
 		type bigWig 1 52209
-		color 255,228,181
+		color 86,180,233
 		# subId=1156
 
 
@@ -636,7 +636,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 c-Jun TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=cJUN cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1 57353
-		color 100,149,237
+		color 86,180,233
 		# subId=1157	
 	
 		track wgEncodeSydhTfbsCh12CmycIggrabSig
@@ -645,7 +645,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 c-Myc TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=cMYC cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1 56356
-		color 210,180,140
+		color 86,180,233
 		# subId=1159
 
 		track wgEncodeSydhTfbsMelTbpIggmusSig
@@ -654,7 +654,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL TBP TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=TBP cellType=MEL control=IGGMUS treatment=zNONE
 		type bigWig 1 60278
-		color 64,224,208
+		color 86,180,233
 		# subId=1160
 
 		track wgEncodeSydhTfbsMelPol2IggmusSig
@@ -663,7 +663,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Pol2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=POL2 cellType=MEL control=IGGMUS treatment=zNONE
 		type bigWig 1 13695
-		color 186,85,211
+		color 86,180,233
 		# subId=1161
 
 		track wgEncodeSydhTfbsMelInputIggmusSig
@@ -672,7 +672,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL IgG-mus Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGMUS treatment=zNONE
 		type bigWig 1 78618
-		color 128,128,128
+		color 86,180,233
 		# subId=1162
 
 		track wgEncodeSydhTfbsMelCmycIggrabSig
@@ -681,7 +681,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL c-Myc TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=cMYC cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1 61932
-		color 65,105,225
+		color 86,180,233
 		# subId=1163
 
 		track wgEncodeSydhTfbsMelInputIggrabSig
@@ -690,7 +690,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL IgG-rab Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1 103648
-		color 128,128,128
+		color 86,180,233
 		# subId=1164
 
  		track wgEncodeSydhTfbsMelGata1IggratSig
@@ -699,7 +699,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL GATA-1 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=GATA1SC265 cellType=MEL control=IGGRAT treatment=zNONE
 		type bigWig 1 56526
-		color 219,112,147
+		color 86,180,233
 		# subId=1165
 
 		track wgEncodeSydhTfbsMelInputIggratSig
@@ -708,7 +708,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL IgG-rat Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGRAT treatment=zNONE
 		type bigWig 1 90844
-		color 128,128,128
+		color 86,180,233
 		# subId=1167
 
 
@@ -718,7 +718,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL JunD TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=JUND cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 71501.000000
-		color 60,179,113
+		color 86,180,233
 		# subId=1192
 
 		track wgEncodeSydhTfbsMelE2f4IggrabSig
@@ -727,7 +727,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL E2F4 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 91713.000000
-		color 255,218,185
+		color 86,180,233
 		# subId=1193
 
 		track wgEncodeSydhTfbsCh12P300sc584IggrabSig
@@ -736,7 +736,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=P300SC584 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 106426.000000
-		color 139,69,19
+		color 86,180,233
 		# subId=1855 dateSubmitted=2010-07-08
 		# was wgEncodeSydhTfbsCh12P300IggrabSig cricket Tue Apr 19 11:41:13 2011
 
@@ -746,7 +746,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Max TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MAX cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 122997.000000
-		color 205,92,92
+		color 86,180,233
 		# subId=1859 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsCh12Rad21IggrabSig
@@ -755,7 +755,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Rad21 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=RAD21 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 78996.000000
-		color 218,165,32
+		color 86,180,233
 		# subId=1860 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsCh12Usf2IggmusSig
@@ -764,7 +764,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 USF2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=USF2 cellType=CH12 control=IGGMUS treatment=zNONE
 		type bigWig 1.000000 126147.000000
-		color 255,215,0
+		color 86,180,233
 		# subId=1861 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsMelMaxIggrabSig
@@ -773,7 +773,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Max TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MAX cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 120749.000000
-		color 176,224,230
+		color 86,180,233
 		# subId=1863 dateSubmitted=2010-07-08
 
 		track wgEncodeSydhTfbsMelP300sc584IggrabSig
@@ -782,7 +782,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=P300SC584 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 93877.000000
-		color 255,228,196
+		color 86,180,233
 		# subId=1864 dateSubmitted=2010-07-08
 		# was wgEncodeSydhTfbsMelP300IggrabSig cricket Tue Apr 19 11:41:14 2011
 
@@ -792,7 +792,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL USF2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=USF2 cellType=MEL control=IGGMUS treatment=zNONE
 		type bigWig 1.000000 99544.000000
-		color 0,255,255
+		color 86,180,233
 		# subId=1865 dateSubmitted=2010-07-08
 
 		#track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig
@@ -812,7 +812,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL IgG-Yale Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYALE treatment=DM2P5D
 		type bigWig 1.000000 78459.000000
-		color 128,128,128
+		color 86,180,233
 		# subId=1862 dateSubmitted=2010-07-09
 		# was wgEncodeSydhTfbsMelInputDmso20IggyaleSig wong Thu Jun  9 10:56:15 2011
 
@@ -822,7 +822,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Rad21 DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=RAD21 cellType=MEL control=IGGRAB treatment=DM2P5D
 		type bigWig 1.000000 64232.000000
-		color 192,192,192
+		color 86,180,233
 		# subId=2539 dateSubmitted=2010-10-20
 		# was wgEncodeSydhTfbsMelRad21Dmso20IggrabSig wong Thu Jun  9 10:56:16 2011
 
@@ -832,7 +832,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Rad21 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=RAD21 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 79946.000000
-		color 240,128,128
+		color 86,180,233
 		# subId=2541 dateSubmitted=2010-10-20
 
 		track wgEncodeSydhTfbsMelNelfeIggrabSig
@@ -841,7 +841,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL NELFe TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=NELFE cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 114421.000000
-		color 127,255,0
+		color 86,180,233
 		# subId=2543 dateSubmitted=2010-10-20
 
 		track wgEncodeSydhTfbsMelCmybsc7874IggrabSig
@@ -850,7 +850,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL c-Myb TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=cMYBSC7874 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 106720.000000
-		color 139,0,139
+		color 86,180,233
 		# subId=2542 dateSubmitted=2010-10-27
 		# was wgEncodeSydhTfbsMelCmybh141IggrabSig cricket Tue Apr 19 11:41:15 2011
 
@@ -860,7 +860,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=P300 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 92232.000000
-		color 135,206,235
+		color 86,180,233
 		# subId=3089 dateSubmitted=2010-12-10
 		# was wgEncodeSydhTfbsMelP300StdSig vsmalladi Wed Jun 29 08:44:39 2011
 		# was wgEncodeSydhTfbsMelP300IggrabSig vsmalladi Thu Sep 15 14:31:05 2011
@@ -871,7 +871,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=CTCFb cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 62645.000000
-		color 210,105,30
+		color 86,180,233
 		# subId=3087 dateSubmitted=2010-12-10
 		# was wgEncodeSydhTfbsMelCtcfStdSig vsmalladi Wed Jun 29 08:56:03 2011
 
@@ -881,7 +881,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 CHD2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=CHD2AB68301 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 169926.000000
-		color 205,133,63
+		color 86,180,233
 		# subId=3756 dateSubmitted=2011-03-15
 
 		track wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig
@@ -890,7 +890,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Mxi1 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=Mxi1AF4185 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 122280.000000
-		color 215,191,216
+		color 86,180,233
 		# subId=3757 dateSubmitted=2011-03-15
 
 		track wgEncodeSydhTfbsCh12Pol2s2IggrabSig
@@ -899,7 +899,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 Pol2(phosphoS2) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=POL2S2 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 59971.000000
-		color 192,192,192
+		color 86,180,233
 		# subId=3758 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsCh12Smc3ab9263IggrabSig
@@ -908,7 +908,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 SMC3 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=SMC3ab9263 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 105075.000000
-		color 233,150,122
+		color 86,180,233
 		# subId=3759 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsMelPol2s2IggrabSig
@@ -917,7 +917,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Pol2(phosphoS2) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=POL2S2 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 44277.000000
-		color 0,255,0
+		color 86,180,233
 		# subId=3762 dateSubmitted=2011-02-25
 
 		track wgEncodeSydhTfbsMelMxi1af4185IggrabSig
@@ -926,7 +926,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Mxi1 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=Mxi1AF4185 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 80915.000000
-		color 255,105,180
+		color 86,180,233
 		# subId=3761 dateSubmitted=2011-03-16
 
 		track wgEncodeSydhTfbsMelChd2ab68301IggrabSig
@@ -935,7 +935,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL CHD2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=CHD2AB68301 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 121731.000000
-		color 128,128,0
+		color 86,180,233
 		# subId=3760 dateSubmitted=2011-03-16
 
 		track wgEncodeSydhTfbsMelSmc3ab9263IggrabSig
@@ -944,7 +944,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL SMC3 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=SMC3ab9263 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 102412.000000
-		color 30,144,25
+		color 86,180,233
 		# subId=3088 dateSubmitted=2011-04-20
 		# was wgEncodeSydhTfbsMelSmc3ab9263StdSig vsmalladi Wed Jun 29 08:48:36 2011
 
@@ -954,7 +954,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 BHLHE40 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=BHLHE40NB100 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 125631.000000
-		color 255,222,173
+		color 86,180,233
 		# subId=4002 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsCh12Mafkab50322IggrabSig
@@ -963,7 +963,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 MafK TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MafKab50322 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 211268.000000
-		color 127,255,212
+		color 86,180,233
 		# subId=4003 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsMelMafkab50322IggrabSig
@@ -972,7 +972,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL MafK TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MafKab50322 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 120440.000000
-		color 222,184,135
+		color 86,180,233
 		# subId=4004 dateSubmitted=2011-04-28
 
 		track wgEncodeSydhTfbsMelInputStdSig
@@ -981,7 +981,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Standard Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=zNONE
 		type bigWig 1.000000 132487.000000
-		color 128,128,128
+		color 86,180,233
 		# subId=4006 dateSubmitted=2011-04-29
 
 		track wgEncodeSydhTfbsMelInputDm2p5dStdSig
@@ -990,7 +990,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel MEL Standard Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=DM2P5D
 		type bigWig 1.000000 103298.000000
-		color 128,128,128
+		color 86,180,233
 		# subId=4007 dateSubmitted=2011-04-29
 		# was wgEncodeSydhTfbsMelInputDmso20StdSig vsmalladi Mon Jun 13 16:46:06 2011
 
@@ -1000,7 +1000,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 NELFe TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=NELFE cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 127356.000000
-		color 255,0,255
+		color 86,180,233
 		# subId=2540 dateSubmitted=2011-04-20
 
 		track wgEncodeSydhTfbsCh12CtcfbIggrabSig
@@ -1009,7 +1009,7 @@ html wgEncodeSydhTfbs.release3
 		longLabel CH12 CTCF TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=CTCFb cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 70041.000000
-		color 107,142,35
+		color 86,180,233
 		# subId=4451 dateSubmitted=2011-06-29
 
         track wgEncodeSydhTfbsCh12Ets1IggrabSig
@@ -1018,7 +1018,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 ETS1 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=ETS1 cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1.000000 99081.000000
-        color 65,105,225
+        color 86,180,233
         # subId=4852 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelPol2Dm2p5dIggrabSig
@@ -1027,7 +1027,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct Pol2 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=POL2 cellType=MEL control=IGGRAB treatment=DM2P5D
         type bigWig 1.000000 40837.000000
-        color 188,143,143
+        color 86,180,233
         # subId=4853 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelUsf2IggrabSig
@@ -1036,7 +1036,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL USF2 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=USF2 cellType=MEL control=IGGRAB treatment=zNONE
         type bigWig 1.000000 117808.000000
-        color 0,206,209
+        color 86,180,233
         # subId=4854 dateSubmitted=2011-09-22
 
         track wgEncodeSydhTfbsMelCtcfbDm2p5dStdSig
@@ -1045,7 +1045,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct CTCF (SC-15914) std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=CTCFb cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 49927.000000
-        color 147,112,219
+        color 86,180,233
         # subId=4928 dateSubmitted=2011-09-29
 
         track wgEncodeSydhTfbsMelInputDm2p5dIggratSig
@@ -1054,7 +1054,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct Input IgG-rat ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGRAT treatment=DM2P5D
         type bigWig 1.000000 87331.000000
-        color 128,128,128
+        color 86,180,233
         # subId=4931 dateSubmitted=2011-09-29
 
         track wgEncodeSydhTfbsCh12Corestsc30189IggrabSig
@@ -1063,7 +1063,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 COREST (sc30189) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=CORESTSC30189 cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1.000000 160065.000000
-        color 47,79,79
+        color 86,180,233
         # subId=5458 dateSubmitted=2012-02-27
 
         track wgEncodeSydhTfbsCh12Sin3anb6001263IggrabSig
@@ -1072,7 +1072,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 SIN3A (NB600-1263) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=SIN3ANB6001263 cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1.000000 159622.000000
-        color 255,160,122
+        color 86,180,233
         # subId=5459 dateSubmitted=2012-02-28
 
         track wgEncodeSydhTfbsMelSin3anb6001263IggrabSig
@@ -1081,7 +1081,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL SIN3A (NB600-1263) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=SIN3ANB6001263 cellType=MEL control=IGGRAB treatment=zNONE
         type bigWig 1.000000 86536.000000
-        color 0,100,0
+        color 86,180,233
         # subId=5471 dateSubmitted=2012-02-28
 
         track wgEncodeSydhTfbsEse14InputStdSig
@@ -1090,7 +1090,7 @@ html wgEncodeSydhTfbs.release3
         longLabel ES-E14 Input std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=zInputstd cellType=ESE14 control=STD treatment=zNONE
         type bigWig 1.000000 255463.000000
-        color 128,128,128
+        color 65,105,225
         # subId=6574 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelInputDm2p5dStdSigV2
@@ -1099,7 +1099,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct Input std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 84376.000000
-        color 128,128,128
+        color 86,180,233
         # subId=6555 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelGata1Dm2p5dStdSig
@@ -1108,7 +1108,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct GATA-1 std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=GATA1SC265 cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 38707.000000
-        color 0,0,255
+        color 86,180,233
         # subId=6557 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelMafkDm2p5dStdSig
@@ -1117,7 +1117,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL DMSO 2.0pct MafK (ab50322) std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=MafKab50322 cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 40202.000000
-        color 0,0,255
+        color 86,180,233
         # subId=6558 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsMelZkscan1hpa006672IggrabSig
@@ -1126,7 +1126,7 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL ZKSCAN1 (HPA006672) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=ZKSCAN1HPA006672 cellType=MEL control=IGGRAB treatment=zNONE
         type bigWig 1.000000 71187.000000
-        color 244,164,96
+        color 86,180,233
         # subId=6559 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsCh12Ubfsc13125IggrabSig
@@ -1135,7 +1135,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 UBF (sc-13125) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=UBFSC13125 cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1.000000 90667.000000
-        color 95,158,160
+        color 86,180,233
         # subId=6560 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabSig
@@ -1144,7 +1144,7 @@ html wgEncodeSydhTfbs.release3
         longLabel CH12 ZKSCAN1 (HPA006672) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=ZKSCAN1HPA006672 cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1.000000 79290.000000
-        color 148,0,211
+        color 86,180,233
         # subId=6561 dateSubmitted=2012-03-29
 
         track wgEncodeSydhTfbsEse14MafkStdSig
@@ -1153,7 +1153,7 @@ html wgEncodeSydhTfbs.release3
         longLabel ES-E14 MafK (ab50322) std ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=MafKab50322 cellType=ESE14 control=STD treatment=zNONE
         type bigWig 1.000000 91890.000000
-        color 0,0,0
+        color 65,105,225
         # subId=6583 dateSubmitted=2012-03-30
 
         track wgEncodeSydhTfbsMelEts1IggrabSig
@@ -1162,6 +1162,6 @@ html wgEncodeSydhTfbs.release3
         longLabel MEL ETS1 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
         subGroups view=Signal factor=ETS1 cellType=MEL control=IGGRAB treatment=zNONE
         type bigWig 1.000000 37310.000000
-        color 255,127,80
+        color 86,180,233
         # subId=6565 dateSubmitted=2012-03-29
 
