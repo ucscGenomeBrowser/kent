@@ -24,11 +24,13 @@ struct annoGrator
 
     // Private members -- callers are on the honor system to access these using only methods above.
     struct annoStreamer *mySource;	// internal source
+    struct annoRow *qHead;		// head of FIFO queue of rows from internal source
+    struct annoRow *qTail;		// head of FIFO queue of rows from internal source
     char *prevPChrom;			// for detection of unsorted input from primary
     uint prevPStart;			// for detection of unsorted input from primary
     boolean eof;			// stop asking internal source for rows when it's done
-    struct annoRow *qHead;		// head of FIFO queue of rows from internal source
-    struct annoRow *qTail;		// head of FIFO queue of rows from internal source
+    boolean haveRJIncludeFilter;	// TRUE if some filter has !isExclude && rightJoin;
+					// if TRUE and there are no overlapping rows, then RJ fail
     };
 
 #endif//ndef ANNOGRATOR_H
