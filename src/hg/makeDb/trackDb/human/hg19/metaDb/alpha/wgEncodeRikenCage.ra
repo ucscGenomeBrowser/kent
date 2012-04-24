@@ -6479,7 +6479,7 @@ subId 4539
 view TssGencV7
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmm
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6496,7 +6496,6 @@ labExpId K01,K02
 labVersion IDR
 localization cell
 md5sum d3b45b723d2bed66d9e44215424bc6f0
-objStatus replaced - this version has scores that exceed chromosome lengths
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -6504,7 +6503,7 @@ tableName wgEncodeRikenCageHepg2CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmmV2
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6521,11 +6520,11 @@ labExpId K01,K02
 labVersion IDR
 localization cell
 md5sum 7f4369f9439d4874b8ca831ea97ca48e
+objStatus replaced - this version has scores that exceed chromosome lengths
 project wgEncode
 rnaExtract longPolyA
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
-tableName wgEncodeRikenCageHepg2CellPapTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
@@ -19860,4 +19859,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 1400041113
+# MAGIC: -2134121219
