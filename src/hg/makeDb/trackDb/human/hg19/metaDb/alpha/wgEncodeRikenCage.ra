@@ -23,6 +23,7 @@ md5sum 4cfc99373e471ba419ec43760eb75d6f,6a1f2a4043e6ee827db74e49b69212f2
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3422
 tableName wgEncodeRikenCageA549CellPapAlnRep1
 view Alignments
@@ -47,6 +48,7 @@ md5sum 19b5a4f9929fe434cb11983a93433584,8382e9f1decfbe90bc25c2b19a8572a6
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3426
 tableName wgEncodeRikenCageA549CellPapAlnRep2
 view Alignments
@@ -71,6 +73,7 @@ md5sum cb45e712458ae6c29623d0e1cf7bc5b2
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3481
 tableName wgEncodeRikenCageA549CellPapMinusSignalRep1
 view MinusRawSignal
@@ -95,6 +98,7 @@ md5sum cac38e9a81172791a918cdfb5c6775f3
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3482
 tableName wgEncodeRikenCageA549CellPapMinusSignalRep2
 view MinusRawSignal
@@ -119,6 +123,7 @@ md5sum 189929e27bbae8fbc603a66fd646e238
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3481
 tableName wgEncodeRikenCageA549CellPapPlusSignalRep1
 view PlusRawSignal
@@ -143,6 +148,7 @@ md5sum 286cb07c282eb64f4204349d61fa3678
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3482
 tableName wgEncodeRikenCageA549CellPapPlusSignalRep2
 view PlusRawSignal
@@ -167,6 +173,7 @@ md5sum 56fb9223f20ea47d8fc9ac986de14d0f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3422
 view RawData
 
@@ -190,6 +197,7 @@ md5sum ba92c4b67807582aa6a9572073e69ee3
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3426
 view RawData
 
@@ -212,6 +220,7 @@ localization cell
 md5sum cae06fe184558274964cc7a34164bf89
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4517
 view TssGencV7
 
@@ -235,6 +244,7 @@ localization cell
 md5sum 7b0f3d45b0bc364e95bd918c835fdae5
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageA549CellPapTssHmm
 view TssHmm
@@ -721,6 +731,7 @@ md5sum b4e3933531d3d4ba91680a2d19cbd497,fde66c3c3d6613bfb9f142b84fc6f0af
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3421
 tableName wgEncodeRikenCageAg04450CellPapAlnRep1
 view Alignments
@@ -745,6 +756,7 @@ md5sum 6137d7782b16a37eea79cf2580ffbce5,1b5991705c53711377cfc1aed5da1729
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3427
 tableName wgEncodeRikenCageAg04450CellPapAlnRep2
 view Alignments
@@ -769,6 +781,7 @@ md5sum f0a6517e60934654068bdc9e403abb1e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3479
 tableName wgEncodeRikenCageAg04450CellPapMinusSignalRep1
 view MinusRawSignal
@@ -793,6 +806,7 @@ md5sum a5a9e730880d6f3d05f9bcbf476ed337
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3480
 tableName wgEncodeRikenCageAg04450CellPapMinusSignalRep2
 view MinusRawSignal
@@ -817,6 +831,7 @@ md5sum 3655e816beecbbf279250e30a9691b66
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3479
 tableName wgEncodeRikenCageAg04450CellPapPlusSignalRep1
 view PlusRawSignal
@@ -841,6 +856,7 @@ md5sum 3582ebe3e115d576f987a5f5b61e04e4
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3480
 tableName wgEncodeRikenCageAg04450CellPapPlusSignalRep2
 view PlusRawSignal
@@ -865,6 +881,7 @@ md5sum 73716d9b241a824ecc1a80539fe326ae
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3421
 view RawData
 
@@ -888,6 +905,7 @@ md5sum 74ba9d09a4c64ef086ba64317fd149e6
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3427
 view RawData
 
@@ -910,6 +928,7 @@ localization cell
 md5sum cd8c202675587912e01c8ca4c2b24344
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4520
 view TssGencV7
 
@@ -933,6 +952,7 @@ localization cell
 md5sum ddc41e9f47db9fa7c2862b3ecdde70df
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageAg04450CellPapTssHmm
 view TssHmm
@@ -957,6 +977,7 @@ md5sum a1132dad095044a9d2db183fdb09e3ff,32292329cf614ce8fae8161ae5e4f385
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3428
 tableName wgEncodeRikenCageBjCellPapAlnRep1
 view Alignments
@@ -981,6 +1002,7 @@ md5sum f4f7f44b1ac7044c8e9a886cccd5c391,4967ce59a18a9317d9aca85351ca78ca
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3429
 tableName wgEncodeRikenCageBjCellPapAlnRep2
 view Alignments
@@ -1005,6 +1027,7 @@ md5sum 364067cd07ff38b75ad2e65b2d244d31
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3483
 tableName wgEncodeRikenCageBjCellPapMinusSignalRep1
 view MinusRawSignal
@@ -1029,6 +1052,7 @@ md5sum af499c5f6e76233e78ab0c07f9676b51
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3484
 tableName wgEncodeRikenCageBjCellPapMinusSignalRep2
 view MinusRawSignal
@@ -1053,6 +1077,7 @@ md5sum f8a208df77bad82c559a9c79454b27cc
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3483
 tableName wgEncodeRikenCageBjCellPapPlusSignalRep1
 view PlusRawSignal
@@ -1077,6 +1102,7 @@ md5sum e8984fe76c3bf0b9808485aca37169dc
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3484
 tableName wgEncodeRikenCageBjCellPapPlusSignalRep2
 view PlusRawSignal
@@ -1101,6 +1127,7 @@ md5sum 2bdeccb1e52715ccbffc0e2da5f5676d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3428
 view RawData
 
@@ -1124,6 +1151,7 @@ md5sum 40c7327ec23ce4d16f20d584fe981b87
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3429
 view RawData
 
@@ -1146,6 +1174,7 @@ localization cell
 md5sum 77f308b9e1745c719328d6a96f030278
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4498
 view TssGencV7
 
@@ -1169,6 +1198,7 @@ localization cell
 md5sum 5384dc8d939943aceddf0fd66effe38b
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageBjCellPapTssHmm
 view TssHmm
@@ -1561,6 +1591,7 @@ md5sum ea9f4c22893c4742e10c7a650eb708b1,2f6dcd025e5cd4cf2f2c27588907ea4d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3946
 tableName wgEncodeRikenCageGm12878CellPapAlnRep1
 view Alignments
@@ -1585,6 +1616,7 @@ md5sum 1f7c9c2db92bf0c340342d3b79c2bb56,31c490fd5faccc8052d5c164607be4ab
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapAlnRep2
 view Alignments
@@ -1609,6 +1641,7 @@ md5sum 8cd60821188d81a0fff923b913a2f156
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3946
 tableName wgEncodeRikenCageGm12878CellPapMinusSignalRep1
 view MinusRawSignal
@@ -1633,6 +1666,7 @@ md5sum 4f1cbefb544bc5d8b00ebc089cf9178f
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapMinusSignalRep2
 view MinusRawSignal
@@ -1657,6 +1691,7 @@ md5sum 6b3c771491b80a0c2a79d908a5e1f60b
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3946
 tableName wgEncodeRikenCageGm12878CellPapPlusSignalRep1
 view PlusRawSignal
@@ -1681,6 +1716,7 @@ md5sum 2c5e364b2affd07ca95a344f16ce8f26
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapPlusSignalRep2
 view PlusRawSignal
@@ -1705,6 +1741,7 @@ md5sum d6c970a05ebafc50f8f109e9e8a515b0
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2389
 view RawData
 
@@ -1728,6 +1765,7 @@ md5sum b62e0151d40da03be7d5d2a31238a23c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2394
 view RawData
 
@@ -1750,6 +1788,7 @@ localization cell
 md5sum 42dad26024f54a14d89c8ac0a4a89192
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4531
 view TssGencV7
 
@@ -1773,6 +1812,7 @@ localization cell
 md5sum 5f6e685ac94e68d1f8696df5f695fd1a
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageGm12878CellPapTssHmm
 view TssHmm
@@ -2064,6 +2104,7 @@ md5sum 8cdec463b84758a0f9413ed98415aa0c,8d586a3389dd7d10466aa277903a3116
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3950
 tableName wgEncodeRikenCageGm12878CytosolPapAlnRep1
 view Alignments
@@ -2088,6 +2129,7 @@ md5sum e8873a432725fff6acf71991c178b875,3604a10a48d7d54a0b06cd560416a3b6
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapAlnRep2
 view Alignments
@@ -2112,6 +2154,7 @@ md5sum 33171018a1b5f7ca9469e87db1f2d052
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3950
 tableName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep1
 view MinusRawSignal
@@ -2136,6 +2179,7 @@ md5sum 8ef216b78facfa754fd26e7cf34b963d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep2
 view MinusRawSignal
@@ -2160,6 +2204,7 @@ md5sum 591b45fc707da9b9e001622830803330
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3950
 tableName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep1
 view PlusRawSignal
@@ -2184,6 +2229,7 @@ md5sum 3de885fbcf494db1ae4266a32d15dfaa
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep2
 view PlusRawSignal
@@ -2208,6 +2254,7 @@ md5sum a00600b0be2b7f32ca5bfa1d37f9b1c2
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2393
 view RawData
 
@@ -2231,6 +2278,7 @@ md5sum d04a9c6774f547e5aaee9f6dd78334e0
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2391
 view RawData
 
@@ -2253,6 +2301,7 @@ localization cytosol
 md5sum 74c76a88c989f1a7972e96b49c514a40
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4508
 view TssGencV7
 
@@ -2276,6 +2325,7 @@ localization cytosol
 md5sum cc58970f6a67f0e89db9c6d3095a5430
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageGm12878CytosolPapTssHmm
 view TssHmm
@@ -2770,6 +2820,7 @@ md5sum f1ebe561e26b754b40b344e312162fc2,32329f56d20a34c34cc1203357771205
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3948
 tableName wgEncodeRikenCageGm12878NucleusPapAlnRep1
 view Alignments
@@ -2794,6 +2845,7 @@ md5sum f53ab0b4254874cabaf77484b20a2e4d,8191307115d4461a5b8c3018afb73da3
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapAlnRep2
 view Alignments
@@ -2818,6 +2870,7 @@ md5sum cd846b0203ddf3ac6dfee13acb9bf030
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3948
 tableName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep1
 view MinusRawSignal
@@ -2842,6 +2895,7 @@ md5sum 0bce07d725d364eb5010391f105d48cb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep2
 view MinusRawSignal
@@ -2866,6 +2920,7 @@ md5sum 63ec12b6dbeeabfa18346d71b448b5ef
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3948
 tableName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep1
 view PlusRawSignal
@@ -2890,6 +2945,7 @@ md5sum 682f11c1765159727acadf7d102fa937
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2
 view PlusRawSignal
@@ -2914,6 +2970,7 @@ md5sum 902ac945214ffc8d988bf25bc4eaef57
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2390
 view RawData
 
@@ -2937,6 +2994,7 @@ md5sum 4978bdc6ef8596eeccf0390fffa5e986
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2392
 view RawData
 
@@ -2959,6 +3017,7 @@ localization nucleus
 md5sum f540fa9eeba85d12124693b116f1b581
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4536
 view TssGencV7
 
@@ -2982,6 +3041,7 @@ localization nucleus
 md5sum ac1075ac9fcb104a35a8159e7e9a8158
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageGm12878NucleusPapTssHmm
 view TssHmm
@@ -3274,6 +3334,7 @@ md5sum 8967b37d49e4aeb1a827c2bba18ff2dd,fe49657a52bfebb614b38fd2ae8f56cb
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapAlnRep1
 view Alignments
@@ -3298,6 +3359,7 @@ md5sum b2d2b1db4c8ea702619e5d43bf8b9faa,168340e060fb954d738c35189b38839d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapAlnRep2
 view Alignments
@@ -3323,6 +3385,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapMinusClustersRep1
 view MinusRawSignal
@@ -3348,6 +3411,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapMinusClustersRep2
 view MinusRawSignal
@@ -3372,6 +3436,7 @@ md5sum af71f718325dffa717412c03a20b3a24
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapMinusSignalRep1
 view MinusRawSignal
@@ -3396,6 +3461,7 @@ md5sum 65ec690e4f56dcbbf777be0515a99579
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapMinusSignalRep2
 view MinusRawSignal
@@ -3421,6 +3487,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapPlusClustersRep1
 view PlusRawSignal
@@ -3446,6 +3513,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapPlusClustersRep2
 view PlusRawSignal
@@ -3470,6 +3538,7 @@ md5sum 407e55ddec4a0cb0d4140c5419b06311
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapPlusSignalRep1
 view PlusRawSignal
@@ -3494,6 +3563,7 @@ md5sum a7e9cfc789181f09584692acfea929bb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapPlusSignalRep2
 view PlusRawSignal
@@ -3518,6 +3588,7 @@ md5sum a7186ad215baddb0067b790b3188d8a4
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2380
 view RawData
 
@@ -3541,6 +3612,7 @@ md5sum 10ff2ab8cd1740567213ec8e14ff95ce
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2370
 view RawData
 
@@ -3563,6 +3635,7 @@ localization cell
 md5sum a5ad9ad642ab1252e2aa890aab89328d
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4505
 view TssGencV7
 
@@ -3586,6 +3659,7 @@ localization cell
 md5sum a4cdc93d8803820602fc68d664ff2882
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageH1hescCellPapTssHmm
 view TssHmm
@@ -3610,6 +3684,7 @@ md5sum 517fe6f8794493006e2756b5f1e1c2e7,8b05e80f60869129a4b2947d4a80bc02
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapAlnRep2
 view Alignments
@@ -3635,6 +3710,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2
 view MinusRawSignal
@@ -3659,6 +3735,7 @@ md5sum 45702da159378b723c5fe749c9a600b8
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
 view MinusRawSignal
@@ -3684,6 +3761,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
 view PlusRawSignal
@@ -3708,6 +3786,7 @@ md5sum bacc17901f779ee8551afd858bc7bac7
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2
 view PlusRawSignal
@@ -3732,6 +3811,7 @@ md5sum a1f11acd7a2c04941a8e83f4c31e5c13
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2379
 view RawData
 
@@ -3755,6 +3835,7 @@ md5sum 13a82092ce42218948697041ae6942b9,50104f02b4b7932e1daed24377dcde3d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapAlnRep2
 view Alignments
@@ -3780,6 +3861,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2
 view MinusRawSignal
@@ -3804,6 +3886,7 @@ md5sum 3da9ef1cdb0957a337294e60f7edb79d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
 view MinusRawSignal
@@ -3829,6 +3912,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
 view PlusRawSignal
@@ -3853,6 +3937,7 @@ md5sum 2a1be0ad1384fa93a1ef60cf3e24adad
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2
 view PlusRawSignal
@@ -3877,6 +3962,7 @@ md5sum 233452cd0e0d6de26c902b65bcabaa54
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2360
 view RawData
 
@@ -4620,6 +4706,7 @@ md5sum 45d63896684904984986a8eee2b0801e,951458bec43e7be84349f351d4061ee1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapAlnRep1
 view Alignments
@@ -4644,6 +4731,7 @@ md5sum e856fe6b026f841fa8c7cfa3809fc9c8,3e77310275c3f3610cfed4bc616b2cb7
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapAlnRep2
 view Alignments
@@ -4669,6 +4757,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapMinusClustersRep1
 view MinusRawSignal
@@ -4694,6 +4783,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapMinusClustersRep2
 view MinusRawSignal
@@ -4718,6 +4808,7 @@ md5sum fb530996757594dd8bec8f8c6cc5e777
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapMinusSignalRep1
 view MinusRawSignal
@@ -4742,6 +4833,7 @@ md5sum 1d44544b712c79cb24e087be43f43d82
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapMinusSignalRep2
 view MinusRawSignal
@@ -4767,6 +4859,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapPlusClustersRep1
 view PlusRawSignal
@@ -4792,6 +4885,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapPlusClustersRep2
 view PlusRawSignal
@@ -4816,6 +4910,7 @@ md5sum fdd5a24977678434f95070287a48f89a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapPlusSignalRep1
 view PlusRawSignal
@@ -4840,6 +4935,7 @@ md5sum f05df8e18f2f5ad1a406e3349fa3c722
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapPlusSignalRep2
 view PlusRawSignal
@@ -4864,6 +4960,7 @@ md5sum 48aff060ec90197fa98e74584a48c63f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2363
 view RawData
 
@@ -4887,6 +4984,7 @@ md5sum 3cdaeaa2170fb7dc3d9ce96b3d7cea49
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2374
 view RawData
 
@@ -4909,6 +5007,7 @@ localization cell
 md5sum 4935697034d9b624b10dfc2244421c03
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4504
 view TssGencV7
 
@@ -4932,6 +5031,7 @@ localization cell
 md5sum 3c9fa398b95e4deab207ceba9c866726
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHelas3CellPapTssHmm
 view TssHmm
@@ -5215,6 +5315,7 @@ md5sum af7972342466cd98b2059e0c24830aca,7215279de9e84437a46aee3349138b25
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapAlnRep1
 view Alignments
@@ -5239,6 +5340,7 @@ md5sum 52059340eaedef246a80e3f7cc3e66cd,1587f48462fc945db485dd20c9177d4b
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapAlnRep2
 view Alignments
@@ -5264,6 +5366,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
 view MinusRawSignal
@@ -5289,6 +5392,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
 view MinusRawSignal
@@ -5313,6 +5417,7 @@ md5sum 963897966f19b8d1089a8d0d074f9522
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1
 view MinusRawSignal
@@ -5337,6 +5442,7 @@ md5sum 9aaf4bb31fd997e3593b3e27458727b5
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2
 view MinusRawSignal
@@ -5362,6 +5468,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
 view PlusRawSignal
@@ -5387,6 +5494,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
 view PlusRawSignal
@@ -5411,6 +5519,7 @@ md5sum 9eb664071fa7d9dd0f2db954508deeb6
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep1
 view PlusRawSignal
@@ -5435,6 +5544,7 @@ md5sum f08210a600e1121ee30ccdf5c8c3f194
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep2
 view PlusRawSignal
@@ -5459,6 +5569,7 @@ md5sum 1430caf04df24a9f56178363869beb1f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2364
 view RawData
 
@@ -5482,6 +5593,7 @@ md5sum ae3619b785120420ccdd78e6362b4147
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2355
 view RawData
 
@@ -5504,6 +5616,7 @@ localization cytosol
 md5sum daa6f533411f7bde84295ba8681aa0a1
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4527
 view TssGencV7
 
@@ -5527,6 +5640,7 @@ localization cytosol
 md5sum c5254de3ecaa95be2021c22647c93923
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHelas3CytosolPapTssHmm
 view TssHmm
@@ -5854,6 +5968,7 @@ md5sum 64ca6d02c8eefe813cc02030a07b83f7,a4b924787eebf0237b317ec0af2f2923
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapAlnRep1
 view Alignments
@@ -5878,6 +5993,7 @@ md5sum 3df468fc8f7c745a44d8d9856a6c6974,9cbbf3bf493ba598fe0cdd31dc35d041
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapAlnRep2
 view Alignments
@@ -5903,6 +6019,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
 view MinusRawSignal
@@ -5928,6 +6045,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
 view MinusRawSignal
@@ -5952,6 +6070,7 @@ md5sum e5ee4571965b12cabb39c5a22e984f5d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1
 view MinusRawSignal
@@ -5976,6 +6095,7 @@ md5sum fa076d5af435705fdbd2b3a6272417ba
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2
 view MinusRawSignal
@@ -6001,6 +6121,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
 view PlusRawSignal
@@ -6026,6 +6147,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
 view PlusRawSignal
@@ -6050,6 +6172,7 @@ md5sum c628400c758e62742bbb79c992d8bde6
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep1
 view PlusRawSignal
@@ -6074,6 +6197,7 @@ md5sum 5b58fcac958a5a6f247282695c07a56c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep2
 view PlusRawSignal
@@ -6098,6 +6222,7 @@ md5sum d6dadc01f9575c7b754d546ef84c4f58
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2386
 view RawData
 
@@ -6121,6 +6246,7 @@ md5sum 04741d526d1ffb690877dba05983374e
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2384
 view RawData
 
@@ -6143,6 +6269,7 @@ localization nucleus
 md5sum 0c65e7b005ff546427a34167b406e989
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4522
 view TssGencV7
 
@@ -6166,6 +6293,7 @@ localization nucleus
 md5sum 891e9deb6113746f742f5f433f839042
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHelas3NucleusPapTssHmm
 view TssHmm
@@ -6190,6 +6318,7 @@ md5sum d9a71394518093f651170aba5575e7bc,2b04c00a9dac78af84b12bc50054029a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapAlnRep1
 view Alignments
@@ -6214,6 +6343,7 @@ md5sum 64bc1bb977669eee40c05f36f4877c71,8c2f983afda1e567ad24ee3c6662ff47
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapAlnRep2
 view Alignments
@@ -6239,6 +6369,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapMinusClustersRep1
 view MinusRawSignal
@@ -6264,6 +6395,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapMinusClustersRep2
 view MinusRawSignal
@@ -6288,6 +6420,7 @@ md5sum 82ac89a39f86ff1945ccfff997d5042b
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapMinusSignalRep1
 view MinusRawSignal
@@ -6312,6 +6445,7 @@ md5sum 8393ef3f063acf9007dc29e119ec0a17
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapMinusSignalRep2
 view MinusRawSignal
@@ -6337,6 +6471,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapPlusClustersRep1
 view PlusRawSignal
@@ -6362,6 +6497,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapPlusClustersRep2
 view PlusRawSignal
@@ -6386,6 +6522,7 @@ md5sum c51b79f62d0642bfe8b157ba6fe8c3b1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapPlusSignalRep1
 view PlusRawSignal
@@ -6410,6 +6547,7 @@ md5sum cb73a8f5e68669952b6e1435094a268e
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapPlusSignalRep2
 view PlusRawSignal
@@ -6434,6 +6572,7 @@ md5sum f06a3ecb0f2c6184bbacff728a9367f7
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2381
 view RawData
 
@@ -6457,6 +6596,7 @@ md5sum 0691a8a363cfa1d6f273ef1404975f25
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2378
 view RawData
 
@@ -6479,6 +6619,7 @@ localization cell
 md5sum c683cb9e7a9af91d7fe6e41b21ad80f0
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4539
 view TssGencV7
 
@@ -6502,6 +6643,7 @@ localization cell
 md5sum d3b45b723d2bed66d9e44215424bc6f0
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHepg2CellPapTssHmm
 view TssHmm
@@ -6527,6 +6669,7 @@ md5sum 7f4369f9439d4874b8ca831ea97ca48e
 objStatus replaced - this version has scores that exceed chromosome lengths
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
@@ -6819,6 +6962,7 @@ md5sum deb03288f236c8ed5ec8d270b45659fd,7714b1ea9abdf87be13daf81045f440d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapAlnRep1
 view Alignments
@@ -6843,6 +6987,7 @@ md5sum b8ca0c61793baf48fa30fd30ba3ba097,d997fd95ed5a8165275e303170327f03
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapAlnRep2
 view Alignments
@@ -6868,6 +7013,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
 view MinusRawSignal
@@ -6893,6 +7039,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
 view MinusRawSignal
@@ -6917,6 +7064,7 @@ md5sum 2ea39955c9b1c0f9eeda48377cce7b30
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1
 view MinusRawSignal
@@ -6941,6 +7089,7 @@ md5sum 92820cb9611cfcef2dce9613e83f3a1a
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2
 view MinusRawSignal
@@ -6966,6 +7115,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
 view PlusRawSignal
@@ -6991,6 +7141,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
 view PlusRawSignal
@@ -7015,6 +7166,7 @@ md5sum 4f2463a54df250799d0312ffbc678e41
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep1
 view PlusRawSignal
@@ -7039,6 +7191,7 @@ md5sum 2e37e3e1ba081ffe36a3faf2845b337d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep2
 view PlusRawSignal
@@ -7063,6 +7216,7 @@ md5sum 8fbbb9aeb0f5ea42681994c970f68958
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2357
 view RawData
 
@@ -7086,6 +7240,7 @@ md5sum 7a2b2712a012cd2f641c4a9cf2f0567a
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2369
 view RawData
 
@@ -7108,6 +7263,7 @@ localization cytosol
 md5sum 0dbcfdad1b806f358beccefa182ff6b7
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4513
 view TssGencV7
 
@@ -7131,6 +7287,7 @@ localization cytosol
 md5sum 625b2bdfd9e1dce5eb66891f4f9366e1
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHepg2CytosolPapTssHmm
 view TssHmm
@@ -7638,6 +7795,7 @@ md5sum cedcde207c25f5915ba125669078692b,cd804a00e266cff3e3c6276aff634ae5
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapAlnRep1
 view Alignments
@@ -7662,6 +7820,7 @@ md5sum 8b427967a1650d8f8f80b2bf621d7ae4,615d7272e66bf4f482e798845fdf79bb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapAlnRep2
 view Alignments
@@ -7687,6 +7846,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
 view MinusRawSignal
@@ -7712,6 +7872,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
 view MinusRawSignal
@@ -7736,6 +7897,7 @@ md5sum 92814b7e04f59782da8ea5890d0521a2
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1
 view MinusRawSignal
@@ -7760,6 +7922,7 @@ md5sum 5a1c86cb20a5d05c51e425094ee36dac
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2
 view MinusRawSignal
@@ -7785,6 +7948,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
 view PlusRawSignal
@@ -7810,6 +7974,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
 view PlusRawSignal
@@ -7834,6 +7999,7 @@ md5sum eef2741f84bc636e4a0e93ad2519359e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep1
 view PlusRawSignal
@@ -7858,6 +8024,7 @@ md5sum 4aaba67241aa3e10eedf931262b3b043
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep2
 view PlusRawSignal
@@ -7882,6 +8049,7 @@ md5sum c8f912f5218c074fe4eb7b0330d4402f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2375
 view RawData
 
@@ -7905,6 +8073,7 @@ md5sum 705e67a50698e2e90bcf0bda168c3721
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2366
 view RawData
 
@@ -7927,6 +8096,7 @@ localization nucleus
 md5sum 1673ba173a7af98a615d7b5a172f1874
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4528
 view TssGencV7
 
@@ -7950,6 +8120,7 @@ localization nucleus
 md5sum 12474bb2ed3cc1498f0fdb1ac2a18f51
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHepg2NucleusPapTssHmm
 view TssHmm
@@ -10027,6 +10198,7 @@ md5sum 537b2508198602e5da0c6f947a25146b,740f8a7b69eb12c1ef235e6557f29295
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapAlnRep1
 view Alignments
@@ -10051,6 +10223,7 @@ md5sum c50d709d79cd25c8de7b46bf3122db2a,7390e8b40729b84da2ecda1d8b64ae25
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapAlnRep2
 view Alignments
@@ -10076,6 +10249,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapMinusClustersRep1
 view MinusRawSignal
@@ -10101,6 +10275,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapMinusClustersRep2
 view MinusRawSignal
@@ -10125,6 +10300,7 @@ md5sum 605d5f495f9db3ea5d60413739956ea8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapMinusSignalRep1
 view MinusRawSignal
@@ -10149,6 +10325,7 @@ md5sum ef982e6ab9386be510f833d95e3207a7
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapMinusSignalRep2
 view MinusRawSignal
@@ -10174,6 +10351,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapPlusClustersRep1
 view PlusRawSignal
@@ -10199,6 +10377,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapPlusClustersRep2
 view PlusRawSignal
@@ -10223,6 +10402,7 @@ md5sum 01dfb230ab89be13d8f70c2078362da8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapPlusSignalRep1
 view PlusRawSignal
@@ -10247,6 +10427,7 @@ md5sum e8c8190de5ff0064026fa1ac9b466bf9
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapPlusSignalRep2
 view PlusRawSignal
@@ -10271,6 +10452,7 @@ md5sum a1c85ed9f1edd7fee962c93d5878ed18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2376
 view RawData
 
@@ -10294,6 +10476,7 @@ md5sum 03be2619488234789125162894879e2e
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2388
 view RawData
 
@@ -10316,6 +10499,7 @@ localization cell
 md5sum 67489ff0adc8f8c09b908edff8bab0f5
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4503
 view TssGencV7
 
@@ -10339,6 +10523,7 @@ localization cell
 md5sum f4239fd75aef86f7ca37999b30759f87
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHuvecCellPapTssHmm
 view TssHmm
@@ -10631,6 +10816,7 @@ md5sum 405a779918393752aff80fef296423de,e1d72966bf49dbccc9dfcadb217e62de
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapAlnRep3
 view Alignments
@@ -10655,6 +10841,7 @@ md5sum 5772c68d93fcca419418180b7407b10f,2010b74ae9ff5ca16c36269a696e49b4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapAlnRep4
 view Alignments
@@ -10680,6 +10867,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
 view MinusRawSignal
@@ -10705,6 +10893,7 @@ objStatus renamed
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
 view MinusRawSignal
@@ -10729,6 +10918,7 @@ md5sum 0af38b6061decd89498c9b035cefe734
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3
 view MinusRawSignal
@@ -10753,6 +10943,7 @@ md5sum 11384c6a20004845a1908588c9ce7f01
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4
 view MinusRawSignal
@@ -10778,6 +10969,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
 view PlusRawSignal
@@ -10803,6 +10995,7 @@ objStatus renamed
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
 view PlusRawSignal
@@ -10827,6 +11020,7 @@ md5sum 78d7a2c1fbecbbcebf31141e47a4c3bd
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep3
 view PlusRawSignal
@@ -10851,6 +11045,7 @@ md5sum b7587592dd6dfd8ed87dabd3ee6df2c3
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep4
 view PlusRawSignal
@@ -10875,6 +11070,7 @@ md5sum 7a7073171fa24bcbac35da28fce57622
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2368
 view RawData
 
@@ -10898,6 +11094,7 @@ md5sum 80f9a109c3769001e78f12701940aa6e
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2354
 view RawData
 
@@ -10920,6 +11117,7 @@ localization cytosol
 md5sum 27e96ed6b35f3f03a7d209e7a9502d06
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4515
 view TssGencV7
 
@@ -10943,6 +11141,7 @@ localization cytosol
 md5sum 2f4e1bce2a46cfeeedd6889929499d5d
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHuvecCytosolPapTssHmm
 view TssHmm
@@ -11067,6 +11266,7 @@ md5sum 9049b048deef9813a507943b4a143a9d,a98a9b6067cf2e4283391482d4a76d1c
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapAlnRep3
 view Alignments
@@ -11091,6 +11291,7 @@ md5sum 8dbdc63630485064eb8849443f87d8ef,9b6e7df5b7b6138c8e9a1a713548ccb9
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapAlnRep4
 view Alignments
@@ -11116,6 +11317,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
 view MinusRawSignal
@@ -11141,6 +11343,7 @@ objStatus renamed
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
 view MinusRawSignal
@@ -11165,6 +11368,7 @@ md5sum 4b4c9685bc810855c8120de03a190608
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3
 view MinusRawSignal
@@ -11189,6 +11393,7 @@ md5sum 36c37d8e3a87cb4ec71181fc38b2ab42
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4
 view MinusRawSignal
@@ -11214,6 +11419,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
 view PlusRawSignal
@@ -11239,6 +11445,7 @@ objStatus renamed
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
 view PlusRawSignal
@@ -11263,6 +11470,7 @@ md5sum 5e374fa9c298c3b3201108e0d5ae6ae3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep3
 view PlusRawSignal
@@ -11287,6 +11495,7 @@ md5sum ee75882cf87e463a5773b62139320725
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep4
 view PlusRawSignal
@@ -11311,6 +11520,7 @@ md5sum b2436773be7fd0e1d2458a69484f53ef
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2377
 view RawData
 
@@ -11334,6 +11544,7 @@ md5sum 2cdc65a2b7537beac4272727ad90de5e
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2356
 view RawData
 
@@ -11356,6 +11567,7 @@ localization nucleus
 md5sum fd1da2b073e5315f72377b74a61f43c9
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4497
 view TssGencV7
 
@@ -11379,6 +11591,7 @@ localization nucleus
 md5sum 57935352afce004be1f70f6f40a99ea0
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageHuvecNucleusPapTssHmm
 view TssHmm
@@ -12603,6 +12816,7 @@ md5sum 72474aac692f85f799fce7390f57b0e8,3657976be404b8230c4dc7eccdb21712
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapAlnRep1
 view Alignments
@@ -12627,6 +12841,7 @@ md5sum 0b3b753312128c5bdaf4c26d5efa2fc2,089b535d5f71fa43726527fcf8cda804
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapAlnRep2
 view Alignments
@@ -12652,6 +12867,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapMinusClustersRep1
 view MinusRawSignal
@@ -12677,6 +12893,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapMinusClustersRep2
 view MinusRawSignal
@@ -12701,6 +12918,7 @@ md5sum 6f086cc3562ae92ff913d473c0c43871
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapMinusSignalRep1
 view MinusRawSignal
@@ -12725,6 +12943,7 @@ md5sum fe038ad751c4879be5e432d34d020907
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapMinusSignalRep2
 view MinusRawSignal
@@ -12750,6 +12969,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapPlusClustersRep1
 view PlusRawSignal
@@ -12775,6 +12995,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapPlusClustersRep2
 view PlusRawSignal
@@ -12799,6 +13020,7 @@ md5sum 78696f2a0d7ebf7fa80ac6fbc2101a0e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapPlusSignalRep1
 view PlusRawSignal
@@ -12823,6 +13045,7 @@ md5sum a61180a4b5b5c4dc75f09eff75be3e34
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapPlusSignalRep2
 view PlusRawSignal
@@ -12847,6 +13070,7 @@ md5sum acc5abcee6cfdfb9c2fad98ddb0154e0
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2359
 view RawData
 
@@ -12870,6 +13094,7 @@ md5sum a03037ef99001eea0f238178024b822b
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2362
 view RawData
 
@@ -12892,6 +13117,7 @@ localization cell
 md5sum ec8f9f716ff2255a3e66ccb6c2ac0cdd
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4532
 view TssGencV7
 
@@ -12915,6 +13141,7 @@ localization cell
 md5sum 510d14e533be6805b44fe0b0e1b8cf40
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageK562CellPapTssHmm
 view TssHmm
@@ -13502,6 +13729,7 @@ md5sum 895bcf6430707991d108281ddf1e8977,4ac17fd619eb1549225c42c5eaf0b1dd
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapAlnRep1
 view Alignments
@@ -13526,6 +13754,7 @@ md5sum f8e8546a0b4577b901612ab456004b6c,567f5a3fd9e77f8b56e34dc9032a29f8
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapAlnRep2
 view Alignments
@@ -13577,6 +13806,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep1
 view MinusRawSignal
@@ -13602,6 +13832,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep2
 view MinusRawSignal
@@ -13651,6 +13882,7 @@ md5sum a2d833c942e225c4ae693c0122fddcb8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep1
 view MinusRawSignal
@@ -13675,6 +13907,7 @@ md5sum ba8ce41a46b5e708fd93e387fb1eedf8
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep2
 view MinusRawSignal
@@ -13726,6 +13959,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 view PlusRawSignal
@@ -13751,6 +13985,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep2
 view PlusRawSignal
@@ -13800,6 +14035,7 @@ md5sum bb9304ed152e51a9926377537039a95d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapPlusSignalRep1
 view PlusRawSignal
@@ -13824,6 +14060,7 @@ md5sum a0855e5cb17e07b485a58c9ec00b71cb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusSignalRep2
 view PlusRawSignal
@@ -13871,6 +14108,7 @@ md5sum afc57d65410893ab36a0eaad51f5e2dc
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2371
 view RawData
 
@@ -13894,6 +14132,7 @@ md5sum 72645dfebabab533fecf688bcaf079da
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2383
 view RawData
 
@@ -13916,6 +14155,7 @@ localization cytosol
 md5sum 3414a5d0b5885e68ca69de4e0d5e2bc3
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4500
 view TssGencV7
 
@@ -13939,6 +14179,7 @@ localization cytosol
 md5sum 99a1bb924355c0881bc6616a6e28b34d
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageK562CytosolPapTssHmm
 view TssHmm
@@ -14656,6 +14897,7 @@ md5sum 7095cc38763f444217fcce8f70b3562a,28dd5f1428870c45f78e513a31c77d1e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapAlnRep1
 view Alignments
@@ -14680,6 +14922,7 @@ md5sum 42b508a3c9c0f650ea0c9a329f5390e0,841ce40b622cbeb4920645ba0fa37b60
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapAlnRep2
 view Alignments
@@ -14705,6 +14948,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapMinusClustersRep1
 view MinusRawSignal
@@ -14730,6 +14974,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapMinusClustersRep2
 view MinusRawSignal
@@ -14754,6 +14999,7 @@ md5sum b5fd0f7d76d85c01c7f2ce1fb8594ded
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapMinusSignalRep1
 view MinusRawSignal
@@ -14778,6 +15024,7 @@ md5sum 15af3feafc52f392285999ffb37d1c63
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapMinusSignalRep2
 view MinusRawSignal
@@ -14803,6 +15050,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep1
 view PlusRawSignal
@@ -14828,6 +15076,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep2
 view PlusRawSignal
@@ -14852,6 +15101,7 @@ md5sum 4668f5224bb32d2f95ecfb32c80200d3
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapPlusSignalRep1
 view PlusRawSignal
@@ -14876,6 +15126,7 @@ md5sum 36303939dc404d37bc19cd51620e6e33
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusSignalRep2
 view PlusRawSignal
@@ -14900,6 +15151,7 @@ md5sum 443107342a6cc9c0dbf6b7a4982f4b7d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2367
 view RawData
 
@@ -14923,6 +15175,7 @@ md5sum 38a90912bd3faa0a7922b017afd685dc
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2358
 view RawData
 
@@ -14945,6 +15198,7 @@ localization nucleus
 md5sum 35317534002907553886dc557ac955a9
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4518
 view TssGencV7
 
@@ -14968,6 +15222,7 @@ localization nucleus
 md5sum c4cf529af320151c7948e604c45f45b3
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageK562NucleusPapTssHmm
 view TssHmm
@@ -15260,6 +15515,7 @@ md5sum db7303df970c7760e1e0adc88dbcff8b,08df05de6bf93c0ce061de6fee13f36a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapAlnRep1
 view Alignments
@@ -15284,6 +15540,7 @@ md5sum c50051557b805f73374c50f331822916,6ec3fa7cebc12c17772031a6121d4adb
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3425
 tableName wgEncodeRikenCageMcf7CellPapAlnRep2
 view Alignments
@@ -15309,6 +15566,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapMinusClustersRep1
 view MinusRawSignal
@@ -15333,6 +15591,7 @@ md5sum cedd987a5cc19fccbbb24af8de8c7381
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4332
 tableName wgEncodeRikenCageMcf7CellPapMinusRawRep2
 view MinusRawSignal
@@ -15357,6 +15616,7 @@ md5sum eb8a6806e1430468c0fb7a7376d42fd8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapMinusSignalRep1
 view MinusRawSignal
@@ -15382,6 +15642,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapPlusClustersRep1
 view PlusRawSignal
@@ -15406,6 +15667,7 @@ md5sum 92c3da85a2c004409f982fee8327f93c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4332
 tableName wgEncodeRikenCageMcf7CellPapPlusRawRep2
 view PlusRawSignal
@@ -15430,6 +15692,7 @@ md5sum 5e98104d551182c37b3b820bdbc822c8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapPlusSignalRep1
 view PlusRawSignal
@@ -15454,6 +15717,7 @@ md5sum b14be70fa85e86f98c6cdb6d515a7ad4
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2365
 view RawData
 
@@ -15477,6 +15741,7 @@ md5sum 9bd8a2a71306b9d94f44abe10cf2ad78
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3425
 view RawData
 
@@ -15499,6 +15764,7 @@ localization cell
 md5sum ccccc512cf479b0d8643dd787f1f4561
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4521
 view TssGencV7
 
@@ -15522,6 +15788,7 @@ localization cell
 md5sum 32fd7d2176d2f79b610fc49696232122
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageMcf7CellPapTssHmm
 view TssHmm
@@ -16488,6 +16755,7 @@ md5sum 883264f44451a2e311de7c8797b3e1d4,bca070302983d4e307c087bd7e94c488
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapAlnRep1
 view Alignments
@@ -16512,6 +16780,7 @@ md5sum f5326f647a5302771f1ea7625f4d7042,d44b51e1de7b76a3d47a4793671b7c69
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapAlnRep2
 view Alignments
@@ -16537,6 +16806,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapMinusClustersRep1
 view MinusRawSignal
@@ -16562,6 +16832,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapMinusClustersRep2
 view MinusRawSignal
@@ -16586,6 +16857,7 @@ md5sum cb87b610e265b22898e57000cce919f8
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapMinusSignalRep1
 view MinusRawSignal
@@ -16610,6 +16882,7 @@ md5sum f6130549c92a04c88a95771417f92546
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapMinusSignalRep2
 view MinusRawSignal
@@ -16635,6 +16908,7 @@ objStatus renamed
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapPlusClustersRep1
 view PlusRawSignal
@@ -16660,6 +16934,7 @@ objStatus renamed
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapPlusClustersRep2
 view PlusRawSignal
@@ -16684,6 +16959,7 @@ md5sum 81a5abe828ab0b1b4987b4bcbe20643b
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapPlusSignalRep1
 view PlusRawSignal
@@ -16708,6 +16984,7 @@ md5sum e26630bd52e58208c4acd1c11cbe4b46
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapPlusSignalRep2
 view PlusRawSignal
@@ -16732,6 +17009,7 @@ md5sum 91f153e228713d2d1a13f59c1bbc5940
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2372
 view RawData
 
@@ -16755,6 +17033,7 @@ md5sum 3332bce9c14895d69029476b99cfcf9c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2361
 view RawData
 
@@ -16777,6 +17056,7 @@ localization cell
 md5sum 87467c120ff6dbaf356641f056345f11
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4499
 view TssGencV7
 
@@ -16800,6 +17080,7 @@ localization cell
 md5sum 6b12bf2ae2ba24248778617904d74267
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageNhekCellPapTssHmm
 view TssHmm
@@ -17092,6 +17373,7 @@ md5sum 2b048dee3ece6207be96d584917172db,508aff49eb1d72bdff00634d59aa8c07
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapAlnRep3
 view Alignments
@@ -17116,6 +17398,7 @@ md5sum 0826bda15b1784b4db2c45379c741a39,b89c7d7ba0d1ebfa11c18bb492f33cbd
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3420
 tableName wgEncodeRikenCageNhekCytosolPapAlnRep4
 view Alignments
@@ -17141,6 +17424,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
 view MinusRawSignal
@@ -17165,6 +17449,7 @@ md5sum b4b58eda0a31f20123eb8c137c675279
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4166
 tableName wgEncodeRikenCageNhekCytosolPapMinusRawRep4
 view MinusRawSignal
@@ -17189,6 +17474,7 @@ md5sum 41920333b916209b8881297a58fd6e0b
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
 view MinusRawSignal
@@ -17214,6 +17500,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
 view PlusRawSignal
@@ -17238,6 +17525,7 @@ md5sum 60e40619a63615bb8def540ced7cd844
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4166
 tableName wgEncodeRikenCageNhekCytosolPapPlusRawRep4
 view PlusRawSignal
@@ -17262,6 +17550,7 @@ md5sum 7dfd1736962c08aa755f321bb8848e8c
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapPlusSignalRep3
 view PlusRawSignal
@@ -17286,6 +17575,7 @@ md5sum 98d0763fc02162d12115b7945d95660e
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2373
 view RawData
 
@@ -17309,6 +17599,7 @@ md5sum b304c6e398746c4a887b39abd10c7e50
 project wgEncode
 replicate 4
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3420
 view RawData
 
@@ -17331,6 +17622,7 @@ localization cytosol
 md5sum cef0c282ea69c47517e16a07e7b572ca
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4502
 view TssGencV7
 
@@ -17354,6 +17646,7 @@ localization cytosol
 md5sum 30acc9c063cd2ea29428b2dd192dd703
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageNhekCytosolPapTssHmm
 view TssHmm
@@ -17646,6 +17939,7 @@ md5sum 1c62e411bd0588cf11a275c2df0a8214,46709d4998248b7a42e11960f67218b3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapAlnRep3
 view Alignments
@@ -17699,6 +17993,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapMinusClustersRep3
 view MinusRawSignal
@@ -17751,6 +18046,7 @@ md5sum ec648f02819365949f5daed76290dc0d
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
 view MinusRawSignal
@@ -17776,6 +18072,7 @@ objStatus renamed
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
 view PlusRawSignal
@@ -17828,6 +18125,7 @@ md5sum 94507040dc098a73dac79897197dab11
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapPlusSignalRep3
 view PlusRawSignal
@@ -17852,6 +18150,7 @@ md5sum ac5894359b16f3731a144ac0457aec50
 project wgEncode
 replicate 3
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 2382
 view RawData
 
@@ -17901,6 +18200,7 @@ localization nucleus
 md5sum a4359018a31ea1259a6fad197a869d8c
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4529
 view TssGencV7
 
@@ -17924,6 +18224,7 @@ localization nucleus
 md5sum c6bc27fcd20b5adbf1c3c5ff105b2cd9
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
@@ -17946,6 +18247,7 @@ localization nucleus
 md5sum acfc0a827edee9ded634a97c9b701128
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5611
 submittedDataVersion V3 - Repacing . with -1 for missing data
 tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
@@ -19659,6 +19961,7 @@ md5sum dd157c5757c5e85f4c7854089a09bbf2,deddd10a9ea249479aeb5a26a201c111
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3423
 tableName wgEncodeRikenCageSknshraCellPapAlnRep1
 view Alignments
@@ -19683,6 +19986,7 @@ md5sum e0edada032843539e6d28574d4a0f766,e3148691af40a89746f4b3d7abc54707
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapAlnRep2
 view Alignments
@@ -19707,6 +20011,7 @@ md5sum c7d6b31c2be98961fbe5f56b1cdcdeff
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4167
 tableName wgEncodeRikenCageSknshraCellPapMinusRawRep1
 view MinusRawSignal
@@ -19731,6 +20036,7 @@ md5sum 49c53bb840d8c3f0b5f081f7f0e86ddc
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapMinusSignalRep2
 view MinusRawSignal
@@ -19755,6 +20061,7 @@ md5sum aba33e70ca776b71c380a163f692c867
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4167
 tableName wgEncodeRikenCageSknshraCellPapPlusRawRep1
 view PlusRawSignal
@@ -19779,6 +20086,7 @@ md5sum 19083c96c5056b16a4345fb333e68b2a
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapPlusSignalRep2
 view PlusRawSignal
@@ -19803,6 +20111,7 @@ md5sum 32f189b19f433b49d0c7179945493373
 project wgEncode
 replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3423
 view RawData
 
@@ -19826,6 +20135,7 @@ md5sum 2a25a6a95dc0aff867be7c50bd8ecded
 project wgEncode
 replicate 2
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 3339
 view RawData
 
@@ -19848,6 +20158,7 @@ localization cell
 md5sum 5cfcfa3ed99060207aa475c2e0db341d
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4524
 view TssGencV7
 
@@ -19871,8 +20182,9 @@ localization cell
 md5sum 74a76af62ea7f81ecbb2503d9b3e61c9
 project wgEncode
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -856860643
+# MAGIC: 750451301
