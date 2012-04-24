@@ -346,7 +346,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for naive populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
@@ -364,7 +364,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for Th0 populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
@@ -382,7 +382,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for Th1 populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
@@ -1316,7 +1316,7 @@ age 43
 tissue blood
 lineage mesoderm
 karyotype normal
-childOf B_Cells_CD20+
+childOf B_cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1335,7 +1335,7 @@ age 27
 tissue blood
 lineage mesoderm
 karyotype normal
-childOf B_Cells_CD20+
+childOf B_cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1354,7 +1354,7 @@ age 27
 tissue blood
 lineage mesoderm
 karyotype normal
-childOf B_Cells_CD20+
+childOf B_cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1486,7 +1486,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for naive populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
@@ -1504,7 +1504,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for Th0 populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
@@ -1522,7 +1522,7 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for Th1 populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
@@ -4704,6 +4704,60 @@ tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 #formerly tier 3
 
+term MRT_G401.6
+tag MRTG401.6
+type Cell Line
+tier 3
+organism human
+description Malignant Renal Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue kidney
+vendorName ATCC 
+vendorId CRL-1441
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTG401.6_Crawford_protocol.pdf
+
+term MRT_A204.1
+tag MRTA204.1
+type Cell Line
+tier 3
+organism human
+description Malignant Rhabdoid tumor (MRT) line, rhabdomyosarcoma PROVISIONAL
+karyotype cancer
+lineage missing
+sex F
+tissue muscle
+vendorName ATCC
+vendorId HTB-82 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTA204.1_Crawford_protocol.pdf
+
+term MRT_TTC549
+tag MRTTTC549
+type Cell Line
+tier 3
+organism human
+description Malignant Hepatic Rhabdoid tumor line PROVISIONAL
+karyotype cancer
+lineage missing
+sex M
+tissue liver
+vendorName ATCC
+vendorId MRT_TTC549 PROVISIONAL 
+orderUrl missing
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+
 term Myometr
 tag MYOMETR
 type Cell Line
@@ -5494,6 +5548,23 @@ orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
+
+term T_cells_CD4+ 
+tag TCELLSCD4
+type Cell Line
+organism human
+description Parent cell line for T cells CD4+.
+tissue blood
+karyotype unknown
+vendorName David Randolph at University of Alabama, Birmingham
+vendorId vary
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:AdultCD4naive_Crawford_protocol.pdf; Crawford:AdultCD4Th0_Crawford_protocol.pdf; Crawford:AdultCD4Th1_Crawford_protocol.pdf; Crawford:CordCD4naive_Crawford_protocol.pdf; Crawford:CordCD4Th0_Crawford_protocol.pdf; Crawford:CordCD4Th1_Crawford_protocol.pdf 
 
 term T98G
 tag T98G
@@ -11803,6 +11874,11 @@ term 1x25
 tag R1X25
 type readType
 description Single 25 nt reads
+
+term 1x30
+tag R1x30
+type readType
+description Single 30 nt read PROVISIONAL
 
 term 1x32
 tag R1X32
