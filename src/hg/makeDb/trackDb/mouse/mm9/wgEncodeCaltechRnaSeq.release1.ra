@@ -46,7 +46,7 @@ html wgEncodeCaltechRnaSeq.release1
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal 
         shortLabel C2C12 Myob AllRd
-        longLabel C2C12 Myoblast RNA-seq All Reads Raw Signal from ENCODE/Caltech
+        longLabel C2C12 Myoblast RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 0.050000 836773.000000
         color 139,69,19
@@ -55,7 +55,7 @@ html wgEncodeCaltechRnaSeq.release1
 #        track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1
 #        parent wgEncodeCaltechRnaSeqViewRawSignal 
 #        shortLabel C2C12 Myoc RawSg 
-#        longLabel C2C12 Myocyte 60h RNA-seq Raw Signal from ENCODE/Caltech
+#        longLabel C2C12 Myocyte 60h RNA-seq Signal from ENCODE/Caltech
 #        subGroups view=RawSignal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
 #        type bigWig 1.000000 513148.000000
 #        color 139,69,19
@@ -64,7 +64,7 @@ html wgEncodeCaltechRnaSeq.release1
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
         shortLabel C2C12 Myoc AllRd
-        longLabel C2C12 Myocyte (EqS 2.0pct 60h) RNA-seq All Reads Raw Signal from ENCODE/Caltech
+        longLabel C2C12 Myocyte (EqS 2.0pct 60h) RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 0.050000 513161.000000
         color 139,69,19
@@ -82,7 +82,7 @@ html wgEncodeCaltechRnaSeq.release1
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
         shortLabel 10T1/2 Fibb AllRd
-        longLabel 10T1/2 Fibroblast RNA-seq All Reads Raw Signal from ENCODE/Caltech
+        longLabel 10T1/2 Fibroblast RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 0.050000 2518819.000000
         color 65,105,225
@@ -100,7 +100,7 @@ html wgEncodeCaltechRnaSeq.release1
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
         shortLabel 10T1/2 Fibc AllRd
-        longLabel 10T1/2 Fibrocyte (EqS 2.0pct 60h) RNA-seq Alll Reads Raw Signal from ENCODE/Caltech
+        longLabel 10T1/2 Fibrocyte (EqS 2.0pct 60h) RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 0.050000 719565.000000
         color 65,105,225
