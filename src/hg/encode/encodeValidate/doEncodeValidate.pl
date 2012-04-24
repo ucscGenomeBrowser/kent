@@ -422,7 +422,7 @@ sub validateBed {
     if($err) {
         #uncomment for web based debug
         #my $errorPrefix = "type = $cmdtype\ninfoFile = $infoFile\ncmd = $cmd\nparamList = $paramList\n";
-        my $errorlog = "$errorPrefix\n\n"."ERROR: failed validateBed : " . $safe->stderr() . "\n" . "End\n";
+        my $errorlog = "ERROR: failed validateBed : " . $safe->stderr() . "\n" . "End\n";
         return("$errorlog\n\nfailed validateBed for '$file'");
     }
 
