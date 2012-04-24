@@ -10,9 +10,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-20
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-20
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
@@ -41,9 +39,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-19
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-19
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
@@ -72,9 +68,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-19
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-19
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
@@ -102,9 +96,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-19
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-19
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
@@ -132,9 +124,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-04-16
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2013-01-16
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
@@ -163,9 +153,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-19
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-19
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
@@ -193,9 +181,7 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-20
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-20
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
@@ -223,9 +209,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-20
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-20
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
@@ -253,9 +237,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-04-16
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2013-01-16
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
@@ -284,9 +266,7 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-03-20
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-12-20
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
@@ -315,9 +295,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-01-31
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-10-31
 dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
@@ -346,9 +324,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-01-31
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-10-31
 dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
@@ -377,9 +353,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-02-01
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-11-01
 dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
@@ -407,9 +381,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-02-01
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-11-01
 dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
@@ -437,9 +409,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-04-16
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2013-01-16
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
@@ -468,9 +438,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-02-01
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-11-01
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
@@ -499,9 +467,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-01-31
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-10-31
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
@@ -529,9 +495,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-01-31
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-10-31
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
@@ -559,9 +523,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-04-16
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2013-01-16
 dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
@@ -590,9 +552,7 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-#dateSubmitted 2012-04-18
 dateSubmitted 2012-01-31
-#dateUnrestricted 2013-01-18
 dateUnrestricted 2012-11-31
 dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
