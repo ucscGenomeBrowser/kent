@@ -410,20 +410,18 @@ sub validateBed {
         $sex = "M";
     }
     my ($infoFile, $twoBitFile) = getInfoFiles($cell, $sex);
-    #print STDERR "infoFile = $infoFile\n";
     my $asPath = "$configPath/autoSql/$type.as";
     if (exists($bedPlusTypes{$type}) and -e "$asPath") {
         $asFile = "-as=$asPath";
     } elsif (exists($bedPlusTypes{$type}) and !(-e "$configPath/$type.as")) {
         return "Can't find .as file for type $type";
     }
-    #print STDERR "type = $cmdtype\n";
-    #print STDERR "cmd = $cmd\n";
     my $cmd = "validateFiles $paramList -type=$cmdtype $asFile -chromInfo=$infoFile $path/$file";
     my $safe = SafePipe->new(CMDS => ["$cmd"]);
     my $err = $safe->exec();
     if($err) {
-        my $errorPrefix = "type = $cmdtype\ninfoFile = $infoFile\ncmd = $cmd\nparamList = $paramList\n";
+        #uncomment for web based debug
+        #my $errorPrefix = "type = $cmdtype\ninfoFile = $infoFile\ncmd = $cmd\nparamList = $paramList\n";
         my $errorlog = "$errorPrefix\n\n"."ERROR: failed validateBed : " . $safe->stderr() . "\n" . "End\n";
         return("$errorlog\n\nfailed validateBed for '$file'");
     }
@@ -520,8 +518,6 @@ sub getInfoFiles
 
 
     if (not defined $terms{'Cell Line'}->{$cell}) {
-        #print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
-        #return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
         return ($infoFile, $twoBitFile);
     }
     my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
@@ -675,7 +671,6 @@ sub validateBigBed
     my $fh = File::Temp->new(UNLINK => 1);
     $fh->unlink_on_destroy( 1 );
     my $tempfilename = $fh->filename;
-    #print STDERR "tempfilename = $tempfilename\n";
     my $safe = SafePipe->new(CMDS => ["bigBedToBed $file $tempfilename"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBigBed : " . $safe->stderr() . "\n";
@@ -874,7 +869,6 @@ sub checkDataFormat {
     if ($format =~ m/(bed)\s*\d/) {
         $format = $1;
     }
-    #print STDERR "format = $format\n";
     if ($format =~ m/(bedGraph) (\d+)/) {
         $format = $1;
     }
