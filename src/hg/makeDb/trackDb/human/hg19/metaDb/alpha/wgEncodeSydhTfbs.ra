@@ -755,6 +755,7 @@ dateUnrestricted 2013-01-19
 fileName wgEncodeSydhTfbsGm08714InputUcdAlnRep1.bam,wgEncodeSydhTfbsGm08714InputUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
+md5sum 5ae0ac0cd396f7e0d8f316ddf593e267,a450b648575256d354f6f50b5a762678
 project wgEncode
 replicate 1
 setType input
@@ -776,6 +777,7 @@ dateUnrestricted 2013-01-19
 fileName wgEncodeSydhTfbsGm08714InputUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 71a6ab158756975741275bf4c00ea49d
 project wgEncode
 replicate 1
 setType input
@@ -798,6 +800,7 @@ fileName wgEncodeSydhTfbsGm08714InputUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum fe6710be2f3d384e99a21d1b1e59dc3a
 project wgEncode
 setType input
 subId 6818
@@ -3442,7 +3445,7 @@ fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaStdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
-md5sum 369ac24672ae5a40b65a3b720b85e9b7
+md5sum c9cad861697c5dbe74451345e2ca78af
 project wgEncode
 setType exp
 subId 5253
@@ -15582,7 +15585,7 @@ fileName wgEncodeSydhTfbsH1hescBrca1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
-md5sum 3f7bfc8d04f5e5daa2f8ba9b32b12e78
+md5sum dd0e5b6256dc61f593df06cf61c112e0
 project wgEncode
 setType exp
 subId 4929
@@ -16270,7 +16273,7 @@ fileName wgEncodeSydhTfbsH1hescCmycIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
-md5sum 14db3279bd9b6c8ae1105fe2e4949fe3
+md5sum 0edf98fcc1d7f037824293a197b64edf
 project wgEncode
 setType exp
 subId 4922
@@ -18459,7 +18462,7 @@ fileName wgEncodeSydhTfbsH1hescZnf143IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
-md5sum 9210e8a0ad35d0922ce38b091ac8251e
+md5sum d35d1196ccda97f52c3c3bd8fedf499a
 project wgEncode
 setType exp
 subId 4930
@@ -58774,4 +58777,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -524196233
+# MAGIC: 1647416514
