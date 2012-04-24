@@ -5738,6 +5738,29 @@ submittedDataVersion V2 - Repacing . with -1 for missing data
 tableName wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2
 view TssHmm
 
+metaObject wgEncodeRikenCageHelas3NucleusPamAlnRep1
+objType table
+bioRep 0163N
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam,wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam.bai
+grant Gingeras
+lab RIKEN
+labExpId CTig10028
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6666
+tableName wgEncodeRikenCageHelas3NucleusPamAlnRep1
+view Alignments
+
 metaObject wgEncodeRikenCageHelas3NucleusPamAlnRep163
 objType table
 bioRep 0163N
@@ -5762,6 +5785,29 @@ subId 6666
 tableName wgEncodeRikenCageHelas3NucleusPamAlnRep163
 view Alignments
 
+metaObject wgEncodeRikenCageHelas3NucleusPamMinusRawRep1
+objType table
+bioRep 0163N
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId CTig10028
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6605
+tableName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageHelas3NucleusPamMinusRawRep163
 objType table
 bioRep 0163N
@@ -5785,6 +5831,29 @@ rnaExtract longNonPolyA
 subId 6605
 tableName wgEncodeRikenCageHelas3NucleusPamMinusRawRep163
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageHelas3NucleusPamPlusRawRep1
+objType table
+bioRep 0163N
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId CTig10028
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6605
+tableName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPamPlusRawRep163
 objType table
@@ -10966,6 +11035,29 @@ subId 5610
 tableName wgEncodeRikenCageHuvecCytosolPapTssHmm
 view TssHmm
 
+metaObject wgEncodeRikenCageHuvecNucleusPamAlnRep1
+objType table
+bioRep 0162N
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHuvecNucleusPamAlnRep1.bam,wgEncodeRikenCageHuvecNucleusPamAlnRep1.bam.bai
+grant Gingeras
+lab RIKEN
+labExpId CTig10027
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6697
+tableName wgEncodeRikenCageHuvecNucleusPamAlnRep1
+view Alignments
+
 metaObject wgEncodeRikenCageHuvecNucleusPamAlnRep162
 objType table
 bioRep 0162N
@@ -10992,6 +11084,29 @@ subId 6697
 tableName wgEncodeRikenCageHuvecNucleusPamAlnRep162
 view Alignments
 
+metaObject wgEncodeRikenCageHuvecNucleusPamMinusRawRep1
+objType table
+bioRep 0162N
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHuvecNucleusPamMinusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId CTig10027
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6635
+tableName wgEncodeRikenCageHuvecNucleusPamMinusRawRep1
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageHuvecNucleusPamMinusRawRep162
 objType table
 bioRep 0162N
@@ -11017,6 +11132,29 @@ rnaExtract longNonPolyA
 subId 6635
 tableName wgEncodeRikenCageHuvecNucleusPamMinusRawRep162
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageHuvecNucleusPamPlusRawRep1
+objType table
+bioRep 0162N
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-31
+fileName wgEncodeRikenCageHuvecNucleusPamPlusRawRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId CTig10027
+localization nucleus
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+subId 6635
+tableName wgEncodeRikenCageHuvecNucleusPamPlusRawRep1
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPamPlusRawRep162
 objType table
@@ -19914,4 +20052,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1672818571
+# MAGIC: 2028479519
