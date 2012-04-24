@@ -150,6 +150,8 @@ dataType RnaSeq
 dataVersion ENCODE Freeze
 dateSubmitted 2012-04-18
 dateUnrestricted 2013-01-18
+dccAccession wgEncodeEM002734
+expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
 grant Hardison
 insertLength 200
@@ -258,6 +260,8 @@ dataType RnaSeq
 dataVersion ENCODE Freeze
 dateSubmitted 2012-04-18
 dateUnrestricted 2013-01-18
+dccAccession wgEncodeEM002735
+expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200SigRep1.bigWig
 grant Hardison
 insertLength 200
@@ -422,6 +426,8 @@ dataType RnaSeq
 dataVersion ENCODE Freeze
 dateSubmitted 2012-04-18
 dateUnrestricted 2013-01-18
+dccAccession wgEncodeEM002733
+expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
 grant Hardison
 insertLength 200
@@ -530,6 +536,8 @@ dataType RnaSeq
 dataVersion ENCODE Freeze
 dateSubmitted 2012-04-18
 dateUnrestricted 2013-01-18
+dccAccession wgEncodeEM002732
+expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1.bigWig
 grant Hardison
 insertLength 200
@@ -547,4 +555,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1
 treatment None
 view Signal
 
-# MAGIC: -1973811166
+# MAGIC: 1573216650
