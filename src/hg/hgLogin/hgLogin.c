@@ -1132,9 +1132,11 @@ int main(int argc, char *argv[])
 {
 pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
+htmlSetStyleSheet("userAccount.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
+htmlSetFormClass("accountScreen");
 oldCart = hashNew(10);
-cartHtmlShell("UCSC Genome Browser Signup", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
