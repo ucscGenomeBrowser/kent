@@ -144,7 +144,7 @@ sub loadBed
     HgAutomate::verbose(2, "loadBed ($assembly, $tableName, $fileList, $pushQ)\n");
     if(!$opt_skipLoad) {
         my $catCmd = makeCatCmd("loadBed", $fileList);
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir");
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "~galt/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir");
         HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
         if(my $err = $safe->exec()) {
@@ -177,15 +177,15 @@ sub loadBedGraph
 sub loadBedFromSchema
 {
 # Load bed using a .sql file
-    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
+    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ, $configPath) = @_;
     HgAutomate::verbose(2, "loadBedFromSchema ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
 
     if(!$opt_skipLoad) {
-	print "$Encode::sqlCreate/${sqlTable}.sql\n";
-        if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
-            die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
+        my $sqlDir = "$configPath/autoSql";
+        if(!(-e "$sqlDir/${sqlTable}.sql")) {
+            die "SQL schema '$sqlDir/${sqlTable}.sql' does not exist\n";
         }
-
+        my $sqlFile = "$sqlDir/${sqlTable}.sql";
         my $fillInArg = "";
         if($sqlTable =~ /peak/i) {
             # fill in zero score columns for narrowPeaks etc.
@@ -198,7 +198,7 @@ sub loadBedFromSchema
 	if ($sqlTable =~ /bedRnaElements/) {
 	    $dotCouldBeNull = "-dotIsNull=7";
 	}
-        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $dotCouldBeNull -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $dotCouldBeNull -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$sqlFile -renameSqlTable $fillInArg");
         HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
@@ -573,16 +573,16 @@ for my $key (keys %ra) {
     } elsif($type eq "genePred" ) {
         loadGene($assembly, $tablename, $files, $pushQ, "-genePredExt");
     } elsif ($extendedTypes{$type}) {
-        loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
+        loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ, $configPath);
     } elsif ($type =~ /^bed/ and defined($sql)) {
-        loadBedFromSchema($assembly, $tablename, $files, $sql, $pushQ);
+        loadBedFromSchema($assembly, $tablename, $files, $sql, $pushQ, $configPath);
     } elsif ($bamTypes{$type}) {
         loadBam($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
     } elsif ($bigWigTypes{$type}) {
         loadBigWig($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
     } elsif ($bigBedTypes{$type}) {
         loadBigBed($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
-    } elsif ($type =~ /^bed (3|4|5|6|8|9|12)$/) {
+    } elsif ($type =~ /^bed\s*(3|4|5|6|8|9|12)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
     } elsif ($type =~ /^bedGraph (4)$/) {
         loadBedGraph($assembly, $tablename, $files, $pushQ);
