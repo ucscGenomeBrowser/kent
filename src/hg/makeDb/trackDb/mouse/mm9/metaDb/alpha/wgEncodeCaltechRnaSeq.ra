@@ -9,9 +9,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-20
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-20
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200AlnRep1.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200AlnRep1.bam.bai
@@ -37,9 +40,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-19
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-19
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAlnRep1.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAlnRep1.bam.bai
@@ -65,9 +71,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-19
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-19
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
@@ -92,9 +101,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-19
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-19
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
@@ -119,9 +131,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-04-16
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2013-01-16
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
@@ -147,9 +162,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-19
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-19
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
@@ -175,9 +193,11 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-20
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-20
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
@@ -202,9 +222,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-20
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-20
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
@@ -229,9 +252,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-04-16
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2013-01-16
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1.bigWig
@@ -257,9 +283,12 @@ age immortalized
 cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-03-20
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-12-20
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200SigRep1.bigWig
@@ -285,9 +314,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-01-31
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-10-31
+dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam.bai
@@ -313,9 +345,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-01-31
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-10-31
+dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam.bai
@@ -341,9 +376,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-02-01
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-11-01
+dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
@@ -368,9 +406,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-02-01
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-11-01
+dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
@@ -395,9 +436,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-04-16
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2013-01-16
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
@@ -423,9 +467,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-02-01
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-11-01
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
@@ -451,9 +498,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-01-31
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-10-31
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
@@ -478,9 +528,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-01-31
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-10-31
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
@@ -505,9 +558,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-04-16
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2013-01-16
+dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1.bigWig
@@ -533,9 +589,12 @@ age immortalized
 cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Freeze
-dateSubmitted 2012-04-18
-dateUnrestricted 2013-01-18
+dataVersion ENCODE Mar 2012 Freeze
+#dateSubmitted 2012-04-18
+dateSubmitted 2012-01-31
+#dateUnrestricted 2013-01-18
+dateUnrestricted 2012-11-31
+dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1.bigWig
