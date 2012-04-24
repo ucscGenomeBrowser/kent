@@ -3672,7 +3672,7 @@ html wgEncodeRikenCage.release3
         color 0,119,158
         # subId=5610 dateSubmitted=2012-02-10
 
-        track wgEncodeRikenCageHepg2CellPapTssHmmV2
+        track wgEncodeRikenCageHepg2CellPapTssHmm
         subTrack wgEncodeRikenCageViewTssHmm off
         shortLabel HepG cell pA+
         longLabel HepG2 whole cell polyA+ CAGE TSS HMM from ENCODE/RIKEN 
