@@ -74,7 +74,7 @@ class CvFile(ra.RaFile):
     def getTypeOfTermStanza(self, type):
     
         if type == 'mouseCellType':
-            mousestanza = cv.CvStanza()
+            mousestanza = CvStanza()
             mousestanza['term'] = 'mouseCellType'
             mousestanza['tag'] = 'MOUSECELLTYPE'
             mousestanza['type'] = 'typeOfTerm'
