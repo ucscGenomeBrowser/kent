@@ -2464,6 +2464,7 @@ labExpId I69
 labVersion IDR
 localization nucleolus
 md5sum 4df3a4e87e01560e0815ae7f67cd95fc
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5057
@@ -2719,6 +2720,7 @@ labExpId J59
 labVersion IDR
 localization nucleus
 md5sum d40d8717b6b1ec35024af5464aa7b766
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5059
@@ -3222,6 +3224,7 @@ labExpId I67
 labVersion IDR
 localization cell
 md5sum f296e6036fcdafb7b93a666b3a74c584
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5080
@@ -5709,6 +5712,7 @@ labExpId J58
 labVersion IDR
 localization nucleolus
 md5sum deb96e4d8a0a676cb6fed674a76ef8e7
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5083
@@ -6765,6 +6769,7 @@ labExpId I42
 labVersion IDR
 localization cytosol
 md5sum d4cdb1627833ec5a2f31391ea545acb4
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5064
@@ -7314,6 +7319,7 @@ labExpId I68
 labVersion IDR
 localization nucleolus
 md5sum 5d61ca1dd5a3b97a1c349cfe5529b70c
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5147
@@ -7582,6 +7588,7 @@ labExpId I44
 labVersion IDR
 localization nucleus
 md5sum da9c284d8022126f3e65fb4aa9a9b673
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5061
@@ -10574,6 +10581,7 @@ labExpId I72
 labVersion IDR
 localization cytosol
 md5sum 9857646f0380943ac53a48cb5f9b18c1
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5073
@@ -13100,6 +13108,7 @@ labExpId I35
 labVersion IDR
 localization chromatin
 md5sum b2de7b3c8b8bcaa98996b53aa2f7684a
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5147
@@ -13417,6 +13426,7 @@ labExpId I22
 labVersion IDR
 localization cytosol
 md5sum 3de7ed2820eaf82676ec0f717108f428
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5051
@@ -14064,6 +14074,7 @@ labExpId I33
 labVersion IDR
 localization nucleolus
 md5sum 099d7b5a919825942021cb1932b92d51
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5147
@@ -14283,6 +14294,7 @@ labExpId I34
 labVersion IDR
 localization nucleoplasm
 md5sum 8ba003d8b609a42c5811d3bd3cdfb459
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract total
 subId 5147
@@ -14594,6 +14606,7 @@ labExpId I23
 labVersion IDR
 localization nucleus
 md5sum 3b004e336fb499508db2071e0dd28256
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5087
@@ -15197,6 +15210,7 @@ labExpId I32
 labVersion IDR
 localization polysome
 md5sum b8b0edaab7470ec3b5a23fc10352f63b
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5062
@@ -17028,6 +17042,7 @@ labExpId I70
 labVersion IDR
 localization cytosol
 md5sum a865b900474c1946fbe8e96550b0dbde
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5084
@@ -17581,6 +17596,7 @@ labExpId I71
 labVersion IDR
 localization nucleus
 md5sum a5e0ef187812b3a05f84f09605d74799
+objStatus replaced - using -1 instead of . to represent missing data
 project wgEncode
 rnaExtract longNonPolyA
 subId 5088
@@ -19859,4 +19875,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -2134121219
+# MAGIC: -856860643
