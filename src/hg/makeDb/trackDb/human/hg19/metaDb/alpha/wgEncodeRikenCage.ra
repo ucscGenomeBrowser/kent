@@ -2,6 +2,7 @@ metaObject wgEncodeRikenCage
 objType composite
 composite wgEncodeRikenCage
 expVars lab,dataType,cell,localization,rnaExtract
+geoSeriesAccession GSE34448
 
 metaObject wgEncodeRikenCageA549CellPapAlnRep1
 objType table
@@ -20187,4 +20188,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 750451301
+# MAGIC: 1167157323
