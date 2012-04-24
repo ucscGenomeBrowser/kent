@@ -5863,7 +5863,7 @@ bioRep 0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 fileName wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam,wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam.bai
@@ -5886,7 +5886,7 @@ bioRep 0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 fileName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1.bigWig
@@ -5909,7 +5909,7 @@ bioRep 0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 fileName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1.bigWig
@@ -5932,9 +5932,9 @@ bioRep 0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-04-24
-dateUnrestricted 2013-01-24
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
 fileName wgEncodeRikenCageHelas3NucleusPamRawDataRep1.fastq.tgz
 grant Gingeras
 lab RIKEN
@@ -11175,7 +11175,7 @@ bioRep 0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002749
@@ -11200,7 +11200,7 @@ bioRep 0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002749
@@ -11225,7 +11225,7 @@ bioRep 0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002749
@@ -11250,9 +11250,9 @@ bioRep 0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-04-24
-dateUnrestricted 2013-01-24
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
 fileName wgEncodeRikenCageHuvecNucleusPamRawDataRep1.fastq.tgz
 grant Gingeras
 lab RIKEN
@@ -20232,4 +20232,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 1259760039
+# MAGIC: 2065058671
