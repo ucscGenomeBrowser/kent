@@ -10949,6 +10949,8 @@ dataType Cage
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002749
+expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamAlnRep1.bam,wgEncodeRikenCageHuvecNucleusPamAlnRep1.bam.bai
 grant Gingeras
 lab RIKEN
@@ -10972,6 +10974,8 @@ dataType Cage
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002749
+expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamMinusRawRep1.bigWig
 grant Gingeras
 lab RIKEN
@@ -10995,6 +10999,8 @@ dataType Cage
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002749
+expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamPlusRawRep1.bigWig
 grant Gingeras
 lab RIKEN
@@ -19854,4 +19860,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 1961057082
+# MAGIC: 1400041113
