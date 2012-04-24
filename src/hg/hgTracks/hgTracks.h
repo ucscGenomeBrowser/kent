@@ -1283,6 +1283,12 @@ boolean superTrackHasVisibleMembers(struct trackDb *tdb);
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 
+INLINE enum trackVisibility actualVisibility(struct track *track)
+// return actual visibility for this track (limited to limitedVis if appropriate)
+{
+return track->limitedVisSet ? track->limitedVis : track->visibility;
+}
+
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
 

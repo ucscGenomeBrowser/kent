@@ -36,6 +36,10 @@ description of the Cluster files is located in the <A TARGET=_BLANK
 HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/supplemental/">supplemental 
 materials directory</A> of our <A TARGET=_BLANK HREF="../../cgi-bin/hgFileUi?db=hg19&g=wgEncodeRikenCage">downloads page</A>.
 -->
+
+<DT><I>TSS HMM</I></DT>
+<DD> Transcriptional Start Sites based on Hidden Markov Modeling for pooled replicates where two replicates exist.
+</DD>
 <DT><I>Plus</I> and <I>Minus</I> <I>Signals</I>
 <DD>These views display signals representing the amount of overlapping CAGE reads (clusters) mapped on the forward and reverse genomic strands.
 </DD>
@@ -55,9 +59,8 @@ on the plus and minus strand.
 
 <h3>Downloadable Files</h3>
 <DL>
-<DT><I>TSS </I> and <I>TSS HMM</I></DT>
-<DD> There are two different files for Transcriptional Start Sites one based on GENCODE V7 and one based on Hidden Markov Modeling. A complete description of the TSS files is located in the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/supplemental/">supplemental materials directory</A>.
-This view is currently available for download only in a modified gtf format.
+<DT><I>TSS GencV7</I> </DT>
+<DD> For some samples, there are download files in a modified gtf format with Transcriptional Start Sites based on GENCODE V7. A complete description of the TSS files is located in the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/supplemental/">supplemental materials directory</A>.
 </DD>
 </dl>
 
@@ -99,6 +102,9 @@ TARGET=_blank>SOLiD</A>  technology. These reads were mapped using Bowtie with i
 
 <H2>Release Notes</H2>
 <P>
+Release 3 (April 2012) of Riken CAGE has viewable Transcription Start Sites determined by Hidden Markov Models.  It has new data for the following cell lines:  CD20+, CD34+_Mobilized, HAoAF, HAoEC, HCH, HFDPC, HMEpC, hMSC-AT, hMSC-BM, hMSC-UC, HOB, HPC-PL, HPIEpC, HSaVEC, HVMF, HWP, IMR90, Monocytes-CD14+, NHDF, NHEM.f_M2, NHEM_M2, SkMC, and SK-N-SH.
+As with previous releases, the orignal Generation 0 data from the hg18 track is still included and marked as Generation 0. The most notable difference is that Generation 0 data never had replicates.</P>
+<!---
 Release 2 has three new downloads only files per experiment (Clusters, TSS Gencode 7 and TSS HMM) and four new cell lines (A459, AG04450, BJ and SK-N-SH_RA).
 </P>
 <P>
@@ -112,6 +118,7 @@ counter indicating the total number of replicates submitted.  The producing lab 
 that correspond to their internal bio-replicate numbering. Where these two numbering systems conflict,
 both are listed in the long label of the specific track.
 </P>
+--->
 
 <H2>Credits</H2>
 <P>

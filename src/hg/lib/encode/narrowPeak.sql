@@ -10,7 +10,7 @@ CREATE TABLE narrowPeak (
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Optional. Name given to a region (preferably unique). Use . if no name is assigned.
     score int unsigned not null,	# Optional. Indicates how dark the peak will be displayed in the browser (1-1000). If '0', the DCC will assign this based on signal value. Ideally average signalValue per base spread between 100-1000.
-    strand char(2) not null,	# Optional. +/- to denote strand or orientation (whenever applicable). Use '.' if no orientation is assigned.
+    strand char(1) not null,	# Optional. +/- to denote strand or orientation (whenever applicable). Use '.' if no orientation is assigned.
     signalValue float not null,	# Measurement of average enrichment for the region
     pValue float not null default -1,	# Within dataset statistical significance of signal value (-log10)
     qValue float not null default -1,	# Cross-dataset statistical significance of signal value (-log10)

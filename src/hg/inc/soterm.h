@@ -31,7 +31,7 @@ enum 	// the various variant effects
     inframe_insertion=1652,
     TF_binding_site_variant=1782,
     non_coding_exon_variant=1792,
-    non_synonyous_variant=1818,
+    non_synonymous_variant=1818,
     synonymous_variant=1819,
     } soTerm;
 
@@ -41,7 +41,17 @@ struct soCall  // a single variant effect call
     uint    soNumber;           // Sequence Ontology Number
     union
 	{
-	struct     // a variant in an intron
+	struct codingChange     // (non)synonymous variant
+	    {
+	    char *transcript;
+	    uint exonNumber;
+	    uint cDnaPosition;
+	    uint cdsPosition;
+	    uint pepPosition;
+	    char *aaChanges;
+	    char *codonChanges;
+	    } codingChange;
+	struct     // intron_variant
 	    {
 	    char *transcript;
 	    uint intronNumber;
