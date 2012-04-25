@@ -467,3 +467,13 @@ close (FH);
     # rmsk covers another 40 million bases 251092658-210793620 = 40299038
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/cpgIslands
+    cd /hive/data/genomes/galGal4/bed/cpgIslands
+    time doCpgIslands.pl galGal4 > do.log 2>&1
+    #   Elapsed time: 58m41s
+
+    cat fb.galGal4.cpgIslandExt.txt
+    #   14619450 bases of 1032854810 (1.415%) in intersection
+
+#########################################################################

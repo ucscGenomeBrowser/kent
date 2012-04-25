@@ -319,4 +319,13 @@ taxId 10181
 #    ln -s `pwd`/hetGla2.2bit /gbdb/hetGla2/hetGla2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/hetGla2/bed/cpgIslands
+    cd /hive/data/genomes/hetGla2/bed/cpgIslands
+    time doCpgIslands.pl hetGla2 > do.log 2>&1
+    #   real    7m57.656s
 
+    cat fb.hetGla2.cpgIslandExt.txt
+    #   21205888 bases of 2314771103 (0.916%) in intersection
+
+#########################################################################

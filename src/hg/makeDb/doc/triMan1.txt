@@ -447,3 +447,13 @@ triMan1.perChromTables = no
     make etc-update
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/triMan1/bed/cpgIslands
+    cd /hive/data/genomes/triMan1/bed/cpgIslands
+    time doCpgIslands.pl triMan1 > do.log 2>&1
+    #   real    23m49.858s
+
+    cat fb.triMan1.cpgIslandExt.txt
+    #   18085037 bases of 2769099677 (0.653%) in intersection
+
+#########################################################################
