@@ -1,4 +1,5 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
+
 import sys, os, shutil, argparse
 from ucscgenomics import ra, soft, track, styles
 

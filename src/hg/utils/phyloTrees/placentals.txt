@@ -25,44 +25,71 @@ speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xe
 # Kangaroo rat Dipodomys ordii
 dipOrd	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Heteromyidae; Dipodomyinae; Dipodomys
 
+# Chinese hamster Cricetulus griseus
+criGri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Cricetinae; Cricetulus
 
+# Mouse Mus musculus
 mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Mus
 
+# Rat Rattus norvegicus
 rn	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Rattus
 
+# Horse Equus caballus
 equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
 
+# Dolphin Tursiops truncatus
 turTru	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinidae; Tursiops
 
 vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
 
+# Cow - Bos taurus
 bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
 
+# Sheep Ovis Aries
 oviAri	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Caprinae; Ovis
 
+# Pig Sus scrofa
 susScr	Eutheria; Laurasiatheria; Cetartiodactyla; Suina; Suidae; Sus
 
+# Megabat Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
+# Microbat Myotis lucifugus
 myoLuc	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
 
+# European polecat Mustela putorius
+musPut	Eutheria; Laurasiatheria; Carnivora; Caniformia; Mustelidae; Mustelinae; Mustela
+
+# domestic ferret Mustela putorius furo
+musFur	Eutheria; Laurasiatheria; Carnivora; Caniformia; Mustelidae; Mustelinae; Mustela; Mustela putorius
+
+# Cat Felis catus
 felCat	Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis
 
+# Dog Canis familiaris
 canFam	Eutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis
 
+# Panda Ailuropoda melanoleuca
 ailMel	Eutheria; Laurasiatheria; Carnivora; Caniformia; Ursidae; Ailuropoda
 
+# Hedgehog Erinaceus europaeus
 eriEur	Eutheria; Laurasiatheria; Insectivora; Erinaceidae; Erinaceinae; Erinaceus
 
 sorAra	Eutheria; Laurasiatheria; Insectivora; Soricidae; Soricinae; Sorex
 
 choHof	Eutheria; Xenarthra; Megalonychidae; Choloepus
 
+# Armadillo Dasypus novemcinctus
 dasNov	Eutheria; Xenarthra; Dasypodidae; Dasypus
 
-loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
-
+# Rock Hyrax Procavia capensis
 proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
 
 # Tenrec Echinops telfairi
 echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
+
+# Trichechus manatus latirostris (Florida manatee)
+triMan	Eutheria; Afrotheria; Sirenia; Trichechidae; Trichechus; Trichechus manatus
+
+# Elephant 
+loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta

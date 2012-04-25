@@ -201,7 +201,13 @@ if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
     dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264528, 17264606, TRUE);
 
     // synonymous - chr22:17,264,871-17,264,940
-    //dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264871, 17264940, TRUE);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr22", 17264871, 17264940, TRUE);
+
+    struct streamerInfo pg2SnpInfo = { NULL, db, "pgHG00733indel", arWords, pgSnpAsObj() };
+    pg2SnpInfo.next = &kgInfo;
+
+    // 3base substitution chr1:21,806,596-21,806,642
+    dbToTabOut(&pg2SnpInfo, tbf, "stdout", "chr1", 21806596, 21806642, TRUE);
     }
 return 0;
 }

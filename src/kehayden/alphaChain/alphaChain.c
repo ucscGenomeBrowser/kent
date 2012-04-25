@@ -92,8 +92,12 @@ struct wordTree
 /* A node in a tree of words.  The head of the tree is a node with word value the empty string. */
     {
     struct rbTree *following;	/* Contains words (as struct wordTree) that follow us. */
+    struct wordTree *parent;    /* Parent of this node or NULL for root. */
     char *word;			/* The word itself including comma, period etc. */
     int useCount;		/* Number of times word used. */
+    int outputCount;            /* each level of tree and initialize that to a normalized version of it. */
+    double normVal;             /* value to place the normalization value */    
+    int missingFromChildren;    /* Uses not in children. */
     };
 
 struct wordTree *wordTreeNew(char *word)
@@ -111,7 +115,45 @@ int wordTreeCmpWord(void *va, void *vb)
 struct wordTree *a = va, *b = vb;
 return strcmp(a->word, b->word);
 }
-
+int wordTreeChildrenUseCount(struct wordTree *wt)
+/* Return sum of useCounts of all children */
+{
+struct rbTree *following = wt->following;
+if (following == NULL)
+    return 0;
+struct slRef *childList = rbTreeItems(following);
+struct slRef *childRef;
+int total = 0;
+for (childRef = childList; childRef != NULL; childRef = childRef->next)
+    {
+    struct wordTree *child = childRef->val;
+    total += child->useCount;
+    }
+slFreeList(&childList);
+return total;
+}
+int wordTreeCountNotInChildren(struct wordTree *wt)
+/* Count up useCounts of all children and return difference between this and our own useCount. */
+{
+return wt->useCount - wordTreeChildrenUseCount(wt);
+}
+void wordTreeSetMissing(struct wordTree *wt)
+/* Set missingFromChildren in self and all children. */
+{
+wt->missingFromChildren = wordTreeCountNotInChildren(wt);
+struct rbTree *following = wt->following;
+if (following != NULL)
+    {
+    struct slRef *childList = rbTreeItems(following);
+    struct slRef *childRef;
+    for (childRef = childList; childRef != NULL; childRef = childRef->next)
+        {
+        struct wordTree *child = childRef->val;
+        wordTreeSetMissing(child);
+        }
+    slFreeList(&childList);
+    }
+}
 
 struct wordTree *wordTreeAddFollowing(struct wordTree *wt, char *word, 
 	struct lm *lm, struct rbTreeNode **stack)
@@ -135,6 +177,7 @@ else
 if (w == NULL)
     {
     w = wordTreeNew(word);
+    w->parent = wt;
     rbTreeAdd(wt->following, w);
     }
 w->useCount += 1;
@@ -155,6 +198,67 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     }
 }
 
+void wordTreeNormalize(struct wordTree *wt, double normVal)
+/* Recursively set wt->normVal */
+{
+wt->normVal = normVal;
+wt->outputCount = normVal * maxNonsenseSize;
+if (wt->following != NULL)
+    {
+    struct slRef *list = rbTreeItems(wt->following);
+    struct slRef *ref;
+    for (ref = list; ref !=NULL; ref = ref->next)
+	{
+	struct wordTree *child = ref->val;
+	double childRatio = (double)child->useCount / wt->useCount;
+	wordTreeNormalize(child, childRatio*normVal);
+	}
+    slFreeList(&list);
+    }
+}
+void wordTreeDeadEnd(struct wordTree *wt)
+/* tally and include incomplete branches */
+{
+/* int levelNormVal = 0;
+ * int levelCount = 0;
+ * int sumNormVal = 0;
+ * int sumCount = 0;
+ * int diffNormVal = 0;
+ * int diffCount=0;
+ * Loop pseudocode
+ * work recursively through level 1-> 3, start at root of tree
+ * foreach word at level 1
+ * {
+ *   sumCount = 0
+ *   sumNormVal = 0
+ *   levelCount = wt -> outputCount
+ *   levelNormVal = wt-> normVal
+ *   if(wt->following == NULL)                                                                                           
+ *   { 
+ *   create new child recursively (level 2 and level 3/default)
+ *     wt->normVal = levelNormVal
+ *     wt->word = 'NaN'
+ *     wt->outputCount = levelCount
+ *   }
+ *   else
+ *   {
+ *    foreach wt->following at level + 1
+ *    {
+ *    sumCount += wt->outputCount
+ *    sumNormVal  += wt->normVal
+ *    ** RECURSIVE level 2 + 1 here **
+ *   }
+ *   diffCount = levelCount - sumCount
+ *   diffNormVal = levelNormVal - sumNormVal
+ *   if(diffCount > 0)
+ *   {
+ *   create level 2:
+ *     wt->normVal = diffNormVal
+ *     wt->word = 'NaN'
+ *     wt->outputVal = diffCount
+ *   }
+ */
+}
 void wordTreeDump(int level, struct wordTree *wt, FILE *f)
 /* Write out wordTree to file. */
 {
@@ -168,9 +272,13 @@ if (wt->useCount >= minUse)
     {
     if (!fullOnly || level == maxChainSize)
 	{
-	fprintf(f, "%d\t", wt->useCount);
+	fprintf(f, "%d\t%d\t%d\t%f\t%d\t", level, wt->useCount, wt->outputCount, wt->normVal, wt->missingFromChildren);
+	
 	for (i=1; i<=level; ++i)
+            {
+            spaceOut(f, level*2);
 	    fprintf(f, "%s ", words[i]);
+            }
 	fprintf(f, "\n");
 	}
     }
@@ -213,7 +321,7 @@ pickedWord = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
-useThreshold = rand() % totalUses;
+useThreshold = rand() % totalUses; 
 rbTreeTraverse(rbTree, pickIfInThreshold);
 assert(pickedWord != NULL);
 return pickedWord;
@@ -384,6 +492,8 @@ void alphaChain(char *inFile, char *outFile)
 {
 struct lm *lm = lmInit(0);
 struct wordTree *wt = wordTreeForChainsInFile(inFile, maxChainSize, lm);
+wordTreeNormalize(wt, 1.0);
+wordTreeSetMissing(wt);
 
 if (optionExists("chain"))
     {
@@ -409,6 +519,7 @@ lmCleanup(&lm);	// Not really needed since we're just going to exit.
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+srand( (unsigned)time(0) );
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();

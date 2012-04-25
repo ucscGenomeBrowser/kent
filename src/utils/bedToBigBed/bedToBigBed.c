@@ -40,8 +40,12 @@ errAbort(
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
   "\n"
   "options:\n"
-  "   -type=bedN[+[P]]  - Bed N is between 3 and 15,\n"
-  "                         optional (+) if extra \"bedPlus\" fields, optional P specifies the number of extra fields \n"
+  "   -type=bedN[+[P]] : \n"
+  "                      N is between 3 and 15, \n"
+  "                      optional (+) if extra \"bedPlus\" fields, \n"
+  "                      optional P specifies the number of extra fields. Not required, but preferred.\n"
+  "                      Examples: -type=bed6 or -type=bed6+ or -type=bed6+3 \n"
+  "                      (see http://genome.ucsc.edu/FAQ/FAQformat.html#format1)\n"
   "   -as=fields.as - If you have non-standard \"bedPlus\" fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
@@ -126,7 +130,7 @@ for (;;)
 		asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
 		}
 	    if (fieldCount > ArraySize(row))
-		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, ArraySize(row));
+		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, (unsigned long)ArraySize(row));
 	    lastField = fieldCount - 1;
 	    *retFieldCount = fieldCount;
 

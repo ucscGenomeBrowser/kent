@@ -159,4 +159,18 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/dipOrd1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/dipOrd1/bed/cpgIslands
+    cd /hive/data/genomes/dipOrd1/bed/cpgIslands
+    time doCpgIslands.pl dipOrd1 > do.log 2>&1
+    #   real    635m52.950s
+    #   fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m18.163s
+    time doCpgIslands.pl -continue=cleanup dipOrd1 > cleanup.log 2>&1
+    #   real    97m27.451s
 
+    cat fb.dipOrd1.cpgIslandExt.txt
+    #   16112003 bases of 1844961421 (0.873%) in intersection
+
+#########################################################################

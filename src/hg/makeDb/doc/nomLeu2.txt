@@ -419,4 +419,13 @@ taxId 61853
 #    ln -s `pwd`/nomLeu2.2bit /gbdb/nomLeu2/nomLeu2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/nomLeu2/bed/cpgIslands
+    cd /hive/data/genomes/nomLeu2/bed/cpgIslands
+    time doCpgIslands.pl nomLeu2 > do.log 2>&1
+    #   Elapsed time: 61m44s
 
+    cat fb.nomLeu2.cpgIslandExt.txt
+    #   17731794 bases of 2756609047 (0.643%) in intersection
+
+#########################################################################

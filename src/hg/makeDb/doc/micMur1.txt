@@ -159,4 +159,15 @@ cut -f 2 chrom.sizes | ave stdin
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute micMur1 (NCBI project 19967, ABDC00000000)" where name="micMur1";' hgcentraltest
+
 ###########################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/micMur1/bed/cpgIslands
+    cd /hive/data/genomes/micMur1/bed/cpgIslands
+    time doCpgIslands.pl micMur1 > do.log 2>&1
+    #   real    314m39.323s
+
+    cat fb.micMur1.cpgIslandExt.txt
+    #   33763514 bases of 1852394361 (1.823%) in intersection
+
+#########################################################################

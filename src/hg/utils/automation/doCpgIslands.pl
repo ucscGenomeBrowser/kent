@@ -22,8 +22,7 @@ use vars qw/
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
-    [ { name => 'compile', func => \&doCompile },
-      { name => 'hardMask',   func => \&doHardMask },
+    [ { name => 'hardMask',   func => \&doHardMask },
       { name => 'cpg', func => \&doCpg },
       { name => 'makeBed', func => \&doMakeBed },
       { name => 'load', func => \&doLoadCpg },
@@ -32,8 +31,11 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
+my $bigClusterHub = 'swarm';
+my $smallClusterHub = 'encodek';
+my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
-my $defaultWorkhorse = 'kolossus';
+my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 
 my $base = $0;
@@ -57,15 +59,16 @@ options:
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
-						'workhorse' => $defaultWorkhorse);
+                                'bigClusterHub' => $bigClusterHub,
+                                'smallClusterHub' => $smallClusterHub,
+                                'workhorse' => $defaultWorkhorse);
   print STDERR "
 Automates UCSC's CpG Island finder for genome database \$db.  Steps:
-    compile:   Check-out and build the CpG Island program from Asif Chinwalla.
     hardMask:  Creates hard-masked fastas needed for the CpG Island program.
-    cpg:       Run cpglh.exe on the hard-masked fastas
-    makeBed:   Transform output from cpglh.exe into cpgIsland.bed
+    cpg:       Run /scratch/data/cpgIslandExt/cpglh on the hard-masked fastas
+    makeBed:   Transform output from cpglh into cpgIsland.bed
     load:      Load cpgIsland.bed into \$db.
-    cleanup:   Removes hard-masked fastas and output from cpglh.exe.
+    cleanup:   Removes hard-masked fastas and output from cpglh.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/cpgIslands unless -buildDir is given.
 ";
@@ -84,7 +87,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir);
+my ($buildDir, $secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -98,52 +101,75 @@ sub checkOptions {
   &HgAutomate::processCommonOptions();
   my $err = $stepper->processOptions();
   usage(1) if ($err);
+  $workhorse = $opt_workhorse if ($opt_workhorse);
+  $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
+  $smallClusterHub = $opt_smallClusterHub if ($opt_smallClusterHub);
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
 #########################################################################
-# * step: check out [dbHost]
-sub doCompile {
-  my $runDir = $buildDir;
-  &HgAutomate::mustMkdir($runDir);
-
-  my $whatItDoes = "Checks out the cpglh source and compiles the executable.";
-  my $bossScript = new HgRemoteScript("$runDir/doCompile.csh", $dbHost,
-				      $runDir, $whatItDoes);
-
-  $bossScript->add(<<_EOF_
-cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
-cd hg3rdParty/cpgIslands
-# comment out the following two lines if it compiles cleanly
-# some day
-sed 's/\\(extern char\\* malloc\\)/\\/\\/ \\1/' cpg_lh.c > tmp.c
-mv tmp.c cpg_lh.c
-make
-cd ../../
-ln -s hg3rdParty/cpgIslands/cpglh.exe
-_EOF_
-  );
-  $bossScript->execute();
-} # doCompile
-
-#########################################################################
-# * step: hard mask [workhorse]
+# * step: hard mask [bigClusterHub]
 sub doHardMask {
-  my $runDir = $buildDir;
+  # Set up and perform the cluster run to run the hardMask sequence.
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/run.hardMask";
+  my $outRoot = '../hardMaskedFa';
+
+  # First, make sure we're starting clean.
+  if (-e "$runDir/run.time") {
+    die "doHardMask: looks like this was run successfully already " .
+      "(run.time exists).  Either run with -continue cpg or some later " .
+	"stage, or move aside/remove $runDir/ and run again.\n";
+  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
+    die "doHardMask: looks like we are not starting with a clean " .
+      "slate.\n\tPlease move aside or remove\n  $runDir/\n\tand run again.\n";
+  }
   &HgAutomate::mustMkdir($runDir);
+  my $templateCmd = ("./runOne.csh " . '$(root1) '
+                . "{check out exists+ $outRoot/" . '$(lastDir1)/$(file1)}');
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+ `touch "$runDir/para_hub_$paraHub"`;
+
+  my $fh = &HgAutomate::mustOpen(">$runDir/runOne.csh");
+  print $fh <<_EOF_
+#!/bin/csh -ef
+set chrom = \$1
+set result = \$2
+twoBitToFa $maskedSeq:\$chrom stdout \\
+  | maskOutFa stdin hard \$result
+_EOF_
+  ;
+  close($fh);
 
   my $whatItDoes = "Make hard-masked fastas for each chrom.";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doHardMask.csh", $workhorse,
+  my $bossScript = new HgRemoteScript("$runDir/doHardMask.csh", $paraHub,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-mkdir -p hardMaskedFa
+mkdir -p $outRoot
+chmod a+x runOne.csh
+set perDirLimit = 4000
+set ctgCount = `twoBitInfo $maskedSeq stdout | wc -l`
+set subDirCount = `echo \$ctgCount | awk '{printf "%d", 1+\$1/4000}'`
+@ dirCount = 0
+set dirName = `echo \$dirCount | awk '{printf "%03d", \$1}'`
+@ perDirCount = 0
+mkdir $outRoot/\$dirName
+/bin/rm -f chr.list
+/bin/touch chr.list
 foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
-   twoBitToFa ${maskedSeq}:\$chrom stdout \\
-      | maskOutFa stdin hard \\
-      hardMaskedFa/\$chrom.fa
+  if (\$perDirCount < \$perDirLimit) then
+    @ perDirCount += 1
+  else
+    @ dirCount += 1
+    set dirName = `echo \$dirCount | awk '{printf "%03d", \$1}'`
+    set perDirCount = 1
+    mkdir $outRoot/\$dirName
+  endif
+  echo \$dirName/\$chrom.fa >> chr.list
 end
+$HgAutomate::gensub2 chr.list single gsub jobList
+$HgAutomate::paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -152,24 +178,55 @@ _EOF_
 #########################################################################
 # * step: cpg [workhorse] (will change to a cluster at some point)
 sub doCpg {
+  # Set up and perform the cluster run to run the CpG function on the
+  #     hard masked sequence.
+  my $paraHub = $bigClusterHub;
   my $runDir = $buildDir;
+  # First, make sure we're starting clean.
+  if (-e "$runDir/run.time") {
+    die "doCpg: looks like this was run successfully already " .
+      "(run.time exists).  Either run with -continue makeBed or some later " .
+	"stage, or move aside/remove $runDir/ and run again.\n";
+  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
+    die "doCpg: looks like we are not starting with a clean " .
+      "slate.\n\tclean\n  $runDir/\n\tand run again.\n";
+  }
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "Run cpglh.exe on masked sequence.";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $workhorse,
-				      $runDir, $whatItDoes);
+  my $templateCmd = ("./runCpg.csh " . '$(root1) $(lastDir1) '
+                . '{check out exists results/$(lastDir1)/$(root1).cpg}');
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+ `touch "$runDir/para_hub_$paraHub"`;
 
+  my $fh = &HgAutomate::mustOpen(">$runDir/runCpg.csh");
+  print $fh <<_EOF_
+#!/bin/csh -ef
+set chrom = \$1
+set dir = \$2
+set result = \$3
+set resultDir = \$result:h
+mkdir -p \$resultDir
+set seqFile = hardMaskedFa/\$dir/\$chrom.fa
+set C = `faCount \$seqFile | egrep -v "^#seq|^total" | awk '{print \$2 - \$7}'`
+if ( \$C > 200 ) then
+    /scratch/data/cpgIslandExt/cpglh \$seqFile > \$result
+else
+    touch \$result
+endif
+_EOF_
+  ;
+  close($fh);
+
+  my $whatItDoes = "Run /scratch/data/cpgIslandExt/cpglh on masked sequence.";
+  my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $paraHub,
+				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 mkdir -p results
-foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
-    set C = `faCount hardMaskedFa/\$chrom.fa | egrep -v "^#seq|^total" | awk '{print  \$2 - \$7 }'`
-    if ( \$C > 200 ) then
-	./cpglh.exe hardMaskedFa/\$chrom.fa > results/\$chrom.cpg
-    else
-	touch results/\$chrom.cpg
-    endif
-end
+chmod a+x runCpg.csh
+rm -f file.list
+find ./hardMaskedFa -type f > file.list
+$HgAutomate::gensub2 file.list single gsub jobList
+$HgAutomate::paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -181,13 +238,19 @@ sub doMakeBed {
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "Makes bed from cpglh.exe output.";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
+  # First, make sure we're starting clean.
+  if (-e "$runDir/cpgIsland.bed") {
+    die "doMakeBed: looks like this was run successfully already " .
+      "(cpgIsland.bed exists).  Either run with -continue load or cleanup " .
+	"or move aside/remove $runDir/cpgIsland.bed and run again.\n";
+  }
+
+  my $whatItDoes = "Makes bed from cpglh output.";
   my $bossScript = new HgRemoteScript("$runDir/doMakeBed.csh", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-catDir results \\
+catDir -r results \\
      | awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' \\
      | sort -k1,1 -k2,2n > cpgIsland.bed
 _EOF_
@@ -206,9 +269,11 @@ sub doLoadCpg {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-cvs -d /projects/compbio/cvsroot checkout -P kent/src/hg/lib
-ln -s kent/src/hg/lib/cpgIslandExt.sql
+set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
+sed -e "s/14/\${C}/" \$HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
 hgLoadBed -sqlTable=cpgIslandExt.sql -tab $db cpgIslandExt cpgIsland.bed 
+checkTableCoords -verboseBlocks -table=cpgIslandExt $db
+featureBits $db cpgIslandExt >&fb.$db.cpgIslandExt.txt
 _EOF_
   );
   $bossScript->execute();
@@ -223,10 +288,8 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf hg3rdParty/ kent/
-rm -rf hardMaskedFa/
-rm -rf results/
-rm -f bed.tab cpgIslandExt.sql cpglh.exe
+rm -rf hardMaskedFa/ results/ err/ run.hardMask/err/
+rm -f batch.bak bed.tab cpgIslandExt.sql run.hardMask/batch.bak
 gzip cpgIsland.bed
 _EOF_
   );
@@ -243,6 +306,8 @@ _EOF_
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
+$secondsStart = `date "+%s"`;
+chomp $secondsStart;
 ($db) = @ARGV;
 
 # Force debug and verbose until this is looking pretty solid:
@@ -263,6 +328,14 @@ my $stopStep = $stepper->getStopStep();
 my $upThrough = ($stopStep eq 'cleanup') ? "" :
   "  (through the '$stopStep' step)";
 
+$secondsEnd = `date "+%s"`;
+chomp $secondsEnd;
+my $elapsedSeconds = $secondsEnd - $secondsStart;
+my $elapsedMinutes = int($elapsedSeconds/60);
+$elapsedSeconds -= $elapsedMinutes * 60;
+
+&HgAutomate::verbose(1,
+	"\n *** All done !  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	"\n *** All done!$upThrough\n");
 &HgAutomate::verbose(1,

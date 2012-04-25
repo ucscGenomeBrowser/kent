@@ -2155,3 +2155,157 @@ fr3.8way.nh > fr3.commonNames.8way.nh
     #	item and verify it can measure the tables and files
 
 ############################################################################
+# running cpgIsland business (DONE - 2012-04-19 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/cpgIsland
+    cd /hive/data/genomes/fr3/bed/cpgIsland
+    # use a previous binary for this program
+    ln -s ../../../mm9/bed/cpgIsland/hg3rdParty/cpgIslands/cpglh.exe .
+
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../fr3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/fr3/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck.
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep -v "^#seq|^total" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 6835 of 6835 jobs
+# CPU time in finished jobs:         45s       0.75m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                 18494s     308.23m     5.14h    0.21d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:           266s       4.43m     0.07h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | awk '{print length($0)}' | sort -rn | head -1
+    #	8
+    # update the length 14 in the template to be 8:
+    sed -e "s/14/8/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/fr3/bed/cpgIsland
+    hgLoadBed fr3 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+    #   Read 36504 elements of size 10 from cpgIsland.bed
+
+    featureBits fr3 cpgIslandExt
+    #   18279877 bases of 350961831 (5.209%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt fr3
+
+    #	cleanup, unless you want to move them to the genscan procedure below
+    rm -fr hardMaskedFa
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE - 2012-04-09 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/genscan
+    cd /hive/data/genomes/fr3/bed/genscan
+    # use a previously existing genscan binary
+    ln -s ../../../mm9/bed/genscan/hg3rdParty .
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../fr3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #	6835 genome.list
+
+    # OK to run on swarm, small chroms will not need the large memory
+    ssh swarm
+    cd /hive/data/genomes/fr3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+# Completed: 6835 of 6835 jobs
+# CPU time in finished jobs:       9926s     165.43m     2.76h    0.11d  0.000 y
+# IO & Wait Time:                 20476s     341.27m     5.69h    0.24d  0.001 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:             786s      13.10m     0.22h    0.01d
+# Submission to last job:          1236s      20.60m     0.34h    0.01d
+
+    # Concatenate results:
+    cd /hive/data/genomes/fr3/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the data/genomesbase (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/fr3/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    genePredCheck -db=fr3 genscan.gp
+    #   checked: 20354 failed: 0
+
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf fr3 genscan genscan.gtf
+    #   Read 20354 transcripts in 159927 lines in 1 files
+    #   20354 groups 4323 seqs 1 sources 1 feature types
+    #   20354 gene predictions
+
+    hgLoadBed fr3 genscanSubopt genscanSubopt.bed
+    #	Read 526572 elements of size 6 from genscanSubopt.bed
+    featureBits fr3 genscan
+    #   25082192 bases of 350961831 (7.147%) in intersection
+
+#########################################################################
