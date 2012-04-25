@@ -421,3 +421,13 @@ close (FH);
 #    ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/cpgIslands
+    cd /hive/data/genomes/susScr3/bed/cpgIslands
+    time doCpgIslands.pl susScr3 > do.log 2>&1
+    #   real    16m36.325s
+
+    cat fb.susScr3.cpgIslandExt.txt
+    #   28059061 bases of 2525294057 (1.111%) in intersection
+
+#########################################################################

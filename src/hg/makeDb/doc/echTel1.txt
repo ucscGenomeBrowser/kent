@@ -1056,3 +1056,19 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/echTel1/bed/cpgIslands
+    cd /hive/data/genomes/echTel1/bed/cpgIslands
+    time doCpgIslands.pl echTel1 > do.log 2>&1
+    #   real    958m28.796s
+    # fixing the broken command:
+    time ./doLoadCpg.csh
+    #   real    2m19.103s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup echTel1 > cleanup.log 2>&1
+    #   real    93m19.493s
+
+    cat fb.echTel1.cpgIslandExt.txt
+    #   15870914 bases of 2111581369 (0.752%) in intersection
+
+#########################################################################
