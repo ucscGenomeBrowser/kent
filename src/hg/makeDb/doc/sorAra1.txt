@@ -212,3 +212,18 @@ geneScaffolds yes
  *** Steps were performed in /hive/data/genomes/sorAra1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/sorAra1/bed/cpgIslands
+    cd /hive/data/genomes/sorAra1/bed/cpgIslands
+    time doCpgIslands.pl sorAra1 > do.log 2>&1
+    #   real    823m38.651s
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m45.268s
+    time doCpgIslands.pl -continue=cleanup sorAra1 > cleanup.log 2>&1
+    #   real    117m41.101s
+
+    cat fb.sorAra1.cpgIslandExt.txt
+    #   19811608 bases of 1832864697 (1.081%) in intersection
+
+#########################################################################

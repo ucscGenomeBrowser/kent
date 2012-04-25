@@ -256,3 +256,18 @@ skipInvalid yes
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/bed/cpgIslands
+    cd /hive/data/genomes/vicPac1/bed/cpgIslands
+    time doCpgIslands.pl vicPac1 > do.log 2>&1
+    #   real    897m19.342s
+    # fixing broken command in the script:
+    time ./doLoadCpg.csh
+    #   real    2m37.853s
+    time doCpgIslands.pl -continue=cleanup vicPac1 > cleanup.log 2>&1
+    #   real    119m41.201s
+
+    cat fb.vicPac1.cpgIslandExt.txt
+    #   9241028 bases of 1922910435 (0.481%) in intersection
+
+#########################################################################

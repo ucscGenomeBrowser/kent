@@ -12413,6 +12413,12 @@ type control
 description Input library was prepared at UC Davis.
 label UCDavis Input Control
 
+term Harvard_Control
+tag HVD
+type control
+description nput library was prepared at Harvard. PROVISIONAL
+label Harvard Input Control
+
 ### Treatments
 
 term 4OHTAM_1uM_4hr
