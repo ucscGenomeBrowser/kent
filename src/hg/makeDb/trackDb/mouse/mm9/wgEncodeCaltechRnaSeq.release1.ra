@@ -45,7 +45,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal 
-        shortLabel C2C12 Myob AllRd
+        shortLabel C2C12 Myob AllR
         longLabel C2C12 Myoblast RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 0.050000 836773.000000
@@ -63,7 +63,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
-        shortLabel C2C12 Myoc AllRd
+        shortLabel C2C12 Myoc AllR
         longLabel C2C12 Myocyte 60h RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 0.050000 513161.000000
@@ -81,7 +81,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
-        shortLabel 10T1/2 Fibb AllRd
+        shortLabel 10T1/2 Fibb AllR
         longLabel 10T1/2 Fibroblast RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 0.050000 2518819.000000
@@ -99,7 +99,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1
         parent wgEncodeCaltechRnaSeqViewRawSignal
-        shortLabel 10T1/2 Fibc AllRd
+        shortLabel 10T1/2 Fibc AllR
         longLabel 10T1/2 Fibrocyte 60h RNA-seq All Reads Signal from ENCODE/Caltech
         subGroups view=RawSignal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 0.050000 719565.000000
@@ -119,7 +119,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1
         parent wgEncodeCaltechRnaSeqViewSignal off
-        shortLabel C2C12 Myob UniRd
+        shortLabel C2C12 Myob UniR
         longLabel C2C12 Myoblast RNA-seq Unique Reads Signal from ENCODE/Caltech
         subGroups view=Signal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 1.000000 756984.000000
@@ -128,7 +128,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hSigRep1
         parent wgEncodeCaltechRnaSeqViewSignal off
-        shortLabel C2C12 Myoc UniRd
+        shortLabel C2C12 Myoc UniR
         longLabel C2C12 Myocyte 60h RNA-seq Unique Reads Signal from ENCODE/Caltech 
         subGroups view=Signal cellType=C2C12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 1.000000 513148.000000
@@ -137,7 +137,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hSigRep1
         parent wgEncodeCaltechRnaSeqViewSignal off
-        shortLabel 10T1/2 Fibc UniRd 
+        shortLabel 10T1/2 Fibc UniR
         longLabel 10T1/2 Fibrocyte 60h RNA-seq Unique Reads Signal from ENCODE/Caltech 
         subGroups view=Signal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=E2P60H rep=rep1
         type bigWig 1.000000 719564.000000
@@ -146,7 +146,7 @@ html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200SigRep1
         parent wgEncodeCaltechRnaSeqViewSignal off
-        shortLabel 10T1/2 Fibb UniRd
+        shortLabel 10T1/2 Fibb UniR
         longLabel 10T1/2 Fibroblast RNA-seq Unique Reads Signal from ENCODE/Caltech 
         subGroups view=Signal cellType=10T12 insertLength=IL200 mapAlgorithm=TH131 readType=R2X75 sex=F strain=C3H treatment=NONE rep=rep1
         type bigWig 1.000000 2072584.000000

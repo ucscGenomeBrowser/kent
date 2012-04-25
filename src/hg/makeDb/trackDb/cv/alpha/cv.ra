@@ -347,7 +347,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for naive populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -366,7 +367,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for Th0 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -385,7 +387,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for Th1 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1274,8 +1277,8 @@ term CD14+
 tag CD14
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
-deprecated same as Monocytes-CD14+_RO01746
+description SEE Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826, newly promoted to tier 2: not in 2011 analysis
+deprecated same as Monocytes-CD14+
 lineage mesoderm
 karyotype normal
 sex F
@@ -1296,7 +1299,7 @@ type Cell Line
 tier 2
 organism human
 deprecated SEE B_cells_CD20+
-description B cells from donors RO01778 (RO01746) and RO01794, newly promoted to tier 2: not in 2011 analysis
+description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
 lineage mesoderm
@@ -1347,26 +1350,6 @@ termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
 label B_cells_CD20+_RO01794
-
-term CD20+_RO01746
-tag CD20RO01746
-type Cell Line
-tier 2
-organism human
-description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promoted to tier 2: not in 2011 analysis
-sex F
-age 27
-tissue blood
-lineage mesoderm
-karyotype normal
-childOf B_cells_CD20+
-vendorName Rajinder Kaul, UW
-vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
-label B_cells_CD20+_RO01746
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1493,7 +1476,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for naive populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1512,7 +1496,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for Th0 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1531,7 +1516,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for Th1 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -4679,7 +4665,7 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826 are being used as replicates, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 childOf Monocytes-CD14+
@@ -4693,15 +4679,14 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01746
-t#formerly tier 3
+#formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, Monocytes-CD14+_RO01826 is a second draw being used as a replicate for Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
-deprecated same as Monocytes-CD14+_RO01746
 karyotype normal
 childOf Monocytes-CD14+
 sex F
@@ -4714,7 +4699,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01826
-t#formerly tier 3
+# formerly tier 3
 
 term MRT_G401.6
 tag MRTG401.6
@@ -5568,6 +5553,7 @@ organism human
 description Parent cell line for T cells CD4+.
 tissue blood
 karyotype unknown
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId vary
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -12872,7 +12858,7 @@ term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
-label TGF-b
+label TGF-beta
 
 term TNFa
 tag TNFA
