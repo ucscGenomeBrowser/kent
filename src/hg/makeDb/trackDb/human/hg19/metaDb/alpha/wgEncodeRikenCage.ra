@@ -5859,13 +5859,15 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHelas3NucleusPamAlnRep1
 objType table
-bioRep 0163N
+bioRep gen0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002775
+expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam,wgEncodeRikenCageHelas3NucleusPamAlnRep1.bam.bai
 grant Gingeras
 lab RIKEN
@@ -5882,13 +5884,15 @@ view Alignments
 
 metaObject wgEncodeRikenCageHelas3NucleusPamMinusRawRep1
 objType table
-bioRep 0163N
+bioRep gen0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002775
+expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1.bigWig
 grant Gingeras
 lab RIKEN
@@ -5905,13 +5909,15 @@ view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPamPlusRawRep1
 objType table
-bioRep 0163N
+bioRep gen0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-31
+dccAccession wgEncodeEH002775
+expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1.bigWig
 grant Gingeras
 lab RIKEN
@@ -5928,13 +5934,15 @@ view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPamRawDataRep1
 objType file
-bioRep 0163N
+bioRep gen0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002775
+expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamRawDataRep1.fastq.tgz
 grant Gingeras
 lab RIKEN
@@ -5950,13 +5958,15 @@ view RawData
 
 metaObject wgEncodeRikenCageHelas3NucleusPamTssHmm
 objType table
-bioRep 0163N
+bioRep gen0163N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002775
+expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -11146,7 +11156,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHuvecNucleusPamAlnRep1
 objType table
-bioRep 0162N
+bioRep gen0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
@@ -11171,7 +11181,7 @@ view Alignments
 
 metaObject wgEncodeRikenCageHuvecNucleusPamMinusRawRep1
 objType table
-bioRep 0162N
+bioRep gen0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
@@ -11196,7 +11206,7 @@ view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPamPlusRawRep1
 objType table
-bioRep 0162N
+bioRep gen0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
@@ -11221,13 +11231,15 @@ view PlusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPamRawDataRep1
 objType file
-bioRep 0162N
+bioRep gen0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002749
+expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamRawDataRep1.fastq.tgz
 grant Gingeras
 lab RIKEN
@@ -11243,7 +11255,7 @@ view RawData
 
 metaObject wgEncodeRikenCageHuvecNucleusPamTssHmm
 objType table
-bioRep 0162N
+bioRep gen0162N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
@@ -20207,4 +20219,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -315892564
+# MAGIC: -1415782412
