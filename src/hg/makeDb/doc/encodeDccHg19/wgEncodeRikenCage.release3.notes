@@ -3,9 +3,9 @@ hg19 wgEncodeRikenCage Release 3 vs Release 2
 2012-04-25
 
 QA Count Summaries for Release 3:
-Tables: 460
-Files: 771
-Gbdbs: 516
+Tables: 467
+Files: 782
+Gbdbs: 524
 Supplemental: 0
 Other: 3
 
@@ -15,22 +15,22 @@ Files: 162
 Gbdbs: 0
 
 Sizes of New:
-Table: 1427 MB (1 GB)
-Files: 182052 MB (178 GB)
-Gbdbs: 70865 MB (69 GB)
+Table: 1437 MB (1 GB)
+Files: 188874 MB (184 GB)
+Gbdbs: 73690 MB (72 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 254345 MB (248 GB)
+Total: 264002 MB (258 GB)
 
 
 TABLES:
-New: 256
+New: 263
 Untouched: 204
 Revoked/Replaced/Renamed: 117
-New + Untouched: 460
-Total (New + Untouched + Revoked/Replaced/Renamed): 577
+New + Untouched: 467
+Total (New + Untouched + Revoked/Replaced/Renamed): 584
 
-New Tables (256):
+New Tables (263):
 wgEncodeRikenCageA549CellPapTssHmm
 wgEncodeRikenCageA549CytosolPapAlnRep3
 wgEncodeRikenCageA549CytosolPapAlnRep4
@@ -48,6 +48,13 @@ wgEncodeRikenCageA549NucleusPapPlusRawRep4
 wgEncodeRikenCageA549NucleusPapTssHmm
 wgEncodeRikenCageAg04450CellPapTssHmm
 wgEncodeRikenCageBjCellPapTssHmm
+wgEncodeRikenCageCd20CellPapAlnRep1
+wgEncodeRikenCageCd20CellPapAlnRep2
+wgEncodeRikenCageCd20CellPapMinusRawRep1
+wgEncodeRikenCageCd20CellPapMinusRawRep2
+wgEncodeRikenCageCd20CellPapPlusRawRep1
+wgEncodeRikenCageCd20CellPapPlusRawRep2
+wgEncodeRikenCageCd20CellPapTssHmm
 wgEncodeRikenCageCd34mobilizedCellPapAlnRep1
 wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1
 wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1
@@ -615,13 +622,13 @@ wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 
 
 DOWNLOAD FILES:
-New: 377
+New: 388
 Untouched: 394
 Revoked/Replaced/Renamed: 162
-New + Untouched: 771
-Total (New + Untouched + Revoked/Replaced/Renamed): 933
+New + Untouched: 782
+Total (New + Untouched + Revoked/Replaced/Renamed): 944
 
-New Download Files (377):
+New Download Files (388):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageA549CellPapTssHmm.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageA549CytosolPapAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageA549CytosolPapAlnRep3.bam.bai
@@ -647,6 +654,17 @@ New Download Files (377):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageA549NucleusPapTssHmm.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageAg04450CellPapTssHmm.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageBjCellPapTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd20CellPapTssHmm.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd34mobilizedCellPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd34mobilizedCellPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release3/wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1.bigWig
@@ -1562,13 +1580,13 @@ Revoked/Replaced/Renamed Download Files (162):
 
 
 GBDBS:
-New: 244
+New: 252
 Untouched: 272
 Revoked/Replaced/Renamed: 0
-New + Untouched: 516
-Total (New + Untouched + Revoked/Replaced/Renamed): 516
+New + Untouched: 524
+Total (New + Untouched + Revoked/Replaced/Renamed): 524
 
-New Gbdb Files (244):
+New Gbdb Files (252):
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CytosolPapAlnRep3.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CytosolPapAlnRep3.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CytosolPapAlnRep4.bam
@@ -1585,6 +1603,14 @@ New Gbdb Files (244):
 /gbdb/hg19/bbi/wgEncodeRikenCageA549NucleusPapMinusRawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageA549NucleusPapPlusRawRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageA549NucleusPapPlusRawRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageCd20CellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageCd34mobilizedCellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageCd34mobilizedCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1.bigWig
