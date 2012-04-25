@@ -14,7 +14,6 @@ struct annoStreamDb
     struct sqlResult *sr;		// SQL query result from which we grab rows
     boolean hasBin;			// 1 if SQL table's first column is bin
     boolean omitBin;			// 1 if table hasBin and autoSql doesn't have bin
-    int numCols;			// Number of columns in autoSql
     char *chromField;			// Name of chrom-ish column in table
     char *startField;			// Name of chromStart-ish column in table
     char *endField;			// Name of chromEnd-ish column in table
@@ -83,7 +82,7 @@ if (row == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
 boolean rightFail = FALSE;
-while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
+while (annoFilterRowFails(vSelf->filters, row, vSelf->numCols, &rightFail))
     {
     if (rightFail)
 	break;
@@ -94,7 +93,7 @@ while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
 char *chrom = row[self->chromIx];
 uint chromStart = sqlUnsigned(row[self->startIx]);
 uint chromEnd = sqlUnsigned(row[self->endIx]);
-return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, self->numCols);
+return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, vSelf->numCols);
 }
 
 static void asdClose(struct annoStreamer **pVSelf)
@@ -179,7 +178,6 @@ if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
     self->hasBin = 1;
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
-self->numCols = slCount(streamer->asObj->columnList);
 if (!asdInitBed3Fields(self))
     errAbort("annoStreamDbNew: can't figure out which fields of %s to use as "
 	     "{chrom, chromStart, chromEnd}.", table);

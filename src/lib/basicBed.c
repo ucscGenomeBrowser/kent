@@ -1282,7 +1282,7 @@ dyStringAppend(dy,
 if (bedFieldCount >= 4)
     dyStringAppend(dy, "   string name;        \"Name of item.\"\n");
 if (bedFieldCount >= 5)
-    dyStringAppend(dy, "   int score;          \"Score (0-1000)\"\n");
+    dyStringAppend(dy, "   uint score;          \"Score (0-1000)\"\n");
 if (bedFieldCount >= 6)
     dyStringAppend(dy, "   char[1] strand;     \"+ or - for strand\"\n");
 if (bedFieldCount >= 7)
@@ -1593,7 +1593,7 @@ if (as)
 	    else if (type == t_string)
 		{
 		if (strlen(row[i]) > 255)
-		    lineFileAbort(lf, "expecting length (%ld) of string (%s) not to exceed 255 in field %s", strlen(row[i]), row[i], asCol->name);
+		    lineFileAbort(lf, "expecting length (%llu) of string (%s) not to exceed 255 in field %s", (unsigned long long)strlen(row[i]), row[i], asCol->name);
 		}
 	    }
 	else if (asCol->isList)

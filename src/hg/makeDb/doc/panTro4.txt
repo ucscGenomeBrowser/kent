@@ -540,3 +540,13 @@ liftUp  /hive/data/genomes/panTro4/jkStuff/ensToUcsc.lift
  *** Steps were performed in /hive/data/genomes/panTro4/bed/ensGene.65
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/panTro4/bed/cpgIslands
+    cd /hive/data/genomes/panTro4/bed/cpgIslands
+    time doCpgIslands.pl panTro4 > do.log 2>&1
+    #   real    54m16.533s
+
+    cat fb.panTro4.cpgIslandExt.txt
+    #   19196639 bases of 2902338967 (0.661%) in intersection
+
+#########################################################################

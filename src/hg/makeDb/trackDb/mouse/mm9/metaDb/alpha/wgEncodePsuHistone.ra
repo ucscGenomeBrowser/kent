@@ -3178,7 +3178,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-04-16
+dateResubmitted 2012-04-25
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3192,7 +3192,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5997
+subId 6862
 tableName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
 view Peaks
 
@@ -8041,4 +8041,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -101941776
+# MAGIC: -101941750

@@ -11,7 +11,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2AlnRep1.bam,wgEncodeGisChiaPetHct116Pol2AlnRep1.bam.bai
@@ -32,7 +32,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd1Rep1.fastq.gz
@@ -53,7 +53,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd2Rep1.fastq.gz
@@ -97,7 +97,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2SigRep1.bigWig
@@ -119,7 +119,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam,wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam.bai
@@ -140,7 +140,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd1Rep1.fastq.gz
@@ -161,7 +161,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd2Rep1.fastq.gz
@@ -205,7 +205,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2SigRep1.bigWig
@@ -226,8 +226,8 @@ cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
@@ -248,8 +248,8 @@ cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
@@ -270,8 +270,8 @@ cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
@@ -292,8 +292,8 @@ cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
@@ -315,8 +315,8 @@ cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
@@ -562,8 +562,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -584,8 +584,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -606,8 +606,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -628,8 +628,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -650,8 +650,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -672,8 +672,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -694,8 +694,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -717,8 +717,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -740,8 +740,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -763,8 +763,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-08-30
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
@@ -787,7 +787,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
-dateUnrestricted 2012-06-20
+dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep1.bam,wgEncodeGisChiaPetMcf7EraaAlnRep1.bam.bai
@@ -808,7 +808,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
-dateUnrestricted 2012-06-21
+dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep2.bam,wgEncodeGisChiaPetMcf7EraaAlnRep2.bam.bai
@@ -829,7 +829,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep3.bam,wgEncodeGisChiaPetMcf7EraaAlnRep3.bam.bai
@@ -850,7 +850,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
-dateUnrestricted 2012-06-20
+dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep1.fastq.gz
@@ -871,7 +871,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
-dateUnrestricted 2012-06-21
+dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep2.fastq.gz
@@ -892,7 +892,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep3.fastq.gz
@@ -913,7 +913,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
-dateUnrestricted 2012-06-20
+dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep1.fastq.gz
@@ -934,7 +934,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
-dateUnrestricted 2012-06-21
+dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep2.fastq.gz
@@ -955,7 +955,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep3.fastq.gz
@@ -976,7 +976,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
-dateUnrestricted 2012-06-20
+dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep1.bed.gz
@@ -998,7 +998,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
-dateUnrestricted 2012-06-21
+dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep2.bed.gz
@@ -1020,7 +1020,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep3.bed.gz
@@ -1042,7 +1042,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
-dateUnrestricted 2012-06-20
+dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep1.bigWig
@@ -1064,7 +1064,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
-dateUnrestricted 2012-06-21
+dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep2.bigWig
@@ -1086,7 +1086,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep3.bigWig
@@ -1108,7 +1108,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam.bai
@@ -1129,7 +1129,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam.bai
@@ -1149,8 +1149,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-09-27
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
@@ -1172,7 +1172,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
-dateUnrestricted 2012-06-27
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam.bai
@@ -1193,7 +1193,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep1.fastq.gz
@@ -1214,7 +1214,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep2.fastq.gz
@@ -1234,8 +1234,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-09-27
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
@@ -1257,7 +1257,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
-dateUnrestricted 2012-06-27
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep4.fastq.gz
@@ -1278,7 +1278,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep1.fastq.gz
@@ -1299,7 +1299,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep2.fastq.gz
@@ -1319,8 +1319,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-09-27
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
@@ -1342,7 +1342,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
-dateUnrestricted 2012-06-27
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep4.fastq.gz
@@ -1408,8 +1408,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-09-27
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
@@ -1455,7 +1455,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep1.bigWig
@@ -1477,7 +1477,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep2.bigWig
@@ -1498,8 +1498,8 @@ cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-06-08
 dateResubmitted 2011-09-27
+dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
@@ -1522,7 +1522,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
-dateUnrestricted 2012-06-27
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep4.bigWig
@@ -1544,7 +1544,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2AlnRep1.bam,wgEncodeGisChiaPetNb4Pol2AlnRep1.bam.bai
@@ -1565,7 +1565,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd1Rep1.fastq.gz
@@ -1586,7 +1586,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd2Rep1.fastq.gz
@@ -1630,7 +1630,7 @@ composite wgEncodeGisChiaPet
 dataType ChiaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
-dateUnrestricted 2012-06-23
+dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2SigRep1.bigWig
@@ -1644,4 +1644,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 651805271
+# MAGIC: 645688883

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #	$Id: updateHtml.sh,v 1.2 2010/03/31 18:18:32 hiram Exp $
 #
