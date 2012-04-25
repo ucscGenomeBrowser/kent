@@ -4734,7 +4734,7 @@ lineage missing
 sex M
 tissue liver
 vendorName ATCC
-vendorId MRT_TTC549 
+vendorId TTC549 
 orderUrl missing
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
