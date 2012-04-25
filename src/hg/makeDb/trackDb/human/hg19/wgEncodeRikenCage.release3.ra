@@ -32,7 +32,7 @@ html wgEncodeRikenCage.release3
     maxHeightPixels 100:24:16
     minLimit .005
     maxLimit 25183
-    viewLimits 0:30
+    viewLimits 0:100
     autoScale off
     transformFunc NONE
     windowingFunction mean+whiskers
@@ -4159,6 +4159,7 @@ html wgEncodeRikenCage.release3
         type bed 6
         color 179,0,134
         # subId=6726 dateSubmitted=2012-03-30
+        # This may end up going away 
 
         track wgEncodeRikenCageHvmfCellPapTssHmm
         subTrack wgEncodeRikenCageViewTssHmm off
