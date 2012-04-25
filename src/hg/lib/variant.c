@@ -1,3 +1,6 @@
+/* variant.c -- routines to convert other variant formats to a generic
+ *              variant structure */
+
 #include "common.h"
 #include "variant.h"
 
@@ -15,6 +18,7 @@ AllocVar(variant);
 variant->chrom = cloneString(pgSnp->chrom);
 variant->chromStart = pgSnp->chromStart;
 variant->chromEnd = pgSnp->chromEnd;
+variant->numAlleles = pgSnp->alleleCount;
 
 // get the alleles.
 char *nextAlleleString = pgSnp->name;
@@ -45,6 +49,7 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     struct allele *allele;
     AllocVar(allele);
     slAddHead(&variant->alleles, allele);
+    allele->variant = variant;
     allele->length = alleleStringLength;
     allele->sequence = cloneString(thisAlleleString);
     }

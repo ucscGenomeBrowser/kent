@@ -261,3 +261,13 @@ taxId   39432
     #	627944117 bases of 2608572064 (24.072%) in intersection
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-20 - Hiram)
+    mkdir /hive/data/genomes/saiBol1/bed/cpgIslands
+    cd /hive/data/genomes/saiBol1/bed/cpgIslands
+    time doCpgIslands.pl saiBol1 > do.log 2>&1
+    #   Elapsed time: 11m10s
+
+    cat fb.saiBol1.cpgIslandExt.txt 
+    #   17439071 bases of 2477131095 (0.704%) in intersection
+
+#########################################################################

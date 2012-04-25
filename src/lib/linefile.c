@@ -12,7 +12,6 @@
 #include "errabort.h"
 #include "linefile.h"
 #include "pipeline.h"
-#include "bigBed.h"
 #include "localmem.h"
 
 char *getFileNameFromHdrSig(char *m)
@@ -198,29 +197,6 @@ lf->buf = s;
 return lf;
 }
 
-struct lineFile *lineFileOnBigBed(char *bigBedFileName)
-/* Wrap a line file object around a BigBed. */
-{
-struct lineFile *lf;
-AllocVar(lf);
-lf->fileName = cloneString(bigBedFileName);
-lf->bbiHandle = bigBedFileOpen(lf->fileName);
-lf->bbiChromList = bbiChromList(lf->bbiHandle);
-lf->bbiChrom = lf->bbiChromList;
-lf->bbiLm = lmInit(0);
-if (lf->bbiChrom)
-    {
-    lf->bbiIntervalList = bigBedIntervalQuery(
-	lf->bbiHandle, lf->bbiChrom->name, 0, lf->bbiChrom->size, 0, lf->bbiLm);
-    lf->bbiInterval = lf->bbiIntervalList;
-    }
-lf->fd = -1;
-lf->lineIx = 0;
-lf->bufSize = 64 * 1024;
-lf->buf = needMem(lf->bufSize);
-return lf;
-}
-
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
@@ -352,17 +328,12 @@ if (lf->tabix != NULL)
 #endif // USE_TABIX
 }
 
-INLINE void noBigBedSupport(struct lineFile *lf, char *where)
-{
-if (lf->bbiHandle)
-    lineFileAbort(lf, "%s: not implemented for lineFile on BigBed.", where);
-}
-
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
 noTabixSupport(lf, "lineFileSeek");
-noBigBedSupport(lf, "lineFileSeek");
+if (lf->checkSupport)
+    lf->checkSupport(lf, "lineFileSeek");
 if (lf->pl != NULL)
     errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
@@ -448,48 +419,9 @@ if (lf->reuse)
     return TRUE;
     }
 
-if (lf->bbiHandle)
-    {
-    int lineSize = 0;
-    if (!lf->bbiChrom)
-	return FALSE;
-    if (!lf->bbiInterval)
-	return FALSE;
-    lineSize = 1024; // some extra room
-    lineSize += strlen(lf->bbiChrom->name);
-    if (lf->bbiInterval->rest)
-	lineSize += strlen(lf->bbiInterval->rest);
-    
-    if (lineSize > lf->bufSize)
-	lineFileExpandBuf(lf, lineSize * 2);
-    safef(lf->buf, lf->bufSize, "%s\t%u\t%u", lf->bbiChrom->name, lf->bbiInterval->start, lf->bbiInterval->end);
-    if (lf->bbiInterval->rest)
-	{
-	safecat(lf->buf, lf->bufSize, "\t");
-	safecat(lf->buf, lf->bufSize, lf->bbiInterval->rest);
-	}
-    lf->bufOffsetInFile = -1;
-    lf->bytesInBuf = strlen(lf->buf);
-    lf->lineIx++;
-    lf->lineStart = 0;
-    lf->lineEnd = lineSize;
-    *retStart = lf->buf;
-    if (retSize != NULL)
-	*retSize = lineSize;
+if (lf->nextCallBack)
+    return lf->nextCallBack(lf, retStart, retSize);
 
-    lf->bbiInterval = lf->bbiInterval->next;
-    if (!lf->bbiInterval)
-	{
-	lmCleanup(&lf->bbiLm);
-	lf->bbiLm = lmInit(0);
-	lf->bbiChrom = lf->bbiChrom->next;
-	if(lf->bbiChrom)
-	    lf->bbiIntervalList = bigBedIntervalQuery(
-		lf->bbiHandle, lf->bbiChrom->name, 0, lf->bbiChrom->size, 0, lf->bbiLm);
-	}
-
-    return TRUE;
-    }
 
 #ifdef USE_TABIX
 if (lf->tabix != NULL && lf->tabixIter != NULL)
@@ -717,12 +649,8 @@ if ((lf = *pLf) != NULL)
 	ti_close(lf->tabix);
 	}
 #endif // USE_TABIX
-    if (lf->bbiHandle)
-	{
-    	lmCleanup(&lf->bbiLm);
-	bbiChromInfoFreeList(&lf->bbiChromList);
-	bbiFileClose(&lf->bbiHandle);
-	}
+    if (lf->closeCallBack)
+        lf->closeCallBack(lf);
     freeMem(lf->fileName);
     metaDataFree(lf);
     freez(pLf);
@@ -1048,7 +976,7 @@ if ((byteCount != 1)
  && (byteCount != 8))
     errAbort("Unexpected error: Invalid byte count for integer size in lineFileCheckAllIntsNoAbort, expected 1 2 4 or 8, got %d.", byteCount);
 
-unsigned long long limit = 0xFFFFFFFFFFFFFFFF >> (8*(8-byteCount));
+unsigned long long limit = 0xFFFFFFFFFFFFFFFFULL >> (8*(8-byteCount));
 
 if (isSigned) 
     limit >>= 1;

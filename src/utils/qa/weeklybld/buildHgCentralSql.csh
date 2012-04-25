@@ -17,7 +17,7 @@ cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
 
 hgsqldump --all -d -c -h genome-centdb hgcentral \
-sessionDb userDb hubStatus | sed -e "s/genome-centdb/localhost/" > \
+sessionDb userDb hubStatus gbMembers namedSessionDb | sed -e "s/genome-centdb/localhost/" > \
 /tmp/hgcentraltemp.sql
 
 # --skip-extended-insert 

@@ -72,6 +72,21 @@ class CvFile(ra.RaFile):
         #print self.missingTypes
 
     def getTypeOfTermStanza(self, type):
+    
+        if type == 'mouseCellType':
+            mousestanza = CvStanza()
+            mousestanza['term'] = 'mouseCellType'
+            mousestanza['tag'] = 'MOUSECELLTYPE'
+            mousestanza['type'] = 'typeOfTerm'
+            mousestanza['label'] = 'Cell, tissue or DNA sample specific to mouse'
+            mousestanza['description'] = 'NOT FOR USE! ONLY FOR VALIDATION. Cell line or tissue used as the source of experimental material specific to mouse.'
+            mousestanza['searchable'] = 'multiSelect'
+            mousestanza['cvDefined'] = 'yes'
+            mousestanza['validate'] = 'cv or None'
+            mousestanza['requiredVars'] = 'term,tag,type,description,organism,vendorName,orderUrl,age,strain,sex #Provisional'
+            mousestanza['optionalVars'] = 'label,tissue,termId,termUrl,color,protocol,category,vendorId,lots,deprecated #Provisional'
+            return mousestanza
+    
         types = self.filter(lambda s: s['term'] == type and s['type'] == 'typeOfTerm', lambda s: s)
         if len(types) != 1:
             return None
@@ -128,6 +143,18 @@ class CvStanza(ra.RaStanza):
                 
             else:
                 self[raKey] = raVal
+        
+#     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
+#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
+#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
+#         date: must be date in YYYY-MM-DD format
+#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
+#        float: must be floating point number
+#      integer: must be integer
+#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
+#         none: not validated in any way
+#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
+#    # NOTE: that validate rules may end comment delimited by a '#'
         
     def validate(self, cvfile):
         type = self['type']
@@ -200,47 +227,6 @@ class CvStanza(ra.RaStanza):
                     cvfile.handler(UnmatchedRegexError(self, val, regex))
             # else:
                 # cvfile.handler(TypeValidationError(itemType))
-        
-        #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
-#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
-#         date: must be date in YYYY-MM-DD format
-#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
-#        float: must be floating point number
-#      integer: must be integer
-#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
-#         none: not validated in any way
-#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
-#    # NOTE: that validate rules may end comment delimited by a '#'
-
-        
-        
-    # def validate2(self, cvfile, necessary=None, optional=None):
-        # '''default validation for a generic cv stanza. Should be called with all arguments if overidden'''
-        
-        # if necessary == None:
-            # necessary = set()
-            
-        # if optional == None:
-            # optional = set()
-        
-        # baseNecessary = {'term', 'tag', 'type'}
-        
-        # if self['type'] != 'Antibody':
-            # baseNecessary.add('description')
-        
-        # baseOptional = {'deprecated', 'label'}
-        # self.checkMandatory(cvfile, necessary | baseNecessary)
-        # self.checkExtraneous(cvfile, necessary | baseNecessary | optional | baseOptional)
-        
-        # temptype = self['type']
-        # if self['type'] == 'Cell Line': # :(
-            # temptype = 'cellType'
-        # if len(cvfile.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-            # cvfile.handler(InvalidTypeError(self, self['type']))
-
-        # self.checkDuplicates(cvfile)
-        
         
     def checkDuplicates(self, cvfile):
         '''ensure that all keys are present and not blank in the stanza'''

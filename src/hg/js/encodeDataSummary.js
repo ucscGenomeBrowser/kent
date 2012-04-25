@@ -116,9 +116,9 @@ $(function () {
 
     function tableOut(table, types, exps, isChipSeq) {
         // Helper function to output tables to document
-        var total = 0, row = 0;
+        var total = 0, rowNum = 0;
         var dataType, antibodyTarget;
-        var description, term;
+        var description, term, row;
 
         $.each(exps, function (key, value) {
             types.push(key);
@@ -144,31 +144,36 @@ $(function () {
                 }
             }
             // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + term + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
-            row++;
+            row = "<tr class='dataRow " + (rowNum % 2 === 0 ? "even" : "odd") + "'>" +
+                    "<td class='dataLabel' title='" + description + "'>" + value + "<\/td>" +
+                    "<td id='" + term + "' class='dataItem' title='Click to search for " + value + 
+                        " data'>" + exps[value] + "<\/td>" + 
+                        "<\/tr>";
+            $(table).append(row);
+            rowNum++;
         });
 
-        $(".even, .odd").click(function () {
+        $(".dataRow").click(function () {
             var dataType, target, url, antibodyTarget;
-            // NOTE: generating full search URL should be generalized & encapsulated
-            url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
+            var antibodies = [];
+            var searchObj = {};
+
             if ($(this).parents('table').attr('id') === 'tfbsTable') {
+                // search on list of antibodies for protein target
                 target = $(this).children('.dataItem').attr('id');
-                url += '&hgt_mdbVar1=antibody';
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $.each(antibodyTarget.antibodies, function (i, antibody) {
-                    url += '&hgt_mdbVal1=' + antibody;
+                    antibodies.push(antibody);
                 });
+                searchObj.mdbVar = 'antibody';
+                searchObj.mdbVal = antibodies;
             } else {
+                // search on data type
                 dataType = $(this).children('.dataItem').attr('id');
-                url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
+                searchObj.mdbVar = 'dataType';
+                searchObj.mdbVal = dataType;
             }
-            url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
-            // remove extra rows
-            url += '&hgt_mdbVar3=[]';
-            url += '&hgt_mdbVar4=[]';
-            url += '&hgt_mdbVar5=[]';
-            url += '&hgt_mdbVar6=[]';
+            url = encodeMatrix.getSearchUrl(searchObj);
             window.open(url, "searchWindow");
         });
 
@@ -177,7 +182,6 @@ $(function () {
             $(table).remove();
         }
     }
-
     // initialize
     encodeMatrix.start($summaryTables);
 

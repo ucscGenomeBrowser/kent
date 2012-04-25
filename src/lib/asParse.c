@@ -417,6 +417,18 @@ freez(&dupe);
 return objList;
 }
 
+struct asColumn *asColumnFind(struct asObject *asObj, char *name)
+// Return named column.
+{
+struct asColumn *asCol = NULL;
+if (asObj!= NULL)
+    {
+    for (asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
+        if (sameString(asCol->name, name))
+             break;
+    }
+return asCol;
+}
 
 boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asObject *as2, int numColumnsToCheck,
  int *retNumColumnsSame, boolean abortOnDifference)

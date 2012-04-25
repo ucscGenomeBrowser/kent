@@ -368,3 +368,15 @@ close (FH);
 #    ln -s `pwd`/turTru2.2bit /gbdb/turTru2/turTru2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/cpgIslands
+    cd /hive/data/genomes/turTru2/bed/cpgIslands
+    time doCpgIslands.pl turTru2 > do.log 2>&1
+    #    fixing broken command in the 'head' calculation
+    doCpgIslands.pl  -continue=cleanup turTru2
+    #   Elapsed time: 8m21s
+
+    cat fb.turTru2.cpgIslandExt.txt
+    #   29423228 bases of 2332402443 (1.261%) in intersection
+
+#########################################################################

@@ -3866,7 +3866,7 @@ tablesIgnored $galGal
     caCondor454
 
 tablesIgnored $danRer
-    ncbiIncidentDb
+    grcIncidentDb
     phastConsElements
     wz_ests
     UMassInput 
@@ -3986,6 +3986,7 @@ tablesIgnored $hg
     fox2ClipSeqDensityReverseStrand
     geneTests
     genomicSuperDups
+    grcIncidentDb
     haplotype
     hgdpGeo
     hgdpFst
@@ -3997,7 +3998,6 @@ tablesIgnored $hg
     laminB1
     laminB1Lads
     mammalPsg
-    ncbiIncidentDb
     nimhBipolarUs
     nimhBipolarDe
     ntHumChimpCodingDiff
@@ -4066,7 +4066,7 @@ tablesIgnored $hg
     wgEncode%
 
 tablesIgnored $mm
-    ncbiIncidentDb
+    grcIncidentDb
     sibGene
     sibTxGraph
     syntenyRat

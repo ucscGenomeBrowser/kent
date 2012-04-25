@@ -180,3 +180,18 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/ochPri2/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/bed/cpgIslands
+    cd /hive/data/genomes/ochPri2/bed/cpgIslands
+    time doCpgIslands.pl ochPri2 > do.log 2>&1
+    #   fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m10.760s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup ochPri2 > cleanup.log 2>&1
+    #   real    41m18.291s
+    
+    cat fb.ochPri2.cpgIslandExt.txt
+    #   22070916 bases of 1923624051 (1.147%) in intersection
+
+#########################################################################

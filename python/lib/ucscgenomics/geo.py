@@ -30,6 +30,7 @@ instrumentModels = {
     'Illumina_GA1': 'Illumina Genome Analyzer',
     'Illumina_GA1_or_GA2': 'Illumina Genome Analyzer, Illumina Genome Analyzer II',
     'SOLiD_Unknown': 'SOLiD',
+    'AB_SOLiD_3.5': 'AB SOLiD 3.5',
     'Unknown': 'Illumina Genome Analyzer'
 }
 
@@ -49,9 +50,13 @@ class Submission(object):
     
     def __init__(self, geoId):
         html = getHtml(geoId)
-        self._accessions = getAccessions(html)
+        self._accessions = getGSE(html)
         self._submitted = getDateSubmitted(html)
         self._updated = getDateUpdated(html)
+        
+    def getSample(self, geoId):
+        html = getHtml(geoId)
+        return getGSM(html)
 
 def getHtml(geoId):
     try:
@@ -60,12 +65,22 @@ def getHtml(geoId):
         return None
     return response.read()
     
-def getAccessions(html):
+def getGSE(html):
     gsms = re.findall('(GSM[0-9]+)</a></td>\n<td valign="top">([^<]+)</td>', html)
     d = dict()
     for gsm in gsms:
         d[gsm[1]] = gsm[0]
     return d
+    
+def getGSM(html):
+    suppfiles = re.findall('<tr valign="top"><td bgcolor="#[0-9A-F]+">([^<]+)</td>', html)
+    d = dict()
+    for f in suppfiles:
+        print f
+        fname = f.rsplit('_', 1)[1]
+        d[fname] = fname
+    return d
+        
     
 def getDateSubmitted(html):
     datestr = re.search('<td>Submission date</td>\n<td>([^<]+)</td>', html)
