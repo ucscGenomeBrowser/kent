@@ -1,4 +1,4 @@
-/* wordChain - Create Markov chain of words. */
+/* alphaChain - Predicts the linear arrangement of satellite repeats provided with a probablistic model. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
