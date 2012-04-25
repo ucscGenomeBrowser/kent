@@ -4701,8 +4701,8 @@ protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01826
 # formerly tier 3
 
-term MRT_G401.6
-tag MRTG401.6
+term MRT_G401
+tag MRTG401
 type Cell Line
 tier 3
 organism human
@@ -4714,13 +4714,14 @@ tissue kidney
 vendorName ATCC 
 vendorId CRL-1441
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
+lots 6
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTG401.6_Crawford_protocol.pdf
 
-term MRT_A204.1
-tag MRTA204.1
+term MRT_A204
+tag MRTA204
 type Cell Line
 tier 3
 organism human
@@ -4732,6 +4733,7 @@ tissue muscle
 vendorName ATCC
 vendorId HTB-82 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
+lots 1
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
