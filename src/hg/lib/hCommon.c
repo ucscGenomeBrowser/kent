@@ -18,6 +18,7 @@ static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom t
 static char *_hgHubConnectName = "../cgi-bin/hgHubConnect"; /* Path back to the track hub manager. */
 static char *_hgSessionName = "../cgi-bin/hgSession";	/* Path to session manager. */
 static char *_hgPalName = "../cgi-bin/hgPal"; /* Path back to the protein aligner */
+static char *_hgVarAnnogratorName = "../cgi-bin/hgVarAnnogrator"; /* Path to variant annot intgr */
 
 char *hgPalName()
 /* Relative URL to click processing program. */
@@ -77,6 +78,12 @@ char *hgSessionName()
 /* Relative URL to session manager. */
 {
 return _hgSessionName;
+}
+
+char *hgVarAnnogratorName()
+/* Relative URL to variant annotation integrator program. */
+{
+return _hgVarAnnogratorName;
 }
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
