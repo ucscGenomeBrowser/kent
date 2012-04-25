@@ -357,6 +357,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
 tag ADULTCD4TH0
@@ -375,6 +376,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_adult
 
 term Adult_CD4_Th1
 tag ADULTCD4TH1
@@ -393,6 +395,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_adult
 
 term AoAF
 tag AOAF
@@ -1271,8 +1274,8 @@ term CD14+
 tag CD14
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
-deprecated same as Monocytes-CD14+_RO01746
+description SEE Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826, newly promoted to tier 2: not in 2011 analysis
+deprecated same as Monocytes-CD14+
 lineage mesoderm
 karyotype normal
 sex F
@@ -1323,6 +1326,7 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01778
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1342,25 +1346,30 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
-
-term CD20+_RO01746
-tag CD20RO01746
-type Cell Line
-tier 2
-organism human
-description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promoted to tier 2: not in 2011 analysis
-sex F
-age 27
-tissue blood
-lineage mesoderm
-karyotype normal
-childOf B_cells_CD20+
-vendorName Rajinder Kaul, UW
-vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01794
+#
+#term CD20+_RO01746
+#tag CD20RO01746
+#type Cell Line
+#tier 2
+#organism human
+#description B cells, caucasian, draw number 1 (draw 2 is RO01826), newly promoted to tier 2: not in 2011 analysis
+#sex F
+#age 27
+#tissue blood
+#lineage mesoderm
+#karyotype normal
+#childOf B_cells_CD20+
+#vendorName Rajinder Kaul, UW
+#vendorId CD20+_RO01746
+#orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
+#termId BTO:0000776
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+#protocol Stam:CD20+_Stam_protocol.pdf
+#label B_cells_CD20+_RO01746
+# This was supposed to be CD14+, 
+# it is not used in the metaDb
+# Delete this if not needed by June 2012. ~Jeff
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1497,6 +1506,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
 tag CORDCD4TH0
@@ -1515,6 +1525,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_cord_blood
 
 term Cord_CD4_Th1
 tag CORDCD4TH1
@@ -1533,6 +1544,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_cord_blood
 
 term Decidua
 tag DECIDUA
@@ -4660,6 +4672,7 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+
 #formerly tier 3
 #there is another Monocytes-CD14+ cell line
 #that is used in UW DNase and Open Chrom Chip
@@ -4669,7 +4682,7 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826 are being used as replicates, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 childOf Monocytes-CD14+
@@ -4682,15 +4695,15 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+_RO01746
 #formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, Monocytes-CD14+_RO01826 is a second draw being used as a replicate for Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
-deprecated same as Monocytes-CD14+_RO01746
 karyotype normal
 childOf Monocytes-CD14+
 sex F
@@ -4702,7 +4715,8 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
-#formerly tier 3
+label Monocytes_CD14+_RO01826
+# formerly tier 3
 
 term MRT_G401.6
 tag MRTG401.6
@@ -12860,7 +12874,7 @@ term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
-label TGF-b
+label TGF-beta
 
 term TNFa
 tag TNFA
