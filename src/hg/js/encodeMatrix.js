@@ -77,7 +77,7 @@ var encodeMatrix = (function () {
                 // Search sees multiple mdbValN= variables for the same mdbVarN as a list of vals
                 mdbVals = [].concat(arguments[i].mdbVal);
                 for (j = 0; j < mdbVals.length; j++) {
-                    url += '&hgt_mdbVal' + (i + 1) + '=' + mdbVals[j];
+                    url += '&hgt_mdbVal' + (i + 1) + '=' + encodeURIComponent(mdbVals[j]);
                 }
             }
             url += '&hgt_mdbVar' + (argsLen + 1) + '=view' +

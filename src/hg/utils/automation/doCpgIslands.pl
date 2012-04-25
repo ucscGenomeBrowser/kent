@@ -269,7 +269,7 @@ sub doLoadCpg {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | head -1`
+set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
 sed -e "s/14/\${C}/" \$HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
 hgLoadBed -sqlTable=cpgIslandExt.sql -tab $db cpgIslandExt cpgIsland.bed 
 checkTableCoords -verboseBlocks -table=cpgIslandExt $db
