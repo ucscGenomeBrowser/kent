@@ -182,3 +182,13 @@ skipInvalid yes
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/tupBel1/bed/cpgIslands
+    cd /hive/data/genomes/tupBel1/bed/cpgIslands
+    time doCpgIslands.pl tupBel1 > do.log 2>&1
+    #   real    296m4.437s
+
+    cat fb.tupBel1.cpgIslandExt.txt
+    #   23173299 bases of 2137225476 (1.084%) in intersection
+
+#########################################################################

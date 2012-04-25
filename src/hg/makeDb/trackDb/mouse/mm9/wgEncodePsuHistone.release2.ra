@@ -113,7 +113,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-04-16
+        # subId=6862 dateSubmitted=2012-04-25
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks

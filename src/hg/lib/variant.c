@@ -4,6 +4,52 @@
 #include "common.h"
 #include "variant.h"
 
+struct allele  *alleleClip(struct allele *allele, int sx, int ex)
+/* clip allele to be inside region defined by sx..ex.  Returns 
+ * pointer to new allele which should be freed by alleleFree, or variantFree
+ */
+{
+struct variant *oldVariant = allele->variant;
+int start = oldVariant->chromStart;
+int end = oldVariant->chromEnd;
+int oldVariantWidth = end - start;
+int delFront = 0;
+int delRear = 0;
+
+if (start < sx)
+    {
+    if (oldVariantWidth != allele->length)	 /* FIXME */
+	errAbort("cannot clip alleles that are a different length than variant region");
+    delFront = sx - start;
+    start = sx;
+    }
+
+if (end > ex)
+    {
+    if (oldVariantWidth != allele->length)	 /* FIXME */
+	errAbort("cannot clip alleles that are a different length than variant region");
+    delRear = end - ex;
+    end = ex;
+    }
+
+struct variant *newVariant;
+AllocVar(newVariant);
+newVariant->chrom = cloneString(oldVariant->chrom);
+newVariant->chromStart = start;
+newVariant->chromEnd = end;
+newVariant->numAlleles = 1;
+struct allele *newAllele;
+AllocVar(newAllele);
+newVariant->alleles = newAllele;
+newAllele->variant = newVariant;
+newAllele->length = allele->length - delRear - delFront;
+assert(newAllele->length > 0);
+newAllele->sequence = cloneString(&allele->sequence[delFront]);
+newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
+
+return newAllele;
+}
+
 struct variant *variantFromPgSnp(struct pgSnp *pgSnp)
 /* convert pgSnp record to variant record */
 {

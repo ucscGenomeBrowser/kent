@@ -610,3 +610,13 @@ done
     rsync -a -P ./nib/ /hive/data/staging/data/rn5/nib/
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-20 - Hiram)
+    mkdir /hive/data/genomes/rn5/bed/cpgIslands
+    cd /hive/data/genomes/rn5/bed/cpgIslands
+    time doCpgIslands.pl rn5 > do.log 2>&1
+    #   Elapsed time: 11m10s
+
+    cat fb.rn5.cpgIslandExt.txt
+    #   10377460 bases of 2572853723 (0.403%) in intersection
+
+#########################################################################
