@@ -27,7 +27,7 @@
 char msg[2048] = "";
 
 
-char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password","hgLogin_confirmPW", NULL };
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password","hgLogin_password2", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -58,7 +58,7 @@ int i;
   printf("\n");
 ************************************************************/
   // Convert the first MD5 value to string
-  printf("Convert result1 to firstMD5 .......\n");
+  // /* DEBUG */ printf("Convert result1 to firstMD5 .......\n");
   for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
@@ -175,23 +175,6 @@ else
     {
     return FALSE;
     }
-}
-
-
-boolean checkPwdCharClasses(char *password)
-/* check that password uses at least 2 character classes */
-{
-/* [A-Z] [a-z] [0-9] [!@#$%^&*()] */
-int classes[4]={0,0,0,0};
-char c;
-while ((c=*password++))
-    {
-    if (c >= 'A' && c <= 'Z') classes[0] = 1;
-    if (c >= 'a' && c <= 'z') classes[1] = 1;
-    if (c >= '0' && c <= '9') classes[2] = 1;
-    if (strchr("!@#$%^&*()",c)) classes[3] = 1;
-    }
-return ((classes[0]+classes[1]+classes[2]+classes[3])>=2);
 }
 
 unsigned int randInt(unsigned int n)
@@ -477,17 +460,7 @@ if (!newPassword || sameString(newPassword,"") || (strlen(newPassword)<5))
     changePasswordPage(conn);
     return;
     }
-/***************************
-if (!checkPwdCharClasses(newPassword))
-    {
-    freez(&errMsg);
-    errMsg = cloneString(
-	"Password must contain characters from 2 of the following 4 classes: "
-	"[A-Z] [a-z] [0-9] [!@#$%^&*()].");
-    changePasswordPage(conn);
-    return;
-    }
-********************************************/
+
 char encPwd[45] = "";
 encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
@@ -519,6 +492,68 @@ void signupPage(struct sqlConnection *conn)
 optional real name */
 
 {
+
+hPrintf(
+"<div id=\"signUpBox\" class=\"centeredContainer formBox\">"
+"<h2>UCSC Genome Browser</h2>"
+"\n"
+"<p>Signing up enables you to save multiple sessions and to share your sessions with others.</p>"
+"Already have an account? <a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Login</a>.<br>"
+"\n"
+);
+hPrintf(
+"<h3>Sign Up</h3>"
+"<form method=\"post\" action=\"hgLogin\" name=\"mainForm\">"
+//"<div id=\"errorBox\" class=\"highlightBox error\">"
+//"  <span id=\"icon\"></span> <span id=\"message\">%s</span>"
+//"</div>"
+"<span style='color:red;'>%s</span>"
+"\n"
+, errMsg ? errMsg : ""
+);
+hPrintf(
+"<div class=\"inputGroup\">"
+"<label for=\"userName\">Username</label>"
+"<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
+"</div>"
+"\n"
+"<div class=\"inputGroup\">"
+"<label for=\"emailAddr\">Email address</label>"
+"<input type=text name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
+"</div>"
+"\n"
+"<div class=\"inputGroup\">"
+"<label for=\"reenterEmail\">Re-enter Email address</label>"
+"<input type=text name=\"hgLogin_email2\" value=\"%s\" size=\"30\" id=\"emailCheck\">"
+"</div>"
+"\n"
+, cartUsualString(cart, "hgLogin_userName", "")
+, cartUsualString(cart, "hgLogin_email", "")
+, cartUsualString(cart, "hgLogin_email2", "")
+);
+hPrintf(
+"<div class=\"inputGroup\">"
+"<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
+"<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
+"</div>"
+"\n"
+"<div class=\"inputGroup\">"
+"<label for=\"password\">Re-enter Password</label>"
+"<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">"
+"\n"
+"</div>"
+"\n"
+"<div class=\"formControls\">"
+"    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign Up\" class=\"largeButton\"> &nbsp; "
+"    <a href=\"javascript:history.go(-1)\">Cancel</a>"
+"</div>"
+"</form>"
+"</div><!-- END - signUpBox -->"
+"\n"
+, cartUsualString(cart, "hgLogin_password", "")
+, cartUsualString(cart, "hgLogin_password2", "")
+);
+/******************************* old UI to be removed
 hPrintf(
 "<div id=\"hgLoginSignupBox\" class=\"centeredContainer\">\n"
 "<h2>UCSC Genome Browser</h2>"
@@ -564,9 +599,9 @@ hPrintf(
 "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
-" for=\"confirmPW\">Confirm Password</label>"
+" for=\"password2\">Confirm Password</label>"
 "\n"
-"<input type=password name=\"hgLogin_confirmPW\" value=\"%s\" size=\"30\" id=\"confirmPW\">"
+"<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"password2\">"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"realName\">Real Name (optional)</label>"
@@ -576,32 +611,19 @@ hPrintf(
 
 
 
-/********
-"<tr><td>Name</td><td><input type=text name=hgLogin_user value=\"%s\" size=20></td></tr>\n"
-"<tr><td>E-mail</td><td><input type=text name=hgLogin_email value=\"%s\"size=20>\n"
-"<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=10></td></tr>\n"
-"<tr><td>Real name (optional)</td><td><input type=text name=hgLogin_realName value=\"%s\" size=20></td></tr>\n"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
-"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
-"<br>\n"
-, cartUsualString(cart, "hgLogin_user", "")
-, cartUsualString(cart, "hgLogin_email", "")
-//, cartUsualString(cart, "hgLogin_password", "")
-, cartUsualString(cart, "hgLogin_realName", "")
-);
-****************/
 "<p>"
 "<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
 "&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
 "<br>\n"
-"</p>"
-, cartUsualString(cart, "hgLogin_user", "")
-, cartUsualString(cart, "hgLogin_email", "")
-, cartUsualString(cart, "hgLogin_password", "")
-, cartUsualString(cart, "hgLogin_confirmPW", "")
-, cartUsualString(cart, "hgLogin_realName", "")
-);
-
+"</p>" 
+****************************** to be removed ****************/
+// , cartUsualString(cart, "hgLogin_userName", "")
+// , cartUsualString(cart, "hgLogin_email", "")
+// , cartUsualString(cart, "hgLogin_email2", "")
+// , cartUsualString(cart, "hgLogin_password", "")
+// , cartUsualString(cart, "hgLogin_password2", "")
+// );
+//
 
 cartSaveSession(cart);
 
@@ -614,7 +636,7 @@ void signup(struct sqlConnection *conn)
 /* process the signup form */
 {
 char query[256];
-char *user = cartUsualString(cart, "hgLogin_user", "");
+char *user = cartUsualString(cart, "hgLogin_userName", "");
 if (!user || sameString(user,""))
     {
     freez(&errMsg);
@@ -642,31 +664,41 @@ if (!email || sameString(email,""))
     return;
     }
 
-password = cartUsualString(cart, "hgLogin_password", "");
-if (!password || sameString(password,"") || (strlen(password)<8))
+char *email2 = cartUsualString(cart, "hgLogin_email2", "");
+if (!email2 || sameString(email2,"")) 
     {
     freez(&errMsg);
-    errMsg = cloneString("Password must be at least 8 characters long.");
-    signupPage(conn);
-    return;
-    }
-if (!checkPwdCharClasses(password))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Password must contain characters from 2 of the following 4 classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
+    errMsg = cloneString("Email cannot be blank.");
     signupPage(conn);
     return;
     }
 
-char *confirmPW = cartUsualString(cart, "hgLogin_confirmPW", "");
-if (!confirmPW || sameString(confirmPW,"") )
+if (email && email2 && !sameString(email, email2))
     {
     freez(&errMsg);
-    errMsg = cloneString("Confirm Password cannot be blank.");
+    errMsg = cloneString("Email addresses do not match.");
     signupPage(conn);
     return;
     }
-if (password && confirmPW && !sameString(password, confirmPW))
+
+password = cartUsualString(cart, "hgLogin_password", "");
+if (!password || sameString(password,"") || (strlen(password)<5))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password must be at least 5 characters long.");
+    signupPage(conn);
+    return;
+    }
+
+char *password2 = cartUsualString(cart, "hgLogin_password2", "");
+if (!password2 || sameString(password2,"") )
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password field cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+if (password && password2 && !sameString(password, password2))
     {
     freez(&errMsg);
     errMsg = cloneString("Passwords do not match.");
@@ -674,19 +706,14 @@ if (password && confirmPW && !sameString(password, confirmPW))
     return;
     }
 
-char *realName = cartUsualString(cart, "hgLogin_realName", "");
-if (!realName || sameString(realName,""))
-    {
-    realName = " ";
-    }
-
+/* pass all the checks, OK to create the account now */
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into gbMembers set "
-    "userName='%s',realName='%s',password='%s',email='%s', "
+    "userName='%s',password='%s',email='%s', "
     "lastUse=NOW(),activated='N',dateAuthenticated='9999-12-31 23:59:59'",
-    sqlEscapeString(user),sqlEscapeString(realName),sqlEscapeString(encPwd),sqlEscapeString(email));
-sqlUpdate(conn, query);
+    sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
+    sqlUpdate(conn, query);
 
 
 hPrintf(
@@ -696,30 +723,8 @@ hPrintf(
 "<h3>User %s successfully added.</h3>\n"
 , user
 );
-
-backToHgSession(1);
-/*
-char *hgLoginHost = hgLoginLinkHost();
-
-hPrintf(
-"<script  language=\"JavaScript\">\n"
-"<!-- "
-"\n"
-"window.setTimeout(afterDelay, 1000);\n"
-"function afterDelay() {\n"
-"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
-"\n}"
-"\n"
-"//-->"
-"\n"
-"</script>"
-,hgLoginHost);
-*/
-
-//hPrintf(
-//"Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>\n"
-//);
-
+/* TODO: cleanup the hgLogin_xxxx vars in the cart */
+backToHgSession(3);
 
 }
 
@@ -768,7 +773,7 @@ hPrintf(
 "\n"
 "<div id=\"helpBox\">"
 "<a href=\"accounthelp.html\">Can't access your account?</a><br>"
-"Need an account? <a href=\"signupScreen.html\">Sign up</a>."
+"Need an account? <a href=\"hgLogin?hgLogin.do.signupPage=1\">Sign up</a>."
 "</div><!-- END - helpBox -->"
 "</div><!-- END - loginBox -->"
 "\n"
@@ -829,11 +834,11 @@ sqlFreeResult(&sr);
 
 if (checkPwd(password,m->password))
     {
-hPrintf("<h1>Login succesful !!!! calling displayLoginSuccess now.</h1>\n");
-      unsigned int userID=m->idx;
-      // hPrintf("Before call userID is  %d\n",userID);
-      displayLoginSuccess(userName,userID);
-      return;
+    unsigned int userID=m->idx;  
+    hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
+            ,userName,userID);
+    displayLoginSuccess(userName,userID);
+    return;
     }
 else
     {
@@ -848,15 +853,12 @@ else
 gbMembersFree(&m);
 
 }
-/******* end old dispalyLogin *************************/
-
-
-
+/******* END dispalyLogin *************************/
 
 void  displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
-char *hgLoginHost = hgLoginLinkHost();
+// char *hgLoginHost = hgLoginLinkHost();
 
 hPrintf(
 "<h2>UCSC Genome Browser</h2>"
@@ -865,10 +867,11 @@ hPrintf(
 "<span style='color:red;'></span>"
 "\n"
 );
+/* Set cookies */
+/* TODO: use htmlSetCookie() to set cookies */
 hPrintf(
 "<script language=\"JavaScript\">"
 " document.write(\"Login successful, setting cookies now...\");"
-" document.write(\" in Call userID is %d\n\");"
 "</script>\n"
 
 "<script language=\"JavaScript\">"
@@ -877,22 +880,8 @@ hPrintf(
 "document.cookie =  \"hgLogin_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
 " </script>"
 "\n",
-userID, userName,userID);
-hPrintf(
-"<script  language=\"JavaScript\">\n"
-"<!-- "
-"\n"
-/* delay for 5 seconds then go back to page X */
-/* TODO: afterDelayBackTo("http....") */
-"window.setTimeout(afterDelay, 1000);\n"
-"function afterDelay() {\n"
-"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
-"\n}"
-"\n"
-"//-->"
-"\n"
-"</script>"
-,hgLoginHost);
+userName,userID);
+backToHgSession(5);
 }
 
 
@@ -915,6 +904,7 @@ hPrintf(
 "document.cookie =  \"hgLogin_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
 "</script>\n"
 );
+/* TODO: cleanup the hgLogin_xxxx vars in the cart */
 /* return to session */
 backToHgSession(1);
 }
@@ -949,7 +939,7 @@ void displayUserInfo(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *user = cartUsualString(cart, "hgLogin_user", "");
+char *user = cartUsualString(cart, "hgLogin_userName", "");
 /*************************************/
 if (sameString(user,""))
     {
@@ -1006,46 +996,6 @@ else
 gbMembersFree(&m);
 
 }
-
-/*
-void upgradeMembersTable(struct sqlConnection* conn)
-/ * one-time upgrade of gbMembers table to store encrypted passwords * /
-{
-char query[256];
-
-safef(query,sizeof(query),"select email from members");
-struct slName *email=NULL,*list = sqlQuickList(conn,query);
-for(email=list;email;email=email->next)
-    {
-
-    uglyf("email=%s<br>\n",email->name);
-
-    safef(query,sizeof(query),"select password from gbMembers where email='%s'", email->name);
-    char *password = sqlQuickString(conn,query);
-
-    uglyf("password=%s<br>\n",password);
-
-    if (password)
-	{
-	if (!startsWith("$1$",password)) / * upgrade has not already been done * /
-	    {
-	    uglyf("does not start with $1$<br>\n");
-	    char encPwd[45] = "";
-    	    encryptNewPwd(password, encPwd, sizeof(encPwd));
-	    safef(query,sizeof(query),"update gbMembers set password = '%s' where email='%s'",
-		sqlEscapeString(encPwd), sqlEscapeString(email->name));
-	    uglyf("query: %s<br>\n",query);
-	    sqlUpdate(conn,query);
-	    }
-	freez(&password);
-	}
-
-    uglyf("<br>\n");
-
-    }
-slFreeList(&list);
-}
-*/
 
 
 void doMiddle(struct cart *theCart)
