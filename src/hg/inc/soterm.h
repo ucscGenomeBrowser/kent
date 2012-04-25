@@ -45,6 +45,8 @@ struct soCall  // a single variant effect call
 	    {
 	    char *transcript;
 	    uint exonNumber;
+
+	    // the next three should have a length specified too
 	    uint cDnaPosition;
 	    uint cdsPosition;
 	    uint pepPosition;

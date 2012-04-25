@@ -5,30 +5,35 @@
 #include "genePred.h"
 #include "gpFx.h"
 
+
 char *gpFxModifySequence(struct allele *allele, struct genePred *pred, 
     int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence)
 /* modify a transcript to what it'd be if the alternate allele were present */
 {
+// clip allele to exon
+struct allele *clipAllele = alleleClip(allele, transcriptPsl->tStarts[exonNum], 
+	transcriptPsl->tStarts[exonNum] + transcriptPsl->blockSizes[exonNum]);
+
 // change transcript at variant point
-int exonOffset = allele->variant->chromStart - transcriptPsl->tStarts[exonNum];
+int exonOffset = clipAllele->variant->chromStart - transcriptPsl->tStarts[exonNum];
 int transcriptOffset = transcriptPsl->qStarts[exonNum] + exonOffset;
 
-if (allele->length != allele->variant->chromEnd - allele->variant->chromStart)
+if (clipAllele->length != clipAllele->variant->chromEnd - clipAllele->variant->chromStart)
     errAbort("only support alleles the same length as the reference");
 
 char *retSequence = cloneString(transcriptSequence->dna);
-char *newAllele = cloneString(allele->sequence);
+char *newAlleleSeq = cloneString(clipAllele->sequence);
 if (*pred->strand == '-')
     {
     transcriptOffset = transcriptSequence->size - (transcriptOffset + 1);
-    reverseComplement(newAllele, strlen(newAllele));
+    reverseComplement(newAlleleSeq, strlen(newAlleleSeq));
     }
 
 // make the change in the sequence
-memcpy(&retSequence[transcriptOffset], newAllele, allele->length);
+memcpy(&retSequence[transcriptOffset], newAlleleSeq, allele->length);
 
 // clean up
-freeMem(newAllele);
+freeMem(newAlleleSeq);
 
 return retSequence;
 }
@@ -46,7 +51,8 @@ char *ptr = transcriptSequence;
 for(ii=0; ii < pred->exonCount; ii++)
     {
     int exonSize = pred->exonEnds[ii] - pred->exonStarts[ii];
-    if (pred->cdsStart > pred->exonStarts[ii])
+    if ((pred->cdsStart > pred->exonStarts[ii]) &&
+	(pred->cdsStart < pred->exonEnds[ii]))
 	break;
 
     ptr += exonSize;
@@ -71,13 +77,20 @@ if (*pred->strand == '-')
 return newString;
 }
 
-static int firstChange(char *string1, char *string2)
+static int firstChange(char *string1, char *string2, int *numDifferent)
 /* return the position of the first difference between the two sequences */
 {
 int count = 0;
 
 while (*string1++ == *string2++)
     count++;
+
+if (numDifferent != NULL)
+    {
+    *numDifferent = 1;
+    while ((*string1) && (*string2) && (*string1++ != *string2++))
+	(*numDifferent)++;
+    }
 
 return count;
 }
@@ -93,29 +106,45 @@ freez(codingDna);
 }
 
 static char *
-codonChangeString(int codonPos, char *oldCodingSequence, char *newCodingSequence)
+codonChangeString(int codonPos, int numCodons, char *oldCodingSequence, char *newCodingSequence)
 /* generate string that describes a codon change */
 {
-char buffer[100];
-safef(buffer, sizeof buffer, "%c%c%c > %c%c%c",
-    toupper(oldCodingSequence[codonPos + 0]),
-    toupper(oldCodingSequence[codonPos + 1]),
-    toupper(oldCodingSequence[codonPos + 2]),
-    toupper(newCodingSequence[codonPos + 0]),
-    toupper(newCodingSequence[codonPos + 1]),
-    toupper(newCodingSequence[codonPos + 2]));
+struct dyString *dy = newDyString(100);
+int ii;
 
-return cloneString(buffer);
+for(ii=0; ii < numCodons; ii++)
+    {
+    dyStringPrintf(dy, "%c%c%c > %c%c%c",
+	toupper(oldCodingSequence[codonPos + 0]),
+	toupper(oldCodingSequence[codonPos + 1]),
+	toupper(oldCodingSequence[codonPos + 2]),
+	toupper(newCodingSequence[codonPos + 0]),
+	toupper(newCodingSequence[codonPos + 1]),
+	toupper(newCodingSequence[codonPos + 2]));
+    if (ii < numCodons - 1)
+	dyStringPrintf(dy, ",");
+    codonPos += 3;
+    }
+
+return dy->string;
 }
 
 static char *
-aaChangeString(int pepPosition, char *oldaa, char *newaa)
+aaChangeString(int pepPosition, int numaa, char *oldaa, char *newaa)
 /* generate string that describes an amino acid change */
 {
-char buffer[100];
-safef(buffer, sizeof buffer, "%c > %c",
-    toupper(oldaa[pepPosition]), toupper(newaa[pepPosition]));
-return cloneString(buffer);
+struct dyString *dy = newDyString(100);
+int ii;
+
+for(ii=0; ii < numaa; ii++)
+    {
+    dyStringPrintf(dy, "%c > %c", 
+	toupper(oldaa[pepPosition+ii]), toupper(newaa[pepPosition+ii]));
+    if (ii < numaa - 1)
+	dyStringPrintf(dy, ",");
+    }
+
+return dy->string;
 }
 
 struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred, 
@@ -179,16 +208,20 @@ slAddHead(&effectsList, effects);
 
 struct codingChange *cc = &effects->so.sub.codingChange;
 cc->transcript = cloneString(pred->name);
-cc->cDnaPosition = firstChange( newSequence, transcriptSequence->dna);
-cc->cdsPosition = firstChange( newCodingSequence, oldCodingSequence);
+int dnaChangeLength;
+cc->cDnaPosition = firstChange( newSequence, transcriptSequence->dna, &dnaChangeLength);
+int cdsChangeLength;
+cc->cdsPosition = firstChange( newCodingSequence, oldCodingSequence, &cdsChangeLength);
 if (*pred->strand == '-')
     cc->exonNumber = pred->exonCount - exonNum;
 else
     cc->exonNumber = exonNum;
 
 // calc codon change
-int codonPos = (cc->cdsPosition / 3) * 3;
-cc->codonChanges = codonChangeString( codonPos, oldCodingSequence, newCodingSequence);
+int codonPosStart = (cc->cdsPosition / 3) * 3;
+int codonPosEnd = ((cdsChangeLength + cc->cdsPosition) / 3) * 3;
+int numCodons = (codonPosEnd - codonPosStart) / 3 + 1;
+cc->codonChanges = codonChangeString( codonPosStart, numCodons, oldCodingSequence, newCodingSequence);
 
 if (sameString(newaa->dna, oldaa->dna))
     {
@@ -204,8 +237,10 @@ else
     // non-synonymous change
     effects->so.soNumber = non_synonymous_variant;
 
-    cc->pepPosition = firstChange( newaa->dna, oldaa->dna);
-    cc->aaChanges = aaChangeString( cc->pepPosition, oldaa->dna, newaa->dna);
+    int numDifferent;
+    cc->pepPosition = firstChange( newaa->dna, oldaa->dna, &numDifferent);
+    cc->aaChanges = aaChangeString( cc->pepPosition, numDifferent, 
+	oldaa->dna, newaa->dna);
     }
 
 return effectsList;
