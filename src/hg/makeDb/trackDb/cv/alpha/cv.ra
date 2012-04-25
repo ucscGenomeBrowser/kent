@@ -357,6 +357,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
 tag ADULTCD4TH0
@@ -375,6 +376,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_adult
 
 term Adult_CD4_Th1
 tag ADULTCD4TH1
@@ -393,6 +395,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_adult
 
 term AoAF
 tag AOAF
@@ -1293,7 +1296,7 @@ type Cell Line
 tier 2
 organism human
 deprecated SEE B_cells_CD20+
-description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
+description B cells from donors RO01778 (RO01746) and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
 lineage mesoderm
@@ -1323,6 +1326,7 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01778
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1342,6 +1346,7 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01794
 
 term CD20+_RO01746
 tag CD20RO01746
@@ -1361,6 +1366,7 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01746
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1497,6 +1503,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
 tag CORDCD4TH0
@@ -1515,6 +1522,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_cord_blood
 
 term Cord_CD4_Th1
 tag CORDCD4TH1
@@ -1533,6 +1541,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_cord_blood
 
 term Decidua
 tag DECIDUA
@@ -4660,6 +4669,7 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+
 #formerly tier 3
 #there is another Monocytes-CD14+ cell line
 #that is used in UW DNase and Open Chrom Chip
@@ -4682,7 +4692,8 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
-#formerly tier 3
+label Monocytes_CD14+_RO01746
+t#formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
@@ -4702,7 +4713,8 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
-#formerly tier 3
+label Monocytes_CD14+_RO01826
+t#formerly tier 3
 
 term MRT_G401.6
 tag MRTG401.6
