@@ -77,6 +77,39 @@ else
 return type;
 }
 
+char *asTypeNameFromSqlType(char *sqlType)
+/* Return the autoSql type name (not enum) for the given SQL type, or NULL.
+ * Don't attempt to free result. */
+{
+if (sqlType == NULL)
+    return NULL;
+// We need to strip '(...)' strings from all types except 'varchar' which must be 'varchar(255)'
+int len = strlen(sqlType) + 8;
+char buf[len];
+if (startsWith("varchar", sqlType))
+    safecpy(buf, len, "varchar(255)");
+else
+    {
+    safecpy(buf, len, sqlType);
+    char *leftParen = strstr(buf, " (");
+    if (leftParen == NULL)
+	leftParen = strchr(buf, '(');
+    if (leftParen != NULL)
+	{
+	char *rightParen = strrchr(leftParen, ')');
+	if (rightParen != NULL)
+	    {
+	    strcpy(leftParen, rightParen+1);
+	    }
+	}
+    }
+int i;
+for (i = 0;  i < ArraySize(asTypes);  i++)
+    if (sameString(buf, asTypes[i].sqlName))
+	return asTypes[i].name;
+return NULL;
+}
+
 static struct asColumn *mustFindColumn(struct asObject *table, char *colName)
 /* Return column or die. */
 {

@@ -37,6 +37,9 @@ char *hgSessionName();
 char *hgPalName();
 /* Relative URL to click processing program. */
 
+char *hgVarAnnogratorName();
+/* Relative URL to variant annotation integrator program. */
+
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */
 
