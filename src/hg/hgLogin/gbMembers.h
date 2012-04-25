@@ -6,7 +6,7 @@
 #define GBMEMBERS_H
 
 #include "jksql.h"
-#define GBMEMBERS_NUM_COLS 13
+#define GBMEMBERS_NUM_COLS 8
 
 struct gbMembers
 /* UCSC Genome Browser members */
@@ -17,14 +17,9 @@ struct gbMembers
     char *realName;	/* Full name */
     char *password;	/* Encrypted password */
     char *email;	/* Email address */
-    char *lastTouched;	/* Last date the user log in/log out/change password */
-    char *newPassword;	/* Password generated for the mail-a-new-password feature */
-    char *newPassTime;	/* Expiration date of the new password generated */
-    char *emailAuthenticated;	/* Date the account activated via email */
-    char *emailToken;	/* Security token used in the email to the user */
-    char *emailTokenExpires;	/* Expiration date of the emailToken */
-    char passwordChangeRequired[2];	/* Password change required? */
-    char accountAactivated[2];	/* Account activated? Y or N */
+    char *lastUse;	/* Last date the user log in */
+    char activated[2];	/* Account activated? Y or N */
+    char *dateAuthenticated;	/* Date the account activated via email */
     };
 
 void gbMembersStaticLoad(char **row, struct gbMembers *ret);

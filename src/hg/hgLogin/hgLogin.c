@@ -734,59 +734,53 @@ char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
 // char *password = cgiUsualString("hgLogin_password", "");
 
+
 hPrintf(
-"<div id=\"hgLoginBox\" class=\"centeredContainer\">\n"
+"<div id=\"loginBox\" class=\"centeredContainer formBox\">"
+"\n"
 "<h2>UCSC Genome Browser</h2>"
 "\n"
-);
-printf(
-"<P>"
-"Signing in enables you to save current settings into a "
-"named session, and then restore settings from the session later.<BR> "
-"If you wish, you can share named sessions with other users. "
-"</P>"
-);
-hPrintf(
+"<h3>Login</h3>"
+"\n"
 "<span style='color:red;'>%s</span>"
+"\n"
 , errMsg ? errMsg : ""
 );
 hPrintf(
-"<h3>Login</h3>"
+"<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
 "\n"
-"<form method=post action=\"hgLogin\" name=accountLoginForm >"
-"\n");
-hPrintf(
-"<label style=\"display: block; margin-top: 10px;\" " 
-" for=\"userName\">User Name</label>"
+"<div class=\"inputGroup\">"
+"<label for=\"userName\">Username</label>"
+"<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
+"</div>"
 "\n"
-"<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
-"\n"
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"password\">Password</label>"
-"\n"
+"<div class=\"inputGroup\">"
+"<label for=\"password\">Password</label>"
 "<input type=password name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"password\">"
+"</div>"
 "\n"
-"<p>"
-"<a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">Forgot your password?</a><br>"
-"<a href=\"hgLogin?do.signupPage=1\">Need an account</a>?"
-"</p>"
-"\n"
-"<p>"
-"<input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" id=\"loginButton\">"
-"\n"
-// "&nbsp;<a href=\"\" onclick=\"history.go(-1)\">Cancel</a>"
-"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
-"</p>"
-"\n"
+"<div class=\"formControls\">"  
+"   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
+"    &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
+"</div>"
 "</form>"
-"</div><!-- END - hgLoginBox -->"
+"\n"
+"\n"
+"<div id=\"helpBox\">"
+"<a href=\"accounthelp.html\">Can't access your account?</a><br>"
+"Need an account? <a href=\"signupScreen.html\">Sign up</a>."
+"</div><!-- END - helpBox -->"
+"</div><!-- END - loginBox -->"
+"\n"
+"\n"
+"</body>"
+"</html>"
 , username
-//, password
 );
 
 cartSaveSession(cart);
 
-hPrintf("</FORM>");
+
 
 }
 
@@ -1132,7 +1126,7 @@ int main(int argc, char *argv[])
 {
 pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
-htmlSetStyleSheet("userAccount.css");
+htmlSetStyleSheet("/style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");

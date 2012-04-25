@@ -4,25 +4,20 @@
 # automatic way.
 
 # This sql was hacked to insert the datetime object, autoSql could not
-# do that and added auto_increment to the idx field and index with
-# userName
+# do that and added auto_increment to the idx field and index with userName
+
 
 #UCSC Genome Browser members
 DROP TABLE IF EXISTS gbMembers;
 CREATE TABLE gbMembers (
-    idx int unsigned NOT NULL auto_increment,	# auto-increment unique ID
-    userName varchar(255) NOT NULL default '',	# Name used to login
-    realName varchar(255) NOT NULL default '',	# Full name
-    password varchar(255) NOT NULL default '',	# Encrypted password
-    email varchar(255) NOT NULL default '',	# Email address
-    lastTouched DATETIME NOT NULL default '????', # Last date the user log in/log out/change password
-    newPassword varchar(255) NOT NULL default '', # Password generated for the mail-a-new-password feature
-    newPassTime DATETIME NOT NULL default '????', # Expiration date of the new password generated
-    emailAuthenticated DATETIME NOT NULL default '????', # Date the account activated via email
-    emailToken varchar(255) NOT NULL default '', # Security token used in the email to the user
-    emailTokenExpires DATETIME NOT NULL default '????',	# Expiration date of the emailToken
-    asswordChangeRequired char(1) NOT NULL default 'N',	# Password change required?
-    accountAactivated char(1) NOT NULL default 'N',	# Account activated? Y or N
+    idx int unsigned not null auto_increment,	# auto-increment unique ID
+    userName varchar(255) not null,	        # Name used to login
+    realName varchar(255) not null,	# Full name
+    password varchar(255) not null,	# Encrypted password
+    email varchar(255) not null,	# Email address
+    lastUse DATETIME not null,	        # Last date the user log in
+    activated char(1) not null,	        # Account activated? Y or N
+    dateAuthenticated DATETIME not null, # Date the account activated via email
               #Indices
     PRIMARY KEY(idx),
     INDEX(userName)

@@ -364,6 +364,7 @@ void htmlSetStyle(char *style)
 htmlStyle = style;
 }
 
+
 static char *htmlStyleSheet = NULL;
 void htmlSetStyleSheet(char *styleSheet)
 /* Set document wide style sheet by adding css name to HEAD part.
@@ -454,13 +455,12 @@ fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
 if (htmlStyleSheet != NULL)
-    fprintf(f, "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", 
-            htmlStyleSheet);
+fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
+        , htmlStyleSheet);  
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlFormClass != NULL )
     fprintf(f, " CLASS=\"%s\"", htmlFormClass);
-
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (gotBgColor)
