@@ -1,4 +1,6 @@
-/* wordChain - Create Markov chain of words. */
+/* alphaChain - Create some faux centromere sequence using input based on a lot of
+ * centromeric reads. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
