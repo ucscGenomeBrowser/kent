@@ -347,7 +347,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for naive populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -366,7 +367,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for Th0 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -385,7 +387,8 @@ organism human
 description CD4+ cells isolated from human blood and enriched for Th1 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1347,29 +1350,6 @@ termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
 label B_cells_CD20+_RO01794
-#
-#term CD20+_RO01746
-#tag CD20RO01746
-#type Cell Line
-#tier 2
-#organism human
-#description B cells, caucasian, draw number 1 (draw 2 is RO01826), newly promoted to tier 2: not in 2011 analysis
-#sex F
-#age 27
-#tissue blood
-#lineage mesoderm
-#karyotype normal
-#childOf B_cells_CD20+
-#vendorName Rajinder Kaul, UW
-#vendorId CD20+_RO01746
-#orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-#termId BTO:0000776
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-#protocol Stam:CD20+_Stam_protocol.pdf
-#label B_cells_CD20+_RO01746
-# This was supposed to be CD14+, 
-# it is not used in the metaDb
-# Delete this if not needed by June 2012. ~Jeff
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1496,7 +1476,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for naive populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1515,7 +1496,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for Th0 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1534,7 +1516,8 @@ organism human
 description CD4+ cells isolated from cord blood and enriched for Th1 populations
 tissue blood
 childOf T_cells_CD4+
-karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -5570,6 +5553,7 @@ organism human
 description Parent cell line for T cells CD4+.
 tissue blood
 karyotype unknown
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId vary
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
