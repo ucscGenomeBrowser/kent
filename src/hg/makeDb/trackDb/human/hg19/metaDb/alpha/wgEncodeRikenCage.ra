@@ -6646,33 +6646,8 @@ seqPlatform Illumina_GA2x
 subId 4539
 view TssGencV7
 
-metaObject wgEncodeRikenCageHepg2CellPapTssHmm
-objType table
-bioRep 013WC,014WC
-cell HepG2
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
-dccAccession wgEncodeEH001149
-expId 1149
-fileName wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId K01,K02
-labVersion IDR
-localization cell
-md5sum d3b45b723d2bed66d9e44215424bc6f0
-project wgEncode
-rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 5610
-tableName wgEncodeRikenCageHepg2CellPapTssHmm
-view TssHmm
-
 metaObject wgEncodeRikenCageHepg2CellPapTssHmmV2
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6689,12 +6664,12 @@ labExpId K01,K02
 labVersion IDR
 localization cell
 md5sum 7f4369f9439d4874b8ca831ea97ca48e
-objStatus replaced - this version has scores that exceed chromosome lengths
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+tableName wgEncodeRikenCageHepg2CellPapTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
@@ -20232,4 +20207,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 2065058671
+# MAGIC: -315892564
