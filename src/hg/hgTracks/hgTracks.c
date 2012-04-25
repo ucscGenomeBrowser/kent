@@ -938,7 +938,7 @@ tg->longLabel = "Your Sequence from Blat Search";
 tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
-tg->priority = 101;
+tg->priority = 103;
 tg->defaultPriority = tg->priority;
 tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
@@ -1102,7 +1102,7 @@ tg->longLabel = longLabel;
 tg->loadItems = oligoMatchLoad;
 tg->itemName = oligoMatchName;
 tg->mapItemName = oligoMatchName;
-tg->priority = 99;
+tg->priority = 101;
 tg->defaultPriority = tg->priority;
 tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
@@ -2527,8 +2527,8 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-// turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306)
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels || withCenterLabels);
+// turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306 and #6944)
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels && withCenterLabels);
 jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
 if(newWinWidth)
     {
@@ -4182,6 +4182,7 @@ if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL) 
     slSafeAddHead(&trackList, userPslTg());
+slSafeAddHead(&trackList, oligoMatchTg());
 if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());

@@ -32,7 +32,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	venter1 \
 	panTro1 panTro2 panTro3 panTro4 \
 	gorGor1 gorGor2 gorGor3 \
-        nomLeu1 \
+        nomLeu1 nomLeu2 \
 	ponAbe2 \
 	rheMac2,rheMac3 \
 	papHam1 \
@@ -46,18 +46,18 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	mm6 mm7 mm8 mm9 mm10 \
 	rn3 rn4 rn5 \
 	speTri1 speTri2 cavPor3 \
-        hetGla1 \
+        hetGla1 hetGla2 \
         sarHar1 \
 	oryCun1 oryCun2 \
 	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
 	equCab1 \
 	equCab2 \
 	oviAri1 \
-	susScr1 susScr2 \
-	eriEur1 sorAra1 turTru1 vicVic1 pteVam1 tarSyr1 \
+	susScr1 susScr2 susScr3 \
+	eriEur1 sorAra1 turTru1 turTru2 vicVic1 pteVam1 tarSyr1 \
 	dipOrd1 proCap1 ochPri2 myoLuc1 myoLuc2 \
 	micMur1 \
-	dasNov1 dasNov2 \
+	dasNov1 dasNov2 dasNov3 \
 	triMan1 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	echTel1 \
@@ -73,7 +73,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	tetNig1 tetNig2 \
 	oryLat1 oryLat2 \
 	ornAna1 \
-	oreNil1 \
+	oreNil1 oreNil2 \
 	fr1 fr2 fr3 \
 	petMar1 \
 	braFlo1 \
@@ -97,7 +97,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	apiMel2	\
 	triCas2 \
 	ci1 ci2 cioSav2 \
-	strPur1 strPur2 \
+	strPur1 strPur2 strPur4 \
     nemVec1 \
 	aplCal1 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 \

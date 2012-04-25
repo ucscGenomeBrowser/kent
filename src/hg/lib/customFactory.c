@@ -296,7 +296,21 @@ if (dbRequested)
 return track;
 }
 
-static struct bed *customTrackBed(char *db, char *row[13], int wordCount,
+static struct bed *customTrackBed(char *row[64], int wordCount, int chromSize, struct lineFile *lf)
+/* Convert a row of strings to a bed.
+ * Intended to replace old customTrackBed,
+ * currently new code is activated by hg.conf switch */
+{
+struct bed * bed;
+AllocVar(bed);
+loadAndValidateBed(row, wordCount, wordCount, lf, bed, NULL, TRUE);
+if (bed->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+    	bed->chrom, bed->chromEnd, chromSize);
+return bed;
+}
+
+static struct bed *customTrackBedOld(char *db, char *row[13], int wordCount,
 	struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to a bed. */
 {
@@ -446,13 +460,38 @@ static struct customTrack *bedLoader(struct customFactory *fac,
 {
 char *line;
 char *db = ctGenomeOrCurrent(track);
+char *lastChrom = NULL;
+int chromSize = -1;
+boolean newCustomTrackValidate = sameOk(cfgOption("newCustomTrackValidate"), "on");
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[bedKnownFields];
     int wordCount = chopLine(line, row);
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
-    struct bed *bed = customTrackBed(db, row, wordCount, chromHash, lf);
+
+    /* since rows are often sorted, we can reduce repetitive checking */
+    if (differentStringNullOk(row[0], lastChrom))
+	{
+	customFactoryCheckChromNameDb(db, row[0], lf);
+	chromSize = hChromSize(db, row[0]);
+	freez(&lastChrom);
+	lastChrom = cloneString(row[0]);
+	}
+
+    struct bed *bed = NULL;
+
+    /* Intended to replace old customTrackBed */
+    if (newCustomTrackValidate)
+	{
+	bed = customTrackBed(row, wordCount, chromSize, lf);
+	bed->chrom = hashStoreName(chromHash, row[0]);
+	}
+    else
+	{
+	bed = customTrackBedOld(db, row, wordCount, chromHash, lf);
+	}
+
     slAddHead(&track->bedList, bed);
     }
 slReverse(&track->bedList);

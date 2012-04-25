@@ -398,7 +398,7 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
 	char *port = cgiServerPort();
         // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
         int newUriSize = 2048;
-	char *newUri = needMem(2048);
+	char *newUri = needMem(newUriSize);
 	// TODO what about https?
 	safef(newUri, newUriSize, "http://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", source, port, domain);
 
@@ -437,6 +437,7 @@ if(!skipSectionHeader)
     puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
+	 "<div id=firstSection>"
          "      <!--outer table is for border purposes-->\n"
          "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
          "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
@@ -537,6 +538,7 @@ puts(
     "	</TD></TR></TABLE>" "\n"
     "	</TD></TR></TABLE>" "\n"
     "	" );
+puts("</div>");
 }
 
 void webNewSection(char* format, ...)
@@ -546,6 +548,7 @@ va_list args;
 va_start(args, format);
 
 webEndSection();
+puts("<div>");
 puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
 puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
     "<BR>\n\n"

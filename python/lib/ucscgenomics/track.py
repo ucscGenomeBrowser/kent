@@ -1,33 +1,6 @@
-import os, re, hashlib
-from ucscgenomics import ra, mdb
+import os, re
+from ucscgenomics import ra, mdb, encode
 
-organisms = {
-    'hg19': 'human',
-    'hg18': 'human',
-    'mm9': 'mouse',
-    'encodeTest': 'human'
-}
-
-def readMd5sums(filename):
-    if os.path.isfile(filename):
-        md5sums = dict()
-        md5file = open(filename, 'r')
-        for line in md5file:
-            key, val = map(str.strip, line.split(' ', 1))
-            md5sums[key] = val
-        return md5sums
-    else:
-        return None
-
-        
-def hashfile(filename, hasher=hashlib.md5(), blocksize=65536):
-    afile = open(filename, 'rb')
-    buf = afile.read(blocksize)
-    while len(buf) > 0:
-        hasher.update(buf)
-        buf = afile.read(blocksize)
-    return hasher.hexdigest()
-        
 class TrackFile(object):
     '''
     A file in the trackDb, which has useful information about iself.
@@ -56,7 +29,7 @@ class TrackFile(object):
     def md5sum(self):
         '''The md5sum for this file, stored in the md5sum.txt file in the downloads directory'''
         if self._md5sum == None:
-            self._md5sum = hashfile(self.fullname)
+            self._md5sum = encode.hashFile(self.fullname)
         return self._md5sum
         
     @property 
@@ -92,6 +65,46 @@ class TrackFile(object):
         else:
             self._extension = None
     
+class Release(object):
+    '''
+    Keeps track of a single release, stored within the track.
+    '''
+    
+    @property
+    def index(self):
+        '''Which release, represented as an int starting with 1'''
+        return self._index
+        
+    # @property
+    # def status(self):
+        # '''A string representing the status of this release: alpha, beta, or public'''
+        # return self._status
+    @property
+    def onAlpha(self):
+        return self._alpha
+    
+    @property
+    def onBeta(self):
+        return self._beta
+        
+    @property
+    def onPublic(self):
+        return self._public
+    
+    @property
+    def files(self):
+        '''A dictionary of TrackFiles belonging to this release where the filename is the key'''
+        return self._files
+    
+    def __init__(self, index, status, files):
+        self._files = files
+        self._index = index
+        if (status.strip() == ''):
+            self._alpha = self._beta = self._public = 1
+        else:
+            self._alpha = 'alpha' in status.split(',')
+            self._beta = 'beta' in status.split(',')
+            self._public = 'public' in status.split(',')
     
 class CompositeTrack(object):
     '''
@@ -159,7 +172,7 @@ class CompositeTrack(object):
         try:
             return self._files
         except AttributeError:
-            md5sums = readMd5sums(self._md5path)
+            md5sums = encode.readMd5sums(self._md5path)
             
             radict = dict()
             for stanza in self.alphaMetaDb.itervalues():
@@ -201,6 +214,63 @@ class CompositeTrack(object):
         self._qaDir = qaDir
         return qaDir
 
+    @property
+    def releaseObjects(self):
+        '''A set of release objects describing each release'''
+        
+        try:
+            return self._releaseObjects
+        except AttributeError:
+            self._releaseObjects = list()
+            
+            omit = ['README.txt', 'md5sum.txt', 'md5sum.history', 'files.txt']
+            
+            maxcomposite = 0
+            statuses = dict()
+            for line in open(self._trackDbDir + 'trackDb.wgEncode.ra'):
+                if line.startswith('#') or line.strip() == '':
+                    continue
+                parts = line.split()
+                composite = parts[1]
+                places = ''
+                if len(parts) > 2:
+                    places = parts[2]
+                if composite.startswith(self.name):
+                    compositeparts = composite.split('.')
+                    if len(compositeparts) >= 2 and compositeparts[1].startswith('release'):
+                        index = int(compositeparts[1].replace('release', ''))
+                        statuses[index] = places
+                        maxcomposite = max(maxcomposite, index)
+                    else:                       # THINK MORE ABOUT THIS REGION RE: PATCHES
+                        statuses[1] = places
+                        maxcomposite = max(maxcomposite, 1)
+            
+            lastplace = statuses[maxcomposite]
+            for i in range(maxcomposite, 0, -1):
+                if i not in statuses:
+                    statuses[i] = lastplace
+                else:
+                    lastplace = statuses[i]
+                    
+            # while(1):
+                # releasepath = self.downloadsDirectory + ('release%d' % count) + '/'
+                
+                # if not os.path.exists(releasepath):
+                    # break
+                    
+                # md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
+                # releasefiles = dict()
+                
+                # for file in os.listdir(releasepath):
+                    # if os.path.isfile(releasepath + file) and file not in omit:
+                        # if md5s != None and file in md5s:
+                            # releasefiles[file] = TrackFile(releasepath + file, md5s[file])
+                        # else:
+                            # releasefiles[file] = TrackFile(releasepath + file, None)
+            for i in range(1, maxcomposite + 1):    
+                self._releaseObjects.append(Release(i, statuses[i], None))
+                
+            return self._releaseObjects
     @property 
     def releases(self):
         '''A list of all files in the release directory of this composite'''
@@ -212,7 +282,7 @@ class CompositeTrack(object):
             
             while os.path.exists(self.downloadsDirectory + 'release' + str(count)):
                 releasepath = self.downloadsDirectory + 'release' + str(count) + '/'
-                md5s = readMd5sums(releasepath + 'md5sum.txt')
+                md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
                 releasefiles = dict()
                 
                 for file in os.listdir(releasepath):
@@ -317,8 +387,8 @@ class CompositeTrack(object):
             if not self._trackPath.endswith('/'):
                 self._trackPath = self._trackPath + '/'
             
-        if database in organisms:
-            self._organism = organisms[database]
+        if database in encode.organisms:
+            self._organism = encode.organisms[database]
         else:
             raise KeyError(database + ' is not a valid database')
         
@@ -365,8 +435,8 @@ class TrackCollection(dict):
     
         self._database = database
         
-        if database in organisms:
-            self._organism = organisms[database]
+        if database in encode.organisms:
+            self._organism = encode.organisms[database]
         else:
             raise KeyError(database + ' is not a valid database')
     

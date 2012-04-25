@@ -264,3 +264,22 @@ skipInvalid yes
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# cpgIsland - (DONE - 2012-04-21 - Hiram)
+    mkdir /hive/data/genomes/tarSyr1/bed/cpgIslands
+    cd /hive/data/genomes/tarSyr1/bed/cpgIslands
+    time doCpgIslands.pl tarSyr1 > do.log 2>&1
+    real    664m57.705s
+    # there is a problem with this command:
+#cut -f1 cpgIsland.bed | sort -u | awk '{print length($0)}' | sort -rn | head -1
+    # replace the 'head -1' with 'sed -n -e '1,1 p'
+    # finished manually with C set at 15:
+    time ./doLoadCpg.csh
+    #   real    3m25.459s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup tarSyr1
+    #   real    34m36.015s
+
+    cat fb.tarSyr1.cpgIslandExt.txt
+    #   9784198 bases of 2768536343 (0.353%) in intersection
+
+##############################################################################

@@ -1,0 +1,205 @@
+<H2>Description</H2>
+
+<P>This track was produced as part of the ENCODE Project.
+RNA-seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly. 
+RNA-seq was performed by reverse-transcribing an RNA sample into cDNA, followed by high-throughput DNA sequencing, 
+which was done here on an Illumina Genome Analyzer (GAI or GAIIx) (Mortazavi <em>et al.</em>, 2008). The transcriptome measurements shown on these tracks were performed on 
+<A target="_BLANK" href="/cgi-bin/hgEncodeVocab?term=longPolyA&type=rnaExtract">polyA selected RNA</A> from 
+<A target="_BLANK" href="/cgi-bin/hgEncodeVocab?term=cell&type=localization">total cellular RNA</A> using two different protocols:
+ one that preserves information about which strand the read is coming from and one that does not. Due to the specifics of the enzymology of library construction, gene 
+ and transcript quantification is more accurate based on the non-strand-specific protocol, while the strand-specific protocol is useful for assigning strandedness, but 
+ in general less reliable for quantification.</P>
+ 
+<H3>Non-strand-specific protocol (deep "reference" transcriptome measurements, 2x75 bp reads):</H3>
+
+<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis, converted into cDNA by random priming and then amplified. Data were produced in two formats: 
+single reads, each of which comes from one end of a cDNA molecule, and paired-end reads, which are obtained as pairs from both ends of cDNAs. This RNA-seq protocol does not 
+specify the coding strand. As a result, there is ambiguity at loci where both strands are transcribed. The &#34;randomly primed&#34; reverse transcription is, apparently, not 
+fully random. This is inferred from a sequence bias in the first residues of the read population, and this likely contributes to observed unevenness in sequence coverage 
+across transcripts.</P>
+<H3>Strand specific protocol (1x75 bp reads):</H3>
+<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis.
+A set of 3&#8242; and 5&#8242; adapters were ligated to the 3&#8242; and 5&#8242; ends of the fragments, respectively.
+The resulting RNA molecules were converted to cDNA and amplified. This RNA-seq protocol does specify the coding strand as each read is in the same 5&#8242;-3&#8242; orientation as the 
+original RNA strand. As a result, loci where both strands are transcribed can be disambiguated. However, RNA ligation is an inherently biased process and as a result, greater 
+unevenness in sequence coverage across transcripts is observed compared to the non-strand-specific data, and quantification is less accurate.
+</P>
+
+<H3>Data Analysis:</H3>
+<P>Reads were aligned to the hg19 human reference genome using TopHat (Trapnell <em>et al.</em>, 2009), a program specifically designed to align RNA-seq reads and discover splice junctions de novo. 
+Cufflinks (Trapnell <em>et al.</em>, 2010), a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantify novel transcripts and to obtain transcript 
+expression estimates based on the GENCODE annotation. All sequence files, alignments, gene and transcript models and expression estimates files are available for download. </P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data 
+<EM>views</EM>.  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A href="/goldenPath/help/multiView.html" target="_BLANK">here</A>.
+The following views are in this track:
+</P>
+
+<DL>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments view shows reads aligned to the genome. Alignments are colored by cell type.  
+The tags used in this file are: NH XS CP NM CC. The 'XS' custom tag indicates the sense/anti-sense of the strand. 
+See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> 
+(Langmead <em>et al.</em>, 2009) for more information about the SAM Bowtie output (including other tags) and the 
+<a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on 
+the SAM/BAM file format.</DD>
+</DL>
+<H4>For Stranded Data (1x75) </H4>
+<DL>
+<DT><I>Plus Raw Signal (only for stranded data)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the forward strand.
+<DT><I>Minus Raw Signal (only for stranded data)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the reverse strand.
+Minus strand score is multiplied by -1 for display purposes, so that data can be viewed around an axis.
+</DL>
+
+<H4>For Paired End Non-Stranded Data (2x75) </H4>
+<DL>
+<DT><I>Raw Signal (only for paired-end data)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned 
+read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. 
+A separate track for the forward (plus) and reverse (minus) strands are provided for strand-specific data.
+<DT><I>Splice Sites</I></DT>
+<DD>Subset of aligned reads that crosses splice junctions.</DD>
+</DL>
+
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<H2>Methods</H2>
+
+<H3>Experimental Procedures</H3>
+
+<P> 
+Cells were grown according to the approved <A href="/ENCODE/protocols/cell" target="_BLANK">ENCODE cell culture protocols</A> 
+except for H1-hESC for which frozen cell pellets were purchased from Cellular Dynamics.
+Cells were lysed in RLT buffer (Qiagen RNEasy kit) and processed on RNEasy midi columns 
+according to the manufacturer's protocol, with the inclusion of the &#34;on-column&#34; DNAse digestion step to remove residual genomic DNA.</P>  
+
+<P>A quantity of 75 &micro;gms of total RNA was selected twice with oligo-dT beads (Dynal) according to the manufacturer's 
+protocol to isolate mRNA from each of the preparations.  For 2x75 bp non-stranded RNA-seq, 100 ngs of mRNA was 
+then processed according to the protocol in Mortazavi <em>et al</em> (2008), and prepared for sequencing on the Genome Analyzer flow cell
+ according to the protocol for the ChIPSeq DNA genomic DNA kit (Illumina). The majority of paired-end libraries were size-selected around 200 bp (fragment length) with the exception of a 
+ few additional replicates that were size-selected at 400 bp with the specific intent to investigate the effect of fragment length on results.  
+ Strand-specific RNA-seq libraries were prepared from 100 ng of mRNA from the same preparation following <A href="http://www.illumina.com/applications/sequencing/rna.ilmn" target="_BLANK">Illumina's Strand-Specific RNA-seq protocol</A>.</P>
+ 
+<P>Libraries were sequenced with an Illumina Genome Analyzer I or an Illumina Genome Analyzer IIx according to the manufacturer's recommendations. 
+Reads of 75 bp length were obtained, single end for directional, strand-specific libraries (1x75D) and paired end for non-strand-specific libraries (2x75).
+
+<H3>Data Processing and Analysis</H3>
+ 
+<P>Reads were mapped to the reference human genome (version hg19), with or without the Y chromosome, depending on the sex of the cell line, 
+and without the random chromosomes and haplotypes in all cases,  using <A href="http://tophat.cbcb.umd.edu/" target="_BLANK">TopHat</A> (version 1.0.14). 
+TopHat was used with default settings with the exception of specifying an empirically determined mean inner-mate distance. 
+After mapping reads to the genome and identifying splice junctions, the data were further analyzed using 
+the transcript assembly and quantification software <A href="http://cufflinks.cbcb.umd.edu/" target="_BLANK">Cufflinks</A> (version 0.9.3) using the sequence bias detection and correction option. 
+Cufflinks was used in two modes: 
+first, expression for genes and individual transcripts was quantified based on the GENCODE annotation, for both versions v3c and v4 of GENCODE GRCh37, and 
+second, Cufflinks was run in de novo transcript assembly and quantification mode to obtain candidate novel transcript and gene models and expression estimates for them. </P>
+
+
+<H2>Downloadable Files</H2>
+
+<P>The following files can be found on the <A target="_BLANK" href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">downloads page</A>:
+</P>
+
+<dl>
+<DD><b>.fastq</b> - raw sequence files in fastq format with phred33 quality scores.</DD>
+<DD><b>Junctions.bedRnaElements</b> - bed file containing TopHat-defined splice junctions.</DD>
+<DD><b>TranscriptDeNovo.gtf</b> - a gtf file containing transcript models and expression estimates in FPKM (Fragments Per Kilobase per Million reads) produced by Cufflinks in de novo mode.</DD>
+<DD><b>TranscriptGencV3c.gtf</b> - expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format.</DD>
+<DD><b>GenesDeNovo.gtf</b> - expression estimates for genes defined by Cufflinks in de novo mode in gtf format.</DD>
+<DD><b>GeneGencV3c.gtf</b> - expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format.</DD>
+<DD><b>ExonGencV3c.gtf</b> - expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon.</DD>
+<DD><b>TSS.gtf</b> - expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS. </DD>
+</dl>
+
+<H2>Verification</H2>
+
+<UL>
+<LI>Known exon maps as displayed on the genome browser are confirmed by the 
+alignment of sequence reads. </LI>
+<LI>Known spliced exons are detected at the expected frequency for transcripts 
+of given abundance.   </LI>
+<LI>Linear range detection of spiked-in RNA transcripts from <em>Arabidopsis</em> and 
+phage lambda over 5 orders of magnitude.   </LI>
+<LI>Endpoint RT&#45;PCR confirms presence of selected 3&#8242; UTR extensions.
+</LI>
+<LI>Correlation to published microarray data r &#61; 0.62.</LI>
+</UL>
+
+
+<H2>Release Notes </H2>
+<P>
+This is release 3 (April 2012). All signal files have been replaced due to a systemic error.
+</P>
+
+<H2>Credits</H2>
+
+<P>Wold Group: Ali Mortazavi, Brian Williams, Georgi Marinov, Diane Trout, Brandon King, Ken McCue, Lorian Schaeffer.</P>
+<P>Myers Group: Norma Neff, Florencia Pauli, Fan Zhang, Tim Reddy, Rami Rauch, Chris Partridge.</P> 
+<P>Illumina gene expression group: Gary Schroth, Shujun Luo, Eric Vermaas.</P>
+<P>TopHat/Cufflinks development: Cole Trapnell, Lior Pachter, Steven Salzberg.</P>
+
+<P>
+Contacts: 
+<A HREF="mailto:&#103;e&#111;r&#103;&#105;&#64;&#99;a&#108;&#116;&#101;&#99;&#104;.
+e&#100;&#117;">
+Georgi Marinov</A> (data coordination/informatics/experimental),
+<!-- above address is georgi at caltech.edu -->
+ 
+<A HREF="mailto:&#100;&#105;&#97;&#110;e&#64;&#99;&#97;l&#116;&#101;&#99;&#104;.
+&#101;d&#117;">
+Diane Trout</A> (informatics) and
+<!-- above address is diane at caltech.edu -->
+<A HREF="mailto:&#98;&#97;&#119;&#105;&#108;l&#105;_&#57;&#49;&#49;&#50;&#53;&#64;&#121;&#97;h&#111;&#111;.
+&#99;o&#109;">
+Brian Williams</A> (experimental).
+<!-- above address is bawilli_91125 at yahoo.com -->
+
+</P>
+
+<H2>References</H2>
+
+<p>
+Langmead B, Trapnell C, Pop M, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+<em>Genome Biol</em>. 2009;10(3):R25.
+</p>
+
+
+<p>
+Mortazavi A, Williams BA, McCue K, Schaeffer L, Wold B.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18516045" target="_blank">
+Mapping and quantifying mammalian transcriptomes by RNA-Seq</a>.
+<em>Nat Methods</em>. 2008 Jul;5(7):621-8.
+</p>
+
+
+<p>
+Trapnell C, Pachter L, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19289445" target="_blank">
+TopHat: discovering splice junctions with RNA-Seq</a>.
+<em>Bioinformatics</em>. 2009 May 1;25(9):1105-11.
+</p>
+
+
+<p>
+Trapnell C, Williams BA, Pertea G, Mortazavi A, Kwan G, van Baren MJ, Salzberg SL, Wold BJ, Pachter L.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20436464" target="_blank">
+Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation</a>.
+<em>Nat Biotechnol</em>. 2010 May;28(5):511-5.
+</p>
+
+
+<H2>Data Release Policy</H2>
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A href="/ENCODE/terms.html" target="_BLANK">here</A>.</P>

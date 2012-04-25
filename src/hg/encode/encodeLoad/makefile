@@ -29,7 +29,7 @@ ${SCRIPTS}/%: %
 
 
 schemas: 
-	./installSqlSchemas.pl
+	./installSqlSchemas.pl ${SCRIPTS}/../../config/autoSql
 
 test:
 	doEncodeLoad.pl load /cluster/store3/encpipeline_dev/43

@@ -12420,14 +12420,14 @@ safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = 
     articleTable, articleId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 if (sr!=NULL)
-{
+    {
     char **row = NULL;
     row = sqlNextRow(sr);
     if (row != NULL)
         dispLabel = pubsFeatureLabel(row[0], row[1]);
     else
         dispLabel = articleId;
-}
+    }
 else
     dispLabel = articleId;
 sqlFreeResult(&sr);
@@ -12463,7 +12463,7 @@ sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset
 struct linkedFeatures *lfList = NULL;
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
-{
+    {
     struct psl *psl = pslLoad(row+rowOffset);
     slAddHead(&lfList, lfFromPsl(psl, TRUE));
     char* shortSeq  = hashFindVal(idToSeq,  lfList->name);
@@ -12472,7 +12472,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     extra->mouseOver=snip;
     extra->label=shortSeq;
     lfList->extra = extra;
-}
+    }
 sqlFreeResult(&sr);
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
@@ -12492,6 +12492,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
+//bedMethods(tg);
 tg->loadItems = pubsLoadKeywordYearItems;
 tg->itemName  = pubsItemName;
 tg->mapItem   = pubsMapItem;
@@ -12500,6 +12501,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
+//bedMethods(tg);
 tg->bedSize   = 5;
 tg->loadItems = pubsLoadMarkerItem;
 tg->mapItem   = pubsMarkerMapItem;
@@ -12527,9 +12529,8 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // XX MaxH: this works as a temp hack, but it is not the right way to do it
-    // XX should I introduce several new track types ? 
-    // XX or rather additional trackDb statements, one per pubs-"track type" ?
+    // FIXME: as long as registerTrackHandler doesn't accept wildcards, 
+    // this probably needs to stay here (it's in the wrong function)
     if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
     if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
@@ -12594,8 +12595,10 @@ else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
 
-    // XX what is the right way to do this? new track type? 
-    if (trackDbSettingClosestToHome(track->tdb, "pubsArticleTable") !=NULL)
+    // FIXME: registerTrackHandler doesn't accept wildcards, so this might be the only
+    // way to get this done in a general way. If this was in loaded with registerTrackHandler
+    // pslMethods would need the tdb object, which we don't have for these callbacks
+    if (startsWith("pubs", track->track))
         pubsBlatPslMethods(track);
     }
 else if (sameWord(type, "snake"))
@@ -13223,6 +13226,7 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
+registerTrackHandler("encodeGencodeGenePolyAMar07",bed9Methods);
 registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);

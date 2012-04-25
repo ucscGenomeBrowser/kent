@@ -1,43 +1,40 @@
-validateFiles - Validates the format of different genomics files.   
+I THINK THIS WHOLE SECTION CAN GO INTO THE HELP 
+validateFiles - Validates the format of different types of genomics files.   
                 Exits with a zero status for no errors detected and non-zero for errors.
                 Uses filename 'stdin' to read from stdin.
-                Automatically decompresses files in .gz, .bz2, .zip, or .Z format.
+                Automatically decompresses files in .gz, .bz2, .zip, or .Z format.  IS THIS TRUE?
                 Accepts multiple input files of the same type. 
                 Writes error messages to stderr.
 
 usage:
-   validateFiles -type=FILE_TYPE file1 [file2 [...]]
+   validateFiles -chromDB=db||-chromInfor=file -type=FILE_TYPE -options file1 [file2 [...]]
 
 
-usage:
-   validateFiles -type=FILE_TYPE file1 [file2 [...]]
 options:
-   -type=
-         BAM 	   : Binary Alignment/Map
-                     (see http://samtools.sourceforge.net/SAM1.pdf)
-         bigWig    : Big Wig
-                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html)
-         bedN[+[P]]   : Bed N is between 3 and 15, 
-                         optional (+) if extra "bedPlus" fields, optional P specifies the number of extra fields 
-                     (see http://genome.ucsc.edu/FAQ/FAQformat.html#format1)
-         fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)
-         fasta     : Fasta files (only one line of sequence, and no quality scores)
-         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)
-         csqual    : Colorspace quality (see link below)
-                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)
-         tagAlign  : Alignments
-         pairedTagAlign :  Paired Alignments
-         broadPeak : 
-         narrowPeak:
-         gappedPeak: 
-         bedGraph  :
+   -type=                      (see http://genome.ucsc.edu/FAQ/FAQformat.html#format1)
+         BAM 	               : Binary Alignment/Map
+         bigWig                : Big Wig
+         bedN                  : Standard BED where N is between 3 and 15 
+         bedN+                 : Bed Plus where N is between 3 and 15 and there are extra unvalidated fields
+         bedN+P                : Bed N Plus where the P fields can be validated against an .as file
+         fastq                 : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)
+         fasta                 : Fasta files (only one line of sequence, and no quality scores)
+         csfasta               : Colorspace fasta 
+         csqual                : Colorspace quality (see link below)
+                                 (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)
+         tagAlign              : Alignments 	
+         pairedTagAlign        : Paired Alignments
+         broadPeak             : ENCODE Broad Peak Format Bed6+3
+         narrowPeak            : ENCODE Narrow Peak Format Bed6+4
+         gappedPeak            : ENCODE Gapped Peak Format Bed12+3
+         bedGraph              : Bed Graph
 
-   -as=fields.as                If you have extra "bedPlus" fields, it's great to put a definition
-                                  of each field in a row in AutoSql format here.
+
    -chromDb=db                  Specify DB containing chromInfo table to validate chrom names
-                                  and sizes
+                                  and sizes. chromDB or chromInfo are required.
    -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes
-   -genome=path/to/hg18.2bit    Validate Alignment sequences match genome specified in the .2bit file
+   -as=fields.as                FOR BED PLUS If you have extra "bedPlus" fields, it's great to put a definition
+                                  of each field in a row in AutoSql format here.
    -privateData                 Private data so empty sequence is tolerated
    -isSorted                    Input is sorted by chrom, only affects types tagAlign and pairedTagAlign
    -version                     Print version
@@ -45,44 +42,18 @@ options:
    -doReport                    output report in filename.report
 
 For Alignment validations:
+   -genome=path/to/.2bit        Required. Validate alignment sequences against the genome specified in the .2bit file
    -nMatch                      N's do not count as a mismatch
-   -matchFirst=n                only check the first N bases of the sequence
+   -matchFirst=n                Only check the first N bases of the sequence
    -mismatches=n                Maximum number of mismatches in sequence (or read pair) if 
                                   validating tagAlign or pairedTagAlign files
    -mismatchTotalQuality=n      Maximum total quality score at mismatching positions
    -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)
-   -allowOther                  allow chromosomes that aren't native in BAM's
-   -allowBadLength              allow chromosomes that have the wrong length in BAM
-   -complementMinus             complement the query sequence on the minus strand (for testing BAM)
-   -showBadAlign                show non-compliant alignments
-   -bamPercent=N.N              percentage of BAM alignments that must be compliant
+   -allowOther                  Allow chromosomes that aren't native in BAM's
+   -allowBadLength              Allow chromosomes that have the wrong length in BAM
+   -complementMinus             Complement the query sequence on the minus strand (for testing BAM)
+   -showBadAlign                Show non-compliant alignments
+   -bamPercent=N.N              Percentage of BAM alignments that must be compliant
    -mmPerPair                   Check either pair dont exceed mismatch count if validating
                                   pairedTagAlign files (default is the total for the pair)
    -colorSpace                  Sequences include colorspace values [0-3] (can be used 
-                                  with formats such as tagAlign and pairedTagAlign)
-
-
-
-
-For Bed Files
-   -zeroSizeOk                  For BED-type positional data, allow rows with start==end
-                                  otherwise require strictly start < end
-                                  in .2bit file
-   -as file
-
-For Alignments:
-   -genome=path/to/hg19.2bit    REQUIRED to validate sequences against genome
-   -nMatch                      N's do not count as a mismatch
-   -mismatches=n                Maximum number of mismatches in sequence (or read pair) 
-   -mismatchTotalQuality=n      Maximum total quality score at mismatching positions
-   -matchFirst=n                Only check the first N bases of the sequence
-   -showBadAlign                Show non-compliant alignments (SHOULD BE PART OF VERBOSE)
-   -bamPercent=N.N              percentage of BAM alignments that must be compliant
-   -allowOther                  allow chromosomes that aren't native in BAM's
-
-
-Historical
-   -colorSpace                  Sequences include colorspace values [0-3] (can be used 
-                                  with formats such as tagAlign and pairedTagAlign)
-   -mmPerPair                   Check either pair dont exceed mismatch count if validating
-                                  pairedTagAlign files (default is the total for the pair)

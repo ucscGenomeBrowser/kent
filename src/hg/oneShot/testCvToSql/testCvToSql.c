@@ -16,24 +16,23 @@
 #include "obscure.h"
 #include "ra.h"
 
+char *tablePrefix = "cvDb_"; /* prefix to give to table names from command line*/
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "testCvToSql - Test out some ideas for making relational database version of cv.ra\n"
   "usage:\n"
-  "   testCvToSql cv.ra out.stats out.atree out.as outTabDir\n"
+  "   testCvToSql cv.ra out.stats out.atree out.as out.sql out.django outTabDir\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tablePrefix=cvDb_ - Some prefix to prepend to all table names\n"
   );
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-typedef char *(*StringMerger)(char *a, char *b);
-/* Given two strings, produce a third. */
 
 enum sfType {sftString = 0, sftUnsigned, sftInt, sftFloat, sftLongString};
 /* Possible types of a simple field. */
@@ -51,7 +50,6 @@ struct stanzaField
     int countUnsigned;     /* Number of times contents of field could be unsigned int */
     int countInt;          /* Number of times contents of field could be unsigned int */
     int maxSize;           /* Longest observed size. */
-    StringMerger mergeChildren; /* Function to merge two children if any */
     struct stanzaField *children;  /* Allows fields to be in a tree. */
     };
 
@@ -62,6 +60,7 @@ struct stanzaType
     char *name;         /* Name of type - something like Cell Line. */
     char *symbol;       /* Similar to name, but no white space and always camelCased. */
     int count;          /* Number of times stanza type observed. */
+    int lastId;		/* Last ID we'll use in output to identify row int table. */
     struct stanzaField *fieldList;      /* Fields, in order of observance. */
     FILE *f;            /* File to output data in if any */
     struct stanzaType *splitSuccessor;  /* If split, the next table in the split. */
@@ -85,7 +84,11 @@ struct fieldLabel fieldDescriptions[] = {
    {"cellLine", "derivedFrom", "Tissue or other souce of original cells. Depreciated?"},
    {"antibody", "validation", "How antibody was validated to be specific for target."},
    {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
+   {"antibody", "antibodyDescription", "Short description of antibody itself."},
    {"antibody", "target", "Molecular target of antibody."},
+   {"antibody", "targetDescription", "Short description of antibody target."},
+   {"antibody", "targetUrl", "Web page associated with antibody target."},
+   {"antibody", "targetId", "Identifier for target, prefixed with source of ID, usually GeneCards"},
    {"antibodyTarget", "target", "Molecular target of antibody."},
    {"antibodyTarget", "targetDescription", "Short description of antibody target."},
    {"antibodyTarget", "externalUrl", "Web page associated with antibody target."},
@@ -96,15 +99,22 @@ struct fieldLabel fieldDescriptions[] = {
    {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
    {"lab", "labPiFull", "Full name of lab's primary investigator."},
    {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
-   {"encodeGrant", "grantInst", "Name of instution awarded grant paying for data."},
-   {"encodeGrant", "projectName", "Short name describing grant."},
+   {"grantee", "grantInst", "Name of instution awarded grant paying for data."},
+   {"grantee", "projectName", "Short name describing grant."},
    {"typeOfTerm", "searchable", "Describes how to search for term in Genome Browser. 'No' for unsearchable."},
    {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
    {"typeOfTerm", "validate", "Describes how to validate field typeOfTerm refers to. Use 'none' for no validation."},
    {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
    {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
+   {"typeOfTerm", "requiredVars", "Required fields for a term of this type."},
+   {"typeOfTerm", "optionalVars", "Optional fields for a term of this type."},
+   {"*", "id", "Unique unsigned integer identifier for this item"},
+   {"*", "term", "A relatively short label, no more than a few words"},
    {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
+   {"*", "tag", "A short human and machine readable symbol with just alphanumeric characters."},
    {"*", "deprecated", "If non-empty, the reason why this entry is obsolete."},
+   {"*", "label", "A relatively short label, no more than a few words"},
+   {"*", "description", "A description up to a paragraph long of plain text."},
    {"*", "shortLabel", "A one or two word (less than 18 character) label."},
    {"*", "longLabel", "A sentence or two label."},
    {"*", "organism", "Common name of donor organism."},
@@ -123,6 +133,36 @@ struct fieldLabel fieldDescriptions[] = {
    {"*", "strain", "Strain of organism."},
    {"*", "geoPlatformName", "Short description of sequencing platform. Matches term used by GEO."},
 };
+
+char *camelCaseToSeparator(char *input, char separator)
+/* Convert something like thisIsMyVar to something all lower case with separator characters
+ * inserted in front of each formerly capitalized letter.  If separator is '_' it would convert
+ * 'thisIsMyVar' to 'this_is_my_var' in a dynamically allocated string. */
+{
+int inLen = strlen(input);
+assert(inLen > 0 && inLen < 1024);
+int maxOutLen = 2*inLen;
+char outBuf[maxOutLen+1];
+char c, *in = input, *out = outBuf;
+
+/* Copy first letter unaltered */
+*out++ = *in++;
+
+/* Loop through throwing in an underbar every time you see a capital letter. */
+while ((c = *in++) != 0)
+    {
+    if (isupper(c))
+        {
+	*out++ = separator;
+	c = tolower(c);
+	}
+    *out++ = c;
+    }
+*out++ = 0;	// end out string
+
+/* Store output to more permanent memory. */
+return cloneString(outBuf);
+}
 
 char *searchFieldDescription(char *type, char *field)
 /* Search field description table for match to field. */
@@ -158,7 +198,7 @@ if (count != 0)
 field->valType = valType;
 }
 
-void enforceCamelCase(char *label)
+void ensureGoodSymbol(char *label)
 /* Make sure that label is a good symbol for us - no spaces, starts with lower case. */
 {
 if (!islower(label[0]))
@@ -170,22 +210,10 @@ while ((c = *(++s)) != 0)
 }
 
 char *fieldLabelToSymbol(char *label)
-/* Convert a field label to one we want to use.  This one mostly puts system into 
- * something more compatible with what we're used to in other databases. */
+/* Convert a field label to one we want to use.  */
 {
-if (sameString(label, "term"))
-    return "shortLabel";
-else if (sameString(label, "tag"))
-    return "symbol";
-else if (sameString(label, "description"))
-    return "longLabel";
-else if (sameString(label, "antibodyDescription"))
-    return "longLabel";
-else
-    {
-    enforceCamelCase(label);
-    return label;
-    }
+ensureGoodSymbol(label);
+return label;
 }
 
 struct stanzaField *stanzaFieldNew(char *name)
@@ -231,7 +259,7 @@ else if (sameString(label, "Antibody"))
     return "antibody";
 else
     {
-    enforceCamelCase(label);
+    ensureGoodSymbol(label);
     return label;
     }
 }
@@ -485,7 +513,7 @@ struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s%s",  outDir, type->symbol, suffix);
+    safef(path, sizeof(path), "%s/%s%s%s",  outDir, tablePrefix, type->symbol, suffix);
     type->f = mustOpen(path, "w");
     }
 }
@@ -503,35 +531,19 @@ for (type = typeList; type != NULL; type = type->next)
 void outputAccordingToType(struct hash *ra, struct stanzaType *type, FILE *f)
 /* Output data in ra as tab-separated according to specs in type. */
 {
-struct stanzaField *field;
-for (field = type->fieldList; field != NULL; field = field->next)
-    {
-    if (field != type->fieldList)
-        fputc('\t', f);
 
+/* Output ID which we generate here, and skip over first field since it is output*/
+fprintf(f, "%d", ++type->lastId);
+struct stanzaField *field = type->fieldList;
+assert(field != NULL && sameString(field->name, "id"));
+field = field->next;
+
+/* Loop through rest. */
+for (; field != NULL; field = field->next)
+    {
+    fputc('\t', f);
     /* Figure out what to put here - just a simple ra field lookup unless we have to merge. */
-    char *val = NULL;
-    if (field->mergeChildren)
-         {
-         /* If we merge, then elsewhere we set up field to have exactly two children.
-          * Get data from tags defined by these two children.  If only one of these is
-          * found use it, otherwise call the mergeChildren function to figure out what
-          * text to use. */
-         struct stanzaField *a = field->children;
-         assert(a != NULL);
-         struct stanzaField *b = a->next;
-         assert(b != NULL);
-         char *aVal = hashFindVal(ra, a->name);
-         char *bVal = hashFindVal(ra, b->name);
-         if (aVal == NULL)
-             val = bVal;
-         else if (bVal == NULL)
-             val = aVal;
-         else
-             val = field->mergeChildren(aVal, bVal);
-         }
-    else
-        val = hashFindVal(ra, field->name);
+    char *val = hashFindVal(ra, field->name);
     val = emptyForNull(val);
     fputs(val, f);
     }
@@ -567,24 +579,37 @@ closeTypeFiles(typeList);
 lineFileClose(&lf);
 }
 
+char *nameInTypeOfTerms(char *name)
+/* Do a little symbol shuffling on "Cell Line" exception */
+{
+if (sameString(name, "Cell Line"))
+    return "cellType";
+else
+    return name;
+}
+
+char *getTypeDescription(struct stanzaType *type, struct hash *typeOfTermHash)
+/* Try and make up description of type, basically looking it up in the hash */
+{
+char *totKey = nameInTypeOfTerms(type->name);  /* key in typeOfTerm hash */
+char *typeDescription = "NoTypeDescription";
+struct slPair *typeOfTerm = hashFindVal(typeOfTermHash, totKey);
+if (typeOfTerm != NULL)
+    {
+    struct slPair *description = slPairFind(typeOfTerm, "description");
+    typeDescription = description->val;
+    }
+return typeDescription;
+}
+
 void outputAutoSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
 /* Output start of autoSql files to outDir, one per table. */
 {
-struct stanzaType *type;
 FILE *f = mustOpen(outFile, "w");
+struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
-    char *totKey = type->name;  /* key in typeOfTerm hash */
-    if (sameString(totKey, "Cell Line"))
-        totKey = "cellType";
-    char *typeDescription = "NoTypeDescription";
-    struct slPair *typeOfTerm = hashFindVal(typeOfTermHash, totKey);
-    if (typeOfTerm != NULL)
-        {
-        struct slPair *description = slPairFind(typeOfTerm, "description");
-        assert(description != NULL);  // Checked in initial parsing
-        typeDescription = description->val;
-        }
+    char *typeDescription = getTypeDescription(type, typeOfTermHash);
     char *indent = "    ";
     fprintf(f, "table %s\n", type->symbol);
     typeDescription = makeEscapedString(typeDescription, '"');
@@ -631,6 +656,181 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+void outputSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
+/* Output sql commands to create tables.  Don't populate tables here, will do that
+ * with tab-separated-files. */
+{
+FILE *f = mustOpen(outFile, "w");
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    char *typeDescription = getTypeDescription(type, typeOfTermHash);
+    fprintf(f, "# %s\n", typeDescription);
+    char *indent = "    ";
+    fprintf(f, "CREATE TABLE %s%s (\n", tablePrefix, type->symbol);
+    struct stanzaField *field;
+    for (field = type->fieldList; field != NULL; field = field->next)
+        {
+	fprintf(f, "%s%s ", indent, field->symbol);
+        switch (field->valType)
+            {
+            case sftString:
+                fputs("VARCHAR(255)", f);
+                break;
+            case sftUnsigned:
+                fputs("INT UNSIGNED", f);
+                break;
+            case sftInt:
+                fputs("INT", f);
+                break;
+            case sftFloat:
+                fputs("FLOAT", f);
+                break;
+            case sftLongString:
+                fputs("LONGBLOB", f);
+                break;
+            default:
+                internalErr();
+                break;
+            }
+	boolean isOptional = (field->count != type->count);
+	if (!isOptional)
+	    fprintf(f, " NOT NULL");
+	if (sameString(field->name, "id"))
+	    fprintf(f, " AUTO_INCREMENT");
+        char *description = searchFieldDescription(type->symbol, field->symbol);
+        if (description == NULL)
+             description = "noDescriptionDefined";
+	fprintf(f, ",\t# %s\n", description);
+        }
+    fprintf(f, "\t\t# Indices\n");
+    fprintf(f, "%sPRIMARY KEY(id)\n", indent);
+    fprintf(f, ");\n\n");
+    }
+carefulClose(&f);
+}
+
+char *djangoClassName(struct stanzaType *type)
+/* Return type->symbol with initial letter capitalized */
+{
+char *className = cloneString(type->symbol);
+className[0] = toupper(className[0]);
+return className;
+}
+
+
+void outputDjangoModels(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
+/* Output Dmango models.py */
+{
+/* Open file and write header */
+FILE *f = mustOpen(outFile, "w");
+fprintf(f, "# %s was originally generated by the cvToSql program\n", outFile);
+fprintf(f, "\n");
+fprintf(f, "from django.db import models\n");
+fprintf(f, "\n");
+
+/* Write a django model for each type */
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    char *indent = "    ";
+    char *typeSymbol = djangoClassName(type);
+    char *typeDescription = getTypeDescription(type, typeOfTermHash);
+    fprintf(f, "class %s(models.Model):\n", typeSymbol);
+    fprintf(f, "%s\"\"\"%s\"\"\"\n", indent, typeDescription);
+    struct stanzaField *field;
+    for (field = type->fieldList; field != NULL; field = field->next)
+        {
+	if (sameString(field->name, "id"))
+	    continue;
+	fprintf(f, "%s%s = models.", indent, field->symbol);
+	char *fieldLabel = camelCaseToSeparator(field->name, ' ');
+        switch (field->valType)
+            {
+            case sftString:
+                fprintf(f, "CharField(\"%s\", max_length=255", fieldLabel);
+                break;
+            case sftUnsigned:
+                fprintf(f, "PositiveIntegerField(\"%s\"", fieldLabel);
+                break;
+            case sftInt:
+                fprintf(f, "IntegerField(\"%s\"", fieldLabel);
+                break;
+            case sftFloat:
+                fprintf(f, "FloatField(\"%s\"", fieldLabel);
+                break;
+            case sftLongString:
+                fprintf(f, "TextField(\"%s\"", fieldLabel);
+                break;
+            default:
+                internalErr();
+                break;
+            }
+	freez(&fieldLabel);
+	boolean isOptional = (field->count != type->count);
+	if (isOptional)
+	    fprintf(f, ", blank=True");
+	fprintf(f, ")\n");
+        char *description = searchFieldDescription(type->symbol, field->symbol);
+        if (description == NULL)
+             description = "noDescriptionDefined";
+	fprintf(f, "\t# %s\n", description);
+        }
+    fprintf(f, "\n");
+
+    /* Add Meta subclass for extra info including table name that matches C expectations. */
+    fprintf(f, "%sclass Meta:\n", indent);
+    fprintf(f, "%s%sdb_table = '%s%s'\n", indent, indent, tablePrefix, type->symbol);
+    fprintf(f, "\n");
+    
+    /* Print unicode method */
+    fprintf(f, "%sdef __unicode__(self):\n", indent);
+    fprintf(f, "%s%sreturn self.term\n", indent, indent);
+    fprintf(f, "\n");
+    fprintf(f, "\n");
+    }
+carefulClose(&f);
+}
+
+
+void outputDjangoAdmin(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
+/* Write Django admin.py */
+{
+/* Open file and write header */
+FILE *f = mustOpen(outFile, "w");
+fprintf(f, "# %s was originally generated by the cvToSql program\n", outFile);
+fprintf(f, "\n");
+fprintf(f, "from django.contrib import admin\n");
+fprintf(f, "from models import *\n");
+fprintf(f, "\n");
+
+/* Write out each type. */
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    fprintf(f, "admin.site.register(%s)\n", djangoClassName(type));
+
+/* Clean up and go home. */
+carefulClose(&f);
+}
+
+
+void outputDjango(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outDir)
+/* Output directory of little Python scripts for Django. */
+{
+/* Make output directory and any directories needed to contain it. */
+makeDirsOnPath(outDir);
+
+/* Output models file. */
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s", outDir, "models.py");
+outputDjangoModels(typeList, typeOfTermHash, path);
+
+/* Output admin file. */
+safef(path, sizeof(path), "%s/%s", outDir, "admin.py");
+outputDjangoAdmin(typeList, typeOfTermHash, path);
+}
+
+
 /******* Routines for rearranging stanza types. *********/
 
 struct stanzaField *removeMatchingSymbol(struct stanzaField **pFieldList, char *symbol)
@@ -669,12 +869,11 @@ type->fieldList = slCat(startList, endList);
 
 char *fieldPriority[] = {
 /* List of order we'd like initial fields in */
-   "symbol",
+   "id",
+   "term",
+   "tag",
    "deprecated",
-   "shortLabel",
-   "longLabel",
-   "target",
-   "targetDescription",
+   "description",
 };
 
 struct stanzaField *stanzaFieldFake(char *name, struct stanzaType *parent, boolean isOptional)
@@ -698,6 +897,17 @@ if (!stanzaFieldFind(type->fieldList, "deprecated"))
     }
 }
 
+void addIdField(struct stanzaType *type)
+/* Add id field, and insure it doesn't already exist */
+{
+if (stanzaFieldFind(type->fieldList, "id"))
+    errAbort("Type %s already has an id field", type->name);
+struct stanzaField *field = stanzaFieldFake("id", type, FALSE);
+field->countFloat = field->countInt = field->countUnsigned = field->count;
+setValType(field);
+slAddHead(&type->fieldList, field);
+}
+
 void removeField(struct stanzaType *type, char *fieldName)
 /* Remove field of given type. */
 {
@@ -706,175 +916,10 @@ if (field != NULL)
     slRemoveEl(&type->fieldList, field);
 }
 
-struct stanzaField *buryTwoUnderMerge(struct stanzaType *type, char *name,
-        struct stanzaField *a, struct stanzaField *b, StringMerger mergeChildren)
-/* Set things up so we'll output a merged field rather than the given two fields 
- * for the given type */
-{
-struct stanzaField *field = stanzaFieldNew(name);
-field->count = max(a->count, b->count);
-field->countFloat = max(a->countFloat, b->countFloat);
-field->countUnsigned = max(a->countUnsigned, b->countUnsigned);
-field->countInt = max(a->countInt, b->countInt);
-slRemoveEl(&type->fieldList, a);
-slRemoveEl(&type->fieldList, b);
-field->children = a;
-a->next = b;
-b->next = NULL; /* Possibly not necessary, but cheap insurance. */
-field->mergeChildren = mergeChildren;
-slAddTail(&type->fieldList, field);
-return field;
-}
 
-char *bestShortLabel(char *a, char *b)
-/* Pick the value that looks like a better label based on length, etc.  All being equal
- * return a. */
-{
-int idealSize = 17;
-int aLen = strlen(a), bLen = strlen(b);
-if (aLen == bLen)
-    return a;
-else if (aLen < bLen)
-    {
-    if (bLen <= idealSize)
-         return b;
-    else
-         return a;
-    }
-else
-    {
-    if (aLen <= idealSize)
-        return a;
-    else
-        return b;
-    }
-}
-
-void testBestShortLabel()
-/* Just verify bestShortLabel function a bit. */
-{
-assert(sameString("longerThanX", bestShortLabel("x", "longerThanX")));
-assert(sameString("longerThanX", bestShortLabel("longerThanX", "x")));
-assert(sameString("x", bestShortLabel("x", "aWholeLotLongerThanX")));
-assert(sameString("x", bestShortLabel("aWholeLotLongerThanX", "x")));
-}
-
-void mergeLabelAndShortLabel(struct stanzaType *type)
-/* If type has both short and long labels, do a merger. */
-{
-struct stanzaField *label = stanzaFieldFindSymbol(type->fieldList, "label");
-struct stanzaField *shortLabel = stanzaFieldFindSymbol(type->fieldList, "shortLabel");
-if (label != NULL && shortLabel != NULL)
-    {
-    verbose(2, "Merging %s and %s in %s\n", label->name, shortLabel->name, type->name);
-    buryTwoUnderMerge(type, "shortLabel", label, shortLabel, bestShortLabel);
-    }
-}
-
-struct stanzaField *copyTypesInHash(char *whichFields[], struct hash *fieldHash)
-/* Create copies of fields specified in NULL terminated array whichFields,
- * and return a list of them.  */
-{
-struct stanzaField *list = NULL;
-char *fieldName, **fieldNames = whichFields;
-while ((fieldName = *fieldNames++) != NULL)
-    {
-    struct stanzaField *oldField = hashFindVal(fieldHash, fieldName);
-    if (oldField == NULL)
-        errAbort("Couldn't find field %s to in table being split", fieldName);
-    struct stanzaField *field = CloneVar(oldField);
-    slAddHead(&list, field);
-    }
-slReverse(&list);
-return list;
-}
-
-struct stanzaType *splitIntoRelatedTables(
-        struct stanzaType *type, struct hash *typeHash, struct hash *typeOfTermHash,
-        char *aFields[], char *bFields[], char *bName, char *bLabel)
-/* Split type into two separate types.  Assumes type is part of a list, and
- * will replace existing type on list with the two new types. The first of the
- * two new types will have the same name and the same spot on the list as the
- * unsplit type, but only the fields listed in the NULL terminated array aFields.
- * The second of the new types will have the fields listed in bFields, the name
- * given in bName, and will be inserted into the list after the input type.
- * The second type will also be intered into typeHash, and a new typeOfTerm
- * made for that attaches bLabel to it. 
- *     Returns new table with bType. */
-{
-struct stanzaType *bType = stanzaTypeNew(bName, typeHash);
-
-/* Move fields to a new variable, and also index in a hash. */
-struct stanzaField *fieldList = type->fieldList;       
-type->fieldList = NULL;
-struct hash *fieldHash = hashNew(8);
-struct stanzaField *field;
-for (field = fieldList; field != NULL; field = field->next)
-    hashAdd(fieldHash, field->name, field);
-
-/* Make new field lists for types. */
-type->fieldList = copyTypesInHash(aFields, fieldHash);
-bType->fieldList = copyTypesInHash(bFields, fieldHash);
-
-/* Insert bType in list. */
-bType->next = type->next;
-type->next = bType;
-type->splitSuccessor = bType;
-
-/* Make new typeOfTerm for it. Not sure all these fields are necessary here. 
- * For the most part following what is defined for Antibody. */
-struct slPair *fakeRa = NULL;
-slPairAdd(&fakeRa, "term", bName);
-slPairAdd(&fakeRa, "tag", strUpper(cloneString(bName)));
-slPairAdd(&fakeRa, "type", "typeOfTerm");
-slPairAdd(&fakeRa, "label", bLabel);
-slPairAdd(&fakeRa, "description", bLabel);
-slPairAdd(&fakeRa, "searchable", "multiSelect");
-slPairAdd(&fakeRa, "cvDefined", "yes");
-slPairAdd(&fakeRa, "validate", "cv");
-slPairAdd(&fakeRa, "priority", "190");
-slReverse(&fakeRa);
-hashAdd(typeOfTermHash, bName, fakeRa);
-
-return bType;
-}
-
-void changeFieldSymbol(struct stanzaType *type, char *name, char *newSymbol)
-/* Find field of given name, and change it's output symbol */
-{
-struct stanzaField *field = stanzaFieldFind(type->fieldList, name);
-if (field == NULL)
-    errAbort("Couldn't change symbol of %s.%s to %s because %s not found.",
-        type->name, name, newSymbol, name);
-field->symbol = newSymbol;
-}
-
-void splitAntibodyTable(struct stanzaType *type, 
-        struct hash *typeHash, struct hash *typeOfTermHash)
-/* Split the antibody table into antibody and target. */
-{
-static char *antibodyKeepFields[] = {
-    "term", "tag", 
-    "antibodyDescription", "deprecated", "lab", "label", "lots",
-    "orderUrl", "tag", "target", "term", "type", "validation",
-    "vendorId", "vendorName", NULL,
-};
-static char *antibodyTargetFields[] = {
-    "target", "targetDescription", "targetId", "targetUrl", NULL,
-};
-
-struct stanzaType *targetType = splitIntoRelatedTables(type, typeHash, typeOfTermHash,
-        antibodyKeepFields, antibodyTargetFields, "antibodyTarget",
-        "Theoretical target of an antibody. May be a protein, modified protein, "
-        "part of a protein, or some other molecule.");
-/* Change label of fields in .as file. */
-changeFieldSymbol(targetType, "target", "symbol");
-changeFieldSymbol(targetType, "targetDescription", "longLabel");
-changeFieldSymbol(targetType, "targetId", "externalId");
-changeFieldSymbol(targetType, "targetUrl", "externalUrl");
-}
-
-void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outAs, char *outDir)
+void testCvToSql(char *inCvRa, 
+	 char *outStats, char *outTree, char *outAs, char *outSql, 
+	 char *outDjango, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
@@ -891,20 +936,21 @@ stanzaTypesToStats(typeList, outStats);
 struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
+    // Grant is a reserved word in SQL so we have to change it
     if (sameString(type->name, "grant"))
-        type->symbol = "encodeGrant";
-    else if (sameString(type->name, "Antibody"))
-        splitAntibodyTable(type, typeHash, typeOfTermHash);
+        type->symbol = "grantee";
     addDeprecatedField(type);
-    mergeLabelAndShortLabel(type);
-    removeField(type, "type");
+    addIdField(type);
     reorderFields(type, fieldPriority, ArraySize(fieldPriority));
+    removeField(type, "type");
     }
 
 /* Output type tree and actual data */
 stanzaTypeToTree(typeList, outTree);
 makeDirsOnPath(outDir);
 outputAutoSql(typeList, typeOfTermHash, outAs);
+outputSql(typeList, typeOfTermHash, outSql);
+outputDjango(typeList, typeOfTermHash, outDjango);
 outputTabs(typeList, typeHash, inCvRa, outDir);
 }
 
@@ -912,9 +958,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 6)
+if (argc != 8)
     usage();
-testBestShortLabel();
-testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5]);
+tablePrefix = optionVal("tablePrefix", tablePrefix);
+testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 return 0;
 }

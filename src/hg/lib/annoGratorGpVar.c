@@ -3,10 +3,14 @@
 #include "annoGratorGpVar.h"
 #include "genePred.h"
 #include "pgSnp.h"
+#include "variant.h"
+#include "gpFx.h"
+#include "twoBit.h"
+#include "annoGratorQuery.h"
 
-static char *gpFxDataLineAutoSqlString =
-"table knownGeneGpVar"
-"\"Genes based on RefSeq, GenBank, and UniProt.\""
+static char *annoGpVarDataLineAutoSqlString =
+"table genePredWithSO"
+"\"genePred with Sequence Ontology annotation\""
 "("
 "string  name;               \"Name of gene\""
 "string  chrom;              \"Reference sequence chromosome or scaffold\""
@@ -20,30 +24,78 @@ static char *gpFxDataLineAutoSqlString =
 "uint[exonCount] exonEnds;   \"Exon end positions\""
 "string  proteinID;          \"UniProt display ID for Known Genes,  UniProt accession or RefSeq protein ID for UCSC Genes\" "
 "string  alignID;            \"Unique identifier for each (known gene, alignment position) pair\""
-"uint    gpFxType;           \"Effect type (see annoGratorGpVar.h)\""
-"uint    gpFxTransOffset;    \"offset in transcript\""
-"string  gpFxBaseChange;     \"base change in transcript\""
-"uint    gpFxCodonChange;    \"codon triplet change in transcript\""
-"uint    gpFxProteinOffset;  \"offset in protein\""
-"uint    gpFxProteinChange;  \"peptide change in protein\""
+"uint    soNumber;           \"Sequence Ontology Number \" "
+"uint    soOther0;           \"Ancillary detail 0\""
+"uint    soOther1;           \"Ancillary detail 1\""
+"uint    soOther2;           \"Ancillary detail 2\""
+"uint    soOther3;           \"Ancillary detail 3\""
+"uint    soOther4;           \"Ancillary detail 4\""
+"uint    soOther5;           \"Ancillary detail 5\""
+"uint    soOther6;           \"Ancillary detail 6\""
 ")";
 
-struct asObject *gpFxAsObj()
+struct asObject *annoGpVarAsObj()
 // Return asObject describing fields of genePred (at the moment, knownGene)
 {
-return asParseText(gpFxDataLineAutoSqlString);
+return asParseText(annoGpVarDataLineAutoSqlString);
 }
 
-static struct gpFx *aggvPredEffect(struct pgSnp *pgSnp, struct genePred *pred)
-// return the predicted effect of a variation on a genePred
+static char *blankIfNull(char *input)
 {
-static struct gpFx noEffect;
+if (input == NULL)
+    return "";
 
-// default is no effect
-noEffect.next = NULL;
-noEffect.type = gpFxNone;
+return input;
+}
 
-return &noEffect;
+static char *uintToString(uint num)
+{
+char buffer[10];
+
+safef(buffer,sizeof buffer, "%d", num);
+return cloneString(buffer);
+}
+
+static void aggvStringifyGpFx(char **words, struct gpFx *effect)
+// turn gpFx structure into a list of words
+{
+int count = 0;
+
+words[count++] = uintToString(effect->so.soNumber);
+
+switch(effect->so.soNumber)
+    {
+    case intron_variant:
+	words[count++] = cloneString(effect->so.sub.intron.transcript);
+	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
+	break;
+
+    case synonymous_variant:
+    case non_synonymous_variant:
+	words[count++] = cloneString(effect->so.sub.codingChange.transcript);
+	words[count++] = uintToString(effect->so.sub.codingChange.exonNumber);
+	words[count++] = uintToString(effect->so.sub.codingChange.cDnaPosition);
+	words[count++] = uintToString(effect->so.sub.codingChange.cdsPosition);
+	words[count++] = uintToString(effect->so.sub.codingChange.pepPosition);
+	words[count++] = cloneString(effect->so.sub.codingChange.aaChanges);
+	words[count++] = cloneString(effect->so.sub.codingChange.codonChanges);
+	break;
+
+    default:
+	// write out ancillary information
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther0);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther1);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther2);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther3);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther4);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther5);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther6);
+	break;
+    };
+
+int needWords = sizeof(effect->so.sub.generic) / sizeof(char *) + 1;
+while (count < needWords)
+	words[count++] = "";
 }
 
 static struct annoRow *aggvEffectToRow( struct annoGrator *self,
@@ -52,30 +104,76 @@ static struct annoRow *aggvEffectToRow( struct annoGrator *self,
 {
 char **wordsOut;
 char **wordsIn = (char **)rowIn->data;
+
+assert(self->streamer.numCols > self->mySource->numCols);
 AllocArray(wordsOut, self->streamer.numCols);
 
-// ?to ASH? do I need to allocate these, or can I just memcpy all of this?
-int ii;
-for(ii=0; ii < self->mySource->numCols; ii++)
-    wordsOut[ii] = cloneString(wordsIn[ii]);
+// copy the genePred fields over
+memcpy(wordsOut, wordsIn, sizeof(char *) * self->mySource->numCols);
 
 // stringify the gpFx structure 
 int count = self->mySource->numCols;
-char buffer[10];
-safef(buffer, sizeof buffer, "%d", effect->type);
-wordsOut[count++] = cloneString(buffer);
-for (; count <  self->streamer.numCols; count++)
-    wordsOut[count] = "";
+aggvStringifyGpFx(&wordsOut[count], effect);
 
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, 
     rowIn->rightJoinFail, wordsOut, self->streamer.numCols);
 }
 
-static struct annoRow *aggvGenRows( struct annoGrator *self,
-    struct pgSnp *pgSnp, struct genePred *pred, struct annoRow *inRow)
-// put out annoRows for all the gpFx that arise from pgSnp and pred
+/* Get the sequence associated with a particular bed concatenated together. */
+struct dnaSeq *twoBitSeqFromBed(struct twoBitFile *tbf, struct bed *bed)
 {
-struct gpFx *effects = aggvPredEffect(pgSnp, pred);
+struct dnaSeq *block = NULL;
+struct dnaSeq *bedSeq = NULL;
+int i = 0 ;
+int size;
+assert(bed);
+/* Handle very simple beds and beds with blocks. */
+if(bed->blockCount == 0)
+    {
+    bedSeq = twoBitReadSeqFragExt(tbf, bed->chrom, bed->chromStart, bed->chromEnd, FALSE, &size);
+    freez(&bedSeq->name);
+    bedSeq->name = cloneString(bed->name);
+    }
+else
+    {
+    int offSet = bed->chromStart;
+    struct dyString *currentSeq = newDyString(2048);
+    //hNibForChrom(db, bed->chrom, fileName);
+    for(i=0; i<bed->blockCount; i++)
+	{
+	block = twoBitReadSeqFragExt(tbf, bed->chrom, 
+	      offSet+bed->chromStarts[i], offSet+bed->chromStarts[i]+bed->blockSizes[i], FALSE, &size);
+	dyStringAppendN(currentSeq, block->dna, block->size);
+	dnaSeqFree(&block);
+	}
+    AllocVar(bedSeq);
+    bedSeq->name = cloneString(bed->name);
+    bedSeq->dna = cloneString(currentSeq->string);
+    bedSeq->size = strlen(bedSeq->dna);
+    dyStringFree(&currentSeq);
+    }
+if(bed->strand[0] == '-')
+    reverseComplement(bedSeq->dna, bedSeq->size);
+return bedSeq;
+}
+
+struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct twoBitFile *tbf)
+{
+struct bed *bed = bedFromGenePred(pred);
+struct dnaSeq *dnaSeq = twoBitSeqFromBed(tbf, bed);
+
+return dnaSeq;
+}
+
+
+static struct annoRow *aggvGenRows( struct annoGrator *self,
+    struct variant *variant, struct genePred *pred, struct annoRow *inRow)
+// put out annoRows for all the gpFx that arise from variant and pred
+{
+// FIXME:  accessing query's tbf is probably bad
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, 
+    self->streamer.query->tbf);
+struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
@@ -88,8 +186,10 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
-				    boolean *retRJFilterFailed)
+struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *self, 
+	struct annoRow *primaryRow, boolean *retRJFilterFailed)
+// integrate a pgSnp and a genePred, generate as many rows as
+// needed to capture all the changes
 {
 struct annoRow *rows = annoGratorIntegrate(self, primaryRow, retRJFilterFailed);
 
@@ -98,13 +198,21 @@ if ((rows == NULL) || (retRJFilterFailed && *retRJFilterFailed))
 
 char **primaryWords = primaryRow->data;
 struct pgSnp *pgSnp = pgSnpLoad(primaryWords);
+struct variant *variant = variantFromPgSnp(pgSnp);
 struct annoRow *outRows = NULL;
 
 for(; rows; rows = rows->next)
     {
     char **inWords = rows->data;
+
+    // work around genePredLoad's trashing its input
+    char *saveExonStarts = cloneString(inWords[8]);
+    char *saveExonEnds = cloneString(inWords[9]);
     struct genePred *gp = genePredLoad(inWords);
-    struct annoRow *outRow = aggvGenRows(self, pgSnp, gp, rows);
+    inWords[8] = saveExonStarts;
+    inWords[9] = saveExonEnds;
+
+    struct annoRow *outRow = aggvGenRows(self, variant, gp, rows);
     slAddHead(&outRows, outRow);
     }
 
@@ -125,7 +233,7 @@ struct annoGrator *self = annoGratorNew(mySource);
 self->integrate = annoGratorGpVarIntegrate;
 
 // TODO: overriding these should be a single function call
-self->streamer.asObj =  gpFxAsObj();
+self->streamer.asObj =  annoGpVarAsObj();
 self->streamer.numCols = slCount(self->streamer.asObj->columnList);
 self->streamer.columns = annoColumnsFromAsObject(self->streamer.asObj);
 

@@ -113,10 +113,13 @@ agCheckPrimarySorting(self, primaryRow);
 agTrimToStart(self, primaryRow->chrom, primaryRow->start);
 agFetchToEnd(self, primaryRow->chrom, primaryRow->end);
 boolean rjFailHard = (retRJFilterFailed != NULL);
+if (rjFailHard)
+    *retRJFilterFailed = FALSE;
 struct annoRow *qRow;
 for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
-    if (qRow->start < primaryRow->end && qRow->end > primaryRow->start)
+    if (qRow->start < primaryRow->end && qRow->end > primaryRow->start &&
+	sameString(qRow->chrom, primaryRow->chrom))
 	{
 	slAddHead(&rowList, annoRowClone(qRow, self->mySource));
 	if (rjFailHard && qRow->rightJoinFail)
@@ -127,6 +130,11 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
 	}
     }
 slReverse(&rowList);
+// If no rows overlapped primary, and there is a right-join, !isExclude (i.e. isInclude) filter,
+// then we need to set retRJFilterFailed because the condition was not met to include
+// the primary item.
+if (rowList == NULL && rjFailHard && self->haveRJIncludeFilter)
+    *retRJFilterFailed = TRUE;
 return rowList;
 }
 
@@ -159,6 +167,24 @@ annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
 self->qTail = NULL;
 }
 
+static boolean filtersHaveRJInclude(struct annoFilter *filters)
+/* Return TRUE if filters have at least one active filter with !isExclude && rightJoin. */
+{
+struct annoFilter *filter;
+for (filter = filters;  filter != NULL;  filter = filter->next)
+    if (filter->op != afNoFilter && !filter->isExclude && filter->rightJoin)
+	return TRUE;
+return FALSE;
+}
+
+static void agSetFilters(struct annoStreamer *vSelf, struct annoFilter *newFilters)
+/* Update filters and re-evaluate self->haveRJIncludeFilter */
+{
+annoStreamerSetFilters(vSelf, newFilters);
+struct annoGrator *self = (struct annoGrator *)vSelf;
+self->haveRJIncludeFilter = filtersHaveRJInclude(vSelf->filters);
+}
+
 void annoGratorSetRegion(struct annoStreamer *vSelf, char *chrom, uint rStart, uint rEnd)
 /* Set genomic region for query, and reset internal state. */
 {
@@ -184,11 +210,13 @@ AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, mySource->getAutoSqlObject(mySource));
 streamer->rowType = mySource->rowType;
+streamer->setFilters = agSetFilters;
 streamer->setRegion = annoGratorSetRegion;
 streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
 self->integrate = annoGratorIntegrate;
 self->mySource = mySource;
+self->haveRJIncludeFilter = filtersHaveRJInclude(streamer->filters);
 return self;
 }

@@ -463,16 +463,17 @@ noInherit on
 
     track pubsBlat
     shortLabel Sequences
-    longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
+    longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
     type bed 12 .
     visibility pack
     priority 2
     release alpha
-    #configurable off
+    configurable off
+    configureByPopup off
 
     track pubsBlatPsl
-    shortLabel Individual Seq. Matches
+    shortLabel Indiv. Seq. Matches
     longLabel Individual sequence matches of one selected article from sequences track
     parent pubs off
     type psl
@@ -480,7 +481,8 @@ noInherit on
     priority 1
     release alpha
     configurable off
-    color 0,158,115
+    configureByPopup off
+    color 0,115,70
 
     track pubsMarkerBand
     shortLabel Bands
@@ -490,7 +492,6 @@ noInherit on
     priority 3
     type bed 4
     release alpha
-    #configurable off
 
     track pubsMarkerSnp
     shortLabel SNPs
@@ -500,7 +501,6 @@ noInherit on
     priority 3
     type bed 4
     release alpha
-    #configurable off
 
     track pubsMarkerGene
     shortLabel Genes
@@ -510,7 +510,6 @@ noInherit on
     visibility hide
     type bed 4
     release alpha
-    #configurable off
 
 track transMap
 superTrack on

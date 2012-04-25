@@ -55,7 +55,7 @@ recommended by the manufacturer.</p>
 
 <P><B><em>Alignment</em></B>: Sequence reads from each IP experiment were aligned to the
 human reference genome (<B>GRCh37/hg19</B>) using
-<a href="http://maq.sourceforge.net/" title='http://maq.sourceforge.net/' rel="nofollow" TARGET = _BLANK>MAQ</a>
+<a href="http://maq.sourceforge.net/" title='http://maq.sourceforge.net/' target="_blank">MAQ</a>
 with default parameters, except '<code>-C 11</code>' and
 '<code>-H output_file</code>' were added, which added outputs up to 11 additional best matches
 for each read (if any are found) to a file. This information was used to filter
@@ -67,7 +67,7 @@ data, following ENCODE practices.</p>
 
 <P><B><em>Signal</em></B>: Fragment densities were computed by counting the number of
 reads overlapping each 25 bp bin along the genome. Densities were computed using
-<a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' rel="nofollow" TARGET = _BLANK>igvtools count</a>
+<a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' target="_blank">igvtools count</a>
 with default parameters (in particular, '<code>-w 25</code>' to set window size
 of 25 bp and '<code>-f mean</code>' to report the mean value across the window),
 except for '<code>-e</code>' which was set to extend the reads to 200 bp, and the
@@ -75,7 +75,7 @@ except for '<code>-e</code>' which was set to extend the reads to 200 bp, and th
 from the UCSC Kent software package.</p>
 
 <P><B><em>Peaks</em></B>: Discrete intervals of ChIP-seq fragment enrichment were
-identified using <a href="http://www.broadinstitute.org/software/scripture/" title='http://www.broadinstitute.org/software/scripture/' rel="nofollow" TARGET = _BLANK>Scripture</a>,
+identified using <a href="http://www.broadinstitute.org/software/scripture/" title='http://www.broadinstitute.org/software/scripture/' target="_blank">Scripture</a>,
 a scan statistics approach, under the assumption of uniform background signal.
 All data sets where processed with '<code>-task chip</code>', and with
 '<code>-windows 100,200,500,1000,5000,10000,100000</code>'. (No mask file nor
@@ -100,9 +100,9 @@ based on prior expectations.
 
 <h2>Credits</h2>
 <p>The ChIP-seq data were generated at the
- <a href="http://www.broadinstitute.org/science/projects/epigenomics/epigenomics-initiative" title="http://www.broad.mit.edu" rel="nofollow" TARGET = _BLANK>
+ <a href="http://www.broadinstitute.org/science/projects/epigenomics/epigenomics-initiative" title="http://www.broad.mit.edu" target="_blank">
  Broad Institute</a> and in the
- <a href="https://csb.mgh.harvard.edu/bradley_bernstein" title="https://csb.mgh.harvard.edu/bradley_bernstein" rel="nofollow" TARGET = _BLANK>
+ <a href="https://csb.mgh.harvard.edu/bradley_bernstein" title="https://csb.mgh.harvard.edu/bradley_bernstein" target="_blank">
  Bradley E. Bernstein lab</a> at the Massachusetts General Hospital/Harvard Medical School.
   &nbsp;&nbsp;
 
@@ -117,44 +117,49 @@ Contact: <A HREF="mailto:&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;
 </p>
 
 <h2>References</h2>
+
 <p>
 Bernstein BE, Kamal M, Lindblad-Toh K, Bekiranov S, Bailey DK, Huebert DJ, McMahon S, Karlsson EK, Kulbokas EJ 3rd, Gingeras TR <em>et al</em>.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/15680324"
- rel="nofollow" target="_blank">
- Genomic maps and comparative analysis of histone modifications in human and mouse</a>.
- <em>Cell</em>. 2005 Jan 28;120(2):169-81.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15680324" target="_blank">
+Genomic maps and comparative analysis of histone modifications in human and mouse</a>.
+<em>Cell</em>. 2005 Jan 28;120(2):169-81.
 </p>
 
 <p>
 Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A, Wernig M, Plath K <em>et al</em>.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/16630819"
- rel="nofollow" target="_blank">
- A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
- <em>Cell</em>. 2006 Apr 21;125(2):315-26.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16630819" target="_blank">
+A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
+<em>Cell</em>. 2006 Apr 21;125(2):315-26.
 </p>
 
 <p>
 Ernst J, Kheradpour P, Mikkelsen TS, Shoresh N, Ward LD, Epstein CB, Zhang X, Wang L, Issner R, Coyne M <em>et al</em>.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907"
- rel="nofollow" target="_blank">
- Mapping and analysis of chromatin state dynamics in nine human cell types</a>.
- <em>Nature</em>. 2011 May 5;473(7345):43-9.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907" target="_blank">
+Mapping and analysis of chromatin state dynamics in nine human cell types</a>.
+<em>Nature</em>. 2011 May 5;473(7345):43-9.
 </p>
 
 <p>
 Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, Adiconis X, Fan L, Koziol MJ, Gnirke A, Nusbaum C <em>et al</em>.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/20436462"
- rel="nofollow" target="_blank">
- Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
- <em>Nat Biotechnol</em>. 2010 May;28(5):503-10.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20436462" target="_blank">
+Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
+<em>Nat Biotechnol</em>. 2010 May;28(5):503-10.
 </p>
 
 <p>
 Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez P, Brockman W, Kim TK, Koche RP <em>et al</em>.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/17603471"
- rel="nofollow" target="_blank">
- Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</a>.
- <em>Nature</em>. 2007 Aug 2;448(7153):553-60.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17603471" target="_blank">
+Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</a>.
+<em>Nature</em>. 2007 Aug 2;448(7153):553-60.
+</p>
+
+<h2>Publications</h2>
+
+<p>
+Ram O, Goren A, Amit I, Shoresh N, Yosef N, Ernst J, Kellis M, Gymrek M, Issner R, Coyne M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22196736" target="_blank">
+Combinatorial patterning of chromatin regulators uncovered by genome-wide location analysis in human cells</a>.
+<em>Cell</em>. 2011 Dec 23;147(7):1628-39.
 </p>
 
 <H2> Data Release Policy </H2>

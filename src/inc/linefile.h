@@ -57,6 +57,11 @@ struct lineFile
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
     struct dyString *rawLines;  // Filled with raw lines used to create the full line
     boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
+
+    void *dataForCallBack;                                 // ptr to data needed for callbacks
+    void(*checkSupport)(struct lineFile *lf, char *where); // check if operation supported 
+    boolean(*nextCallBack)(struct lineFile *lf, char **retStart, int *retSize); // next line callback
+    void(*closeCallBack)(struct lineFile *lf);             // close callback
     };
 
 char *getFileNameFromHdrSig(char *m);
@@ -87,6 +92,9 @@ struct lineFile *lineFileOnString(char *name, bool zTerm, char *s);
 /* Wrap a line file object around string in memory. This buffer
  * have zeroes written into it if zTerm is non-zero.  It will
  * be freed when the line file is closed. */
+
+struct lineFile *lineFileOnBigBed(char *bigBedFileName);
+/* Wrap a line file object around a BigBed. */
 
 void lineFileClose(struct lineFile **pLf);
 /* Close up a line file. */
@@ -191,6 +199,28 @@ int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords);
 #define lineFileChopTab(lf, words) lineFileChopNextTab(lf, words, ArraySize(words))
 /* Ease-of-usef macro for lineFileChopNext above. */
 
+int lineFileCheckAllIntsNoAbort(char *s, void *val, 
+    boolean isSigned, int byteCount, char *typeString, boolean noNeg, 
+    char *errMsg, int errMsgSize);
+/* Convert string to (signed) integer of the size specified.  
+ * Unlike atol assumes all of string is number, no trailing trash allowed.
+ * Returns 0 if conversion possible, and value is returned in 'val'
+ * Otherwise 1 for empty string or trailing chars, and 2 for numeric overflow,
+ * and 3 for (-) sign in unsigned number.
+ * Error messages if any are written into the provided buffer.
+ * Pass NULL val if you only want validation.
+ * Use noNeg if negative values are not allowed despite the type being signed,
+ * returns 4. */
+
+void lineFileAllInts(struct lineFile *lf, char *words[], int wordIx, void *val,
+  boolean isSigned,  int byteCount, char *typeString, boolean noNeg);
+/* Returns long long integer from converting the input string. Aborts on error. */
+
+int lineFileAllIntsArray(struct lineFile *lf, char *words[], int wordIx, void *array, int arraySize,
+  boolean isSigned,  int byteCount, char *typeString, boolean noNeg);
+/* Convert comma separated list of numbers to an array.  Pass in
+ * array and max size of array. Aborts on error. Returns number of elements in parsed array. */
+
 int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return
  * binary representation of it. */
@@ -230,6 +260,8 @@ void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
 void lineFileSetUniqueMetaData(struct lineFile *lf);
 /* suppress duplicate lines in metadata */
 
+void lineFileExpandBuf(struct lineFile *lf, int newSize);
+/* Expand line file buffer. */
 
 void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
 /* remove initial browser and track lines */

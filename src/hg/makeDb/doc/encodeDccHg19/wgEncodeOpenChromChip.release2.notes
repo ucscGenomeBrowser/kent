@@ -1,11 +1,11 @@
 mkChangeNotes v2
 hg19 wgEncodeOpenChromChip Release 2 vs Release 1
-2011-12-12
+2012-04-09
 
 QA Count Summaries for Release 2:
-Tables: 122
-Files: 387
-Gbdbs: 85
+Tables: 140
+Files: 441
+Gbdbs: 97
 Supplemental: 0
 Other: 3
 
@@ -15,22 +15,22 @@ Files: 4
 Gbdbs: 1
 
 Sizes of New:
-Table: 198 MB
-Files: 32218 MB (31 GB)
-Gbdbs: 17113 MB (17 GB)
+Table: 227 MB
+Files: 83775 MB (82 GB)
+Gbdbs: 40378 MB (39 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 49530 MB (48 GB)
+Total: 124381 MB (121 GB)
 
 
 TABLES:
-New: 8
+New: 26
 Untouched: 114
 Revoked/Replaced/Renamed: 1
-New + Untouched: 122
-Total (New + Untouched + Revoked/Replaced/Renamed): 123
+New + Untouched: 140
+Total (New + Untouched + Revoked/Replaced/Renamed): 141
 
-New Tables (8):
+New Tables (26):
 wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
 wgEncodeOpenChromChipA549CtcfPkRep1
 wgEncodeOpenChromChipA549CtcfSig
@@ -38,6 +38,24 @@ wgEncodeOpenChromChipA549InputSig
 wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
 wgEncodeOpenChromChipA549Pol2PkRep1
 wgEncodeOpenChromChipA549Pol2Sig
+wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
+wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
+wgEncodeOpenChromChipMcf7CmycSerumstimSig
+wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
+wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
+wgEncodeOpenChromChipMcf7CmycSerumstvdSig
+wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
+wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
+wgEncodeOpenChromChipMcf7CtcfSerumstimSig
+wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
+wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
+wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
+wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
+wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
+wgEncodeOpenChromChipMcf7Pol2SerumstimSig
+wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
+wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
+wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
 wgEncodeOpenChromChipMonocd14ro1746InputSig
 
 Untouched Tables (114):
@@ -161,13 +179,13 @@ wgEncodeOpenChromChipMonocd14InputSig
 
 
 DOWNLOAD FILES:
-New: 39
+New: 93
 Untouched: 348
 Revoked/Replaced/Renamed: 4
-New + Untouched: 387
-Total (New + Untouched + Revoked/Replaced/Renamed): 391
+New + Untouched: 441
+Total (New + Untouched + Revoked/Replaced/Renamed): 445
 
-New Download Files (39):
+New Download Files (93):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep2.bam
@@ -203,6 +221,60 @@ New Download Files (39):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562CmycValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562CtcfValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562Pol2Validation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstvdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstimSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CtcfSerumstvdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputRawData.fastq.gz
@@ -566,18 +638,30 @@ Revoked/Replaced/Renamed Download Files (4):
 
 
 GBDBS:
-New: 6
+New: 18
 Untouched: 79
 Revoked/Replaced/Renamed: 1
-New + Untouched: 85
-Total (New + Untouched + Revoked/Replaced/Renamed): 86
+New + Untouched: 97
+Total (New + Untouched + Revoked/Replaced/Renamed): 98
 
-New Gbdb Files (6):
+New Gbdb Files (18):
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549CtcfSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549InputSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549Pol2Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstvdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CtcfSerumstimSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CtcfSerumstvdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMonocd14ro1746InputSig.bigWig
 
 Untouched Gbdb Files (79):
@@ -703,6 +787,24 @@ Files that dropped between releases (2):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release1/preamble.html
 
 
+
+
+
+
+New Attic Objects (13):
+wgEncodeOpenChromChipGm12878CmycValidation
+wgEncodeOpenChromChipGm12878CtcfValidation
+wgEncodeOpenChromChipGm12878Pol2Validation
+wgEncodeOpenChromChipHelas3CmycValidation
+wgEncodeOpenChromChipHelas3CtcfValidation
+wgEncodeOpenChromChipHelas3Pol2Validation
+wgEncodeOpenChromChipHepg2CmycValidation
+wgEncodeOpenChromChipHepg2CtcfValidation
+wgEncodeOpenChromChipHepg2Pol2Validation
+wgEncodeOpenChromChipHuvecCtcfValidation
+wgEncodeOpenChromChipK562CmycValidation
+wgEncodeOpenChromChipK562CtcfValidation
+wgEncodeOpenChromChipK562Pol2Validation
 
 
 No Errors

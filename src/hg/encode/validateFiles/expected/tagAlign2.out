@@ -1,0 +1,6 @@
+Error [file=input/tagAlign2.txt, line=1]: too many mismatches (found 1/25, maximum is 0) (chr1 222077840 222077865 +)
+seq=[ATAAACACTGTAGACTTTCCNAGNN]
+gen=[aaaaacactgtagactttcccagta]
+
+Aborting .. found 1 error
+

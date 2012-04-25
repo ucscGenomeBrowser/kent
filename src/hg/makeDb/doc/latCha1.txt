@@ -284,3 +284,13 @@ taxId   7897
     ln -s `pwd`/latCha1.2bit /gbdb/latCha1/latCha1.2bit
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/latCha1/bed/cpgIslands
+    cd /hive/data/genomes/latCha1/bed/cpgIslands
+    time doCpgIslands.pl latCha1 > do.log 2>&1
+    #   Elapsed time: 75m3s
+
+    cat fb.latCha1.cpgIslandExt.txt
+    #   3128859 bases of 2183592768 (0.143%) in intersection
+
+#########################################################################

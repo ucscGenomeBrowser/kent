@@ -25,8 +25,10 @@ errAbort(
   "This converts:\n"
   "   - top-level gene records with mRNA records\n"
   "   - top-level mRNA records\n"
-  "   - mRNA records can contain exon and CDS, or only CDS, or only\n"
-  "     exon for non--coding.\n"
+  "   - mRNA records that contain:\n"
+  "       - exon and CDS\n"
+  "       - CDS, five_prime_UTR, three_prime_UTR\n"
+  "       - only exon for non-coding\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
@@ -116,6 +118,21 @@ slSort(&feats, gff3AnnRefLocCmp);
 return feats;
 }
 
+static void setCdsStatFromCodons(struct genePred *gp, struct gff3Ann *mrna)
+/* set cds start/stop status based on start/stop codon annotation */
+{
+if (gp->strand[0] == '+')
+    {
+    gp->cdsStartStat = haveChildFeature(mrna, gff3FeatStartCodon) ? cdsComplete : cdsIncomplete;
+    gp->cdsEndStat =  haveChildFeature(mrna, gff3FeatStopCodon) ? cdsComplete : cdsIncomplete;
+    }
+else
+    {
+    gp->cdsStartStat = haveChildFeature(mrna, gff3FeatStopCodon) ? cdsComplete : cdsIncomplete;
+    gp->cdsEndStat =  haveChildFeature(mrna, gff3FeatStartCodon) ? cdsComplete : cdsIncomplete;
+    }
+}
+
 static struct genePred *makeGenePred(struct gff3Ann *gene, struct gff3Ann *mrna, struct gff3AnnRef *exons, struct gff3AnnRef *cdsBlks)
 /* construct the empty genePred, return NULL on a failure. */
 {
@@ -144,16 +161,7 @@ gp->name2 = cloneString(gene->id);
 // set start/end status based on codon features if requested
 if (honorStartStopCodons)
     {
-    if (gp->strand[0] == '+')
-        {
-        gp->cdsStartStat = haveChildFeature(mrna, gff3FeatStartCodon) ? cdsComplete : cdsIncomplete;
-        gp->cdsEndStat =  haveChildFeature(mrna, gff3FeatStopCodon) ? cdsComplete : cdsIncomplete;
-        }
-    else
-        {
-        gp->cdsStartStat = haveChildFeature(mrna, gff3FeatStopCodon) ? cdsComplete : cdsIncomplete;
-        gp->cdsEndStat =  haveChildFeature(mrna, gff3FeatStartCodon) ? cdsComplete : cdsIncomplete;
-        }
+    setCdsStatFromCodons(gp, mrna);
     }
 else
     {
@@ -163,16 +171,35 @@ else
 return gp;
 }
 
-static void addExons(struct genePred *gp, struct gff3AnnRef *exons)
-/* add exons */
+static bool adjacentBlockDiffTypes(struct gff3AnnRef *prevBlk, struct gff3AnnRef *blk)
+/* are two block adjacent and of a different type? prevBlk can be NULL */
 {
-struct gff3AnnRef *exon;
-for (exon = exons; exon != NULL; exon = exon->next)
+return (prevBlk != NULL) && (prevBlk->ann->end == blk->ann->start)
+    && !sameString(prevBlk->ann->type, blk->ann->type);
+}
+
+static void addExons(struct genePred *gp, struct gff3AnnRef *blks)
+/* Add exons.  blks can either be exon records or utr and cds records.
+ * If blks are adjacent and are of different types, they will be joined.
+ * If blks are adjacent and the same type, they are not joined, which might
+ * indicate a CDS frameshift.
+*/
+{
+struct gff3AnnRef *blk, *prevBlk = NULL;
+for (blk = blks; blk != NULL; prevBlk = blk, blk = blk->next)
     {
-    int i = gp->exonCount++;
-    gp->exonStarts[i] = exon->ann->start;
-    gp->exonEnds[i] = exon->ann->end;
-    gp->exonFrames[i] = -1;
+    int i = gp->exonCount;
+    if (adjacentBlockDiffTypes(prevBlk, blk))
+        {
+        gp->exonEnds[i-1] = blk->ann->end; // extend
+        }
+    else
+        {
+        gp->exonStarts[i] = blk->ann->start;
+        gp->exonEnds[i] = blk->ann->end;
+        gp->exonFrames[i] = -1;
+        gp->exonCount++;
+        }
     }
 }
 
@@ -203,36 +230,54 @@ for (cds = cdsBlks; cds != NULL; cds = cds->next)
 return TRUE;
 }
 
+static struct gff3AnnRef *getCdsUtrBlks(struct gff3Ann *mrna)
+/* build sorted list of UTR + CDS blocks */
+{
+struct gff3AnnRef *cdsUtrBlks = slCat(getChildFeatures(mrna, gff3FeatFivePrimeUTR),
+                                      slCat(getChildFeatures(mrna, gff3FeatCDS),
+                                            getChildFeatures(mrna, gff3FeatThreePrimeUTR)));
+slSort(&cdsUtrBlks, gff3AnnRefLocCmp);
+return cdsUtrBlks;
+}
+
+static struct genePred *mrnaToGenePred(struct gff3Ann *gene, struct gff3Ann *mrna)
+/* construct a genePred from an mRNA, return NULL if there is an error */
+{
+// allow for only having UTR/CDS children
+struct gff3AnnRef *exons = getChildFeatures(mrna, gff3FeatExon);
+struct gff3AnnRef *cdsBlks = getChildFeatures(mrna, gff3FeatCDS);
+struct gff3AnnRef *cdsUtrBlks = NULL;  // used if no exons
+if (exons == NULL)
+    cdsUtrBlks = getCdsUtrBlks(mrna);
+struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
+
+struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
+if (gp != NULL)
+    {
+    addExons(gp, useExons);
+    if (!addCdsFrame(gp, cdsBlks))
+        genePredFree(&gp);  // got error, free it and NULL.
+    }
+slFreeList(&exons);
+slFreeList(&cdsBlks);
+slFreeList(&cdsUtrBlks);
+return gp;  // NULL if error above
+}
+
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
 /* process a mRNA node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
 recProcessed(processed, mrna);
 
-// allow for only having CDS children
-struct gff3AnnRef *exons = getChildFeatures(mrna, gff3FeatExon);
-struct gff3AnnRef *cdsBlks = getChildFeatures(mrna, gff3FeatCDS);
-struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsBlks;
-
-struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
-if (gp == NULL)
-    return; // error
-
-addExons(gp, useExons);
-if (!addCdsFrame(gp, cdsBlks))
-    return; // error
-
-// output before checking so it can be examined
-genePredTabOut(gp, gpFh);
-if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
+struct genePred *gp = mrnaToGenePred(gene, mrna);
+if (gp != NULL)
     {
-    cnvError("discarding invalid genePred created for: %s", gp->name);
+    // output before checking so it can be examined
+    genePredTabOut(gp, gpFh);
+    if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
+        cnvError("invalid genePred created for: %s", gp->name);
     genePredFree(&gp);
-    return; // error
     }
-
-genePredFree(&gp);
-slFreeList(&exons);
-slFreeList(&cdsBlks);
 }
 
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)

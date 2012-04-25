@@ -13,7 +13,7 @@ var encodeProject = (function () {
 
     var server = "genome.ucsc.edu",
         assembly = "hg19",
-        cgi = "/cgi-bin/hgApi?";
+        cgi = "/cgi-bin/hgEncodeApi?";
 
     var accessionPrefix = 'wgEncodeE?';
     var dataTypeLabelHash = {}, dataTypeTermHash = {};
@@ -50,8 +50,7 @@ var encodeProject = (function () {
 
         serverRequests: {
             // Requests for data from server API
-            experiment: "cmd=encodeExperiments",
-            expId: "cmd=encodeExpId",
+            experiment: "cmd=experiments",
             dataType: "cmd=cv&type=dataType",
             cellType: "cmd=cv&type=cellType",
             antibody: "cmd=cv&type=antibody"
@@ -62,7 +61,7 @@ var encodeProject = (function () {
             var serverData = [],
                 count = requests.length;
             $.each(requests, function (i, request) {
-                $.getJSON("http://" + server + cgi + "db=" + assembly + "&" + request, 
+                $.getJSON("http://" + server + cgi + request + "&" + "db=" + assembly, 
                     function (data) {
                         serverData[i] = data;
                         if (--count === 0) {
@@ -89,29 +88,20 @@ var encodeProject = (function () {
                 a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
         },
 
+        isIE7: function() {
+            // Detect IE version 7
+            return ($.browser.msie  && parseInt($.browser.version, 10) === 7);
+        }, 
+
         isIE8: function() {
             // Detect IE version 8
             return ($.browser.msie  && parseInt($.browser.version, 10) === 8);
         }, 
 
-        getSearchType: function () {
-            return $('input:radio[name=searchType]:checked').val();
-        },
-
         // Experiments, data types and cell types
 
         expIdFromAccession: function(accession) {
             return accession.slice(accessionPrefix.length);
-        },
-
-        getExpIdHash: function (ids) {
-            // Return hash of experiment ID's
-
-            var hash = {};
-            $.each(ids, function (i, id) {
-                hash[id.expId] = true;
-            });
-            return hash;
         },
 
         getDataType: function (term) {

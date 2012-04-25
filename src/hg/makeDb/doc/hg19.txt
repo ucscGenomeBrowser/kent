@@ -15227,23 +15227,24 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 # the decipher track after the new data are downloaded.
 
 #############################################################################
-# NCBI Incident database (DONE - 2011-02-10 - Hiram)
+# GRC Incident database (DONE - 2011-02-10 - Hiram)
+    # used to be NCBI Incident - changed to GRC Incident 2012-04-12
     # this procedure is run as a cron job in Hiram's account:
 
-    #	43 09 * * * /hive/data/outside/ncbi/incidentDb/runUpdate.sh makeItSo
+    #	43 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
 
     # using the two scrips there: runUpdate.sh and update.sh
     # which are checked into the source tree as files:
-    #	src/hg/utils/automation/ncbiIncidentUpdate.sh
-    #	src/hg/utils/automation/ncbiRunIncidentUpdate.sh
+    #	src/hg/utils/automation/grcIncidentUpdate.sh
+    #	src/hg/utils/automation/grcRunIncidentUpdate.sh
 
     # they fetch the XML files from NCBI, convert them to SQL text
     # files, construct a bigBed file, and pushes it to genomewiki if
     # it is an update from previous
 
-    # the table in the dataBase is: ncbiIncidentDb
+    # the table in the dataBase is: grcIncidentDb
     # which is the URL to the bb file, a single row:
-    # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
+    # http://genomewiki.ucsc.edu/images/6/67/Hg19.grcIncidentDb.bb
 
 #############################################################################
 # UNIGENE/SAGE TRACK (RE-BUILT - 2011-02-22 Fan)
@@ -17488,6 +17489,7 @@ TMPDIR=/scratch/tmp
 #Read 396 elements of size 11 from iscaLikelyBenign.bed
 #Read 114 elements of size 11 from iscaLikelyPathogenic.bed
 
+## more for this track below v ##
 
 ############################################################################
 # ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-08 b0b)
@@ -18405,3 +18407,68 @@ echo "select * from encodeRegions" | hgsql hg18 | tail -n +2 \
   | liftOver /dev/stdin /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz /dev/stdout encodeRegions.unmapped \
   | hgLoadBed -noBin hg19 encodeRegions /dev/stdin
 # (all mapped cleanly)
+
+#########################################################################
+## WINDOWMASKER (DONE - 2012-04-19 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/windowMasker
+    cd /hive/data/genomes/hg19/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev hg19 > do.log 2>&1 &
+    #   real    225m45.489s
+
+    # Masking statistics
+    twoBitToFa hg19.wmsk.2bit stdout | faSize stdin
+    #   3137161264 bases (239850802 N's 2897310462 real 1828487268 upper
+    #   1068823194 lower) in 93 sequences in 1 files
+    #   Total size: mean 33732916.8 sd 63483709.4
+    #   min 4262 (chr18_gl000207_random) max 249250621 (chr1) median 172294
+    #   %34.07 masked total, %36.89 masked real
+
+    twoBitToFa hg19.wmsk.sdust.2bit stdout | faSize stdin
+    #   3137161264 bases (239850802 N's 2897310462 real 1811306328 upper
+    #   1086004134 lower) in 93 sequences in 1 files
+    #   Total size: mean 33732916.8 sd 63483709.4
+    #   min 4262 (chr18_gl000207_random) max 249250621 (chr1) median 172294
+    #   %34.62 masked total, %37.48 masked real
+
+    hgLoadBed hg19 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 16318719 elements of size 3 from windowmasker.sdust.bed.gz
+
+    featureBits -countGaps hg19 windowmaskerSdust
+    #	1325854876 bases of 3137161264 (42.263%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits hg19 -not gap -bed=notGap.bed
+    #	2897316137 bases of 2897316137 (100.000%) in intersection
+    time nice -n +19 featureBits hg19 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   1086009749 bases of 2897316137 (37.483%) in intersection
+    #   real    2m11.261s
+
+    #	reload track to get it clean
+    hgLoadBed hg19 windowmaskerSdust cleanWMask.bed.gz
+    #	Read 16318560 elements of size 4 from cleanWMask.bed.gz
+    time featureBits -countGaps hg19 windowmaskerSdust
+    #   1086009749 bases of 3137161264 (34.618%) in intersection
+    #   real    1m34.044s
+
+    #	do *not* need to mask with this clean result since RepeatMasker
+    #	does a very good job here.  Using RM masking instead.
+#    zcat cleanWMask.bed.gz \
+#	| twoBitMask ../../hg19.unmasked.2bit stdin \
+#	    -type=.bed hg19.cleanWMSdust.2bit
+#    twoBitToFa hg19.cleanWMSdust.2bit stdout | faSize stdin \
+#        > hg19.cleanWMSdust.faSize.txt
+#    cat hg19.cleanWMSdust.faSize.txt
+
+    # how much does this window masker and repeat masker overlap:
+    time featureBits -countGaps hg19 rmsk windowmaskerSdust
+    #   849334688 bases of 3137161264 (27.073%) in intersection
+    #   real    2m4.634s
+
+    # RM by itself:
+    time featureBits -countGaps hg19 rmsk
+    #   1465724774 bases of 3137161264 (46.721%) in intersection
+    #   real    0m33.408s
+
+#############################################################################

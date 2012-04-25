@@ -10,9 +10,8 @@
 #ifndef BASICBED_H
 #define BASICBED_H
 
-#ifndef PSL_H
 #include "psl.h"
-#endif
+#include "asParse.h"
 
 struct bed
 /* Browser extensible data */
@@ -24,7 +23,7 @@ struct bed
     char *name;	/* Name of item */
 
     /* The following items are not loaded by   the bedLoad routines. */
-    int score; /* Score - 0-1000 */
+    int score; /* Score - 0-1000 */  /* Should be uint but there are still some ct users with neg values, .as DOES say uint */
     char strand[2];  /* + or -.  */
     unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
     unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */
@@ -40,6 +39,8 @@ struct bed
     };
 
 #define bedKnownFields 15	/* Maximum known fields in bed */
+
+#define BB_MAX_CHROM_STRING 32  /* Maximum string length for chromosome length */
 
 struct bed3
 /* Browser extensible data - first three fields */
@@ -269,5 +270,12 @@ char *bedAsDef(int bedFieldCount, int totalFieldCount);
  * Normally totalFieldCount is equal to bedFieldCount.  If there are extra
  * fields they are just given the names field16, field17, etc and type string. */
 
+boolean asCompareObjAgainstStandardBed(struct asObject *asYours, int numColumnsToCheck, boolean abortOnDifference);
+/* Compare user's .as object asYours to the standard BED.
+ * abortOnDifference specifies whether to warn or abort if they differ within the first numColumnsToCheck columns.
+ * Returns TRUE if they match. */
+
+void loadAndValidateBed(char *row[], int wordCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt);
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject. */
 
 #endif /* BASICBED_H */

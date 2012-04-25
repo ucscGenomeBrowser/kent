@@ -11,42 +11,25 @@
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
  * doesn't match the precision of the database fields, specifying a larger
  * precision with %g resulted in numbers like 1.9999999999999999597733e-12,
- *  which might impact load time.  THis issue needs more investigation.*/
+ *  which might impact load time.  This issue needs more investigation.*/
 struct asTypeInfo asTypes[] = {
-    {t_double,  "double",  FALSE, FALSE, "double",           
-            "double",        "Double", "Double", "%g", "FloatField"},
-    {t_float,   "float",   FALSE, FALSE, "float",            
-            "float",         "Float",  "Float",  "%g", "FloatField"},
-    {t_char,    "char",    FALSE, FALSE, "char",             
-            "char",          "Char",   "Char",   "%c", "CharField"},
-    {t_int,     "int",     FALSE, FALSE, "int",              
-            "int",           "Signed", "Signed", "%d", "IntegerField"},
-    {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",
-            "unsigned",      "Unsigned","Unsigned", "%u", "PositiveIntegerField"},
-    {t_short,   "short",   FALSE, FALSE, "smallint",         
-            "short",         "Short",  "Signed", "%d", "SmallIntegerField"},
-    {t_ushort,  "ushort",  TRUE,  FALSE, "smallint unsigned",
-            "unsigned short","Ushort", "Unsigned", "%u", "SmallPositiveIntegerField"},
-    {t_byte,    "byte",    FALSE, FALSE, "tinyint",          
-            "signed char",   "Byte",   "Signed", "%d", "SmallIntegerField"},
-    {t_ubyte,   "ubyte",   TRUE,  FALSE, "tinyint unsigned",
-            "unsigned char", "Ubyte",  "Unsigned", "%u", "SmallPositiveIntegerField"},
-    {t_off,     "bigint",  FALSE,  FALSE,"bigint",           
-            "long long",     "LongLong", "LongLong", "%lld", "BigIntegerField"},
-    {t_string,  "string",  FALSE, TRUE,  "varchar(255)",     
-            "char *",        "String", "String", "%s", "CharField"},
-    {t_lstring,    "lstring",    FALSE, TRUE,  "longblob",   
-            "char *",        "String", "String", "%s", "TextField"},
-    {t_enum,    "enum",    FALSE, FALSE, "enum",             
-            "!error!",       "Enum",   "Enum", NULL, "CharField"},
-    {t_set,     "set",     FALSE, FALSE, "set",              
-            "unsigned",      "Set",    "Set", NULL, NULL},
-    {t_object,  "object",  FALSE, FALSE, "longblob",         
-            "!error!",       "Object", "Object", NULL, "TextField"},
-    {t_object,  "table",   FALSE, FALSE, "longblob",         
-            "!error!",       "Object", "Object", NULL, "TextField"},
-    {t_simple,  "simple",  FALSE, FALSE, "longblob",         
-            "!error!",       "Simple", "Simple", NULL, "TextField"},
+    {t_double,  "double",  FALSE, FALSE, "double",            "double",        "Double",   "Double",   "%g",   "FloatField"},
+    {t_float,   "float",   FALSE, FALSE, "float",             "float",         "Float",    "Float",    "%g",   "FloatField"},
+    {t_char,    "char",    FALSE, FALSE, "char",              "char",          "Char",     "Char",     "%c",   "CharField"},
+    {t_int,     "int",     FALSE, FALSE, "int",               "int",           "Signed",   "Signed",   "%d",   "IntegerField"},
+    {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",      "unsigned",      "Unsigned", "Unsigned", "%u",   "PositiveIntegerField"},
+    {t_short,   "short",   FALSE, FALSE, "smallint",          "short",         "Short",    "Signed",   "%d",   "SmallIntegerField"},
+    {t_ushort,  "ushort",  TRUE,  FALSE, "smallint unsigned", "unsigned short","Ushort",   "Unsigned", "%u",   "SmallPositiveIntegerField"},
+    {t_byte,    "byte",    FALSE, FALSE, "tinyint",           "signed char",   "Byte",     "Signed",   "%d",   "SmallIntegerField"},
+    {t_ubyte,   "ubyte",   TRUE,  FALSE, "tinyint unsigned",  "unsigned char", "Ubyte",    "Unsigned", "%u",   "SmallPositiveIntegerField"},
+    {t_off,     "bigint",  FALSE, FALSE, "bigint",            "long long",     "LongLong", "LongLong", "%lld", "BigIntegerField"},
+    {t_string,  "string",  FALSE, TRUE,  "varchar(255)",      "char *",        "String",   "String",   "%s",   "CharField"},
+    {t_lstring, "lstring", FALSE, TRUE,  "longblob",          "char *",        "String",   "String",   "%s",   "TextField"},
+    {t_enum,    "enum",    FALSE, FALSE, "enum",              "!error!",       "Enum",     "Enum",     NULL,   "CharField"},
+    {t_set,     "set",     FALSE, FALSE, "set",               "unsigned",      "Set",      "Set",      NULL,   NULL},
+    {t_object,  "object",  FALSE, FALSE, "longblob",          "!error!",       "Object",   "Object",   NULL,   "TextField"},
+    {t_object,  "table",   FALSE, FALSE, "longblob",          "!error!",       "Object",   "Object",   NULL,   "TextField"},
+    {t_simple,  "simple",  FALSE, FALSE, "longblob",          "!error!",       "Simple",   "Simple",   NULL,   "TextField"},
 };
 
 static struct asTypeInfo *findLowType(struct tokenizer *tkz)
@@ -266,35 +249,92 @@ for (obj = objList; obj != NULL; obj = obj->next)
 return objList;
 }
 
+char *asTypesIntSizeDescription(enum asTypes type)
+/* Return description of integer size.  Do not free. */
+{
+int size = asTypesIntSize(type);
+switch (size)
+    {
+    case 1:
+	return "byte";
+    case 2:
+	return "short integer";
+    case 4:
+	return "integer";
+    case 8:
+	return "long long integer";
+    default:
+        errAbort("Unexpected error in asTypesIntSizeDescription: expecting integer type size of 1, 2, 4, or 8.  Got %d.", size);
+	return NULL; // happy compiler, never gets here
+    
+    }
+}
+
+int asTypesIntSize(enum asTypes type)
+/* Return size in bytes of any integer type - short, long, unsigned, etc. */
+{
+switch (type)
+    {
+    case t_int:
+    case t_uint:
+	return 4;
+    case t_short:
+    case t_ushort:
+	return 2;
+    case t_byte:
+    case t_ubyte:
+	return 1;
+    case t_off:
+	return 8;
+    default:
+        errAbort("Unexpected error in  asTypesIntSize: expecting integer type.  Got %d.", type);
+	return 0; // happy compiler, never gets here
+    }
+}
+
+boolean asTypesIsUnsigned(enum asTypes type)
+/* Return TRUE if it's any integer type - short, long, unsigned, etc. */
+{
+switch (type)
+    {
+    case t_uint:
+    case t_ushort:
+    case t_ubyte:
+       return TRUE;
+    default:
+       return FALSE;
+    }
+}
+
 boolean asTypesIsInt(enum asTypes type)
 /* Return TRUE if it's any integer type - short, long, unsigned, etc. */
 {
 switch (type)
-   {
-   case t_int:
-   case t_uint:
-   case t_short:
-   case t_ushort:
-   case t_byte:
-   case t_ubyte:
-   case t_off:
+    {
+    case t_int:
+    case t_uint:
+    case t_short:
+    case t_ushort:
+    case t_byte:
+    case t_ubyte:
+    case t_off:
        return TRUE;
-   default:
+    default:
        return FALSE;
-   }
+    }
 }
 
 boolean asTypesIsFloating(enum asTypes type)
 /* Return TRUE if it's any floating point type - float or double. */
 {
 switch (type)
-   {
-   case t_float:
-   case t_double:
+    {
+    case t_float:
+    case t_double:
        return TRUE;
-   default:
+    default:
        return FALSE;
-   }
+    }
 }
 
 static struct asObject *asParseLineFile(struct lineFile *lf)
@@ -377,3 +417,114 @@ freez(&dupe);
 return objList;
 }
 
+struct asColumn *asColumnFind(struct asObject *asObj, char *name)
+// Return named column.
+{
+struct asColumn *asCol = NULL;
+if (asObj!= NULL)
+    {
+    for (asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
+        if (sameString(asCol->name, name))
+             break;
+    }
+return asCol;
+}
+
+boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asObject *as2, int numColumnsToCheck,
+ int *retNumColumnsSame, boolean abortOnDifference)
+/* Compare as-objects as1 and as2 making sure several important fields show they are the same name and type.
+ * If difference found, print it to stderr.  If abortOnDifference, errAbort.
+ * Othewise, return TRUE if the objects columns match through the first numColumnsToCheck fields. 
+ * If retNumColumnsSame is not NULL, then it will be set to the number of contiguous matching columns. */
+{
+boolean differencesFound = FALSE;
+struct asColumn *col1 = as1->columnList, *col2 = as2->columnList;
+int checkCount = 0;
+int verboseLevel = 2;
+if (abortOnDifference)
+    verboseLevel = 1;
+if (as1->isTable != as2->isTable)
+    {
+    verbose(verboseLevel,"isTable does not match: %s=[%d]  %s=[%d]", name1, as1->isTable, name2, as2->isTable);
+    differencesFound = TRUE;
+    }
+else if (as1->isSimple != as2->isSimple)
+    {
+    verbose(verboseLevel,"isSimple does not match: %s=[%d]  %s=[%d]", name1, as1->isSimple, name2, as2->isSimple);
+    differencesFound = TRUE;
+    }
+else
+    {
+    if (!as1->isTable)
+	{
+	errAbort("asCompareObjLists only supports Table .as objects at this time.");
+	}
+    for (col1 = as1->columnList, col2 = as2->columnList; 
+	 col1 != NULL && col2 != NULL && checkCount < numColumnsToCheck; 
+	 col1 = col1->next, col2 = col2->next, ++checkCount)
+	{
+	if (!sameOk(col1->name, col2->name))
+	    {
+	    verbose(verboseLevel,"column #%d names do not match: %s=[%s]  %s=[%s]\n"
+		, checkCount+1, name1, col1->name, name2, col2->name);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (col1->isSizeLink != col2->isSizeLink)
+	    {
+	    verbose(verboseLevel,"column #%d isSizeLink do not match: %s=[%d]  %s=[%d]\n"
+		, checkCount+1, name1, col1->isSizeLink, name2, col2->isSizeLink);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (col1->isList != col2->isList)
+	    {
+	    verbose(verboseLevel,"column #%d isList do not match: %s=[%d]  %s=[%d]\n"
+		, checkCount+1, name1, col1->isList, name2, col2->isList);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (col1->isArray != col2->isArray)
+	    {
+	    verbose(verboseLevel,"column #%d isArray do not match: %s=[%d]  %s=[%d]\n"
+		, checkCount+1, name1, col1->isArray, name2, col2->isArray);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (!sameOk(col1->lowType->name, col2->lowType->name))
+	    {
+	    verbose(verboseLevel,"column #%d type names do not match: %s=[%s]  %s=[%s]\n"
+		, checkCount+1, name1, col1->lowType->name, name2, col2->lowType->name);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (col1->fixedSize != col2->fixedSize)
+	    {
+	    verbose(verboseLevel,"column #%d fixedSize do not match: %s=[%d]  %s=[%d]\n"
+		, checkCount+1, name1, col1->fixedSize, name2, col2->fixedSize);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	else if (!sameOk(col1->linkedSizeName, col2->linkedSizeName))
+	    {
+	    verbose(verboseLevel,"column #%d linkedSizeName do not match: %s=[%s]  %s=[%s]\n"
+		, checkCount+1, name1, col1->linkedSizeName, name2, col2->linkedSizeName);
+	    differencesFound = TRUE;
+	    break;
+	    }
+	}
+    if (!differencesFound && checkCount < numColumnsToCheck)
+	errAbort("Unexpected error in asCompareObjLists: asked to compare %d columns in %s and %s, but only found %d in one or both asObjects."
+	    , numColumnsToCheck, name1, name2, checkCount);
+    }
+if (differencesFound)
+    {
+    if (abortOnDifference)
+    	errAbort("asObjects differ.");
+    else
+    	verbose(verboseLevel,"asObjects differ. Matching field count=%d\n", checkCount);
+    }
+if (retNumColumnsSame)
+    *retNumColumnsSame = checkCount;
+return (!differencesFound);
+}

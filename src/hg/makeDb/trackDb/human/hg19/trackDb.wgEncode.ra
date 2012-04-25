@@ -16,6 +16,9 @@ include wgEncodeGencodeV11.ra
 include wgEncodeUncBsuProt.ra beta,public
 include wgEncodeUncBsuProt.release2.ra alpha
 
+# UNC/BSU Proteogenomics (wrangler: fang)
+include wgEncodeUncBsuProtGenc.release1.ra alpha
+
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
 include wgEncodeReg.release2.ra alpha
@@ -24,8 +27,8 @@ include wgEncodeReg.release2.ra alpha
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
 
-# FSU Repli-Seq track (wrangler: venkat)
-include wgEncodeFsuRepliSeq.ra alpha
+# FSU Repli-chip track (wrangler: venkat)
+include wgEncodeFsuRepliChip.ra
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -107,8 +110,7 @@ include wgEncodeCshlShortRnaSeq.release3.ra alpha
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.release2.ra beta,public
-include wgEncodeCaltechRnaSeq.release3.ra alpha
+include wgEncodeCaltechRnaSeq.release3.ra
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
 include wgEncodeCshlLongRnaSeq.release2.ra alpha
@@ -152,8 +154,7 @@ include wgEncodeBroadHistone.release2.ra
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release3.ra beta,public
-include wgEncodeUwHistone.release4.ra alpha
+include wgEncodeUwHistone.release4.ra
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
@@ -170,7 +171,8 @@ include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra
+include wgEncodeHaibTfbs.release3.ra alpha
+include wgEncodeHaibTfbs.release2.ra beta,public
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.release2.ra alpha

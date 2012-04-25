@@ -33,7 +33,7 @@ WGBS library construction starts with sonication of genomic DNA on a Covaris S2 
 <h3>Data analysis</h3>
 <p>To analyze the sequence data, the <A TARGET=_BLANK HREF="http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/program">Bismark</A> (Krueger and Andrews, 2011) was used to align sequences reads.  Generally, each read went through a conversion of C's to T's, then underwent alignment to fully converted plus and minus strands of the hg19 build of the human genome.  A few custom refinements were made to the Bismark program.  Since these libraries were made in a directional orientation with the first read always being C-poor, we skipped unnecessary alignments to impossible orientations.  We also implemented a more stringent uniqueness filter, only allowing reads that have one acceptable alignment (based on default bowtie parameters) across both strands.  Once reads were aligned, the percent methylation was calculated for each cytosine using the original sequence reads. The percent methylation and number of reads is reported for each CpG in the wgEncodeHaibMethylWgbsXXXXCpg.bigBed file and for each non CpG cytosine in the wgEncodeHaibMethylWgbsXXXXNoncpg.bigBed file.</p>
 
-<a name="Credits"></a><h2> Credits </h2>
+<a name="Credits"></a><h2>Credits</h2>
 <p>These data were produced by the <A TARGET=_BLANK HREF="http://hudsonalpha.org/myers-lab"> Dr. Richard Myers Lab</A> at the <A TARGET=_BLANK HREF="http://hudsonalpha.org/"> HudsonAlpha Institute for Biotechnology</A>.  
 <p>Cells were grown by the Myers Lab and other ENCODE production groups. 
 </p>
@@ -43,18 +43,16 @@ WGBS library construction starts with sonication of genomic DNA on a Covaris S2 
 <!-- above address is fpauli at hudsonalpha.org (encodeEmail.pl) -->
 
 
-<H2> References </H2>
+<H2>References</H2>
 
 <p>
 Krueger F, Andrews SR.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/21493656"
- rel="nofollow" target="_blank">
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21493656" target="_blank">
 Bismark: a flexible aligner and methylation caller for Bisulfite-Seq applications</a>.
 <em>Bioinformatics</em>. 2011 Jun 1;27(11):1571-2.
 </p>
 
-
-<H2> Data Release Policy </H2>
+<H2>Data Release Policy</H2>
 
 <P>Data users may freely use ENCODE data, but may not, without prior 
 consent, submit publications that use an unpublished ENCODE dataset until 

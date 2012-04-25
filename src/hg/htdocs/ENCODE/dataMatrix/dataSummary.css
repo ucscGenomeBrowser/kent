@@ -53,6 +53,10 @@
     font-weight: bold;
 }
 
+.dataItem, .dataLabel {
+    cursor: pointer;
+}
+
 .matrixButton {
     float: right;
     margin-right: 1em;

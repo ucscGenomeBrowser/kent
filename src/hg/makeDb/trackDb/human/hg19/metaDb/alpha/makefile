@@ -8,7 +8,7 @@ wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
-wgEncodeFsuRepliSeq.ra \
+wgEncodeFsuRepliChip.ra \
 wgEncodeGencodeV3.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
@@ -46,6 +46,7 @@ wgEncodeUchicagoTfbs.ra \
 wgEncodeUmassDekker5C.ra \
 wgEncodeUMassWengTfbsValid.ra \
 wgEncodeUncBsuProt.ra \
+wgEncodeUncBsuProtGenc.ra \
 wgEncodeUw5C.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
