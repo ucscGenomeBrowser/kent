@@ -1296,7 +1296,7 @@ type Cell Line
 tier 2
 organism human
 deprecated SEE B_cells_CD20+
-description B cells from donors RO01778 (RO01746) and RO01794, newly promoted to tier 2: not in 2011 analysis
+description B cells from donors RO01778, RO01746 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
 lineage mesoderm
@@ -1347,26 +1347,29 @@ termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
 label B_cells_CD20+_RO01794
-
-term CD20+_RO01746
-tag CD20RO01746
-type Cell Line
-tier 2
-organism human
-description B cells, caucasian, draw number 1 (draw 2 is RO01826), newly promoted to tier 2: not in 2011 analysis
-sex F
-age 27
-tissue blood
-lineage mesoderm
-karyotype normal
-childOf B_cells_CD20+
-vendorName Rajinder Kaul, UW
-vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
-label B_cells_CD20+_RO01746
+#
+#term CD20+_RO01746
+#tag CD20RO01746
+#type Cell Line
+#tier 2
+#organism human
+#description B cells, caucasian, draw number 1 (draw 2 is RO01826), newly promoted to tier 2: not in 2011 analysis
+#sex F
+#age 27
+#tissue blood
+#lineage mesoderm
+#karyotype normal
+#childOf B_cells_CD20+
+#vendorName Rajinder Kaul, UW
+#vendorId CD20+_RO01746
+#orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
+#termId BTO:0000776
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+#protocol Stam:CD20+_Stam_protocol.pdf
+#label B_cells_CD20+_RO01746
+# This was supposed to be CD14+, 
+# it is not used in the metaDb
+# Delete this if not needed by June 2012. ~Jeff
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
