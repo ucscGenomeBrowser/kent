@@ -452,23 +452,6 @@ sex U
 tier 3
 protocol Crawford:Astrocytes_Crawford_protocol.pdf
 
-term B_cells_CD20+
-tag BCELLSCD20
-type Cell Line
-tier 2
-organism human
-description B cells CD20+ from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
-sex F
-tissue blood
-lineage mesoderm
-karyotype normal
-vendorName Rajinder Kaul, UW
-vendorId CD20+
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
-
 term BC_Adipose_UHN00001
 tag BCADIPOSE
 type Cell Line
@@ -1298,7 +1281,6 @@ tag CD20
 type Cell Line
 tier 2
 organism human
-deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
@@ -1310,6 +1292,7 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+
 
 term CD20+_RO01778
 tag CD20RO01778
@@ -1322,7 +1305,7 @@ age 43
 tissue blood
 lineage mesoderm
 karyotype normal
-childOf B_cells_CD20+
+childOf CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1342,7 +1325,7 @@ age 27
 tissue blood
 lineage mesoderm
 karyotype normal
-childOf B_cells_CD20+
+childOf CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -4701,8 +4684,8 @@ protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01826
 # formerly tier 3
 
-term MRT_G401.6
-tag MRTG401.6
+term MRT_G401
+tag MRTG401
 type Cell Line
 tier 3
 organism human
@@ -4714,13 +4697,14 @@ tissue kidney
 vendorName ATCC 
 vendorId CRL-1441
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
+lots 6
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTG401.6_Crawford_protocol.pdf
 
-term MRT_A204.1
-tag MRTA204.1
+term MRT_A204
+tag MRTA204
 type Cell Line
 tier 3
 organism human
@@ -4732,6 +4716,7 @@ tissue muscle
 vendorName ATCC
 vendorId HTB-82 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
+lots 1
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
@@ -4742,13 +4727,13 @@ tag MRTTTC549
 type Cell Line
 tier 3
 organism human
-description Malignant Hepatic Rhabdoid tumor line PROVISIONAL
+description Malignant Hepatic Rhabdoid tumor line 
 karyotype cancer
 lineage missing
 sex M
 tissue liver
 vendorName ATCC
-vendorId MRT_TTC549 PROVISIONAL 
+vendorId MRT_TTC549 
 orderUrl missing
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
@@ -11876,7 +11861,7 @@ description Single 25 nt reads
 term 1x30
 tag R1x30
 type readType
-description Single 30 nt read PROVISIONAL
+description Single 30 nt read 
 
 term 1x32
 tag R1X32
@@ -12402,7 +12387,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description nput library was prepared at Harvard. PROVISIONAL
+description nput library was prepared at Harvard. 
 label Harvard Input Control
 
 ### Treatments
@@ -13764,7 +13749,7 @@ term RepliChip
 tag REPLICHIP
 type dataType
 label Repli-chip
-description Assessment of DNA Replication Timing PROVISIONAL
+description Assessment of DNA Replication Timing 
 dataGroup Other
 
 term RepliSeq

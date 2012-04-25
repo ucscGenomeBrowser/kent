@@ -1563,7 +1563,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
-md5sum 2e5eed3122f7f47d7dbbf96aa27ed893
+md5sum ab8da53f0160caed5bf387c3f1f376d0
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
@@ -5873,6 +5873,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 12cf4273d216a86313df412a65018dd2,609d95f951f6dd3b3debea5b983b21b5
 project wgEncode
 readType 1x36
 replicate 1
@@ -5898,6 +5899,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum a2736d3a53110909cfb64cb8c5a09b53
 project wgEncode
 readType 1x36
 replicate 1
@@ -5923,6 +5925,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 8128cae05f011c9427cb083b939322fe
 project wgEncode
 readType 1x36
 replicate 1
@@ -5948,6 +5951,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 166afa3abc92d4e6b2be3119bbb07824
 project wgEncode
 readType 1x36
 replicate 1
@@ -5972,7 +5976,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
-md5sum cd37ce793dbd53d4ec1e61e4ad3379c7
+md5sum 546d06d9cbd57d8afeb22e394fce1122
 project wgEncode
 readType 1x36
 rnaExtract longNonPolyA
@@ -8497,7 +8501,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
-md5sum e4b2412ea0297b966c88e5c0c48b953d
+md5sum 2086ceaa259db00df99625d501e85f06
 project wgEncode
 readType 1x50
 rnaExtract longPolyA
@@ -11170,6 +11174,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum 2036093cd1efd5f367f2f0d6c1344ff7,ea2fd5719f0a669e21196152b57e07c1
 project wgEncode
 readType 1x36
 replicate 1
@@ -11195,6 +11200,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum d7d6d4d6d6d6cbad8e155b9621909adc
 project wgEncode
 readType 1x36
 replicate 1
@@ -11220,6 +11226,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum c71d492d7c62fddc76b4efc098f1bc9d
 project wgEncode
 readType 1x36
 replicate 1
@@ -11245,6 +11252,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum 1bb3921c15deb6a74e3a64af07aac934
 project wgEncode
 readType 1x36
 replicate 1
@@ -11269,7 +11277,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
-md5sum 7bd8e72c15ed6942a0d867327ea9e1e2
+md5sum 1e6748fab032faa8a4d4df7a369f41e6
 project wgEncode
 readType 1x36
 rnaExtract longNonPolyA
@@ -20219,4 +20227,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1415782412
+# MAGIC: -1817297051
