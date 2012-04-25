@@ -1274,8 +1274,8 @@ term CD14+
 tag CD14
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
-deprecated same as Monocytes-CD14+_RO01746
+description SEE Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826, newly promoted to tier 2: not in 2011 analysis
+deprecated same as Monocytes-CD14+
 lineage mesoderm
 karyotype normal
 sex F
@@ -1296,7 +1296,7 @@ type Cell Line
 tier 2
 organism human
 deprecated SEE B_cells_CD20+
-description B cells from donors RO01778, RO01746 and RO01794, newly promoted to tier 2: not in 2011 analysis
+description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
 lineage mesoderm
@@ -4682,7 +4682,7 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826 are being used as replicates, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 childOf Monocytes-CD14+
@@ -4696,15 +4696,14 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01746
-t#formerly tier 3
+#formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, Monocytes-CD14+_RO01826 is a second draw being used as a replicate for Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
-deprecated same as Monocytes-CD14+_RO01746
 karyotype normal
 childOf Monocytes-CD14+
 sex F
@@ -4717,7 +4716,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 label Monocytes_CD14+_RO01826
-t#formerly tier 3
+# formerly tier 3
 
 term MRT_G401.6
 tag MRTG401.6
