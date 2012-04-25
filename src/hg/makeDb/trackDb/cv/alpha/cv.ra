@@ -466,7 +466,7 @@ vendorId D4234003_A701166
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001487
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001487
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Adipose_BC_UHN00001
 #lineage mesoderm
 
@@ -485,7 +485,7 @@ vendorId D1234004_B103117
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000047
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000047
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Adrenal_Gland_BC_H12803N
 # http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 
@@ -504,7 +504,7 @@ vendorId CP-S12-D1234010-05_B402059
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001418
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001418
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Bladder_BC_01-11002
 
 term BC_Brain_H11058N 
@@ -522,7 +522,7 @@ vendorId D4234035_A810101
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000142
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000142
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Brain_BC_H11058N
 
 term BC_Breast_02-03015
@@ -540,7 +540,7 @@ vendorId D4234086_A710031
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000149
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000149
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Breast_BC_02-03015
 
 # Maybe some day this cell line will have data. ~Jeff
@@ -560,7 +560,7 @@ label Breast_BC_02-03015
 #orderUrl http://www.biochain.com/biochain/homepage.htm
 #termId BTO:0001421
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
-#protocol Myers:Myers_protocol.pdf
+#protocol Myers:Myers_BioChain_protocol.pdf
 
 term Colon_BC
 tag COLONBC
@@ -577,7 +577,7 @@ vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC
 # The new terms Colon_BC, Esophagus_BC, Kidney_BC, 
 # Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out 
@@ -601,7 +601,7 @@ vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC_01-11002
 
 term BC_Colon_H12817N
@@ -620,7 +620,7 @@ vendorId CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC_H12817N
 
 term Esophagus_BC
@@ -638,7 +638,7 @@ vendorId CP-S12-D1234106-05_A803198; CP-S10-R1234106-20_B402075; CP-S13-D1234106
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Esophagus_BC
 
 term BC_Esophagus_01-11002
@@ -657,7 +657,7 @@ vendorId CP-S12-D1234106-05_A803198; CP-S10-R1234106-20_B402075
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Esophagus_BC_01-11002
 
 term BC_Esophagus_H12817N
@@ -676,7 +676,7 @@ vendorId CP-S13-D1234106-05_B302113
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Esophagus_BC_H12817N
 
 term BC_Jejunum_H12817N
@@ -694,7 +694,7 @@ vendorId CP-S13-D1234230-05_B402068; CP-S10-R1234230-20_A911037
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000657
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000657
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Jejunum_BC_H12817N
 # http://en.wikipedia.org/wiki/Jejunum
 
@@ -713,7 +713,7 @@ vendorId CP-S12-D1234142-05_B402060; CP-S10-R1234142-20_A808055; CP-S13-D1234142
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Kidney_BC
 
 term BC_Kidney_01-11002
@@ -732,7 +732,7 @@ vendorId CP-S12-D1234142-05_B402060; CP-S10-R1234142-20_A808055
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Kidney_BC_01-11002
 
 term BC_Kidney_H12817N
@@ -751,7 +751,7 @@ vendorId CP-S13-D1234142-05_B402061; CP-S10-R1234142-20_B111054
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Kidney_BC_H12817N
 
 term BC_Left_Ventricle_N41
@@ -769,7 +769,7 @@ vendorId D1234138_A705026
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001629
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001629
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Left_Ventricle_BC_N41
 
 term BC_Leukocyte_UHN00204
@@ -787,7 +787,7 @@ vendorId D4234148_A612197
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Leukocyte_BC_UHN00204
 
 term BC_Liver_01-11002
@@ -805,7 +805,7 @@ vendorId CP-S12-D1234149-05_B209118; CP-S10-R1234149-20_B304045
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000759
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Liver_BC_01-11002
 
 term Lung_BC
@@ -823,7 +823,7 @@ vendorId CP-S12-D1234152-05_A610240; CP-S10-R1234152-20_A906114; CP-S13-D1234152
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Lung_BC
 
 term BC_Lung_01-11002
@@ -842,7 +842,7 @@ vendorId CP-S12-D1234152-05_A610240; CP-S10-R1234152-20_A906114
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Lung_BC_01-11002
 
 term BC_Lung_H12817N
@@ -861,7 +861,7 @@ vendorId CP-S13-D1234152-05_B402062; CP-S10-R1234152-20_B207133
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Lung_BC_H12817N
 
 term BC_Pancreas_H12817N
@@ -879,7 +879,7 @@ vendorId CP-S13-D1234188-05_B402063; CP-S10-R1234188-20_B402076
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000988
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Pancreas_BC_H12817N
 
 term BC_Penis_H12817N
@@ -897,7 +897,7 @@ vendorId CP-S13-D1234194-05_B402064
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000405
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000405
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Penis_BC_H12817N
 
 term BC_Pericardium_H12529N
@@ -915,7 +915,7 @@ vendorId D1234133_A712271
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000717
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000717
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Pericardium_BC_H12529N
 
 term BC_Placenta_UHN00189
@@ -933,7 +933,7 @@ vendorId D4234200_A603104
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001078
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001078
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Placenta_BC_UHN00189
 # lineage decidua basalis, chorion frondosum
 
@@ -952,7 +952,7 @@ vendorId CP-D1234201-05_B101058
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Prostate_Gland_BC_H12817N
 
 term BC_Rectum_N29
@@ -970,7 +970,7 @@ vendorId D4234206_A712205
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001158
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001158
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Rectum_BC_N29
 
 term Skeletal_Muscle_BC
@@ -988,7 +988,7 @@ vendorId CP-S12-D1234171-05_A610262; CP-S10-R1234171-20_A808148; CP-S13-D1234171
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Skeletal_Muscle_BC
 
 term BC_Skeletal_Muscle_01-11002
@@ -1007,7 +1007,7 @@ vendorId CP-S12-D1234171-05_A610262; CP-S10-R1234171-20_A808148
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Skeletal_Muscle_BC_01-11002
 
 term BC_Skeletal_Muscle_H12817N
@@ -1026,7 +1026,7 @@ vendorId CP-S13-D1234171-05_B402065; CP-S10-R1234230-20_A911037
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Skeletal_Muscle_BC_H12817N
 
 term BC_Skin_01-11002
@@ -1044,7 +1044,7 @@ vendorId CP-S12-D1234218-05_B402066
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001253
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Skin_BC_01-11002
 
 term BC_Small_Intestine_01-11002
@@ -1062,7 +1062,7 @@ vendorId CP-S12-D1234226-05_B402067; CP-S10-R1234226-20_A612138
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Small_Intestine_BC_01-11002
 
 # Maybe some day this cell line will have data. ~Jeff
@@ -1081,7 +1081,7 @@ label Small_Intestine_BC_01-11002
 #orderUrl http://www.biochain.com/biochain/homepage.htm
 #termId BTO:0001281
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
-#protocol Myers:Myers_protocol.pdf
+#protocol Myers:Myers_BioChain_protocol.pdf
 
 term BC_Spleen_H12817N
 tag BCSPLEENb
@@ -1098,7 +1098,7 @@ vendorId CP-S13-D1234246-05_B402069; CP-S10-R1234246-20_B304070
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001281
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Spleen_BC_H12817N
 
 term Stomach_BC
@@ -1116,7 +1116,7 @@ vendorId CP-S12-D1234248-05_A808008; CP-S13-D1234248-05_B402070; CP-S10-R1234248
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Stomach_BC
 
 term BC_Stomach_01-11002
@@ -1135,7 +1135,7 @@ vendorId CP-S12-D1234248-05_A808008
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Stomach_BC_01-11002
 
 term BC_Stomach_H12817N
@@ -1154,7 +1154,7 @@ vendorId CP-S13-D1234248-05_B402070; CP-S10-R1234248-20_B402077
 orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Stomach_BC_H12817N
 
 term BC_Testis_N30
@@ -1172,7 +1172,7 @@ vendorId D4234260_A711169
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001363
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001363
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Testis_BC_N30
 
 term BC_Uterus_BN0765
@@ -1189,7 +1189,7 @@ vendorId D4234274_A810099
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001424
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001424
-protocol Myers:Myers_protocol.pdf
+protocol Myers:Myers_BioChain_protocol.pdf
 label Uterus_BC_BN0765
 
 term BE2_C
