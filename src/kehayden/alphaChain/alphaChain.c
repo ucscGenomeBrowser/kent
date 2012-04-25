@@ -1,4 +1,4 @@
-/* alphaChain - Predicts the linear arrangement of satellite repeats provided with a probablistic model. */
+/* alphaChain - Predicts faux centromere sequences using a probablistic model. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
