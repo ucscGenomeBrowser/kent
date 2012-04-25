@@ -114,9 +114,9 @@ sub doHardMask {
 
   # First, make sure we're starting clean.
   if (-e "$buildDir/genscan.gtf.gz") {
-    die "doHardMask: looks like this entire business was run already," .
+    die "doHardMask: looks like this entire business was run already,\n" .
       "(genscan.gtf.gz exists)\n" .
-	"\tplease investigate the directory: $buildDir\n";
+	"    please investigate the directory: $buildDir\n";
   } elsif (-e "$runDir/run.time") {
     die "doHardMask: looks like this step was run successfully already " .
       "(run.hardMask/run.time exists).  Either run with -continue genscan or some later " .
@@ -245,10 +245,10 @@ sub doMakeBed {
     die "doMakeBed: the previous step genscan did not complete \n" .
       "successfully ($buildDir/run.time does not exist).\nPlease " .
       "complete the previous step: -continue=-genscan\n";
-  } elsif (-e "$runDir/genscan.gtf") {
-    die "doMakeBed: looks like this was run successfully already " .
-      "(genscan.gtf exists).  Either run with -continue load or cleanup " .
-	"or move aside/remove $runDir/genscan.gtf and run again.\n";
+  } elsif (-e "$runDir/genscan.gtf" || -e "$runDir/genscan.gtf.gz" ) {
+    die "doMakeBed: looks like this was run successfully already\n" .
+      "(genscan.gtf exists).  Either run with -continue load or cleanup\n" .
+	"or move aside/remove $runDir/genscan.gtf\nand run again.\n";
   }
 
   my $whatItDoes = "Makes gtf/pep/bed files from gsBig output.";
@@ -271,6 +271,13 @@ sub doLoadGenscan {
   &HgAutomate::mustMkdir($runDir);
 
   if (! -e "$runDir/genscan.gtf") {
+    die "doLoadGenscan: the previous step makeBed did not complete \n" .
+      "successfully (genscan.gtf does not exists).\nPlease " .
+      "complete the previous step: -continue=-makeBed\n";
+  } elsif (-e "$runDir/fb.$db.genscan.txt" ) {
+    die "doLoadGenscan: looks like this was run successfully already\n" .
+      "(fb.$db.genscan.txt exists).  Either run with -continue cleanup\n" .
+	"or move aside/remove\n$runDir/fb.$db.genscan.txt and run again.\n";
   }
   my $whatItDoes = "Loads genscan.gtf and genscanSubopt.bed.";
   my $bossScript = new HgRemoteScript("$runDir/doLoadGenscan.csh", $dbHost,
@@ -294,6 +301,12 @@ _EOF_
 # * step: cleanup [fileServer]
 sub doCleanup {
   my $runDir = $buildDir;
+
+  if (-e "$runDir/genscan.gtf.gz" ) {
+    die "doCleanup: looks like this was run successfully already\n" .
+      "(genscan.gtf.gz exists).  Investigate the run directory:\n" .
+	" $runDir/\n";
+  }
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
