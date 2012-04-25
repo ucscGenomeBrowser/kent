@@ -12875,7 +12875,7 @@ term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
-label TGF-b
+label TGF-beta
 
 term TNFa
 tag TNFA
