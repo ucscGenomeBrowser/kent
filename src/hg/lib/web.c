@@ -1370,8 +1370,10 @@ dyStringFree(&fullDirName);
 char *linkFull = dyStringCannibalize(&linkWithTimestamp);
 char *link = linkFull;
 if (docRoot != NULL)
+    {
     link = cloneString(linkFull + strlen(docRoot) + 1);
-freeMem(linkFull);
+    freeMem(linkFull);
+    }
 
 if (wrapInHtml) // wrapped for christmas
     {
