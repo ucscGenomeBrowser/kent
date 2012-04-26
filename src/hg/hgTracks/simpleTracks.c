@@ -744,8 +744,8 @@ if (x < xEnd)
             }
         else
             {
-            safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
+            safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -770,8 +770,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
                 chromName, winStart, winEnd,
                 database, tl.picWidth);
             }
