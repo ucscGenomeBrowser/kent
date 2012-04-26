@@ -581,70 +581,7 @@ hPrintf(
 , cartUsualString(cart, "hgLogin_password", "")
 , cartUsualString(cart, "hgLogin_password2", "")
 );
-/******************************* old UI to be removed
-hPrintf(
-"<div id=\"hgLoginSignupBox\" class=\"centeredContainer\">\n"
-"<h2>UCSC Genome Browser</h2>"
-"\n"
-);
-
-printf(
-"<P>"
-"Signing in enables you to save current settings into a "
-"named session, and then restore settings from the session later.<BR> "
-"If you wish, you can share named sessions with other users. "
-"</P>"
-);
-
-hPrintf(
-"If you are already a member, click <a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">here</a> to log in to UCSC Genome Browser.<br>\n"
-"To change your password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>.<br>\n"
-"Lost your password? Click <a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">here</a>.<br>\n"
-);
-
-hPrintf(
-"<h3>Sign Up</h3>"
-"\n"
-"<form method=post action=\"hgLogin\" name=mainForm >"
-"<span style='color:red;'>%s</span>"
-, errMsg ? errMsg : ""
-);
-
-hPrintf(
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"userName\">User Name</label>"
-"\n"
-"<input type=text name=\"hgLogin_user\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
-"\n"
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"emailAddr\">E-mail</label>"
-"\n"
-"<input type=text name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\"> <br>"
-"\n"
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"password\">Password</label>"
-"\n"
-"<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
-"\n"
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"password2\">Confirm Password</label>"
-"\n"
-"<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"password2\">"
-"\n"
-"<label style=\"display: block; margin-top: 10px;\" "
-" for=\"realName\">Real Name (optional)</label>"
-"\n"
-"<input type=text name=\"hgLogin_realName\" value=\"%s\" size=\"30\" id=\"realName\"> <br>"
-"\n"
-
-
-
-"<p>"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
-"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
-"<br>\n"
-"</p>" 
-****************************** to be removed ****************/
+// TODO: group them to one remove function
 // , cartUsualString(cart, "hgLogin_userName", "")
 // , cartUsualString(cart, "hgLogin_email", "")
 // , cartUsualString(cart, "hgLogin_email2", "")
@@ -756,6 +693,42 @@ backToHgSession(2);
 
 }
 
+void displayAccHelpPage(struct sqlConnection *conn)
+/* draw the account help page */
+{
+
+hPrintf(
+"<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
+"\n"
+"<h2>UCSC Genome Browser</h2>"
+"\n"
+"<h3>Having trouble signing in?</h3>"
+"\n"
+"<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acctHelpForm\">"
+"\n"
+"<div class=\"inputGroup\">"
+"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
+"<label for=\"password\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
+"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"username\" id=\"userName\">"
+"<label for=\"userName\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
+"\n"
+"</div>"
+"\n"
+);
+hPrintf(
+"<div class=\"inputGroup\">"
+"<label for=\"emailPassword\">Email address</label>"
+"<input type=\"text\" name=\"hgLogin_email\" size=\"30\" id=\"emailPassword\">"
+"</div>"    
+"\n"
+"<div class=\"formControls\">"  
+"    <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Continue\" class=\"largeButton\">"
+"     &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
+"</div>"
+"</form>"
+"</div><!-- END - accountHelpBox -->"
+);
+}
 
 /* ----- account login/display functions ---- */
 
@@ -800,7 +773,7 @@ hPrintf(
 "\n"
 "\n"
 "<div id=\"helpBox\">"
-"<a href=\"accounthelp.html\">Can't access your account?</a><br>"
+"<a href=\"hgLogin?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
 "Need an account? <a href=\"hgLogin?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
 "To change password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>."
 "</div><!-- END - helpBox -->"
@@ -1091,6 +1064,8 @@ else if (cartVarExists(cart, "hgLogin.do.changePassword"))
     changePassword(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayUserInfo"))
     displayUserInfo(conn);
+else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
+    displayAccHelpPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
