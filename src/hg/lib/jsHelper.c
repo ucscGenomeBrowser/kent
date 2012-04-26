@@ -879,13 +879,14 @@ int i;
 for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++);
     ;
 char *val = cloneStringZ(str + *posPtr, i);
-if(sameWord(val, "true"))
+if(sameString(val, "true"))
     ele = newJsonBoolean(TRUE);
-else if(sameWord(val, "false"))
+else if(sameString(val, "false"))
     ele =  newJsonBoolean(FALSE);
 else
     errAbort("Invalid boolean value '%s'; pos: %d", val, *posPtr);
 *posPtr += i;
+freez(&val);
 return (struct jsonElement *) ele;
 }
 
@@ -893,6 +894,8 @@ static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
 {
 int i;
 boolean integral = TRUE;
+struct jsonElement *retVal = NULL;
+
 for(i = 0;; i++)
     {
     char c = str[*posPtr + i];
@@ -904,16 +907,17 @@ for(i = 0;; i++)
 char *val = cloneStringZ(str + *posPtr, i);
 *posPtr += i;
 if(integral)
-    return (struct jsonElement *) newJsonNumber(sqlLongLong(val));
+    retVal = (struct jsonElement *) newJsonNumber(sqlLongLong(val));
 else
     {
     double d;
     if(sscanf(val, "%lf", &d))
-        return (struct jsonElement *) newJsonDouble(d);
+        retVal = (struct jsonElement *) newJsonDouble(d);
     else
-        errAbort("Invalid JSON Double: %s; pos: %d", val, *posPtr + i);
+        errAbort("Invalid JSON Double: %s", val);
     }
-return NULL;
+freez(&val);
+return retVal;
 }
 
 static struct jsonElement *jsonParseExpression(char *str, int *posPtr)
