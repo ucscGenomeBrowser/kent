@@ -27,4 +27,9 @@ struct variant   // a single variant
 struct variant *variantFromPgSnp(struct pgSnp *pgSnp);
 /* convert pgSnp record to variant record */
 
+struct allele  *alleleClip(struct allele *allele, int sx, int ex);
+/* clip allele to be inside region defined by sx..ex.  Returns 
+ * pointer to new allele which should be freed by alleleFree, or variantFree
+ */
+
 #endif /* VARIANT_H*/
