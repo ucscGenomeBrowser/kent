@@ -12674,7 +12674,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVIVISIONAL
+description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVISIONAL
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -14327,7 +14327,6 @@ tag GPL10989
 geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
 type platform
 description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
-#PROVISIONAL
 
 term GPL9156
 tag GPL9156
