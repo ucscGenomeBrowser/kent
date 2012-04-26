@@ -46,4 +46,4 @@ def runCommand(command, stdout=None, stderr=None):
     p.wait()
     if p.returncode != 0:
         cmdstr = " ".join([pipes.quote(arg) for arg in command])
-        raise Exception("Error from: " + cmdstr + ": ")
+        raise Exception("Error from: " + cmdstr)
