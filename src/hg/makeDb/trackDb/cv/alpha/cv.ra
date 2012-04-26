@@ -5458,6 +5458,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
+label SkMC
 
 term SkMC
 tag SKMC
@@ -5476,6 +5477,7 @@ termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+label SkMC
 
 term SkMC_9011302
 tag SKMC9011302
@@ -6094,7 +6096,7 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System PROVSIONAL
+description Central Nervous System PROVISIONAL
 vendorName CSHL lab
 vendorId CNS
 orderUrl http://gingeraslab.cshl.edu/
@@ -13276,7 +13278,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Raw signal -
+label Minus Raw signal 
 description Graphs the base-by-base density of tags on the minus strand
 
 term Peaks
@@ -13360,7 +13362,7 @@ description Signal over an interval as a percentage of normalized tag densities 
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
-label Raw signal +
+label Plus Raw signal
 description Graphs the base-by-base density of tags on the plus strand
 
 term Primer
