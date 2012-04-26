@@ -41,8 +41,13 @@ def runTests(reporter, tableList):
     reporter.writeTimestamp()
     reporter.writeBlankLine()
     for table in tableList:
+        reporter.writeLine("===============================================")
+        reporter.writeLine("Tests for " + args.database + "." + table +":\n")
         table = factory.tableQaFactory(args.database, table, reporter)
         table.validate()
+    reporter.writeLine("===============================================")
+    reporter.writeLine("Tests complete:")
+    reporter.writeTimestamp()
 
 args = parseCommandLine()
 tableList = getTableListFromFile()

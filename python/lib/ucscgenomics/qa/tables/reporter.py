@@ -56,12 +56,12 @@ class Reporter(object):
 
     def writeStepInfo(self):
         """Writes current step information and timestamp to file."""
-        self.fh.write(self.db + " " + self.table + " " + self.description + " " +
-                      time.asctime() + "\n")
+        self.fh.write(self.db + " " + self.table + " " + self.description + "\n")
         self.fh.flush()
 
     def endStep(self):
-        """To be run at the end of each test. Clears variables."""
+        """To be run at the end of each test. Clears variables and writes a blank line."""
         self.db = None
         self.table = None
         self.description = None
+        self.writeBlankLine()

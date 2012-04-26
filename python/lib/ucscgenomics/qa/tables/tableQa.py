@@ -1,3 +1,5 @@
+import re
+
 from ucscgenomics.qa import qaUtils
 
 class TableQa(object):
@@ -11,21 +13,29 @@ class TableQa(object):
         self.table = table
         self.reporter = reporter
 
-    def __tableDescriptionCheck(self):
+    def __checkTableDescription(self):
         """Checks for an autoSql definition for this table in the tableDescriptions table."""
         # Ideally this would also check to see if each column in the table is described.
-        self.reporter.beginStep(self.db, self.table, "table descriptions check")
+        self.reporter.beginStep(self.db, self.table, "checking table descriptions")
         self.reporter.writeStepInfo()
         sqlOut = qaUtils.callHgsql(self.db, "select autoSqlDef from tableDescriptions where\
                                   tableName='" + self.table + "'")
         if sqlOut.strip() == '':
             self.reporter.writeLine("ERROR: No table description for " + self.db + "." + self.table)
+        else:
+            self.reporter.writeLine("pass")
         self.reporter.endStep()
-        self.reporter.writeBlankLine()
 
-    def __checkNameFormat(self):
-        """Checks the table name for underscores."""
-        pass
+    def __checkForUnderscores(self):
+        """Checks the table name for underscores. Allows 'all_' and 'chr.*_' for split tables."""
+        self.reporter.beginStep(self.db, self.table, "checking for underscores")
+        self.reporter.writeStepInfo()
+        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all)_.*', self.table):
+            self.reporter.writeLine("ERROR: " + self.db + "." + self.table + 
+                                    " has unexpected underscores")
+        else:
+            self.reporter.writeLine("pass")
+        self.reporter.endStep()
 
     def __getRowCount(self):
         """Returns the number of rows in this table."""
@@ -33,7 +43,8 @@ class TableQa(object):
 
     def validate(self):
         """Runs validation methods.  Puts errors captured from programs in errorLog."""
-        self.__tableDescriptionCheck()
+        self.__checkTableDescription()
+        self.__checkForUnderscores()
 
     def statistics(self):
         """Returns a table stats object describing statistics of this table."""

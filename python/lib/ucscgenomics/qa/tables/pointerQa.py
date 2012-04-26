@@ -7,4 +7,4 @@ class PointerQa(TableQa):
 
     def validate(self, errorLog):
         """Adds pointer-specific table checks to errorLog."""
-        pass
+        super(PointerQa, self).validate()
