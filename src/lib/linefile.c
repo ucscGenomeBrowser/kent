@@ -976,7 +976,7 @@ if ((byteCount != 1)
  && (byteCount != 8))
     errAbort("Unexpected error: Invalid byte count for integer size in lineFileCheckAllIntsNoAbort, expected 1 2 4 or 8, got %d.", byteCount);
 
-unsigned long long limit = 0xFFFFFFFFFFFFFFFF >> (8*(8-byteCount));
+unsigned long long limit = 0xFFFFFFFFFFFFFFFFULL >> (8*(8-byteCount));
 
 if (isSigned) 
     limit >>= 1;

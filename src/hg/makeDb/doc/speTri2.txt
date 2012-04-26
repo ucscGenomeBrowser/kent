@@ -268,4 +268,15 @@ ncbiAssemblyName SpeTri2.0
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
     # Do not need to do this since Repeat Masker was used
+
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/speTri2/bed/cpgIslands
+    cd /hive/data/genomes/speTri2/bed/cpgIslands
+    time doCpgIslands.pl speTri2 > do.log 2>&1
+    #   real    61m47.841s
+
+    cat fb.speTri2.cpgIslandExt.txt
+    #   14580847 bases of 2311060300 (0.631%) in intersection
+
+#########################################################################

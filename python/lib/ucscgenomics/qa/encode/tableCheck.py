@@ -1,37 +1,25 @@
-#!/usr/bin/env python2.7
 import re
-import argparse
 import subprocess
 import datetime
 import time
-import pipes
+from ucscgenomics.qa import qaUtils
 
 """
-    A collection of functions useful to the ENCODE and GB QA Teams.
+    A collection of functions useful to the ENCODE QA Teams.
 """
-
-def callHgsql(database, command):
-    """ Run hgsql command using subprocess, return stdout data if no error."""
-    cmd = ["hgsql", database, "-Ne", command]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmdout, cmderr = p.communicate()
-    if p.returncode != 0:
-        # keep command arguments nicely quoted
-        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
-        raise Exception("Error from: " + cmdstr + ": " + cmderr)
-    return cmdout
 
 def getGbdbTables(database, tableset):
     """ Remove tables that aren't pointers to Gbdb files."""
     sep = "','"
     tablestr = sep.join(tableset)
     tablestr = "'" + tablestr + "'"
-    hgsqlOut = callHgsql(database, "select table_name from information_schema.columns where table_name in ("
-                                   + tablestr + ") and column_name = 'fileName'")
+    hgsqlOut = qaUtils.callHgsql(database, "select table_name from information_schema.columns where\
+                                 table_name in ("+ tablestr + ") and column_name = 'fileName'")
     gbdbtableset = set(hgsqlOut.split())
     return gbdbtableset
 
 def sorted_nicely(l):
+    #From Ned Batchelder's Compact Python Human Sort
     """ Sort the given iterable in the way that humans expect."""
     convert = lambda text: int(text) if text.isdigit() else text
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
@@ -45,7 +33,7 @@ def countPerChrom(database, tables):
     globalseen = set()
     localseen = dict()
 
-    hgsqlOut = callHgsql(database, "select chrom from chromInfo")
+    hgsqlOut = qaUtils.callHgsql(database, "select chrom from chromInfo")
     chrlist = set(hgsqlOut.split())
 
     notPositionalTable = set()
@@ -110,7 +98,7 @@ def checkTableDescriptions(database, tables):
         tablelist.append("tableName = '%s'" % i)
         orsep = " OR "
         orstr = orsep.join(tablelist)
-    hgsqlOut = callHgsql(database, "select tableName from tableDescriptions where " + orstr)
+    hgsqlOut = qaUtils.callHgsql(database, "select tableName from tableDescriptions where " + orstr)
     described = set(hgsqlOut.split())
     missing = tables - described
     if missing:
@@ -136,7 +124,7 @@ def checkTableIndex(database, tables):
         return (output, missing)
 
     for i in notgbdbtablelist:
-        hgsqlOut = callHgsql(database, "show indexes from " + i)
+        hgsqlOut = qaUtils.callHgsql(database, "show indexes from " + i)
         index = hgsqlOut.split()
         if index:
             pass

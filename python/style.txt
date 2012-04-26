@@ -59,6 +59,8 @@ A module may in turn contain any number of related classes and methods. This dif
 where one file correlates to one class: in Python it is correct to treat one module similar to
 a whole namespace in Java.
 
+In general try to keep modules on the order of 100's of lines.
+
 Internal packages and modules should have short names in mixedCase, with no spaces or underscores.
 A good example of this style is the ucscGenomics package:
 
@@ -115,10 +117,14 @@ mixedCase names. The leading character is not capitalized, but all successive wo
 capitalized. Underscores are not used, except for private internal methods, 
 where the name is preceded by double underscores which Python recognizes as private.
 
+In general try to keep methods around 20 lines.
+
 Functions
 
 mixedCase names. The leading character is not capitalized, but all 
 successive words are capitalized.
+
+In general try to keep methods around 20 lines.
 
 Variables
 
