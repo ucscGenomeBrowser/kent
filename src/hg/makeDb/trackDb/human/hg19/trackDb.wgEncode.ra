@@ -99,8 +99,8 @@ include wgEncodeUwDgf.release4.ra alpha
 # ENCODE RNA SEQ -----------------------------------
 
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.ra beta,public
-include wgEncodeRikenCage.release3.ra alpha
+include wgEncodeRikenCage.ra public
+include wgEncodeRikenCage.release3.ra alpha,beta
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.release2.ra beta,public
