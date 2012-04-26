@@ -37,7 +37,7 @@ which was done here on the Illumina HiSeq sequencer. The transcriptome measureme
 by magnesium-catalyzed hydrolysis and then converted into cDNA by random priming and amplified. Paired-end 2x100 bp reads were obtained from each end of a cDNA fragment. 
 Reads were aligned to the mm9 human reference genome using TopHat, a program specifically designed to align RNA-Seq reads and discover splice junctions de novo. 
 Cufflinks, a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantifiy novel transcripts and to obtain trascript 
-expression estimates based on the UCSC annotation. All sequence files, alignments, and expression estimates files are available at <A target="_BLANK" href="/cgi-bin/hgFileUi?db=mm9&g=wgEncodeCaltechRnaSeq">download page</A>.</P>
+expression estimates based on the UCSC annotation. All sequence files, alignments, and expression estimates files are available on the <A target="_BLANK" href="/cgi-bin/hgFileUi?db=mm9&g=wgEncodeCaltechRnaSeq">download page</A>.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -46,15 +46,18 @@ This track is a multi-view composite track that contains multiple data types
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <A href="/goldenPath/help/multiView.html" target="_BLANK">here</A>.
 The following views are in this track:
-</P><DL>
-</DD><DT><I>Alignments</I></DT>
-<DD>The Alignments (BAM file) view shows reads aligned to the genome. Alignments are colored by cell type. </DT></DD>
-<DL><DT><I>Raw Signal</I></DT>
+<DL>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments (BAM file) view shows reads aligned to the genome. Alignments are colored by cell type.</DD></DT>
+<DT><I>Raw Signal</I></DT>
 <DD>Density graph (wiggle) of signal enrichment based on a normalized aligned 
-read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. <BR><BR>
-</DT><DD><I>All Reads</I> - raw signal wiggle track containing all alignments with multireads weighed by their multiplicity
-</DT><DD><I>Unique Reads Only</I> - raw signal wiggle track containing only uniquely mapping reads
-</DD></DL>
+read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples.</DD>
+<DD><I>All Reads</I> - raw signal wiggle track containing all alignments with multireads weighed by their multiplicity
+<DT><I>Signal</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on processed data.</DD>
+<DD><I>Unique Reads Only</I> - Signal wiggle track containing only uniquely mapping reads
+</DD>
+</DL>
 
 <H2>Methods</H2>
 
