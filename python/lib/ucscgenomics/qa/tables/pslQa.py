@@ -15,12 +15,7 @@ class PslQa(PositionalQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        # TODO: why won't this work???
-        # super(GenePredQa, self).__writePassOrFail(p.returncode)
-        if p.returncode == 0:
-            self.reporter.writeLine("pass")
-        else:
-            self.reporter.writeLine("ERROR")
+        self._PositionalQa__writePassOrFail(p.returncode)
         self.reporter.endStep()
 
     def validate(self):
