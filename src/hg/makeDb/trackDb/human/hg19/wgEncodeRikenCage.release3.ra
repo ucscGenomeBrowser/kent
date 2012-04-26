@@ -9,7 +9,7 @@ subGroup3 localization Localization wcell=Whole_Cell cytosol=Cytosol nucleus=Nuc
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
 subGroup6 rank Replicate rank1=1st rank2=2nd rankP=Pooled
-dimensions dimensionY=wcellType dimensionC=rnaExtract dimensionX=localization dimensionB=rank 
+dimensions dimensionY=cellType dimensionC=rnaExtract dimensionX=localization dimensionB=rank 
 dimensionCchecked pAP,pAM
 dimensionBchecked rank1, rankP
 #dimensionDchecked rep0,rep1,rep2,rep3,rep4,Pooled
