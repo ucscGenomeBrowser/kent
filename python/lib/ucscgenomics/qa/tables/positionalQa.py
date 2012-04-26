@@ -21,9 +21,9 @@ class PositionalQa(TableQa):
         """Runs featureBits -countGaps for this table and this table intersected with gap."""
         pass
 
-    def validate(self, errorLog):
+    def validate(self):
         """Adds positional-table-specific checks to basic table checks."""
-        pass
+        super(PositionalQa, self).validate()
 
     def statistics(self):
         pass

@@ -1,12 +1,11 @@
 import subprocess
 import pipes
+
 from ucscgenomics.qa.tables.genePredQa import GenePredQa
 from ucscgenomics.qa.tables.tableQa import TableQa
 from ucscgenomics.qa.tables.pslQa import PslQa
 from ucscgenomics.qa.tables.positionalQa import PositionalQa
 from ucscgenomics.qa.tables.pointerQa import PointerQa
-
-# TODO: add functions that check whether db and table actually exists
 
 def getTrackType(db, table):
     """Looks for a track type via tdbQuery."""
@@ -31,19 +30,19 @@ otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "
                                   "chromGraph", "factorSource", "bedDetail", "pgSnp"])
 pointerTypes = frozenset(["bigWig", "bigBed", "bam"])
 
-def tableQaFactory(db, table):
+def tableQaFactory(db, table, reporter):
     """Returns tableQa object according to trackDb track type.""" 
     tableType = getTrackType(db, table)
     if not tableType:
-        return TableQa(db, table)
+        return TableQa(db, table, reporter)
     elif tableType in pslTypes:
-        return PslQa(db, table)
+        return PslQa(db, table, reporter)
     elif tableType in genePredTypes:
-        return GenePredQa(db, table)
+        return GenePredQa(db, table, reporter)
     elif tableType in otherPositionalTypes:
-        return PositionalQa(db, table)
+        return PositionalQa(db, table, reporter)
     elif tableType in pointerTypes:
-        return PointerQa(db, table)
+        return PointerQa(db, table, reporter)
     else:
         raise Exception(db + table + " has unknown track type " + tableType)
 
