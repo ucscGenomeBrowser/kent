@@ -1,6 +1,4 @@
-/* alphaChain - Create some faux centromere sequence using input based on a lot of
- * centromeric reads. */
-
+/* alphaChain - Predicts faux centromere sequences using a probablistic model. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
