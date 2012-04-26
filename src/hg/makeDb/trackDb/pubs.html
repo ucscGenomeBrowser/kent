@@ -1,13 +1,13 @@
 <H2>Description</H2>
-<P>This track is based on text-mining on fulltext of biomedical articles and includes three types of subtracks:</P>
+<P>This track is based on text-mining of full-text biomedical articles and includes three types of subtracks:</P>
 
 <ul>
 <li>Sequences - grouped by article - found in publications and searched in genomes with BLAT</li>
 <li>Individual BLAT matches of all sequences of one single article</li>
 <li>Identifiers in publications that directly relate to chromosome locations (e.g. gene symbols, SNP identifiers, etc)</li>
 </ul>
-<P>Both sources of information are linked to the respective articles.
-Background information on how permissions to full text data was obtained can be found on the <A
+<P>All three sources of information are linked to the respective articles.
+Background information on how permission to full-text data was obtained can be found on the <A
 href="http://text.soe.ucsc.edu">project website</A>.</P>
 
 <H2>Display Convention and Configuration</H2>
@@ -18,18 +18,18 @@ Article titles are shown when you move the mouse cursor over the features.
 Thicker parts of the features (exons) represent matching sequences,
 connected by thin lines to matches from the same article within 30 kbp.</P>
 
-<P>The track "individual sequence matches" activates automatically when
+<P>The subtrack "individual sequence matches" activates automatically when
 the user clicks a sequence match and follows the link "Show sequence matches individually" 
-from the details page.  Mouse overs show flanking text around the sequence and clicking
+from the details page.  Mouse-overs show flanking text around the sequence, and clicking
 features links to BLAT alignments.
 </P>
 
-<P>All other tracks show the number of matching articles as the feature
-description.  Clicking on them shows the sentences and sections in articles 
+<P>All other subtracks (i.e., Sequences, Bands, Genes, SNPs) show the number of matching articles as
+ the feature description.  Clicking on them shows the sentences and sections in articles 
 where the identifiers were found.</P>
 
 <P>The track configuration includes a keyword and year filter. Keywords are space-separated
-and are searched in the article's title, author list and abstract.</P>
+and are searched in the article's title, author list, and abstract.</P>
 
 <H2>Data</H2>
 <P>The track is based on text from biomedical research articles, obtained as
@@ -38,16 +38,16 @@ part of the <A HREF="http://text.soe.ucsc.edu">UCSC Genocoding Project</A>.</P>
 <P>The current dataset consists of about 600,000 files (main text and
 supplementary files) from <A HREF="http://www.pubmedcentral.com/"
 TARGET=_blank>Pubmed Central</A> (Open-Access set) and around 6 million text
-files (main text) from the publisher <A HREF="http://elsevier.com"
+files (main text) from <A HREF="http://elsevier.com"
 TARGET=_blank>Elsevier</A> (as part of the <A
 HREF="http://www.applications.sciverse.com/action/userhome"
 TARGET=_blank>Sciverse Apps</A> program). </P>
 
 <H2>Methods</H2>
 <P>
-Any filetype was converted to text, including XML, raw ASCII, PDFs and various
-office formats (Excel, Word, Powerpoint).  The results were processed with
-programs to find groups of words that look like DNA/RNA sequences or
+All filetypes (incl. XML, raw ASCII, PDFs and various
+office formats (Excel, Word, Powerpoint)) were converted to text. The results were processed 
+to find groups of words that look like DNA/RNA sequences or
 words that look like protein sequences. These are then mapped with BLAT to the
 human genome and these model organisms: mouse (mm9), rat (rn4), zebrafish
 (danRer6), Drosophila melanogaster (dm3), X. tropicalis (xenTro2), Medaka
@@ -56,8 +56,8 @@ human genome and these model organisms: mouse (mm9), rat (rn4), zebrafish
 <UL>
 <LI>For sequences, the best match across all genomes is used, if it is longer than 17bp and matches at 90% identity. 
 Two sets of BLAT parameters are tried, the default ones for sequences longer than 25 bp, very sensitive ones (stepSize=5) for shorter sequences.</LI>
-<LI>Sequences are mapped to genomic DNA, those that do not match are mapped to RefSeq cDNAs</LI>
-<LI>Hits from the same article that are closer than 30 kbp are</LI>
+<LI>Sequences are mapped to genomic DNA. Those that do not match are mapped to RefSeq cDNAs</LI>
+<LI>Hits from the same article that are closer than 30 kbp are
 joined into one feature (shown as exon-blocks on the browser)</LI>
 <LI>All parts of a joined feature have to match at least 25 bp</LI>
 <LI>Non-unique hits are kept in the joined feature with the most members</LI>
@@ -65,8 +65,8 @@ joined into one feature (shown as exon-blocks on the browser)</LI>
 </UL>
 
 <P>Note that due to the 90% identity filter, some sequences do not match
-anywhere in the genome.  Examples include primers with added restriction sites,
-mutation primers or many other sequence that mixes two pieces of genomic
+anywhere in the genome. Examples include primers with added restriction sites,
+mutation primers, or many other sequence that mixes two pieces of genomic
 DNA not part of RefSeq.  Also note that some gene symbols correspond to 
 English words which can sometimes lead to many false positives.</P>
 
@@ -86,7 +86,7 @@ e&#100;&#117;">
 uc&#115;&#99;.
 <!-- above address is max at soe.ucsc.edu -->
 e&#100;&#117;</A>. We are very interested in getting access to more 
-articles from publishers for this dataset, see <A HREF="http://text.soe.ucsc.edu">projet website</a>.
+articles from publishers for this dataset; see <A HREF="http://text.soe.ucsc.edu">projet website</a>.
 </P>
 
 <H2>References</H2>

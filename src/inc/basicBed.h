@@ -23,7 +23,7 @@ struct bed
     char *name;	/* Name of item */
 
     /* The following items are not loaded by   the bedLoad routines. */
-    int score; /* Score - 0-1000 */
+    int score; /* Score - 0-1000 */  /* Should be uint but there are still some ct users with neg values, .as DOES say uint */
     char strand[2];  /* + or -.  */
     unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
     unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */

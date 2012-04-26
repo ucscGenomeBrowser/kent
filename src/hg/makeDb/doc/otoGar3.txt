@@ -263,4 +263,15 @@ ncbiAssemblyName OtoGar3
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
     # Do not need to do this since Repeat Masker was used
+
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/cpgIslands
+    cd /hive/data/genomes/otoGar3/bed/cpgIslands
+    time doCpgIslands.pl otoGar3 > do.log 2>&1
+    #   real    29m34.875s
+
+    cat fb.otoGar3.cpgIslandExt.txt
+    #   14292453 bases of 2359530453 (0.606%) in intersection
+
+#########################################################################

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #	$Id: kentSrcUpdate.sh,v 1.1 2010/03/18 18:40:12 hiram Exp $
 #

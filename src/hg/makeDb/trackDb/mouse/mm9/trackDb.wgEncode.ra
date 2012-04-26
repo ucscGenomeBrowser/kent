@@ -53,7 +53,7 @@ include wgEncodeCshlLongRnaSeq.ra
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha
-include wgEncodeCaltechRnaSeq.release1.ra alpha
+include wgEncodeCaltechRnaSeq.release1.ra alpha,beta
 
 # FSU Repli-chip (wrangler: Venkat)
 include wgEncodeFsuRepliChip.ra

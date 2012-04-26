@@ -5,6 +5,6 @@ table tagAlign
     uint   chromStart;   "Start position in chromosome"
     uint   chromEnd;     "End position in chromosome"
     string sequence;     "Sequence of this read"
-    int    score;        "Indicates mismatches, quality, or other measurement (0-1000)"
+    uint    score;       "Indicates mismatches, quality, or other measurement (0-1000)"
     char[1] strand;      "+ or - or . for unknown"
 )

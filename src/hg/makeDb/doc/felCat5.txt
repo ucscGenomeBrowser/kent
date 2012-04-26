@@ -488,3 +488,13 @@ close (FH);
 #    ln -s `pwd`/felCat5.2bit /gbdb/felCat5/felCat5.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/felCat5/bed/cpgIslands
+    cd /hive/data/genomes/felCat5/bed/cpgIslands
+    time doCpgIslands.pl felCat5 > do.log 2>&1
+    #   real    28m6.499s
+
+    cat fb.felCat5.cpgIslandExt.txt
+    #   39523291 bases of 2364296207 (1.672%) in intersection
+
+#########################################################################

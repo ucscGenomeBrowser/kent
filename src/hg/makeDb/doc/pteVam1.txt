@@ -155,3 +155,13 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/pteVam1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/pteVam1/bed/cpgIslands
+    cd /hive/data/genomes/pteVam1/bed/cpgIslands
+    time doCpgIslands.pl pteVam1 > do.log 2>&1
+    #   real    239m18.855s
+
+    cat fb.pteVam1.cpgIslandExt.txt
+    #   49493178 bases of 1839436660 (2.691%) in intersection
+
+#########################################################################
