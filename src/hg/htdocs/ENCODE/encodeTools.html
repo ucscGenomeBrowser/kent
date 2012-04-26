@@ -8,7 +8,7 @@
     </head>
 
     <body>
-        <!--#include virtual="/inc/encodeProject.topbar.html"-->
+        <!--#include virtual="/inc/encodeProjectSoftware.topbar.html"-->
 
         <div class="encodeHeader">
             <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
@@ -18,6 +18,8 @@
        <div class="wrapper">
                 <div class="bar"><h4 class="title">Tools for identifying features from ENCODE assays</h4></div>
                 <div class="content">
+                        <h4>ChIP-seq Peak Callers</h4>
+
                         <p>
                         <a class="thick" href="http://liulab.dfci.harvard.edu/MACS/" target="_blank">MACS</a><br>
                         A widely-used, fast, robust ChIP-Seq peak-finding algorithm that accounts for the offset
@@ -41,6 +43,19 @@
                         </p>
 
                         <p>
+                        <a class="thick" href="http://info.gersteinlab.org/PeakSeq" target="_blank">PeakSeq</a><br>
+                        Identifies enriched regions in ChIP-seq type experiments and explicitly compares signal
+                        experiments to control experiments.
+                        </p>
+
+                        <p>
+                        Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M, Gerstein MB.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">
+                        PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
+                        <em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
+                        </p>
+
+                        <p>
                         <a class="thick" href="http://compbio.med.harvard.edu/Supplements/ChIP-seq/" target="_blank">SPP</a><br>
                         A ChIP-seq peak calling algorithm, implemented as an R package, that accounts for the offset
                         in forward-strand and reverse-strand reads to improve resolution, compares enrichment in
@@ -56,17 +71,101 @@
                         <em>Nat Biotechnol</em>. 2008 Dec;26(12):1351-9.
                         </p>
 
+                        <h4>RNA-seq Analysis</h4>
+
                         <p>
-                        <a class="thick" href="http://info.gersteinlab.org/PeakSeq" target="_blank">PeakSeq</a><br>
-                        Identifies enriched regions in ChIP-seq type experiments and explicitly compares signal
-                        experiments to control experiments.
+                        <a class="thick" href="http://info.gersteinlab.org/FusionSeq" target="_blank">FusionSeq</a><br>
+                        A computational framework that detects chimeric transcripts from paired-end RNA-seq experiments.
                         </p>
 
                         <p>
-                        Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M, Gerstein MB.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">
-                        PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
-                        <em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
+                        Sboner A, Habegger L, Pflueger D, Terry S, Chen DZ, Rozowsky JS, Tewari AK, Kitabayashi N, Moss BJ, Chee MS <em>et al</em>.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20964841" target="_blank">
+                        FusionSeq: a modular framework for finding gene fusions by analyzing paired-end RNA-sequencing data</a>.
+                        <em>Genome Biol</em>. 2010;11(10):R104.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://archive.gersteinlab.org/proj/rnaseq/IQSeq/" target="_blank">IQSeq</a><br>
+                        Uses RNA-seq data for isoform quantification.
+                        </p>
+
+                        <p>
+                        Du J, Leng J, Habegger L, Sboner A, McDermott D, Gerstein M.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22238592" target="_blank">
+                        IQSeq: integrated isoform quantification analysis based on next-generation sequencing</a>.
+                        <em>PLoS One</em>. 2012;7(1):e29175.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://info.gersteinlab.org/RSEQtools" target="_blank">RSeqTools</a><br>
+                        Processes, quantifies, and annotates gene expression data from RNA-seq experiments. Utilizes
+                        Mapped Read Format (MRF) for secure and efficient analysis.
+                        </p>
+
+                        <p>
+                        Habegger L, Sboner A, Gianoulis TA, Rozowsky J, Agarwal A, Snyder M, Gerstein M.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21134889" target="_blank">
+                        RSEQtools: a modular framework to analyze RNA-Seq data using compact, anonymized data summaries</a>.
+                        <em>Bioinformatics</em>. 2011 Jan 15;27(2):281-3.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://www.broadinstitute.org/software/scripture/" target="_blank">Scripture</a><br>
+                        Reconstructs transcriptomes, relying solely on RNA-Seq reads and an assembled genome to build a
+                        transcriptome ab initio. The statistical methods to estimate read coverage significance are also
+                        applicable to other sequencing data. Scripture also has modules for ChIP-Seq peak calling.
+                        </p>
+
+                        <p>
+                        Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, Adiconis X, Fan L, Koziol MJ, Gnirke A, Nusbaum C <em>et al</em>.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20436462" target="_blank">
+                        Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
+                        <em>Nat Biotechnol</em>. 2010 May;28(5):503-10.
+                        </p>
+
+                        <h4>Other</h4>
+
+                        <p>
+                        <a class="thick" href="http://alleleseq.gersteinlab.org/" target="_blank">AlleleSeq</a><br>
+                        Quantifies the allele-specific binding and expression at the SNP sites using
+                        the RNA-seq, ChIP-seq datasets, and diploid genome sequences.
+                        </p>
+
+                        <p>
+                        Rozowsky J, Abyzov A, Wang J, Alves P, Raha D, Harmanci A, Leng J, Bjornson R, Kong Y, Kitabayashi N <em>et al</em>.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21811232" target="_blank">
+                        AlleleSeq: analysis of allele-specific expression and binding in a network framework</a>.
+                        <em>Mol Syst Biol</em>. 2011 Aug 2;7:522.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://www.uwencode.org/software/hotspot" target="_blank">Hotspot</a><br>
+                        Identifies regions of local enrichment, including peaks, in genomic short-read sequence data.
+                        Uses the binomial distribution with a local background model to automatically correct for
+                        broad-scale regional differences in tag levels.  It is applicable to a wide variety of epigenetic
+                        profiling assays, including ChIP-Seq and DNase-Seq.  Hotspot forms the basis of the SPOT data quality
+                        metric (described below).
+                        </p>
+
+                        <p>
+                        John S, Sabo PJ, Thurman RE, Sung MH, Biddie SC, Johnson TA, Hager GL, Stamatoyannopoulos JA.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21258342" target="_blank">
+                        Chromatin accessibility pre-determines glucocorticoid receptor binding patterns</a>.
+                        <em>Nat Genet</em>. 2011 Mar;43(3):264-8.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://archive.gersteinlab.org/proj/incrna/" target="_blank">incRNA</a><br>
+                        A computational framework that identifies structured RNAs by combining variety of gene expression
+                        data, and several sequence based metrics.
+                        </p>
+
+                        <p>
+                        Lu ZJ, Yip KY, Wang G, Shou C, Hillier LW, Khurana E, Agarwal A, Auerbach R, Rozowsky J, Cheng C <em>et al</em>.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21177971" target="_blank">
+                        Prediction and characterization of noncoding RNAs in <em>C. elegans</em> by integrating conservation, secondary structure, and high-throughput sequencing and array data</a>.
+                        <em>Genome Res</em>. 2011 Feb;21(2):276-85.
                         </p>
 
                         <p>
@@ -105,105 +204,14 @@
                         Hoffman M, Ernst J, Wilder S, Kundaje A, Harris R, Libbrecht M, Giardine B, Bilmes J, Birney E, Hardison R <em>et al</em>.
                         Integrative annotation of chromatin elements from ENCODE data. (In Review)
                         </p>
-
-                        <p>
-                        <a class="thick" href="http://www.broadinstitute.org/software/scripture/" target="_blank">Scripture</a><br>
-                        Reconstructs transcriptomes, relying solely on RNA-Seq reads and an assembled genome to build a
-                        transcriptome ab initio. The statistical methods to estimate read coverage significance are also
-                        applicable to other sequencing data. Scripture also has modules for ChIP-Seq peak calling.
-                        </p>
-
-                        <p>
-                        Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, Adiconis X, Fan L, Koziol MJ, Gnirke A, Nusbaum C <em>et al</em>.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20436462" target="_blank">
-                        Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
-                        <em>Nat Biotechnol</em>. 2010 May;28(5):503-10.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://www.uwencode.org/software/hotspot" target="_blank">Hotspot</a><br>
-                        Identifies regions of local enrichment, including peaks, in genomic short-read sequence data.
-                        Uses the binomial distribution with a local background model to automatically correct for
-                        broad-scale regional differences in tag levels.  It is applicable to a wide variety of epigenetic
-                        profiling assays, including ChIP-Seq and DNase-Seq.  Hotspot forms the basis of the SPOT data quality
-                        metric (described below).
-                        </p>
-
-                        <p>
-                        John S, Sabo PJ, Thurman RE, Sung MH, Biddie SC, Johnson TA, Hager GL, Stamatoyannopoulos JA.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21258342" target="_blank">
-                        Chromatin accessibility pre-determines glucocorticoid receptor binding patterns</a>.
-                        <em>Nat Genet</em>. 2011 Mar;43(3):264-8.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://alleleseq.gersteinlab.org/" target="_blank">AlleleSeq</a><br>
-                        Quantifies the allele-specific binding and expression at the SNP sites using
-                        the RNA-seq, ChIP-seq datasets, and diploid genome sequences.
-                        </p>
-
-                        <p>
-                        Rozowsky J, Abyzov A, Wang J, Alves P, Raha D, Harmanci A, Leng J, Bjornson R, Kong Y, Kitabayashi N <em>et al</em>.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21811232" target="_blank">
-                        AlleleSeq: analysis of allele-specific expression and binding in a network framework</a>.
-                        <em>Mol Syst Biol</em>. 2011 Aug 2;7:522.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://info.gersteinlab.org/RSEQtools" target="_blank">RSeqTools</a><br>
-                        Processes, quantifies, and annotates gene expression data from RNA-seq experiments. Utilizes
-                        Mapped Read Format (MRF) for secure and efficient analysis.
-                        </p>
-
-                        <p>
-                        Habegger L, Sboner A, Gianoulis TA, Rozowsky J, Agarwal A, Snyder M, Gerstein M.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21134889" target="_blank">
-                        RSEQtools: a modular framework to analyze RNA-Seq data using compact, anonymized data summaries</a>.
-                        <em>Bioinformatics</em>. 2011 Jan 15;27(2):281-3.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://archive.gersteinlab.org/proj/rnaseq/IQSeq/" target="_blank">IQSeq</a><br>
-                        Uses RNA-seq data for isoform quantification.
-                        </p>
-
-                        <p>
-                        Du J, Leng J, Habegger L, Sboner A, McDermott D, Gerstein M.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22238592" target="_blank">
-                        IQSeq: integrated isoform quantification analysis based on next-generation sequencing</a>.
-                        <em>PLoS One</em>. 2012;7(1):e29175.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://archive.gersteinlab.org/proj/incrna/" target="_blank">incRNA</a><br>
-                        A computational framework that identifies structured RNAs by combining variety of gene expression
-                        data, and several sequence based metrics.
-                        </p>
-
-                        <p>
-                        Lu ZJ, Yip KY, Wang G, Shou C, Hillier LW, Khurana E, Agarwal A, Auerbach R, Rozowsky J, Cheng C <em>et al</em>.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21177971" target="_blank">
-                        Prediction and characterization of noncoding RNAs in <em>C. elegans</em> by integrating conservation, secondary structure, and high-throughput sequencing and array data</a>.
-                        <em>Genome Res</em>. 2011 Feb;21(2):276-85.
-                        </p>
-
-                        <p>
-                        <a class="thick" href="http://info.gersteinlab.org/FusionSeq" target="_blank">FusionSeq</a><br>
-                        A computational framework that detects chimeric transcripts from paired-end RNA-seq experiments.
-                        </p>
-
-                        <p>
-                        Sboner A, Habegger L, Pflueger D, Terry S, Chen DZ, Rozowsky JS, Tewari AK, Kitabayashi N, Moss BJ, Chee MS <em>et al</em>.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20964841" target="_blank">
-                        FusionSeq: a modular framework for finding gene fusions by analyzing paired-end RNA-sequencing data</a>.
-                        <em>Genome Biol</em>. 2010;11(10):R104.
-                        </p>
                </div><!--end content-->
        </div><!--end wrapper-->
 
        <div class="wrapper">
                 <div class="bar"><h4 class="title">Integrative analysis across data types</h4></div>
                 <div class="content">
+                        <h4>Genome Segmentation</h4>
+
                         <p>
                         <a class="thick" href="http://compbio.mit.edu/ChromHMM/" target="_blank">ChromHMM</a><br>
                         Learns and characterizes chromatin states.
@@ -214,6 +222,21 @@
                         <a href="http://www.ncbi.nlm.nih.gov/pubmed/22373907" target="_blank">
                         ChromHMM: automating chromatin-state discovery and characterization</a>.
                         <em>Nat Methods</em>. 2012 Feb 28;9(3):215-6.
+                        </p>
+
+                        <p>
+                        <a class="thick" href="http://noble.gs.washington.edu/proj/segtools/" target="_blank">Segtools</a><br>
+                        A Python package that analyzes genomic segmentations. The software efficiently calculates
+                        a variety of summary statistics and produces corresponding publication quality visualizations. The
+                        overall goal of Segtools is to provide a bird.s-eye view of complex genomic data sets, allowing
+                        researchers to easily generate and confirm hypotheses.
+                        </p>
+
+                        <p>
+                        Buske OJ, Hoffman MM, Ponts N, Le Roch KG, Noble WS.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22029426" target="_blank">
+                        Exploratory analysis of genomic segmentations with Segtools</a>.
+                        <em>BMC Bioinformatics</em>. 2011 Oct 26;12:415.
                         </p>
 
                         <p>
@@ -232,20 +255,7 @@
                         <em>Nat Methods</em>. 2012 Mar 18;.
                         </p>
 
-                        <p>
-                        <a class="thick" href="http://noble.gs.washington.edu/proj/segtools/" target="_blank">Segtools</a><br>
-                        A Python package that analyzes genomic segmentations. The software efficiently calculates
-                        a variety of summary statistics and produces corresponding publication quality visualizations. The
-                        overall goal of Segtools is to provide a bird.s-eye view of complex genomic data sets, allowing
-                        researchers to easily generate and confirm hypotheses.
-                        </p>
-
-                        <p>
-                        Buske OJ, Hoffman MM, Ponts N, Le Roch KG, Noble WS.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22029426" target="_blank">
-                        Exploratory analysis of genomic segmentations with Segtools</a>.
-                        <em>BMC Bioinformatics</em>. 2011 Oct 26;12:415.
-                        </p>
+                        <h4>Other</h4>
 
                         <p>
                         <a class="thick" href="http://act.gersteinlab.org/" target="_blank">ACT</a><br>
@@ -305,21 +315,6 @@
                 <div class="bar"><h4 class="title">Other Tools</h4></div>
                 <div class="content">
                         <p>
-                        <a class="thick" href="http://noble.gs.washington.edu/proj/genomedata/" target="_blank">Genomedata</a><br>
-                        Efficiently stores multiple tracks of numeric data anchored to a genome. The format allows fast
-                        random access to hundreds of gigabytes of data, while retaining a small disk space footprint. We
-                        have also developed utilities to load data into this format. A reference implementation in Python
-                        and C components is available under the GNU General Public License.
-                        </p>
-
-                        <p>
-                        Hoffman MM, Buske OJ, Noble WS.
-                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20435580" target="_blank">
-                        The Genomedata format for storing large-scale functional genomics data</a>.
-                        <em>Bioinformatics</em>. 2010 Jun 1;26(11):1458-9.
-                        </p>
-
-                        <p>
                         <a class="thick" href="http://www.uwencode.org/software/bedops" target="_blank">BEDOPS</a><br>
                         A suite of scalable tools that offers high-performance feature analysis and comparison methods
                         for genomic data in BED format. It also provides efficient data storage and retrieval techniques. The
@@ -334,8 +329,23 @@
                         BEDOPS: High performance genomic feature operations.
                         <em>Bioinformatics</em>. (In Revision)
                         </p>
+
+                        <p>
+                        <a class="thick" href="http://noble.gs.washington.edu/proj/genomedata/" target="_blank">Genomedata</a><br>
+                        Efficiently stores multiple tracks of numeric data anchored to a genome. The format allows fast
+                        random access to hundreds of gigabytes of data, while retaining a small disk space footprint. We
+                        have also developed utilities to load data into this format. A reference implementation in Python
+                        and C components is available under the GNU General Public License.
+                        </p>
+
+                        <p>
+                        Hoffman MM, Buske OJ, Noble WS.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20435580" target="_blank">
+                        The Genomedata format for storing large-scale functional genomics data</a>.
+                        <em>Bioinformatics</em>. 2010 Jun 1;26(11):1458-9.
+                        </p>
                </div><!--end content-->
        </div><!--end wrapper-->
-       <p class="date">Updated 23 April 2012</p>
+       <p class="date">Updated 26 April 2012</p>
     </body>
 </html>
