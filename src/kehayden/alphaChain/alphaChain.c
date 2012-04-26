@@ -34,6 +34,7 @@ errAbort(
 }
 
 char *noData  = "n/a";   // Used to indicate a dummy node representing missing data
+
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"size", OPTION_INT},
@@ -304,40 +305,50 @@ if (wt->following != NULL)
 int totalUses = 0;
 int curUses = 0;
 int useThreshold = 0;
-char *pickedWord;
+struct wordTree *picked;
 
 void addUse(void *v)
 /* Add up to total uses. */
 {
 struct wordTree *wt = v;
-totalUses += wt->useCount;
+totalUses += wt->outputCount;
 }
 
 void pickIfInThreshold(void *v)
-/* See if inside threshold, and if so store it in pickedWord. */
+/* See if inside threshold, and if so store it in picked. */
 {
 struct wordTree *wt = v;
-int top = curUses + wt->useCount;
+int top = curUses + wt->outputCount;
 if (curUses <= useThreshold && useThreshold < top)
-    pickedWord = wt->word;
+    picked = wt;
 curUses = top;
 }
 
-char *pickRandomWord(struct rbTree *rbTree)
+struct wordTree *pickRandom(struct rbTree *rbTree)
 /* Pick word from list randomly, but so that words more
  * commonly seen are picked more often. */
 {
-pickedWord = NULL;
+picked = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
 useThreshold = rand() % totalUses; 
 rbTreeTraverse(rbTree, pickIfInThreshold);
-assert(pickedWord != NULL);
-return pickedWord;
+assert(picked != NULL);
+return picked;
 }
 
-char *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
+void dumpWordList(struct dlNode *list)
+{
+struct dlNode *node;
+for (node = list; !dlEnd(node); node = node->next)
+    {
+    char *word = node->val;
+    uglyf("%s ", word);
+    }
+}
+
+struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
 /* Predict next word given tree and recently used word list.  If tree doesn't
  * have statistics for what comes next given the words in list, then it returns
  * NULL. */
@@ -352,13 +363,13 @@ for (node = list; !dlEnd(node); node = node->next)
     if (wt == NULL || wt->following == NULL)
         break;
     }
-char *result = NULL;
+struct wordTree *result = NULL;
 if (wt != NULL && wt->following != NULL)
-    result = pickRandomWord(wt->following);
+    result = pickRandom(wt->following);
 return result;
 }
 
-char *predictNext(struct wordTree *wt, struct dlList *recent)
+struct wordTree *predictNext(struct wordTree *wt, struct dlList *recent)
 /* Predict next word given tree and recently used word list.  Will use all words in
  * recent list if can,  but if there is not data in tree, will back off, and use
  * progressively less previous words until ultimately it just picks a random
@@ -367,14 +378,45 @@ char *predictNext(struct wordTree *wt, struct dlList *recent)
 struct dlNode *node;
 for (node = recent->head; !dlEnd(node); node = node->next)
     {
-    char *result = predictNextFromAllPredecessors(wt, node);
+    struct wordTree *result = predictNextFromAllPredecessors(wt, node);
     if (result != NULL)
         return result;
     }
-return pickRandomWord(wt->following); 
+return pickRandom(wt->following); 
 }
 
-static void wordTreeMakeNonsense(struct wordTree *wt, int maxSize, char *firstWord, 
+void decrementOutputCounts(struct wordTree *wt)
+/* Decrement output count of self and parents. */
+{
+while (wt != NULL)
+    {
+    wt->outputCount -= 1;
+    wt = wt->parent;
+    }
+}
+
+int anyForceCount = 0;
+int fullForceCount = 0;
+
+struct wordTree *forceRealWord(struct wordTree *wt, struct dlNode *list)
+/* Get a choice that is not one of the fake no-date ones by backing up to progressively
+ * higher levels of markov chain.  */
+{
+++anyForceCount;
+// uglyf("forceRealWord("); dumpWordList(list); uglyf(")\n");
+struct dlNode *sublist;
+for (sublist = list->next; !dlEnd(sublist); sublist = sublist->next)    /* Skip over first one, it failed already. */
+    {
+  //   uglyf("  "); dumpWordList(sublist); uglyf("\n");
+    struct wordTree *picked = predictNextFromAllPredecessors(wt, sublist);
+    if (picked != NULL && !sameString(picked->word, noData))
+        return picked;
+    }
+++fullForceCount;
+return pickRandom(wt->following);
+}
+
+static void wordTreeGenerateFaux(struct wordTree *wt, int maxSize, struct wordTree *firstWord, 
 	int maxOutputWords, FILE *f)
 /* Go spew out a bunch of words according to probabilities in tree. */
 {
@@ -387,33 +429,44 @@ for (;;)
     if (++outputWords > maxOutputWords)
         break;
     struct dlNode *node;
-    char *word;
+    struct wordTree *maybeWord;	// This might be what we want, or it might be a dummy node
 
     /* Get next predicted word. */
     if (listSize == 0)
         {
 	AllocVar(node);
 	++listSize;
-	word = firstWord;
+	maybeWord = firstWord;
 	}
     else if (listSize >= maxSize)
 	{
 	node = dlPopHead(ll);
-	word = predictNext(wt, ll);
+	maybeWord = predictNext(wt, ll);
 	}
     else
 	{
-	word = predictNext(wt, ll);
+	maybeWord = predictNext(wt, ll);
 	AllocVar(node);
 	++listSize;
 	}
-    node->val = word;
-    dlAddTail(ll, node);
 
-    if (word == NULL)
+    if (maybeWord == NULL)
          break;
 
-    fprintf(f, "%s\n", word);
+    /* Here we deal with possibly having fetched a dummy node. */
+    struct wordTree *realWord = maybeWord;
+    if (sameString(maybeWord->word, noData))
+        {
+	realWord = forceRealWord(wt, ll->head);
+	}
+
+    /* Add word from whatever level we fetched back to our chain of up to maxChainSize. */
+    node->val = realWord->word;
+    dlAddTail(ll, node);
+
+    fprintf(f, "%s\n", maybeWord->word);
+
+    decrementOutputCounts(maybeWord);
     }
 dlListFree(&ll);
 }
@@ -517,14 +570,15 @@ if (optionExists("chain"))
     }
 
 
- FILE *f = mustOpen(outFile, "w");
- int maxSize = min(wt->useCount, maxNonsenseSize);
+FILE *f = mustOpen(outFile, "w");
+int maxSize = min(wt->useCount, maxNonsenseSize);
 
- /* KEH NOTES: controls how many words we emit */
+/* KEH NOTES: controls how many words we emit */
 
- wordTreeMakeNonsense(wt, maxChainSize, pickRandomWord(wt->following), maxSize, f);
- carefulClose(&f);
-    
+wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->following), maxSize, f);
+carefulClose(&f);
+
+uglyf("anyForce %d, fullForce %d (%4.2f%%)\n", anyForceCount, fullForceCount, 100.0*fullForceCount/anyForceCount);
 
 lmCleanup(&lm);	// Not really needed since we're just going to exit.
 }
@@ -532,7 +586,9 @@ lmCleanup(&lm);	// Not really needed since we're just going to exit.
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+#ifdef SOON
 srand( (unsigned)time(0) );
+#endif /* SOON */
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
