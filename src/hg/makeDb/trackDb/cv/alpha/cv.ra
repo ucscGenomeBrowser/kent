@@ -5458,6 +5458,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
+label SkMC
 
 term SkMC
 tag SKMC
@@ -5476,6 +5477,7 @@ termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+label SkMC
 
 term SkMC_9011302
 tag SKMC9011302
