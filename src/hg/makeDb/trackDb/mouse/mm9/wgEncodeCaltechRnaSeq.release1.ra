@@ -3,17 +3,17 @@ compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Caltech
 group regulation
-subGroup1 view Views RawSignal=All_Reads Signal=Unique_Reads_Only Alignments=Alignments
+subGroup1 view Views RawSignal=Raw_Signal_(All_Reads) Signal=Signal_(Unique_Reads_Only) Alignments=Alignments
 subGroup2 cellType Cell_Line 10T12=10T1/2 C2C12=C2C12
 subGroup3 strain Strain C3H=C3H
 subGroup4 sex Sex F=F
 subGroup5 readType ReadType R2X75=2x75
 subGroup6 mapAlgorithm MapAlgorithm TH131=TH131
 subGroup7 insertLength InsertLength IL200=200
-subGroup8 treatment Treatment E2P60H=EqS_2.0pct_60hr NONE=None
+subGroup8 treatment Treatment E2P60H=EqS_2.0%_60h NONE=None
 subGroup9 rep Replicate rep1=1
 dimensions dimensionX=cellType dimensionY=treatment
-sortOrder cellType=+ treatment=+
+sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex mapAlgorithm=mapAlgorithm insertLength=insertLength treatment=treatment
 dragAndDrop subTracks
