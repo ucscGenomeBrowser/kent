@@ -273,7 +273,7 @@ subId 6344
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 1AWC,1BWC
 cell Adrenal
@@ -298,6 +298,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6229
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep1
@@ -812,7 +813,7 @@ subId 6290
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 14AWC,14BWC
 cell Colon
@@ -837,6 +838,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6215
+tableName wgEncodeCshlLongRnaSeqColonAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep1
@@ -1351,7 +1353,7 @@ subId 6334
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 2AWC,2BWC
 cell Duodenum
@@ -1376,6 +1378,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6220
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep1
@@ -1890,7 +1893,7 @@ subId 6338
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 4AWC,4BWC
 cell GenitalFatPad
@@ -1915,6 +1918,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6223
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep1
@@ -2429,7 +2433,7 @@ subId 6332
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 16BWC,16AWC
 cell Heart
@@ -2454,6 +2458,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6217
+tableName wgEncodeCshlLongRnaSeqHeartAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep1
@@ -2968,7 +2973,7 @@ subId 6331
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 17AWC,17BWC
 cell Kidney
@@ -2993,6 +2998,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6216
+tableName wgEncodeCshlLongRnaSeqKidneyAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep1
@@ -3507,7 +3513,7 @@ subId 6345
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 8AWC,8BWC
 cell LgIntestine
@@ -3532,6 +3538,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6231
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep1
@@ -4046,7 +4053,7 @@ subId 6341
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 18AWC,18BWC
 cell Liver
@@ -4071,6 +4078,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6226
+tableName wgEncodeCshlLongRnaSeqLiverAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep1
@@ -4585,7 +4593,7 @@ subId 6333
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 15AWC,15BWC
 cell Lung
@@ -4610,6 +4618,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6218
+tableName wgEncodeCshlLongRnaSeqLungAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep1
@@ -5124,7 +5133,7 @@ subId 6336
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 22AWC,22BWC
 cell MammaryGland
@@ -5149,6 +5158,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6221
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep1
@@ -5663,7 +5673,7 @@ subId 6346
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 11AWC,11BWC
 cell Ovary
@@ -5688,6 +5698,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6230
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep1
@@ -6202,7 +6213,7 @@ subId 6339
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 5AWC,5BWC
 cell SubcFatPad
@@ -6227,6 +6238,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6224
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep1
@@ -6741,7 +6753,7 @@ subId 6335
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 9AWC,9BWC
 cell SmIntestine
@@ -6766,6 +6778,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6219
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep1
@@ -7280,7 +7293,7 @@ subId 6337
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 13AWC,13BWC
 cell Spleen
@@ -7305,6 +7318,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6222
+tableName wgEncodeCshlLongRnaSeqSpleenAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep1
@@ -7819,7 +7833,7 @@ subId 6342
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 3AWC,3BWC
 cell Stomach
@@ -7844,6 +7858,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6227
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep1
@@ -8358,7 +8373,7 @@ subId 6340
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 12AWC,12BWC
 cell Testis
@@ -8383,6 +8398,7 @@ sex M
 spikeInPool Nist14
 strain C57BL/6J
 subId 6225
+tableName wgEncodeCshlLongRnaSeqTestisAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep1
@@ -8897,7 +8913,7 @@ subId 6343
 view GeneEnsV65IAcuff
 
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksJunctions
-objType file
+objType table
 age adult-8wks
 bioRep 19AWC,19BWC
 cell Thymus
@@ -8922,6 +8938,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 6228
+tableName wgEncodeCshlLongRnaSeqThymusAdult8wksJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep1
@@ -9167,4 +9184,4 @@ strain C57BL/6J
 subId 6343
 view TranscriptEnsV65IAcuff
 
-# MAGIC: 83580691
+# MAGIC: 676492454
