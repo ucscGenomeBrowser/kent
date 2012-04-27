@@ -431,3 +431,21 @@ close (FH);
     #   28059061 bases of 2525294057 (1.111%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/genscan
+    cd /hive/data/genomes/susScr3/bed/genscan
+    time doGenscan.pl susScr3 > do.log 2>&1
+    #   real    526m12.532s
+    # one failing job:  (as found via 'para problems' on swarm)
+./runGsBig.csh chr1 000 gtf/000/chr1.gtf pep/000/chr1.pep subopt/000/chr1.bed
+    # rerun at a window size of 2000000 worked out OK
+    #   real    116m26.816s
+    time doGenscan.pl -continue=makeBed susScr3 > makeBed.log 2>&1
+    #   real    22m49.789s
+
+    cat fb.susScr3.genscan.txt
+    #   54701861 bases of 2525294057 (2.166%) in intersection
+    cat fb.susScr3.genscanSubopt.txt
+    #   53271634 bases of 2525294057 (2.110%) in intersection
+
+#########################################################################

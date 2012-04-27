@@ -384,3 +384,15 @@ close (FH);
     #   39980778 bases of 2392715236 (1.671%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/canFam3/bed/genscan
+    cd /hive/data/genomes/canFam3/bed/genscan
+    time doGenscan.pl canFam3 > do.log 2>&1
+    #   real    56m58.015s
+
+    cat fb.canFam3.genscan.txt
+    #   56089579 bases of 2392715236 (2.344%) in intersection
+    cat fb.canFam3.genscanSubopt.txt
+    #   49232090 bases of 2392715236 (2.058%) in intersection
+
+#########################################################################
