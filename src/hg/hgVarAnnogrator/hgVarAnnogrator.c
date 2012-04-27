@@ -60,7 +60,6 @@ int maxOutRows = 10000;  //#*** make sensible, configurable limit
 #define hgvaRegionTypeEncode "encode"
 #define hgvaRegionTypeGenome "genome"
 #define hgvaRegionTypeRange "range"
-#define hgvaDoLookupPosition "hgva_doLookupPosition"
 #define hgvaPositionContainer "positionContainer"
 
 void addSomeCss()
@@ -177,9 +176,7 @@ void saveMiniCart()
 /* Store cart variables necessary for executing queries here, so javascript can
  * include them in AJAX calls and we can retrieve them in restoreMiniCart() below. */
 {
-printf("<span id='miniCart'>\n");
 cartSaveSession(cart);
-cgiMakeHiddenVar("db", database);
 char *ctfile = cartOptionalStringDb(cart, database, "ctfile");
 if (isNotEmpty(ctfile))
     cgiMakeHiddenVar("ctfile", ctfile);
@@ -190,11 +187,6 @@ for (hubVar = hubVarList; hubVar != NULL;  hubVar = hubVar->next)
 char *trackHubs = cartOptionalString(cart, hubConnectTrackHubsVarName);
 if (isNotEmpty(trackHubs))
     cgiMakeHiddenVar(hubConnectTrackHubsVarName, trackHubs);
-if (isNotEmpty(regionType))
-    cgiMakeHiddenVar(hgvaRegionType, regionType);
-if (isNotEmpty(position))
-    cgiMakeHiddenVar(hgvaRange, position);
-printf("</span>\n");
 }
 
 static boolean gotCustomTracks()
@@ -335,6 +327,15 @@ printf("</span></span></span>");
 nbSpaces(1);
 }
 
+char *makePositionInput()
+/* Return HTML for the position input. */
+{
+struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\""
+				     " onblur=\"hgvaLookupPosition();\">",
+				     hgvaRange, 26, addCommasToPos(NULL, position));
+return dyStringCannibalize(&dy);
+}
+
 void hgGatewayCladeGenomeDb()
 /* Make a row of labels and row of buttons like hgGateway, but not using tables. */
 {
@@ -362,9 +363,7 @@ topLabelSpansStart("");
 // Yet another span, for hiding/showing position input and lookup button:
 printf("<span id='"hgvaPositionContainer"'%s>\n",
        differentString(regionType, hgvaRegionTypeRange) ? " style='display: none;'" : "");
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\""
-       " onblur=\"$('#"hgvaDoLookupPosition"').submit();\">", hgvaRange, 26, position);
-cgiMakeButton(hgvaDoLookupPosition, "lookup");
+puts(makePositionInput());
 printf("</span>\n");
 topLabelSpansEnd();
 puts("<BR><BR>");
@@ -391,7 +390,7 @@ void printAssemblySection()
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }
 
-hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
 	getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 //#*** ------------------ end verbatim ---------------
 
@@ -1054,11 +1053,6 @@ return list;
 void doMainPage()
 /* Print out initial HTML of control page. */
 {
-jsInit();
-jsIncludeFile("jquery-ui.js", NULL);
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("hgVarAnnogrator.js", NULL);
-addSomeCss();
 printAssemblySection();
 webEndHackSection();
 printf("<div id='sourceContainerPlus'>\n");
@@ -1104,7 +1098,7 @@ hPrintf("</FORM>\n");
 //#*** ------------------ end verbatim ---------------
 
 /* Hidden form for executing a query (after some javascript fiddling). */
-hPrintf("<FORM ACTION='%s' METHOD=%s NAME='executeForm'>", hgVarAnnogratorName(),
+hPrintf("<FORM ACTION='%s' METHOD=%s NAME='executeForm' ID='executeForm'>", hgVarAnnogratorName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 cgiMakeHiddenVar("executeQuery", "");
@@ -1139,10 +1133,23 @@ knetUdcInstall();
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 cartWebStart(cart, database, "Variant Annotation Integrator");
+jsInit();
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("hgVarAnnogrator.js", NULL);
+addSomeCss();
 if (lookupPosition())
+    doMainPage();
+else if (webGotWarnings())
     {
+    // We land here when lookupPosition pops up a warning box.
+    // Reset the problematic position and show the main page.
+    position = hDefaultPos(database);
+    cartSetString(cart, hgvaRange, position);
     doMainPage();
     }
+// If lookupPosition returned FALSE and didn't report warnings,
+// then it wrote HTML showing multiple position matches & links.
 cartWebEnd();
 /* Save variables. */
 cartCheckout(&cart);
@@ -1184,6 +1191,14 @@ expectJsonType(el, jsonList, elName);
 return ((struct jsonListElement *)el)->list;
 }
 
+struct hash *hashFromJEl(struct jsonElement *jel, char *desc, boolean nullOk)
+/* Make sure jel's type is jsonHash and return its actual hash.  If nullOK, return
+ * NULL when elName is not found. */
+{
+expectJsonType(jel, jsonHash, desc);
+return ((struct jsonHashElement *)jel)->hash;
+}
+
 struct hash *hashFromJHash(struct hash *jHash, char *elName, boolean nullOk)
 /* Look up the jsonElement with elName in jHash, make sure the element's type is jsonHash,
  * and return its actual hash.  If nullOK, return NULL when elName is not found. */
@@ -1192,8 +1207,7 @@ struct hashEl *hel = hashLookup(jHash, elName);
 if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
-expectJsonType(el, jsonHash, elName);
-return ((struct jsonHashElement *)el)->hash;
+return hashFromJEl(el, elName, nullOk);
 }
 
 struct slPair *stringsWithPrefixFromJHash(struct hash *jHash, char *prefix)
@@ -1252,9 +1266,7 @@ struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
 char *selGroup = NULL, *selTrack = NULL, *selTable = NULL;
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
-    struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
     char *srcId = stringFromJHash(srcHash, "id", FALSE);
     if (sameString(srcId, divId))
 	{
@@ -1322,9 +1334,7 @@ struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
 boolean gotUpdate = FALSE;
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
-    struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
     char *srcId = stringFromJHash(srcHash, "id", FALSE);
     boolean isPrimary = (srcRef == sources);
     boolean srcThinksItsPrimary = isNotEmpty(stringFromJHash(srcHash, "isPrimary", TRUE));
@@ -1349,6 +1359,66 @@ else
     printf("{ ");
 dyStringAppend(dy, "Still need to compute possible output format choices from input types.");
 printf("\"serverSays\": \"%s\" }\n", dy->string);
+}
+
+boolean gotSinglePosition(char *spec)
+/* This duplicates some logic from hgFind.c::genomePos(), so we can determine whether
+ * we can send a little ajax update for the position, or whether we need to resubmit to
+ * get the printf'd HTML showing multiple results or warning that term is not found. */
+{
+struct hgPositions *hgp = NULL;
+char *terms[16];
+int termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
+boolean multiTerm = (termCount > 1);
+char *chrom = NULL;
+int start = BIGNUM;
+int end = 0;
+int i;
+for (i = 0;  i < termCount;  i++)
+    {
+    trimSpaces(terms[i]);
+    if (isEmpty(terms[i]))
+	continue;
+    hgp = hgPositionsFind(database, terms[i], "", getScriptName(), cart, multiTerm);
+    if (hgp != NULL && hgp->posCount > 0 && hgp->singlePos != NULL)
+	{
+	if (chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
+	    return FALSE;
+	chrom = hgp->singlePos->chrom;
+	if (hgp->singlePos->chromStart < start)
+	    start = hgp->singlePos->chromStart;
+	if (hgp->singlePos->chromEnd > end)
+	    end = hgp->singlePos->chromEnd;
+	}
+    else
+	return FALSE;
+    }
+if (chrom != NULL)
+    {
+    char posBuf[128];
+    safef(posBuf, sizeof(posBuf), "%s:%d-%d", chrom, start+1, end);
+    position = cloneString(posBuf);
+    }
+else
+    position = hDefaultPos(database);
+cartSetString(cart, hgvaRange, position);
+return TRUE;
+}
+
+void updatePosition(struct hash *topHash)
+/* Look up the position value in case it's a search term. If there's an unambiguous result,
+ * update the page with the new value.  If there are multiple results, show them so the
+ * user can select one. */
+{
+if (gotSinglePosition(position))
+    {
+    printf("{ \"values\": [ { \"id\": \"[name='"hgvaRange"']\", \"value\": \"%s\" } ] }",
+	   addCommasToPos(NULL, position));
+    }
+else
+    {
+    printf("{ \"resubmit\": \"#mainForm\" }");
+    }
 }
 
 boolean columnsMatch(struct asObject *asObj, struct sqlFieldInfo *fieldList)
@@ -1532,9 +1602,7 @@ struct annoGrator *gratorList = NULL;
 struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
-    struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
     char *table = stringFromJHash(srcHash, "tableSel", FALSE);
     struct trackDb *tdb = tdbForTrack(db, table, &fullTrackList);
     boolean isPrimary = (srcRef == sources);
@@ -1605,6 +1673,8 @@ restoreMiniCart(topHash);
 char *action = stringFromJHash(topHash, "action", FALSE);
 if (sameString(action, "reorderSources"))
     updateSourcesAndOutput(querySpec);
+else if (sameString(action, "lookupPosition"))
+    updatePosition(topHash);
 else if (sameString(action, "event"))
     {
     // Determine where this event originated:

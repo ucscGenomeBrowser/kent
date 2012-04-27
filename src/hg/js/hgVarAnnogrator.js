@@ -8,7 +8,6 @@ function hgvaChangeRegion()
     } else {
 	$('#positionContainer').hide();
     }
-    $('#miniCart input[name="hgva_regionType"]').val(newVal);
 }
 
 function hgvaShowNextHiddenSource()
@@ -60,7 +59,9 @@ function hgvaBuildQuerySpec()
 function hgvaExpandCommand(command)
 {
     command.querySpec = hgvaBuildQuerySpec();
-    $('#miniCart input').each(function(i,el){ command[el.name] = el.value; });
+    var addToCommand = function(i,el){ command[el.name] = el.value; };
+    $('#mainForm input').each(addToCommand);
+    $('#mainForm select').each(addToCommand);
 }
 
 function hgvaAjax(command)
@@ -77,14 +78,31 @@ function hgvaAjax(command)
     });
 }
 
+function hgvaLookupPosition()
+{
+    hgvaAjax({'action': 'lookupPosition'});
+}
+
+function hgvaLookupPositionIfNecessary()
+{
+    var regionType = $('#mainForm #hgva_regionType').val();
+    if (regionType == "range") {
+	var position = $('#mainForm input[name="position"]').val();
+	if (!position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
+	    hgvaLookupPosition();
+	}
+    }
+}
+
 function hgvaExecuteQuery()
 {
+    hgvaLookupPositionIfNecessary();
     showLoadingMessage("Executing your query may take some time. " +
 		       "Please leave this window open during processing.");
     var command = {'action': 'execute'};
     hgvaExpandCommand(command);
-    $('input[name="executeQuery"]').val(JSON.stringify(command));
-    $('form[name="executeForm"]').submit();
+    $('#executeForm input[name="executeQuery"]').val(JSON.stringify(command));
+    $('#executeForm').submit();
 }
 
 function hgvaEventBubble(event)
@@ -113,6 +131,13 @@ function hgvaSourceSortUpdate(event, ui)
 
 function hgvaUpdatePage(responseJson)
 {
+    var message = responseJson.serverSays;
+    if (message != null)
+	console.log('server says: ' + JSON.stringify(message));
+    if (responseJson.resubmit) {
+	$(responseJson.resubmit).submit();
+	return true;
+    }
     var updateList = responseJson.updates;
     if (updateList != null) {
 	for (var i=0;  i < updateList.length;  i++) {
@@ -124,9 +149,13 @@ function hgvaUpdatePage(responseJson)
 	    }
 	}
     }
-    var message = responseJson.serverSays;
-    if (message != null)
-	console.log('server says: ' + JSON.stringify(message));
+    var valueList = responseJson.values;
+    if (valueList != null) {
+	for (var i=0;  i < valueList.length;  i++) {
+	    var value = valueList[i];
+	    $(value.id).val(value.value);
+	}
+    }
 }
 
 //-------------------------- adapted from hgCustom.js: -----------------------------
