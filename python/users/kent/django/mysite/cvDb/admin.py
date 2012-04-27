@@ -9,15 +9,15 @@ model
 from django.contrib import admin
 from models import *  # Forgive import *, but really it is the best thing in this case....
 
-admin.site.register(CellLine)
+admin.site.register(CellType)
 
-class AbAdmin(admin.ModelAdmin):
-"""Tell admin to not try to cram 300 targets into a selection gadget"""
+class AntibodyAdmin(admin.ModelAdmin):
+    """Tell admin to not try to cram 300 targets into a selection gadget"""
     raw_id_fields = ["target"]
+    pass
 
-admin.site.register(Ab, AbAdmin)
+admin.site.register(Antibody, AntibodyAdmin)
 admin.site.register(AbTarget)
-admin.site.register(Antibody)
 admin.site.register(MapAlgorithm)
 admin.site.register(ReadType)
 admin.site.register(InsertLength)
@@ -47,3 +47,17 @@ admin.site.register(Platform)
 admin.site.register(Lab)
 admin.site.register(Grantee)
 admin.site.register(TypeOfTerm)
+admin.site.register(Series)
+
+admin.site.register(Result)
+
+class ResultsInline(admin.TabularInline):
+    model = Result
+    extra = 3
+
+class ExperimentAdmin(admin.ModelAdmin):
+    inlines = [ResultsInline]
+    pass
+
+admin.site.register(Experiment, ExperimentAdmin)
+

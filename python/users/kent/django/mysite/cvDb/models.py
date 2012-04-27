@@ -4,7 +4,7 @@
 from django.db import models
 
 # Cell line or tissue used as the source of experimental material.
-class CellLine(models.Model):
+class CellType(models.Model):
     term = models.CharField("term", max_length=255)
 	# A relatively short label, no more than a few words
     tag = models.CharField("tag", max_length=255)
@@ -55,47 +55,7 @@ class CellLine(models.Model):
 	# Strain of organism.
 
     class Meta:
-        db_table = 'cvDb_cellLine'
-
-    def __unicode__(self):
-        return self.term
-
-
-# The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
-class Antibody(models.Model):
-    term = models.CharField("term", max_length=255)
-	# A relatively short label, no more than a few words
-    tag = models.CharField("tag", max_length=255)
-	# A short human and machine readable symbol with just alphanumeric characters.
-    deprecated = models.CharField("deprecated", max_length=255, blank=True)
-	# If non-empty, the reason why this entry is obsolete.
-    target = models.CharField("target", max_length=255)
-	# Molecular target of antibody.
-    antibodyDescription = models.TextField("antibody description")
-	# Short description of antibody itself.
-    targetDescription = models.TextField("target description")
-	# Short description of antibody target.
-    vendorName = models.CharField("vendor name", max_length=255)
-	# Name of vendor selling reagent.
-    vendorId = models.CharField("vendor id", max_length=255)
-	# Catalog number of other way of identifying reagent.
-    orderUrl = models.CharField("order url", max_length=255, blank=True)
-	# Web page to order regent.
-    lab = models.CharField("lab", max_length=255)
-	# Scientific lab producing data.
-    targetId = models.CharField("target id", max_length=255)
-	# Identifier for target, prefixed with source of ID, usually GeneCards
-    targetUrl = models.CharField("target url", max_length=255, blank=True)
-	# Web page associated with antibody target.
-    validation = models.CharField("validation", max_length=255)
-	# How antibody was validated to be specific for target.
-    label = models.CharField("label", max_length=255, blank=True)
-	# A relatively short label, no more than a few words
-    lots = models.CharField("lots", max_length=255, blank=True)
-	# The specific lots of reagent used.
-
-    class Meta:
-        db_table = 'cvDb_antibody'
+        db_table = 'cvDb_cellType'
 
     def __unicode__(self):
         return self.term
@@ -119,7 +79,7 @@ class AbTarget(models.Model):
     def __unicode__(self):
         return self.term
 
-class Ab(models.Model):
+class Antibody(models.Model):
     term = models.CharField("term", max_length=255)
         # A relatively short label, no more than a few words
     tag = models.CharField("tag", max_length=255)
@@ -147,6 +107,7 @@ class Ab(models.Model):
 
     class Meta:
         db_table = 'cvDb_ab'
+        verbose_name_plural = "antibodies"
 
     def __unicode__(self):
         return self.term
@@ -549,6 +510,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'cvDb_category'
+        verbose_name_plural = "categories"
 
     def __unicode__(self):
         return self.term
@@ -567,6 +529,7 @@ class Sex(models.Model):
 
     class Meta:
         db_table = 'cvDb_sex'
+        verbose_name_plural = "sexes"
 
     def __unicode__(self):
         return self.term
@@ -585,6 +548,7 @@ class ObjStatus(models.Model):
 
     class Meta:
         db_table = 'cvDb_objStatus'
+        verbose_name_plural = "objStatuses"
 
     def __unicode__(self):
         return self.term
@@ -755,4 +719,91 @@ class TypeOfTerm(models.Model):
     def __unicode__(self):
         return self.term
 
+
+class Series(models.Model):
+    """
+    Represents a series of experiments of the same type done for
+    the same project.
+    """
+    term = models.CharField(max_length=50, unique=True, db_index=True)
+    dataType = models.CharField(max_length=40)
+    grantee = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'cvDb_series'
+        verbose_name_plural = 'Serieses'
+
+    def __unicode__(self):
+        return self.term
+
+
+class Experiment(models.Model):
+    """
+    A defined set of conditions for an experiment.  There may be
+    multiple replicates of an experiment, but they are all done
+    under the same conditions.  Often many experiments are done in
+    a 'Series' under sets of conditions that vary in defined ways
+    Some experiments may be designated controls for the series.
+     """
+    updateTime = models.CharField(max_length=40)
+    series = models.ForeignKey(Series, db_column='series', to_field='term')
+    accession = models.CharField(unique=True, max_length=16)
+    organism = models.ForeignKey(Organism, db_column='organism')
+    lab = models.ForeignKey(Lab, db_column='lab')
+    dataType = models.ForeignKey(DataType, db_column='dataType')
+    cellType = models.ForeignKey(CellType, db_column='cellType', blank=True, null=True)
+    antibody = models.ForeignKey(Antibody, db_column='ab', blank=True, null=True)
+    age = models.ForeignKey(Age, db_column='age', blank=True, null=True)
+    attic = models.ForeignKey(Attic, db_column='attic', blank=True, null=True)
+    category = models.ForeignKey(Category, db_column='category', blank=True, null=True)
+    control = models.ForeignKey(Control, db_column='control', blank=True, null=True)
+    fragSize = models.ForeignKey(FragSize, db_column='fragSize', blank=True, null=True)
+    grantee = models.ForeignKey(Grantee, db_column='grantee', blank=True, null=True)
+    insertLength = models.ForeignKey(InsertLength, db_column='insertLength', blank=True, null=True)
+    localization = models.ForeignKey(Localization, db_column='localization', blank=True, null=True)
+    mapAlgorithm = models.ForeignKey(MapAlgorithm, db_column='mapAlgorithm', blank=True, null=True)
+    objStatus = models.ForeignKey(ObjStatus, db_column='objStatus', blank=True, null=True)
+    phase = models.ForeignKey(Phase, db_column='phase', blank=True, null=True)
+    platform = models.ForeignKey(Platform, db_column='platform', blank=True, null=True)
+    promoter = models.ForeignKey(Promoter, db_column='promoter', blank=True, null=True)
+    protocol = models.ForeignKey(Protocol, db_column='protocol', blank=True, null=True)
+    readType = models.ForeignKey(ReadType, db_column='readType', blank=True, null=True)
+    region = models.ForeignKey(Region, db_column='region', blank=True, null=True)
+    restrictionEnzyme = models.ForeignKey(RestrictionEnzyme, db_column='restrictionEnzyme', blank=True, null=True)
+    rnaExtract = models.ForeignKey(RnaExtract, db_column='rnaExtract', blank=True, null=True)
+    seqPlatform = models.ForeignKey(SeqPlatform, db_column='seqPlatform', blank=True, null=True)
+    sex = models.ForeignKey(Sex, db_column='sex', blank=True, null=True)
+    strain = models.ForeignKey(Strain, db_column='strain', blank=True, null=True)
+    tissueSourceType = models.ForeignKey(TissueSourceType, db_column='tissueSourceType', blank=True, null=True)
+    treatment = models.ForeignKey(Treatment, db_column='treatment', blank=True, null=True)
+    version = models.ForeignKey(Version, db_column='version', blank=True, null=True)
+
+    class Meta:
+        db_table = 'cvDb_experiment'
+
+    def __unicode__(self):
+        return self.accession + ' ' + `self.cellType`
+
+class Result(models.Model):
+    """
+    A result of an experiment - generally either a data file or a
+    database table. Intermediate as well as final results may be found
+    here.  Some results may be replicated a number of times
+    """
+    experiment = models.ForeignKey(Experiment, db_column='experiment')
+    replicate = models.CharField(max_length=20, blank=True)
+    view = models.CharField(max_length=20)
+    objType = models.CharField(max_length=20)
+    fileName = models.CharField(max_length=255)
+    md5sum = models.CharField(max_length=255)
+    tableName = models.CharField(max_length=100, blank=True)
+    dateSubmitted = models.CharField(max_length=40)
+    dateResubmitted = models.CharField(max_length=40, blank=True)
+    dateUnrestricted = models.CharField(max_length=40)
+
+    class Meta:
+        db_table = 'cvDb_result'
+
+    def __unicode__(self):
+        return self.fileName
 
