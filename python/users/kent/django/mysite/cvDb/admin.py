@@ -49,7 +49,10 @@ admin.site.register(Grantee)
 admin.site.register(TypeOfTerm)
 admin.site.register(Series)
 
-admin.site.register(Result)
+class ResultsAdmin(admin.ModelAdmin):
+    """Tell admin to not try to cram 300 targets into a selection gadget"""
+    raw_id_fields = ["experiment"]
+admin.site.register(Result, ResultsAdmin)
 
 class ResultsInline(admin.TabularInline):
     model = Result
