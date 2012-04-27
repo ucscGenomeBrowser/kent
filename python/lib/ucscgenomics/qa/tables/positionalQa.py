@@ -11,11 +11,15 @@ class PositionalQa(TableQa):
     A positional table.
     """
 
+    def __checkLabelLengths(self):
+        pass
+
     def __writePassOrFail(self, returncode):
         if returncode == 0:
             self.reporter.writeLine("pass")
         else:
             self.reporter.writeLine("ERROR")
+            self.sumRow.setError()
 
     def __positionalTblCheck(self):
         """Runs positionalTblCheck program on this table. Excludes GenBank tables."""
@@ -49,6 +53,7 @@ class PositionalQa(TableQa):
     def validate(self):
         """Adds positional-table-specific checks to basic table checks."""
         super(PositionalQa, self).validate()
+        self.__checkLabelLengths()
         self.__positionalTblCheck()
         self.__checkTableCoords()
 

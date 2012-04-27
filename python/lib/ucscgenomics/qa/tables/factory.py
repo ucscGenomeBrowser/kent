@@ -30,19 +30,19 @@ otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "
                                   "chromGraph", "factorSource", "bedDetail", "pgSnp"])
 pointerTypes = frozenset(["bigWig", "bigBed", "bam"])
 
-def tableQaFactory(db, table, reporter):
+def tableQaFactory(db, table, reporter, sumTable):
     """Returns tableQa object according to trackDb track type.""" 
     tableType = getTrackType(db, table)
     if not tableType:
-        return TableQa(db, table, reporter)
+        return TableQa(db, table, tableType, reporter, sumTable)
     elif tableType in pslTypes:
-        return PslQa(db, table, reporter)
+        return PslQa(db, table, tableType, reporter, sumTable)
     elif tableType in genePredTypes:
-        return GenePredQa(db, table, reporter)
+        return GenePredQa(db, table, tableType, reporter, sumTable)
     elif tableType in otherPositionalTypes:
-        return PositionalQa(db, table, reporter)
+        return PositionalQa(db, table, tableType, reporter, sumTable)
     elif tableType in pointerTypes:
-        return PointerQa(db, table, reporter)
+        return PointerQa(db, table, tableType, reporter, sumTable)
     else:
         raise Exception(db + table + " has unknown track type " + tableType)
 

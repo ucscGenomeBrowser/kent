@@ -1,6 +1,7 @@
 import re
 
 from ucscgenomics.qa import qaUtils
+from ucscgenomics.qa.tables import summary
 
 class TableQa(object):
     """
@@ -8,10 +9,13 @@ class TableQa(object):
     etc.), for running QA validations and describing table statistics.
     """
 
-    def __init__(self, db, table, reporter):
+    def __init__(self, db, table, tableType, reporter, sumTable):
         self.db = db
         self.table = table
         self.reporter = reporter
+        self.sumTable = sumTable
+        self.sumRow = summary.SumRow(db, table, tableType)
+        self.sumTable.addRow(self.sumRow)
 
     def __checkTableDescription(self):
         """Checks for an autoSql definition for this table in the tableDescriptions table."""
@@ -22,6 +26,7 @@ class TableQa(object):
                                   tableName='" + self.table + "'")
         if sqlOut.strip() == '':
             self.reporter.writeLine("ERROR: No table description for " + self.db + "." + self.table)
+            self.sumRow.setError()
         else:
             self.reporter.writeLine("pass")
         self.reporter.endStep()
@@ -33,6 +38,7 @@ class TableQa(object):
         if re.search('.*_.*', self.table) and not re.search('^(chr.*|all)_.*', self.table):
             self.reporter.writeLine("ERROR: " + self.db + "." + self.table + 
                                     " has unexpected underscores")
+            self.sumRow.setError()
         else:
             self.reporter.writeLine("pass")
         self.reporter.endStep()
