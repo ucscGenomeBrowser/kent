@@ -1,17 +1,16 @@
 <H2>Description</H2>
-<P>This track is based on text-mining of full-text biomedical articles and includes three types of subtracks:</P>
+<P>This track is based on text-mining of full-text biomedical articles and includes two types of subtracks:</P>
 
 <ul>
-<li>Sequences - grouped by article - found in publications and searched in genomes with BLAT</li>
-<li>Individual BLAT matches of all sequences of one single article</li>
+<li>Sequences found in publications, grouped by article and searched in genomes with BLAT</li>
 <li>Identifiers in publications that directly relate to chromosome locations (e.g. gene symbols, SNP identifiers, etc)</li>
 </ul>
-<P>All three sources of information are linked to the respective articles.
+<P>Both sources of information are linked to the respective articles.
 Background information on how permission to full-text data was obtained can be found on the <A
 href="http://text.soe.ucsc.edu">project website</A>.</P>
 
 <H2>Display Convention and Configuration</H2>
-<P>The sequence track indicates the location of sequences in publications
+<P>The sequence subtrack indicates the location of sequences in publications
 mapped back to the genome, annotated with the first author and the year of the
 publication.  All matches of one article are grouped ("chained") together.
 Article titles are shown when you move the mouse cursor over the features.
@@ -24,7 +23,7 @@ from the details page.  Mouse-overs show flanking text around the sequence, and 
 features links to BLAT alignments.
 </P>
 
-<P>All other subtracks (i.e., Sequences, Bands, Genes, SNPs) show the number of matching articles as
+<P>All other subtracks (i.e. bands, genes, SNPs) show the number of matching articles as
  the feature description.  Clicking on them shows the sentences and sections in articles 
 where the identifiers were found.</P>
 
@@ -53,20 +52,21 @@ human genome and these model organisms: mouse (mm9), rat (rn4), zebrafish
 (danRer6), Drosophila melanogaster (dm3), X. tropicalis (xenTro2), Medaka
 (oryLat2), C. intestinalis (ci2), C. elegans (ce6) and yeast (sacCer2).
 
+The pipeline roughly proceeds through these steps:
 <UL>
 <LI>For sequences, the best match across all genomes is used, if it is longer than 17bp and matches at 90% identity. 
 Two sets of BLAT parameters are tried, the default ones for sequences longer than 25 bp, very sensitive ones (stepSize=5) for shorter sequences.</LI>
-<LI>Sequences are mapped to genomic DNA. Those that do not match are mapped to RefSeq cDNAs</LI>
+<LI>Sequences are mapped to genomic DNA. Those that do not match are mapped to RefSeq cDNAs.</LI>
 <LI>Hits from the same article that are closer than 30 kbp are
-joined into one feature (shown as exon-blocks on the browser)</LI>
-<LI>All parts of a joined feature have to match at least 25 bp</LI>
-<LI>Non-unique hits are kept in the joined feature with the most members</LI>
-<LI>Joined features with identical members in two different genomes are kept in both</LI>
+joined into one feature (shown as exon-blocks on the browser).</LI>
+<LI>All parts of a joined feature have to match at least 25 bp.</LI>
+<LI>Non-unique hits are kept in the joined feature with the most members.</LI>
+<LI>Joined features with identical members in two different genomes are kept in both genomes.</LI>
 </UL>
 
 <P>Note that due to the 90% identity filter, some sequences do not match
 anywhere in the genome. Examples include primers with added restriction sites,
-mutation primers, or many other sequence that mixes two pieces of genomic
+mutation primers, or any other sequence that joins or mixes two pieces of genomic
 DNA not part of RefSeq.  Also note that some gene symbols correspond to 
 English words which can sometimes lead to many false positives.</P>
 
