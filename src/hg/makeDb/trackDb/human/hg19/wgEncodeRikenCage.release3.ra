@@ -1236,7 +1236,7 @@ html wgEncodeRikenCage.release3
     windowingFunction mean+whiskers
     autoScale off
     transformFunc NONE
-    maxWindowToDraw 1000000
+    maxWindowToDraw 10000000
 
         track wgEncodeRikenCageNhekCytosolPamMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
