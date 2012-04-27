@@ -39,6 +39,41 @@ char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
+/* -------- utilities functions --- */
+
+void sendMail()
+{
+char cmd[256];
+char email[256]="chinhli@soe.ucsc.edu";
+char msg[256]="UCSC";
+safef(cmd,sizeof(cmd),
+"echo 'Hello from your favoriate browser at: %s' | mail -s \"Greeting form UCSC Genome Browser\" %s"
+, msg, email);
+int result = system(cmd);
+if (result == -1)
+    {
+    hPrintf( 
+    "<h2>GSID HIV Data Browser</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Error emailing password to: %s</h3>"
+    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
+    , email
+    );
+    }
+else
+    {
+    hPrintf(
+    "<h2>GSID HIV Data Browser</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Password has been emailed to: %s</h3>"
+    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
+    , email
+    );
+    }
+
+}
 /* -------- password functions ---- */
 
 void cryptWikiWay(char *password, char *salt, char* result)
@@ -696,7 +731,7 @@ backToHgSession(2);
 void displayAccHelpPage(struct sqlConnection *conn)
 /* draw the account help page */
 {
-
+char *email = cartUsualString(cart, "hgLogin_email", "");
 hPrintf(
 "<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
 "\n"
@@ -706,11 +741,16 @@ hPrintf(
 "\n"
 "<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acctHelpForm\">"
 "\n"
+"<p><span style='color:red;'>%s</span><p>"
+"\n"
+, errMsg ? errMsg : ""
+);
+hPrintf(
 "<div class=\"inputGroup\">"
+"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"username\" id=\"username\" checked>"
+"<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
 "<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
-"<label for=\"password\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
-"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"username\" id=\"userName\">"
-"<label for=\"userName\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
+"<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
 "\n"
 "</div>"
 "\n"
@@ -718,16 +758,53 @@ hPrintf(
 hPrintf(
 "<div class=\"inputGroup\">"
 "<label for=\"emailPassword\">Email address</label>"
-"<input type=\"text\" name=\"hgLogin_email\" size=\"30\" id=\"emailPassword\">"
+"<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailPassword\">"
 "</div>"    
 "\n"
 "<div class=\"formControls\">"  
-"    <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Continue\" class=\"largeButton\">"
+"    <input type=\"submit\" name=\"hgLogin.do.accountHelp\" value=\"Continue\" class=\"largeButton\">"
 "     &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
 "</div>"
 "</form>"
 "</div><!-- END - accountHelpBox -->"
+, email
 );
+}
+
+void accountHelp(struct sqlConnection *conn)
+/* email user username(s) or new password */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *email = cartUsualString(cart, "hgLogin_email", "");
+if (sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email address cannot be blank.");
+    displayAccHelpPage(conn);
+    return;
+    }
+/* TODO: validate the email address is in right format */
+/* Username selcted? */
+char *helpWith = cartUsualString(cart, "helpWith", "");
+if (sameString(helpWith,"username"))
+    {
+    sendMail();
+    freez(&errMsg);
+    errMsg = cloneString("Forgot user name selected!");
+    displayAccHelpPage(conn);
+    return;
+    }
+if (sameString(helpWith,"password"))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Forgot password selected!");
+    displayAccHelpPage(conn);
+    return;
+    }
+displayAccHelpPage(conn);
+return;
 }
 
 /* ----- account login/display functions ---- */
@@ -841,11 +918,8 @@ if (checkPwd(password,m->password))
     }
 else
     {
-    //hPrintf("<h1>Invalid User/Password</h1>\n");
-    errMsg = cloneString("Invalid User/Password.");
-
+    errMsg = cloneString("Invalid user name or password.");
     displayLoginPage(conn);
-    // hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
     return;
     }
 
@@ -1054,6 +1128,12 @@ else if (cartVarExists(cart, "update"))
     "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
     );
     }
+/*******************************************************************
+else if (cartVarExists(cart, "hgLogin.do.lostUserNamePage"))
+    lostUserNamedPage(conn);
+else if (cartVarExists(cart, "hgLogin.do.lostUserName"))
+    lostUserName(conn);
+********************************************************************/
 else if (cartVarExists(cart, "hgLogin.do.lostPasswordPage"))
     lostPasswordPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.lostPassword"))
@@ -1066,6 +1146,8 @@ else if (cartVarExists(cart, "hgLogin.do.displayUserInfo"))
     displayUserInfo(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
     displayAccHelpPage(conn);
+else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
+    accountHelp(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
