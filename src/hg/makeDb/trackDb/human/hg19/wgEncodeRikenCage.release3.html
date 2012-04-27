@@ -46,7 +46,7 @@ materials directory</A> of our <A TARGET=_BLANK HREF="../../cgi-bin/hgFileUi?db=
 <DD>The Alignments view shows reads mapped to the genome and indicates where
 bases may mismatch. Every mapped read is displayed, i.e. uncollapsed. 
 The alignment file follows the standard SAM format of Bowtie output. The custom tag XP can be ignored. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format.
- Where mapping quality is not available for this track a score of 255 is used in accordance with the SAM Format Specification. Also, where the sequence quality scores are not available, all scores are displayed as 40.
+ Where mapping quality is not available for this track, a score of 255 is used in accordance with the SAM Format Specification. Also, where the sequence quality scores are not available, all scores are displayed as 40.
 </dd>
 </DL>
 <P>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</P>
@@ -60,7 +60,7 @@ on the plus and minus strand.
 <h3>Downloadable Files</h3>
 <DL>
 <DT><I>TSS GencV7</I> </DT>
-<DD> For some samples, there are download files in a modified gtf format with Transcriptional Start Sites based on GENCODE V7. A complete description of the TSS files is located in the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/supplemental/">supplemental materials directory</A>.
+<DD> For some samples, there are download files in a modified gtf format with Transcriptional Start Sites based on GENCODE V7. A complete description of the TSS files is located in the <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/supplemental/">supplemental materials directory</A>.
 </DD>
 </dl>
 
@@ -86,7 +86,7 @@ attached to the 3' end of the cDNA.
 <P>
 After PCR amplification, the tags were sequenced using Illumina's Genome analyzer or HiSeq. The read lengths for each sample 
 are specified in the metadata.
-Tags were mapped to the human genome (hg19) using the program delve (T. Lassmann manuscript in preparation).
+Tags were mapped to the human genome (hg19) using the program Delve (T. Lassmann manuscript in preparation).
 Delve is a new probabilistic aligner focused on giving the best possible alignment of reads to a genome rather
 than focusing on speed. It calculates the mapping accuracy (probability of each alignment being true or not)
 for each alignment. There is no set limit on the number of errors allowed and therefore the mapping rate is
@@ -104,12 +104,12 @@ TARGET=_blank>SOLiD</A>  technology. These reads were mapped using Bowtie with i
 <H2>Release Notes</H2>
 <P>
 Release 3 (April 2012) of Riken CAGE has viewable Transcription Start Sites determined by Hidden Markov Models.  
-It has the following new cell lines and tissues:  CD20+, CD34+_Mobilized, HAoAF, HAoEC, HCH, HFDPC, HMEpC, 
+It has the following new cell lines and tissues:  CD20+, CD34+ Mobilized, HAoAF, HAoEC, HCH, HFDPC, HMEpC, 
 hMSC-AT, hMSC-BM, hMSC-UC, HOB, HPC-PL, HPIEpC, HSaVEC, HVMF, HWP, IMR90, Monocytes-CD14+, NHDF, NHEM.f_M2, 
 NHEM_M2, SkMC, and SK-N-SH. With the tissue data, often each replicate is from a different donor.  
 The donor ID can be found in the metadata. The newer data were sequenced with Illumina HiSeq 2000 machines. </P>
 <P>
- As with previous releases, the orignal data from the hg18 version of this track is still included, it can be noted in the metadata as having a bioRepId that starts with gen0. This older data may be missing some information and does not have replicates. If there are new data available for an older sample, only the newer data is displayed.  The older data is still availble for downloads.</P>
+ As with previous releases, the orignal data from the hg18 version of this track is still included and can be noted in the metadata as having a bioRepId that starts with gen0. This older data may be missing some information and does not have replicates. If there are new data available for an older sample, only the newer data is displayed.  The older data is still availble for downloads.</P>
 <!---
 Release 2 has three new downloads only files per experiment (Clusters, TSS Gencode 7 and TSS HMM) and four new cell lines (A459, AG04450, BJ and SK-N-SH_RA).
 </P>
