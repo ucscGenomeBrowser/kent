@@ -6,6 +6,51 @@
 #include "gpFx.h"
 
 
+unsigned countDashes(char *string)
+{
+int count = 0;
+
+while(*string)
+    {
+    if (*string == '-')
+	count++;
+    string++;
+    }
+
+return count;
+}
+
+static void mergeAllele(char *transcript, int variantWidth,
+    char *newAlleleSeq, int alleleLength)
+{
+if (variantWidth == alleleLength)
+    {
+    // for the moment, we're sticking the dashes into the transcripts
+    if (1) //noDashes(newAlleleSeq))
+	memcpy(transcript, newAlleleSeq, alleleLength);
+    else
+	{
+	char *transcriptSource = transcript;
+	int ii;
+	for(ii=0; ii < variantWidth; ii++)
+	    {
+	    if (*newAlleleSeq == '-')
+		{
+		transcriptSource++;
+		}
+	    else
+		{
+		*transcript++ = *newAlleleSeq++;
+		transcriptSource++;
+		}
+	    }
+	while(*transcriptSource)
+	    *transcript++ = *transcriptSource++;
+	*transcript = 0;
+	}
+    }
+}
+
 char *gpFxModifySequence(struct allele *allele, struct genePred *pred, 
     int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence)
 /* modify a transcript to what it'd be if the alternate allele were present */
@@ -18,19 +63,20 @@ struct allele *clipAllele = alleleClip(allele, transcriptPsl->tStarts[exonNum],
 int exonOffset = clipAllele->variant->chromStart - transcriptPsl->tStarts[exonNum];
 int transcriptOffset = transcriptPsl->qStarts[exonNum] + exonOffset;
 
-if (clipAllele->length != clipAllele->variant->chromEnd - clipAllele->variant->chromStart)
+int variantWidth = clipAllele->variant->chromEnd - clipAllele->variant->chromStart;
+if (clipAllele->length !=  variantWidth)
     errAbort("only support alleles the same length as the reference");
 
 char *retSequence = cloneString(transcriptSequence->dna);
 char *newAlleleSeq = cloneString(clipAllele->sequence);
 if (*pred->strand == '-')
     {
-    transcriptOffset = transcriptSequence->size - (transcriptOffset + 1);
+    transcriptOffset = transcriptSequence->size - (transcriptOffset + strlen(newAlleleSeq));
     reverseComplement(newAlleleSeq, strlen(newAlleleSeq));
     }
 
 // make the change in the sequence
-memcpy(&retSequence[transcriptOffset], newAlleleSeq, allele->length);
+mergeAllele( &retSequence[transcriptOffset], variantWidth, newAlleleSeq, allele->length);
 
 // clean up
 freeMem(newAlleleSeq);
@@ -79,20 +125,28 @@ return newString;
 
 static int firstChange(char *string1, char *string2, int *numDifferent)
 /* return the position of the first difference between the two sequences */
+/* if numDifferent is non-NULL, return number of characters between first 
+ * difference, and the last difference */
 {
 int count = 0;
 
-while (*string1++ == *string2++)
-    count++;
+for(; *string1 == *string2; count++, string1++, string2++)
+    ;
+
+int firstChange = count;
+int lastChange = firstChange;
 
 if (numDifferent != NULL)
     {
-    *numDifferent = 1;
-    while ((*string1) && (*string2) && (*string1++ != *string2++))
-	(*numDifferent)++;
+    for (; (*string1) && (*string2); string1++, string2++, count++)
+	{
+	if (*string1 != *string2)
+	    lastChange = count;
+	}
+    *numDifferent = lastChange - firstChange + 1;
     }
 
-return count;
+return firstChange;
 }
 
 static void getSequences(struct genePred *pred, char *transcriptSequence,
@@ -145,6 +199,15 @@ for(ii=0; ii < numaa; ii++)
     }
 
 return dy->string;
+}
+
+struct gpFx *gpFxInCdsDeletion( struct allele *allele, struct genePred *pred, 
+    int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence,
+    char *newSequence)
+{
+struct gpFx *effects;
+AllocVar(effects);
+return effects;
 }
 
 struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred, 
@@ -201,6 +264,7 @@ getSequences(pred, newSequence, &newCodingSequence, &newaa);
 if (sameString(oldCodingSequence, newCodingSequence))
     return effectsList;
 
+
 // start allocating the effect structure
 struct gpFx *effects;
 AllocVar(effects);
@@ -218,29 +282,39 @@ else
     cc->exonNumber = exonNum;
 
 // calc codon change
-int codonPosStart = (cc->cdsPosition / 3) * 3;
-int codonPosEnd = ((cdsChangeLength + cc->cdsPosition) / 3) * 3;
-int numCodons = (codonPosEnd - codonPosStart) / 3 + 1;
-cc->codonChanges = codonChangeString( codonPosStart, numCodons, oldCodingSequence, newCodingSequence);
+int codonPosStart = (cc->cdsPosition / 3) ;
+int codonPosEnd = ((cdsChangeLength - 1 + cc->cdsPosition) / 3) ;
+int numCodons = (codonPosEnd - codonPosStart + 1);
+cc->codonChanges = codonChangeString( codonPosStart*3, numCodons, oldCodingSequence, newCodingSequence);
+// by convention we zero out these fields if they aren't used
+cc->pepPosition = 0;
+cc->aaChanges = "";
 
+int numDashes;
 if (sameString(newaa->dna, oldaa->dna))
     {
     // synonymous change
     effects->so.soNumber = synonymous_variant;
-    
-    // by convention we zero out these fields since they aren't used
-    cc->pepPosition = 0;
-    cc->aaChanges = "";
     }
 else
     {
-    // non-synonymous change
-    effects->so.soNumber = non_synonymous_variant;
-
     int numDifferent;
     cc->pepPosition = firstChange( newaa->dna, oldaa->dna, &numDifferent);
     cc->aaChanges = aaChangeString( cc->pepPosition, numDifferent, 
 	oldaa->dna, newaa->dna);
+
+    if ((numDashes = countDashes(newCodingSequence)) != 0)
+	{
+	if ((numDashes % 3) == 0)
+	    effects->so.soNumber = inframe_deletion;
+	else
+	    effects->so.soNumber = frameshift_variant;
+	}
+    else
+	{
+	// non-synonymous change
+	effects->so.soNumber = non_synonymous_variant;
+	}
     }
 
 return effectsList;
