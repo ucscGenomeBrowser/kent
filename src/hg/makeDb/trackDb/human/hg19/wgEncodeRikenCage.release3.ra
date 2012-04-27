@@ -15,7 +15,7 @@ dimensionBchecked rank1,rankP
 #dimensionDchecked rep0,rep1,rep2,rep3,rep4,Pooled
 filterComposite dimC=multi dimB=multi
 sortOrder  cellType=+ localization=+ rnaExtract=+ view=- rank=+
-fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
@@ -2454,7 +2454,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageNhekCytosolLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageGm12878CytosolPamAln
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cyto pA- A 1
         longLabel GM12878 cytosol polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep0 rank=rank1
@@ -2508,7 +2508,7 @@ html wgEncodeRikenCage.release3
 
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapAln         #subTrack wgEncodeRikenCageViewAlignments on
+        #track wgEncodeRikenCageK562CytosolPapAln         #subTrack wgEncodeRikenCageViewAlignments off
         #shortLabel K562 cyto pA+ A 1
         #longLabel K562 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         #subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -2546,7 +2546,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageNhekNucleusLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageK562NucleusPamAln
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA- A 1
         longLabel K562 nucleus polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep0 rank=rank1
@@ -2619,7 +2619,7 @@ html wgEncodeRikenCage.release3
         # subId=2381 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA+ A 1
         longLabel H1-hESC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1H1hESC localization=wcell rnaExtract=pAP rep=rep1 rank=rank1
@@ -2628,7 +2628,7 @@ html wgEncodeRikenCage.release3
         # subId=2380 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCytosolPapAlnRep2
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cyto pA+ A 2
         longLabel H1-hESC cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1H1hESC localization=cytosol rnaExtract=pAP rep=rep2 rank=rank1
@@ -2700,7 +2700,7 @@ html wgEncodeRikenCage.release3
         # subId=2372 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 1
         longLabel K562 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
@@ -2736,7 +2736,7 @@ html wgEncodeRikenCage.release3
         # subId=2368 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ A 1
         longLabel K562 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
@@ -2790,7 +2790,7 @@ html wgEncodeRikenCage.release3
         # subId=2361 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescNucleusPapAlnRep2
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES nucl pA+ A 2
         longLabel H1-hESC nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1H1hESC localization=nucleus rnaExtract=pAP rep=rep2 rank=rank1
@@ -2799,7 +2799,7 @@ html wgEncodeRikenCage.release3
         # subId=2360 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ A 1
         longLabel K562 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=wcell rnaExtract=pAP rep=rep1 rank=rank1
@@ -2853,7 +2853,7 @@ html wgEncodeRikenCage.release3
         # subId=2354 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPamAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1 rank=rank1
@@ -2889,7 +2889,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageProstateCellLongnonpolyaAln cricket Wed May  4 14:47:02 2011
 
         track wgEncodeRikenCageK562CytosolPamAln
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA- A 1
         longLabel K562 cytosol polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep0 rank=rank1
@@ -2899,7 +2899,7 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562CytosolLongnonpolyaAln cricket Wed May  4 14:47:01 2011
 
         track wgEncodeRikenCageH1hescCellPamAln
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA- A 1
         longLabel H1-hESC whole cell polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1H1hESC localization=wcell rnaExtract=pAM rep=rep0 rank=rank1
@@ -3019,7 +3019,7 @@ html wgEncodeRikenCage.release3
         # subId=3339 dateSubmitted=2011-01-19
 
         track wgEncodeRikenCageGm12878CellPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cell pA+ A 1
         longLabel GM12878 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=wcell rnaExtract=pAP rep=rep1 rank=rank1
@@ -3028,7 +3028,7 @@ html wgEncodeRikenCage.release3
         # subId=3946 dateSubmitted=2011-04-29
 
         track wgEncodeRikenCageGm12878CytosolPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cyto pA+ A 1
         longLabel GM12878 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep1 rank=rank1
@@ -3037,7 +3037,7 @@ html wgEncodeRikenCage.release3
         # subId=3950 dateSubmitted=2011-04-29
 
         track wgEncodeRikenCageGm12878NucleusPapAlnRep1
-        subTrack wgEncodeRikenCageViewAlignments on
+        subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nucl pA+ A 1
         longLabel GM12878 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep1 rank=rank1
