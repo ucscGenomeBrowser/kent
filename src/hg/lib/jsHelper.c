@@ -1,15 +1,4 @@
-/* javascript - some little helper routines  to manage our javascript.
- * We don't do much javascript - just occassionally use it so that
- * when they select something from a pull-down, it will go hit the server to
- * figure out how to reload other control options based on the choice.
- * (For instance if they change the group, which items in the track
- * drop-down need to change).
- *
- * We accomplish this by maintaining two forms - a mainForm and a
- * hiddenForm.  The hiddenForm maintains echo's of all the variables
- * in the main form, which get updated onChange of controls that need
- * to 'ripple' to other controls.  The onChange also submits the
- * control. */
+// jsHelper.c - helper routines for interface between CGIs and client-side javascript
 
 #include "common.h"
 #include <regex.h>
@@ -24,10 +13,21 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-
 static boolean jsInited = FALSE;
 
-struct jsonHashElement *jsonGlobalsHash = NULL;
+struct jsonElement *jsonGlobalsHash = NULL;
+
+/* mainForm/hiddenForm code supports the following: when the user selects
+ * something from a pull-down, it will go hit the server to
+ * figure out how to reload other control options based on the choice.
+ * (For instance if they change the group, which items in the track
+ * drop-down need to change).
+ *
+ * We accomplish this by maintaining two forms - a mainForm and a
+ * hiddenForm.  The hiddenForm maintains echo's of all the variables
+ * in the main form, which get updated onChange of controls that need
+ * to 'ripple' to other controls.  The onChange also submits the
+ * control. */
 
 void jsInit()
 /* If this is the first call, set window.onload to the operations
@@ -470,125 +470,78 @@ void jsEndCollapsibleSection()
 puts("</TD></TR>");
 }
 
-struct jsonStringElement *newJsonString(char *str)
+static struct jsonElement *newJsonElement(jsonElementType type)
+// generic constructor for a jsonElement; callers fill in the appropriate value
 {
-struct jsonStringElement *ele;
+struct jsonElement *ele;
 AllocVar(ele);
-ele->str = cloneString(str);
-ele->type = jsonString;
+ele->type = type;
 return ele;
 }
 
-struct jsonBooleanElement *newJsonBoolean(boolean val)
+struct jsonElement *newJsonString(char *str)
 {
-struct jsonBooleanElement *ele;
-AllocVar(ele);
-ele->val = val;
-ele->type = jsonBoolean;
+struct jsonElement *ele = newJsonElement(jsonString);
+ele->val.jeString = cloneString(str);
 return ele;
 }
 
-struct jsonNumberElement *newJsonNumber(long val)
+struct jsonElement *newJsonBoolean(boolean val)
 {
-struct jsonNumberElement *ele;
-AllocVar(ele);
-ele->val = val;
-ele->type = jsonNumber;
+struct jsonElement *ele = newJsonElement(jsonBoolean);
+ele->val.jeBoolean = val;
 return ele;
 }
 
-struct jsonDoubleElement *newJsonDouble(double val)
+struct jsonElement *newJsonNumber(long val)
 {
-struct jsonDoubleElement *ele;
-AllocVar(ele);
-ele->val = val;
-ele->type = jsonDouble;
+struct jsonElement *ele = newJsonElement(jsonNumber);
+ele->val.jeNumber = val;
 return ele;
 }
 
-struct jsonHashElement *newJsonHash(struct hash *h)
+struct jsonElement *newJsonDouble(double val)
 {
-struct jsonHashElement *ele;
-AllocVar(ele);
-ele->type = jsonHash;
-ele->hash = h;
+struct jsonElement *ele = newJsonElement(jsonDouble);
+ele->val.jeDouble = val;
 return ele;
 }
 
-struct jsonListElement *newJsonList(struct slRef *list)
+struct jsonElement *newJsonObject(struct hash *h)
 {
-struct jsonListElement *ele;
-AllocVar(ele);
-ele->type = jsonList;
-ele->list = list;
+struct jsonElement *ele = newJsonElement(jsonObject);
+ele->val.jeHash = h;
 return ele;
 }
 
-void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele)
+struct jsonElement *newJsonList(struct slRef *list)
+{
+struct jsonElement *ele = newJsonElement(jsonList);
+ele->val.jeList = list;
+return ele;
+}
+
+void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele)
+// Add a new element to a jsonObject; existing values are replaced.
+// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals();
 {
 if (h == NULL)  // If hash isn't provided, assume global
     {
     if (jsonGlobalsHash == NULL)
-        jsonGlobalsHash = newJsonHash(newHash(8));
+        jsonGlobalsHash = newJsonObject(newHash(8));
     h = jsonGlobalsHash;
     }
-hashReplace(h->hash, name, ele);
+if(h->type != jsonObject)
+    errAbort("jsonObjectAdd called on element with incorrect type (%d)", h->type);
+hashReplace(h->val.jeHash, name, ele);
 }
 
-void jsonHashAddString(struct jsonHashElement *h, char *name, char *val)
-{
-// Add a string to a hash which will be used to print a javascript object;
-// existing values are replaced.
-jsonHashAdd(h, name, (struct jsonElement *) newJsonString(val));
-}
-
-void jsonHashAddNumber(struct jsonHashElement *h, char *name, long val)
-{
-// Add a number to a hash which will be used to print a javascript object;
-// existing values are replaced.
-jsonHashAdd(h, name, (struct jsonElement *) newJsonNumber(val));
-}
-
-void jsonHashAddDouble(struct jsonHashElement *h, char *name, double val)
-{
-// Add a number to a hash which will be used to print a javascript object;
-// existing values are replaced.
-jsonHashAdd(h, name, (struct jsonElement *) newJsonDouble(val));
-}
-
-void jsonHashAddBoolean(struct jsonHashElement *h, char *name, boolean val)
-{
-// Add a boolean to a hash which will be used to print a javascript object;
-// existing values are replaced.
-jsonHashAdd(h, name, (struct jsonElement *) newJsonBoolean(val));
-}
-
-void jsonListAdd(struct slRef **list, struct jsonElement *ele)
+void jsonListAdd(struct jsonElement *list, struct jsonElement *ele)
 {
 struct slRef *e;
-AllocVar(e);
-e->val = ele;
-slAddHead(list, e);
-}
-
-void jsonListAddString(struct slRef **list, char *val)
-{
-jsonListAdd(list, (struct jsonElement *) newJsonString(val));
-}
-
-void jsonListAddNumber(struct slRef **list, long val)
-{
-jsonListAdd(list, (struct jsonElement *) newJsonNumber(val));
-}
-
-void jsonListAddDouble(struct slRef **list, double val)
-{
-jsonListAdd(list, (struct jsonElement *) newJsonDouble(val));
-}
-
-void jsonListAddBoolean(struct slRef **list, boolean val)
-{
-jsonListAdd(list, (struct jsonElement *) newJsonString(val ? "true" : "false"));
+if(list->type != jsonList)
+    errAbort("jsonListAdd called on element with incorrect type (%d)", list->type);
+slAddHead(&list->val.jeList, e);
 }
 
 static char *makeIndentBuf(int indentLevel)
@@ -602,7 +555,7 @@ indentBuf[indentLevel] = 0;
 return indentBuf;
 }
 
-static void jsonPrintRecurse(struct jsonElement *json, int indentLevel)
+static void jsonPrintRecurse(struct jsonElement *ele, int indentLevel)
 {
 if (indentLevel >= -1) // Note that < -1 will result in no indenting
     indentLevel++;
@@ -614,19 +567,18 @@ if (indentLevel < 0)
     nl = "";
     }
 char *indentBuf = makeIndentBuf(indentLevel);
-switch (json->type)
+switch (ele->type)
     {
-    case jsonHash:
+    case jsonObject:
         {
-        struct jsonHashElement *ele = (struct jsonHashElement *) json;
         hPrintf("{%s",nl);
-        if(hashNumEntries(ele->hash))
+        if(hashNumEntries(ele->val.jeHash))
             {
-            struct hashEl *el, *list = hashElListHash(ele->hash);
+            struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
             slSort(&list, hashElCmp);
             for (el = list; el != NULL; el = el->next)
                 {
-                struct jsonElement *val = (struct jsonElement *) el->val;
+                struct jsonElement *val = el->val;
                 hPrintf("%s%s\"%s\": ", indentBuf, tab, el->name);
                 jsonPrintRecurse(val, indentLevel);
                 hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
@@ -638,14 +590,13 @@ switch (json->type)
         }
     case jsonList:
         {
-        struct jsonListElement *rec = (struct jsonListElement *) json;
         struct slRef *el;
         hPrintf("[%s",nl);
-        if(rec->list)
+        if(ele->val.jeList)
             {
-            for (el = rec->list; el != NULL; el = el->next)
+            for (el = ele->val.jeList; el != NULL; el = el->next)
                 {
-                struct jsonElement *val = (struct jsonElement *) el->val;
+                struct jsonElement *val = el->val;
                 hPrintf("%s%s", indentBuf,tab);
                 jsonPrintRecurse(val, indentLevel);
                 hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
@@ -656,32 +607,31 @@ switch (json->type)
         }
     case jsonString:
         {
-        char *val = javaScriptLiteralEncode(((struct jsonStringElement *) json)->str);
-        hPrintf("\"%s\"", val);
+        hPrintf("\"%s\"", javaScriptLiteralEncode(ele->val.jeString));
         break;
         }
     case jsonBoolean:
         {
-        hPrintf("%s", ((struct jsonBooleanElement *) json)->val ? "true" : "false");
+        hPrintf("%s", ele->val.jeBoolean ? "true" : "false");
         break;
         }
     case jsonNumber:
         {
         char buf[256];
-        safef(buf, sizeof(buf), "%ld", ((struct jsonNumberElement *) json)->val);
+        safef(buf, sizeof(buf), "%ld", ele->val.jeNumber);
         hPrintf("%s", buf);
         break;
         }
     case jsonDouble:
         {
         char buf[256];
-        safef(buf, sizeof(buf), "%.10f", ((struct jsonDoubleElement *) json)->val);
+        safef(buf, sizeof(buf), "%g", ele->val.jeDouble);
         hPrintf("%s", buf);
         break;
         }
     default:
         {
-        errAbort("jsonPrintRecurse; invalid type: %d", json->type);
+        errAbort("jsonPrintRecurse; invalid type: %d", ele->type);
         break;
         }
     }
@@ -719,7 +669,7 @@ if (jsonGlobalsHash != NULL)
     {
     if (wrapWithScriptTags)
         printf("<script type='text/javascript'>\n");
-    jsonPrint((struct jsonElement *) jsonGlobalsHash, "common", 0);
+    jsonPrint(jsonGlobalsHash, "common", 0);
     if (wrapWithScriptTags)
         printf("</script>\n");
     }
@@ -841,7 +791,7 @@ while(str[*posPtr] != '}')
     }
 skipLeadingSpacesWithPos(str, posPtr);
 getSpecificChar('}', str, posPtr);
-return (struct jsonElement *) newJsonHash(h);
+return newJsonObject(h);
 }
 
 static struct jsonElement *jsonParseList(char *str, int *posPtr)
@@ -864,17 +814,17 @@ while(str[*posPtr] != ']')
 skipLeadingSpacesWithPos(str, posPtr);
 getSpecificChar(']', str, posPtr);
 slReverse(&list);
-return (struct jsonElement *) newJsonList(list);
+return newJsonList(list);
 }
 
 static struct jsonElement *jsonParseString(char *str, int *posPtr)
 {
-return (struct jsonElement *) newJsonString(getString(str, posPtr));
+return newJsonString(getString(str, posPtr));
 }
 
 static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
 {
-struct jsonBooleanElement *ele = NULL;
+struct jsonElement *ele = NULL;
 int i;
 for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++);
     ;
@@ -887,7 +837,7 @@ else
     errAbort("Invalid boolean value '%s'; pos: %d", val, *posPtr);
 *posPtr += i;
 freez(&val);
-return (struct jsonElement *) ele;
+return ele;
 }
 
 static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
@@ -907,12 +857,12 @@ for(i = 0;; i++)
 char *val = cloneStringZ(str + *posPtr, i);
 *posPtr += i;
 if(integral)
-    retVal = (struct jsonElement *) newJsonNumber(sqlLongLong(val));
+    retVal = newJsonNumber(sqlLongLong(val));
 else
     {
     double d;
     if(sscanf(val, "%lf", &d))
-        retVal = (struct jsonElement *) newJsonDouble(d);
+        retVal = newJsonDouble(d);
     else
         errAbort("Invalid JSON Double: %s", val);
     }
