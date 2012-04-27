@@ -283,3 +283,15 @@ skipInvalid yes
     #   9784198 bases of 2768536343 (0.353%) in intersection
 
 ##############################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/tarSyr1/bed/genscan
+    cd /hive/data/genomes/tarSyr1/bed/genscan
+    time doGenscan.pl tarSyr1 > do.log 2>&1
+    #   real    1086m30.217s
+
+    cat fb.tarSyr1.genscan.txt
+    #   49393140 bases of 2768536343 (1.784%) in intersection
+    cat fb.tarSyr1.genscanSubopt.txt
+    #   46556603 bases of 2768536343 (1.682%) in intersection
+
+#########################################################################
