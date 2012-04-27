@@ -1169,7 +1169,7 @@ if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
 expectJsonType(el, jsonString, elName);
-return ((struct jsonStringElement *)el)->str;
+return el->val.jeString;
 }
 
 struct slRef *listFromJHash(struct hash *jHash, char *elName, boolean nullOk)
@@ -1181,19 +1181,19 @@ if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
 expectJsonType(el, jsonList, elName);
-return ((struct jsonListElement *)el)->list;
+return el->val.jeList;
 }
 
 struct hash *hashFromJHash(struct hash *jHash, char *elName, boolean nullOk)
-/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonHash,
+/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonObject,
  * and return its actual hash.  If nullOK, return NULL when elName is not found. */
 {
 struct hashEl *hel = hashLookup(jHash, elName);
 if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
-expectJsonType(el, jsonHash, elName);
-return ((struct jsonHashElement *)el)->hash;
+expectJsonType(el, jsonObject, elName);
+return el->val.jeHash;
 }
 
 struct slPair *stringsWithPrefixFromJHash(struct hash *jHash, char *prefix)
@@ -1208,8 +1208,7 @@ while ((hel = hashNext(&cookie)) != NULL)
 	{
 	struct jsonElement *el = hel->val;
 	if (el->type == jsonString)
-	    slAddHead(&varList, slPairNew(hel->name,
-					  ((struct jsonStringElement *)hel->val)->str));
+	    slAddHead(&varList, slPairNew(hel->name, el->val.jeString));
 	}
     }
 return varList;
@@ -1253,8 +1252,8 @@ char *selGroup = NULL, *selTrack = NULL, *selTable = NULL;
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
     struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    expectJsonType(srcJson, jsonObject, "source object");
+    struct hash *srcHash = srcJson->val.jeHash;
     char *srcId = stringFromJHash(srcHash, "id", FALSE);
     if (sameString(srcId, divId))
 	{
@@ -1323,8 +1322,8 @@ boolean gotUpdate = FALSE;
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
     struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    expectJsonType(srcJson, jsonObject, "source object");
+    struct hash *srcHash = srcJson->val.jeHash;
     char *srcId = stringFromJHash(srcHash, "id", FALSE);
     boolean isPrimary = (srcRef == sources);
     boolean srcThinksItsPrimary = isNotEmpty(stringFromJHash(srcHash, "isPrimary", TRUE));
@@ -1533,8 +1532,8 @@ struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
 for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
     struct jsonElement *srcJson = srcRef->val;
-    expectJsonType(srcJson, jsonHash, "source object");
-    struct hash *srcHash = ((struct jsonHashElement *)srcJson)->hash;
+    expectJsonType(srcJson, jsonObject, "source object");
+    struct hash *srcHash = srcJson->val.jeHash;
     char *table = stringFromJHash(srcHash, "tableSel", FALSE);
     struct trackDb *tdb = tdbForTrack(db, table, &fullTrackList);
     boolean isPrimary = (srcRef == sources);
@@ -1595,8 +1594,8 @@ puts("Content-Type:text/javascript\n");
 
 // Parse jsonText and make sure that it is a hash:
 struct jsonElement *request = jsonParse(jsonText);
-expectJsonType(request, jsonHash, "top-level request");
-struct hash *topHash = ((struct jsonHashElement *)request)->hash;
+expectJsonType(request, jsonObject, "top-level request");
+struct hash *topHash = request->val.jeHash;
 // Every request must include a querySpec:
 struct hash *querySpec = hashFromJHash(topHash, "querySpec", FALSE);
 
