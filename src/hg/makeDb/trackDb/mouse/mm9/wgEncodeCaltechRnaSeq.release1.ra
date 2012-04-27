@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Caltech
 group regulation
-subGroup1 view Views RawSignal=Raw_Signal_(All_Reads) Signal=Signal_(Unique_Reads_Only) Alignments=Alignments
+subGroup1 view Views RawSignal=Raw_Signal_(for_All_Reads) Signal=Signal_(for_Unique_Reads_Only) Alignments=Alignments
 subGroup2 cellType Cell_Line 10T12=10T1/2 C2C12=C2C12
 subGroup3 strain Strain C3H=C3H
 subGroup4 sex Sex F=F
