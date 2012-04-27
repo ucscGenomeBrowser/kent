@@ -51,14 +51,11 @@ The following views are in this track:
 for information about the SAM Bowtie output (including other tags) and the 
 <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for information on 
 the SAM/BAM file format. </DD></DT>
-<DT><I>Raw Signal</I></DT>
+<DT><I>Raw Signal (for All Reads)</I></DT>
 <DD>Density graph (wiggle) of signal enrichment based on a normalized aligned 
-read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples.</DD>
-<DD><I>All Reads</I> - raw signal wiggle track containing all alignments with multireads weighed by their multiplicity
-<DT><I>Signal</I></DT>
-<DD>Density graph (wiggle) of signal enrichment based on processed data.</DD>
-<DD><I>Unique Reads Only</I> - Signal wiggle track containing only uniquely mapping reads
-</DD>
+read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. This is used to display All Reads in this track</DD>
+<DT><I>Signal (for Unique Reads Only)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on processed data. This is used to display uniquely mapped reads in this track</DD>
 </DL>
 
 <H2>Methods</H2>
