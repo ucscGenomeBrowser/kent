@@ -380,3 +380,15 @@ close (FH);
     #   19965268 bases of 608038597 (3.284%) in intersection
 
 ########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/gadMor1/bed/genscan
+    cd /hive/data/genomes/gadMor1/bed/genscan
+    time doGenscan.pl gadMor1 > do.log 2>&1
+    #   real    909m27.951s
+
+    cat fb.gadMor1.genscan.txt
+    #   31133526 bases of 608038597 (5.120%) in intersection
+    cat fb.gadMor1.genscanSubopt.txt
+    #   23477881 bases of 608038597 (3.861%) in intersection
+
+#########################################################################

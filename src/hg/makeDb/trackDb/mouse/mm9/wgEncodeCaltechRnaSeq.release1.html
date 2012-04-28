@@ -23,63 +23,62 @@ being used in the ENCODE project are performed in cell types in mouse that are s
 or homologous to those studied in the human project. Thus we will be able to discover 
 which epigenetic features are conserved between mouse and human, and we can 
 examine the extent to which these overlap with the DNA sequences under negative 
-selection. The contribution of DNA that with a function preserved in mammals versus 
+selection. The contribution of DNA with a function preserved in mammals versus 
 that with a function in only one species will be discovered. The results will have a 
 significant impact on our understanding of the evolution of gene regulation.
 </p>
 
 <H3>Reference transcriptome measurements with RNA-Seq</H3>
-RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly (Mortazavi et al., 2008).
-RNA-Seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high throughput DNA sequencing, 
+RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly (Mortazavi <EM>et al.</EM>, 2008).
+RNA-Seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high-throughput DNA sequencing, 
 which was done here on the Illumina HiSeq sequencer. The transcriptome measurements shown on these tracks were performed on 
-<A target="_BLANK" href="http://genome-test.cse.ucsc.edu/cgi-bin/hgEncodeVocab?term=longPolyA&type=rnaExtract">polyA selected RNA</A> from 
-<A target="_BLANK" href="http://genome-test.cse.ucsc.edu/cgi-bin/hgEncodeVocab?term=cell&type=localization">total cellular RNA.</A> PolyA-selected RNA was fragmented 
-by magnesium-catalyzed hydrolysis and then converted into cDNA by random priming and amplified. Paired-end 2x100bp reads were obtained from each end of a cDNA fragment. 
-This RNA-Seq protocol does not specify the coding strand. Reads were aligned to the mm9 human reference genome using TopHat, a program specifically designed to align RNA-Seq reads and discover splice junctions de novo. 
-Cufflinks, a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantifiy novel transcripts and to obtain trascript 
-expression estimates based on the UCSC annotation. All sequence files, alignments, gene and transcript models and expression estimates files are available for download </P>
+<A target="_BLANK" href="/cgi-bin/hgEncodeVocab?term=longPolyA&type=rnaExtract">polyA selected RNA</A> from 
+<A target="_BLANK" href="/cgi-bin/hgEncodeVocab?term=cell&type=localization">total cellular RNA</A>. PolyA-selected RNA was fragmented 
+by magnesium-catalyzed hydrolysis and then converted into cDNA by random priming and amplified. Paired-end 2x100 bp reads were obtained from each end of a cDNA fragment. 
+Reads were aligned to the mm9 human reference genome using TopHat (Trapnell <em>et al.</em>, 2009), a program specifically designed to align RNA-Seq reads and discover splice junctions de novo. 
+All sequence and alignments files are available on the <A target="_BLANK" href="/cgi-bin/hgFileUi?db=mm9&g=wgEncodeCaltechRnaSeq">downloads page</A>.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
-tracks are <A href="http://genome-test.cse.ucsc.edu/goldenPath/help/multiView.html" target="_BLANK">here</A>.
+tracks are <A href="/goldenPath/help/multiView.html" target="_BLANK">here</A>.
 The following views are in this track:
-</P><DL>
-</DD><DT><I>Alignments</I></DT>
-<DD>The Alignments (BAM file) view shows reads aligned to the genome. Alignments are colored by cell type. </DT></DD>
-<DL><DT><I>Raw Signal</I></DT>
+<DL>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments (BAM file) view shows reads aligned to the genome. Alignments are colored by cell type. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> (Langmead <em>et al.</em>, 2009)
+for information about the SAM Bowtie output (including other tags) and the 
+<a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for information on 
+the SAM/BAM file format. </DD></DT>
+<DT><I>Raw Signal (for All Reads)</I></DT>
 <DD>Density graph (wiggle) of signal enrichment based on a normalized aligned 
-read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. <BR><BR>
-</DT><DD><I>All Reads</I> - raw signal wiggle track containing all alignments with multireads weighed by their multiplicity
-</DT><DD><I>Unique Reads Only</I> - raw signal wiggle track containing only uniquely mapping reads
-</DD></DL>
+read density (Read Per Million, RPM). The RPM measure assists in visualizing the relative amount of a given transcript across multiple samples. This is used to display All Reads in this track</DD>
+<DT><I>Signal (for Unique Reads Only)</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on processed data. This is used to display uniquely mapped reads in this track</DD>
+</DL>
 
 <H2>Methods</H2>
 
 <H3>Experimental Procedures</H3>
 
 <P> 
-Cells were grown according to the approved <a href="http://genome-test.cse.ucsc.edu/ENCODE/protocols/cell/mouse" target="_BLANK">ENCODE cell culture protocols</a>. 
-Cells were lysed in RLT buffer (Qiagen RNEasy kit), and processed on RNEasy midi columns according to the manufacturer's protocol, with the inclusion of the "on-column" DNAse digestion step to remove residual genomic DNA.
-
-75 µgs of total RNA was selected twice with oligo-dT beads (Dynal) according to the manufacturer's 
-protocol to isolate mRNA from each of the preparations.  100 ngs of mRNA was 
-then processed according to the protocol in Mortazavi et al (2008), and prepared for sequencing on the Illumina GAIIx or HiSeq platforms 
- according to the protocol for the ChIPSeq DNA genomic DNA kit (Illumina). Paired-end libraries were size-selected around 200bp (fragment length).
+Cells were grown according to the approved <a href="/ENCODE/protocols/cell/mouse" target="_BLANK">ENCODE cell culture protocols</a>. 
+Cells were lysed in RLT buffer (Qiagen RNEasy kit), and processed on RNEasy midi columns according to the manufacturer's protocol, with the inclusion of the "on-column" DNAse digestion step to remove residual genomic DNA. A quantity of 75 µgs of total RNA was selected twice with oligo-dT beads (Dynal) according to the manufacturer's 
+protocol to isolate mRNA from each of the preparations.  A quantity of 100 ngs of mRNA was 
+then processed according to the protocol in Mortazavi <EM>et al.</EM> (2008), and prepared for sequencing on the Illumina GAIIx or HiSeq platforms 
+ according to the protocol for the ChIP-Seq DNA genomic DNA kit (Illumina). Paired-end libraries were size-selected around 200 bp (fragment length).
  
-Libraries were sequenced with the Illumina HiSeq according to the manufacturer's recommendations. Paired-end reads of 100bp length were obtained
+Libraries were sequenced with the Illumina HiSeq according to the manufacturer's recommendations. Paired-end reads of 100 bp length were obtained
 
 <H3>Data Processing and Analysis</H3>
  
 <P>Reads were mapped to the reference mouse genome (version mm9 with or without the Y chromosome, depending on the sex of the cell line, 
-and without the random chromosomes in all cases)  using <A href="http://tophat.cbcb.umd.edu/"" target="_BLANK">TopHat</A> (version 1.3.1). 
-TopHat was used with default settings with the exception of specifying an empirically determined mean inner-mate distance and that known ENSEMBL version 63 splice junctions were supplied. </P>
+and without the random chromosomes in all cases) using <A href="http://tophat.cbcb.umd.edu/" target="_BLANK">TopHat</A> (version 1.3.1).  TopHat was used with default settings with the exception of specifying an empirically determined mean inner-mate distance and supplying known ENSEMBL version 63 splice junctions.</P>
 
 <H2>Downloadable Files</H2>
 
-<P>The following files can be found on the <A target="_BLANK" href="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">downloads page</A>.
+<P>The following files can be found on the <A target="_BLANK" href="/cgi-bin/hgFileUi?db=mm9&g=wgEncodeCaltechRnaSeq">downloads page</A>.
 </P>
 
 <P>
@@ -88,7 +87,7 @@ TopHat was used with default settings with the exception of specifying an empiri
 <DD><b>*.unique.BigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data) with only uniquely mappable reads represented<br></DD>
 <DD><b>*.BigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data) with multi-reads included (with weight scaled according to the number of locations they map to)<br></DD>
 <DD><b>*.bam</b> - all alignments in <A target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf">SAM/BAM format</A> (<I>Alignments</I> view)<br></DD>
-<DD><b>*.bam.bai</b> bam file index<br></DD>
+<DD><b>*.bam.bai</b> - bam file index<br></DD>
 
 <H2>Credits</H2>
 
@@ -97,26 +96,17 @@ TopHat was used with default settings with the exception of specifying an empiri
 <P>
 Contacts: 
 <A href="mailto:georgi@caltech.edu">
-Georgi Marinov</A> (data coordination/informatics/experimental).
+Georgi Marinov</A> (data coordination/informatics/experimental),
 <!-- above address is georgi at caltech.edu -->
 <A href="mailto:diane@caltech.edu">
 Diane Trout</A> (informatics) and
 <!-- above address is diane at caltech.edu -->
 <A href="mailto:bawilli_91125@yahoo.com">
-Brian Williams
-</A> (experimental).
+Brian Williams</A> (experimental)
 <!-- above address is bawilli_91125 at yahoo.com -->
-
 </P>
 
 <H2>References</H2>
-
-<p>
-Mortazavi A, Williams BA, McCue K, Schaeffer L, Wold B.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/18516045" target="_blank">
-Mapping and quantifying mammalian transcriptomes by RNA-Seq</a>.
-<em>Nat Methods</em>. 2008 Jul;5(7):621-8.
-</p>
 
 <p>
 Langmead B, Trapnell C, Pop M, Salzberg SL.
@@ -126,17 +116,17 @@ Ultrafast and memory-efficient alignment of short DNA sequences to the human gen
 </p>
 
 <p>
+Mortazavi A, Williams BA, McCue K, Schaeffer L, Wold B.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18516045" target="_blank">
+Mapping and quantifying mammalian transcriptomes by RNA-Seq</a>.
+<em>Nat Methods</em>. 2008 Jul;5(7):621-8.
+</p>
+
+<p>
 Trapnell C, Pachter L, Salzberg SL.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/19289445" target="_blank">
 TopHat: discovering splice junctions with RNA-Seq</a>.
 <em>Bioinformatics</em>. 2009 May 1;25(9):1105-11.
-</p>
-
-<p>
-Trapnell C, Williams BA, Pertea G, Mortazavi A, Kwan G, van Baren MJ, Salzberg SL, Wold BJ, Pachter L.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/20436464" target="_blank">
-Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation</a>.
-<em>Nat Biotechnol</em>. 2010 May;28(5):511-5.
 </p>
 
 <H2> Data Release Policy </H2>
@@ -146,4 +136,4 @@ consent, submit publications that use an unpublished ENCODE dataset until
 nine months following the release of the dataset.  This date is listed in
 the <EM>Restricted Until</EM> column, above.  The full data release policy
 for ENCODE is available
-<A href="http://genome-test.cse.ucsc.edu/ENCODE/terms.html" target="_BLANK">here</A>.</P>
+<A href="/ENCODE/terms.html" target="_BLANK">here</A>.</P>

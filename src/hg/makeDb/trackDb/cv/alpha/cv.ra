@@ -5458,6 +5458,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
+label SkMC
 
 term SkMC
 tag SKMC
@@ -5476,6 +5477,7 @@ termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+label SkMC
 
 term SkMC_9011302
 tag SKMC9011302
@@ -6077,14 +6079,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Colon
-vendorName LICR lab
-vendorId Colon
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Colon; Colon
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 230,159,0
 sex U
-protocol Ren:Colon_Ren_protocol.pdf
+protocol Ren:Colon_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term CNS
 tag CNS
@@ -6094,7 +6096,7 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System PROVSIONAL
+description Central Nervous System PROVISIONAL
 vendorName CSHL lab
 vendorId CNS
 orderUrl http://gingeraslab.cshl.edu/
@@ -6430,14 +6432,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Heart
-vendorName LICR lab
-vendorId Heart
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Heart; Heart
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-protocol Ren:Heart_Ren_protocol.pdf
+protocol Ren:Heart_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term HeadlessEmbryo
 tag HLEMBRYO
@@ -6486,12 +6488,12 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Kidney
-vendorName Stam lab
-vendorId Kidney
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)Stam lab ; 2)CSHL lab
+vendorId Kidney; Kidney
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 color 204,121,167
 sex U
-protocol Stam:Tissue_Stam_protocol.pdf
+protocol Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 #termId
 #termUrl
 
@@ -6541,7 +6543,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Limb
-vendorName 1)LICR lab 2)CSHL lab
+vendorName 1)LICR lab; 2)CSHL lab
 vendorId Limb; Limb
 orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7127
@@ -6559,14 +6561,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Liver
-vendorName LICR lab
-vendorId Liver
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)Stam lab; 2)CSHL lab
+vendorId Liver; Liver
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 230,159,0
 sex U
-protocol Ren:Liver_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf
+protocol Ren:Liver_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Lung
 tag LUNG
@@ -6577,13 +6579,13 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Lung
-vendorName LICR lab
-vendorId Lung
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Lung; Lung
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
-protocol Ren:Lung_Ren_protocol.pdf
+protocol Ren:Lung_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term MammaryGland
 tag MAMG
@@ -6921,14 +6923,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName 1) LICR lab; 2)Stam Lab
+vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
 vendorId Spleen; Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
 sex U
-protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf
+protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Stomach
 tag STOM
@@ -6976,14 +6978,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Testis
-vendorName LICR lab
-vendorId Testis
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Testis; Testis
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 0,158,115
 sex U
-protocol Ren:Testis_Ren_protocol.pdf
+protocol Ren:Testis_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Thymus
 tag THYMUS
@@ -6994,14 +6996,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Thymus
-vendorName LICR lab
-vendorId Thymus
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Thymus; Thymus
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 86,180,233
 sex U
-protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf
+protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term THelper-Activated
 tag THELPA
@@ -12674,7 +12676,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVIVISIONAL
+description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVISIONAL
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -13276,7 +13278,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Raw signal -
+label Minus Raw signal 
 description Graphs the base-by-base density of tags on the minus strand
 
 term Peaks
@@ -13360,7 +13362,7 @@ description Signal over an interval as a percentage of normalized tag densities 
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
-label Raw signal +
+label Plus Raw signal
 description Graphs the base-by-base density of tags on the plus strand
 
 term Primer
@@ -14327,7 +14329,6 @@ tag GPL10989
 geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
 type platform
 description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
-#PROVISIONAL
 
 term GPL9156
 tag GPL9156
