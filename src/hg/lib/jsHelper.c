@@ -538,10 +538,9 @@ hashReplace(h->val.jeHash, name, ele);
 
 void jsonListAdd(struct jsonElement *list, struct jsonElement *ele)
 {
-struct slRef *e;
 if(list->type != jsonList)
     errAbort("jsonListAdd called on element with incorrect type (%d)", list->type);
-slAddHead(&list->val.jeList, e);
+slAddHead(&list->val.jeList, ele);
 }
 
 static char *makeIndentBuf(int indentLevel)
