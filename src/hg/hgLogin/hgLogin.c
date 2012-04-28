@@ -41,14 +41,14 @@ char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
 
-void sendMail()
+void sendMail(char *email, char *subject, char *msg)
 {
 char cmd[256];
-char email[256]="chinhli@soe.ucsc.edu";
-char msg[256]="UCSC";
 safef(cmd,sizeof(cmd),
-"echo 'Hello from your favoriate browser at: %s' | mail -s \"Greeting form UCSC Genome Browser\" %s"
-, msg, email);
+// "echo 'Hello from your favoriate browser at: %s %s ' | mail -s \"Greeting form UCSC Genome Browser\" %s"
+// , msg, httpLink, email);
+//"echo '%s' | mail -s \"Greeting from uCSC\" %s"
+"echo '%s' | mail -s \"%s\" %s" , msg, subject, email); 
 int result = system(cmd);
 if (result == -1)
     {
@@ -72,7 +72,26 @@ else
     , email
     );
     }
+}
 
+
+
+
+void activateAccount(struct sqlConnection *conn)
+/* activate user account  */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *token = cgiUsualString("hgLogin_activateAccount", "");
+safef(query,sizeof(query),"Token is %s ", token);
+if (!sameString(token,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString(query);
+    displayLoginPage(conn);
+    return;
+    }
 }
 /* -------- password functions ---- */
 
@@ -790,7 +809,14 @@ if (sameString(email,""))
 char *helpWith = cartUsualString(cart, "helpWith", "");
 if (sameString(helpWith,"username"))
     {
-    sendMail();
+char subject[256];
+char email[256]="chinhli@soe.ucsc.edu";
+char msg[256];
+char httpLink[256]="Visit http://www.genome.ucsc.edu ";
+safef(subject, sizeof(subject),"Greeting form UCSC about %s", email);
+safecpy(msg, sizeof(msg), "Hello from your favoriate browser at UCSC. ");
+safecat (msg, sizeof(msg), httpLink);
+    sendMail(email, subject, msg);
     freez(&errMsg);
     errMsg = cloneString("Forgot user name selected!");
     displayAccHelpPage(conn);
@@ -1147,6 +1173,8 @@ else if (cartVarExists(cart, "hgLogin.do.displayUserInfo"))
 else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
     displayAccHelpPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
+    accountHelp(conn);
+else if (cartVarExists(cart, "hgLogin.do.activateAccount"))
     accountHelp(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);

@@ -25,4 +25,7 @@ void backToHgSession(int nSec);
 /* delay for N micro seconds then go back to hgSession page */
 void backToDoLoginPage(int nSec);
 /* delay for N micro seconds then go back to Login page */
+void displayLoginPage(struct sqlConnection *conn);
+/* draw the account login page */
+
 
