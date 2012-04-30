@@ -1574,6 +1574,26 @@ cartCheckout(&cart);
 cartFooter();
 }
 
+void setBackgroundFromCart(struct cart *cart) 
+/* if 'theme' set in cart: overwrite background with the one from defined for this theme */
+{
+printf("trying to reset background ");
+char *cartTheme = cartOptionalString(cart, "theme");
+if (cartTheme==NULL)
+    return;
+printf("found theme");
+char * themeKey = stringCopy
+char *themeDefLine = cfgOption(cartTheme);
+if (themeDefLine == NULL)
+    return;
+printf("found theme line ");
+char * background = cloneString(themeDefLine);
+chopSuffixAt(background, ',');
+printf("background set to %s", background);
+htmlSetBackground(background);
+freeMem(background);
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -1608,6 +1628,7 @@ else if (pos == NULL && org == NULL)
 else
     safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
 popWarnHandler();
+setBackgroundFromCart(cart);
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
