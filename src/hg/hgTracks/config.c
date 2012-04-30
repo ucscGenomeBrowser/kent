@@ -31,6 +31,7 @@ if (themes==NULL)
 hPrintf("<TR><TD>website style:");
 hPrintf("<TD style=\"text-align: right\">");
 
+// create labels for drop down box by removing prefix from hg.conf keys
 char *labels[50];
 struct slName* el;
 int i = 0;
@@ -43,7 +44,8 @@ for (el = themes; el != NULL && i<50; el = el->next)
     labels[i] = name;
     i++;
     }
-char* currentTheme = cartOptionalString(cart, "classic"); // default value is classic
+
+char* currentTheme = cartOptionalString(cart, "theme"); 
 hDropList("theme", labels, i, currentTheme);
 slFreeList(themes);
 hPrintf("</TD>");

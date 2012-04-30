@@ -89,6 +89,10 @@ void htmlSetStyle(char *style);
  * which will remove underlines from links.
  * Needs to be called before htmlStart or htmShell. */
 
+void htmlSetStyleTheme(char *style);
+/* Set theme style, these styles can overwrite document wide styles.
+ * Needs to be called before htmlStart or htmShell. */
+
 void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart
  * or htmShell. */
