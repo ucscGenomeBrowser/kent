@@ -52734,18 +52734,18 @@ tableName wgEncodeSydhTfbsK562Znf274m01UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum 12d92416434d805e81f49638531648b7,904b65bee578912a3bca938f0ba58528
@@ -52756,18 +52756,18 @@ subId 5548
 treatment EtOH_0.01pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosEtoh01StdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum 9af9fa4587f389cd5dcc0ef6a6291f8d,67e77b8ab1aa6c2d901dcfb4ecb5926b
@@ -52778,18 +52778,18 @@ subId 5548
 treatment EtOH_0.01pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdPk
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdPk
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -52797,22 +52797,22 @@ md5sum 75f03cd7a494998053a03059a7bbd757
 project wgEncode
 setType exp
 subId 5548
-tableName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdPk
+tableName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdPk
 treatment EtOH_0.01pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdRawDataRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum ec57158eb439975b397fe3cb0d97289b
@@ -52823,18 +52823,18 @@ subId 5548
 treatment EtOH_0.01pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdRawDataRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 865cdb67fa2c56d694921bf191b88224
@@ -52845,18 +52845,18 @@ subId 5548
 treatment EtOH_0.01pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01StdSig
+metaObject wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdSig
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -52864,22 +52864,22 @@ md5sum 5b8e3eb1c0dab633a30673a57adc7e35
 project wgEncode
 setType exp
 subId 5548
-tableName wgEncodeSydhTfbsMcf10aesCfosEtoh01StdSig
+tableName wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdSig
 treatment EtOH_0.01pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum 385818e70a0ac212aa6c03f5496287f3,faf0eec11b637838403fd9d51bbf7e44
@@ -52890,18 +52890,18 @@ subId 5549
 treatment 4OHTAM_1uM_12hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTam112hStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTam112hHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum 8db7dea07ea57dff52118a4a8af11bda,06dd7171222005d407f3383705010c81
@@ -52912,18 +52912,18 @@ subId 5549
 treatment 4OHTAM_1uM_12hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdPk
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdPk
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -52931,22 +52931,22 @@ md5sum 2fa64ee2de793e51fe58bb3d9c1b0dd5
 project wgEncode
 setType exp
 subId 5549
-tableName wgEncodeSydhTfbsMcf10aesCfosTam112hStdPk
+tableName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdPk
 treatment 4OHTAM_1uM_12hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdRawDataRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 1ede8fe771344ffcff085a4313a74141
@@ -52957,18 +52957,18 @@ subId 5549
 treatment 4OHTAM_1uM_12hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdRawDataRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum ce6b0c08e9ddf4e35cb0cf102874a32b
@@ -52979,18 +52979,18 @@ subId 5549
 treatment 4OHTAM_1uM_12hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hStdSig
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam112hHvdSig
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam112hStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -52998,22 +52998,22 @@ md5sum c336e2e3c793eef201a87bc974086ed0
 project wgEncode
 setType exp
 subId 5549
-tableName wgEncodeSydhTfbsMcf10aesCfosTam112hStdSig
+tableName wgEncodeSydhTfbsMcf10aesCfosTam112hHvdSig
 treatment 4OHTAM_1uM_12hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum 98d6e7dcc08427be31b9447aca26e32c,7437e9b77d1430d43417c1971b5560e3
@@ -53024,18 +53024,18 @@ subId 5551
 treatment 4OHTAM_1uM_4hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTam14hStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTam14hHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum 3085f765689b7f21c71a58ff1c6272aa,95a533962db06d7fdd3c7ecb0c6f91d1
@@ -53046,18 +53046,18 @@ subId 5551
 treatment 4OHTAM_1uM_4hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdPk
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdPk
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53065,22 +53065,22 @@ md5sum a65fb471a920d6e01784c77e0614e354
 project wgEncode
 setType exp
 subId 5551
-tableName wgEncodeSydhTfbsMcf10aesCfosTam14hStdPk
+tableName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdPk
 treatment 4OHTAM_1uM_4hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdRawDataRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 7d63c0deeef98fa9e88a31476690634d
@@ -53091,18 +53091,18 @@ subId 5551
 treatment 4OHTAM_1uM_4hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdRawDataRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum b815eaa337284eea462619cf8ff7a98d
@@ -53113,18 +53113,18 @@ subId 5551
 treatment 4OHTAM_1uM_4hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hStdSig
+metaObject wgEncodeSydhTfbsMcf10aesCfosTam14hHvdSig
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTam14hStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53132,22 +53132,22 @@ md5sum ca10d0c354bf1e54d1129ada8f839135
 project wgEncode
 setType exp
 subId 5551
-tableName wgEncodeSydhTfbsMcf10aesCfosTam14hStdSig
+tableName wgEncodeSydhTfbsMcf10aesCfosTam14hHvdSig
 treatment 4OHTAM_1uM_4hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum aee81e7d89f049d44fc344b8b1b7b496,d76a6db81c53ca015214cdd3619d5911
@@ -53158,18 +53158,18 @@ subId 5550
 treatment 4OHTAM_1uM_36hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTamStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCfosTamHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum c6862ed7d243aa368f5e4b23be0191d4,b2d5e9f58d919d6c488237577bdab299
@@ -53180,18 +53180,18 @@ subId 5550
 treatment 4OHTAM_1uM_36hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdPk
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdPk
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53199,22 +53199,22 @@ md5sum d5ff398f8f287eb419e135d7d4d9f728
 project wgEncode
 setType exp
 subId 5550
-tableName wgEncodeSydhTfbsMcf10aesCfosTamStdPk
+tableName wgEncodeSydhTfbsMcf10aesCfosTamHvdPk
 treatment 4OHTAM_1uM_36hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdRawDataRep1
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum d6a7a246aef33e1e08a7024a01c5ca76
@@ -53225,18 +53225,18 @@ subId 5550
 treatment 4OHTAM_1uM_36hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdRawDataRep2
 objType file
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum e76ff093cdf9a4b2c70192786641337d
@@ -53247,18 +53247,18 @@ subId 5550
 treatment 4OHTAM_1uM_36hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCfosTamStdSig
+metaObject wgEncodeSydhTfbsMcf10aesCfosTamHvdSig
 objType table
 antibody c-Fos
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCfosTamStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCfosTamHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53266,22 +53266,22 @@ md5sum c8f8feedb7c42f071d2bed1c727d90c7
 project wgEncode
 setType exp
 subId 5550
-tableName wgEncodeSydhTfbsMcf10aesCfosTamStdSig
+tableName wgEncodeSydhTfbsMcf10aesCfosTamHvdSig
 treatment 4OHTAM_1uM_36hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep1
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum c9a0dadadb91b656d8c9c7bb998ea7c3,520e05253f2e948d43a56863b6e5f0d1
@@ -53292,18 +53292,18 @@ subId 5545
 treatment EtOH_0.01pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep2
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCmycEtoh01StdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum e2f036448dd640deb95232ff9eb6cc8a,af15318fdb40a2ef001b8f20d130258b
@@ -53314,18 +53314,18 @@ subId 5545
 treatment EtOH_0.01pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdPk
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdPk
 objType table
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53333,22 +53333,22 @@ md5sum e1aa56a8a87c363be9817c2ed3069a50
 project wgEncode
 setType exp
 subId 5545
-tableName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdPk
+tableName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdPk
 treatment EtOH_0.01pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdRawDataRep1
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 3a8240f58d91819e634134426f74604e
@@ -53359,18 +53359,18 @@ subId 5545
 treatment EtOH_0.01pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdRawDataRep2
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 252fd780e6e0b8bf73494306be427d4c
@@ -53381,18 +53381,18 @@ subId 5545
 treatment EtOH_0.01pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01StdSig
+metaObject wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdSig
 objType table
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-04
 dateUnrestricted 2012-11-03
-fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53400,22 +53400,22 @@ md5sum ad79ae85cf87e688f13328c32d35a282
 project wgEncode
 setType exp
 subId 5545
-tableName wgEncodeSydhTfbsMcf10aesCmycEtoh01StdSig
+tableName wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdSig
 treatment EtOH_0.01pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep1
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum 30593833ae4d882116f20d3c021dbd59,b24e3ba0b87492fcfc65c1759beec9b2
@@ -53426,18 +53426,18 @@ subId 5547
 treatment 4OHTAM_1uM_4hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep2
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCmycTam14hStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesCmycTam14hHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum b89450c1f3e3aa4b4281bfef237f0e83,c642d1ac112345958468da36ca9fcd36
@@ -53448,18 +53448,18 @@ subId 5547
 treatment 4OHTAM_1uM_4hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdPk
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdPk
 objType table
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53467,22 +53467,22 @@ md5sum a0c8a29a4324f992d4b89eec2ce5fca7
 project wgEncode
 setType exp
 subId 5547
-tableName wgEncodeSydhTfbsMcf10aesCmycTam14hStdPk
+tableName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdPk
 treatment 4OHTAM_1uM_4hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdRawDataRep1
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum d644584a2341d985710468388c54fd79
@@ -53493,18 +53493,18 @@ subId 5547
 treatment 4OHTAM_1uM_4hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdRawDataRep2
 objType file
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 2085275c3e60a80b3bc4b1c279438611
@@ -53515,18 +53515,18 @@ subId 5547
 treatment 4OHTAM_1uM_4hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hStdSig
+metaObject wgEncodeSydhTfbsMcf10aesCmycTam14hHvdSig
 objType table
 antibody c-Myc
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesCmycTam14hStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53534,22 +53534,22 @@ md5sum 72333e781d8813c7da3aedced74d42d5
 project wgEncode
 setType exp
 subId 5547
-tableName wgEncodeSydhTfbsMcf10aesCmycTam14hStdSig
+tableName wgEncodeSydhTfbsMcf10aesCmycTam14hHvdSig
 treatment 4OHTAM_1uM_4hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep1
 objType file
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum b68d14d5e23cb5b91b22e2d209baabfd,29b7234b4f9207643119921ff2a640cc
@@ -53560,18 +53560,18 @@ subId 5544
 treatment 4OHTAM_1uM_36hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep2
 objType file
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesE2f4TamStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesE2f4TamHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum 5a9ef1d4fe92eb72764ebb199f98469c,1219256ddde9d8e0da5e3ef88622c7ac
@@ -53582,18 +53582,18 @@ subId 5544
 treatment 4OHTAM_1uM_36hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdPk
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdPk
 objType table
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53601,22 +53601,22 @@ md5sum 0e02db7740d3de6a993581dcd11b3e69
 project wgEncode
 setType exp
 subId 5544
-tableName wgEncodeSydhTfbsMcf10aesE2f4TamStdPk
+tableName wgEncodeSydhTfbsMcf10aesE2f4TamHvdPk
 treatment 4OHTAM_1uM_36hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdRawDataRep1
 objType file
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum e91c0c1a54d553e722a7414ed6b899e1
@@ -53627,18 +53627,18 @@ subId 5544
 treatment 4OHTAM_1uM_36hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdRawDataRep2
 objType file
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 78071704f79e854acfa594d6bdcb908d
@@ -53649,18 +53649,18 @@ subId 5544
 treatment 4OHTAM_1uM_36hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesE2f4TamStdSig
+metaObject wgEncodeSydhTfbsMcf10aesE2f4TamHvdSig
 objType table
 antibody E2F4
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesE2f4TamStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesE2f4TamHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -53668,7 +53668,7 @@ md5sum 9ff5178a3853d1a711239b0db95137cd
 project wgEncode
 setType exp
 subId 5544
-tableName wgEncodeSydhTfbsMcf10aesE2f4TamStdSig
+tableName wgEncodeSydhTfbsMcf10aesE2f4TamHvdSig
 treatment 4OHTAM_1uM_36hr
 view Signal
 
@@ -53818,6 +53818,73 @@ setType input
 subId 3255
 tableName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig
 treatment EtOH_0.01pct_12hr
+view Signal
+
+metaObject wgEncodeSydhTfbsMcf10aesInputHvdAlnRep1
+objType file
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-04-25
+dateUnrestricted 2013-01-25
+fileName wgEncodeSydhTfbsMcf10aesInputHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesInputHvdAlnRep1.bam.bai
+grant Snyder
+lab Harvard
+md5sum 388206fec78e0c65af7fb4b331569a4c,19ce7e24857d746b75a7ea5d2d11eb62
+project wgEncode
+replicate 1
+setType input
+subId 6819
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf10aesInputHvdRawDataRep1
+objType file
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-04-25
+dateUnrestricted 2013-01-25
+fileName wgEncodeSydhTfbsMcf10aesInputHvdRawDataRep1.fastq.tgz
+grant Snyder
+lab Harvard
+md5sum e1dc12d511194c241afe1f1dde8db2f2
+project wgEncode
+replicate 1
+setType input
+subId 6819
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf10aesInputHvdSig
+objType table
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-04-25
+dateUnrestricted 2013-01-25
+fileName wgEncodeSydhTfbsMcf10aesInputHvdSig.bigWig
+grant Snyder
+lab Harvard
+labVersion PeakSeq1.0
+md5sum 07f30dbb5df95fd92cd0c045af37ea37
+project wgEncode
+setType input
+subId 6819
+tableName wgEncodeSydhTfbsMcf10aesInputHvdSig
+treatment None
 view Signal
 
 metaObject wgEncodeSydhTfbsMcf10aesInputStdAln
@@ -54654,18 +54721,18 @@ tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig
 treatment EtOH_0.01pct_12hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep1
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep1
 objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep1.bam,wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep1.bam.bai
 grant Snyder
 lab Harvard
 md5sum 5291c8d1e324b0f0f2f3803964f043f9,29f74b67d85128cfee935f9240f9fe64
@@ -54676,18 +54743,18 @@ subId 5546
 treatment 4OHTAM_1uM_12hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep2
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep2
 objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesStat3Tam112hStdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep2.bam,wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdAlnRep2.bam.bai
 grant Snyder
 lab Harvard
 md5sum 273eecbae73cdeb41423cc2626794ac5,b746d812e67ac72e64ffba7be3a41944
@@ -54698,18 +54765,18 @@ subId 5546
 treatment 4OHTAM_1uM_12hr
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdPk
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdPk
 objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdPk.narrowPeak.gz
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -54717,22 +54784,22 @@ md5sum e86b3fed3aa38002751539c8e1456b1e
 project wgEncode
 setType exp
 subId 5546
-tableName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdPk
+tableName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdPk
 treatment 4OHTAM_1uM_12hr
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdRawDataRep1
 objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdRawDataRep1.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 1c9b3b3af06c3b326782a84e1b07473c
@@ -54743,18 +54810,18 @@ subId 5546
 treatment 4OHTAM_1uM_12hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdRawDataRep2
 objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdRawDataRep2.fastq.tgz
 grant Snyder
 lab Harvard
 md5sum 1ab0b139ee1259194fd796dceedcd56e
@@ -54765,18 +54832,18 @@ subId 5546
 treatment 4OHTAM_1uM_12hr
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hStdSig
+metaObject wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdSig
 objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/None/Input/std
+control Harvard_Control
+controlId MCF10A-Er-Src/None/Input/Harvard
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
-fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdSig.bigWig
+fileName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdSig.bigWig
 grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
@@ -54784,7 +54851,7 @@ md5sum 12ab770dad691d2062fc6f0af078d54e
 project wgEncode
 setType exp
 subId 5546
-tableName wgEncodeSydhTfbsMcf10aesStat3Tam112hStdSig
+tableName wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdSig
 treatment 4OHTAM_1uM_12hr
 view Signal
 
@@ -58777,4 +58844,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1647416514
+# MAGIC: -1368521994
