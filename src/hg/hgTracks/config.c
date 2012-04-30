@@ -17,6 +17,38 @@
 #include "hubConnect.h"
 #include "fileUi.h"
 
+static void themeDropDown(struct cart* cart)
+/* Create drop down for UI themes. 
+ * specfied in hg.conf like this
+ * browser.theme.modern=background.png,HGStyle
+ * */
+{
+struct slName* themes = cfgNamesWithPrefix("browser.theme.");
+//struct slName* themes = cfgNames();
+if (themes==NULL)
+    return;
+
+hPrintf("<TR><TD>website style:");
+hPrintf("<TD style=\"text-align: right\">");
+
+char *labels[50];
+struct slName* el;
+int i = 0;
+el = themes;
+for (el = themes; el != NULL && i<50; el = el->next)
+    {
+    char* name = el->name;
+    name = chopPrefix(name); // chop off first two words
+    name = chopPrefix(name);
+    labels[i] = name;
+    i++;
+    }
+char* currentTheme = cartOptionalString(cart, "classic"); // default value is classic
+hDropList("theme", labels, i, currentTheme);
+slFreeList(themes);
+hPrintf("</TD>");
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -378,7 +410,9 @@ if (trackLayoutInclFontExtras())
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
     }
-hPrintf("<TR><BR>");
+
+themeDropDown(cart);
+
 hTableStart();
 if (ideoTrack != NULL)
     {
@@ -459,7 +493,6 @@ freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
 }
-
 
 void configPage()
 /* Put up configuration page. */
