@@ -195,3 +195,24 @@ skipInvalid yes
     #   22070916 bases of 1923624051 (1.147%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/bed/genscan
+    cd /hive/data/genomes/ochPri2/bed/genscan
+    time doGenscan.pl ochPri2 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    329m1.050s
+    # continuing:
+    time doGenscan.pl -continue=load ochPri2 > load.log 2>&1
+    #   real    12m8.926s
+    # failed out of inodes on hive:
+    time doGenscan.pl -continue=cleanup ochPri2 > cleanup.log 2>&1
+    #   real    35m52.560s
+
+    cat fb.ochPri2.genscan.txt
+    #   76450061 bases of 1923624051 (3.974%) in intersection
+    cat fb.ochPri2.genscanSubopt.txt
+    #   102217862 bases of 1923624051 (5.314%) in intersection
+
+#########################################################################

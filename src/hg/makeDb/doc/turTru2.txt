@@ -380,3 +380,23 @@ close (FH);
     #   29423228 bases of 2332402443 (1.261%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/genscan
+    cd /hive/data/genomes/turTru2/bed/genscan
+    time doGenscan.pl turTru2 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    298m41.971s
+    time doGenscan.pl -continue=load turTru2 > load.log 2>&1
+    #   real    17m53.512s
+    # failed out of inodes on the hive FS, continuing:
+    time doGenscan.pl -continue=cleanup turTru2 > cleanup.log 2>&1
+    #   real    20m48.384s
+
+    cat fb.turTru2.genscan.txt
+    #   53945792 bases of 2332402443 (2.313%) in intersection
+    cat fb.turTru2.genscanSubopt.txt
+    #   59031653 bases of 2332402443 (2.531%) in intersection
+
+#########################################################################
