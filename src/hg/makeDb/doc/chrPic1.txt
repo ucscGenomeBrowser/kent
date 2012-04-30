@@ -400,3 +400,21 @@ close (FH);
     #   15937502 bases of 2158289746 (0.738%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/chrPic1/bed/genscan
+    cd /hive/data/genomes/chrPic1/bed/genscan
+    time doGenscan.pl chrPic1 > do.log 2>&1
+    # one failed job:
+./runGsBig.csh JH584641 000 gtf/000/JH584641.gtf pep/000/JH584641.pep subopt/000/JH584641.bed
+    # rerunning with window size of 200000
+    #   real    0m45.659s
+    #   continuing:
+    time doGenscan.pl -continue=makeBed chrPic1 > makeBed.log 2>&1
+    #   real    73m21.769s
+
+    cat fb.chrPic1.genscan.txt
+    #   41301989 bases of 2158289746 (1.914%) in intersection
+    cat fb.chrPic1.genscanSubopt.txt
+    #   50395023 bases of 2158289746 (2.335%) in intersection
+
+#########################################################################
