@@ -40,9 +40,28 @@ struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
-
-void sendMail(char *email, char *subject, char *msg)
+void  displayMailSuccess()
+/* display mail success msg, and set cookie */
 {
+char *email = cartUsualString(cart, "hgLogin_email", "");
+char *obj=cartUsualString(cart, "hgLogin_helpWith", "");
+//safecpy(obj, sizeof(obj),object);
+hPrintf(
+"<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
+"\n"
+"<h2>UCSC Genome Browser</h2>"
+"<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to "
+" <span id=\"emailaddress\">%s</span> containing %s...</p>"
+"\n"
+"<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>"
+, email
+, obj
+);
+//  backToDoLoginPage(12);
+}
+void sendMail(char *email, char *subject, char *msg, char *object)
+{
+char *hgLoginHost = hgLoginLinkHost();
 char cmd[256];
 safef(cmd,sizeof(cmd),
 // "echo 'Hello from your favoriate browser at: %s %s ' | mail -s \"Greeting form UCSC Genome Browser\" %s"
@@ -63,6 +82,7 @@ if (result == -1)
     }
 else
     {
+/*************************** old mail **************
     hPrintf(
     "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
@@ -71,9 +91,39 @@ else
     "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
     , email
     );
-    }
-}
+********************************** old mail ****/
+/*************************
+hPrintf(
+"<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
+"\n"
+"<h2>UCSC Genome Browser</h2>"
+"<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to "
+" <span id=\"emailaddress\">$email</span> containing %s...</p>"
+"\n"
+"<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>"
+"\n"
+"</div><!-- END - confirmationBox -->"
+"\n"
+, object);
+**********************/
+cartSetString(cart, "hgLogin_helpWith", "password");
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
 
+"window.location =\"http://%s/cgi-bin//hgLogin?hgLogin.do.displayMailSuccess=1\""
+"//-->"
+"\n"
+"</script>"
+, hgLoginHost
+);
+
+cartSetString(cart, "hgLogin.do.displayMailSuccess", "1");
+//displayMailSuccess("password");
+//return;
+}
+}
 
 
 
@@ -766,9 +816,9 @@ hPrintf(
 );
 hPrintf(
 "<div class=\"inputGroup\">"
-"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"username\" id=\"username\" checked>"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\" checked>"
 "<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
-"<div class=\"acctHelpSection\"><input name=\"helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
 "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
 "\n"
 "</div>"
@@ -816,7 +866,7 @@ char httpLink[256]="Visit http://www.genome.ucsc.edu ";
 safef(subject, sizeof(subject),"Greeting form UCSC about %s", email);
 safecpy(msg, sizeof(msg), "Hello from your favoriate browser at UCSC. ");
 safecat (msg, sizeof(msg), httpLink);
-    sendMail(email, subject, msg);
+    sendMail(email, subject, msg, "password");
     freez(&errMsg);
     errMsg = cloneString("Forgot user name selected!");
     displayAccHelpPage(conn);
@@ -1176,6 +1226,8 @@ else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
     accountHelp(conn);
 else if (cartVarExists(cart, "hgLogin.do.activateAccount"))
     accountHelp(conn);
+else if (cartVarExists(cart, "hgLogin.do.displayMailSuccess"))
+    displayMailSuccess(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
