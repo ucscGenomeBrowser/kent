@@ -1270,7 +1270,7 @@ cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeRange);
-position = cartOptionalString(cart, hgvaRange);
+position = cloneString(cartOptionalString(cart, hgvaRange));
 if (isEmpty(position))
     position = hDefaultPos(database);
 cartSetString(cart, hgvaRange, position);
@@ -1296,7 +1296,7 @@ else if (webGotWarnings())
     {
     // We land here when lookupPosition pops up a warning box.
     // Reset the problematic position and show the main page.
-    position = hDefaultPos(database);
+    position = cloneString(cartUsualString(cart, "lastPosition", hDefaultPos(database)));
     cartSetString(cart, hgvaRange, position);
     doMainPage();
     }
