@@ -23,7 +23,7 @@ bool pubsHasSupp = TRUE;
 bool pubsIsElsevier = FALSE; 
 
 // internal section types in mysql table
-static char* pubsSecNames[] ={
+static char *pubsSecNames[] ={
       "header", "abstract",
       "intro", "methods",
       "results", "discussion",
@@ -38,38 +38,41 @@ static int pubsSecChecked[] ={
       1, 0,
       0, 1 };
 
-static char* pubsSequenceTable;
+static char *pubsSequenceTable;
 
 
-/* ------  START based on QA's suggestions, functions to replace old HTML tables */
-
+/* ------ functions to replace HTML4 tables with HTML5 constructs */
+/* Web wrappers incorporating tag, id, and class HTML attributes, to support
+ * styling and test */
 
 /* Suffix -S for  "function accepts style parameter"
  * Suffix -C for  "function accepts class parameter"
  * Suffix -CI for "function accepts class and id parameter"
+ *
+ * Some functions are commented out because they are not yet used.
  */
 
-static void web2Start(char* tag)
+static void web2Start(char *tag)
 {
 printf("<%s>\n", tag);
 }
 
-static void web2End(char* tag)
+static void web2End(char *tag)
 {
 printf("</%s>\n", tag);
 }
 
-static void web2StartS(char* style, char* tag)
+static void web2StartS(char *style, char *tag)
 {
 printf("<%s style=\"%s\">\n", tag, style);
 }
 
-static void web2StartC(char* class, char* tag)
+static void web2StartC(char *class, char *tag)
 {
 printf("<%s class=\"%s\">\n", tag, class);
 }
 
-static void web2StartCI(char* class, char* id, char* tag)
+static void web2StartCI(char *class, char *id, char *tag)
 {
 if ((id==NULL) && (class==NULL))
     web2Start(tag);
@@ -79,33 +82,33 @@ else
     printf("<%s class=\"%s\" id=\"%s\">\n", tag, class, id);
 }
 
-static void web2PrintS(char* style, char* tag, char* label)
+static void web2PrintS(char *style, char *tag, char *label)
 {
 printf("<%s style=\"%s\">%s</%s>\n", tag, style, label, tag);
 }
 
-//static void web2PrintC(char* class, char* tag, char* label)
+//static void web2PrintC(char *class, char *tag, char *label)
 //{
 //printf("<%s class=\"%s\">%s</%s>\n", tag, class, label, tag);
 //}
 
-//static void web2Print(char* tag, char* label)
+//static void web2Print(char *tag, char *label)
 //{
 //printf("<%s>%s</%s>\n", tag, label, tag);
 //}
 
-static void web2StartTableC(char* class)             { web2StartC(class, "table"); }
+static void web2StartTableC(char *class)             { web2StartC(class, "table"); }
 
-static void web2StartTheadC(char* class)             { web2StartC(class, "thead"); }
+static void web2StartTheadC(char *class)             { web2StartC(class, "thead"); }
 static void web2EndThead()                           { web2End("thead"); }
 
-static void web2StartTbodyS(char* style)             { web2StartS(style, "tbody"); }
+static void web2StartTbodyS(char *style)             { web2StartS(style, "tbody"); }
 
 static void web2StartCell()                          { web2Start("td"); }
 static void web2EndCell()                            { web2End("td"); }
-static void web2StartCellS(char* style)              { web2StartS(style, "td"); }
-//static void web2PrintCell(char* label)               { web2Print("td", label); }
-static void web2PrintCellS(char* style, char *label) { web2PrintS(style, "td", label); }
+static void web2StartCellS(char *style)              { web2StartS(style, "td"); }
+//static void web2PrintCell(char *label)               { web2Print("td", label); }
+static void web2PrintCellS(char *style, char *label) { web2PrintS(style, "td", label); }
 
 static void web2StartRow()                           { web2Start("tr"); }
 static void web2EndRow()                             { web2End("tr"); }
@@ -116,10 +119,10 @@ static void web2EndTbody()                           { web2End("tbody"); }
 //static void web2StartTable()                         { web2Start("table"); }
 static void web2EndTable()                           { web2EndTbody(); web2End("table"); }
 
-static void web2StartDivCI(char* class, char* id)    { web2StartCI(class, id, "div"); }
-static void web2StartDivC(char* class)               { web2StartC(class, "div"); }
+static void web2StartDivCI (char *class, char *id)    { web2StartCI(class, id, "div"); }
+static void web2StartDivC (char *class)               { web2StartC(class, "div"); }
 
-static void web2EndDiv(char* comment) 
+static void web2EndDiv(char *comment) 
 {
 printf("</div> <!-- %s -->\n", comment);
 }
@@ -131,7 +134,7 @@ printf("<th width=\"%d%%\">", width);
 printf("%s</th>", label);
 }
 
-static void web2PrintCellF(char* format, ...)
+static void web2PrintCellF(char *format, ...)
 /* print a td with format */
 {
 va_list args;
@@ -143,9 +146,7 @@ web2EndCell();
 va_end(args);
 }
 
-
-
-static void web2StartSection(char* id, char* format, ...)
+static void web2StartSection(char *id, char *format, ...)
 /* create a new section on the web page */
 {
 va_list args;
@@ -165,22 +166,24 @@ static void web2EndSection()
 web2EndDiv("section");
 }
 
-/* ------  END based on QA's suggestions, functions to replace old HTML tables */
+/* ------  */
 
-static char* mangleUrl(char* url) 
+
+
+static char *mangleUrl(char *url) 
 /* add publisher specific parameters to url and return new url*/
 {
 if (!stringIn("sciencedirect.com", url))
     return url;
     
 // cgi param to add the "UCSC matches" sciverse application to elsevier's sciencedirect
-char* sdAddParam = "?svAppaddApp=298535"; 
-char* longUrl = catTwoStrings(url, sdAddParam);
-char* newUrl = replaceChars(longUrl, "article", "svapps");
+char *sdAddParam = "?svAppaddApp=298535"; 
+char *longUrl = catTwoStrings(url, sdAddParam);
+char *newUrl = replaceChars(longUrl, "article", "svapps");
 return newUrl;
 }
 
-static void printFilterLink(char* pslTrack, char* articleId, char* articleTable)
+static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
     int start = cgiInt("o");
@@ -188,7 +191,7 @@ static void printFilterLink(char* pslTrack, char* articleId, char* articleTable)
     char qBuf[1024];
     struct sqlConnection *conn = hAllocConn(database);
     safef(qBuf, sizeof(qBuf), "SELECT CONCAT(firstAuthor, year) FROM %s WHERE articleId='%s';", articleTable, articleId);
-    char* dispId = sqlQuickString(conn, qBuf);
+    char *dispId = sqlQuickString(conn, qBuf);
 
     printf(
         "      <div class=\"subsection\">");
@@ -204,16 +207,16 @@ static void printFilterLink(char* pslTrack, char* articleId, char* articleTable)
     
 }
 
-static char* makeSqlMarkerList(void)
+static char *makeSqlMarkerList(void)
 /* return list of sections from cgi vars, format like "'abstract','header'" */
 {
 int secCount = sizeof(pubsSecNames)/sizeof(char *);
-struct slName* names = NULL;
+struct slName *names = NULL;
 int i;
 for (i=0; i<secCount; i++) 
 {
     // add ' around name and add to list
-    char* secName = pubsSecNames[i];
+    char *secName = pubsSecNames[i];
     if (cgiOptionalInt(secName, pubsSecChecked[i]))
     {
         char nameBuf[100];
@@ -225,14 +228,14 @@ for (i=0; i<secCount; i++)
 if (names==0)
     errAbort("You need to specify at least one article section.");
 
-char* nameListString = slNameListToString(names, ',');
+char *nameListString = slNameListToString(names, ',');
 slNameFree(names);
 return nameListString;
 }
 
 
-static struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* markerTable, \
-    char* articleTable, char* item, int itemLimit, char* sectionList)
+static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *markerTable, \
+    char *articleTable, char *item, int itemLimit, char *sectionList)
 /* query marker rows from mysql, based on http parameters  */
 {
 char query[4000];
@@ -278,7 +281,7 @@ printf("<FORM ACTION=\"hgc?%s&o=%s&t=%s&g=%s&i=%s\" METHOD=\"get\">\n",
 
 for (i=0; i<labelCount; i++) 
 {
-    char* name = pubsSecNames[i];
+    char *name = pubsSecNames[i];
     // checkboxes default to 0 unless checked, see 
     // http://stackoverflow.com/questions/2520952/how-come-checkbox-state-is-not-always-passed-along-to-php-script
     printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"0\" />\n", pubsSecNames[i]);
@@ -301,8 +304,8 @@ printf("<INPUT TYPE=\"submit\" VALUE=\"Submit\" />\n");
 printf("</FORM><P>\n");
 }
 
-static void printLimitWarning(struct sqlConnection *conn, char* markerTable, 
-    char* item, int itemLimit, char* sectionList)
+static void printLimitWarning(struct sqlConnection *conn, char *markerTable, 
+    char *item, int itemLimit, char *sectionList)
 {
 char query[4000];
 safef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
@@ -314,29 +317,29 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
 }
 }
 
-static void printMarkerSnippets(struct sqlConnection *conn, char* articleTable, char* markerTable, char* item)
+static void printMarkerSnippets(struct sqlConnection *conn, char *articleTable, char *markerTable, char *item)
 {
 
 /* do not show more snippets than this limit */
 int itemLimit=1000;
 
 printSectionCheckboxes();
-char* sectionList = makeSqlMarkerList();
+char *sectionList = makeSqlMarkerList();
 printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
 
 printf("<H3>Snippets from Publications:</H3>");
-struct sqlResult* sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList);
+struct sqlResult *sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList);
 
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char* articleId = row[0];
-    char* url       = row[1];
-    char* title     = row[2];
-    char* authors   = row[3];
-    char* citation  = row[4];
-    char* pmid      = row[5];
-    char* snippets  = row[6];
+    char *articleId = row[0];
+    char *url       = row[1];
+    char *title     = row[2];
+    char *authors   = row[3];
+    char *citation  = row[4];
+    char *pmid      = row[5];
+    char *snippets  = row[6];
     url = mangleUrl(url);
     printf("<A HREF=\"%s\">%s</A> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
@@ -354,7 +357,7 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
-static char* printArticleInfo(struct sqlConnection *conn, char* item, char* pubsArticleTable)
+static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubsArticleTable)
 /* Header with information about paper, return documentId */
 {
 char query[512];
@@ -373,12 +376,12 @@ if ((row = sqlNextRow(sr)) == NULL)
     }
 
 articleId = cloneString(row[0]);
-char* url      = row[1];
-char* title    = row[2];
-char* authors  = row[3];
-char* cit      = row[4];
-char* abstract = row[5];
-char* pmid     = row[6];
+char *url      = row[1];
+char *title    = row[2];
+char *authors  = row[3];
+char *cit      = row[4];
+char *abstract = row[5];
+char *pmid     = row[6];
 
 url = mangleUrl(url);
 if (strlen(abstract)==0) 
@@ -403,14 +406,14 @@ sqlFreeResult(&sr);
 return articleId;
 }
 
-static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, \
-    char* articleId, char *item, char* seqName, int start)
+static struct hash *getSeqIdHash(struct sqlConnection *conn, char *trackTable, \
+    char *articleId, char *item, char *seqName, int start)
 /* return a hash with the sequence IDs for a given chain of BLAT matches */
 {
 char query[512];
 /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
 safef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
-char* seqIdPresent = sqlQuickString(conn, query);
+char *seqIdPresent = sqlQuickString(conn, query);
 if (!seqIdPresent) {
     return NULL;
 }
@@ -422,8 +425,8 @@ if (pubsDebug)
     printf("%s<br>", query);
 
 // split comma-sep list into parts
-char* seqIdCoordString = sqlQuickString(conn, query);
-char* seqIdCoords[1024];
+char *seqIdCoordString = sqlQuickString(conn, query);
+char *seqIdCoords[1024];
 int partCount = chopString(seqIdCoordString, ",", seqIdCoords, ArraySize(seqIdCoords));
 int i;
 
@@ -455,14 +458,14 @@ web2EndThead();
 web2StartTbodyS("font-family: Arial, Helvetica, sans-serif; line-height: 1.5em; font-size: 0.9em;");
 }
 
-static void printAddWbr(char* text, int distance) 
+static void printAddWbr(char *text, int distance) 
 /* a crazy hack for firefox/mozilla that is unable to break long words in tables
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
  */
 {
 int i;
 i = 0;
-char* c;
+char *c;
 c = text;
 bool doNotBreak = FALSE;
 while (*c != 0) 
@@ -480,7 +483,7 @@ while (*c != 0)
     }
 }
 
-void printHgTracksLink(char* db, char* chrom, int start, int end, char* linkText, char* optUrlStr)
+void printHgTracksLink(char *db, char *chrom, int start, int end, char *linkText, char *optUrlStr)
 /* print link to hgTracks for db at pos */
 {
 char buf[1024];
@@ -499,17 +502,17 @@ if (optUrlStr==NULL)
 printf("<A HREF=\"%s&amp;db=%s&amp;position=%s:%d-%d&amp;%s\">%s</A>\n", hgTracksPathAndSettings(), db, chrom, start, end, optUrlStr, linkText);
 }
 
-void printGbLinks(struct slName* locs) 
+void printGbLinks(struct slName *locs) 
 /* print hash keys in format hg19/chr1:1-1000 as links */
 {
 struct slName *el;
 for (el = locs; el != NULL; el = el->next) 
     {
-    char* locString = el->name;
-    char* db       = cloneNextWordByDelimiter(&locString, '/');
-    char* chrom    = cloneNextWordByDelimiter(&locString, ':');
-    char* startStr = cloneNextWordByDelimiter(&locString, '-');
-    char* endStr   = cloneString(locString);
+    char *locString = el->name;
+    char *db       = cloneNextWordByDelimiter(&locString, '/');
+    char *chrom    = cloneNextWordByDelimiter(&locString, ':');
+    char *startStr = cloneNextWordByDelimiter(&locString, '-');
+    char *endStr   = cloneString(locString);
 
     int start = atoi(startStr);
     int end = atoi(endStr);
@@ -525,7 +528,7 @@ for (el = locs; el != NULL; el = el->next)
 
 
 
-static bool printSeqSection(char* articleId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta, char* pslTable, char* articleTable)
+static bool printSeqSection(char *articleId, char *title, bool showDesc, struct sqlConnection *conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta, char *pslTable, char *articleTable)
 /* print a section with a table of sequences, show only sequences with IDs in hash,
  * There are two sections, respective sequences are shown depending on isClickedSection and clickedSeqs 
  *   - seqs that were clicked on (isClickedSection=True) -> show only seqs in clickedSeqs
@@ -543,7 +546,7 @@ if (pubsDebug)
 struct sqlResult *sr = sqlGetResult(conn, query);
 
 // construct title for section
-char* otherFormat = NULL;
+char *otherFormat = NULL;
 if (fasta)
     otherFormat = "table";
 else
@@ -569,13 +572,13 @@ char **row;
 bool foundSkippedRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char* fileDesc = row[0];
-    char* snippet  = row[1];
-    char* locString= row[2];
-    char* artId    = row[3];
-    char* fileId   = row[4];
-    char* seqId    = row[5];
-    char* seq      = row[6];
+    char *fileDesc = row[0];
+    char *snippet  = row[1];
+    char *locString= row[2];
+    char *artId    = row[3];
+    char *fileId   = row[4];
+    char *seqId    = row[5];
+    char *seq      = row[6];
 
     // annotation (=sequence) ID is a 64 bit int with 10 digits for 
     // article, 3 digits for file, 5 for annotation
@@ -617,7 +620,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             //locs = charSepToSlNames(locString, ',');
 
             web2StartCell();
-            char* locArr[1024];
+            char *locArr[1024];
             int partCount = chopString(locString, ",", locArr, ArraySize(locArr));
             if (partCount==0)
                 printf("No matches");
@@ -644,13 +647,13 @@ sqlFreeResult(&sr);
 return foundSkippedRows;
 }
 
-static void printSeqInfo(struct sqlConnection* conn, char* trackTable,
-    char* pslTable, char* articleId, char* item, char* seqName, int start, 
-    bool fileDesc, bool fasta, char* articleTable)
+static void printSeqInfo(struct sqlConnection *conn, char *trackTable,
+    char *pslTable, char *articleId, char *item, char *seqName, int start, 
+    bool fileDesc, bool fasta, char *articleTable)
     /* print sequences, split into two sections 
      * two sections: one for sequences that were clicked, one for all others*/
 {
-struct hash* clickedSeqs = getSeqIdHash(conn, trackTable, articleId, item, seqName, start);
+struct hash *clickedSeqs = getSeqIdHash(conn, trackTable, articleId, item, seqName, start);
 
 bool skippedRows;
 if (clickedSeqs) 
@@ -667,7 +670,7 @@ if (pubsIsElsevier)
 freeHash(&clickedSeqs);
 }
 
-static void printTrackVersion(struct trackDb *tdb, struct sqlConnection* conn, char* item) 
+static void printTrackVersion(struct trackDb *tdb, struct sqlConnection *conn, char *item) 
 {
 char versionString[256];
 char dateReference[256];
@@ -805,14 +808,14 @@ void doPubsDetails(struct trackDb *tdb, char *item)
 
 int start        = cgiInt("o");
 int end          = cgiOptionalInt("t", 0);
-char* trackTable = cgiString("g");
-char* aliTable   = cgiOptionalString("aliTable");
+char *trackTable = cgiString("g");
+char *aliTable   = cgiOptionalString("aliTable");
 int fasta        = cgiOptionalInt("fasta", 0);
 pubsDebug        = cgiOptionalInt("debug", 0);
 
 struct sqlConnection *conn = hAllocConn(database);
 
-char* articleTable = trackDbRequiredSetting(tdb, "pubsArticleTable");
+char *articleTable = trackDbRequiredSetting(tdb, "pubsArticleTable");
 
 if (stringIn("Psl", trackTable))
     { 
@@ -836,7 +839,7 @@ else
     printTrackVersion(tdb, conn, item);
     if (stringIn("Marker", trackTable))
         {
-        char* markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
+        char *markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
         printPositionAndSize(start, end, 0);
         printMarkerSnippets(conn, articleTable, markerTable, item);
         }
@@ -844,7 +847,7 @@ else
         {
         printPositionAndSize(start, end, 1);
         pubsSequenceTable = trackDbRequiredSetting(tdb, "pubsSequenceTable");
-        char* articleId = printArticleInfo(conn, item, articleTable);
+        char *articleId = printArticleInfo(conn, item, articleTable);
         if (articleId!=NULL) 
             {
             char *pslTable = trackDbRequiredSetting(tdb, "pubsPslTrack");
