@@ -182,17 +182,6 @@ sqlFreeResult(&sr);
 return foundIndex;
 }
 
-boolean tableMayNotBeSorted(char *table)
-/* Return TRUE if table name is recognized as one that gets ongoing updates. */
-{
-return (endsWith(table, "_mrna") ||
-	endsWith(table, "_est") ||
-	endsWith(table, "_intronEst") ||
-	sameString(table, "xenoMrna") ||
-	sameString(table, "xenoEst") ||
-	sameString(table, "refGene"));
-}
-
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
@@ -220,6 +209,6 @@ if (!asdInitBed3Fields(self))
 // When a table has an index on endField, sometimes the query optimizer uses it
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->hasEndFieldIndex = sqlTableHasIndexOn(self->conn, self->table, self->endField);
-self->notSorted = tableMayNotBeSorted(table);
+self->notSorted = TRUE; // True for more tables than I counted on, e.g. snp135 (bc it's packed??)
 return (struct annoStreamer *)self;
 }
