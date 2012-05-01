@@ -130,7 +130,7 @@ for (;;)
 		asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
 		}
 	    if (fieldCount > ArraySize(row))
-		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, ArraySize(row));
+		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, (unsigned long)ArraySize(row));
 	    lastField = fieldCount - 1;
 	    *retFieldCount = fieldCount;
 

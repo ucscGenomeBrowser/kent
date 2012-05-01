@@ -159,4 +159,38 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/dipOrd1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/dipOrd1/bed/cpgIslands
+    cd /hive/data/genomes/dipOrd1/bed/cpgIslands
+    time doCpgIslands.pl dipOrd1 > do.log 2>&1
+    #   real    635m52.950s
+    #   fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m18.163s
+    time doCpgIslands.pl -continue=cleanup dipOrd1 > cleanup.log 2>&1
+    #   real    97m27.451s
 
+    cat fb.dipOrd1.cpgIslandExt.txt
+    #   16112003 bases of 1844961421 (0.873%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/dipOrd1/bed/genscan
+    cd /hive/data/genomes/dipOrd1/bed/genscan
+    time doGenscan.pl dipOrd1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    317m41.669s
+    time doGenscan.pl -continue=load dipOrd1 > load.log 2>&1
+    #   real    14m39.736s
+    # failed out of inodes on hive:
+    time doGenscan.pl -continue=cleanup dipOrd1 > cleanup.log 2>&1
+    #   real    43m1.037s
+
+    cat fb.dipOrd1.genscan.txt
+    #   46775156 bases of 1844961421 (2.535%) in intersection
+    cat fb.dipOrd1.genscanSubopt.txt
+    #   46026502 bases of 1844961421 (2.495%) in intersection
+
+#########################################################################

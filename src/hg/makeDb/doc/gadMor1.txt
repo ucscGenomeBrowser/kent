@@ -359,3 +359,36 @@ close (FH);
     ln -s `pwd`/gadMor1.2bit /gbdb/gadMor1/gadMor1.2bit
 
 ########################################################################
+# cpgIslandExt (DONE - 2012-04-19 - Hiram)
+    mkdir /hive/data/genomes/gadMor1/bed/cpgIslands
+    cd /hive/data/genomes/gadMor1/bed/cpgIslands
+
+    # this procedure was done during development of the script to do all
+    #   this automatically.
+
+    time ./doHardMask.csh
+    real    876m43.648s
+
+    time ./doMakeBed.csh
+    real    24m19.176s
+
+    time doCpgIslands.pl -continue=load
+
+    time featureBits gadMor1 cpgIslandExt > fb.gadMor1.cpgIslandExt.txt 2>&1
+    #   real    2m11.771s
+    cat fb.gadMor1.cpgIslandExt.txt
+    #   19965268 bases of 608038597 (3.284%) in intersection
+
+########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/gadMor1/bed/genscan
+    cd /hive/data/genomes/gadMor1/bed/genscan
+    time doGenscan.pl gadMor1 > do.log 2>&1
+    #   real    909m27.951s
+
+    cat fb.gadMor1.genscan.txt
+    #   31133526 bases of 608038597 (5.120%) in intersection
+    cat fb.gadMor1.genscanSubopt.txt
+    #   23477881 bases of 608038597 (3.861%) in intersection
+
+#########################################################################

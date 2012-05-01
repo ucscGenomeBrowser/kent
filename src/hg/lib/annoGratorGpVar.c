@@ -70,6 +70,8 @@ switch(effect->so.soNumber)
 	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
 	break;
 
+    case inframe_deletion:
+    case frameshift_variant:
     case synonymous_variant:
     case non_synonymous_variant:
 	words[count++] = cloneString(effect->so.sub.codingChange.transcript);

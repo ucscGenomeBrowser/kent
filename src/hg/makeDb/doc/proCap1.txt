@@ -171,3 +171,35 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/proCap1/bed/ensGene.51
 
 ###########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/proCap1/bed/cpgIslands
+    cd /hive/data/genomes/proCap1/bed/cpgIslands
+    time doCpgIslands.pl proCap1 > do.log 2>&1
+    #   real    884m46.543s
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    3m6.649s
+    time doCpgIslands.pl -continue=cleanup proCap1 > cleanup.log 2>&1
+    #   real    105m41.557s
+
+    cat fb.proCap1.cpgIslandExt.txt
+    #   13143269 bases of 2407847681 (0.546%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/proCap1/bed/genscan
+    cd /hive/data/genomes/proCap1/bed/genscan
+    time doGenscan.pl proCap1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    483m14.978s
+    time doGenscan.pl -continue=load proCap1 > load.log 2>&1
+    #   real    39m19.361s
+
+    cat fb.proCap1.genscan.txt
+    #   66421419 bases of 2407847681 (2.759%) in intersection
+    cat fb.proCap1.genscanSubopt.txt
+    #   74279950 bases of 2407847681 (3.085%) in intersection
+
+#########################################################################

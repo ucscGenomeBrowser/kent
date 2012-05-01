@@ -1500,7 +1500,7 @@ for (i=0; i<n; ++i)
 }
 
 void toLowerN(char *s, int n)
-/* Convert a section of memory to upper case. */
+/* Convert a section of memory to lower case. */
 {
 int i;
 for (i=0; i<n; ++i)

@@ -23,9 +23,9 @@ priority 0
 type bed 3
 origAssembly hg19
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HEPG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 GM08714=GM08714 GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293T=HEK293-T-REx HCT116=HCT-116 IMR90=IMR90 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PANC1=PANC1 PBDE=PBDE PBDEFetal=PBDE-Fetal PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS 
-subGroup3 factor Factor AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; ARID3ANB100279=ARID3A_(NB100-279) ARID3ASC8821=ARID3A_(sc-8821) ATF106325=ATF1_(06-325) ATF3=ATF3 BACH1SC14700=Bach1_(sc-14700) BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40=BHLHE40_(sc-101023) BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB CEBPZ=CEBPZ CFOS=c-FOS CHD1A301218A=CHD1_(A301-218A) CHD2=CHD2_(AB68301) CJUN=c-Jun CMYC=c-Myc CORESTAB24166=COREST_(ab24166) CORESTSC30189=COREST_(sc-30189) CTBP2=CtBP2 CTCFb=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK112771=ELK1_(1277-1) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-268) GATA3SC269=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 IKZF1IKNUCLA=IKZF1_(IkN)_(UCLA) INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MAFFM8194=MafF_(M8194) MAFK=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max MXI1=Mxi1_(AF4185) MAZAB85725=MAZ_(ab85725) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300=p300 P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIN3ANB6001263=SIN3A_(NB600-1263) SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TBLR1AB24550=TBLR1_(ab24550) TBLR1NB600270=TBLR1_(NB600-270) TCF7L2=TCF7L2 TCF7L2C9B92565=TCF7L2_C9B9_(2565) TF3C110=TFIIIC-110 TR4=TR4 UBFSC13125=UBF_(sc-13125) USF2=USF2 UBTFSAB1404509=UBTF_(SAB1404509) WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZKSCAN1HPA006672=ZKSCAN1_(HPA006672) ZNF143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputgoat=Input_(<i>IgG-goat</i>) zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
-subGroup4 control Control STD=Standard IGGGOAT=IgG-goat IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG-Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2A549=A549&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HEPG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) 2IMR90=IMR90&nbsp;(Tier_2) 2MCF7=MCF-7&nbsp;(Tier_2) GM08714=GM08714 GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293T=HEK293-T-REx HCT116=HCT-116 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PANC1=PANC1 PBDE=PBDE PBDEFetal=PBDE-Fetal PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS 
+subGroup3 factor Factor AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; ARID3ANB100279=ARID3A_(NB100-279) ARID3ASC8821=ARID3A_(sc-8821) ATF106325=ATF1_(06-325) ATF3=ATF3 BACH1SC14700=Bach1_(sc-14700) BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40=BHLHE40_(sc-101023) BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB CEBPZ=CEBPZ CFOS=c-FOS CHD1A301218A=CHD1_(A301-218A) CHD2=CHD2_(AB68301) CJUN=c-Jun CMYC=c-Myc CORESTAB24166=COREST_(ab24166) CORESTSC30189=COREST_(sc-30189) CTBP2=CtBP2 CTCFb=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK112771=ELK1_(1277-1) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-268) GATA3SC269=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 IKZF1IKNUCLA=IKZF1_(IkN)_(UCLA) INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MAFFM8194=MafF_(M8194) MAFK=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max MXI1=Mxi1_(AF4185) MAZAB85725=MAZ_(ab85725) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300=p300 P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIN3ANB6001263=SIN3A_(NB600-1263) SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TBLR1AB24550=TBLR1_(ab24550) TBLR1NB600270=TBLR1_(NB600-270) TCF7L2=TCF7L2 TCF7L2C9B92565=TCF7L2_C9B9_(2565) TF3C110=TFIIIC-110 TR4=TR4 UBFSC13125=UBF_(sc-13125) USF2=USF2 UBTFSAB1404509=UBTF_(SAB1404509) WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZKSCAN1HPA006672=ZKSCAN1_(HPA006672) ZNF143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputgoat=Input_(<i>IgG-goat</i>) zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputhvd=Input_(<i>Harvard</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
+subGroup4 control Control STD=Standard IGGGOAT=IgG-goat IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG-Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA HVD=Harvard
 subGroup5 treatment Treatment aNONE=None ETOH01=EtOH_0.01pct_36hr ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen_36hr TAM112H=4-hydroxytamoxifen_12hr TAM14H=4-hydroxytamoxifen_14hr TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
 dimensionZchecked aNone,IFNa30,IGNa6h,IFNg30,IFNg6h
@@ -1804,7 +1804,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF7 HAE2 UCD
         longLabel MCF-7 HA-E2F1 UC Davis ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=HAE2F1 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Peaks factor=HAE2F1 cellType=2MCF7 control=UCD treatment=aNONE
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
@@ -2287,7 +2287,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF7 GAT3 UCD
         longLabel MCF-7 GATA3 UC Davis ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=GATA3 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Peaks factor=GATA3 cellType=2MCF7 control=UCD treatment=aNONE
         type narrowPeak
         # subId=4699 dateSubmitted=2011-08-03
 
@@ -2295,7 +2295,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF7 Z217 UCD
         longLabel MCF-7 ZNF217 UC Davis ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=ZNF217 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Peaks factor=ZNF217 cellType=2MCF7 control=UCD treatment=aNONE
         type narrowPeak
         # subId=4700 dateSubmitted=2011-08-03
 
@@ -2312,7 +2312,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF7 TCF7 UCD
         longLabel MCF-7 TCF7L2 UC Davis ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF7L2 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Peaks factor=TCF7L2 cellType=2MCF7 control=UCD treatment=aNONE
         type narrowPeak
         # subId=4836 dateSubmitted=2011-09-20
         # was wgEncodeSydhTfbsMcf7Tcf4UcdPk vsmalladi Mon Oct 17 10:24:06 2011
@@ -2488,7 +2488,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel IMR90 Pol2 Pk
         longLabel IMR90 Pol2 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=POL2 cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=POL2 cellType=2IMR90 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5258 dateSubmitted=2011-12-18
 
@@ -2496,7 +2496,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel IMR90 Rad21 Pk
         longLabel IMR90 Rad21 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=RAD21 cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=RAD21 cellType=2IMR90 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5257 dateSubmitted=2011-12-18
 
@@ -2504,7 +2504,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF-7 GATA3_(SC-269) Pk
         longLabel MCF-7 GATA3 (SC-269) UCDavis ChIP-seq Peaks from ENCODE/USC #autogenerated
-        subGroups view=Peaks factor=GATA3SC269 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Peaks factor=GATA3SC269 cellType=2MCF7 control=UCD treatment=aNONE
         type narrowPeak
         # subId=5254 dateSubmitted=2011-12-18
 
@@ -2522,7 +2522,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel IMR90 CEBPB Pk
         longLabel IMR90 CEBPB IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=CEBPB cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=CEBPB cellType=2IMR90 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5256 dateSubmitted=2011-12-18
 
@@ -2566,7 +2566,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel IMR90 CTCF_(SC-15914) Pk
         longLabel IMR90 CTCF (SC-15914) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=CTCFb cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=CTCFb cellType=2IMR90 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5517 dateSubmitted=2012-02-04
 
@@ -2574,7 +2574,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel IMR90 MafK_(ab50322) Pk
         longLabel IMR90 MafK (ab50322) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=MAFK cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=MAFK cellType=2IMR90 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5518 dateSubmitted=2012-02-04
 
@@ -2631,7 +2631,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel A549 CEBPB Pk
         longLabel A549 CEBPB IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=CEBPB cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=CEBPB cellType=2A549 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5537 dateSubmitted=2012-02-04
 
@@ -2639,7 +2639,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel A549 BHLHE40 Pk
         longLabel A549 BHLHE40 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=BHLHE40 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=BHLHE40 cellType=2A549 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5539 dateSubmitted=2012-02-04
 
@@ -2647,7 +2647,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel A549 Max Pk
         longLabel A549 Max IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=MAX cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=MAX cellType=2A549 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5540 dateSubmitted=2012-02-04
 
@@ -2655,7 +2655,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel A549 Pol2(phosphoS2) Pk
         longLabel A549 Pol2(phosphoS2) IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=POL2S2 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=POL2S2 cellType=2A549 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5541 dateSubmitted=2012-02-04
 
@@ -2663,73 +2663,81 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel A549 Rad21 Pk
         longLabel A549 Rad21 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
-        subGroups view=Peaks factor=RAD21 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Peaks factor=RAD21 cellType=2A549 control=IGGRAB treatment=aNONE
         type narrowPeak
         # subId=5542 dateSubmitted=2012-02-04
 
-        track wgEncodeSydhTfbsMcf10aesE2f4TamStdPk
+        track wgEncodeSydhTfbsMcf10aesE2f4TamHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src E2F4 Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 36hr E2F4 std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=E2F4 cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Peaks factor=E2F4 cellType=MCF10AES control=HVD treatment=TAM
         type narrowPeak
         # subId=5544 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesE2f4TamStdPk vsmalladi Sun Apr 29 14:40:37 2012
 
-        track wgEncodeSydhTfbsMcf10aesCmycEtoh01StdPk
+        track wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Myc Pk
         longLabel MCF10A-Er-Src EtOH 0.01pct c-Myc std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CMYC cellType=MCF10AES control=STD treatment=ETOH01
+        subGroups view=Peaks factor=CMYC cellType=MCF10AES control=HVD treatment=ETOH01
         type narrowPeak
         # subId=5545 dateSubmitted=2012-02-04
+        # was wgEncodeSydhTfbsMcf10aesCmycEtoh01StdPk vsmalladi Sun Apr 29 14:40:35 2012
 
-        track wgEncodeSydhTfbsMcf10aesStat3Tam112hStdPk
+        track wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 12hr STAT3 std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=TAM112H
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=HVD treatment=TAM112H
         type narrowPeak
         # subId=5546 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesStat3Tam112hStdPk vsmalladi Sun Apr 29 14:40:38 2012
 
-        track wgEncodeSydhTfbsMcf10aesCmycTam14hStdPk
+        track wgEncodeSydhTfbsMcf10aesCmycTam14hHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Myc Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 4hr c-Myc std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CMYC cellType=MCF10AES control=STD treatment=TAM14H
+        subGroups view=Peaks factor=CMYC cellType=MCF10AES control=HVD treatment=TAM14H
         type narrowPeak
         # subId=5547 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCmycTam14hStdPk vsmalladi Sun Apr 29 14:40:36 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosEtoh01StdPk
+        track wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Fos Pk
         longLabel MCF10A-Er-Src EtOH 0.01pct c-Fos std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=STD treatment=ETOH01
+        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=HVD treatment=ETOH01
         type narrowPeak
         # subId=5548 dateSubmitted=2012-02-04
+        # was wgEncodeSydhTfbsMcf10aesCfosEtoh01StdPk vsmalladi Sun Apr 29 14:40:31 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTam112hStdPk
+        track wgEncodeSydhTfbsMcf10aesCfosTam112hHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Fos Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 12hr c-Fos std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=STD treatment=TAM112H
+        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=HVD treatment=TAM112H
         type narrowPeak
         # subId=5549 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTam112hStdPk vsmalladi Sun Apr 29 14:40:32 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTamStdPk
+        track wgEncodeSydhTfbsMcf10aesCfosTamHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Fos Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 36hr c-Fos std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=HVD treatment=TAM
         type narrowPeak
         # subId=5550 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTamStdPk vsmalladi Sun Apr 29 14:40:34 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTam14hStdPk
+        track wgEncodeSydhTfbsMcf10aesCfosTam14hHvdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src c-Fos Pk
         longLabel MCF10A-Er-Src 4OHTAM 1uM 4hr c-Fos std ChIP-seq Peaks from ENCODE/Harvard #autogenerated
-        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=STD treatment=TAM14H
+        subGroups view=Peaks factor=CFOS cellType=MCF10AES control=HVD treatment=TAM14H
         type narrowPeak
         # subId=5551 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTam14hStdPk vsmalladi Sun Apr 29 14:40:33 2012
 
         track wgEncodeSydhTfbsH1hescChd1a301218aIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -5446,7 +5454,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF7 HAE2 UCD
         longLabel MCF-7 HA-E2F1 UC Davis ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=HAE2F1 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=HAE2F1 cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 0.000000 3515.699951
         # subId=3056 dateSubmitted=2010-12-02
 
@@ -5454,7 +5462,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF7 Inpt UCD
         longLabel MCF-7 Input UC Davis ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=zInputucd cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=zInputucd cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 0.000000 12982.900391
         # subId=3056 dateSubmitted=2010-12-02
 
@@ -6122,7 +6130,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF7 GAT3 UCD
         longLabel MCF-7 GATA3 UC Davis ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=GATA3 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=GATA3 cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 1.000000 29891.000000
         # subId=4699 dateSubmitted=2011-08-03
 
@@ -6130,7 +6138,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF7 Z217 UCD
         longLabel MCF-7 ZNF217 UC Davis ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=ZNF217 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=ZNF217 cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 1.000000 21439.000000
         # subId=4700 dateSubmitted=2011-08-03
 
@@ -6147,7 +6155,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF7 TCF7 UCD
         longLabel MCF-7 TCF7L2 UC Davis ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF7L2 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=TCF7L2 cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 1.000000 20980.000000
         # subId=4836 dateSubmitted=2011-09-20
         # was wgEncodeSydhTfbsMcf7Tcf4UcdSig vsmalladi Mon Oct 17 10:24:06 2011
@@ -6339,7 +6347,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 Input Sig
         longLabel IMR90 Input IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=zInputrab cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=zInputrab cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 27735.000000
         # subId=5260 dateSubmitted=2011-12-18
 
@@ -6347,7 +6355,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 Pol2 Sig
         longLabel IMR90 Pol2 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=POL2 cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=POL2 cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 20680.000000
         # subId=5258 dateSubmitted=2011-12-18
 
@@ -6355,7 +6363,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 Rad21 Sig
         longLabel IMR90 Rad21 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=RAD21 cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=RAD21 cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 18682.000000
         # subId=5257 dateSubmitted=2011-12-18
 
@@ -6363,7 +6371,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF-7 GATA3_(SC-269) Sig
         longLabel MCF-7 GATA3 (SC-269) UCDavis ChIP-seq Signal from ENCODE/USC #autogenerated
-        subGroups view=Signal factor=GATA3SC269 cellType=MCF7 control=UCD treatment=aNONE
+        subGroups view=Signal factor=GATA3SC269 cellType=2MCF7 control=UCD treatment=aNONE
         type bigWig 1.000000 22065.000000
         # subId=5254 dateSubmitted=2011-12-18
 
@@ -6381,7 +6389,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 CEBPB Sig
         longLabel IMR90 CEBPB IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=CEBPB cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=CEBPB cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 57153.000000
         # subId=5256 dateSubmitted=2011-12-18
 
@@ -6425,7 +6433,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 CTCF_(SC-15914) Sig
         longLabel IMR90 CTCF (SC-15914) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=CTCFb cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=CTCFb cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 15006.000000
         # subId=5517 dateSubmitted=2012-02-04
 
@@ -6433,7 +6441,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel IMR90 MafK_(ab50322) Sig
         longLabel IMR90 MafK (ab50322) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=MAFK cellType=IMR90 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=MAFK cellType=2IMR90 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 17706.000000
         # subId=5518 dateSubmitted=2012-02-04
 
@@ -6490,7 +6498,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 CEBPB Sig
         longLabel A549 CEBPB IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=CEBPB cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=CEBPB cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 22596.000000
         # subId=5537 dateSubmitted=2012-02-04
 
@@ -6498,7 +6506,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 Input Sig
         longLabel A549 Input IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=zInputrab cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=zInputrab cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 20411.000000
         # subId=5538 dateSubmitted=2012-02-04
 
@@ -6506,7 +6514,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 BHLHE40 Sig
         longLabel A549 BHLHE40 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=BHLHE40 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=BHLHE40 cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 18642.000000
         # subId=5539 dateSubmitted=2012-02-04
 
@@ -6514,7 +6522,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 Max Sig
         longLabel A549 Max IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=MAX cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=MAX cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 20499.000000
         # subId=5540 dateSubmitted=2012-02-04
 
@@ -6522,7 +6530,7 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 Pol2(phosphoS2) Sig
         longLabel A549 Pol2(phosphoS2) IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=POL2S2 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=POL2S2 cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 16207.000000
         # subId=5541 dateSubmitted=2012-02-04
 
@@ -6530,73 +6538,81 @@ html wgEncodeSydhTfbs.release2
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel A549 Rad21 Sig
         longLabel A549 Rad21 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
-        subGroups view=Signal factor=RAD21 cellType=A549 control=IGGRAB treatment=aNONE
+        subGroups view=Signal factor=RAD21 cellType=2A549 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 20851.000000
         # subId=5542 dateSubmitted=2012-02-04
 
-        track wgEncodeSydhTfbsMcf10aesE2f4TamStdSig
+        track wgEncodeSydhTfbsMcf10aesE2f4TamHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src E2F4 Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 36hr E2F4 std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=E2F4 cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Signal factor=E2F4 cellType=MCF10AES control=HVD treatment=TAM
         type bigWig 1.000000 27434.000000
         # subId=5544 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesE2f4TamStdSig vsmalladi Sun Apr 29 14:40:38 2012
 
-        track wgEncodeSydhTfbsMcf10aesCmycEtoh01StdSig
+        track wgEncodeSydhTfbsMcf10aesCmycEtoh01HvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Myc Sig
         longLabel MCF10A-Er-Src EtOH 0.01pct c-Myc std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CMYC cellType=MCF10AES control=STD treatment=ETOH01
+        subGroups view=Signal factor=CMYC cellType=MCF10AES control=HVD treatment=ETOH01
         type bigWig 1.000000 18129.000000
         # subId=5545 dateSubmitted=2012-02-04
+        # was wgEncodeSydhTfbsMcf10aesCmycEtoh01StdSig vsmalladi Sun Apr 29 14:40:36 2012
 
-        track wgEncodeSydhTfbsMcf10aesStat3Tam112hStdSig
+        track wgEncodeSydhTfbsMcf10aesStat3Tam112hHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 12hr STAT3 std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=TAM112H
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=HVD treatment=TAM112H
         type bigWig 1.000000 12103.000000
         # subId=5546 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesStat3Tam112hStdSig vsmalladi Sun Apr 29 14:40:39 2012
 
-        track wgEncodeSydhTfbsMcf10aesCmycTam14hStdSig
+        track wgEncodeSydhTfbsMcf10aesCmycTam14hHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Myc Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 4hr c-Myc std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CMYC cellType=MCF10AES control=STD treatment=TAM14H
+        subGroups view=Signal factor=CMYC cellType=MCF10AES control=HVD treatment=TAM14H
         type bigWig 1.000000 28917.000000
         # subId=5547 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCmycTam14hStdSig vsmalladi Sun Apr 29 14:40:37 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosEtoh01StdSig
+        track wgEncodeSydhTfbsMcf10aesCfosEtoh01HvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Fos Sig
         longLabel MCF10A-Er-Src EtOH 0.01pct c-Fos std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CFOS cellType=MCF10AES control=STD treatment=ETOH01
+        subGroups view=Signal factor=CFOS cellType=MCF10AES control=HVD treatment=ETOH01
         type bigWig 1.000000 14079.000000
         # subId=5548 dateSubmitted=2012-02-04
+        # was wgEncodeSydhTfbsMcf10aesCfosEtoh01StdSig vsmalladi Sun Apr 29 14:40:31 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTam112hStdSig
+        track wgEncodeSydhTfbsMcf10aesCfosTam112hHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Fos Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 12hr c-Fos std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CFOS cellType=MCF10AES control=STD treatment=TAM112H
+        subGroups view=Signal factor=CFOS cellType=MCF10AES control=HVD treatment=TAM112H
         type bigWig 1.000000 14588.000000
         # subId=5549 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTam112hStdSig vsmalladi Sun Apr 29 14:40:32 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTamStdSig
+        track wgEncodeSydhTfbsMcf10aesCfosTamHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Fos Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 36hr c-Fos std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CFOS cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Signal factor=CFOS cellType=MCF10AES control=HVD treatment=TAM
         type bigWig 1.000000 19041.000000
         # subId=5550 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTamStdSig vsmalladi Sun Apr 29 14:40:34 2012
 
-        track wgEncodeSydhTfbsMcf10aesCfosTam14hStdSig
+        track wgEncodeSydhTfbsMcf10aesCfosTam14hHvdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src c-Fos Sig
         longLabel MCF10A-Er-Src 4OHTAM 1uM 4hr c-Fos std ChIP-seq Signal from ENCODE/Harvard #autogenerated
-        subGroups view=Signal factor=CFOS cellType=MCF10AES control=STD treatment=TAM14H
+        subGroups view=Signal factor=CFOS cellType=MCF10AES control=HVD treatment=TAM14H
         type bigWig 1.000000 21132.000000
         # subId=5551 dateSubmitted=2012-02-07
+        # was wgEncodeSydhTfbsMcf10aesCfosTam14hStdSig vsmalladi Sun Apr 29 14:40:33 2012
 
         track wgEncodeSydhTfbsH1hescChd1a301218aIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -6895,4 +6911,12 @@ html wgEncodeSydhTfbs.release2
         subGroups view=Signal factor=zInputucd cellType=GM08714 control=UCD treatment=aNONE
         type bigWig 1.000000 25207.000000
         # subId=6818 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhTfbsMcf10aesInputHvdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF10A-Er-Src Input Sig
+        longLabel MCF10A-Er-Src Input Harvard Control ChIP-seq Signal from ENCODE/Harvard #autogenerated
+        subGroups view=Signal factor=zInputhvd cellType=MCF10AES control=HVD treatment=aNONE
+        type bigWig 1.000000 82889.000000
+        # subId=6819 dateSubmitted=2012-04-25
 

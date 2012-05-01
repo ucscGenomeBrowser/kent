@@ -1056,3 +1056,40 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/echTel1/bed/cpgIslands
+    cd /hive/data/genomes/echTel1/bed/cpgIslands
+    time doCpgIslands.pl echTel1 > do.log 2>&1
+    #   real    958m28.796s
+    # fixing the broken command:
+    time ./doLoadCpg.csh
+    #   real    2m19.103s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup echTel1 > cleanup.log 2>&1
+    #   real    93m19.493s
+
+    cat fb.echTel1.cpgIslandExt.txt
+    #   15870914 bases of 2111581369 (0.752%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/echTel1/bed/genscan
+    cd /hive/data/genomes/echTel1/bed/genscan
+    time doGenscan.pl echTel1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    514m42.545s
+    # continuing:
+    time doGenscan.pl -continue=load echTel1 > load.log 2>&1
+    # broken small clusters
+    time doGenscan.pl -workhorse=hgwdev -continue=cleanup echTel1 \
+        > cleanup.log 2>&1
+    #   real    20m24.981s
+
+    cat fb.echTel1.genscan.txt
+    #   76152256 bases of 2111581369 (3.606%) in intersection
+    cat fb.echTel1.genscanSubopt.txt
+    #   90237546 bases of 2111581369 (4.273%) in intersection
+
+#########################################################################

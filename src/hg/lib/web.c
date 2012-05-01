@@ -591,10 +591,13 @@ if(!webInTextMode)
     }
 }
 
+static boolean gotWarnings = FALSE;
+
 void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
+gotWarnings = TRUE;
 boolean needStart = !webHeadAlreadyOutputed;
 if (needStart)
     webStart(errCart, NULL, "Error");
@@ -605,6 +608,12 @@ if (needStart)
     webEnd();
 }
 
+
+boolean webGotWarnings()
+/* Return TRUE if webVaWarn has been called. */
+{
+return gotWarnings;
+}
 
 void webAbort(char* title, char* format, ...)
 /* an abort function that outputs a error page */
@@ -1370,8 +1379,10 @@ dyStringFree(&fullDirName);
 char *linkFull = dyStringCannibalize(&linkWithTimestamp);
 char *link = linkFull;
 if (docRoot != NULL)
+    {
     link = cloneString(linkFull + strlen(docRoot) + 1);
-freeMem(linkFull);
+    freeMem(linkFull);
+    }
 
 if (wrapInHtml) // wrapped for christmas
     {

@@ -6,6 +6,7 @@ wgEncodeLicrHistone.ra \
 wgEncodeLicrRnaSeq.ra \
 wgEncodeLicrTfbs.ra \
 wgEncodeNhgriBip.ra \
+wgEncodePsuHistone.ra \
 wgEncodePsuTfbs.ra \
 wgEncodeSydhHist.ra \
 wgEncodeSydhTfbs.ra \

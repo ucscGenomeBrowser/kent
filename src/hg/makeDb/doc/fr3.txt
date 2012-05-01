@@ -2229,9 +2229,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     featureBits fr3 cpgIslandExt
     #   18279877 bases of 350961831 (5.209%) in intersection
-    # compare to previous:
-    featureBits fr2 cpgIslandExt
-    #	10496250 bases of 2620346127 (0.401%) in intersection
 
     # there should be no output from checkTableCoords:
     checkTableCoords -verboseBlocks -table=cpgIslandExt fr3
