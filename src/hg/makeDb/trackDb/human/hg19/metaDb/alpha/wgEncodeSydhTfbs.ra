@@ -18551,6 +18551,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000627
 expId 627
 fileName wgEncodeSydhTfbsHct116InputRawData.fastq.gz
+geoSampleAccession GSM817344
 grant Snyder
 lab USC
 md5sum 0ad0d5d81899ba21529433412c5dbfe8
@@ -18602,6 +18603,7 @@ dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000627
 expId 627
 fileName wgEncodeSydhTfbsHct116InputUcdSig.bigWig
+geoSampleAccession GSM817344
 grant Snyder
 lab USC
 md5sum 4fac8cf5d28494dbb2a5e910b93b40a9
@@ -24343,6 +24345,7 @@ dccAccession wgEncodeEH000612
 dccInternalNotes Lab provide GEO number GSE12781
 expId 612
 fileName wgEncodeSydhTfbsHelas3InputRawData.fastq.gz
+geoSampleAccession GSM817342
 grant Snyder
 lab Yale
 md5sum 351f23d693d70e0b2df25a3d788bf963
@@ -24394,6 +24397,7 @@ dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000612
 expId 612
 fileName wgEncodeSydhTfbsHelas3InputStdSig.bigWig
+geoSampleAccession GSM817342
 grant Snyder
 lab Yale
 md5sum fe3523b9edf3ddd289b56fca051016e7
@@ -24443,6 +24447,7 @@ dateUnrestricted 2011-01-27
 dccAccession wgEncodeEH001754
 expId 1754
 fileName wgEncodeSydhTfbsHelas3InputUcdRawData.fastq.gz
+geoSampleAccession GSM818744
 grant Snyder
 lab USC
 md5sum dd7b36cf58901002322b2a9ce23722f2
@@ -24467,6 +24472,7 @@ dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001754
 expId 1754
 fileName wgEncodeSydhTfbsHelas3InputUcdSig.bigWig
+geoSampleAccession GSM818744
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -28105,6 +28111,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
 fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdPk.narrowPeak.gz
+geoSampleAccession GSM816436
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -28131,6 +28138,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
 fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM816436
 grant Snyder
 lab USC
 md5sum cae0aaa44f1813310782e4db6a81c9c8
@@ -28156,6 +28164,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
 fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM816436
 grant Snyder
 lab USC
 md5sum 6a33b82cb4c907cdf539fdeff04d6fcb
@@ -28181,6 +28190,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
 fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdSig.bigWig
+geoSampleAccession GSM816436
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -31945,6 +31955,7 @@ dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000674
 expId 674
 fileName wgEncodeSydhTfbsHepg2InputRawData.fastq.gz
+geoSampleAccession GSM817343
 grant Snyder
 lab USC
 md5sum 2c125520e0c3efca87ed9b1b377a9e08
@@ -32071,6 +32082,7 @@ dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000674
 expId 674
 fileName wgEncodeSydhTfbsHepg2InputUcdSig.bigWig
+geoSampleAccession GSM817343
 grant Snyder
 lab USC
 md5sum 7c9e5a99d59426fa82bc2b6f961ed083
@@ -55071,6 +55083,7 @@ dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
 expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdPk.narrowPeak.gz
+geoSampleAccession GSM825711
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -55097,6 +55110,7 @@ dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
 expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM825711
 grant Snyder
 lab USC
 md5sum 0c437c119365108b1aba0e70545f62ce
@@ -55122,6 +55136,7 @@ dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
 expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM825711
 grant Snyder
 lab USC
 md5sum 3c112cf76ff69b3c5ceb43fe22818a54
@@ -55147,6 +55162,7 @@ dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
 expId 2035
 fileName wgEncodeSydhTfbsMcf7Gata3UcdSig.bigWig
+geoSampleAccession GSM825711
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -55648,6 +55664,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
 fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdPk.narrowPeak.gz
+geoSampleAccession GSM816438
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -55674,6 +55691,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
 fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM816438
 grant Snyder
 lab USC
 md5sum 45a49b53c33370de427a400c79140e4d
@@ -55699,6 +55717,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
 fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM816438
 grant Snyder
 lab USC
 md5sum f8bfca6f61361e44c1d47f3ac9c0332c
@@ -55724,6 +55743,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
 fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdSig.bigWig
+geoSampleAccession GSM816438
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -57162,6 +57182,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
 fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdPk.narrowPeak.gz
+geoSampleAccession GSM816437
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -57188,6 +57209,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
 fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM816437
 grant Snyder
 lab USC
 md5sum 687f270b38d23d5e04e5a2309335320a
@@ -57213,6 +57235,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
 fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM816437
 grant Snyder
 lab USC
 md5sum 7a97d2a7d84724f3ce75eab5242e3c23
@@ -57238,6 +57261,7 @@ dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
 fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdSig.bigWig
+geoSampleAccession GSM816437
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -58844,4 +58868,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1368521994
+# MAGIC: 1084905200
