@@ -291,6 +291,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
 fileName wgEncodeUwDgfAoafHotspots.broadPeak.gz
+geoSampleAccession GSM849029
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -312,6 +313,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
 fileName wgEncodeUwDgfAoafPk.narrowPeak.gz
+geoSampleAccession GSM849029
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -333,6 +335,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
 fileName wgEncodeUwDgfAoafRaw.bigWig
+geoSampleAccession GSM849029
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -354,6 +357,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
 fileName wgEncodeUwDgfAoafRawData.fastq.gz
+geoSampleAccession GSM849029
 grant Stam
 lab UW
 md5sum b1e8c3844752452610e2e1eeef4e84ae
@@ -373,6 +377,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
 fileName wgEncodeUwDgfAoafSig.bigWig
+geoSampleAccession GSM849029
 grant Stam
 lab UW
 md5sum 397a419ac66207eddbf1502b2b75c9a0
@@ -838,6 +843,7 @@ dccAccession wgEncodeEH000834
 dccInternalNotes geoSampleAccession GSM646563
 expId 834
 fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -967,6 +973,7 @@ dccAccession wgEncodeEH000835
 dccInternalNotes geoSampleAccession GSM646560
 expId 835
 fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1754,6 +1761,7 @@ dccAccession wgEncodeEH000836
 dccInternalNotes geoSampleAccession GSM646565
 expId 836
 fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -2540,6 +2548,7 @@ dccAccession wgEncodeEH000837
 dccInternalNotes geoSampleAccession GSM646561
 expId 837
 fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -2937,6 +2946,7 @@ dccAccession wgEncodeEH000838
 dccInternalNotes geoSampleAccession GSM646570
 expId 838
 fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -3298,6 +3308,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
 fileName wgEncodeUwDgfHpafHotspots.broadPeak.gz
+geoSampleAccession GSM849031
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -3319,6 +3330,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
 fileName wgEncodeUwDgfHpafPk.narrowPeak.gz
+geoSampleAccession GSM849031
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -3340,6 +3352,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
 fileName wgEncodeUwDgfHpafRaw.bigWig
+geoSampleAccession GSM849031
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -3361,6 +3374,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
 fileName wgEncodeUwDgfHpafRawData.fastq.gz
+geoSampleAccession GSM849031
 grant Stam
 lab UW
 md5sum 3512edaa43461d8a137ec94b71854521
@@ -3380,6 +3394,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
 fileName wgEncodeUwDgfHpafSig.bigWig
+geoSampleAccession GSM849031
 grant Stam
 lab UW
 md5sum 7f853f32ba0b3a34610b1ea69de690e6
@@ -3420,6 +3435,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
 fileName wgEncodeUwDgfHpdlfHotspots.broadPeak.gz
+geoSampleAccession GSM849030
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -3441,6 +3457,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
 fileName wgEncodeUwDgfHpdlfPk.narrowPeak.gz
+geoSampleAccession GSM849030
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -3462,6 +3479,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
 fileName wgEncodeUwDgfHpdlfRaw.bigWig
+geoSampleAccession GSM849030
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -3483,6 +3501,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
 fileName wgEncodeUwDgfHpdlfRawData.fastq.gz
+geoSampleAccession GSM849030
 grant Stam
 lab UW
 md5sum 77a65ea9a6b6be0447a4b16e0b82472c
@@ -3502,6 +3521,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
 fileName wgEncodeUwDgfHpdlfSig.bigWig
+geoSampleAccession GSM849030
 grant Stam
 lab UW
 md5sum 4db7f85b9b420db6480869a9060b1563
@@ -3542,6 +3562,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
 fileName wgEncodeUwDgfHpfHotspots.broadPeak.gz
+geoSampleAccession GSM849028
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -3563,6 +3584,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
 fileName wgEncodeUwDgfHpfPk.narrowPeak.gz
+geoSampleAccession GSM849028
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -3584,6 +3606,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
 fileName wgEncodeUwDgfHpfRaw.bigWig
+geoSampleAccession GSM849028
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -3605,6 +3628,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
 fileName wgEncodeUwDgfHpfRawData.fastq.gz
+geoSampleAccession GSM849028
 grant Stam
 lab UW
 md5sum 5e340874f2e680f5cbf7b81d97291f8e
@@ -3624,6 +3648,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
 fileName wgEncodeUwDgfHpfSig.bigWig
+geoSampleAccession GSM849028
 grant Stam
 lab UW
 md5sum a037459854f36eb501272ec69711f4c2
@@ -3664,6 +3689,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
 fileName wgEncodeUwDgfHrceHotspots.broadPeak.gz
+geoSampleAccession GSM849027
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -3685,6 +3711,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
 fileName wgEncodeUwDgfHrcePk.narrowPeak.gz
+geoSampleAccession GSM849027
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -3706,6 +3733,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
 fileName wgEncodeUwDgfHrceRaw.bigWig
+geoSampleAccession GSM849027
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -3727,6 +3755,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
 fileName wgEncodeUwDgfHrceRawData.fastq.gz
+geoSampleAccession GSM849027
 grant Stam
 lab UW
 md5sum 7ff526b1911e355255b800e777c11349
@@ -3746,6 +3775,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
 fileName wgEncodeUwDgfHrceSig.bigWig
+geoSampleAccession GSM849027
 grant Stam
 lab UW
 md5sum fdad779cd9e39b31499d570d02228ad8
@@ -5223,6 +5253,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
 fileName wgEncodeUwDgfNhaHotspots.broadPeak.gz
+geoSampleAccession GSM849026
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -5244,6 +5275,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
 fileName wgEncodeUwDgfNhaPk.narrowPeak.gz
+geoSampleAccession GSM849026
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -5265,6 +5297,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
 fileName wgEncodeUwDgfNhaRaw.bigWig
+geoSampleAccession GSM849026
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -5286,6 +5319,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
 fileName wgEncodeUwDgfNhaRawData.fastq.gz
+geoSampleAccession GSM849026
 grant Stam
 lab UW
 md5sum e3a685e68b0028437eb0ca0f47153fe4
@@ -5305,6 +5339,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
 fileName wgEncodeUwDgfNhaSig.bigWig
+geoSampleAccession GSM849026
 grant Stam
 lab UW
 md5sum e5afaff54c8e8ef11f3f30dd580ef29e
@@ -5369,6 +5404,7 @@ dccAccession wgEncodeEH000839
 dccInternalNotes geoSampleAccession GSM646564
 expId 839
 fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -5864,6 +5900,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
 fileName wgEncodeUwDgfSaecHotspots.broadPeak.gz
+geoSampleAccession GSM849025
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -5885,6 +5922,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
 fileName wgEncodeUwDgfSaecPk.narrowPeak.gz
+geoSampleAccession GSM849025
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -5906,6 +5944,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
 fileName wgEncodeUwDgfSaecRaw.bigWig
+geoSampleAccession GSM849025
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -5927,6 +5966,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
 fileName wgEncodeUwDgfSaecRawData.fastq.gz
+geoSampleAccession GSM849025
 grant Stam
 lab UW
 md5sum 53db7371d3dd316dbc02cd3b8be6f5cf
@@ -5946,6 +5986,7 @@ dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
 fileName wgEncodeUwDgfSaecSig.bigWig
+geoSampleAccession GSM849025
 grant Stam
 lab UW
 md5sum 7a405d7fa408556298a3dde0eebd8ba4
@@ -6010,6 +6051,7 @@ dccAccession wgEncodeEH000840
 dccInternalNotes geoSampleAccession GSM646562
 expId 840
 fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -6350,4 +6392,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1151082644
+# MAGIC: 1149632671

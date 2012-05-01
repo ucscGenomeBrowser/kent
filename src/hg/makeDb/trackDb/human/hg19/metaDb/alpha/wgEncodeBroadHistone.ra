@@ -8554,6 +8554,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam.bai
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 md5sum 2cbf5aba58a3a25621e88c0bbb3e951c,dbfe678feb24137f68ab82b43546ff65
@@ -8578,6 +8579,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam.bai
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 md5sum 5047977b1b2a4817d2032596b31f25fc,1733fd6e936a0fa84dcf2861abee6457
@@ -8602,6 +8604,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdPk.broadPeak.gz
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 md5sum 147b58954e878a2350250c8bfb53eb93
@@ -8627,6 +8630,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdRawDataRep1.fastq.gz
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -8652,6 +8656,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdRawDataRep2.fastq.gz
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -8677,6 +8682,7 @@ dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdSig.bigWig
+geoSampleAccession GSM798322
 grant Bernstein
 lab Broad
 md5sum d33b338452d6d17526977a60de9b040f
@@ -10870,6 +10876,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam.bai
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 md5sum bdeabafdedd09747e8104ec103631c65,e1bb1ca9d37fcd95d72e86d3f33197ca
@@ -10894,6 +10901,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam.bai
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 md5sum 17847371fcf423c9473d5ea4b54c51f9,8b1f3e3be71b1e8d121d27310021757a
@@ -10918,6 +10926,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdPk.broadPeak.gz
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 md5sum bd11f6a804b468ca0af1bb7b64ffdd23
@@ -10943,6 +10952,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdRawDataRep1.fastq.gz
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10968,6 +10978,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdRawDataRep2.fastq.gz
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10993,6 +11004,7 @@ dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdSig.bigWig
+geoSampleAccession GSM798321
 grant Bernstein
 lab Broad
 md5sum 332760916058b585dca5ec2b2e96de47
@@ -38280,4 +38292,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1116155766
+# MAGIC: 110570610
