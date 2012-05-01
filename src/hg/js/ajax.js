@@ -153,7 +153,7 @@ function loadXMLDoc(url, callBack)
     }
 }
 
-function setCartVars(names, values, errFunc)
+function setCartVars(names, values, errFunc, async)
 {
 // Asynchronously sets the array of cart vars with values
     if(names.length <= 0)
@@ -161,6 +161,8 @@ function setCartVars(names, values, errFunc)
 
     if (errFunc == null)
 	errFunc = errorHandler;
+    if (async == null)
+	async = true;
 
     // Set up constant portion of url
     var loc = window.location.href;
@@ -189,6 +191,7 @@ function setCartVars(names, values, errFunc)
     }
     $.ajax({
                type: type,
+               async: async,
                url: loc,
                data: data,
                trueSuccess: function () {},

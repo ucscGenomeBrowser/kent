@@ -173,7 +173,7 @@ function hgvaUpdatePage(responseJson)
     }
     // setCartVars returns error when this is called by synchronous ajax...
     var ignoreError = function(){};
-    setCartVars(names, values, ignoreError);
+    setCartVars(names, values, ignoreError, false);
 }
 
 
