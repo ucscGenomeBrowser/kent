@@ -41,7 +41,7 @@ char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
 void  displayMailSuccess()
-/* display mail success msg, and set cookie */
+/* display mail success confirmation box */
 {
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *obj=cartUsualString(cart, "hgLogin_helpWith", "");
@@ -57,11 +57,11 @@ hPrintf(
 , email
 , obj
 );
-//  backToDoLoginPage(12);
 }
-void sendMail(char *email, char *subject, char *msg, char *object)
+void sendMail(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = hgLoginLinkHost();
+char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[256];
 safef(cmd,sizeof(cmd),
 // "echo 'Hello from your favoriate browser at: %s %s ' | mail -s \"Greeting form UCSC Genome Browser\" %s"
@@ -72,41 +72,18 @@ int result = system(cmd);
 if (result == -1)
     {
     hPrintf( 
-    "<h2>GSID HIV Data Browser</h2>"
+    "<h2>UCSC Genome Browser</h2>"
     "<p align=\"left\">"
     "</p>"
-    "<h3>Error emailing password to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
+    "<h3>Error emailing %s to: %s</h3>"
+    "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>"
+    , helpWith
     , email
     );
     }
 else
     {
-/*************************** old mail **************
-    hPrintf(
-    "<h2>GSID HIV Data Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Password has been emailed to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , email
-    );
-********************************** old mail ****/
-/*************************
-hPrintf(
-"<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
-"\n"
-"<h2>UCSC Genome Browser</h2>"
-"<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to "
-" <span id=\"emailaddress\">$email</span> containing %s...</p>"
-"\n"
-"<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>"
-"\n"
-"</div><!-- END - confirmationBox -->"
-"\n"
-, object);
-**********************/
-cartSetString(cart, "hgLogin_helpWith", "password");
+// cartSetString(cart, "hgLogin_helpWith", "password");
 hPrintf(
 "<script  language=\"JavaScript\">\n"
 "<!-- "
@@ -125,10 +102,20 @@ cartSetString(cart, "hgLogin.do.displayMailSuccess", "1");
 }
 }
 
-
+void sendUsername(char *email, char *users)
+/* send user name list to the email address */
+{
+char subject[256];
+char msg[256];
+char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
+safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
+safef(msg, sizeof(msg), "User name(s) associated with this email address at UCSC Genome Browser: \n\n  %s \n", users);
+safecat (msg, sizeof(msg), signature);
+sendMail(email, subject, msg);
+}
 
 void activateAccount(struct sqlConnection *conn)
-/* activate user account  */
+/* activate account */
 {
 struct sqlResult *sr;
 char **row;
@@ -856,22 +843,37 @@ if (sameString(email,""))
     }
 /* TODO: validate the email address is in right format */
 /* Username selcted? */
-char *helpWith = cartUsualString(cart, "helpWith", "");
+char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 if (sameString(helpWith,"username"))
     {
-char subject[256];
-char email[256]="chinhli@soe.ucsc.edu";
-char msg[256];
-char httpLink[256]="Visit http://www.genome.ucsc.edu ";
-safef(subject, sizeof(subject),"Greeting form UCSC about %s", email);
-safecpy(msg, sizeof(msg), "Hello from your favoriate browser at UCSC. ");
-safecat (msg, sizeof(msg), httpLink);
-    sendMail(email, subject, msg, "password");
-    freez(&errMsg);
-    errMsg = cloneString("Forgot user name selected!");
-    displayAccHelpPage(conn);
-    return;
-    }
+    /* find all the user names assocaited with this email address */
+    char userList[256]="";
+    safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
+    sr = sqlGetResult(conn, query);
+    int numUser = 0;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct gbMembers *m = gbMembersLoad(row);
+        if (numUser >= 1)  
+            safecat(userList, sizeof(userList), ", ");
+        safecat(userList, sizeof(userList), m->userName);
+        numUser += 1;
+        }
+        sqlFreeResult(&sr);
+    if (numUser == 0)
+        {
+        freez(&errMsg);
+        char temp[256];
+        safef(temp,sizeof(temp),"No user found with this email address.");
+        errMsg = cloneString(temp);
+        displayAccHelpPage(conn);
+        return;
+        } else {
+        sendUsername(email, userList);
+        }
+    } /* helpWith username */
+
+
 if (sameString(helpWith,"password"))
     {
     freez(&errMsg);
@@ -1225,7 +1227,7 @@ else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
 else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
     accountHelp(conn);
 else if (cartVarExists(cart, "hgLogin.do.activateAccount"))
-    accountHelp(conn);
+    activateAccount(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayMailSuccess"))
     displayMailSuccess(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
