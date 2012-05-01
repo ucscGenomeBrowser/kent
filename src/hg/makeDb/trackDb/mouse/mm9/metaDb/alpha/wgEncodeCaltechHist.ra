@@ -49,6 +49,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
 expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918410
 grant Hardison
 lab Caltech-m
 labExpId 11907
@@ -80,6 +81,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
 expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918410
 grant Hardison
 lab Caltech-m
 labExpId 11907
@@ -110,6 +112,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
 expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xSigRep1.bigWig
+geoSampleAccession GSM918410
 grant Hardison
 lab Caltech-m
 labExpId 11907
@@ -171,6 +174,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
 expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918413
 grant Hardison
 lab Caltech-m
 labExpId 11832
@@ -202,6 +206,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
 expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918413
 grant Hardison
 lab Caltech-m
 labExpId 11832
@@ -232,6 +237,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
 expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xSigRep1.bigWig
+geoSampleAccession GSM918413
 grant Hardison
 lab Caltech-m
 labExpId 11832
@@ -293,6 +299,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
 expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918412
 grant Hardison
 lab Caltech-m
 labExpId 11669
@@ -324,6 +331,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
 expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918412
 grant Hardison
 lab Caltech-m
 labExpId 11669
@@ -354,6 +362,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
 expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xSigRep1.bigWig
+geoSampleAccession GSM918412
 grant Hardison
 lab Caltech-m
 labExpId 11669
@@ -415,6 +424,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
 expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918411
 grant Hardison
 lab Caltech-m
 labExpId 11906
@@ -446,6 +456,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
 expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918411
 grant Hardison
 lab Caltech-m
 labExpId 11906
@@ -476,6 +487,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
 expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xSigRep1.bigWig
+geoSampleAccession GSM918411
 grant Hardison
 lab Caltech-m
 labExpId 11906
@@ -537,6 +549,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
 expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918423
 grant Hardison
 lab Caltech-m
 labExpId 10330
@@ -568,6 +581,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
 expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918423
 grant Hardison
 lab Caltech-m
 labExpId 10330
@@ -598,6 +612,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
 expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xSigRep1.bigWig
+geoSampleAccession GSM918423
 grant Hardison
 lab Caltech-m
 labExpId 10330
@@ -659,6 +674,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
 expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918422
 grant Hardison
 lab Caltech-m
 labExpId 10331
@@ -690,6 +706,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
 expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918422
 grant Hardison
 lab Caltech-m
 labExpId 10331
@@ -720,6 +737,7 @@ dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
 expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xSigRep1.bigWig
+geoSampleAccession GSM918422
 grant Hardison
 lab Caltech-m
 labExpId 10331
@@ -781,6 +799,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
 expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918416
 grant Hardison
 lab Caltech-m
 labExpId 11957
@@ -812,6 +831,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
 expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918416
 grant Hardison
 lab Caltech-m
 labExpId 11957
@@ -842,6 +862,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
 expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
+geoSampleAccession GSM918416
 grant Hardison
 lab Caltech-m
 labExpId 11957
@@ -903,6 +924,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
 expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918415
 grant Hardison
 lab Caltech-m
 labExpId 11956
@@ -934,6 +956,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
 expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918415
 grant Hardison
 lab Caltech-m
 labExpId 11956
@@ -964,6 +987,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
 expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xSigRep1.bigWig
+geoSampleAccession GSM918415
 grant Hardison
 lab Caltech-m
 labExpId 11956
@@ -1025,6 +1049,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
 expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918414
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -1056,6 +1081,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
 expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918414
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -1086,6 +1112,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
 expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1.bigWig
+geoSampleAccession GSM918414
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -1147,6 +1174,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
 expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918408
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1178,6 +1206,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
 expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918408
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1208,6 +1237,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
 expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1.bigWig
+geoSampleAccession GSM918408
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1269,6 +1299,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
 expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918409
 grant Hardison
 lab Caltech-m
 labExpId 11697
@@ -1300,6 +1331,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
 expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918409
 grant Hardison
 lab Caltech-m
 labExpId 11697
@@ -1330,6 +1362,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
 expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
+geoSampleAccession GSM918409
 grant Hardison
 lab Caltech-m
 labExpId 11697
@@ -1391,6 +1424,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
 expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xPkRep1.narrowPeak.gz
+geoSampleAccession GSM918417
 grant Hardison
 lab Caltech-m
 labExpId 11905
@@ -1422,6 +1456,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
 expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918417
 grant Hardison
 lab Caltech-m
 labExpId 11905
@@ -1452,6 +1487,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
 expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xSigRep1.bigWig
+geoSampleAccession GSM918417
 grant Hardison
 lab Caltech-m
 labExpId 11905
@@ -1513,6 +1549,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002110
 expId 2110
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918418
 grant Hardison
 lab Caltech-m
 labExpId 10007
@@ -1543,6 +1580,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002110
 expId 2110
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xSigRep1.bigWig
+geoSampleAccession GSM918418
 grant Hardison
 lab Caltech-m
 labExpId 10007
@@ -1604,6 +1642,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002112
 expId 2112
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918420
 grant Hardison
 lab Caltech-m
 labExpId 10194
@@ -1634,6 +1673,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002112
 expId 2112
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xSigRep1.bigWig
+geoSampleAccession GSM918420
 grant Hardison
 lab Caltech-m
 labExpId 10194
@@ -1695,6 +1735,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002111
 expId 2111
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xRawDataRep1.fastq.tgz
+geoSampleAccession GSM918419
 grant Hardison
 lab Caltech-m
 labExpId 10135
@@ -1725,6 +1766,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002111
 expId 2111
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xSigRep1.bigWig
+geoSampleAccession GSM918419
 grant Hardison
 lab Caltech-m
 labExpId 10135
@@ -1786,6 +1828,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002126
 expId 2126
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918407
 grant Hardison
 lab Caltech-m
 labExpId 11610
@@ -1816,6 +1859,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002126
 expId 2126
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xSigRep1.bigWig
+geoSampleAccession GSM918407
 grant Hardison
 lab Caltech-m
 labExpId 11610
@@ -1877,6 +1921,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002113
 expId 2113
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xRawDataRep1.fastq.gz
+geoSampleAccession GSM918421
 grant Hardison
 lab Caltech-m
 labExpId 11612
@@ -1907,6 +1952,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002113
 expId 2113
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1.bigWig
+geoSampleAccession GSM918421
 grant Hardison
 lab Caltech-m
 labExpId 11612
@@ -1923,4 +1969,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 794671092
+# MAGIC: 1202155452
