@@ -19,7 +19,7 @@ include wgEncodePsuTfbs.patch.ra
 #include wgEncodePsuTfbs.release2.ra alpha
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra alpha,beta
+include wgEncodePsuHistone.ra
 
 # LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.release2.ra beta,public

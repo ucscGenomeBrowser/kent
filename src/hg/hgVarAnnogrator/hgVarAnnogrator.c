@@ -115,7 +115,7 @@ if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
 expectJsonType(el, jsonString, elName);
-return ((struct jsonStringElement *)el)->str;
+return el->val.jeString;
 }
 
 struct slRef *listFromJHash(struct hash *jHash, char *elName, boolean nullOk)
@@ -127,19 +127,19 @@ if (hel == NULL && nullOk)
     return NULL;
 struct jsonElement *el = hel ? hel->val : NULL;
 expectJsonType(el, jsonList, elName);
-return ((struct jsonListElement *)el)->list;
+return el->val.jeList;
 }
 
 struct hash *hashFromJEl(struct jsonElement *jel, char *desc, boolean nullOk)
-/* Make sure jel's type is jsonHash and return its actual hash.  If nullOK, return
+/* Make sure jel's type is jsonObject and return its actual hash.  If nullOK, return
  * NULL when elName is not found. */
 {
-expectJsonType(jel, jsonHash, desc);
-return ((struct jsonHashElement *)jel)->hash;
+expectJsonType(jel, jsonObject, desc);
+return jel->val.jeHash;
 }
 
 struct hash *hashFromJHash(struct hash *jHash, char *elName, boolean nullOk)
-/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonHash,
+/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonObject,
  * and return its actual hash.  If nullOK, return NULL when elName is not found. */
 {
 struct hashEl *hel = hashLookup(jHash, elName);
@@ -161,8 +161,7 @@ while ((hel = hashNext(&cookie)) != NULL)
 	{
 	struct jsonElement *el = hel->val;
 	if (el->type == jsonString)
-	    slAddHead(&varList, slPairNew(hel->name,
-					  ((struct jsonStringElement *)hel->val)->str));
+	    slAddHead(&varList, slPairNew(hel->name, el->val.jeString));
 	}
     }
 return varList;
@@ -170,7 +169,6 @@ return varList;
 
 
 // #*** -------------------------- end maybe libify to jsHelper ------------------------
-
 //#*** --------------- begin verbatim from hgTables.c -- libify ------------------------
 
 char *getScriptName()
@@ -1746,8 +1744,8 @@ puts("Content-Type:text/javascript\n");
 
 // Parse jsonText and make sure that it is a hash:
 struct jsonElement *request = jsonParse(jsonText);
-expectJsonType(request, jsonHash, "top-level request");
-struct hash *topHash = ((struct jsonHashElement *)request)->hash;
+expectJsonType(request, jsonObject, "top-level request");
+struct hash *topHash = request->val.jeHash;
 // Every request must include a querySpec:
 struct hash *querySpec = hashFromJHash(topHash, "querySpec", FALSE);
 restoreMiniCart(topHash);
