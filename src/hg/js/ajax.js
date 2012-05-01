@@ -153,11 +153,14 @@ function loadXMLDoc(url, callBack)
     }
 }
 
-function setCartVars(names, values)
+function setCartVars(names, values, errFunc)
 {
 // Asynchronously sets the array of cart vars with values
     if(names.length <= 0)
         return;
+
+    if (errFunc == null)
+	errFunc = errorHandler;
 
     // Set up constant portion of url
     var loc = window.location.href;
@@ -190,7 +193,7 @@ function setCartVars(names, values)
                data: data,
                trueSuccess: function () {},
                success: catchErrorOrDispatch,
-               error: errorHandler,
+               error: errFunc,
                cache: false
            });
 }
