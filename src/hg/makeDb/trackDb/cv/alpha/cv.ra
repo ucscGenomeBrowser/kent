@@ -39,7 +39,7 @@ term GM12878
 tag GM12878
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 tissue blood
 vendorName Coriell
 vendorId GM12878
@@ -95,7 +95,7 @@ tag HEPG2
 type Cell Line
 organism human
 tissue liver
-description liver carcinoma
+description hepatocellular carcinoma
 vendorName ATCC
 vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
@@ -1696,7 +1696,7 @@ term GM06990
 tag GM06990
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
+description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
@@ -2055,7 +2055,7 @@ term GM12878-XiMat
 tag GM12878Xb
 type Cell Line
 organism human
-description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
@@ -2489,6 +2489,7 @@ type Cell Line
 organism human
 description amniotic epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 7110
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
@@ -2708,6 +2709,7 @@ organism human
 description cardiac fibroblasts- adult atrial
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
@@ -2722,6 +2724,7 @@ organism human
 description cardiac fibroblasts
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
@@ -2806,6 +2809,7 @@ organism human
 description cardiac myocytes
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
@@ -2820,6 +2824,7 @@ organism human
 description choroid plexus epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
@@ -2851,6 +2856,7 @@ organism human
 description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
+karyotype normal
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3103,6 +3109,7 @@ organism human
 description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3601,6 +3608,7 @@ type Cell Line
 organism human
 description non-pigment ciliary epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
@@ -3685,6 +3693,7 @@ type Cell Line
 organism human
 description pulmonary alevolar epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 3200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
@@ -3919,6 +3928,7 @@ organism human
 description retinal pigment epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
@@ -4530,6 +4540,7 @@ type Cell Line
 organism human
 description mammary gland, non-tumorigenic epithelial, inducible cell line, derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
 tissue breast
+karyotype normal
 vendorName Struhl laboratory
 vendorId MCF10A-Er-Src
 orderUrl https://struhl.med.harvard.edu/
@@ -4596,6 +4607,7 @@ type Cell Line
 organism human
 description epidermal melanocytes
 tissue skin
+karyotype normal
 lineage ectoderm
 vendorName ScienCell
 vendorId 2200
@@ -4747,6 +4759,7 @@ type Cell Line
 organism human
 tissue myometrium
 description myometrial cells
+karyotype normal
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
@@ -4846,6 +4859,7 @@ organism human
 tissue skin
 lineage mesoderm
 description neonatal dermal fibroblasts
+karyotype normal
 vendorName Lonza
 vendorId CC-2509
 orderUrl http://www.lonza.com/
@@ -5149,6 +5163,7 @@ organism human
 description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
+karyotype normal
 vendorName Refer to publication or NDRI
 vendorId PanIslets
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
