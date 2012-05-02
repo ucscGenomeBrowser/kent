@@ -192,3 +192,28 @@ skipInvalid yes
     #   23173299 bases of 2137225476 (1.084%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-27 - Hiram)
+    mkdir /hive/data/genomes/tupBel1/bed/genscan
+    cd /hive/data/genomes/tupBel1/bed/genscan
+    time doGenscan.pl tupBel1 > do.log 2>&1
+    #   real    60m14.339s
+    # failed kluster run due to out of disk space
+    # finished manually:
+# Completed: 150851 of 150851 jobs
+# CPU time in finished jobs:      51736s     862.26m    14.37h    0.60d  0.002 y
+# IO & Wait Time:               1645536s   27425.61m   457.09h   19.05d  0.052 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest finished job:              92s       1.53m     0.03h    0.00d
+# Submission to last job:        241720s    4028.67m    67.14h    2.80d
+
+    # continuing:
+    time doGenscan.pl -workhorse=hgwdev -continue=makeBed tupBel1 \
+        > makeBed.log 2>&1
+    #   real    83m4.947s
+
+    cat fb.tupBel1.genscan.txt
+    #   57907224 bases of 2137225476 (2.709%) in intersection
+    cat fb.tupBel1.genscanSubopt.txt
+    #   76071378 bases of 2137225476 (3.559%) in intersection
+
+#########################################################################

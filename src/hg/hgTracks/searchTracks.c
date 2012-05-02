@@ -448,7 +448,7 @@ else
     hPrintf("</td></tr>\n");
 
     // Set up json for js functionality
-    struct jsonHashElement *jsonTdbVars = newJsonHash(newHash(8));
+    struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 
     int trackCount=0;
     boolean containerTrackCount = 0;

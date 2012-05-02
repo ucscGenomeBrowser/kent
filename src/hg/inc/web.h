@@ -47,6 +47,9 @@ void webEndSectionTables();
 void webVaWarn(char *format, va_list args);
 /* Warning handler that closes off web page. */
 
+boolean webGotWarnings();
+/* Return TRUE if webVaWarn has been called. */
+
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 

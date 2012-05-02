@@ -19,7 +19,7 @@ include wgEncodePsuTfbs.patch.ra
 #include wgEncodePsuTfbs.release2.ra alpha
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra alpha,beta
+include wgEncodePsuHistone.ra
 
 # LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.release2.ra beta,public
@@ -49,7 +49,8 @@ include wgEncodeCaltechHist.ra
 include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.ra
+include wgEncodeCshlLongRnaSeq.ra beta,public
+include wgEncodeCshlLongRnaSeq.release2.ra alpha
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha

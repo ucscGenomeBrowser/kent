@@ -477,3 +477,22 @@ close (FH);
     #   14619450 bases of 1032854810 (1.415%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/genscan
+    cd /hive/data/genomes/galGal4/bed/genscan
+    time doGenscan.pl galGal4 > do.log 2>&1
+    #   real    29m37.528s
+    # one broken job:
+./runGsBig.csh chr8 000 gtf/000/chr8.gtf pep/000/chr8.pep subopt/000/chr8.bed
+    # rerunning with window size of 2000000
+    #   about 10 minutes
+    #   continuing:
+    time doGenscan.pl -continue=makeBed galGal4 > makeBed.log 2>&1
+    #   real    12m15.506s
+
+    cat fb.galGal4.genscan.txt
+    #   22904400 bases of 1032854810 (2.218%) in intersection
+    cat fb.galGal4.genscanSubopt.txt
+    #   24186038 bases of 1032854810 (2.342%) in intersection
+
+#########################################################################

@@ -452,7 +452,6 @@ visibility hide
 color 0,0,0
 type bed 4
 compositeTrack on
-release alpha
 nextExonText Next Match
 prevExonText Prev Match
 pubsArticleTable hgFixed.pubsArticle
@@ -468,7 +467,6 @@ noInherit on
     type bed 12 .
     visibility pack
     priority 2
-    release alpha
     configurable off
     configureByPopup off
 
@@ -479,7 +477,6 @@ noInherit on
     type psl
     visibility hide
     priority 1
-    release alpha
     configurable off
     configureByPopup off
     color 0,115,70
@@ -491,7 +488,6 @@ noInherit on
     visibility hide
     priority 3
     type bed 4
-    release alpha
 
     track pubsMarkerSnp
     shortLabel SNPs
@@ -500,7 +496,6 @@ noInherit on
     visibility hide
     priority 3
     type bed 4
-    release alpha
 
     track pubsMarkerGene
     shortLabel Genes
@@ -509,7 +504,6 @@ noInherit on
     priority 3
     visibility hide
     type bed 4
-    release alpha
 
 track transMap
 superTrack on
