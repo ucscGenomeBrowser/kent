@@ -360,27 +360,6 @@ carefulClose(&out);
 }
 
 
-
-
-/* ---------- reverse DNS function --------- */
-
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netdb.h>
-
-char *reverseDns(char *ip)
-/* do reverse dns lookup on ip using getnamebyaddr,
- *  and then return a string to be freed that is the host */
-{
-struct hostent *hp;
-struct sockaddr_in sock;
-if (inet_aton(ip,&sock.sin_addr) == 0) return NULL;
-hp = gethostbyaddr(&sock.sin_addr,sizeof(sock.sin_addr),AF_INET);
-if (!hp) return NULL;
-return cloneString(hp->h_name);
-}
-
-
 /* -------- functions ---- */
 
 void debugShowAllMembers(struct sqlConnection *conn)
@@ -403,35 +382,6 @@ sqlFreeResult(&sr);
 hPrintf("</table>");
 }
 
-
-/************************************************************
-void lostPasswordPage(struct sqlConnection *conn)
-// draw the lost password page 
-{
-hPrintf(
-"<h2>UCSC Genome Browser</h2>"
-"<p align=\"left\">"
-"</p>"
-"<span style='color:red;'>%s</span>"
-"<h3>Send Me A New Password</h3>"
-"<form method=post action=\"hgLogin\" name=lostPasswordForm >"
-"<table>"
-"<tr><td>E-mail</td><td><input type=text name=hgLogin_email size=20> "
-  "(your e-mail is also your user-id)</td></tr>"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.lostPassword value=submit>"
-"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
-"</table>"
-"<br>"
-, errMsg ? errMsg : ""
-);
-
-cartSaveSession(cart);
-
-hPrintf("</FORM>");
-
-}
-
-**************************************************************/
 void lostPassword(struct sqlConnection *conn)
 /* process the lost password form */
 {
@@ -594,13 +544,13 @@ if (newPassword1 && newPassword2 && !sameString(newPassword1, newPassword2))
 /* check username existence first */
 safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
 char *password = sqlQuickString(conn, query);
-if (!password)
+if ((!password) || (password && !checkPwd(currentPassword,password)))
     {
     freez(&errMsg);
     errMsg = cloneString("Invalid user name or password.");
     changePasswordPage(conn);
     return;
-    }
+    } 
 
 char encPwd[45] = "";
 encryptNewPwd(newPassword1, encPwd, sizeof(encPwd));
