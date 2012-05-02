@@ -567,7 +567,7 @@ tag COLONBC
 type Cell Line
 tier 3
 organism human
-description colon, parent cell type to donors BC_01-11002 and BC_H12817N PROVISIONAL
+description colon, parent cell type to donors BC_01-11002 and BC_H12817N 
 tissue colon
 lineage endoderm
 karyotype normal
@@ -628,7 +628,7 @@ tag ESOPHAGUSBC
 type Cell Line
 tier 3
 organism human
-description esophagus, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description esophagus, parental cell type to donors 01-11002 and H12817N 
 tissue esophagus
 lineage endoderm
 karyotype normal
@@ -703,7 +703,7 @@ tag KIDNEYBC
 type Cell Line
 tier 3
 organism human
-description kidney, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description kidney, parental cell type to donors 01-11002 and H12817N 
 tissue kidney
 lineage mesoderm
 karyotype normal
@@ -813,7 +813,7 @@ tag LUNGBC
 type Cell Line
 tier 3
 organism human
-description lung, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description lung, parental cell type to donors 01-11002 and H12817N 
 tissue lung
 lineage endoderm
 karyotype normal
@@ -978,7 +978,7 @@ tag SKELBC
 type Cell Line
 tier 3
 organism human
-description skeletal muscle, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description skeletal muscle, parental cell type to donors 01-11002 and H12817N 
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
@@ -1106,7 +1106,7 @@ tag STOMACHBC
 type Cell Line
 tier 3
 organism human
-description stomach, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description stomach, parental cell type to donors 01-11002 and H12817N 
 tissue stomach
 lineage endoderm
 karyotype normal
@@ -4458,7 +4458,7 @@ term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
 type Cell Line
 organism human
-description parental cell type to lymphoblastoid cell lines PROVISIONAL
+description parental cell type to lymphoblastoid cell lines 
 tissue blood
 vendorName Coriell
 vendorId various GMXXXXX cell lines
@@ -4690,7 +4690,7 @@ tag MRTG401
 type Cell Line
 tier 3
 organism human
-description Malignant Renal Rhabdoid tumor line PROVISIONAL
+description Malignant renal rhabdoid tumor line 
 karyotype cancer
 lineage missing
 sex M
@@ -4709,7 +4709,7 @@ tag MRTA204
 type Cell Line
 tier 3
 organism human
-description Malignant Rhabdoid tumor (MRT) line, rhabdomyosarcoma PROVISIONAL
+description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma 
 karyotype cancer
 lineage missing
 sex F
@@ -12674,7 +12674,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVISIONAL
+description 1 h with 100 nM Estradiol, Hormone treatment (Stam) 
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -13862,7 +13862,7 @@ label B6D2F1/J
 term B6CBAF1/J
 tag B6CBAF1J
 type strain
-description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. PROVISIONAL
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
 term BALB/cAnN
 tag BALBCANN
