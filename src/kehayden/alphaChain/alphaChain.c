@@ -9,7 +9,7 @@
 
 /* Global vars - all of which can be set by command line options. */
 int maxChainSize = 3;
-int maxNonsenseSize = 10000;
+int outSize = 10000;
 int minUse = 1;
 boolean lower = FALSE;
 boolean unpunc = FALSE;
@@ -26,14 +26,12 @@ errAbort(
   "options:\n"
   "   -size=N - Set max chain size, default %d\n"
   "   -chain=fileName - Write out word chain to file\n"
-  "   -maxNonsenseSize=N - Keep nonsense output to this many words.\n"
+  "   -outSize=N - Output this many words.\n"
   "   -fullOnly - Only output chains of size\n"
   "   -minUse=N - Set minimum use in output chain, default %d\n"
   , maxChainSize, minUse
   );
 }
-
-char *noData  = "n/a";   // Used to indicate a dummy node representing missing data
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
@@ -41,7 +39,7 @@ static struct optionSpec options[] = {
    {"minUse", OPTION_INT},
    {"chain", OPTION_STRING},
    {"fullOnly", OPTION_BOOLEAN},
-   {"maxNonsenseSize", OPTION_INT},
+   {"outSize", OPTION_INT},
    {NULL, 0},
 };
 
@@ -164,35 +162,6 @@ slFreeList(&childList);
 return total;
 }
 
-int wordTreeCountNotInChildren(struct wordTree *wt)
-/* Count up useCounts of all children and return difference between this and our own useCount. */
-{
-return wt->useCount - wordTreeChildrenUseCount(wt);
-}
-
-void wordTreeSetMissing(struct wordTree *wt, int level, struct lm *lm, struct rbTreeNode **stack)
-/* Set missingFromChildren in self and all children. */
-{
-int missingFromChildren = wordTreeCountNotInChildren(wt);
-if (missingFromChildren > 0)
-    {
-    struct wordTree *missing = wordTreeAddFollowing(wt, noData, lm, stack);
-    missing->useCount = missingFromChildren;
-    }
-struct rbTree *following = wt->following;
-if (following != NULL && level < maxChainSize)
-    {
-    struct slRef *childList = rbTreeItems(following);
-    struct slRef *childRef;
-    for (childRef = childList; childRef != NULL; childRef = childRef->next)
-        {
-        struct wordTree *child = childRef->val;
-        wordTreeSetMissing(child, level+1, lm, stack);
-        }
-    slFreeList(&childList);
-    }
-}
-
 void addChainToTree(struct wordTree *wt, struct dlList *chain, 
 	struct lm *lm, struct rbTreeNode **stack)
 /* Add chain of words to tree. */
@@ -207,20 +176,21 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     }
 }
 
-void wordTreeNormalize(struct wordTree *wt, double normVal)
-/* Recursively set wt->normVal */
+void wordTreeNormalize(struct wordTree *wt, int outputCount, double normVal)
+/* Recursively set wt->normVal  and wt->outputCount */
 {
 wt->normVal = normVal;
-wt->outputCount = normVal * maxNonsenseSize;
+wt->outputCount = outputCount;
 if (wt->following != NULL)
     {
+    int totalChildUses = wordTreeChildrenUseCount(wt);
     struct slRef *list = rbTreeItems(wt->following);
     struct slRef *ref;
     for (ref = list; ref !=NULL; ref = ref->next)
 	{
 	struct wordTree *child = ref->val;
-	double childRatio = (double)child->useCount / wt->useCount;
-	wordTreeNormalize(child, childRatio*normVal);
+	double childRatio = (double)child->useCount / totalChildUses;
+	wordTreeNormalize(child, round(childRatio*outputCount), childRatio*normVal);
 	}
     slFreeList(&list);
     }
@@ -307,6 +277,8 @@ int curUses = 0;
 int useThreshold = 0;
 struct wordTree *picked;
 
+int totUseZeroCount = 0;
+
 void addUse(void *v)
 /* Add up to total uses. */
 {
@@ -324,6 +296,13 @@ if (curUses <= useThreshold && useThreshold < top)
 curUses = top;
 }
 
+void pickAny(void *v)
+/* See if inside threshold, and if so store it in picked. */
+{
+struct wordTree *wt = v;
+picked = wt;
+}
+
 struct wordTree *pickRandom(struct rbTree *rbTree)
 /* Pick word from list randomly, but so that words more
  * commonly seen are picked more often. */
@@ -332,20 +311,18 @@ picked = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
-useThreshold = rand() % totalUses; 
-rbTreeTraverse(rbTree, pickIfInThreshold);
+if (totalUses != 0)
+    {
+    useThreshold = rand() % totalUses; 
+    rbTreeTraverse(rbTree, pickIfInThreshold);
+    }
+if (picked == NULL)
+    {
+    ++totUseZeroCount;
+    rbTreeTraverse(rbTree, pickAny);
+    }
 assert(picked != NULL);
 return picked;
-}
-
-void dumpWordList(struct dlNode *list)
-{
-struct dlNode *node;
-for (node = list; !dlEnd(node); node = node->next)
-    {
-    char *word = node->val;
-    uglyf("%s ", word);
-    }
 }
 
 struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
@@ -395,27 +372,6 @@ while (wt != NULL)
     }
 }
 
-int anyForceCount = 0;
-int fullForceCount = 0;
-
-struct wordTree *forceRealWord(struct wordTree *wt, struct dlNode *list)
-/* Get a choice that is not one of the fake no-date ones by backing up to progressively
- * higher levels of markov chain.  */
-{
-++anyForceCount;
-// uglyf("forceRealWord("); dumpWordList(list); uglyf(")\n");
-struct dlNode *sublist;
-for (sublist = list->next; !dlEnd(sublist); sublist = sublist->next)    /* Skip over first one, it failed already. */
-    {
-  //   uglyf("  "); dumpWordList(sublist); uglyf("\n");
-    struct wordTree *picked = predictNextFromAllPredecessors(wt, sublist);
-    if (picked != NULL && !sameString(picked->word, noData))
-        return picked;
-    }
-++fullForceCount;
-return pickRandom(wt->following);
-}
-
 static void wordTreeGenerateFaux(struct wordTree *wt, int maxSize, struct wordTree *firstWord, 
 	int maxOutputWords, FILE *f)
 /* Go spew out a bunch of words according to probabilities in tree. */
@@ -429,44 +385,38 @@ for (;;)
     if (++outputWords > maxOutputWords)
         break;
     struct dlNode *node;
-    struct wordTree *maybeWord;	// This might be what we want, or it might be a dummy node
+    struct wordTree *picked;
 
     /* Get next predicted word. */
     if (listSize == 0)
         {
 	AllocVar(node);
 	++listSize;
-	maybeWord = firstWord;
+	picked = firstWord;
 	}
     else if (listSize >= maxSize)
 	{
 	node = dlPopHead(ll);
-	maybeWord = predictNext(wt, ll);
+	picked = predictNext(wt, ll);
 	}
     else
 	{
-	maybeWord = predictNext(wt, ll);
+	picked = predictNext(wt, ll);
 	AllocVar(node);
 	++listSize;
 	}
 
-    if (maybeWord == NULL)
+    if (picked == NULL)
          break;
 
-    /* Here we deal with possibly having fetched a dummy node. */
-    struct wordTree *realWord = maybeWord;
-    if (sameString(maybeWord->word, noData))
-        {
-	realWord = forceRealWord(wt, ll->head);
-	}
 
     /* Add word from whatever level we fetched back to our chain of up to maxChainSize. */
-    node->val = realWord->word;
+    node->val = picked->word;
     dlAddTail(ll, node);
 
-    fprintf(f, "%s\n", maybeWord->word);
+    fprintf(f, "%s\n", picked->word);
 
-    decrementOutputCounts(maybeWord);
+    decrementOutputCounts(picked);
     }
 dlListFree(&ll);
 }
@@ -548,9 +498,6 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 
-/* Add in additional information to help traverse tree . */
-wordTreeSetMissing(wt, 1, lm, stack);
-wordTreeNormalize(wt, 1.0);
 return wt;
 }
 
@@ -559,6 +506,7 @@ void alphaChain(char *inFile, char *outFile)
 {
 struct lm *lm = lmInit(0);
 struct wordTree *wt = wordTreeForChainsInFile(inFile, maxChainSize, lm);
+wordTreeNormalize(wt, outSize, 1.0);
 
 if (optionExists("chain"))
     {
@@ -571,14 +519,15 @@ if (optionExists("chain"))
 
 
 FILE *f = mustOpen(outFile, "w");
-int maxSize = min(wt->useCount, maxNonsenseSize);
-
-/* KEH NOTES: controls how many words we emit */
-
-wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->following), maxSize, f);
+wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->following), outSize, f);
 carefulClose(&f);
+uglyf("totUseZeroCount = %d\n", totUseZeroCount);
 
-uglyf("anyForce %d, fullForce %d (%4.2f%%)\n", anyForceCount, fullForceCount, 100.0*fullForceCount/anyForceCount);
+    {
+    FILE *f = mustOpen("foo.chain", "w");
+    wordTreeDump(0, wt, f);
+    carefulClose(&f);
+    }
 
 lmCleanup(&lm);	// Not really needed since we're just going to exit.
 }
@@ -594,7 +543,7 @@ if (argc != 3)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
 minUse = optionInt("minUse", minUse);
-maxNonsenseSize = optionInt("maxNonsenseSize", maxNonsenseSize);
+outSize = optionInt("outSize", outSize);
 fullOnly = optionExists("fullOnly");
 alphaChain(argv[1], argv[2]);
 return 0;

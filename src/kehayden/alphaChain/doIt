@@ -1,1 +1,1 @@
-alphaChain DYZ3_alphaChain.txt test chain=test.chain
+alphaChain DYZ3_alphaChain.txt test chain=test.chain outSize=10000
