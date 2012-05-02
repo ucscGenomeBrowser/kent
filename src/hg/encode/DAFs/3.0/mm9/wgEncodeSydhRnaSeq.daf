@@ -1,6 +1,6 @@
 # Data Agreement File for Stanford/Yale RNA-seq experiments for mm9  
 
-#$Revision: 1.4 $
+#$Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -27,8 +27,8 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Snyder
-lab               Stanford
-#Alternative labs: lab Yale
+lab               Stanford-m
+#Alternative labs: lab Yale-m
 dataType          RnaSeq 
 compositeSuffix   SydhRnaSeq
 group             Expression
