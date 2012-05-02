@@ -20,8 +20,13 @@ ret->realName = row[2];
 ret->password = row[3];
 ret->email = row[4];
 ret->lastUse = row[5];
-safecpy(ret->activated, sizeof(ret->activated), row[6]);
-ret->dateAuthenticated = row[7];
+ret->newPassword = row[6];
+ret->newPasswordExpire = row[7];
+ret->dateActivated = row[8];
+ret->emailToken = row[9];
+ret->emailTokenExpires = row[10];
+safecpy(ret->passwordChangeRequired, sizeof(ret->passwordChangeRequired), row[11]);
+safecpy(ret->accountActivated, sizeof(ret->accountActivated), row[12]);
 }
 
 struct gbMembers *gbMembersLoadByQuery(struct sqlConnection *conn, char *query)
@@ -56,8 +61,8 @@ void gbMembersSaveToDb(struct sqlConnection *conn, struct gbMembers *el, char *t
  * If worried about this use gbMembersSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->idx,  el->userName,  el->realName,  el->password,  el->email,  el->lastUse,  el->activated,  el->dateAuthenticated);
+dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->idx,  el->userName,  el->realName,  el->password,  el->email,  el->lastUse,  el->newPassword,  el->newPasswordExpire,  el->dateActivated,  el->emailToken,  el->emailTokenExpires,  el->passwordChangeRequired,  el->accountActivated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -72,17 +77,22 @@ void gbMembersSaveToDbEscaped(struct sqlConnection *conn, struct gbMembers *el, 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *userName, *realName, *password, *email, *lastUse, *activated, *dateAuthenticated;
+char  *userName, *realName, *password, *email, *lastUse, *newPassword, *newPasswordExpire, *dateActivated, *emailToken, *emailTokenExpires, *passwordChangeRequired, *accountActivated;
 userName = sqlEscapeString(el->userName);
 realName = sqlEscapeString(el->realName);
 password = sqlEscapeString(el->password);
 email = sqlEscapeString(el->email);
 lastUse = sqlEscapeString(el->lastUse);
-activated = sqlEscapeString(el->activated);
-dateAuthenticated = sqlEscapeString(el->dateAuthenticated);
+newPassword = sqlEscapeString(el->newPassword);
+newPasswordExpire = sqlEscapeString(el->newPasswordExpire);
+dateActivated = sqlEscapeString(el->dateActivated);
+emailToken = sqlEscapeString(el->emailToken);
+emailTokenExpires = sqlEscapeString(el->emailTokenExpires);
+passwordChangeRequired = sqlEscapeString(el->passwordChangeRequired);
+accountActivated = sqlEscapeString(el->accountActivated);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->idx,  userName,  realName,  password,  email,  lastUse,  activated,  dateAuthenticated);
+dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->idx,  userName,  realName,  password,  email,  lastUse,  newPassword,  newPasswordExpire,  dateActivated,  emailToken,  emailTokenExpires,  passwordChangeRequired,  accountActivated);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&userName);
@@ -90,8 +100,13 @@ freez(&realName);
 freez(&password);
 freez(&email);
 freez(&lastUse);
-freez(&activated);
-freez(&dateAuthenticated);
+freez(&newPassword);
+freez(&newPasswordExpire);
+freez(&dateActivated);
+freez(&emailToken);
+freez(&emailTokenExpires);
+freez(&passwordChangeRequired);
+freez(&accountActivated);
 }
 
 struct gbMembers *gbMembersLoad(char **row)
@@ -107,8 +122,13 @@ ret->realName = cloneString(row[2]);
 ret->password = cloneString(row[3]);
 ret->email = cloneString(row[4]);
 ret->lastUse = cloneString(row[5]);
-safecpy(ret->activated, sizeof(ret->activated), row[6]);
-ret->dateAuthenticated = cloneString(row[7]);
+ret->newPassword = cloneString(row[6]);
+ret->newPasswordExpire = cloneString(row[7]);
+ret->dateActivated = cloneString(row[8]);
+ret->emailToken = cloneString(row[9]);
+ret->emailTokenExpires = cloneString(row[10]);
+safecpy(ret->passwordChangeRequired, sizeof(ret->passwordChangeRequired), row[11]);
+safecpy(ret->accountActivated, sizeof(ret->accountActivated), row[12]);
 return ret;
 }
 
@@ -118,7 +138,7 @@ struct gbMembers *gbMembersLoadAll(char *fileName)
 {
 struct gbMembers *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -136,7 +156,7 @@ struct gbMembers *gbMembersLoadAllByChar(char *fileName, char chopper)
 {
 struct gbMembers *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -163,8 +183,13 @@ ret->realName = sqlStringComma(&s);
 ret->password = sqlStringComma(&s);
 ret->email = sqlStringComma(&s);
 ret->lastUse = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->activated, sizeof(ret->activated));
-ret->dateAuthenticated = sqlStringComma(&s);
+ret->newPassword = sqlStringComma(&s);
+ret->newPasswordExpire = sqlStringComma(&s);
+ret->dateActivated = sqlStringComma(&s);
+ret->emailToken = sqlStringComma(&s);
+ret->emailTokenExpires = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->passwordChangeRequired, sizeof(ret->passwordChangeRequired));
+sqlFixedStringComma(&s, ret->accountActivated, sizeof(ret->accountActivated));
 *pS = s;
 return ret;
 }
@@ -181,7 +206,11 @@ freeMem(el->realName);
 freeMem(el->password);
 freeMem(el->email);
 freeMem(el->lastUse);
-freeMem(el->dateAuthenticated);
+freeMem(el->newPassword);
+freeMem(el->newPasswordExpire);
+freeMem(el->dateActivated);
+freeMem(el->emailToken);
+freeMem(el->emailTokenExpires);
 freez(pEl);
 }
 
@@ -224,11 +253,31 @@ fprintf(f, "%s", el->lastUse);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->activated);
+fprintf(f, "%s", el->newPassword);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->dateAuthenticated);
+fprintf(f, "%s", el->newPasswordExpire);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->dateActivated);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->emailToken);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->emailTokenExpires);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->passwordChangeRequired);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->accountActivated);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
