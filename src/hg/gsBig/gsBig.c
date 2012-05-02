@@ -686,16 +686,16 @@ else
 		slAddHead(&segList, seg);
 		}
 	    chunkNum++;
+            if (! optionExists("noRemove"))
+                {
+                remove(tempFa);
+                remove(tempGs);
+                }
 	    }
 	slReverse(&segList);
 	seg = mergeSegs(segList);
 	writeSeg(seqName, seg, gtfFile, subFile, transFile);
 	freez(&seqName);
-	}
-    if (! optionExists("noRemove"))
-	{
-	remove(tempFa);
-	remove(tempGs);
 	}
     }
 }

@@ -271,3 +271,29 @@ taxId   39432
     #   17439071 bases of 2477131095 (0.704%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/saiBol1/bed/genscan
+    cd /hive/data/genomes/saiBol1/bed/genscan
+    # while running this procedure, constructed the script to do this
+    #   automatically, the steps were run manually for this instance.
+    doGenscan.pl hetGla2
+    # one job failed during the genscan kluster run.
+    # to recover, edit the runGsBig.csh script and lower the size of chunks
+    # for gsBig, in this case from 2400000 to 2000000:
+
+/cluster/bin/x86_64/gsBig $seqFile $resultGtf -trans=$resultPep -subopt=$resultSubopt -exe=/hive/data/staging/data/genscan/genscan -par=/hive/data/staging/data/genscan/HumanIso.smat -tmp=/tmp -window=2000000
+
+    # then run the job on hgwdev that uses this script:
+    ./runGsBig.csh JH378249 000 gtf/000/JH378249.gtf \
+        pep/000/JH378249.pep subopt/000/JH378249.bed
+
+    # may need to adjust the number even smaller, or in the worst case,
+    #   actually partition the bit in question.
+
+    # when all finished:
+    cat fb.saiBol1.genscan.txt
+    #   51449399 bases of 2477131095 (2.077%) in intersection
+    cat fb.saiBol1.genscanSubopt.txt
+    #   50823007 bases of 2477131095 (2.052%) in intersection
+
+#########################################################################

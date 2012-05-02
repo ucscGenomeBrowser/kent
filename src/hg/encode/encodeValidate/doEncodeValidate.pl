@@ -360,6 +360,7 @@ our %formatCheckers = (
     genePred => \&validateGene,
     gtf => \&validateGtf,
     txt  => \&validateFreepass,
+    pdf  => \&validateFreepass,
     document => \&validateFreepass,
     fasta  => \&replacedByFastQ,
     wig => \&replacedByBigWig,

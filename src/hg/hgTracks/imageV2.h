@@ -62,12 +62,12 @@ void flatTracksFree(struct flatTracks **flatTracks);
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct jsonHashElement *settings, struct track *track, boolean configurable);
+void jsonTdbSettingsBuild(struct jsonElement *settings, struct track *track, boolean configurable);
 
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 
-void jsonTdbSettingsUse(struct jsonHashElement *settings);
+void jsonTdbSettingsUse(struct jsonElement *settings);
 // Closes and returns the contents of the jsonTdbSettingsString
 
 /////////////////////////

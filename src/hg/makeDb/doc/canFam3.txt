@@ -384,3 +384,102 @@ close (FH);
     #   39980778 bases of 2392715236 (1.671%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/canFam3/bed/genscan
+    cd /hive/data/genomes/canFam3/bed/genscan
+    time doGenscan.pl canFam3 > do.log 2>&1
+    #   real    56m58.015s
+
+    cat fb.canFam3.genscan.txt
+    #   56089579 bases of 2392715236 (2.344%) in intersection
+    cat fb.canFam3.genscanSubopt.txt
+    #   49232090 bases of 2392715236 (2.058%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-01 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2392715236 / 2897316137 \) \* 1024
+    #	( 2392715236 / 2897316137 ) * 1024 = 845.658632
+
+    # round up to 900  (canFam2 used 852)
+
+    cd /hive/data/genomes/canFam3
+    time blat canFam3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/canFam3.11.ooc -repMatch=900
+    #   Wrote 24788 overused 11-mers to jkStuff/canFam3.11.ooc
+    #	real    1m11.629s
+
+    # there are a few non-bridged gaps, make lift file for genbank
+    hgsql -N -e "select bridge from gap;" canFam3 | sort | uniq -c
+    #   80 no
+    #   23796 yes
+    cd /hive/data/genomes/canFam3/jkStuff
+    gapToLift canFam3 canFam3.nonBridged.lift -bedFile=canFam3.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' canFam3.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-02-08 - Hiram)
+    # examine the file:
+    /cluster/data/genomes/genbank/data/genomes/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Mus musculus    334577  4853663 26288
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # of course, canFam3 has plenty of everything
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add canFam3 just after canFam2 and commit to GIT
+# canFam3 (dog)
+canFam3.serverGenome = /hive/data/genomes/canFam3/canFam3.2bit
+canFam3.clusterGenome = /hive/data/genomes/canFam3/canFam3.2bit
+canFam3.ooc = /hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc
+canFam3.lift = /hive/data/genomes/canFam3/jkStuff/canFam3.nonBridged.lift
+canFam3.align.unplacedChroms = chrUn
+canFam3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+canFam3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+canFam3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+canFam3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+canFam3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+canFam3.refseq.mrna.native.load = yes
+canFam3.refseq.mrna.xeno.load = yes
+canFam3.genbank.mrna.xeno.load = yes
+canFam3.downloadDir = canFam3
+canFam3.upstreamGeneTbl = ensGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding definition for canFam3" genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S mm10		# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial canFam3 &
+    #	logFile: var/build/logs/2012.05.01-13:24:37.canFam3.initalign.log
+XXX - running - Tue May  1 13:24:53 PDT 2012
+    #	real    795m52.388s
+
+    # load data/genomesbase when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad canFam3 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #	real    114m56.461s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add canFam3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added canFam3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
