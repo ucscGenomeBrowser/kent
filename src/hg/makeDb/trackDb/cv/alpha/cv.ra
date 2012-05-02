@@ -6260,6 +6260,21 @@ color 65,105,225
 sex M
 protocol Stam:ES-E14_Stam_protocol.pdf
 
+term ES-EM5Sox17huCD25 
+tag ESEM5S
+type Cell Line
+organism mouse
+category primaryCells
+description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5 PROVISIONAL
+age EO
+strain 129/Ola
+vendorName Gilbert lab
+vendorId ES-GscgfpSox17huCD25
+orderUrl http://gilbertlab.bio.fsu.edu/ 
+color 65,105,225
+sex U
+protocol missing
+
 term ES-TT2
 tag ESTT2
 type Cell Line
@@ -6478,6 +6493,22 @@ color 102,50,200
 sex U
 protocol Stam:HindlimbBuds_Stam_protocol.pdf
 label Hind Limb Bud
+
+term J185a
+tag J185A
+type Cell Line
+organism mouse
+category cellLine
+age immortalized
+strain Unknown
+description Fetal myoblast Desmin+ PROVISIONAL
+vendorName Gilbert lab
+vendorId J185a
+orderUrl http://gilbertlab.bio.fsu.edu/ 
+termId 174
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
+color 139,69,19
+sex U
 
 term Kidney
 tag KIDNEY
@@ -12391,7 +12422,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description nput library was prepared at Harvard. 
+description input library was prepared at Harvard. 
 label Harvard Input Control
 
 ### Treatments
@@ -12597,6 +12628,21 @@ type treatment
 term diffProtF_9d
 tag DIFFF9D
 description 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert)
+type treatment
+
+term diffProtG_3d
+tag DIFFG3D
+description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtH_Sox17+
+tag DIFFHSOXP
+description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtH_Sox17-
+tag DIFFHSOXM
+description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert) PROVISIONAL
 type treatment
 
 term DMSO_0.02pct
