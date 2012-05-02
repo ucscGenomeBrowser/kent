@@ -171,3 +171,24 @@ sourceName="Broad Institute micMur1 (NCBI project 19967, ABDC00000000)" where na
     #   33763514 bases of 1852394361 (1.823%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/micMur1/bed/genscan
+    cd /hive/data/genomes/micMur1/bed/genscan
+    time doGenscan.pl micMur1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    256m38.291s
+    # continuing:
+    time doGenscan.pl -continue=load micMur1 > load.log 2>&1
+    #   real    9m19.938s
+    # failed out of inodes on hive:
+    time doGenscan.pl -continue=cleanup micMur1 > cleanup.log 2>&1
+    #   real    25m41.674s
+
+    cat fb.micMur1.genscan.txt
+    #   50561491 bases of 1852394361 (2.730%) in intersection
+    cat fb.micMur1.genscanSubopt.txt
+    #   55072205 bases of 1852394361 (2.973%) in intersection
+
+#########################################################################

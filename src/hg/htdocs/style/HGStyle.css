@@ -1,35 +1,35 @@
-.topBlueBar {   font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold;
+.topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
                 color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
 
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
-.topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
-.leftbar { text-decoration: none; font-family: arial, san-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
+.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
+.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
 .hiddenText {background-color: silver}
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
 .topbar { white-space: nowrap; padding: 0px 10px;}
-A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #EAE360; font-size: 15px; }
+A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #EAE360; font-size: 15px; }
 
-A:link.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:visited.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:active.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:hover.leftbar { text-decoration: none; font-family: arial, san-serif; color: #FFFF99; font-size: 10pt; font-weight: 600; }
+A:link.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:visited.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:active.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:hover.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FFFF99; font-size: 10pt; font-weight: 600; }
 /*--  #FFFF00;  --*/
 
-A:link.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:visited.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:active.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:hover.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:link.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:visited.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:active.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:hover.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
 
-A:link.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
-A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
-A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
-A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
+A:link.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
+A:visited.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:active.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:hover.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 IMG.bigBlue {vertical-align: middle;}
 TD.bigBlue {vertical-align: middle;}
 
