@@ -12422,7 +12422,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description nput library was prepared at Harvard. 
+description input library was prepared at Harvard. 
 label Harvard Input Control
 
 ### Treatments
