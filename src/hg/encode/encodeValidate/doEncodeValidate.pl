@@ -235,8 +235,10 @@ sub validateFiles {
         } elsif(!(-r $file)) {
             pushError(\@errors, "File \'$file\' is un-readable");
         } else {
+            #pushError(\@errors, "Start validating $file:\n");
             #Venkat: Added $sex to pass sex from ddf to bam validate mouse tissues
             pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file, $cell,$sex));
+            #pushError(\@errors, "End validating file $file\n\n\n");
         }
     }
     $files = \@newFiles;
@@ -349,16 +351,16 @@ our %formatCheckers = (
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
-    bed5FloatScore => \&validateBed,
     narrowPeak => \&validateNarrowPeak,
     broadPeak => \&validateBroadPeak,
-    gappedPeak => \&validateGappedPeak,
+    gappedPeak => \&validateBed,
     fastq => \&validateFastQ,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     genePred => \&validateGene,
     gtf => \&validateGtf,
     txt  => \&validateFreepass,
+    pdf  => \&validateFreepass,
     document => \&validateFreepass,
     fasta  => \&replacedByFastQ,
     wig => \&replacedByBigWig,
@@ -371,121 +373,6 @@ my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|[eE]{1}?[+-]{1}?\\d+))";  # Tim's attempt
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";                      # Original
 my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
-
-sub listToRegExp
-{
-# Return a regular expression for given list of field specific tests.
-#
-# $validateList is a reference to a list of hashes with: {NAME, REGEX or TYPE}
-# If a line fails this regular expression, you should then call validateWithListUtil with this line
-# and validation list to generate a field specific error message; this is a speedup hack,
-# because we want to avoid calling validateWithListUtil for every line (because validateWithListUtil is really
-# slow).
-#
-# Note that the 'chrom' field is captured, so you should test %chromInfo (e.g. $chromInfo($1))
-# after using the regular expression to verify that the line has a valid chrom.
-    my ($validateList) = @_;
-    my @list;
-    for my $validateField (@{$validateList}) {
-        my $type = $validateField->{TYPE};
-        if(defined($type) && $type eq 'chrom') {
-            push(@list, "(\\S+)");
-        } else {
-            my $regex;
-            if($type) {
-                if(!($regex = $typeMap{$type})) {
-                    die "PROGRAM ERROR: invalid TYPE: $type\n";
-                }
-            } elsif(!($regex = $validateField->{REGEX})) {
-                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
-            }
-            push(@list, $regex);
-        }
-    }
-    return "^" . join("\\s+", @list) . "\$";
-}
-
-sub validateWithListUtil
-{
-# Validate $line using a validation list.
-# returns error string or undef if line passes validation
-# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
-    my ($line, $validateList) = @_;
-    my @list = split(/\s+/, $line);
-    my $fieldError = "; saw '" . scalar(@list) . "' fields; expected: '" . @{$validateList} . "'";
-    if(@list < @{$validateList}) {
-        return "not enough fields" . $fieldError;
-    } elsif(@list > @{$validateList}) {
-        return "too many fields" . $fieldError;
-    } else {
-        for my $validateField (@{$validateList}) {
-            my $val = shift(@list);
-            my $type = $validateField->{TYPE};
-            if(defined($type) && $type eq 'chrom') {
-                if(!$chromInfo{$val}) {
-                    return "value '$val' for field '$validateField->{NAME}' is an invalid chromosome";
-                }
-            } else {
-                my $regex;
-                if($type) {
-                    if(!($regex = $typeMap{$type})) {
-                        die "PROGRAM ERROR: invalid TYPE: $type\n";
-                    }
-                } elsif(!($regex = $validateField->{REGEX})) {
-                    die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
-                }
-                if($val !~ /^$regex$/) {
-                    my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
-                    if($type) {
-                        $error .= "; must be type '$type'";
-                    }
-                    return $error;
-                }
-            }
-        }
-    }
-    return undef;
-}
-
-sub validateWithList
-{
-# open a file and validate each line with $validateList
-# $name is the caller's subroutine name (used in error and debug messages).
-    my ($path, $file, $type, $maxRows, $name, $validateList) = @_;
-    my $lineNumber = 0;
-    my $fh = Encode::openUtil($file, $path);
-    my $regexp = listToRegExp($validateList);
-    my $hasChrom = 0;
-    for my $rec (@{$validateList}) {
-        $hasChrom++ if($rec->{NAME} eq "chrom");
-    }
-    doTime("beginning validateWithList $name,$type,$maxRows") if $opt_timing;
-    while(my $line = <$fh>) {
-        chomp $line;
-        $lineNumber++;
-        return ("Invalid $type file; line $lineNumber in file '$file';\nerror: exceeded maximum number of rows allowed ($maxRows) \nline: $line") if $lineNumber > $maxRows;
-        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        if($line =~ /$regexp/) {
-            if($hasChrom) {
-                my $chrom = $1;
-                if(!$chromInfo{$1}) {
-                    return ("Invalid $type file; line $lineNumber in file '$file';\nerror: invalid chrom '$chrom';\nline: $line");
-                }
-            }
-        } else {
-            if(my $error = validateWithListUtil($line, $validateList)) {
-                return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line");
-            } else {
-                die "PROGRAM ERROR: inconsistent results from validateWithListUtil\n";
-            }
-        }
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateWithList $name,$type,$maxRows",$lineNumber) if $opt_timing;
-    return ();
-}
-
 
 sub validateFreepass
 {
@@ -501,131 +388,52 @@ sub validateFreepass
 
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
-    my ($path, $file, $type) = @_;
-    my $lineNumber = 0;
+    my ($path, $file, $type, $cell, $sex) = @_;
     doTime("beginning validateBed") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    my @localerrors;
-    my $errorCount = 0;
-    my $errorLimit = 20;
-    my $oldError = 0;
-    while(<$fh>) {
-        my $line = $_;
-        chomp $_;
-        $lineNumber++;
-        if (scalar(@localerrors) != $oldError) {
-            $oldError = scalar(@localerrors);
-            $errorCount++;
-        }
-        if ($errorCount >= $errorLimit) {
-            push @localerrors, "Error limit exceeded, there may be more after this point.\n";
-            last
-        }
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        my @fields = split /\s+/, $line;
-        my $fieldCount = scalar(@fields);
-        next if(!$fieldCount);
-        my $prefix = "line $lineNumber:";
-        if ($fields[0] =~ m/(track|browser)/) {
-            next
-        }
-        if($fieldCount <= 2) {
-            push @localerrors, "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
-            next
-        }
-        if ($fields[1] !~ /^\d+$/) {
-            push @localerrors, "$prefix field 2 value ($fields[1]) is invalid; value must be a positive integer\n";
-        }
-        if ($fields[2] !~ /^\d+$/) {
-            push @localerrors, "$prefix field 3 value ($fields[2]) is invalid; value must be a positive integer\n";
-        }
-        if ($fields[2] < $fields[1]) {
-            push @localerrors, "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-        } elsif (!$chromInfo{$fields[0]}) {
-            push @localerrors, "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
-            next
-        } elsif ($fields[0] !~ m/chrM/) {
-            if ($fields[2] > $chromSizes{$fields[0]}) {
-                push @localerrors, "$prefix field 3 value ($fields[2]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
-            }
-        } 
-        if ($fieldCount >= 5 && ($fields[4] !~ /^\d+$/ or $fields[4] > 1000)) {
-            push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer between 0-1000\n";
-        }
-        if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
-            push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
-        }
-        if ($type eq 'bedRnaElements') {
-            unless ($fields[6] =~ m/$floatRegEx/) {
-                push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
-            }
-            unless ($fields[7] =~ m/$floatRegEx/ or $fields[7] =~ m/\.$/) {
-                push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
-            }
-            unless ($fields[8] =~ m/^\d+$/) {
-                push @localerrors, "$prefix field 9 ($fields[8]) in $type must be an int.\n";
-            }
-        }
-        if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
-            push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
-            next
-        }
-        if ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx$/) {
-            push @localerrors, "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
-            next
+    if ($type =~ m/bed\s*(\d+)/){
+        unless ($1 =~ m/^(3|4|5|6|8|9|12)$/) {
+            return "ENCODE does not accept bed$1, please change the field type to match one of the standard bed types (3,4,5,6,8,9,12).\n";
         }
     }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
-    doTime("done validateBed",$lineNumber) if $opt_timing;
-    if (scalar(@localerrors)) {
-        my $errstr = join "", @localerrors;
-        $errstr = "Failed BED validation in $file:\n" . $errstr;
-        return $errstr;
-    } else {
-        return ();
+    my %bedPlusTypes = (
+        bedRnaElements => "bed6+3",
+        bedLogR => "bed9+1",
+        bedRrbs => "bed9+2",
+        gappedPeak => "bed12+3"
+    );
+    my $paramList = validationSettings("validateFiles","$type");
+    my $cmdtype = $type;
+    if (exists ($bedPlusTypes{$type})) {
+        $cmdtype = $bedPlusTypes{$type};
     }
-}
+    my $asFile = "";
+    unless ($sex) {
+        $sex = "M";
+    }
+    my ($infoFile, $twoBitFile) = getInfoFiles($cell, $sex);
+    my $asPath = "$configPath/autoSql/$type.as";
+    if (exists($bedPlusTypes{$type}) and -e "$asPath") {
+        $asFile = "-as=$asPath";
+    } elsif (exists($bedPlusTypes{$type}) and !(-e "$configPath/$type.as")) {
+        return "Can't find .as file for type $type";
+    }
+    my $cmd = "validateFiles $paramList -type=$cmdtype $asFile -chromInfo=$infoFile $path/$file";
+    my $safe = SafePipe->new(CMDS => ["$cmd"]);
+    my $err = $safe->exec();
+    if($err) {
+        #uncomment for web based debug
+        #my $errorPrefix = "type = $cmdtype\ninfoFile = $infoFile\ncmd = $cmd\nparamList = $paramList\n";
+        my $errorlog = "ERROR: failed validateBed : " . $safe->stderr() . "\n" . "End\n";
+        return("$errorlog\n\nfailed validateBed for '$file'");
+    }
 
-#sub validateBedGraph {
-# This format is no longer accepted by ENCODE, But I was wondering if we wanted to save this code
-# somewhere to be incorporated into another validator. (Mar 2012)
-# Validate each line of a bedGraph file.
-#    my ($path, $file, $type) = @_;
-#    my $lineNumber = 0;
-#    doTime("beginning validateBedGraph") if $opt_timing;
-#    my $fh = Encode::openUtil($file, $path);
-#    while(<$fh>) {
-#        chomp;
-#        $lineNumber++;
-#        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-#        my @fields = split /\s+/;
-#        my $fieldCount = @fields;
-#        next if(!$fieldCount);
-#        my $prefix = "Failed bedGraph validation, file '$file'; line $lineNumber:";
-#        if(/^(track|browser)/) {
-#            ;
-#        } elsif($fieldCount != 4) {
-#            die "$prefix found " . scalar(@fields) . " fields; need 4\n";
-#        } elsif (!$chromInfo{$fields[0]}) {
-#            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
-#        } elsif ($fields[1] !~ /^\d+$/) {
-#            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
-#        } elsif ($fields[2] !~ /^\d+$/) {
-#            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
-#        } elsif ($fields[2] < $fields[1]) {
-#            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-#        } elsif ($fields[3] !~ /^$floatRegEx$/) {
-#            die "$prefix field 4 value '$fields[3]' is invalid; must be a float [$floatRegEx]\n";
-#        } else {
-#            ;
-#        }
-#    }
-#    $fh->close();
-#    HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
-#    doTime("done validateBedGraph", $lineNumber) if $opt_timing;
-#    return ();
-#}
+
+
+    HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
+    doTime("done validateBed") if $opt_timing;
+
+    return ();
+}
 
 sub validateGtf {
 # validate GTF by converting to genePred and validating that
@@ -684,31 +492,34 @@ sub validateGene {
 sub replacedByBam {
 # tagAlign and pairedTagAligne are replaced by BAM for ENCODE (Jan 2011)
 # After training the labs, this code should be removed (remove in Jan 2013)
-    my ($type) = @_;
+    my ($path,$file,$type) = @_;
     return ("Files of type \'$type\' should be submitted as type BAM");
 }
 
 sub replacedByBigWig {
 # wigs and bedGraphs are replaced by bigWig for ENCODE (Jan 2011)
 # After training the labs, this code should be removed (remove in Jan 2013)
-    my ($type) = @_;
+    my ($path,$file,$type) = @_;
     return ("Files of type \'$type\' should be submitted as type bigWig");
 }
 
 sub replacedByFastQ {
 # fasta is replaced by fastQ for ENCODE (Jan 2011)
 # After training the labs, this code should be removed (remove in Jan 2013)
-    my ($type) = @_;
+    my ($path,$file,$type) = @_;
     return ("Files of type \'$type\' should be submitted as type fastQ");
 }
 
 sub getInfoFiles
 {
     my ($cell,$sex) = @_;
+    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
+    my $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
+    my $twoBitFile =  "$downloadDir/male.$assembly.2bit";
+
 
     if (not defined $terms{'Cell Line'}->{$cell}) {
-        print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
-        return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
+        return ($infoFile, $twoBitFile);
     }
     my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
 
@@ -731,13 +542,9 @@ sub getInfoFiles
     }
 
 
-    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
-    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
-    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
-
-    if ($cellLineSex ne "F")  {
-        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
-        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
+    if ($cellLineSex eq "F")  {
+        $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
+        $twoBitFile =  "$downloadDir/female.$assembly.2bit";
     }
     return ($infoFile, $twoBitFile);
 }
@@ -770,29 +577,6 @@ sub validateBroadPeak
         return("failed validateBroadPeak for '$file'");
     }
     return ();
-}
-
-sub validateGappedPeak
-# Cricket says:  validateFiles does gappedPeak, why are we doing it differently here.
-{
-    my ($path, $file, $type) = @_;
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {TYPE => "string", NAME => "name"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"},
-                {TYPE => "uint", NAME => "thickStart"},
-                {TYPE => "uint", NAME => "thickEnd"},
-                {TYPE => "string", NAME => "itemRgb"},
-                {TYPE => "uint", NAME => "blockCount"},
-                {TYPE => "string", NAME => "blockSizes"},
-                {TYPE => "string", NAME => "blockStarts"},
-                {TYPE => "float", NAME => "signalValue"},
-                {TYPE => "float", NAME => "pValue"},
-                {TYPE => "float", NAME => "qValue"}
-                );
-    return validateWithList($path, $file, $type, $maxBedRows, "validateGappedPeak", \@list);
 }
 
 sub validateFastQ
@@ -882,20 +666,19 @@ sub validateBam
 
 sub validateBigBed
 {
-    my ($path, $file, $type) = @_;
+    my ($path, $file, $type, $cell, $sex) = @_;
     doTime("Beginning validateBigBed") if $opt_timing;
     HgAutomate::verbose(2, "validateBigBed($path,$file,$type)\n");
     my $fh = File::Temp->new(UNLINK => 1);
     $fh->unlink_on_destroy( 1 );
     my $tempfilename = $fh->filename;
-    #print STDERR "tempfilename = $tempfilename\n";
     my $safe = SafePipe->new(CMDS => ["bigBedToBed $file $tempfilename"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBigBed : " . $safe->stderr() . "\n";
         return("failed validateBigBed for '$file'");
     }
     my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
-    my $bedError = &validateBed($basedir, $tmpfile, $type);
+    my $bedError = &validateBed($basedir, $tmpfile, "bed3+", $cell, $sex);
     if ($bedError) {
         $bedError =~ s/$tmpfile/$file/g;
         print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";
@@ -1032,6 +815,15 @@ sub validateDdfHeader {
     #can't use %terms becuase it's global, not falling into that trap.
     my %cv = %{$_[1]};
     my @localerrors;
+    my @variables = @{$_[2]};
+    my %ddfHash = map {$_ => 1} @ddfHeader;
+    foreach my $reqVar (@variables) {
+        unless (exists($ddfHash{$reqVar})) {
+            push @localerrors, "The required variable '$reqVar' is defined in the DAF, but is not in the DDF header.";
+        }
+    }
+
+
 
     foreach my $column (@ddfHeader) {
         if ($column eq "cell") {
@@ -1075,7 +867,7 @@ sub checkDataFormat {
     my ($format, $file, $cell,$sex) = @_;
     HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = $format;
-    if ($format =~ m/(bed) (\d+)/) {
+    if ($format =~ m/(bed)\s*\d/) {
         $format = $1;
     }
     if ($format =~ m/(bedGraph) (\d+)/) {
@@ -1267,6 +1059,9 @@ sub validationSettings {
                 if($setting =~ /^validateFiles\./) {
                     my @pair = split('\:',$setting,2);
                     my @subTypes = split('\.',$pair[0],2);
+                    unless ($subTypes[1] eq "bam") {
+                        return "";
+                    }
                     if($fileType eq $subTypes[1]) {
                         my @params = split('\,',$pair[1]);
                         for my $param (@params) {
@@ -1579,7 +1374,7 @@ while(@{$lines}) {
 #my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
 
 #the ddf header should not validate against fields.ra, so it now validates against the CV
-my @errors = @{&validateDdfHeader(\@ddfHeader, \%terms)};
+my @errors = @{&validateDdfHeader(\@ddfHeader, \%terms, $daf->{variableArray})};
 
 
 # Special cases to handle conditionally required fields

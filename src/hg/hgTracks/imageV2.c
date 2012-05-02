@@ -195,80 +195,80 @@ return kindOfChild;
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
 
 
-static void jsonTdbSettingsInit(struct jsonHashElement *settings)
+static void jsonTdbSettingsInit(struct jsonElement *settings)
 // Inititializes trackDbJson
 {
-struct jsonHashElement *ele = newJsonHash(newHash(8));
-jsonHashAddString(ele, "shortLabel", "ruler");
-jsonHashAddString(ele, "type", "ruler");
-jsonHashAddString(ele, "longLabel", "Base Position Controls");
-jsonHashAddNumber(ele, "canPack", 0);
-jsonHashAddNumber(ele, "visibility", rulerMode);
-jsonHashAddString(ele, "configureBy", "popup");
-jsonHashAddNumber(ele, "kindOfParent", 0);
-jsonHashAdd(settings, "ruler", (struct jsonElement *) ele);
+struct jsonElement *ele = newJsonObject(newHash(8));
+jsonObjectAdd(ele, "shortLabel", newJsonString("ruler"));
+jsonObjectAdd(ele, "type", newJsonString("ruler"));
+jsonObjectAdd(ele, "longLabel", newJsonString("Base Position Controls"));
+jsonObjectAdd(ele, "canPack", newJsonNumber(0));
+jsonObjectAdd(ele, "visibility", newJsonNumber(rulerMode));
+jsonObjectAdd(ele, "configureBy", newJsonString("popup"));
+jsonObjectAdd(ele, "kindOfParent", newJsonNumber(0));
+jsonObjectAdd(settings, "ruler", (struct jsonElement *) ele);
 }
 
-void jsonTdbSettingsBuild(struct jsonHashElement *settings, struct track *track, boolean configurable)
+void jsonTdbSettingsBuild(struct jsonElement *settings, struct track *track, boolean configurable)
 // Adds trackDb settings to the jsonTdbSettings
 {
-struct jsonHashElement *ele = newJsonHash(newHash(8));
-jsonHashAdd(settings, track->track, (struct jsonElement *) ele);
+struct jsonElement *ele = newJsonObject(newHash(8));
+jsonObjectAdd(settings, track->track, (struct jsonElement *) ele);
 // track name and type
-jsonHashAddString(ele, "type", track->tdb->type);
+jsonObjectAdd(ele, "type", newJsonString(track->tdb->type));
 
 // Tell which kind of parent and which kind of child
 enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
 enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
-jsonHashAddNumber(ele, "kindOfParent", kindOfParent);
-jsonHashAddNumber(ele, "kindOfChild", kindOfChild);
+jsonObjectAdd(ele, "kindOfParent", newJsonNumber(kindOfParent));
+jsonObjectAdd(ele, "kindOfChild", newJsonNumber(kindOfChild));
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
     {
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
-    jsonHashAddString(ele, "parentTrack", parentTdb->track);
-    jsonHashAddString(ele, "parentLabel", parentTdb->shortLabel);
+    jsonObjectAdd(ele, "parentTrack", newJsonString(parentTdb->track));
+    jsonObjectAdd(ele, "parentLabel", newJsonString(parentTdb->shortLabel));
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
-        jsonHashAddNumber(ele, "shouldPack", 0); // default vis is full, but pack is an option
+        jsonObjectAdd(ele, "shouldPack", newJsonNumber(0)); // default vis is full, but pack is an option
         track->canPack = rTdbTreeCanPack(parentTdb);
         }
     }
 
 // XXXX really s/d be numChildren
-jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
+jsonObjectAdd(ele, "hasChildren", newJsonNumber(slCount(track->tdb->subtracks)));
 
 // Configuring?
 int cfgByPopup = configurableByAjax(track->tdb,0);
 if (!configurable
 ||  track->hasUi == FALSE
 ||  cfgByPopup == cfgNone)
-    jsonHashAddString(ele, "configureBy", "none");
+    jsonObjectAdd(ele, "configureBy", newJsonString("none"));
 else if (cfgByPopup < 0)  // denied via ajax, but allowed via full normal hgTrackUi page
-    jsonHashAddString(ele, "configureBy", "clickThrough");
+    jsonObjectAdd(ele, "configureBy", newJsonString("clickThrough"));
 else
-    jsonHashAddString(ele, "configureBy", "popup");
+    jsonObjectAdd(ele, "configureBy", newJsonString("popup"));
 
 // Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    jsonHashAddString(ele, "url", trackDbSetting(track->tdb, "url"));
+    jsonObjectAdd(ele, "url", newJsonString(trackDbSetting(track->tdb, "url")));
 
 // Close with some standard vars
-jsonHashAddString(ele, "shortLabel", track->shortLabel);
-jsonHashAddString(ele, "longLabel", track->longLabel);
-jsonHashAddNumber(ele, "canPack", track->canPack);
+jsonObjectAdd(ele, "shortLabel", newJsonString(track->shortLabel));
+jsonObjectAdd(ele, "longLabel", newJsonString(track->longLabel));
+jsonObjectAdd(ele, "canPack", newJsonNumber(track->canPack));
 
 if(track->limitedVis != track->visibility)
-    jsonHashAddNumber(ele, "limitedVis", track->limitedVis);
-jsonHashAddNumber(ele, "visibility", track->visibility);
+    jsonObjectAdd(ele, "limitedVis", newJsonNumber(track->limitedVis));
+jsonObjectAdd(ele, "visibility", newJsonNumber(track->visibility));
 }
 
-void jsonTdbSettingsUse(struct jsonHashElement *settings)
+void jsonTdbSettingsUse(struct jsonElement *settings)
 {
 // add the settings to the hgTracks output object
-jsonHashAdd(jsonForClient, "trackDb", (struct jsonElement *) settings);
+jsonObjectAdd(jsonForClient, "trackDb", (struct jsonElement *) settings);
 }
 
 /////////////////////////
@@ -1835,26 +1835,26 @@ if(imgBox->showPortal)
     {
     // Let js code know what's up
     int chromSize = hChromSize(database, chromName);
-    jsonHashAddNumber( jsonForClient,"chromStart",   1);
-    jsonHashAddNumber( jsonForClient,"chromEnd",     chromSize);
-    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       TRUE);
-    jsonHashAddNumber( jsonForClient,"imgBoxWidth",        (imgBox->width - imgBox->sideLabelWidth));
-    jsonHashAddNumber( jsonForClient,"imgBoxPortalStart",  imgBox->portalStart);
-    jsonHashAddNumber( jsonForClient,"imgBoxPortalEnd",    imgBox->portalEnd);
-    jsonHashAddNumber( jsonForClient,"imgBoxPortalWidth",  imgBox->portalWidth);
-    jsonHashAddNumber( jsonForClient,"imgBoxLeftLabel",    (imgBox->plusStrand?imgBox->sideLabelWidth:0));
-    jsonHashAddNumber( jsonForClient,"imgBoxPortalOffsetX",(long)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel));
-    jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
+    jsonObjectAdd(jsonForClient,"chromStart", newJsonNumber(  1));
+    jsonObjectAdd(jsonForClient,"chromEnd", newJsonNumber(chromSize));
+    jsonObjectAdd(jsonForClient,"imgBoxPortal", newJsonBoolean(TRUE));
+    jsonObjectAdd(jsonForClient,"imgBoxWidth", newJsonNumber(imgBox->width - imgBox->sideLabelWidth));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalStart", newJsonNumber(imgBox->portalStart));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalEnd", newJsonNumber(imgBox->portalEnd));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalWidth", newJsonNumber(imgBox->portalWidth));
+    jsonObjectAdd(jsonForClient,"imgBoxLeftLabel", newJsonNumber(imgBox->plusStrand ? imgBox->sideLabelWidth : 0));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalOffsetX", newJsonNumber((long) ((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel)));
+    jsonObjectAdd(jsonForClient,"imgBoxBasesPerPixel", newJsonDouble(imgBox->basesPerPixel));
     }
 else
-    jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
+    jsonObjectAdd(jsonForClient,"imgBoxPortal", newJsonBoolean(FALSE));
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
 hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
-struct jsonHashElement *jsonTdbVars = newJsonHash(newHash(8));
+struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 jsonTdbSettingsInit(jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));

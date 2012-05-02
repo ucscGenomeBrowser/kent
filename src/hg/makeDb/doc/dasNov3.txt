@@ -317,3 +317,25 @@ taxId 9361
 #    ln -s `pwd`/dasNov3.2bit /gbdb/dasNov3/dasNov3.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/dasNov3/bed/cpgIslands
+    cd /hive/data/genomes/dasNov3/bed/cpgIslands
+    time doCpgIslands.pl dasNov3 > do.log 2>&1
+    #   real    98m44.307s
+
+    cat fb.dasNov3.cpgIslandExt.txt
+    #   59319215 bases of 3299882059 (1.798%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/dasNov3/bed/genscan
+    cd /hive/data/genomes/dasNov3/bed/genscan
+    time doGenscan.pl dasNov3 > do.log 2>&1
+    #   Elapsed time: 161m31s
+
+    cat fb.dasNov3.genscan.txt
+    #   71941727 bases of 3299882059 (2.180%) in intersection
+    cat fb.dasNov3.genscanSubopt.txt
+    #   85113391 bases of 3299882059 (2.579%) in intersection
+
+#########################################################################

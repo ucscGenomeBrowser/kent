@@ -212,3 +212,36 @@ geneScaffolds yes
  *** Steps were performed in /hive/data/genomes/sorAra1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/sorAra1/bed/cpgIslands
+    cd /hive/data/genomes/sorAra1/bed/cpgIslands
+    time doCpgIslands.pl sorAra1 > do.log 2>&1
+    #   real    823m38.651s
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m45.268s
+    time doCpgIslands.pl -continue=cleanup sorAra1 > cleanup.log 2>&1
+    #   real    117m41.101s
+
+    cat fb.sorAra1.cpgIslandExt.txt
+    #   19811608 bases of 1832864697 (1.081%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/sorAra1/bed/genscan
+    cd /hive/data/genomes/sorAra1/bed/genscan
+    time doGenscan.pl sorAra1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    400m44.222s
+    # continuing:
+    time doGenscan.pl -continue=load sorAra1 > load.log 2>&1
+    #   real    27m31.386s
+
+    cat fb.sorAra1.genscan.txt
+    #   27964827 bases of 1832864697 (1.526%) in intersection
+    cat fb.sorAra1.genscanSubopt.txt
+    #   28734625 bases of 1832864697 (1.568%) in intersection
+
+#########################################################################

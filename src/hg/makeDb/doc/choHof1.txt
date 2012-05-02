@@ -119,3 +119,32 @@ _EOF_
 	/hive/data/staging/data/choHof1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+###########################################################################
+# cpgIsland - (DONE - 2012-04-23 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/cpgIslands
+    cd /hive/data/genomes/choHof1/bed/cpgIslands
+    time doCpgIslands.pl choHof1 > do.log 2>&1
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    4m0.503s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup choHof1 > cleanup.log 2>&1
+    #   real    135m42.244s
+
+    cat fb.choHof1.cpgIslandExt.txt
+    #   9771165 bases of 2060419685 (0.474%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/genscan
+    cd /hive/data/genomes/choHof1/bed/genscan
+    time doGenscan.pl choHof1 > do.log 2>&1
+    #   real    1004m5.449s
+
+    cat fb.choHof1.genscan.txt
+    #   41313862 bases of 2060419685 (2.005%) in intersection
+    cat fb.choHof1.genscanSubopt.txt
+    #   37047077 bases of 2060419685 (1.798%) in intersection
+
+#########################################################################

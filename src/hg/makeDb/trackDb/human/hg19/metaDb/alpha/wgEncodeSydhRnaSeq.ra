@@ -38,6 +38,7 @@ dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH000524
 expId 524
 fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRaw.bigWig
+geoSampleAccession GSM922955
 grant Snyder
 lab Yale
 md5sum 21f96f5dad27c1ff06d366b50ee4dd8a
@@ -60,6 +61,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000524
 expId 524
 fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRawData.fastq.gz
+geoSampleAccession GSM922955
 grant Snyder
 lab Yale
 md5sum 7256a053c3ad4c1d534b84f2b026b91f
@@ -104,6 +106,7 @@ dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH000525
 expId 525
 fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw.bigWig
+geoSampleAccession GSM922956
 grant Snyder
 lab Yale
 md5sum bf43ce7474a5d6719b913db4669f63e0
@@ -126,6 +129,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000525
 expId 525
 fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRawData.fastq.gz
+geoSampleAccession GSM922956
 grant Snyder
 lab Yale
 md5sum e84cf4c32eb25451fa42552356a9051c
@@ -170,6 +174,7 @@ dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH000526
 expId 526
 fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRaw.bigWig
+geoSampleAccession GSM922957
 grant Snyder
 lab Yale
 md5sum 743068172a9326bb2eaeeef85040f848
@@ -192,6 +197,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000526
 expId 526
 fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRawData.fastq.gz
+geoSampleAccession GSM922957
 grant Snyder
 lab Yale
 md5sum 1c4921fd415475111ed52e0fe67d2980
@@ -236,6 +242,7 @@ dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH000527
 expId 527
 fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw.bigWig
+geoSampleAccession GSM922958
 grant Snyder
 lab Yale
 md5sum 1bab4c6f7515ecef3adf7ac3c072362d
@@ -258,6 +265,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000527
 expId 527
 fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRawData.fastq.gz
+geoSampleAccession GSM922958
 grant Snyder
 lab Yale
 md5sum 7e1bc75e179bedb05dcfd8ef4b30e9ae
@@ -268,4 +276,4 @@ subId 543
 treatment IFNg6h
 view RawData
 
-# MAGIC: -1584328760
+# MAGIC: -766511272

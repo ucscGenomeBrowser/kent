@@ -23,17 +23,17 @@ being used in the ENCODE project are performed in cell types in mouse that are s
 or homologous to those studied in the human project. Thus we will be able to discover 
 which epigenetic features are conserved between mouse and human, and we can 
 examine the extent to which these overlap with the DNA sequences under negative 
-selection. The contribution of DNA that with a function preserved in mammals versus 
+selection. The contribution of DNA with a function preserved in mammals versus 
 that with a function in only one species will be discovered. The results will have a 
 significant impact on our understanding of the evolution of gene regulation.
 </p>
 
 <H3>Reference transcriptome measurements with RNA-Seq</H3>
-RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly (Mortazavi et al., 2008).
-RNA-Seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high throughput DNA sequencing, 
+RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly (Mortazavi <EM>et al.</EM>, 2008).
+RNA-Seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high-throughput DNA sequencing, 
 which was done here on the Illumina HiSeq sequencer. The transcriptome measurements shown on these tracks were performed on 
 <a href="/cgi-bin/hgEncodeVocab?term=longPolyA&type=rnaExtract" target="_blank">polyA selected RNA</A> from 
-<a href="/cgi-bin/hgEncodeVocab?term=cell&type=localization" target="_blank">total cellular RNA</A>. PolyA-selected RNA was fragmented 
+<a href="/cgi-bin/hgEncodeVocab?term=cell&type=localization" target="_blank">total cellular RNA</A> PolyA-selected RNA was fragmented 
 by magnesium-catalyzed hydrolysis and then converted into cDNA by random priming and amplified. Paired-end 2x100bp reads were obtained from each end of a cDNA fragment. 
 This RNA-Seq protocol does not specify the coding strand. Reads were aligned to the mm9 human reference genome using TopHat, a program specifically designed to align RNA-Seq reads and discover splice junctions de novo. 
 Cufflinks, a de novo transcript assembly and quantification software package, was run on the TopHat alignments to discover and quantifiy novel transcripts and to obtain trascript 

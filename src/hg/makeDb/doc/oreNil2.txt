@@ -427,3 +427,33 @@ close (FH);
     ln -s `pwd`/oreNil2.2bit /gbdb/oreNil2/oreNil2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-20 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/cpgIslands
+    cd /hive/data/genomes/oreNil2/bed/cpgIslands
+    time doCpgIslands.pl oreNil2 > do.log 2>&1
+    #   Elapsed time: 11m10s
+
+    time featureBits oreNil2 cpgIslandExt > fb.oreNil2.cpgIslandExt.txt 2>&1
+    #   6076152 bases of 816084674 (0.745%) in intersection
+    #   real    0m2.342s
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/genscan
+    cd /hive/data/genomes/oreNil2/bed/genscan
+    time doGenscan.pl oreNil2 > do.log 2>&1
+    #   real    26m8.894s
+    # three broken jobs rerunning at window size of 2000000:
+./runGsBig.csh chrLG12 000 gtf/000/chrLG12.gtf pep/000/chrLG12.pep subopt/000/chrLG12.bed &
+./runGsBig.csh chrLG20 000 gtf/000/chrLG20.gtf pep/000/chrLG20.pep subopt/000/chrLG20.bed &
+./runGsBig.csh chrLG22 000 gtf/000/chrLG22.gtf pep/000/chrLG22.pep subopt/000/chrLG22.bed
+    #   real    13m41.480s
+    # continuing:
+    time doGenscan.pl -continue=makeBed oreNil2 > makeBed.log 2>&1
+    #   Elapsed time: 9m20s
+    cat fb.oreNil2.genscan.txt
+    #   38275835 bases of 816084674 (4.690%) in intersection
+    cat fb.oreNil2.genscanSubopt.txt
+    #   28219603 bases of 816084674 (3.458%) in intersection
+
+#########################################################################

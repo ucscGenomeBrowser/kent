@@ -263,4 +263,33 @@ ncbiAssemblyName OtoGar3
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
     # Do not need to do this since Repeat Masker was used
+
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/cpgIslands
+    cd /hive/data/genomes/otoGar3/bed/cpgIslands
+    time doCpgIslands.pl otoGar3 > do.log 2>&1
+    #   real    29m34.875s
+
+    cat fb.otoGar3.cpgIslandExt.txt
+    #   14292453 bases of 2359530453 (0.606%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/genscan
+    cd /hive/data/genomes/otoGar3/bed/genscan
+    time doGenscan.pl otoGar3 > do.log 2>&1
+    #   real    25m26.159s
+    # one broken job:
+./runGsBig.csh GL873659 000 gtf/000/GL873659.gtf pep/000/GL873659.pep subopt/000/GL873659.bed
+    # rerunning with 2000000 window size
+    #   about 2 minutes
+    #   continuing:
+    time doGenscan.pl -continue=makeBed otoGar3 > makeBed.log 2>&1
+    #   real    4m12.143s
+    cat fb.otoGar3.genscan.txt
+    #   55174547 bases of 2359530453 (2.338%) in intersection
+    cat fb.otoGar3.genscanSubopt.txt
+    #   58681737 bases of 2359530453 (2.487%) in intersection
+
+#########################################################################

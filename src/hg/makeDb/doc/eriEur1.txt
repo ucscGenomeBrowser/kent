@@ -225,3 +225,30 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/eriEur1/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/eriEur1/bed/cpgIslands
+    cd /hive/data/genomes/eriEur1/bed/cpgIslands
+    time doCpgIslands.pl eriEur1 > do.log 2>&1
+    # fixing broken script, manually:
+    time ./doLoadCpg.csh
+    #   real    2m21.892s
+    #   continuing
+    time doCpgIslands.pl -continue=cleanup eriEur1 > cleanup.log 2>&1
+    #   real    25m45.187s
+
+    cat fb.eriEur1.cpgIslandExt.txt
+    #   8392822 bases of 2133134836 (0.393%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/eriEur1/bed/genscan
+    cd /hive/data/genomes/eriEur1/bed/genscan
+    time doGenscan.pl eriEur1 > do.log 2>&1
+    #   real    852m24.551s
+
+    cat fb.eriEur1.genscan.txt
+    #   23586367 bases of 2133134836 (1.106%) in intersection
+    cat fb.eriEur1.genscanSubopt.txt
+    #   20779803 bases of 2133134836 (0.974%) in intersection
+
+#########################################################################
