@@ -73,6 +73,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
 fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912922
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -101,6 +102,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
 fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912922
 grant Snyder
 lab Stanford-m
 md5sum e452cb577a35de0f7338fc813052e019
@@ -128,6 +130,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
 fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912922
 grant Snyder
 lab Stanford-m
 md5sum fe765d4ce88716394d895e363ec726f4
@@ -155,6 +158,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
 fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabSig.bigWig
+geoSampleAccession GSM912922
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -237,6 +241,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
 fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912926
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -265,6 +270,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
 fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912926
 grant Snyder
 lab Stanford-m
 md5sum ab7f5b455febbefc40bf1063881ffbdf
@@ -292,6 +298,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
 fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912926
 grant Snyder
 lab Stanford-m
 md5sum e57e20c4b0626c35fde488f4280bd0e2
@@ -319,6 +326,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
 fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabSig.bigWig
+geoSampleAccession GSM912926
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -403,6 +411,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912901
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -431,6 +440,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912901
 grant Snyder
 lab Stanford-m
 md5sum 586b219a6344a877d53cf71f2c4f6f2f
@@ -458,6 +468,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912901
 grant Snyder
 lab Stanford-m
 md5sum f18f1f3e36fbb19e57e63f6ec8cf3632
@@ -485,6 +496,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
 fileName wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig
+geoSampleAccession GSM912901
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -569,6 +581,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912906
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -597,6 +610,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912906
 grant Snyder
 lab Stanford-m
 md5sum 251314891177bc2b02cc871f1679e356
@@ -624,6 +638,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912906
 grant Snyder
 lab Stanford-m
 md5sum e8ffa801aab6d94b79165263aea8087d
@@ -651,6 +666,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
 fileName wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig
+geoSampleAccession GSM912906
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -888,6 +904,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
 fileName wgEncodeSydhTfbsCh12CtcfbIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912909
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -917,6 +934,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
 fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912909
 grant Snyder
 lab Stanford-m
 md5sum c0c891c138330f95188d88a371956536
@@ -945,6 +963,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
 fileName wgEncodeSydhTfbsCh12CtcfbIggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912909
 grant Snyder
 lab Stanford-m
 md5sum 732276c745ae620355e9d79013d400db
@@ -973,6 +992,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
 fileName wgEncodeSydhTfbsCh12CtcfbIggrabSig.bigWig
+geoSampleAccession GSM912909
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1057,6 +1077,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912912
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1085,6 +1106,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912912
 grant Snyder
 lab Stanford-m
 md5sum 75a37eed97475482f310dcb11483a96d
@@ -1112,6 +1134,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912912
 grant Snyder
 lab Stanford-m
 md5sum a93447b896a8ccf35f75010b2e382cf8
@@ -1139,6 +1162,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
 fileName wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig
+geoSampleAccession GSM912912
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1347,6 +1371,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001938
 expId 1938
 fileName wgEncodeSydhTfbsCh12InputIggmusRawData.fastq.gz
+geoSampleAccession GSM912918
 grant Snyder
 lab Stanford-m
 md5sum dd5e8c77bb19a7d565c858b559b22169
@@ -1373,6 +1398,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001938
 expId 1938
 fileName wgEncodeSydhTfbsCh12InputIggmusSig.bigWig
+geoSampleAccession GSM912918
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1429,6 +1455,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001939
 expId 1939
 fileName wgEncodeSydhTfbsCh12InputIggrabRawData.fastq.gz
+geoSampleAccession GSM912917
 grant Snyder
 lab Stanford-m
 md5sum f8feb312c4aa83cca0f1f7b3922205f4
@@ -1455,6 +1482,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001939
 expId 1939
 fileName wgEncodeSydhTfbsCh12InputIggrabSig.bigWig
+geoSampleAccession GSM912917
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1539,6 +1567,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912902
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1567,6 +1596,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912902
 grant Snyder
 lab Stanford-m
 md5sum 8fbeeae6fc3e91ccbbc7322aa6ee31a2
@@ -1594,6 +1624,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912902
 grant Snyder
 lab Stanford-m
 md5sum 5665ae28fa07e4b7ccc93f6674054188
@@ -1621,6 +1652,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
 fileName wgEncodeSydhTfbsCh12JundIggrabSig.bigWig
+geoSampleAccession GSM912902
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1703,6 +1735,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
 fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912898
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1731,6 +1764,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
 fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912898
 grant Snyder
 lab Stanford-m
 md5sum 845e31514da7aae4dec76a3cafcc42bd
@@ -1758,6 +1792,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
 fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912898
 grant Snyder
 lab Stanford-m
 md5sum 9206145e455f51a15a9023d50d469a04
@@ -1785,6 +1820,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
 fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabSig.bigWig
+geoSampleAccession GSM912898
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1867,6 +1903,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912908
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -1895,6 +1932,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912908
 grant Snyder
 lab Stanford-m
 md5sum a4c2352361c67e5c5360977efbc2bd56
@@ -1922,6 +1960,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912908
 grant Snyder
 lab Stanford-m
 md5sum ca7c170fba23a32445ce86d1ae6abc75
@@ -1949,6 +1988,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
 fileName wgEncodeSydhTfbsCh12MaxIggrabSig.bigWig
+geoSampleAccession GSM912908
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2031,6 +2071,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
 fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912925
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2059,6 +2100,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
 fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912925
 grant Snyder
 lab Stanford-m
 md5sum ba0583a44ecc855561a5cbfa5b05b976
@@ -2086,6 +2128,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
 fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912925
 grant Snyder
 lab Stanford-m
 md5sum 6fa596c4a79f72dce31c82f2569d4c8b
@@ -2113,6 +2156,7 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
 fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabSig.bigWig
+geoSampleAccession GSM912925
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2195,6 +2239,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
 fileName wgEncodeSydhTfbsCh12NelfeIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912924
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2223,6 +2268,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
 fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912924
 grant Snyder
 lab Stanford-m
 md5sum 7a732338eec628a0316673cd2e9b894c
@@ -2250,6 +2296,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
 fileName wgEncodeSydhTfbsCh12NelfeIggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912924
 grant Snyder
 lab Stanford-m
 md5sum 42b924e4eebc8fa2bc6d591115788143
@@ -2277,6 +2324,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
 fileName wgEncodeSydhTfbsCh12NelfeIggrabSig.bigWig
+geoSampleAccession GSM912924
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2359,6 +2407,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912920
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2387,6 +2436,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912920
 grant Snyder
 lab Stanford-m
 md5sum 21303612cab8d0ba76199b7f28ac5ebb
@@ -2414,6 +2464,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912920
 grant Snyder
 lab Stanford-m
 md5sum 7e58dbc94286274a3c4a61183bd78ae8
@@ -2441,6 +2492,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
 fileName wgEncodeSydhTfbsCh12P300sc584IggrabSig.bigWig
+geoSampleAccession GSM912920
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2525,6 +2577,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
+geoSampleAccession GSM912891
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2553,6 +2606,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912891
 grant Snyder
 lab Stanford-m
 md5sum 31b14a3202d378c267a2d5e2ba810053
@@ -2580,6 +2634,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912891
 grant Snyder
 lab Stanford-m
 md5sum 48d2e4d630f76556aedfd87e7444f358
@@ -2607,6 +2662,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
 fileName wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig
+geoSampleAccession GSM912891
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2689,6 +2745,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
 fileName wgEncodeSydhTfbsCh12Pol2s2IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912931
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2717,6 +2774,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
 fileName wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912931
 grant Snyder
 lab Stanford-m
 md5sum f93cdc73a6cb36d4a93e6f791c4411de
@@ -2744,6 +2802,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
 fileName wgEncodeSydhTfbsCh12Pol2s2IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912931
 grant Snyder
 lab Stanford-m
 md5sum bb24d0316bfc106a93e2f4e66b2e4483
@@ -2771,6 +2830,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
 fileName wgEncodeSydhTfbsCh12Pol2s2IggrabSig.bigWig
+geoSampleAccession GSM912931
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2853,6 +2913,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912911
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2881,6 +2942,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912911
 grant Snyder
 lab Stanford-m
 md5sum bed597cc700dd305c35c0144b51c94d4
@@ -2908,6 +2970,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912911
 grant Snyder
 lab Stanford-m
 md5sum 5572b34bbdc3d716fce385b058841637
@@ -2935,6 +2998,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
 fileName wgEncodeSydhTfbsCh12Rad21IggrabSig.bigWig
+geoSampleAccession GSM912911
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3169,6 +3233,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
 fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912930
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3197,6 +3262,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
 fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912930
 grant Snyder
 lab Stanford-m
 md5sum 35ff98b85dda13cad70e9afb22c6b988
@@ -3224,6 +3290,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
 fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912930
 grant Snyder
 lab Stanford-m
 md5sum e9d358767db7ee3edf11e03c8aedc839
@@ -3251,6 +3318,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
 fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabSig.bigWig
+geoSampleAccession GSM912930
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3336,6 +3404,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
+geoSampleAccession GSM912900
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3364,6 +3433,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912900
 grant Snyder
 lab Stanford-m
 md5sum 371e8f7219f38236fef86f25caa494d4
@@ -3391,6 +3461,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912900
 grant Snyder
 lab Stanford-m
 md5sum 17b1fadacffa05627612b33aa1a25391
@@ -3418,6 +3489,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
 fileName wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig
+geoSampleAccession GSM912900
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3652,6 +3724,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusPk.narrowPeak.gz
+geoSampleAccession GSM912910
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3680,6 +3753,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912910
 grant Snyder
 lab Stanford-m
 md5sum a62d9a6914579ee39df4aea426a2f3d7
@@ -3707,6 +3781,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912910
 grant Snyder
 lab Stanford-m
 md5sum 3edf8b246c97a17eb6cf2a9a13d36979
@@ -3734,6 +3809,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
 fileName wgEncodeSydhTfbsCh12Usf2IggmusSig.bigWig
+geoSampleAccession GSM912910
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4196,6 +4272,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
 fileName wgEncodeSydhTfbsMelChd2ab68301IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912929
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4224,6 +4301,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
 fileName wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912929
 grant Snyder
 lab Stanford-m
 md5sum 065bb6d26105b9936ac026c8d18eeb3a
@@ -4251,6 +4329,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
 fileName wgEncodeSydhTfbsMelChd2ab68301IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912929
 grant Snyder
 lab Stanford-m
 md5sum c0bc929e063529f94521abe9dd9ef229
@@ -4278,6 +4357,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
 fileName wgEncodeSydhTfbsMelChd2ab68301IggrabSig.bigWig
+geoSampleAccession GSM912929
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4518,6 +4598,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
 fileName wgEncodeSydhTfbsMelCmybsc7874IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912903
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4546,6 +4627,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
 fileName wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912903
 grant Snyder
 lab Stanford-m
 md5sum 64976867f5b72a18ed1c682f95d2f190
@@ -4573,6 +4655,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
 fileName wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912903
 grant Snyder
 lab Stanford-m
 md5sum 69f482d3dcce968145159c3aeaf8440e
@@ -4600,6 +4683,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
 fileName wgEncodeSydhTfbsMelCmybsc7874IggrabSig.bigWig
+geoSampleAccession GSM912903
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4685,6 +4769,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912934
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -4713,6 +4798,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912934
 grant Snyder
 lab Stanford-m
 md5sum 03a3d5e2998fde6495967e9e7b800c38
@@ -4740,6 +4826,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912934
 grant Snyder
 lab Stanford-m
 md5sum 2500b9ce365596e7a8f4c32ef609594a
@@ -4767,6 +4854,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
 fileName wgEncodeSydhTfbsMelCmycIggrabSig.bigWig
+geoSampleAccession GSM912934
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5106,6 +5194,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
 fileName wgEncodeSydhTfbsMelCtcfbIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912896
 grant Snyder
 lab Stanford-m
 md5sum 15c11c5be6b17165d7d72000cec4c90f
@@ -5358,6 +5447,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
 fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912896
 grant Snyder
 lab Stanford-m
 md5sum 97248a1f5bcc75bc3c0e0d735cffc277
@@ -5385,6 +5475,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
 fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912896
 grant Snyder
 lab Stanford-m
 md5sum 58cae160a4926e589dbd9c89a132a8ac
@@ -5412,6 +5503,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
 fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabSig.bigWig
+geoSampleAccession GSM912896
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5496,6 +5588,7 @@ dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912914
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5524,6 +5617,7 @@ dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912914
 grant Snyder
 lab Stanford-m
 md5sum 6c76ac286ce5eea82d5888148e48e571
@@ -5551,6 +5645,7 @@ dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912914
 grant Snyder
 lab Stanford-m
 md5sum 2fc8094f9680de41167f9f944bcbe339
@@ -5578,6 +5673,7 @@ dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
 fileName wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig
+geoSampleAccession GSM912914
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5967,6 +6063,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
+geoSampleAccession GSM912907
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -5995,6 +6092,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep1.fastq.gz
+geoSampleAccession GSM912907
 grant Snyder
 lab Stanford-m
 md5sum e62eccf5d396daf6a3d3cbbec8e55432
@@ -6022,6 +6120,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep2.fastq.gz
+geoSampleAccession GSM912907
 grant Snyder
 lab Stanford-m
 md5sum fa46374a09c29e7e95dd44f828e6682c
@@ -6049,6 +6148,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
 fileName wgEncodeSydhTfbsMelGata1IggratSig.bigWig
+geoSampleAccession GSM912907
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6180,6 +6280,7 @@ dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
 expId 1963
 fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleRawData.fastq.gz
+geoSampleAccession GSM913032
 grant Snyder
 lab Yale-m
 md5sum 5b9e3ce2865b2fc2420b5e2cdccc6618
@@ -6206,6 +6307,7 @@ dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
 expId 1963
 fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig.bigWig
+geoSampleAccession GSM913032
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
@@ -6287,6 +6389,7 @@ dateUnrestricted 2012-01-29
 dccAccession wgEncodeEM001983
 expId 1983
 fileName wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1.fastq.tgz
+geoSampleAccession GSM912897
 grant Snyder
 lab Yale-m
 md5sum f4aa553484994da8f34bd0be73c811bd
@@ -6340,6 +6443,7 @@ dateUnrestricted 2012-01-29
 dccAccession wgEncodeEM001983
 expId 1983
 fileName wgEncodeSydhTfbsMelInputDm2p5dStdSig.bigWig
+geoSampleAccession GSM912897
 grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
@@ -6500,6 +6604,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001946
 expId 1946
 fileName wgEncodeSydhTfbsMelInputIggmusRawData.fastq.gz
+geoSampleAccession GSM912904
 grant Snyder
 lab Stanford-m
 md5sum 6821267e1e67c2fe4b731a1ae451ae1b
@@ -6526,6 +6631,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001946
 expId 1946
 fileName wgEncodeSydhTfbsMelInputIggmusSig.bigWig
+geoSampleAccession GSM912904
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6582,6 +6688,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001947
 expId 1947
 fileName wgEncodeSydhTfbsMelInputIggrabRawData.fastq.gz
+geoSampleAccession GSM912905
 grant Snyder
 lab Stanford-m
 md5sum ad01a4ca1c30a8dab5ff461569b7459f
@@ -6608,6 +6715,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001947
 expId 1947
 fileName wgEncodeSydhTfbsMelInputIggrabSig.bigWig
+geoSampleAccession GSM912905
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6664,6 +6772,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001948
 expId 1948
 fileName wgEncodeSydhTfbsMelInputIggratRawData.fastq.gz
+geoSampleAccession GSM912894
 grant Snyder
 lab Stanford-m
 md5sum ac546abf96fdabb373243613ab713aa6
@@ -6690,6 +6799,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001948
 expId 1948
 fileName wgEncodeSydhTfbsMelInputIggratSig.bigWig
+geoSampleAccession GSM912894
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6745,6 +6855,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001982
 expId 1982
 fileName wgEncodeSydhTfbsMelInputStdRawDataRep1.fastq.tgz
+geoSampleAccession GSM912916
 grant Snyder
 lab Stanford-m
 md5sum 17e6a72c3c35cfbb70f9fc4a6efa1a8b
@@ -6772,6 +6883,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001982
 expId 1982
 fileName wgEncodeSydhTfbsMelInputStdSig.bigWig
+geoSampleAccession GSM912916
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6856,6 +6968,7 @@ dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912915
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -6884,6 +6997,7 @@ dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912915
 grant Snyder
 lab Stanford-m
 md5sum 551d771460f19252ff0f57004d802032
@@ -6911,6 +7025,7 @@ dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912915
 grant Snyder
 lab Stanford-m
 md5sum b86c808a23e2c7cb214b4b4cc72792ed
@@ -6938,6 +7053,7 @@ dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
 fileName wgEncodeSydhTfbsMelJundIggrabSig.bigWig
+geoSampleAccession GSM912915
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7172,6 +7288,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
 fileName wgEncodeSydhTfbsMelMafkab50322IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912899
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7200,6 +7317,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
 fileName wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912899
 grant Snyder
 lab Stanford-m
 md5sum 9d55aa08ce1239d95d742021aed8642c
@@ -7227,6 +7345,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
 fileName wgEncodeSydhTfbsMelMafkab50322IggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912899
 grant Snyder
 lab Stanford-m
 md5sum 1284b1e7c290cb0782856bb63f2cc2ec
@@ -7254,6 +7373,7 @@ dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
 fileName wgEncodeSydhTfbsMelMafkab50322IggrabSig.bigWig
+geoSampleAccession GSM912899
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7392,6 +7512,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912919
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7420,6 +7541,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912919
 grant Snyder
 lab Stanford-m
 md5sum 3489959098e292859c2e2984e0cef30b
@@ -7447,6 +7569,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912919
 grant Snyder
 lab Stanford-m
 md5sum 444c45a755c5cc255b1e862f81d9d306
@@ -7474,6 +7597,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
 fileName wgEncodeSydhTfbsMelMaxIggrabSig.bigWig
+geoSampleAccession GSM912919
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7556,6 +7680,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
 fileName wgEncodeSydhTfbsMelMxi1af4185IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912928
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7584,6 +7709,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
 fileName wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912928
 grant Snyder
 lab Stanford-m
 md5sum f48252e5837f1a4326c431586f48ea3e
@@ -7611,6 +7737,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
 fileName wgEncodeSydhTfbsMelMxi1af4185IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912928
 grant Snyder
 lab Stanford-m
 md5sum 216a85454f84e59602c8b8fda8f1a9d6
@@ -7638,6 +7765,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
 fileName wgEncodeSydhTfbsMelMxi1af4185IggrabSig.bigWig
+geoSampleAccession GSM912928
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7720,6 +7848,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912932
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7748,6 +7877,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912932
 grant Snyder
 lab Stanford-m
 md5sum 9551e07b32b081e6abb072e428d751ee
@@ -7775,6 +7905,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912932
 grant Snyder
 lab Stanford-m
 md5sum e5a95b93924e21317079cfae7d5dc437
@@ -7802,6 +7933,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
 fileName wgEncodeSydhTfbsMelNelfeIggrabSig.bigWig
+geoSampleAccession GSM912932
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -7965,6 +8097,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabPkV2.narrowPeak.gz
+geoSampleAccession GSM912921
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8020,6 +8153,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1V2.fastq.gz
+geoSampleAccession GSM912921
 grant Snyder
 lab Stanford-m
 md5sum 385d7609c8d1d408b527788dd1923f63
@@ -8074,6 +8208,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2V2.fastq.gz
+geoSampleAccession GSM912921
 grant Snyder
 lab Stanford-m
 md5sum 194e6ba808b821b58a733bf1919b6bff
@@ -8129,6 +8264,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
 fileName wgEncodeSydhTfbsMelP300IggrabSigV2.bigWig
+geoSampleAccession GSM912921
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8212,6 +8348,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
 fileName wgEncodeSydhTfbsMelP300sc584IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912893
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8240,6 +8377,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
 fileName wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912893
 grant Snyder
 lab Stanford-m
 md5sum e0b40aba30f2ac2010d4aa9ceaae744b
@@ -8267,6 +8405,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
 fileName wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912893
 grant Snyder
 lab Stanford-m
 md5sum 7840bcc97bc1c553da07d0d5d58daf59
@@ -8294,6 +8433,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
 fileName wgEncodeSydhTfbsMelP300sc584IggrabSig.bigWig
+geoSampleAccession GSM912893
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8530,6 +8670,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
+geoSampleAccession GSM912895
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8558,6 +8699,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912895
 grant Snyder
 lab Stanford-m
 md5sum 25f04432deee10aa54c04972f40529ce
@@ -8585,6 +8727,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912895
 grant Snyder
 lab Stanford-m
 md5sum 4b0a5dcfa3d26a01edc05f324216fd18
@@ -8612,6 +8755,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
 fileName wgEncodeSydhTfbsMelPol2IggmusSig.bigWig
+geoSampleAccession GSM912895
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8694,6 +8838,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
 fileName wgEncodeSydhTfbsMelPol2s2IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912927
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8722,6 +8867,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
 fileName wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912927
 grant Snyder
 lab Stanford-m
 md5sum 4f84eda57d556e64db566a5afaf98e97
@@ -8749,6 +8895,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
 fileName wgEncodeSydhTfbsMelPol2s2IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912927
 grant Snyder
 lab Stanford-m
 md5sum 76c15821a69d07fd9835b05603498917
@@ -8776,6 +8923,7 @@ dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
 fileName wgEncodeSydhTfbsMelPol2s2IggrabSig.bigWig
+geoSampleAccession GSM912927
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8859,6 +9007,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
 fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk.narrowPeak.gz
+geoSampleAccession GSM912933
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -8887,6 +9036,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
 fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912933
 grant Snyder
 lab Stanford-m
 md5sum beffb9ed76538b0974ec0b40613fd892
@@ -8914,6 +9064,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
 fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912933
 grant Snyder
 lab Stanford-m
 md5sum 070f886a7b00767cf0c772c410c987e2
@@ -8941,6 +9092,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
 fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig.bigWig
+geoSampleAccession GSM912933
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9181,6 +9333,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912935
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9209,6 +9362,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep1.fastq.gz
+geoSampleAccession GSM912935
 grant Snyder
 lab Stanford-m
 md5sum dabb43efca28e1244177c31fcfa47aae
@@ -9236,6 +9390,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep2.fastq.gz
+geoSampleAccession GSM912935
 grant Snyder
 lab Stanford-m
 md5sum 3523e3c27d01397e59a374369a256e48
@@ -9263,6 +9418,7 @@ dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
 fileName wgEncodeSydhTfbsMelRad21IggrabSig.bigWig
+geoSampleAccession GSM912935
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9497,6 +9653,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
 fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabPk.narrowPeak.gz
+geoSampleAccession GSM912923
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9525,6 +9682,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
 fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep1.fastq.tgz
+geoSampleAccession GSM912923
 grant Snyder
 lab Stanford-m
 md5sum 44e5583d7c9ef31c0f5d3b7c24c53dd5
@@ -9552,6 +9710,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
 fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabRawDataRep2.fastq.tgz
+geoSampleAccession GSM912923
 grant Snyder
 lab Stanford-m
 md5sum 8c6a3393bd52bb7190ab49f52660f5a5
@@ -9579,6 +9738,7 @@ dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
 fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabSig.bigWig
+geoSampleAccession GSM912923
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9664,6 +9824,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
+geoSampleAccession GSM912913
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9692,6 +9853,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912913
 grant Snyder
 lab Stanford-m
 md5sum 3b0b2057afc1e08fc7d17d125da5309c
@@ -9719,6 +9881,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912913
 grant Snyder
 lab Stanford-m
 md5sum 5d029df4421309bd7f1a7d7fcf4f0205
@@ -9746,6 +9909,7 @@ dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
 fileName wgEncodeSydhTfbsMelTbpIggmusSig.bigWig
+geoSampleAccession GSM912913
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9884,6 +10048,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusPk.narrowPeak.gz
+geoSampleAccession GSM912892
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -9912,6 +10077,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep1.fastq.gz
+geoSampleAccession GSM912892
 grant Snyder
 lab Stanford-m
 md5sum 9f16d28a89e0146d0fe8c5fe4072e236
@@ -9939,6 +10105,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep2.fastq.gz
+geoSampleAccession GSM912892
 grant Snyder
 lab Stanford-m
 md5sum e5e71ccd663350b9f202c8743bb0c0d9
@@ -9966,6 +10133,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
 fileName wgEncodeSydhTfbsMelUsf2IggmusSig.bigWig
+geoSampleAccession GSM912892
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -10283,4 +10451,4 @@ tableName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabSig
 treatment None
 view Signal
 
-# MAGIC: 1306486363
+# MAGIC: 1300737951

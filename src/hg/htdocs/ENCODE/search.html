@@ -1,102 +1,80 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="ENCODE Project at UCSC - ">
-    <META name="keywords" content="ENCODE, project, ENCODE project, ENCODE Search, search, NHGRI, NISC">
-    <TITLE>ENCODE Search</TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>ENCODE Search</title>
+        <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+        <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    </head>
 
-    <style type="text/css">
-        .hd0 { font-size: 120%; text-align: left; font-weight:bold; text-indent:.6em; height:2em;  }
-        .hd1 { font-size: 115%; text-align: left; font-weight:bold; text-indent:.18em; height:1.5em; }
-        .hd2 { font-size: 100%; text-align: left; font-weight:bold; text-indent:.1em; }
-        .virtual { height: 2.1em; }
-        .contentTbl { border: 1px solid #888888; background-color: #fffee8; width: 100%; }
-        .content { background-color: #fffee8; padding:0em .9em 1.2em; margin: 0; }
-        .itemTbl { border: 1px solid #000088; background-color: #FFFEE8; }
-        .ltBlue { background-color: #D9E4F8; }
-        .buttonLink { width:100px; }
-    </style>
-  </HEAD>
+    <body>
+        <!--#include virtual="/inc/encodeProject.topbar.html"-->
 
-  <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
+        <div class="encodeHeader">
+            <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+            <span class="txt">ENCODE Search</span>
+        </div>
+       <div class="wrapper">
+                <div class="bar"><h4 class="title">ENCODE Search Tools</h4></div>
+                <div class="content">
+                        <p>This page contains links to search tools for finding tracks displayed
+                        in the browser or downloadable files that are part of the ENCODE project.
+                        All tracks and files for ENCODE data are released as part of the ENCODE
+                        production phase (September 2007-present).  For bulk download, retrieval by
+                        <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/" target=_blank>FTP</a>
+                        is recommended. All ENCODE data are covered by the
+                        <a href="/ENCODE/terms.html" target=_BLANK>ENCODE data release policy</a>.
+                        Early access to pre-release data is available for viewing in the browser on 
+                        <a href="http://genome-preview.ucsc.edu" target=_BLANK>genome-preview</a> and for download from the
+                        <a href="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/" target=_blank>test download server</A>
+                        and by
+                        <a href="ftp://encodeftp.cse.ucsc.edu/pipeline/hg19/" target=_blank>FTP</a>.
+                        Preview data is made available with the warning that it has not yet been reviewed by UCSC for
+                        correctness and is subject to change at any time.</p>
 
-    <!-- Header Images and links -->
-    <div class='hd0'>
-        <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="../images/ENCODE_scaleup_logo.png" height=50 ALT="ENCODE Project at NHGRI"></A>
-        &nbsp;
-        <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
-        <div class='virtual'><!--#include virtual="../inc/encode.topbar.html"--></div>
-    <div>
+                         <!--#if expr='"$SERVER_NAME" != /genome-preview.*.ucsc.edu/' -->
+                         <p>To search the pre-release data, see the
+                         <a href="http://genome-preview.ucsc.edu/ENCODE/search.html" target=_blank>genome-preview search</a> page.</p>
+                         <!--#endif -->
 
-    <!-- Content table -->
-    <TABLE class='contentTbl' BORDER="0" CELLSPACING="0" CELLPADDING="0">
-        <TR><TD class='ltBlue hd1'>&nbsp; ENCODE Search</TD></TR>
-        <TR><TD class='content'>
-            <P>This page contains links to search tools for finding tracks displayed
-            in the browser or downloadable files that are part of the ENCODE project.
-            All tracks and files for ENCODE data are released as part of the ENCODE
-            production phase (September 2007-present).  For bulk download, retrieval by
-            <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/" TARGET=_blank>FTP</A>
-            is recommended. All ENCODE data are covered by the
-            <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.
-            Early access to pre-release data is available for viewing in the browser on 
-            <A HREF="http://genome-preview.ucsc.edu" TARGET=_BLANK>genome-preview</A> and for download from the
-            <A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/" TARGET=_blank>test download server</A>
-            and by
-            <A HREF="ftp://encodeftp.cse.ucsc.edu/pipeline/hg19/" TARGET=_blank>FTP</A>.
-            Preview data is made available with the warning that it has not yet been reviewed by UCSC for
-            correctness and is subject to change at any time.</P>
+                        <!--#if expr='"$SERVER_NAME" = /genome-preview.*.ucsc.edu/' -->
+	                <p><b>This is genome-preview</b>, which contains pre-release data. To search the released data,
+	                see this <a href="http://genome.ucsc.edu/ENCODE/search.html" target=_blank>search</a> page on the public site.</p>
+	                <!--#endif -->
+                </div><!--end content-->
+       </div><!--end wrapper-->
 
-             <!--#if expr='"$SERVER_NAME" != /genome-preview.*.ucsc.edu/' -->
-             <p>To search the pre-release data, see the
-             <a href="http://genome-preview.ucsc.edu/ENCODE/search.html" target=_blank>genome-preview search</a> page.</p>
-             <!--#endif -->
+       <div class="wrapper">
+                <div class="bar"><h4 class="title">Search Human Genome GRCh37/hg19</h4></div>
+                <div class="content">
+                        <p>
+                        <input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=hg19&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks'>
+                        Search for tracks visible in the Genome Browser - Human GRCh37/hg19 assembly.<br>
+                        <input type='button' class='buttonLink' value='File search   ' onclick="window.location='../cgi-bin/hgFileSearch?db=hg19';" title='Search for downloadable files'>
+                        Search for downloadable files of data aligned to the Human GRCh37/hg19 assembly.</p>
+                </div><!--end content-->
+       </div><!--end wrapper-->
 
-            <!--#if expr='"$SERVER_NAME" = /genome-preview.*.ucsc.edu/' -->
-	    <p><b>This is genome-preview</b>, which contains pre-release data. To search the released data,
-	    see this <a href="http://genome.ucsc.edu/ENCODE/search.html" target=_blank>search</a> page on the public site.</p>
-	    <!--#endif -->
+       <div class="wrapper">
+                <div class="bar"><h4 class="title">Search Human Genome NCBI36/hg18</h4></div>
+                <div class="content">
+                        <p>
+                        <input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=hg18&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks'>
+                        Search for tracks visible in the Genome Browser - Human NCBI36/hg18 assembly.<br>
+                        <input type='button' class='buttonLink' value='File search   ' onclick="window.location='../cgi-bin/hgFileSearch?db=hg18';" title='Search for downloadable files'>
+                        Search for downloadable files of data aligned to the Human NCBI36/hg18 assembly.</p>
+                </div><!--end content-->
+       </div><!--end wrapper-->
 
-            <!-- Item tables -->
-            <TABLE class='itemTbl' BORDER=1 CELLSPACING=0>
-                <tr><td class='ltBlue hd2' colspan=2>Human Genome Build 37 (hg19)</td><tr>
-                <tr>
-                    <td><input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=hg19&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks ...'></td>
-                    <td>Search for tracks visible in the Genome Browser - Human GRCh37/hg19 assembly.</td>
-                </tr><tr>
-                    <td><input type='button' class='buttonLink' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=hg19';" title='Search for downloadable files ...'></td>
-                    <td>Search for downloadable files of data aligned to the Human GRCh37/hg19 assembly.</td>
-                </tr>
-            </table>
-            <BR>
-
-            <TABLE class='itemTbl' BORDER=1 CELLSPACING=0>
-                <tr><td class='ltBlue hd2' colspan=2>Human Genome Build 36 (hg18)</td><tr>
-                <tr>
-                    <td><input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=hg18&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks ...'></td>
-                    <td>Search for tracks visible in the Genome Browser - Human NCBI36/hg18 assembly.</td>
-                </tr><tr>
-                    <td><input type='button' class='buttonLink' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=hg18';" title='Search for downloadable files ...'></td>
-                    <td>Search for downloadable files of data aligned to the Human NCBI36/hg18 assembly.</td>
-                </tr>
-            </table>
-            <BR>
-
-            <TABLE class='itemTbl' BORDER=1 CELLSPACING=0>
-                <tr><td class='ltBlue hd2' colspan=2>Mouse Genome Build NCBI37/mm9</td><tr>
-                <tr>
-                    <td><input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=mm9&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks ...'></td>
-                    <td>Search for tracks visible in the Genome Browser - Mouse NCBI37/mm9 assembly.</td>
-                </tr><tr>
-                    <td><input type='button' class='buttonLink' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=mm9';" title='Search for downloadable files ...'></td>
-                    <td>Search for downloadable files of data aligned to the Mouse NCBI37/mm9 assembly.</td>
-                </tr>
-            </table>
-        </TD></TR>
-    </TABLE>
-  </BODY>
-</HTML>
-
+       <div class="wrapper">
+                <div class="bar"><h4 class="title">Search Mouse Genome NCBI37/mm9</h4></div>
+                <div class="content">
+                        <p>
+                        <input type='button' class='buttonLink' value='Track search' onclick="window.location='../cgi-bin/hgTracks?db=mm9&hgt_tSearch=1&tsCurTab=advancedTab';" title='Search for displayable tracks'>
+                        Search for tracks visible in the Genome Browser - Mouse NCBI37/mm9 assembly.<br>
+                        <input type='button' class='buttonLink' value='File search   ' onclick="window.location='../cgi-bin/hgFileSearch?db=mm9';" title='Search for downloadable files'>
+                        Search for downloadable files of data aligned to the Mouse NCBI37/mm9 assembly.</p>
+        </div><!--end content-->
+       </div><!--end wrapper-->
+    </body>
+</html>

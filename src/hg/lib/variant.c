@@ -50,6 +50,17 @@ newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 return newAllele;
 }
 
+static char *makeDashes(int count)
+{
+char *ret = needMem(count + 1);
+char *ptr = ret;
+
+while(count--)
+    *ptr++ = '-';
+
+return ret;
+}
+
 struct variant *variantFromPgSnp(struct pgSnp *pgSnp)
 /* convert pgSnp record to variant record */
 {
@@ -88,15 +99,25 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     // this check probably not right, could be different per allele
     int alleleStringLength = strlen(thisAlleleString);
     if (alleleStringLength != alleleLength)
-	errAbort("length of allele number %d is %d, should be %d", 
-	    alleleNumber, alleleStringLength, alleleLength);
+	{
+	// check for special case of single '-'
+	if (sameString("-", thisAlleleString))
+	    {
+	    thisAlleleString = makeDashes(alleleLength);
+	    alleleStringLength = alleleLength;
+	    }
+	else
+	    errAbort("length of allele number %d is %d, should be %d", 
+		alleleNumber, alleleStringLength, alleleLength);
+	}
 
     // we have a new allele!
     struct allele *allele;
     AllocVar(allele);
     slAddHead(&variant->alleles, allele);
     allele->variant = variant;
-    allele->length = alleleStringLength;
+    allele->length = alleleStringLength; 
+    toLowerN(thisAlleleString, alleleStringLength);
     allele->sequence = cloneString(thisAlleleString);
     }
 

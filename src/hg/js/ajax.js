@@ -153,11 +153,16 @@ function loadXMLDoc(url, callBack)
     }
 }
 
-function setCartVars(names, values)
+function setCartVars(names, values, errFunc, async)
 {
 // Asynchronously sets the array of cart vars with values
     if(names.length <= 0)
         return;
+
+    if (errFunc == null)
+	errFunc = errorHandler;
+    if (async == null)
+	async = true;
 
     // Set up constant portion of url
     var loc = window.location.href;
@@ -186,11 +191,12 @@ function setCartVars(names, values)
     }
     $.ajax({
                type: type,
+               async: async,
                url: loc,
                data: data,
                trueSuccess: function () {},
                success: catchErrorOrDispatch,
-               error: errorHandler,
+               error: errFunc,
                cache: false
            });
 }
@@ -455,3 +461,47 @@ function scrapeVariable(html, name)
     }
     return json;
 }
+
+// The loadingImage module helps you manage a loading image (for a slow upload; e.g. in hgCustom).
+
+var loadingImage = function ()
+{
+    // private vars
+    var imgEle, msgEle, statusMsg;
+
+    // private methods
+    var refreshLoadingImg = function()
+    {
+        // hack to make sure animation continues in IE after form submission
+        // See: http://stackoverflow.com/questions/774515/keep-an-animated-gif-going-after-form-submits
+        // and http://stackoverflow.com/questions/780560/animated-gif-in-ie-stopping
+        imgEle.attr('src', imgEle.attr('src'));
+    };
+
+    // public methods
+    return {
+        init: function(_imgEle, _msgEle, _msg)
+        {
+            // This should be called from the ready method; imgEle and msgEle should be jQuery objects
+            imgEle = _imgEle;
+            msgEle = _msgEle;
+            statusMsg = _msg;
+            // To make the loadingImg visible on FF, we have to make sure it's visible during page load (i.e. in html) otherwise it doesn't get shown by the submitClick code.
+            imgEle.hide();
+        },
+        run: function() {
+            msgEle.append(statusMsg);
+            if(navigator.userAgent.indexOf("Chrome") != -1) {
+                // In Chrome, gif animation and setTimeout's are stopped when the browser receives the first blank line/comment of the next page
+                // (basically, the current page is unloaded). I have found no way around this problem, so we just show a 
+                // simple "Processing..." message (we can't make that blink, b/c Chrome doesn't support blinking text).
+                // 
+                // (Surprisingly, this is NOT true for Safari, so this is apparently not a WebKit issue).
+                imgEle.replaceWith("<span id='loadingBlinker'>&nbsp;&nbsp;<b>Processing...</b></span>");
+            } else {
+                imgEle.show();
+                setTimeout(refreshLoadingImg, 1000);
+            }
+        }
+    }
+}();

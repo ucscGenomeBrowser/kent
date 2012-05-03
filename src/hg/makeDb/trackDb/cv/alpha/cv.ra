@@ -39,7 +39,7 @@ term GM12878
 tag GM12878
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 tissue blood
 vendorName Coriell
 vendorId GM12878
@@ -95,7 +95,7 @@ tag HEPG2
 type Cell Line
 organism human
 tissue liver
-description liver carcinoma
+description hepatocellular carcinoma
 vendorName ATCC
 vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
@@ -567,7 +567,7 @@ tag COLONBC
 type Cell Line
 tier 3
 organism human
-description colon, parent cell type to donors BC_01-11002 and BC_H12817N PROVISIONAL
+description colon, parent cell type to donors BC_01-11002 and BC_H12817N 
 tissue colon
 lineage endoderm
 karyotype normal
@@ -628,7 +628,7 @@ tag ESOPHAGUSBC
 type Cell Line
 tier 3
 organism human
-description esophagus, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description esophagus, parental cell type to donors 01-11002 and H12817N 
 tissue esophagus
 lineage endoderm
 karyotype normal
@@ -703,7 +703,7 @@ tag KIDNEYBC
 type Cell Line
 tier 3
 organism human
-description kidney, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description kidney, parental cell type to donors 01-11002 and H12817N 
 tissue kidney
 lineage mesoderm
 karyotype normal
@@ -813,7 +813,7 @@ tag LUNGBC
 type Cell Line
 tier 3
 organism human
-description lung, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description lung, parental cell type to donors 01-11002 and H12817N 
 tissue lung
 lineage endoderm
 karyotype normal
@@ -978,7 +978,7 @@ tag SKELBC
 type Cell Line
 tier 3
 organism human
-description skeletal muscle, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description skeletal muscle, parental cell type to donors 01-11002 and H12817N 
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
@@ -1106,7 +1106,7 @@ tag STOMACHBC
 type Cell Line
 tier 3
 organism human
-description stomach, parental cell type to donors 01-11002 and H12817N PROVISIONAL
+description stomach, parental cell type to donors 01-11002 and H12817N 
 tissue stomach
 lineage endoderm
 karyotype normal
@@ -1696,7 +1696,7 @@ term GM06990
 tag GM06990
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
+description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
@@ -1715,9 +1715,8 @@ tag GM08714
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line
+description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo. 
 lineage mesoderm
-karyotype Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
@@ -2055,7 +2054,7 @@ term GM12878-XiMat
 tag GM12878Xb
 type Cell Line
 organism human
-description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
@@ -2489,6 +2488,7 @@ type Cell Line
 organism human
 description amniotic epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 7110
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
@@ -2708,6 +2708,7 @@ organism human
 description cardiac fibroblasts- adult atrial
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
@@ -2722,6 +2723,7 @@ organism human
 description cardiac fibroblasts
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
@@ -2806,6 +2808,7 @@ organism human
 description cardiac myocytes
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
@@ -2820,6 +2823,7 @@ organism human
 description choroid plexus epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
@@ -2851,6 +2855,7 @@ organism human
 description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
+karyotype normal
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3103,6 +3108,7 @@ organism human
 description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3483,6 +3489,7 @@ organism human
 description adult dermal microvascular endothelial cells.
 sex F
 tissue skin
+karyotype normal
 vendorName Lonza
 vendorId CC-2543,CC-3202
 orderUrl http://www.lonza.com
@@ -3601,6 +3608,7 @@ type Cell Line
 organism human
 description non-pigment ciliary epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
@@ -3672,6 +3680,7 @@ organism human
 description pulmonary artery endothelial cells.
 sex F
 tissue heart
+karyotype normal
 vendorName Lonza
 vendorId CC-2530,CC-3162
 orderUrl http://www.lonza.com
@@ -3685,6 +3694,7 @@ type Cell Line
 organism human
 description pulmonary alevolar epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 3200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
@@ -3699,6 +3709,7 @@ organism human
 description pulmonary artery fibroblasts
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
@@ -3785,6 +3796,7 @@ type Cell Line
 organism human
 description periodontal ligament fibroblasts
 tissue epithelium
+karyotype normal
 vendorName Lonza
 vendorId CC-7049
 orderUrl http://www.lonza.com/
@@ -3798,6 +3810,7 @@ type Cell Line
 organism human
 description pulmonary fibroblasts isolated from lung tissue
 tissue blood
+karyotype normal
 vendorName ScienCell
 vendorId 3300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
@@ -3919,6 +3932,7 @@ organism human
 description retinal pigment epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
@@ -4166,6 +4180,7 @@ type Cell Line
 organism human
 description villous mesenchymal fibroblast cells
 tissue connective
+karyotype normal
 vendorName ScienCell
 vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
@@ -4327,7 +4342,6 @@ type Cell Line
 organism human
 description iPS cells derived from MSC658 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -4344,7 +4358,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG08395 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4361,7 +4374,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG20443 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4458,7 +4470,7 @@ term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
 type Cell Line
 organism human
-description parental cell type to lymphoblastoid cell lines PROVISIONAL
+description parental cell type to lymphoblastoid cell lines 
 tissue blood
 vendorName Coriell
 vendorId various GMXXXXX cell lines
@@ -4477,6 +4489,7 @@ type Cell Line
 tier 3
 organism human
 description malignant glioblastoma, glioma, lack DNA-dependent protein kinase activity, deficient in repair of DNA double strand breaks, the cells are negative for glial fibrillary acidic protein (GFAP), tumor specimen taken from a 33 year old
+lineage ectoderm
 karyotype cancer
 sex M
 tissue brain
@@ -4530,6 +4543,7 @@ type Cell Line
 organism human
 description mammary gland, non-tumorigenic epithelial, inducible cell line, derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
 tissue breast
+karyotype normal
 vendorName Struhl laboratory
 vendorId MCF10A-Er-Src
 orderUrl https://struhl.med.harvard.edu/
@@ -4596,6 +4610,7 @@ type Cell Line
 organism human
 description epidermal melanocytes
 tissue skin
+karyotype normal
 lineage ectoderm
 vendorName ScienCell
 vendorId 2200
@@ -4690,7 +4705,7 @@ tag MRTG401
 type Cell Line
 tier 3
 organism human
-description Malignant Renal Rhabdoid tumor line PROVISIONAL
+description Malignant renal rhabdoid tumor line 
 karyotype cancer
 lineage missing
 sex M
@@ -4709,7 +4724,7 @@ tag MRTA204
 type Cell Line
 tier 3
 organism human
-description Malignant Rhabdoid tumor (MRT) line, rhabdomyosarcoma PROVISIONAL
+description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma 
 karyotype cancer
 lineage missing
 sex F
@@ -4747,6 +4762,7 @@ type Cell Line
 organism human
 tissue myometrium
 description myometrial cells
+karyotype normal
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
@@ -4846,6 +4862,7 @@ organism human
 tissue skin
 lineage mesoderm
 description neonatal dermal fibroblasts
+karyotype normal
 vendorName Lonza
 vendorId CC-2509
 orderUrl http://www.lonza.com/
@@ -5149,6 +5166,7 @@ organism human
 description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
+karyotype normal
 vendorName Refer to publication or NDRI
 vendorId PanIslets
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
@@ -5328,6 +5346,7 @@ tag RPTEC
 type Cell Line
 organism human
 description renal proximal tubule epithelial cells
+karyotype normal
 tissue epithelium
 vendorName Lonza
 vendorId CC-2553, CC-2553T225
@@ -5450,6 +5469,7 @@ organism human
 description skeletal muscle cells
 tissue muscle
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2561
 orderUrl http://www.lonza.com/
@@ -5458,6 +5478,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
+label SkMC
 
 term SkMC
 tag SKMC
@@ -5476,6 +5497,7 @@ termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+label SkMC
 
 term SkMC_9011302
 tag SKMC9011302
@@ -6077,14 +6099,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Colon
-vendorName LICR lab
-vendorId Colon
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Colon; Colon
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 230,159,0
 sex U
-protocol Ren:Colon_Ren_protocol.pdf
+protocol Ren:Colon_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term CNS
 tag CNS
@@ -6094,7 +6116,7 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System PROVSIONAL
+description Central Nervous System 
 vendorName CSHL lab
 vendorId CNS
 orderUrl http://gingeraslab.cshl.edu/
@@ -6257,6 +6279,21 @@ orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
 protocol Stam:ES-E14_Stam_protocol.pdf
+
+term ES-EM5Sox17huCD25 
+tag ESEM5S
+type Cell Line
+organism mouse
+category primaryCells
+description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5 
+age EO
+strain 129/Ola
+vendorName Gilbert lab
+vendorId ES-GscgfpSox17huCD25
+orderUrl http://gilbertlab.bio.fsu.edu/ 
+color 65,105,225
+sex U
+protocol missing
 
 term ES-TT2
 tag ESTT2
@@ -6430,14 +6467,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Heart
-vendorName LICR lab
-vendorId Heart
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Heart; Heart
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-protocol Ren:Heart_Ren_protocol.pdf
+protocol Ren:Heart_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term HeadlessEmbryo
 tag HLEMBRYO
@@ -6477,6 +6514,22 @@ sex U
 protocol Stam:HindlimbBuds_Stam_protocol.pdf
 label Hind Limb Bud
 
+term J185a
+tag J185A
+type Cell Line
+organism mouse
+category cellLine
+age immortalized
+strain Unknown
+description Fetal myoblast Desmin+ 
+vendorName Gilbert lab
+vendorId J185a
+orderUrl http://gilbertlab.bio.fsu.edu/ 
+termId 174
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
+color 139,69,19
+sex U
+
 term Kidney
 tag KIDNEY
 type Cell Line
@@ -6486,12 +6539,12 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Kidney
-vendorName Stam lab
-vendorId Kidney
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)Stam lab ; 2)CSHL lab
+vendorId Kidney; Kidney
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 color 204,121,167
 sex U
-protocol Stam:Tissue_Stam_protocol.pdf
+protocol Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 #termId
 #termUrl
 
@@ -6541,7 +6594,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Limb
-vendorName 1)LICR lab 2)CSHL lab
+vendorName 1)LICR lab; 2)CSHL lab
 vendorId Limb; Limb
 orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7127
@@ -6559,14 +6612,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Liver
-vendorName LICR lab
-vendorId Liver
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)Stam lab; 2)CSHL lab
+vendorId Liver; Liver
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 230,159,0
 sex U
-protocol Ren:Liver_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf
+protocol Ren:Liver_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Lung
 tag LUNG
@@ -6577,13 +6630,13 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Lung
-vendorName LICR lab
-vendorId Lung
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Lung; Lung
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
-protocol Ren:Lung_Ren_protocol.pdf
+protocol Ren:Lung_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term MammaryGland
 tag MAMG
@@ -6921,14 +6974,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName 1) LICR lab; 2)Stam Lab
+vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
 vendorId Spleen; Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
 sex U
-protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf
+protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Stomach
 tag STOM
@@ -6976,14 +7029,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Testis
-vendorName LICR lab
-vendorId Testis
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Testis; Testis
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 0,158,115
 sex U
-protocol Ren:Testis_Ren_protocol.pdf
+protocol Ren:Testis_Ren_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Thymus
 tag THYMUS
@@ -6994,14 +7047,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Thymus
-vendorName LICR lab
-vendorId Thymus
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Thymus; Thymus
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 86,180,233
 sex U
-protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf
+protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term THelper-Activated
 tag THELPA
@@ -12389,7 +12442,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description nput library was prepared at Harvard. 
+description input library was prepared at Harvard. 
 label Harvard Input Control
 
 ### Treatments
@@ -12597,6 +12650,21 @@ tag DIFFF9D
 description 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert)
 type treatment
 
+term diffProtG_3d
+tag DIFFG3D
+description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert) 
+type treatment
+
+term diffProtH_Sox17+
+tag DIFFHSOXP
+description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert) 
+type treatment
+
+term diffProtH_Sox17-
+tag DIFFHSOXM
+description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert) 
+type treatment
+
 term DMSO_0.02pct
 tag DM002P1H
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
@@ -12674,7 +12742,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVIVISIONAL
+description 1 h with 100 nM Estradiol, hormone treatment (Stam) 
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -13276,7 +13344,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Raw signal -
+label Minus Raw signal 
 description Graphs the base-by-base density of tags on the minus strand
 
 term Peaks
@@ -13360,7 +13428,7 @@ description Signal over an interval as a percentage of normalized tag densities 
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
-label Raw signal +
+label Plus Raw signal
 description Graphs the base-by-base density of tags on the plus strand
 
 term Primer
@@ -13862,7 +13930,7 @@ label B6D2F1/J
 term B6CBAF1/J
 tag B6CBAF1J
 type strain
-description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. PROVISIONAL
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
 term BALB/cAnN
 tag BALBCANN
@@ -14327,7 +14395,6 @@ tag GPL10989
 geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
 type platform
 description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
-#PROVISIONAL
 
 term GPL9156
 tag GPL9156

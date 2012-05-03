@@ -2695,8 +2695,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
-    jsonHashAddString(NULL, "track", tdb->track);
-    jsonHashAddString(NULL, "db", database);
+    jsonObjectAdd(NULL, "track", newJsonString(tdb->track));
+    jsonObjectAdd(NULL, "db", newJsonString(database));
     }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];

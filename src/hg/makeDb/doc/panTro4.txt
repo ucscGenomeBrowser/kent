@@ -550,3 +550,128 @@ liftUp  /hive/data/genomes/panTro4/jkStuff/ensToUcsc.lift
     #   19196639 bases of 2902338967 (0.661%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/panTro4/bed/genscan
+    cd /hive/data/genomes/panTro4/bed/genscan
+    time doGenscan.pl panTro4 > do.log 2>&1
+    # recovering after a power failure
+XXX - running - Thu Apr 26 14:41:32 PDT 2012
+    time ./lastJobs.sh
+    #   real    431m5.600s
+
+    #   This is not working.  Need to run these split
+    mkdir /hive/data/genomes/panTro4/bed/genscan/splitRun
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun
+    gapToLift panTro4 panTro4.nonBridged.lift -bedFile=panTro4.nonBridged.bed
+
+    for C in 1 3 5 6 7 9 X 11 13 15 16 19 2B
+do
+    echo chr${C}
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun
+    grep -w "chr${C}" panTro4.nonBridged.lift | grep -v random \
+        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
+    mkdir chr${C}
+    faToTwoBit ../hardMaskedFa/00?/chr${C}.fa chr${C}/chr${C}.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr${C}/chr${C}.2bit \
+        chr${C}.nonBridged.lift > chr${C}/chr${C}.nonBridged.fa
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/chr${C}
+    mkdir split${C}
+    faSplit sequence chr${C}.nonBridged.fa 100 split${C}/chr${C}_
+done
+    # verify lift files are sane:
+    awk '{print $4}' chr*.nonBridged.lift | sort | uniq -c
+    # should see the list of chroms:
+    #   240 chr1
+    #   75 chr11
+    #   51 chr13
+    #   88 chr15
+    #   259 chr16
+    #   144 chr19
+    #   59 chr2B
+    #   59 chr3
+    #   89 chr5
+    #   80 chr6
+    #   33 chr7
+    #   246 chr9
+    #   607 chrX
+
+    for C in 1 3 5 6 7 9 X 11 13 15 16 19 2B
+do
+    echo chr${C}
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/chr${C}
+    echo '#!/bin/sh' > cmdList.sh
+    export NL=-1
+    ls split${C} | while read F
+  do
+  NL=`echo $NL | awk '{print $1+1}'`
+  if [ "${NL}" -gt 7 ]; then
+    NL=0
+    echo "echo waiting before $F" >> cmdList.sh
+    echo wait >> cmdList.sh
+  fi
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &" 
+  done >> cmdList.sh
+    echo "echo waiting at end" >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    rm -fr gtf pep subopt
+    mkdir gtf pep subopt
+done
+
+chr1 cmdList.sh real    36m59.341s
+# running the rest:
+for C in chr11 chr13 chr15 chr16 chr19 chr2B chr3 chr5 chr6 chr7 chr9 chrX
+do
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/${C}
+    time ./cmdList.sh > ../${C}.log 2>&1
+done
+
+    # collecting the results:
+for C in chr1 chr11 chr13 chr15 chr16 chr19 chr2B chr3 chr5 chr6 chr7 chr9 chrX
+do
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/${C}
+    cat gtf/${C}_*.gtf | liftUp -type=.gtf stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.gtf
+cat subopt/${C}_*.bed | liftUp -type=.bed stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.subopt.bed
+cat pep/${C}_*.pep | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.pep
+ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+done
+    # after verifying the sizes of the files seem same compared to what
+    #   happened in the main run:
+for C in chr1 chr11 chr13 chr15 chr16 chr19 chr2B chr3 chr5 chr6 chr7 chr9 chrX
+do
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/${C}
+   ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+    ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun
+done
+
+    # this is tricky, it is counting on the file existing, empty or otherwise
+for C in chr1 chr11 chr13 chr15 chr16 chr19 chr2B chr3 chr5 chr6 chr7 chr9 chrX
+do
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun/${C}
+    D=`ls ../../gtf/00?/${C}.gtf`
+    rm -f "${D}"
+    cp -p ${C}.gtf "${D}"
+    D=`ls ../../pep/00?/${C}.pep`
+    rm -f "${D}"
+    cp -p ${C}.pep "${D}"
+    D=`ls ../../subopt/00?/${C}.bed`
+    rm -f "${D}"
+    cp -p ${C}.subopt.bed "${D}"
+    cd /hive/data/genomes/panTro4/bed/genscan/splitRun
+done
+
+    # Now, we can continue
+    time doGenscan.pl -continue=makeBed -workhorse=hgwdev -dbHost=hgwdev \
+        panTro4 > makeBed.log 2>&1
+    #   real    8m55.453s
+
+    cat fb.panTro4.genscan.txt
+    #   52641598 bases of 2902338967 (1.814%) in intersection
+    cat fb.panTro4.genscanSubopt.txt
+    #   54088961 bases of 2902338967 (1.864%) in intersection
+
+#########################################################################

@@ -126,7 +126,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
 struct hash *oldVars = NULL;
-struct jsonHashElement *jsonForClient = NULL;
+struct jsonElement *jsonForClient = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
@@ -2528,11 +2528,11 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 // turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306 and #6944)
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels && withCenterLabels);
-jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
+jsonObjectAdd(jsonForClient, "inPlaceUpdate", newJsonBoolean(withLeftLabels && withCenterLabels));
+jsonObjectAdd(jsonForClient, "rulerClickHeight", newJsonNumber(rulerClickHeight));
 if(newWinWidth)
     {
-    jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
+    jsonObjectAdd(jsonForClient, "newWinWidth", newJsonNumber(newWinWidth));
     }
 
 /* Save out picture and tell html file about it. */
@@ -2544,13 +2544,13 @@ hvGfxClose(&hvg);
 char *type = cartUsualString(cart, "hgt.contentType", "html");
 if(sameString(type, "jsonp"))
     {
-    struct jsonHashElement *json = newJsonHash(newHash(8));
+    struct jsonElement *json = newJsonObject(newHash(8));
 
     printf("Content-Type: application/json\n\n");
-    jsonHashAddString(json, "track", cartString(cart, "hgt.trackNameFilter"));
-    jsonHashAddNumber(json, "height", pixHeight);
-    jsonHashAddNumber(json, "width", pixWidth);
-    jsonHashAddString(json, "img", gifTn.forHtml);
+    jsonObjectAdd(json, "track", newJsonString(cartString(cart, "hgt.trackNameFilter")));
+    jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
+    jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
+    jsonObjectAdd(json, "img", newJsonString(gifTn.forHtml));
     printf("%s(", cartString(cart, "jsonp"));
     hPrintEnable();
     jsonPrint((struct jsonElement *) json, NULL, 0);
@@ -4688,8 +4688,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonHashAddNumber(jsonForClient, "insideX", insideX);
-jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
+jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
@@ -4863,9 +4863,9 @@ if(theImgBox)
 hPrintf("<CENTER>\n");
 
 // info for drag selection javascript
-jsonHashAddNumber(jsonForClient, "winStart", winStart);
-jsonHashAddNumber(jsonForClient, "winEnd", winEnd);
-jsonHashAddString(jsonForClient, "chromName", chromName);
+jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(winStart));
+jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(winEnd));
+jsonObjectAdd(jsonForClient, "chromName", newJsonString(chromName));
 
 if(trackImgOnly && !ideogramToo)
     {
@@ -5006,7 +5006,7 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
 	hButtonWithOnClick("hgt.jump", "go", NULL, "imageV2.jumpButtonOnClick()");
-	jsonHashAddBoolean(jsonForClient, "assemblySupportsGeneSuggest", assemblySupportsGeneSuggest(database));
+	jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
 	if(assemblySupportsGeneSuggest(database))
 	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 #else///ifndef MERGE_GENE_SUGGEST
@@ -5974,8 +5974,8 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
-jsonForClient = newJsonHash(newHash(8));
-jsonHashAddString(jsonForClient, "cgiVersion", CGI_VERSION);
+jsonForClient = newJsonObject(newHash(8));
+jsonObjectAdd(jsonForClient, "cgiVersion", newJsonString(CGI_VERSION));
 boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
 
 if(!trackImgOnly)
@@ -6090,7 +6090,7 @@ else
     tracksDisplay();
     }
 
-jsonHashAddBoolean(jsonForClient, "measureTiming", measureTiming);
+jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

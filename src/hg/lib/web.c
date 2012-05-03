@@ -591,10 +591,13 @@ if(!webInTextMode)
     }
 }
 
+static boolean gotWarnings = FALSE;
+
 void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
+gotWarnings = TRUE;
 boolean needStart = !webHeadAlreadyOutputed;
 if (needStart)
     webStart(errCart, NULL, "Error");
@@ -605,6 +608,12 @@ if (needStart)
     webEnd();
 }
 
+
+boolean webGotWarnings()
+/* Return TRUE if webVaWarn has been called. */
+{
+return gotWarnings;
+}
 
 void webAbort(char* title, char* format, ...)
 /* an abort function that outputs a error page */

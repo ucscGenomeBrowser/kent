@@ -331,6 +331,23 @@ tier 1
 protocol ENCODE:H1_ES_protocol.pdf
 #vendorId
 
+term LHCN-M2
+tag LHCNM2
+type Cell Line
+tier 2
+organism human
+description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523, newly promoted to tier 2: not in 2011 analysis.
+lineage mesoderm
+sex M
+tissue skeletal muscle myoblast
+vendorName Woodring Wright, M.D., Ph.D.
+vendorId (None)
+orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
+termId BTO:0000023
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
+protocol Wold:LHCNM2_Wold_protocol.pdf
+
+
 ###### type 3 cells once they have been submitted.
 
 term 8988T
@@ -445,8 +462,9 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for naive populations
 tissue blood
-childOf T-Cells-CD4+
-karyotype blood
+childOf T_cells_CD4+
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -456,6 +474,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
 tag ADULTCD4TH0
@@ -463,8 +482,9 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for Th0 populations
 tissue blood
-childOf T-Cells-CD4+
-karyotype blood
+childOf T_cells_CD4+
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -474,6 +494,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_adult
 
 term Adult_CD4_Th1
 tag ADULTCD4TH1
@@ -481,8 +502,9 @@ type Cell Line
 organism human
 description CD4+ cells isolated from human blood and enriched for Th1 populations
 tissue blood
-childOf T-Cells-CD4+
-karyotype blood
+childOf T_cells_CD4+
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -492,6 +514,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_adult
 
 term AoAF
 tag AOAF
@@ -545,21 +568,6 @@ sex U
 tier 3
 protocol Crawford:Astrocytes_Crawford_protocol.pdf
 
-term B_cells_CD20+
-tag BCELLSCD20
-type Cell Line
-tier 2
-organism human
-description B cells CD20+ from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
-sex F
-tissue blood
-vendorName Rajinder Kaul, UW
-vendorId CD20+
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
-
 term BC_Adipose_UHN00001
 tag BCADIPOSE
 type Cell Line
@@ -570,7 +578,7 @@ tissue adipose tissue
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D4234003_A701166
+vendorId D4234003_A701166
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001487
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001487
@@ -589,7 +597,7 @@ lineage ectoderm, mesoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D1234004_B103117
+vendorId D1234004_B103117
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000047
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000047
@@ -608,7 +616,7 @@ lineage endoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_CP-S12-D1234010-05_B402059
+vendorId CP-S12-D1234010-05_B402059
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001418
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001418
@@ -626,7 +634,7 @@ lineage ectoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_D4234035_A810101
+vendorId D4234035_A810101
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000142
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000142
@@ -644,7 +652,7 @@ lineage ectoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D4234086_A710031
+vendorId D4234086_A710031
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000149
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000149
@@ -664,11 +672,12 @@ label Breast_BC_02-03015
 #karyotype normal
 #sex F
 #vendorName BioChain
-#vendorId BioChain_D4234275_A511454
+#vendorId D4234275_A511454
 #orderUrl http://www.biochain.com/biochain/homepage.htm
 #termId BTO:0001421
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
 #protocol Myers:Myers_BioChain_protocol.pdf
+
 
 term BC_Colon_01-11002
 tag BCCOLON
@@ -681,9 +690,9 @@ lineage endoderm
 karyotype normal
 childOf Colon_BC
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -700,9 +709,9 @@ lineage endoderm
 karyotype normal
 sex M
 childOf Colon_BC
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -719,9 +728,9 @@ lineage endoderm
 karyotype normal
 childOf Esophagus_BC
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234106-05_A803198; CP-S10-R1234106-20_B402075
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -739,7 +748,7 @@ karyotype normal
 childOf Esophagus_BC
 sex M
 vendorName BioChain
-vendorId BioChain_CP-S13-D1234106-05_B302113
+vendorId CP-S13-D1234106-05_B302113
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
@@ -756,9 +765,9 @@ tissue jejunum
 lineage endoderm
 karyotype normal
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234230-05_B402068; BioChain_CP-S10-R1234230-20_A911037
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234230-05_B402068; CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000657
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000657
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -776,9 +785,9 @@ lineage mesoderm
 karyotype normal
 childOf Kidney_BC
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234142-05_B402060; CP-S10-R1234142-20_A808055
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -795,9 +804,9 @@ lineage mesoderm
 karyotype normal
 childOf Kidney_BC
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234142-05_B402061; CP-S10-R1234142-20_B111054
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -814,7 +823,7 @@ lineage mesoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_D1234138_A705026
+vendorId D1234138_A705026
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001629
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001629
@@ -832,7 +841,7 @@ lineage mesoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_D4234148_A612197
+vendorId D4234148_A612197
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -849,9 +858,9 @@ tissue liver
 lineage endoderm
 karyotype normal
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234149-05_B209118; BioChain_CP-S10-R1234149-20_B304045
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234149-05_B209118; CP-S10-R1234149-20_B304045
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000759
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -868,9 +877,9 @@ lineage endoderm
 karyotype normal
 childOf Lung_BC
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234152-05_A610240; CP-S10-R1234152-20_A906114
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -887,9 +896,9 @@ lineage endoderm
 karyotype normal
 childOf Lung_BC
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234152-05_B402062; CP-S10-R1234152-20_B207133
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -905,9 +914,9 @@ tissue pancreas
 lineage endoderm
 karyotype normal
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234188-05_B402063; BioChain_CP-S10-R1234188-20_B402076
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234188-05_B402063; CP-S10-R1234188-20_B402076
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000988
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -924,7 +933,7 @@ lineage mesoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_CP-S13-D1234194-05_B402064
+vendorId CP-S13-D1234194-05_B402064
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000405
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000405
@@ -942,7 +951,7 @@ lineage mesoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D1234133_A712271
+vendorId D1234133_A712271
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000717
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000717
@@ -960,7 +969,7 @@ lineage extraembryonic mesoderm, trophectoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D4234200_A603104
+vendorId D4234200_A603104
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001078
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001078
@@ -979,7 +988,7 @@ lineage endoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_CP-D1234201-05_B101058
+vendorId CP-D1234201-05_B101058
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
@@ -997,7 +1006,7 @@ lineage endoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_D4234206_A712205
+vendorId D4234206_A712205
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001158
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001158
@@ -1015,9 +1024,9 @@ lineage mesoderm
 karyotype normal
 childOf Skeletal_Muscle_BC
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234171-05_A610262; CP-S10-R1234171-20_A808148
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1034,9 +1043,9 @@ lineage mesoderm
 karyotype normal
 childOf Skeletal_Muscle_BC
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234171-05_B402065; CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1053,7 +1062,7 @@ lineage ectoderm, mesoderm
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_CP-S12-D1234218-05_B402066
+vendorId CP-S12-D1234218-05_B402066
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001253
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
@@ -1070,9 +1079,9 @@ tissue small intestine
 lineage endoderm
 karyotype normal
 sex F
-vendorName BioChain
-vendorId BioChain_CP-S12-D1234226-05_B402067; BioChain_CP-S10-R1234226-20_A612138
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S12-D1234226-05_B402067; CP-S10-R1234226-20_A612138
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1090,7 +1099,7 @@ label Small_Intestine_BC_01-11002
 #karyotype normal
 #sex F
 #vendorName BioChain
-#vendorId BioChain_CP-S10-R1234246-20_A612140
+#vendorId CP-S10-R1234246-20_A612140
 #orderUrl http://www.biochain.com/biochain/homepage.htm
 #termId BTO:0001281
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
@@ -1106,9 +1115,9 @@ tissue spleen
 lineage mesoderm
 karyotype normal
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234246-05_B402069; BioChain_CP-S10-R1234246-20_B304070
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234246-05_B402069; CP-S10-R1234246-20_B304070
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001281
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1126,7 +1135,7 @@ karyotype normal
 childOf Stomach_BC
 sex F
 vendorName BioChain
-vendorId BioChain_CP-S12-D1234248-05_A808008
+vendorId CP-S12-D1234248-05_A808008
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
@@ -1144,9 +1153,9 @@ lineage endoderm
 karyotype normal
 childOf Stomach_BC
 sex M
-vendorName BioChain
-vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
-orderUrl http://www.biochain.com/biochain/homepage.htm
+vendorName BioChain; BioChain
+vendorId CP-S13-D1234248-05_B402070; CP-S10-R1234248-20_B402077
+orderUrl http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1163,7 +1172,7 @@ lineage mesoderm
 karyotype normal
 sex M
 vendorName BioChain
-vendorId BioChain_D4234260_A711169
+vendorId D4234260_A711169
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001363
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001363
@@ -1180,7 +1189,7 @@ tissue uterus
 karyotype normal
 sex F
 vendorName BioChain
-vendorId BioChain_D4234274_A810099
+vendorId D4234274_A810099
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001424
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001424
@@ -1255,7 +1264,8 @@ term CD14+
 tag CD14
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
+description SEE Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826, newly promoted to tier 2: not in 2011 analysis
+deprecated same as Monocytes-CD14+
 lineage mesoderm
 karyotype normal
 sex F
@@ -1267,6 +1277,7 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+
 #formerly tier 3
 # Adding a derprecated term CD14+ for reference with other sorted cells.
 
@@ -1275,16 +1286,18 @@ tag CD20
 type Cell Line
 tier 2
 organism human
-deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 sex F
 tissue blood
+lineage mesoderm
+karyotype normal
 vendorName Heimfeld Lab, FHCRC
 vendorId CD20+
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+
 
 term CD20+_RO01778
 tag CD20RO01778
@@ -1295,13 +1308,16 @@ description B cells, caucasian, draw number 1, newly promoted to tier 2: not in 
 sex F
 age 43
 tissue blood
-childOf B_Cells_CD20+
+lineage mesoderm
+karyotype normal
+childOf CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01778
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1312,30 +1328,16 @@ description B cells, African American, draw number 1, newly promoted to tier 2: 
 sex F
 age 27
 tissue blood
-childOf B_Cells_CD20+
+lineage mesoderm
+karyotype normal
+childOf CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
-
-term CD20+_RO01746
-tag CD20RO01746
-type Cell Line
-tier 2
-organism human
-description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promoted to tier 2: not in 2011 analysis
-sex F
-age 27
-tissue blood
-childOf B_Cells_CD20+
-vendorName Rajinder Kaul, UW
-vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
-termId BTO:0000776
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol Stam:CD20+_Stam_protocol.pdf
+label B_cells_CD20+_RO01794
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1461,8 +1463,10 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for naive populations
 tissue blood
-childOf T-Cells-CD4+
+childOf T_cells_CD4+
 karyotype blood
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1472,6 +1476,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
 tag CORDCD4TH0
@@ -1479,8 +1484,9 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for Th0 populations
 tissue blood
-childOf T-Cells-CD4+
-karyotype blood
+childOf T_cells_CD4+
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1490,6 +1496,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+label T_cells_CD4+_Th0_cord_blood
 
 term Cord_CD4_Th1
 tag CORDCD4TH1
@@ -1497,8 +1504,9 @@ type Cell Line
 organism human
 description CD4+ cells isolated from cord blood and enriched for Th1 populations
 tissue blood
-childOf T-Cells-CD4+
-karyotype blood
+childOf T_cells_CD4+
+karyotype normal
+lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
@@ -1508,6 +1516,7 @@ sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+_Th1_cord_blood
 
 
 term Decidua
@@ -4409,22 +4418,6 @@ sex M
 tier 3
 protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
-term LHCN-M2
-tag LHCNM2
-type Cell Line
-tier 3
-organism human
-description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-lineage mesoderm
-sex M
-tissue skeletal muscle myoblast
-vendorName Woodring Wright, M.D., Ph.D.
-vendorId (None)
-orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
-termId BTO:0000023
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
-protocol Wold:LHCNM2_Wold_protocol.pdf
-
 term LHSR
 tag LHSR
 type Cell Line
@@ -4633,7 +4626,6 @@ tag MONOCD14
 type Cell Line
 organism human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
-deprecated same as Monocytes-CD14+_RO01746
 lineage mesoderm
 karyotype normal
 sex F
@@ -4645,6 +4637,7 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+
 #formerly tier 3
 #there is another Monocytes-CD14+ cell line
 #that is used in UW DNase and Open Chrom Chip
@@ -4654,7 +4647,7 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), Monocytes-CD14+_RO01746 and Monocytes-CD14+_RO01826 are being used as replicates, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 childOf Monocytes-CD14+
@@ -4667,15 +4660,15 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+label Monocytes_CD14+_RO01746
 #formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, Monocytes-CD14+_RO01826 is a second draw being used as a replicate for Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
-deprecated same as Monocytes-CD14+_RO01746
 karyotype normal
 childOf Monocytes-CD14+
 sex F
@@ -4687,7 +4680,26 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
-#formerly tier 3
+label Monocytes_CD14+_RO01826
+# formerly tier 3
+
+term MRT_TTC549
+tag MRTTTC549
+type Cell Line
+tier 3
+organism human
+description Malignant Hepatic Rhabdoid tumor line
+karyotype cancer
+lineage missing
+sex M
+tissue liver
+vendorName ATCC
+vendorId TTC549
+orderUrl missing
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
+lab Crawford
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -5349,6 +5361,25 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
+term T_cells_CD4+
+tag TCELLSCD4
+type Cell Line
+organism human
+description Parent cell line for T cells CD4+.
+tissue blood
+karyotype unknown
+lineage mesoderm
+vendorName David Randolph at University of Alabama, Birmingham
+vendorId vary
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:AdultCD4naive_Crawford_protocol.pdf; Crawford:AdultCD4Th0_Crawford_protocol.pdf; Crawford:AdultCD4Th1_Crawford_protocol.pdf; Crawford:CordCD4naive_Crawford_protocol.pdf; Crawford:CordCD4Th0_Crawford_protocol.pdf; Crawford:CordCD4Th1_Crawford_protocol.pdf
+label T_cells_CD4+
+
 term T98G
 tag T98G
 type Cell Line
@@ -5871,7 +5902,6 @@ tag ESCJ7
 type Cell Line
 organism mouse
 category primaryCells
-description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
 strain 129
@@ -8154,7 +8184,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
-label ERalpha_a (sc-543)
+label ERalpha a (sc-543)
 
 term ERalpha_b
 tag ERAB
@@ -8169,7 +8199,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation 
-label ERalpha_b (MAb-009-050)
+label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
 term Egr-1
@@ -11675,6 +11705,11 @@ tag R1X25
 type readType
 description Single 25 nt reads
 
+term 1x30
+tag R1x30
+type readType
+description Single 30 nt read
+
 term 1x32
 tag R1X32
 type readType
@@ -12196,6 +12231,12 @@ type control
 description Input library was prepared at UC Davis.
 label UCDavis Input Control
 
+term Harvard_Control
+tag HVD
+type control
+description nput library was prepared at Harvard.
+label Harvard Input Control
+
 ### Treatments
 
 term 4OHTAM_1uM_4hr
@@ -12645,7 +12686,6 @@ tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
 label TGF-beta
-label TGF-b
 
 term TNFa
 tag TNFA
@@ -13027,7 +13067,7 @@ description Expression level estimates at the gene level for the GENCODE V7 anno
 term GeneGencV10
 tag GENEGENCV10
 type view
-label Genes Genoce V10
+label Genes Gencode V10
 description Expression level estimates at the gene level for the GENCODE V10 annotation in gtf format
 
 term GeneGencV3c
@@ -13039,6 +13079,7 @@ description Expression level estimates at the gene level for the GENCODE CRCh37.
 term GeneEnsV65IAcuff
 tag GENENSV65
 type view
+label Genes ENSEMBL V65
 description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format
 
 term HMM
@@ -13546,6 +13587,13 @@ label Proteogenomics
 description Mass Spec Proteogenomic Mapping
 dataGroup Other
 
+term RepliChip
+tag REPLICHIP
+type dataType
+label Repli-chip
+description Assessment of DNA Replication Timing
+dataGroup Other
+
 term RepliSeq
 tag REPLISEQ
 type dataType
@@ -13650,6 +13698,11 @@ tag B6D2F1J
 type strain
 description Derived from cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
 label B6D2F1/J
+
+term B6CBAF1/J
+tag B6CBAF1J
+type strain
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. PROVISIONAL
 
 term BALB/cAnN
 tag BALBCANN
@@ -13822,7 +13875,7 @@ description Adult 5 weeks
 label Adult 5 weeks
 
 term adult-8wks
-tag ADLT8W
+tag ADULT8WKS
 type age
 stage Adult
 description Adult 8 weeks
@@ -14109,6 +14162,12 @@ tag GPL14965
 geoPlatformName NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
 type platform
 description Human 3x720k Whole Genome CGH
+
+term GPL10989
+tag GPL10989
+geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
+type platform
+description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
 
 term GPL9156
 tag GPL9156
@@ -15187,7 +15246,7 @@ label Insertion length
 description The length of the insertion for paired reads for RNA-seq experiments.
 searchable no
 cvDefined yes
-validate cv
+validate cv or None
 priority 166
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 
@@ -15601,5 +15660,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
+
 
 
