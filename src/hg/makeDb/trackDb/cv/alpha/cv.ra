@@ -1715,9 +1715,8 @@ tag GM08714
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line
+description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo. 
 lineage mesoderm
-karyotype Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
@@ -3490,6 +3489,7 @@ organism human
 description adult dermal microvascular endothelial cells.
 sex F
 tissue skin
+karyotype normal
 vendorName Lonza
 vendorId CC-2543,CC-3202
 orderUrl http://www.lonza.com
@@ -3680,6 +3680,7 @@ organism human
 description pulmonary artery endothelial cells.
 sex F
 tissue heart
+karyotype normal
 vendorName Lonza
 vendorId CC-2530,CC-3162
 orderUrl http://www.lonza.com
@@ -3708,6 +3709,7 @@ organism human
 description pulmonary artery fibroblasts
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
@@ -3794,6 +3796,7 @@ type Cell Line
 organism human
 description periodontal ligament fibroblasts
 tissue epithelium
+karyotype normal
 vendorName Lonza
 vendorId CC-7049
 orderUrl http://www.lonza.com/
@@ -3807,6 +3810,7 @@ type Cell Line
 organism human
 description pulmonary fibroblasts isolated from lung tissue
 tissue blood
+karyotype normal
 vendorName ScienCell
 vendorId 3300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
@@ -4176,6 +4180,7 @@ type Cell Line
 organism human
 description villous mesenchymal fibroblast cells
 tissue connective
+karyotype normal
 vendorName ScienCell
 vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
@@ -4337,7 +4342,6 @@ type Cell Line
 organism human
 description iPS cells derived from MSC658 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -4354,7 +4358,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG08395 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4371,7 +4374,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG20443 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4487,6 +4489,7 @@ type Cell Line
 tier 3
 organism human
 description malignant glioblastoma, glioma, lack DNA-dependent protein kinase activity, deficient in repair of DNA double strand breaks, the cells are negative for glial fibrillary acidic protein (GFAP), tumor specimen taken from a 33 year old
+lineage ectoderm
 karyotype cancer
 sex M
 tissue brain
@@ -5343,6 +5346,7 @@ tag RPTEC
 type Cell Line
 organism human
 description renal proximal tubule epithelial cells
+karyotype normal
 tissue epithelium
 vendorName Lonza
 vendorId CC-2553, CC-2553T225
@@ -5465,6 +5469,7 @@ organism human
 description skeletal muscle cells
 tissue muscle
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2561
 orderUrl http://www.lonza.com/
