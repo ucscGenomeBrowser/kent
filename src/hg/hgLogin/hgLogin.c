@@ -118,20 +118,23 @@ char *email = cartUsualString(cart, "hgLogin_email", "");
 
 /* TODO: validate the email address is in right format */
 /* find all the user names assocaited with this email address */
-char userList[256]="";
+// char userList[256]="";
+char user[256];
 safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
 sr = sqlGetResult(conn, query);
-int numUser = 0;
+// int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-    if (numUser >= 1)
-        safecat(userList, sizeof(userList), ", ");
-    safecat(userList, sizeof(userList), m->userName);
-    numUser += 1;
+   // if (numUser >= 1)
+   //     safecat(userList, sizeof(userList), ", ");
+   //  safecat(userList, sizeof(userList), m->userName);
+   //  numUser += 1;
+    safef(user, sizeof(user), m->userName);
+    mailUsername(email, user);   
     }
 sqlFreeResult(&sr);
-mailUsername(email, userList);
+// mailUsername(email, userList);
 }
 
 
@@ -760,7 +763,7 @@ void displayAccHelpPage(struct sqlConnection *conn)
 /* draw the account help page */
 {
 char *email = cartUsualString(cart, "hgLogin_email", "");
-char *username = cartUsualString(cart, "hgLogin_email", ""); 
+char *username = cartUsualString(cart, "hgLogin_userName", ""); 
 //cartRemove(cart, "hgLogin_helpWith");
 //cartRemove(cart, "hgLogin_email");
 hPrintf(
@@ -768,12 +771,15 @@ hPrintf(
 "<!-- "
 "\n"
 "function toggle(value){\n"
-"if(value=='show')\n"
-" document.getElementById('usernameBox').style.visibility='visible';\n"
-"else\n"
-" document.getElementById('usernameBox').style.visibility='hidden';\n"
+"if(value=='showE')\n"
+"{\n"
+" document.getElementById('usernameBox').style.display='none';\n"
+" document.getElementById('emailAddrBox').style.display='inline';\n"
+" } else {\n"
+" document.getElementById('usernameBox').style.display='inline';\n"
+" document.getElementById('emailAddrBox').style.display='none';\n"
 "}\n"
-"\n"
+"}\n"
 "//-->"
 "\n"
 "</script>"
@@ -794,34 +800,33 @@ hPrintf(
 );
 hPrintf(
 "<div class=\"inputGroup\">"
-"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" checked=\"checked\" onclick=\"toggle('show');\">"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" onclick=\"toggle('showU');\">"
 "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
-"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\"  onclick=\"toggle('hide');\">"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\"  onclick=\"toggle('showE');\">"
 "<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
 "\n"
 "</div>"
 "\n"
 );
 hPrintf(
-"<div class=\"inputGroup\">"
-"<label for=\"emailPassword\">Email address</label>"
-"<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailPassword\">"
-"</div>"    
-"\n"
-"<div class=\"inputGroup\" id=\"usernameBox\">"
+"<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
 "<label for=\"emailUsername\">Username</label>"
 "<input type=\"text\" name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"emailUsername\">"
 "</div>"
 "\n"
-
+"<div class=\"inputGroup\" id=\"emailAddrBox\" style=\"display: none;\">"
+"<label for=\"emailPassword\">Email address</label>"
+"<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailPassword\">"
+"</div>"
+"\n"
 "<div class=\"formControls\">"  
 "    <input type=\"submit\" name=\"hgLogin.do.accountHelp\" value=\"Continue\" class=\"largeButton\">"
 "     &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
 "</div>"
 "</form>"
 "</div><!-- END - accountHelpBox -->"
-, email
 , username
+, email
 );
 cartSaveSession(cart);
 }
@@ -856,7 +861,9 @@ if (sameString(helpWith,"password"))
     displayAccHelpPage(conn);
     return;
     }
-//cartRemove(cart, "hgLogin_helpWith");
+cartRemove(cart, "hgLogin_helpWith");
+cartRemove(cart, "hgLogin_email");
+// cartRemove(cart, "hgLogin_userName");
 displayAccHelpPage(conn);
 return;
 }
