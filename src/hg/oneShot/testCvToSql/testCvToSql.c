@@ -76,12 +76,12 @@ struct fieldLabel
 
 struct fieldLabel fieldDescriptions[] = {
 /* Descriptions of fields, with types being from most to least specific. */
-   {"cellLine", "lineage", "High level developmental lineage of cell."},
-   {"cellLine", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
-   {"cellLine", "protocol", "Scientific protocol used for growing cells"},
-   {"cellLine", "category", "Category of cell source - Tissue, primaryCells, etc."},
-   {"cellLine", "childOf", "Name of cell line or tissue this cell is descended from."},
-   {"cellLine", "derivedFrom", "Tissue or other souce of original cells. Depreciated?"},
+   {"cellType", "lineage", "High level developmental lineage of cell."},
+   {"cellType", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
+   {"cellType", "protocol", "Scientific protocol used for growing cells"},
+   {"cellType", "category", "Category of cell source - Tissue, primaryCells, etc."},
+   {"cellType", "childOf", "Name of cell line or tissue this cell is descended from."},
+   {"cellType", "derivedFrom", "Tissue or other souce of original cells. Depreciated?"},
    {"antibody", "validation", "How antibody was validated to be specific for target."},
    {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
    {"antibody", "antibodyDescription", "Short description of antibody itself."},
@@ -253,7 +253,7 @@ char *typeLabelToSymbol(char *label)
 {
 if (sameString(label, "Cell Line"))
     {
-    return "cellLine";
+    return "cellType";
     }
 else if (sameString(label, "Antibody"))
     return "antibody";
