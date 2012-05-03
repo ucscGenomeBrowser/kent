@@ -5135,7 +5135,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5162,7 +5162,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5189,7 +5189,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5217,7 +5217,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5244,7 +5244,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5271,7 +5271,7 @@ antibody CTCF_(SC-15914)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -5972,7 +5972,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -5999,7 +5999,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -6026,7 +6026,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -6054,7 +6054,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -6081,7 +6081,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -6108,7 +6108,7 @@ antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7230,7 +7230,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7257,7 +7257,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7284,7 +7284,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7312,7 +7312,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7339,7 +7339,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
@@ -7366,7 +7366,7 @@ antibody MafK_(ab50322)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
-controlId MEL/DMSO_2.0pct/Input/std
+controlId 2791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
