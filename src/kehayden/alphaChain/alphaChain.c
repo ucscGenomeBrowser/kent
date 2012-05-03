@@ -83,9 +83,6 @@ static struct optionSpec options[] = {
  * the tree is the same as the chain size, by default 3. At each node in the tree you get
  * a word, and a list of all words that are observed in the text to follow that word.
  *
- * There are special cases in the code so that the first and last words in the text get included 
- * as much as possible in the tree. 
- *
  * Once the program has build up the wordTree, it can output it in a couple of fashions. */
 
 struct wordTree
@@ -94,8 +91,9 @@ struct wordTree
     struct rbTree *following;	/* Contains words (as struct wordTree) that follow us. */
     struct wordTree *parent;    /* Parent of this node or NULL for root. */
     char *word;			/* The word itself including comma, period etc. */
-    int useCount;		/* Number of times word used. */
-    int outputCount;            /* each level of tree and initialize that to a normalized version of it. */
+    int useCount;		/* Number of times word used in input. */
+    int outTarget;              /* Number of times want to output word. */
+    int outCount;	/* Number of times output. */
     double normVal;             /* value to place the normalization value */    
     };
 
@@ -176,11 +174,11 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     }
 }
 
-void wordTreeNormalize(struct wordTree *wt, int outputCount, double normVal)
-/* Recursively set wt->normVal  and wt->outputCount */
+void wordTreeNormalize(struct wordTree *wt, double outTarget, double normVal)
+/* Recursively set wt->normVal  and wt->outTarget so each branch gets its share */
 {
 wt->normVal = normVal;
-wt->outputCount = outputCount;
+wt->outTarget = outTarget;
 if (wt->following != NULL)
     {
     int totalChildUses = wordTreeChildrenUseCount(wt);
@@ -190,54 +188,10 @@ if (wt->following != NULL)
 	{
 	struct wordTree *child = ref->val;
 	double childRatio = (double)child->useCount / totalChildUses;
-	wordTreeNormalize(child, round(childRatio*outputCount), childRatio*normVal);
+	wordTreeNormalize(child, childRatio*outTarget, childRatio*normVal);
 	}
     slFreeList(&list);
     }
-}
-
-void wordTreeDeadEnd(struct wordTree *wt)
-/* tally and include incomplete branches */
-{
-/* int levelNormVal = 0;
- * int levelCount = 0;
- * int sumNormVal = 0;
- * int sumCount = 0;
- * int diffNormVal = 0;
- * int diffCount=0;
- * Loop pseudocode
- * work recursively through level 1-> 3, start at root of tree
- * foreach word at level 1
- * {
- *   sumCount = 0
- *   sumNormVal = 0
- *   levelCount = wt -> outputCount
- *   levelNormVal = wt-> normVal
- *   if(wt->following == NULL)                                                                                           
- *   { 
- *   create new child recursively (level 2 and level 3/default)
- *     wt->normVal = levelNormVal
- *     wt->word = 'NaN'
- *     wt->outputCount = levelCount
- *   }
- *   else
- *   {
- *    foreach wt->following at level + 1
- *    {
- *    sumCount += wt->outputCount
- *    sumNormVal  += wt->normVal
- *    ** RECURSIVE level 2 + 1 here **
- *   }
- *   diffCount = levelCount - sumCount
- *   diffNormVal = levelNormVal - sumNormVal
- *   if(diffCount > 0)
- *   {
- *   create level 2:
- *     wt->normVal = diffNormVal
- *     wt->word = 'NaN'
- *     wt->outputVal = diffCount
- *   }
- */
 }
 
 void wordTreeDump(int level, struct wordTree *wt, FILE *f)
@@ -253,7 +207,7 @@ if (wt->useCount >= minUse)
     {
     if (!fullOnly || level == maxChainSize)
 	{
-	fprintf(f, "%d\t%d\t%d\t%f\t", level, wt->useCount, wt->outputCount, wt->normVal);
+	fprintf(f, "%d\t%d\t%d\t%d\t%f\t", level, wt->useCount, wt->outTarget, wt->outCount, wt->normVal);
 	
 	for (i=1; i<=level; ++i)
             {
@@ -275,7 +229,7 @@ if (wt->following != NULL)
 int totalUses = 0;
 int curUses = 0;
 int useThreshold = 0;
-struct wordTree *picked;
+struct wordTree *pickedNode;
 
 int totUseZeroCount = 0;
 
@@ -283,46 +237,49 @@ void addUse(void *v)
 /* Add up to total uses. */
 {
 struct wordTree *wt = v;
-totalUses += wt->outputCount;
+totalUses += wt->outTarget;
 }
 
 void pickIfInThreshold(void *v)
-/* See if inside threshold, and if so store it in picked. */
+/* See if inside threshold, and if so store it in pickedNode. */
 {
-struct wordTree *wt = v;
-int top = curUses + wt->outputCount;
-if (curUses <= useThreshold && useThreshold < top)
-    picked = wt;
-curUses = top;
+if (pickedNode == NULL)
+    {
+    struct wordTree *wt = v;
+    int top = curUses + wt->outTarget;
+    if (useThreshold < top)
+	pickedNode = wt;
+    curUses = top;
+    }
 }
 
 void pickAny(void *v)
-/* See if inside threshold, and if so store it in picked. */
+/* Force it to pick something - first thing as it turns out. */
 {
-struct wordTree *wt = v;
-picked = wt;
+if (pickedNode == NULL)
+    pickedNode = v;
 }
 
 struct wordTree *pickRandom(struct rbTree *rbTree)
 /* Pick word from list randomly, but so that words more
  * commonly seen are picked more often. */
 {
-picked = NULL;
+pickedNode = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
-if (totalUses != 0)
+if (totalUses > 0)
     {
     useThreshold = rand() % totalUses; 
     rbTreeTraverse(rbTree, pickIfInThreshold);
     }
-if (picked == NULL)
+if (pickedNode == NULL)
     {
     ++totUseZeroCount;
     rbTreeTraverse(rbTree, pickAny);
     }
-assert(picked != NULL);
-return picked;
+assert(pickedNode != NULL);
+return pickedNode;
 }
 
 struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
@@ -367,15 +324,17 @@ void decrementOutputCounts(struct wordTree *wt)
 {
 while (wt != NULL)
     {
-    wt->outputCount -= 1;
+    wt->outTarget -= 1;
+    wt->outCount += 1;
     wt = wt->parent;
     }
 }
 
 static void wordTreeGenerateFaux(struct wordTree *wt, int maxSize, struct wordTree *firstWord, 
-	int maxOutputWords, FILE *f)
+	int maxOutputWords, char *fileName)
 /* Go spew out a bunch of words according to probabilities in tree. */
 {
+FILE *f = mustOpen(fileName, "w");
 struct dlList *ll = dlListNew();
 int listSize = 0;
 int outputWords = 0;
@@ -398,6 +357,7 @@ for (;;)
 	{
 	node = dlPopHead(ll);
 	picked = predictNext(wt, ll);
+//         decrementOutputCounts(picked);   // ugly placement?
 	}
     else
 	{
@@ -419,6 +379,7 @@ for (;;)
     decrementOutputCounts(picked);
     }
 dlListFree(&ll);
+carefulClose(&f);
 }
 
 struct wordTree *wordTreeForChainsInFile(char *fileName, int chainSize, struct lm *lm)
@@ -461,9 +422,6 @@ while (lineFileNext(lf, &line, NULL))
 	 * chain size.  Once past the initial section of the file we'll be
 	 * getting rid of the first link in the chain as well as adding a new
 	 * last link in the chain with each new word we see. */
-
-
-
 	if (curSize < chainSize)
 	    {
 	    dlAddValTail(chain, cloneString(word));
@@ -501,6 +459,15 @@ lineFileClose(&lf);
 return wt;
 }
 
+void wordTreeWrite(struct wordTree *wt, char *fileName)
+/* Write out tree to file */
+{
+FILE *f = mustOpen(fileName, "w");
+fprintf(f, "#level\tuseCount\toutTarget\toutCount\tnormVal\tmonomers\n");
+wordTreeDump(0, wt, f);
+carefulClose(&f);
+}
+
 void alphaChain(char *inFile, char *outFile)
 /* alphaChain - Create Markov chain of words and optionally output chain in two formats. */
 {
@@ -511,23 +478,14 @@ wordTreeNormalize(wt, outSize, 1.0);
 if (optionExists("chain"))
     {
     char *fileName = optionVal("chain", NULL);
-    FILE *f = mustOpen(fileName, "w");
-    fprintf(f, "#level\tuseCount\toutputCount\tnormVal\tmonomers\n");
-    wordTreeDump(0, wt, f);
-    carefulClose(&f);
+    wordTreeWrite(wt, fileName);
     }
 
 
-FILE *f = mustOpen(outFile, "w");
-wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->following), outSize, f);
-carefulClose(&f);
+wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->following), outSize, outFile);
+
 uglyf("totUseZeroCount = %d\n", totUseZeroCount);
-
-    {
-    FILE *f = mustOpen("foo.chain", "w");
-    wordTreeDump(0, wt, f);
-    carefulClose(&f);
-    }
+wordTreeWrite(wt, "ugly.chain");
 
 lmCleanup(&lm);	// Not really needed since we're just going to exit.
 }
