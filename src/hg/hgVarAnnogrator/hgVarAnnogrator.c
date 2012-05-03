@@ -46,7 +46,6 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *database;		/* Current genome database - hg17, mm5, etc. */
 char *regionType;	/* genome, ENCODE pilot regions, or specific position range. */
 char *position;		/* position range (if applicable) */
-struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 struct grp *fullGroupList;	/* List of all groups. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
@@ -96,6 +95,80 @@ else
     printf(hack);
 }
 
+// #*** -------------------------- libify to jsHelper ? ------------------------
+
+void expectJsonType(struct jsonElement *el, jsonElementType type, char *desc)
+/* Die if el is NULL or its type is not as expected. */
+{
+if (el == NULL)
+    errAbort("expected %s (type %d) but got NULL", desc, type);
+if (el->type != type)
+    errAbort("expected %s to have type %d but got type %d", desc, type, el->type);
+}
+
+char *stringFromJHash(struct hash *jHash, char *elName, boolean nullOk)
+/* Look up the jsonElement with elName in hash, make sure the element's type is jsonString,
+ * and return its actual string.  If nullOK, return NULL when elName is not found. */
+{
+struct hashEl *hel = hashLookup(jHash, elName);
+if (hel == NULL && nullOk)
+    return NULL;
+struct jsonElement *el = hel ? hel->val : NULL;
+expectJsonType(el, jsonString, elName);
+return el->val.jeString;
+}
+
+struct slRef *listFromJHash(struct hash *jHash, char *elName, boolean nullOk)
+/* Look up the jsonElement with elName in hash, make sure the element's type is jsonList,
+ * and return its actual list.  If nullOK, return NULL when elName is not found. */
+{
+struct hashEl *hel = hashLookup(jHash, elName);
+if (hel == NULL && nullOk)
+    return NULL;
+struct jsonElement *el = hel ? hel->val : NULL;
+expectJsonType(el, jsonList, elName);
+return el->val.jeList;
+}
+
+struct hash *hashFromJEl(struct jsonElement *jel, char *desc, boolean nullOk)
+/* Make sure jel's type is jsonObject and return its actual hash.  If nullOK, return
+ * NULL when elName is not found. */
+{
+expectJsonType(jel, jsonObject, desc);
+return jel->val.jeHash;
+}
+
+struct hash *hashFromJHash(struct hash *jHash, char *elName, boolean nullOk)
+/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonObject,
+ * and return its actual hash.  If nullOK, return NULL when elName is not found. */
+{
+struct hashEl *hel = hashLookup(jHash, elName);
+if (hel == NULL && nullOk)
+    return NULL;
+struct jsonElement *el = hel ? hel->val : NULL;
+return hashFromJEl(el, elName, nullOk);
+}
+
+struct slPair *stringsWithPrefixFromJHash(struct hash *jHash, char *prefix)
+/* Search jHash elements for string variables whose names start with prefix. */
+{
+struct slPair *varList = NULL;
+struct hashCookie cookie = hashFirst(jHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (startsWith(prefix, hel->name))
+	{
+	struct jsonElement *el = hel->val;
+	if (el->type == jsonString)
+	    slAddHead(&varList, slPairNew(hel->name, el->val.jeString));
+	}
+    }
+return varList;
+}
+
+
+// #*** -------------------------- end maybe libify to jsHelper ------------------------
 //#*** --------------- begin verbatim from hgTables.c -- libify ------------------------
 
 char *getScriptName()
@@ -206,7 +279,7 @@ static struct dyString *onChangeStart()
 {
 struct dyString *dy = jsOnChangeStart();
 //#*** mainPage.c saves a bunch of variables in addition to clade/org/db/position.
-//jsTrackedVarCarryOver(dy, hgvaRegionType, "regionType");
+jsTextCarryOver(dy, hgvaRegionType);
 jsTextCarryOver(dy, hgvaRange);
 return dy;
 }
@@ -284,23 +357,18 @@ hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>");
 }
 
-char *onChangeRegionType()
-/* If regionType is hgvaRange (i.e. position), show the position input box; otherwise hide it. */
-{
-return "hgvaChangeRegion()";
-}
-
 INLINE void printOption(char *val, char *selectedVal, char *label)
 /* For rolling our own select without having to build conditional arrays/lists. */
 {
 printf("<OPTION VALUE='%s'%s>%s\n", val, (sameString(selectedVal, val) ? " SELECTED" : ""), label);
 }
 
-void printRegionListHtml(char *db, char *onChange)
+void printRegionListHtml(char *db)
 /* Make a dropdown choice of region type, with position input box that appears if needed.
  * Return the selected region type. */
 {
-printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' onchange=\"%s\">\n", onChange);
+printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' "
+       "onchange=\"hgvaChangeRegion();\">\n");
 struct sqlConnection *conn = hAllocConn(db);
 boolean doEncode = sqlTableExists(conn, "encodeRegions");
 hFreeConn(&conn);
@@ -357,7 +425,7 @@ printAssemblyListHtml(database, onChangeDb());
 topLabelSpansEnd();
 puts("<BR>");
 topLabelSpansStart("region");
-printRegionListHtml(database, onChangeRegionType());
+printRegionListHtml(database);
 topLabelSpansEnd();
 topLabelSpansStart("");
 // Yet another span, for hiding/showing position input and lookup button:
@@ -704,8 +772,8 @@ dyStringPrintf(dy, "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>",
 	       (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
 }
 
+// Defined after a bunch of verbatims below:
 void initGroupsTracksTables();
-// -- defined after a bunch of verbatims below
 
 char *buildSourceContents(struct slName *groupList, char *selGroup, char *selTrack, char *selTable,
 			  boolean isPrimary)
@@ -722,12 +790,12 @@ if (groupList != NULL)
 else
     makeGroupDropDown(dy, selGroup);
 dyStringPrintf(dy, "<B>track:</B> ");
-if (selGroup != NULL)
+if (isNotEmpty(selGroup))
     selTrack = makeTrackDropDown(dy, selGroup, selTrack);
 else
     makeEmptySelect(dy, "trackSel");
 dyStringPrintf(dy, "<B>table:</B> ");
-if (selTrack != NULL)
+if (isNotEmpty(selTrack))
     makeTableDropDown(dy, selTrack, selTable);
 else
     makeEmptySelect(dy, "tableSel");
@@ -738,13 +806,13 @@ dyStringPrintf(dy, "<BR>\n");
 printSmallerVerticalSpace(dy);
 dyStringPrintf(dy, "<div id='filter'>\n");
 dyStringPrintf(dy, "\n</div>\n");
-if (selTrack != NULL)
+if (isNotEmpty(selTable))
     dyMakeButtonWithMsg(dy, "addFilter", "Add Filter", "add constraints on data");
 return dyStringCannibalize(&dy);
 }
 
-void printDataSourceSection(char *title, char *divId, struct slName *groupList, boolean show,
-			    boolean isPrimary)
+void printDataSourceSection(char *title, char *divId, struct slName *groupList,
+			    char *selTrack, char *selTable, boolean show, boolean isPrimary)
 /* Add section with group/track/table selects, which may be restricted to a particular
  * group and may be hidden. */
 {
@@ -753,7 +821,13 @@ printf("<div id='%sContents' "
        "onchange=\"hgvaEventBubble(event);\" onsubmit=\"hgvaOnChangeBubble(event);\""
        "onclick=\"hgvaEventBubble(event);\""
        ">\n", divId);
-char *contents = buildSourceContents(groupList, NULL, NULL, NULL, isPrimary);
+char *selGroup = NULL;
+if (isNotEmpty(selTrack))
+    {
+    struct trackDb *tdb = findTdb(fullTrackList, selTrack);
+    selGroup = tdb->grp;
+    }
+char *contents = buildSourceContents(groupList, selGroup, selTrack, selTable, isPrimary);
 puts(contents);
 printf("</div>\n");
 freeMem(contents);
@@ -770,21 +844,27 @@ cgiMakeButtonWithOnClick("addData", "Select More Data",
 printSmallVerticalSpace(NULL);
 }
 
-void makeOutputFormatDropDown(char *selectName)
+void makeOutputFormatDropDown(char *selectName, char *selected)
 /* placeholder for now... the real choices will depend on inputs */
 {
 char *menu[] = { "Tab-separated text", "Something else" };
 char *values[] = { "tabSep", "other" };
-cgiMakeDropListWithVals(selectName, menu, values, ArraySize(menu), "");
+cgiMakeDropListWithVals(selectName, menu, values, ArraySize(menu), selected);
 }
 
-void printOutputSection()
+void printOutputSection(struct hash *querySpec)
 /* Print an output format section that can't be removed like data source sections can. */
 {
 webNewHackSection(FALSE, "outFormat", TRUE, "Select Output Format");
 printf("<div id='outFormatContents' "
        "onchange=\"hgvaEventBubble(event);\" onclick=\"hgvaEventBubble(event);\">\n");
-makeOutputFormatDropDown("outFormat");
+char *selOutput = "";
+if (querySpec != NULL)
+    {
+    struct hash *outSpec = hashFromJHash(querySpec, "output", FALSE);
+    selOutput = stringFromJHash(outSpec, "outFormat", FALSE);
+    }
+makeOutputFormatDropDown("outFormat", selOutput);
 printf("<BR>\n");
 printf("<div id='outOptions'>\n");
 printSmallerVerticalSpace(NULL);
@@ -879,9 +959,7 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
         }
 
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
-    if (tbOff != NULL && startsWithWord("off", tbOff))
-	slAddHead(&forbiddenTrackList, tdb);
-    else
+    if (tbOff == NULL || !startsWithWord("off", tbOff))
 	slAddHead(&newList, tdb);
     }
 slReverse(&newList);
@@ -1041,6 +1119,13 @@ if (list == NULL)
 return list;
 }
 
+void printVariantsSection(char *selTrack, char *selTable, boolean isPrimary)
+/* Print a section that shows tracks only from group varRep (+ phenDis + user if available). */
+{
+printDataSourceSection("Select Variants", "variants", variantsGroupList(), selTrack, selTable,
+		       TRUE, isPrimary);
+}
+
 struct slName *genesGroupList()
 /* Return the restricted group list for the Genes section. */
 {
@@ -1050,28 +1135,82 @@ if (list == NULL)
 return list;
 }
 
+void printGenesSection(char *selTrack, char *selTable, boolean isPrimary)
+/* Print a section that shows tracks only from group genes (+ user if available). */
+{
+printDataSourceSection("Select Genes", "genes", genesGroupList(), selTrack, selTable,
+		       TRUE, isPrimary);
+}
+
+void printExtraSource(int i, char *selTrack, char *selTable, boolean show, boolean isPrimary)
+/* Print a source section with unrestricted group list and numeric-suffix id. */
+{
+char id[32];
+safef(id, sizeof(id), "source%d", i);
+printDataSourceSection("Select Data", id, NULL, selTrack, selTable, show, isPrimary);
+}
+
+#define MAX_EXTRA_SOURCES 5
+
+void printDefaultSources()
+/* When cart doesn't yet have a querySpec, show variants & genes; make several hidden sources. */
+{
+printVariantsSection(NULL, NULL, TRUE);
+printGenesSection(NULL, NULL, FALSE);
+int i;
+for (i = 0;  i < MAX_EXTRA_SOURCES;  i++)
+    printExtraSource(i, NULL, NULL, FALSE, FALSE);
+}
+
+void printSourcesFromQuerySpec(struct hash *querySpec)
+/* Show sources with the same order and settings as querySpec. */
+{
+int i;
+struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
+for (i = 0, srcRef = sources;  srcRef != NULL;  i++, srcRef = srcRef->next)
+    {
+    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
+    char *srcId = stringFromJHash(srcHash, "id", FALSE);
+    char *selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
+    char *selTable = stringFromJHash(srcHash, "tableSel", FALSE);
+    boolean isPrimary = (srcRef == sources);
+    if (sameString(srcId, "variantsContents"))
+	printVariantsSection(selTrack, selTable, isPrimary);
+    else if (sameString(srcId, "genesContents"))
+	printGenesSection(selTrack, selTable, isPrimary);
+    else
+	printExtraSource(i, selTrack, selTable, TRUE, isPrimary);
+    }
+// If the max number of extra sources hasn't been reached, add hidden extra sources:
+for (;  i < MAX_EXTRA_SOURCES;  i++)
+    printExtraSource(i, NULL, NULL, FALSE, FALSE);
+}
+
 void doMainPage()
 /* Print out initial HTML of control page. */
 {
 printAssemblySection();
 webEndHackSection();
+initGroupsTracksTables();
+struct hash *querySpec = NULL;
+char *queryStr = cartOptionalString(cart, "querySpec");
+if (queryStr != NULL)
+    {
+    struct jsonElement *querySpecJson = jsonParse(queryStr);
+    querySpec = hashFromJEl(querySpecJson, "querySpec from cart", FALSE);
+    }
 printf("<div id='sourceContainerPlus'>\n");
 printf("<div id='sourceContainer'>\n");
-printDataSourceSection("Select Variants", "variants", variantsGroupList(), TRUE, TRUE);
-printDataSourceSection("Select Genes", "genes", genesGroupList(), TRUE, FALSE);
-int maxGrators = 5, i;
-for (i = 0;  i < maxGrators;  i++)
-    {
-    char id[32];
-    safef(id, sizeof(id), "source%d", i);
-    printDataSourceSection("Select Data", id, NULL, FALSE, FALSE);
-    }
+if (querySpec == NULL)
+    printDefaultSources();
+else
+    printSourcesFromQuerySpec(querySpec);
 webEndHackSection();
 printf("</div>\n"); // sourceContainer
 printAddDataSection();
 webEndHackSection();
 printf("</div>\n"); // sourceContainerPlus (extend down a bit so sections can be dragged to bottom)
-printOutputSection();
+printOutputSection(querySpec);
 printSubmitSection();
 
 printf("<script>\n"
@@ -1082,6 +1221,22 @@ printf("<script>\n"
        "  update: hgvaSourceSortUpdate"
        "}); });\n"
        "</script>\n");
+
+// __detectback trick from http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
+printf("<script>\n"
+       "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
+       "value=''></form>\");\n"
+       "function checkPageBackOrRefresh() {\n"
+       "  if (document.getElementById('__detectback').value) {\n"
+       "    return true;\n"
+       "  } else {\n"
+       "    document.getElementById('__detectback').value = 'been here';\n"
+       "    return false;\n"
+       "  }\n"
+       "}\n"
+       "window.onload = function() { "
+       "  if (checkPageBackOrRefresh()) { window.location.replace('%s?%s'); } };\n"
+       "</script>\n", getScriptName(), cartSidUrlString(cart));
 
 //#*** ------------------ more verbatim from mainPage.c ---------------
 /* Hidden form for jumping to custom tracks CGI. */
@@ -1096,13 +1251,6 @@ cgiMakeHiddenVar(hgHubConnectCgiDestUrl, hgVarAnnogratorName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 //#*** ------------------ end verbatim ---------------
-
-/* Hidden form for executing a query (after some javascript fiddling). */
-hPrintf("<FORM ACTION='%s' METHOD=%s NAME='executeForm' ID='executeForm'>", hgVarAnnogratorName(),
-	cartUsualString(cart, "formMethod", "POST"));
-cartSaveSession(cart);
-cgiMakeHiddenVar("executeQuery", "");
-hPrintf("</FORM>\n");
 
 webNewSection("Using the Variant Annotation Integrator");
 printf("Documentation goes here :)\n");
@@ -1122,7 +1270,11 @@ cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeRange);
-position = cloneString(cartUsualString(cart, hgvaRange, hDefaultPos(database)));
+position = cloneString(cartOptionalString(cart, hgvaRange));
+if (isEmpty(position))
+    position = hDefaultPos(database);
+cartSetString(cart, hgvaRange, position);
+position = cloneString(position);
 
 setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
@@ -1144,7 +1296,7 @@ else if (webGotWarnings())
     {
     // We land here when lookupPosition pops up a warning box.
     // Reset the problematic position and show the main page.
-    position = hDefaultPos(database);
+    position = cloneString(cartUsualString(cart, "lastPosition", hDefaultPos(database)));
     cartSetString(cart, hgvaRange, position);
     doMainPage();
     }
@@ -1155,81 +1307,6 @@ cartWebEnd();
 cartCheckout(&cart);
 textOutClose(&compressPipeline);
 }
-
-// #*** -------------------------- libify to jsHelper ? ------------------------
-
-void expectJsonType(struct jsonElement *el, jsonElementType type, char *desc)
-/* Die if el is NULL or its type is not as expected. */
-{
-if (el == NULL)
-    errAbort("expected %s (type %d) but got NULL", desc, type);
-if (el->type != type)
-    errAbort("expected %s to have type %d but got type %d", desc, type, el->type);
-}
-
-char *stringFromJHash(struct hash *jHash, char *elName, boolean nullOk)
-/* Look up the jsonElement with elName in hash, make sure the element's type is jsonString,
- * and return its actual string.  If nullOK, return NULL when elName is not found. */
-{
-struct hashEl *hel = hashLookup(jHash, elName);
-if (hel == NULL && nullOk)
-    return NULL;
-struct jsonElement *el = hel ? hel->val : NULL;
-expectJsonType(el, jsonString, elName);
-return el->val.jeString;
-}
-
-struct slRef *listFromJHash(struct hash *jHash, char *elName, boolean nullOk)
-/* Look up the jsonElement with elName in hash, make sure the element's type is jsonList,
- * and return its actual list.  If nullOK, return NULL when elName is not found. */
-{
-struct hashEl *hel = hashLookup(jHash, elName);
-if (hel == NULL && nullOk)
-    return NULL;
-struct jsonElement *el = hel ? hel->val : NULL;
-expectJsonType(el, jsonList, elName);
-return el->val.jeList;
-}
-
-struct hash *hashFromJEl(struct jsonElement *jel, char *desc, boolean nullOk)
-/* Make sure jel's type is jsonObject and return its actual hash.  If nullOK, return
- * NULL when elName is not found. */
-{
-expectJsonType(jel, jsonObject, desc);
-return jel->val.jeHash;
-}
-
-struct hash *hashFromJHash(struct hash *jHash, char *elName, boolean nullOk)
-/* Look up the jsonElement with elName in jHash, make sure the element's type is jsonObject,
- * and return its actual hash.  If nullOK, return NULL when elName is not found. */
-{
-struct hashEl *hel = hashLookup(jHash, elName);
-if (hel == NULL && nullOk)
-    return NULL;
-struct jsonElement *el = hel ? hel->val : NULL;
-return hashFromJEl(el, elName, nullOk);
-}
-
-struct slPair *stringsWithPrefixFromJHash(struct hash *jHash, char *prefix)
-/* Search jHash elements for string variables whose names start with prefix. */
-{
-struct slPair *varList = NULL;
-struct hashCookie cookie = hashFirst(jHash);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    if (startsWith(prefix, hel->name))
-	{
-	struct jsonElement *el = hel->val;
-	if (el->type == jsonString)
-	    slAddHead(&varList, slPairNew(hel->name, el->val.jeString));
-	}
-    }
-return varList;
-}
-
-
-// #*** -------------------------- end maybe libify to jsHelper ------------------------
 
 struct slName *groupListForSource(char *divId)
 /* If applicable, return the restricted group list for the given section. */
@@ -1347,7 +1424,10 @@ for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
 	gotUpdate = TRUE;
 	printf("{ \"id\": \"#%s\", \"contents\": \"", srcId);
 	struct slName *groupList = groupListForSource(srcId);
-	char *newContents = buildSourceContents(groupList, NULL, NULL, NULL, isPrimary);
+	char *selGroup = stringFromJHash(srcHash, "groupSel", FALSE);
+	char *selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
+	char *selTable = stringFromJHash(srcHash, "tableSel", FALSE);
+	char *newContents = buildSourceContents(groupList, selGroup, selTrack, selTable, isPrimary);
 	printf("%s\" }", escapeStringForJson(newContents));
 	dyStringPrintf(dy, "Telling %s that it is%s primary.  ", srcId, isPrimary ? "" : " not");
 	}
@@ -1595,6 +1675,7 @@ return formatter;
 void executeQuery(char *db, struct hash *querySpec)
 /* Build up annoGrator objects from querySpec, create an annoGratorQuery and execute it. */
 {
+webStartText();
 initGroupsTracksTables();
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
@@ -1603,7 +1684,8 @@ for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
     struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
     char *table = stringFromJHash(srcHash, "tableSel", FALSE);
-    struct trackDb *tdb = tdbForTrack(db, table, &fullTrackList);
+    char *tableNoAll_ = startsWith("all_", table) ? table+strlen("all_") : table;
+    struct trackDb *tdb = tdbForTrack(db, tableNoAll_, &fullTrackList);
     boolean isPrimary = (srcRef == sources);
     if (isPrimary)
 	primary = streamerFromSource(db, table, tdb);
@@ -1666,7 +1748,6 @@ expectJsonType(request, jsonObject, "top-level request");
 struct hash *topHash = request->val.jeHash;
 // Every request must include a querySpec:
 struct hash *querySpec = hashFromJHash(topHash, "querySpec", FALSE);
-
 restoreMiniCart(topHash);
 
 char *action = stringFromJHash(topHash, "action", FALSE);

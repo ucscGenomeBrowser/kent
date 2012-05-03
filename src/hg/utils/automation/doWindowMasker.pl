@@ -28,6 +28,7 @@ my $stepper = new HgStepManager(
       { name => 'mask', func => \&doMask },
       { name => 'sdust', func => \&doSdust },
       { name => 'twobit', func => \&doTwoBit },
+      { name => 'load', func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -63,6 +64,7 @@ Automates UCSC's WindowMasker process for genome database \$db.  Steps:
     mask: The second pass of WindowMasker and collect output.
     sdust: Another pass of WindowMasker using -sdust true.
     twobit: Make masked twobit files.
+    load: load and clean of gaps, reload cleaned table.
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/WindowMasker.\$date unless -buildDir is given.
@@ -202,7 +204,7 @@ _EOF_
 sub doTwoBit {
   my $runDir = "$buildDir";
   my $whatItDoes = "Make .2bit files from the beds.";
-  &HgAutomate::checkExistsUnlessDebug('mask', 'sdust', ("$runDir/windowmasker.counts", 
+  &HgAutomate::checkExistsUnlessDebug('sdust', 'twobit', ("$runDir/windowmasker.counts", 
            "$runDir/windowmasker.bed", "$runDir/windowmasker.sdust.bed"));
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doTwoBit.csh", $fileServer,
@@ -210,10 +212,36 @@ sub doTwoBit {
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq windowmasker.bed $db.wmsk.2bit
 twoBitMask $unmaskedSeq windowmasker.sdust.bed $db.wmsk.sdust.2bit
+twoBitToFa $db.wmsk.2bit stdout | faSize stdin >&faSize.$db.wmsk.txt
+twoBitToFa $db.wmsk.sdust.2bit stdout | faSize stdin >&faSize.$db.wmsk.sdust.txt
 _EOF_
   );
   $bossScript->execute();
 } #doTwoBit
+
+#########################################################################
+# * step: load [dbHost]
+sub doLoad {
+  my $runDir = "$buildDir";
+  my $whatItDoes = "load sdust.bed and filter with gaps to clean";
+  &HgAutomate::checkExistsUnlessDebug('twobit', 'load', ("$runDir/$db.wmsk.sdust.2bit", 
+           "$runDir/$db.wmsk.2bit", "$runDir/faSize.$db.wmsk.sdust.txt"));
+  my $bossScript = new HgRemoteScript("$runDir/doLoadClean.csh", $dbHost,
+				      $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+hgLoadBed $db windowmaskerSdust windowmasker.sdust.bed
+featureBits -countGaps $db windowmaskerSdust >&fb.$db.windowmaskerSdust.beforeClean.txt
+featureBits $db -not gap -bed=notGap.bed
+featureBits $db windowmaskerSdust notGap.bed -bed=stdout | gzip -c > cleanWMask.bed.gz
+hgLoadBed $db windowmaskerSdust cleanWMask.bed.gz
+featureBits -countGaps $db windowmaskerSdust >&fb.$db.windowmaskerSdust.clean.txt
+zcat cleanWMask.bed.gz | twoBitMask ../../$db.unmasked.2bit stdin -type=.bed $db.cleanWMSdust.2bit
+twoBitToFa $db.cleanWMSdust.2bit stdout | faSize stdin >& faSize.$db.cleanWMSdust.txt
+featureBits -countGaps $db rmsk windowmaskerSdust >&fb.$db.rmsk.windowmaskerSdust.txt
+_EOF_
+  );
+  $bossScript->execute();
+} #doLoad
 
 #########################################################################
 # * step: cleanup [fileServer]
@@ -242,6 +270,8 @@ _EOF_
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
+my $secondsStart = `date "+%s"`;
+chomp $secondsStart;
 ($db) = @ARGV;
 
 # Force debug and verbose until this is looking pretty solid:
@@ -264,8 +294,14 @@ my $stopStep = $stepper->getStopStep();
 my $upThrough = ($stopStep eq 'cleanup') ? "" :
   "  (through the '$stopStep' step)";
 
+my $secondsEnd = `date "+%s"`;
+chomp $secondsEnd;
+my $elapsedSeconds = $secondsEnd - $secondsStart;
+my $elapsedMinutes = int($elapsedSeconds/60);
+$elapsedSeconds -= $elapsedMinutes * 60;
+
 &HgAutomate::verbose(1,
-	"\n *** All done!$upThrough\n");
+	"\n *** All done !$upThrough - Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	" *** Steps were performed in $buildDir\n");
 &HgAutomate::verbose(1, "\n");

@@ -467,7 +467,8 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562ChromatinTotalPlusClusters cricket Wed May  4 14:37:31 2011
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapPlusClusters         #subTrack wgEncodeRikenCageViewPlusSignal on
+        #track wgEncodeRikenCageK562CytosolPapPlusClusters 
+        #subTrack wgEncodeRikenCageViewPlusSignal on
         #shortLabel K562 cyto pA+ + 1
         #longLabel K562 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         #subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -1301,7 +1302,8 @@ html wgEncodeRikenCage.release3
         # was wgEncodeRikenCageK562ChromatinTotalMinusClusters cricket Wed May  4 14:37:26 2011
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapMinusClusters         #subTrack wgEncodeRikenCageViewMinusSignal on
+        #track wgEncodeRikenCageK562CytosolPapMinusClusters 
+        #subTrack wgEncodeRikenCageViewMinusSignal on
         #shortLabel K562 cyto pA+ - 1
         #longLabel K562 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         #subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -2508,7 +2510,8 @@ html wgEncodeRikenCage.release3
 
 
         #ATTIC
-        #track wgEncodeRikenCageK562CytosolPapAln         #subTrack wgEncodeRikenCageViewAlignments off
+        #track wgEncodeRikenCageK562CytosolPapAln 
+        #subTrack wgEncodeRikenCageViewAlignments off
         #shortLabel K562 cyto pA+ A 1
         #longLabel K562 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         #subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep0 rank=rank1
@@ -3584,6 +3587,7 @@ html wgEncodeRikenCage.release3
     view TssHmm
     visibility pack
     subTrack wgEncodeRikenCage
+    configurable off
 
         track wgEncodeRikenCageA549CellPapTssHmm
         subTrack wgEncodeRikenCageViewTssHmm off
@@ -3949,7 +3953,8 @@ html wgEncodeRikenCage.release3
         color 46,0,184
         # subId=5611 dateSubmitted=2012-02-10
 
-        #track wgEncodeRikenCageNhekNucleusPapTssHmmV3        #subTrack wgEncodeRikenCageViewTssHmm off
+        #track wgEncodeRikenCageNhekNucleusPapTssHmmV3
+        #subTrack wgEncodeRikenCageViewTssHmm off
         #shortLabel NHEK nucl pA+
         #longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
         #subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
@@ -4150,7 +4155,8 @@ html wgEncodeRikenCage.release3
         type bed 6
         # subId=6725 dateSubmitted=2012-03-30
 
-        #track wgEncodeRikenCageNhekNucleusPapTssHmmV4        #subTrack wgEncodeRikenCageViewTssHmm off
+        #track wgEncodeRikenCageNhekNucleusPapTssHmmV4
+        #subTrack wgEncodeRikenCageViewTssHmm off
         #shortLabel NHEK nucl pA+
         #longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN 
         #subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP

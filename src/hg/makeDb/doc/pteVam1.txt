@@ -165,3 +165,45 @@ skipInvalid yes
     #   49493178 bases of 1839436660 (2.691%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/pteVam1/bed/genscan
+    cd /hive/data/genomes/pteVam1/bed/genscan
+    time doGenscan.pl pteVam1 > do.log 2>&1
+    #   Elapsed time: 356m2s
+
+    cat fb.pteVam1.genscan.txt
+    #   55912473 bases of 1839436660 (3.040%) in intersection
+    cat fb.pteVam1.genscanSubopt.txt
+    #   60619613 bases of 1839436660 (3.296%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S pteVam1
+    mkdir /hive/data/genomes/pteVam1/bed/windowMasker
+    cd /hive/data/genomes/pteVam1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev pteVam1 > do.log 2>&1
+    #   real    278m34.535s
+    # fixing the last couple of commands from doLoadClean step
+    time ./lastClean.csh 
+    # real    4m47.606s
+
+    cat fb.pteVam1.windowmaskerSdust.clean.txt
+    #   514392905 bases of 1996076410 (25.770%) in intersection
+
+    cat faSize.pteVam1.cleanWMSdust.txt
+    #   1996076410 bases (156639750 N's 1839436660 real 1325043755 upper 514392905 lower) in 96944 sequences in 1 files
+    #   Total size: mean 20590.0 sd 54686.1 min 601 (scaffold_96943) max 1019178 (scaffold_0) median 1777
+    #   %25.77 masked total, %27.96 masked real
+
+     cat fb.pteVam1.rmsk.windowmaskerSdust.txt
+    #   238443817 bases of 1996076410 (11.946%) in intersection
+
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev pteVam1 > cleanup.log 2>&1
+    #   real    2m19.430s
+
+#########################################################################

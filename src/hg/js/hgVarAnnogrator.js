@@ -8,6 +8,7 @@ function hgvaChangeRegion()
     } else {
 	$('#positionContainer').hide();
     }
+    setCartVar("hgva_regionType", newVal);
 }
 
 function hgvaShowNextHiddenSource()
@@ -24,25 +25,27 @@ function hgvaShowNextHiddenSource()
     }
 }
 
-function addJQToSettings(jq, settings)
+function makeHashAddFx(hashObject)
 {
-    jq.each(function(i,el) { settings[el.name] = el.value; });
+    return function(i, el) { hashObject[el.name] = el.value };
 }
 
 function hgvaDescribeSource(source)
 {
     var settings = {};
     settings.id = source.id + "Contents";
-    addJQToSettings($('#'+source.id+' select'), settings);
-    addJQToSettings($('#'+source.id+' :hidden'), settings);
-    addJQToSettings($('#'+source.id+' div[id="filter"] *').not(':submit'), settings);
+    var addToSettings = makeHashAddFx(settings);
+    $('#'+source.id+' select').each(addToSettings);
+    $('#'+source.id+' :hidden').each(addToSettings);
+    $('#'+source.id+' div[id="filter"] *').not(':submit').each(addToSettings);
     return settings;
 }
 
 function hgvaDescribeOutput()
 {
     var settings = {};
-    addJQToSettings($('#outFormat select, #outFormat input').not(':submit'), settings);
+    var addToSettings = makeHashAddFx(settings);
+    $('#outFormat select, #outFormat input').not(':submit').each(addToSettings);
     return settings;
 }
 
@@ -59,28 +62,32 @@ function hgvaBuildQuerySpec()
 function hgvaExpandCommand(command)
 {
     command.querySpec = hgvaBuildQuerySpec();
-    var addToCommand = function(i,el){ command[el.name] = el.value; };
-    $('#mainForm input').each(addToCommand);
+    var addToCommand = makeHashAddFx(command);
+    $('#mainForm input').not(':button').each(addToCommand);
     $('#mainForm select').each(addToCommand);
 }
 
-function hgvaAjax(command)
+function hgvaAjax(command, async)
 {
+    if (async == null)
+	async = true;
     hgvaExpandCommand(command);
     $.ajax({
         type: "POST",
+	async: async,
         dataType: "JSON",
         url: "hgVarAnnogrator",
 	data: 'updatePage=' + JSON.stringify(command),
         trueSuccess: hgvaUpdatePage,
         success: catchErrorOrDispatch,
+        error: errorHandler,
         cache: false,
     });
 }
 
-function hgvaLookupPosition()
+function hgvaLookupPosition(async)
 {
-    hgvaAjax({'action': 'lookupPosition'});
+    hgvaAjax({'action': 'lookupPosition'}, async);
 }
 
 function hgvaLookupPositionIfNecessary()
@@ -89,20 +96,21 @@ function hgvaLookupPositionIfNecessary()
     if (regionType == "range") {
 	var position = $('#mainForm input[name="position"]').val();
 	if (!position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
-	    hgvaLookupPosition();
+	    hgvaLookupPosition(false);
 	}
     }
 }
 
 function hgvaExecuteQuery()
 {
-    hgvaLookupPositionIfNecessary();
     showLoadingMessage("Executing your query may take some time. " +
 		       "Please leave this window open during processing.");
+    hgvaLookupPositionIfNecessary();
     var command = {'action': 'execute'};
     hgvaExpandCommand(command);
-    $('#executeForm input[name="executeQuery"]').val(JSON.stringify(command));
-    $('#executeForm').submit();
+    $('#mainForm').append("<INPUT TYPE=HIDDEN NAME='executeQuery' VALUE='" +
+			  JSON.stringify(command) + "'>);");
+    $('#mainForm').submit();
 }
 
 function hgvaEventBubble(event)
@@ -156,7 +164,18 @@ function hgvaUpdatePage(responseJson)
 	    $(value.id).val(value.value);
 	}
     }
+    var names = [ 'querySpec' ];
+    var values = [ JSON.stringify(hgvaBuildQuerySpec()) ];
+    var position = $('#mainForm input[name="position"]').val();
+    if (position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
+	names.push('position');
+	values.push(position);
+    }
+    // setCartVars returns error when this is called by synchronous ajax...
+    var ignoreError = function(){};
+    setCartVars(names, values, ignoreError, false);
 }
+
 
 //-------------------------- adapted from hgCustom.js: -----------------------------
 //#*** move to utils.js

@@ -148,3 +148,28 @@ _EOF_
     #   37047077 bases of 2060419685 (1.798%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/windowMasker
+    cd /hive/data/genomes/choHof1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev choHof1 > do.log 2>&1
+    #   real    219m35.396s
+    # fixing some broken commands:
+    #   time ./doLoadClean.csh > loadClean.log 2>&1
+    #   real    1460m21.553s
+
+    # fixing some broken commands:
+    time ./lastClean.sh
+    #   real    13m14.689s
+
+    cat fb.choHof1.windowmaskerSdust.beforeClean.txt
+    #   1188087555 bases of 2458927620 (48.317%) in intersection
+    cat fb.choHof1.windowmaskerSdust.clean.txt
+    #   789579620 bases of 2458927620 (32.111%) in intersection
+
+    cat fb.choHof1.rmsk.windowmaskerSdust.txt
+    #   377356167 bases of 2458927620 (15.346%) in intersection
+
+#########################################################################
