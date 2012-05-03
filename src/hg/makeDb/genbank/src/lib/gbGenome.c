@@ -24,6 +24,7 @@ static char *mmNames[] = {"Mus musculus", "Mus sp.",
                           NULL};
 static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
 static char *choHofNames[] = {"Choloepus hoffmanni", NULL};
+static char *chrPicNames[] = {"Chrysemys picta", "Chrysemys picta marginata", "Chrysemys picta bellii", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
 static char *cioSavNames[] = {"Ciona savignyi", NULL};
 static char *strPurNames[] = {"Strongylocentrotus purpuratus", NULL};
@@ -110,6 +111,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"mm", mmNames},
     {"rn", rnNames},
     {"choHof", choHofNames},
+    {"chrPic", chrPicNames},
     {"ci", ciNames},
     {"cioSav", cioSavNames},
     {"fr", frNames},
