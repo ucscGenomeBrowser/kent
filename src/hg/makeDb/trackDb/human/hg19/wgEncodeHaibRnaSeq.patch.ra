@@ -17,7 +17,7 @@ superTrack wgEncodeRnaSeqSuper dense
 shortLabel HAIB RNA-seq
 longLabel RNA-seq from ENCODE/HAIB
 group expression
-subGroup1 view Views RawSignal=Signal Alignments=Alignments
+subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878<BR>&nbsp;(Tier_1) 1H1hESC=H1-hESC<BR>&nbsp;(Tier_1) 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HEPG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2&#95;C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC-1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn 2HUVEC=HUVEC IMR90=IMR90 JURKAT=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
 subGroup3 treatment Treatment  BPA14h=BPA_4hr_100nM DM002P4H=DMSO_4hr_0.02pct EST10NM4H=ESTRADIOL_4hr_10nM GEN4H=GENISTEIN_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5NM=DEX_1hr_5nM DEX1NM=DEX_1hr_1nM DEX500PM=DEX_1hr_500pM DEX100PM=DEX_1hr_100pM ETOH02=ETOH_1hr_0.02pct zNONE=None 
 subGroup4 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 
@@ -469,7 +469,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Etoh02RawRep3
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 3
-        longLabel A549 ETOH 1 hr 0.02% RNA-seq Signal Rep 3 from ENCODE/HAIB
+        longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 3 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep3
         type bigWig 0.115095 1155.819946
         # subId=2974 dateSubmitted=2011-01-22
@@ -478,7 +478,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex100pmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100pM 1
-        longLabel A549 DEX 1 hr 100 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 100 pM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep1
         type bigWig 0.122735 1558.979980
         # subId=2974 dateSubmitted=2011-01-22
@@ -487,7 +487,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex500pmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX500pM 1
-        longLabel A549 DEX 1 hr 500 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 500 pM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep1
         type bigWig 0.117905 1144.349976
         # subId=2974 dateSubmitted=2011-01-22
@@ -496,7 +496,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX1nM 1
-        longLabel A549 DEX 1 hr 1 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep1
         type bigWig 0.120431 1351.449951
         # subId=2974 dateSubmitted=2011-01-22
@@ -505,7 +505,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex5nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX5nM 1
-        longLabel A549 DEX 1 hr 5 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 5 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep1
         type bigWig 0.149512 1237.839966
         # subId=2974 dateSubmitted=2011-01-22
@@ -514,7 +514,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Etoh02RawRep4
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 4
-        longLabel A549 ETOH 1 hr 0.02% RNA-seq Signal Rep 4 from ENCODE/HAIB
+        longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 4 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep4
         type bigWig 0.120691 1476.140015
         # subId=2974 dateSubmitted=2011-01-22
@@ -523,7 +523,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex100pmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX100pM 2
-        longLabel A549 DEX 1 hr 100 pM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 100 pM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep2
         type bigWig 0.140351 1194.630005
         # subId=2974 dateSubmitted=2011-01-22
@@ -532,7 +532,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex500pmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX500pM 2
-        longLabel A549 DEX 1 hr 500 pM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 500 pM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep2
         type bigWig 0.108844 1106.400024
         # subId=2974 dateSubmitted=2011-01-22
@@ -541,7 +541,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX1nM 2
-        longLabel A549 DEX 1 hr 1 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep2
         type bigWig 0.122421 1310.829956
         # subId=2974 dateSubmitted=2011-01-22
@@ -550,7 +550,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex5nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX5nM 2
-        longLabel A549 DEX 1 hr 5 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 5 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep2
         type bigWig 0.157130 1170.689941
         # subId=2974 dateSubmitted=2011-01-22
@@ -559,7 +559,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Gen4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 GEN 1
-        longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=GEN4H rep=rep1
         type bigWig 0.248248 738.353027
         # subId=2975 dateSubmitted=2011-01-21
@@ -568,7 +568,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep2
         type bigWig 0.208881 751.294006
         # subId=2975 dateSubmitted=2011-01-21
@@ -577,7 +577,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep1
         type bigWig 0.267722 963.263977
         # subId=2975 dateSubmitted=2011-01-21
@@ -586,7 +586,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep1
         type bigWig 0.271642 1572.939941
         # subId=2975 dateSubmitted=2011-01-21
@@ -595,7 +595,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dGen4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D GEN 1
-        longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=GEN4H rep=rep1
         type bigWig 0.256140 872.221008
         # subId=2975 dateSubmitted=2011-01-21
@@ -604,7 +604,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dDm002p4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 2
-        longLabel T-47D DMSO 4 hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=DM002P4H rep=rep2
         type bigWig 0.098354 737.018005
         # subId=2975 dateSubmitted=2011-01-21
@@ -614,7 +614,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep2
         type bigWig 0.090113 781.908997
         # subId=2975 dateSubmitted=2011-01-21
@@ -623,7 +623,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dGen4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D GEN 2
-        longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=GEN4H rep=rep2
         type bigWig 0.174213 644.237976
         # subId=2975 dateSubmitted=2011-01-21
@@ -632,7 +632,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Gen4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 GEN 2
-        longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=GEN4H rep=rep2
         type bigWig 0.204548 865.341980
         # subId=2975 dateSubmitted=2011-01-21
@@ -641,7 +641,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dDm002p4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 1
-        longLabel T-47D DMSO 4 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=DM002P4H rep=rep1
         type bigWig 0.138023 880.583984
         # subId=2975 dateSubmitted=2011-01-21
@@ -651,7 +651,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dBpa14hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D BPA 1
-        longLabel T-47D BPA 4 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D BPA 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=BPA14h rep=rep1
         type bigWig 0.149111 676.367004
         # subId=2976 dateSubmitted=2011-01-21
@@ -660,7 +660,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Bpa14hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 BPA 1
-        longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=BPA14h rep=rep1
         type bigWig 0.210921 561.841003
         # subId=2976 dateSubmitted=2011-01-21
@@ -669,7 +669,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dBpa14hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D BPA 2
-        longLabel T-47D BPA 4 hr 100 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D BPA 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=BPA14h rep=rep2
         type bigWig 0.129285 618.044983
         # subId=2976 dateSubmitted=2011-01-21
@@ -678,7 +678,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Bpa14hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 BPA 2
-        longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=BPA14h rep=rep2
         type bigWig 0.206326 724.461975
         # subId=2976 dateSubmitted=2011-01-21
@@ -687,7 +687,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 2
-        longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=DM002P4H rep=rep2
         type bigWig 0.176215 817.461975
         # subId=2976 dateSubmitted=2011-01-21
@@ -697,7 +697,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 1
-        longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=DM002P4H rep=rep1
         type bigWig 0.264957 963.716003
         # subId=2976 dateSubmitted=2011-01-21
@@ -707,7 +707,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Etoh02RawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 ETOH 1
-        longLabel A549 ETOH 1 hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep1
         type bigWig 0.218757 915.445007
         # subId=1849 dateSubmitted=2011-01-21
@@ -716,7 +716,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Etoh02RawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 2
-        longLabel A549 ETOH 1 hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep2
         type bigWig 0.228926 1241.689941
         # subId=1849 dateSubmitted=2011-01-21
@@ -725,7 +725,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex100nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100nM 1
-        longLabel A549 DEX 1 hr 100 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100NM rep=rep1
         type bigWig 0.217478 1051.670044
         # subId=1849 dateSubmitted=2011-01-21
@@ -734,7 +734,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex100nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX100nM 2
-        longLabel A549 DEX 1 hr 100 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100NM rep=rep2
         type bigWig 0.124371 1297.219971
         # subId=1849 dateSubmitted=2011-01-21
@@ -743,7 +743,7 @@ noInherit on
         track wgEncodeHaibRnaSeqBe2cRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C 1
-        longLabel BE2_C RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel BE2_C RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep1
         type bigWig 0.231311 1122.900024
         # subId=3838 dateSubmitted=2011-03-31
@@ -752,7 +752,7 @@ noInherit on
         track wgEncodeHaibRnaSeqBe2cRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C 2
-        longLabel BE2_C RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel BE2_C RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep2
         type bigWig 0.145512 1134.989990
         # subId=3838 dateSubmitted=2011-03-31
@@ -761,7 +761,7 @@ noInherit on
         track wgEncodeHaibRnaSeqSknshRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH 1
-        longLabel SK-N-SH RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel SK-N-SH RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep1
         type bigWig 0.139722 938.793030
         # subId=3838 dateSubmitted=2011-03-31
@@ -771,7 +771,7 @@ noInherit on
         track wgEncodeHaibRnaSeqSknshRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH 2
-        longLabel SK-N-SH RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel SK-N-SH RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep2
         type bigWig 0.149537 705.216003
         # subId=3838 dateSubmitted=2011-03-31
@@ -781,7 +781,7 @@ noInherit on
         track wgEncodeHaibRnaSeqPanc1RawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 1
-        longLabel PANC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel PANC-1 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep1
         type bigWig 0.137402 1973.189941
         # subId=3838 dateSubmitted=2011-03-31
@@ -790,7 +790,7 @@ noInherit on
         track wgEncodeHaibRnaSeqPanc1RawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 2
-        longLabel PANC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel PANC-1 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep2
         type bigWig 0.146817 2090.860107
         # subId=3838 dateSubmitted=2011-03-31
@@ -799,7 +799,7 @@ noInherit on
         track wgEncodeHaibRnaSeqPfsk1RawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 1
-        longLabel PFSK-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel PFSK-1 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep1
         type bigWig 0.149150 1066.459961
         # subId=3838 dateSubmitted=2011-03-31
@@ -808,7 +808,7 @@ noInherit on
         track wgEncodeHaibRnaSeqPfsk1RawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 2
-        longLabel PFSK-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel PFSK-1 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep2
         type bigWig 0.178471 1536.329956
         # subId=3838 dateSubmitted=2011-03-31
@@ -817,7 +817,7 @@ noInherit on
         #track wgEncodeHaibRnaSeqU87RawRep1
         #parent wgEncodeHaibRnaSeqViewSignal off
         #shortLabel U87 1
-        #longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        #longLabel U87 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
         #type bigWig 0.141237 1836.530029
         # subId=3838 dateSubmitted=2011-03-31
@@ -826,7 +826,7 @@ noInherit on
         #track wgEncodeHaibRnaSeqU87RawRep2
         #parent wgEncodeHaibRnaSeqViewSignal off
         #shortLabel U87 2
-        #longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        #longLabel U87 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
         #type bigWig 0.148672 2637.550049
         # subId=3838 dateSubmitted=2011-03-31
@@ -835,7 +835,7 @@ noInherit on
         track wgEncodeHaibRnaSeqJurkatRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel Jurkat 2
-        longLabel Jurkat RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel Jurkat RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep2
         type bigWig 0.579586 391.365997
         # subId=3868 dateSubmitted=2011-04-01
@@ -844,7 +844,7 @@ noInherit on
         track wgEncodeHaibRnaSeqJurkatRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel Jurkat 1
-        longLabel Jurkat RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel Jurkat RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep1
         type bigWig 0.244927 403.884003
         origAssembly hg18
@@ -853,7 +853,7 @@ noInherit on
         track wgEncodeHaibRnaSeqU87RawRep2V2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel U87 2
-        longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel U87 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
         type bigWig 1.000000 70252.000000
         origAssembly hg18
@@ -862,7 +862,7 @@ noInherit on
         track wgEncodeHaibRnaSeqU87RawRep1V2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel U87 1
-        longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel U87 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
         type bigWig 1.000000 52464.000000
         origAssembly hg18
