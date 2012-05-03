@@ -462,22 +462,20 @@ canFam3.upstreamGeneTbl = ensGene
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial canFam3 &
     #	logFile: var/build/logs/2012.05.01-13:24:37.canFam3.initalign.log
-XXX - running - Tue May  1 13:24:53 PDT 2012
-    #	real    795m52.388s
+    #   real    381m29.244s
 
     # load data/genomesbase when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad canFam3 &
-    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
-    #	real    114m56.461s
+    #   logFile: var/dbload/hgwdev/logs/2012.05.02-13:42:10.dbload.log
+    #   real    61m9.113s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add canFam3 to:
-        etc/align.dbs
-        etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
     git commit -m "Added canFam3." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update

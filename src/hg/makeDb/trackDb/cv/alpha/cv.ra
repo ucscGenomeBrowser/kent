@@ -39,7 +39,7 @@ term GM12878
 tag GM12878
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 tissue blood
 vendorName Coriell
 vendorId GM12878
@@ -95,7 +95,7 @@ tag HEPG2
 type Cell Line
 organism human
 tissue liver
-description liver carcinoma
+description hepatocellular carcinoma
 vendorName ATCC
 vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
@@ -1696,7 +1696,7 @@ term GM06990
 tag GM06990
 type Cell Line
 organism human
-description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
+description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
@@ -1715,9 +1715,8 @@ tag GM08714
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line
+description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo. 
 lineage mesoderm
-karyotype Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
@@ -2055,7 +2054,7 @@ term GM12878-XiMat
 tag GM12878Xb
 type Cell Line
 organism human
-description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
+description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
@@ -2489,6 +2488,7 @@ type Cell Line
 organism human
 description amniotic epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 7110
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
@@ -2708,6 +2708,7 @@ organism human
 description cardiac fibroblasts- adult atrial
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
@@ -2722,6 +2723,7 @@ organism human
 description cardiac fibroblasts
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
@@ -2806,6 +2808,7 @@ organism human
 description cardiac myocytes
 tissue heart
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
@@ -2820,6 +2823,7 @@ organism human
 description choroid plexus epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
@@ -2851,6 +2855,7 @@ organism human
 description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
+karyotype normal
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3103,6 +3108,7 @@ organism human
 description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3483,6 +3489,7 @@ organism human
 description adult dermal microvascular endothelial cells.
 sex F
 tissue skin
+karyotype normal
 vendorName Lonza
 vendorId CC-2543,CC-3202
 orderUrl http://www.lonza.com
@@ -3601,6 +3608,7 @@ type Cell Line
 organism human
 description non-pigment ciliary epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
@@ -3672,6 +3680,7 @@ organism human
 description pulmonary artery endothelial cells.
 sex F
 tissue heart
+karyotype normal
 vendorName Lonza
 vendorId CC-2530,CC-3162
 orderUrl http://www.lonza.com
@@ -3685,6 +3694,7 @@ type Cell Line
 organism human
 description pulmonary alevolar epithelial cells
 tissue epithelium
+karyotype normal
 vendorName ScienCell
 vendorId 3200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
@@ -3699,6 +3709,7 @@ organism human
 description pulmonary artery fibroblasts
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
@@ -3785,6 +3796,7 @@ type Cell Line
 organism human
 description periodontal ligament fibroblasts
 tissue epithelium
+karyotype normal
 vendorName Lonza
 vendorId CC-7049
 orderUrl http://www.lonza.com/
@@ -3798,6 +3810,7 @@ type Cell Line
 organism human
 description pulmonary fibroblasts isolated from lung tissue
 tissue blood
+karyotype normal
 vendorName ScienCell
 vendorId 3300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
@@ -3919,6 +3932,7 @@ organism human
 description retinal pigment epithelial cells
 tissue epithelium
 lineage ectoderm
+karyotype normal
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
@@ -4166,6 +4180,7 @@ type Cell Line
 organism human
 description villous mesenchymal fibroblast cells
 tissue connective
+karyotype normal
 vendorName ScienCell
 vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
@@ -4327,7 +4342,6 @@ type Cell Line
 organism human
 description iPS cells derived from MSC658 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
@@ -4344,7 +4358,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG08395 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4361,7 +4374,6 @@ type Cell Line
 organism human
 description iPS cells derived from AG20443 fibroblast
 tissue induced pluripotent cell (iPS)
-karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
 orderUrl http://www.ninds.nih.gov/research/labs/25.htm
@@ -4477,6 +4489,7 @@ type Cell Line
 tier 3
 organism human
 description malignant glioblastoma, glioma, lack DNA-dependent protein kinase activity, deficient in repair of DNA double strand breaks, the cells are negative for glial fibrillary acidic protein (GFAP), tumor specimen taken from a 33 year old
+lineage ectoderm
 karyotype cancer
 sex M
 tissue brain
@@ -4530,6 +4543,7 @@ type Cell Line
 organism human
 description mammary gland, non-tumorigenic epithelial, inducible cell line, derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
 tissue breast
+karyotype normal
 vendorName Struhl laboratory
 vendorId MCF10A-Er-Src
 orderUrl https://struhl.med.harvard.edu/
@@ -4596,6 +4610,7 @@ type Cell Line
 organism human
 description epidermal melanocytes
 tissue skin
+karyotype normal
 lineage ectoderm
 vendorName ScienCell
 vendorId 2200
@@ -4747,6 +4762,7 @@ type Cell Line
 organism human
 tissue myometrium
 description myometrial cells
+karyotype normal
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
 orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
@@ -4846,6 +4862,7 @@ organism human
 tissue skin
 lineage mesoderm
 description neonatal dermal fibroblasts
+karyotype normal
 vendorName Lonza
 vendorId CC-2509
 orderUrl http://www.lonza.com/
@@ -5149,6 +5166,7 @@ organism human
 description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
+karyotype normal
 vendorName Refer to publication or NDRI
 vendorId PanIslets
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
@@ -5328,6 +5346,7 @@ tag RPTEC
 type Cell Line
 organism human
 description renal proximal tubule epithelial cells
+karyotype normal
 tissue epithelium
 vendorName Lonza
 vendorId CC-2553, CC-2553T225
@@ -5450,6 +5469,7 @@ organism human
 description skeletal muscle cells
 tissue muscle
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2561
 orderUrl http://www.lonza.com/
