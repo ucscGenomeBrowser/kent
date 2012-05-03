@@ -108,33 +108,26 @@ sendMail(email, subject, msg);
 }
 
 
-void sendUsername(struct sqlConnection *conn)
+void sendUsername(struct sqlConnection *conn, char *email)
 /* email user username(s)  */
 {
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *email = cartUsualString(cart, "hgLogin_email", "");
+// char *email = cartUsualString(cart, "hgLogin_email", "");
 
 /* TODO: validate the email address is in right format */
 /* find all the user names assocaited with this email address */
-// char userList[256]="";
 char user[256];
 safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
 sr = sqlGetResult(conn, query);
-// int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-   // if (numUser >= 1)
-   //     safecat(userList, sizeof(userList), ", ");
-   //  safecat(userList, sizeof(userList), m->userName);
-   //  numUser += 1;
     safef(user, sizeof(user), m->userName);
     mailUsername(email, user);   
     }
 sqlFreeResult(&sr);
-// mailUsername(email, userList);
 }
 
 
@@ -390,20 +383,28 @@ void lostPassword(struct sqlConnection *conn)
 {
 char query[256];
 char cmd[256];
-char *email = cartUsualString(cart, "hgLogin_email", "");
-if (!email || sameString(email,""))
+char *username = cartUsualString(cart, "hgLogin_userName", "");
+if (!username || sameString(username,""))
     {
     freez(&errMsg);
-    errMsg = cloneString("Email cannot be blank.");
+    errMsg = cloneString("Username cannot be blank.");
     // lostPasswordPage(conn);
     return;
     }
-safef(query,sizeof(query), "select password from gbMembers where email='%s'", email);
+/**** scalfolding code before reset pwd is finished ***/
+    else {
+    freez(&errMsg);
+    errMsg = cloneString("Generating new password.....");
+    // lostPasswordPage(conn);
+    return;
+    }
+
+safef(query,sizeof(query), "select password from gbMembers where userName='%s'", username);
 char *password = sqlQuickString(conn, query);
 if (!password)
     {
     freez(&errMsg);
-    errMsg = cloneString("Email not found.");
+    errMsg = cloneString("Username not found.");
     // lostPasswordPage(conn);
     return;
     }
@@ -412,14 +413,14 @@ password = generateRandomPassword();
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 
-safef(query,sizeof(query), "update gbMembers set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
+safef(query,sizeof(query), "update gbMembers set password='%s' where userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(username));
 sqlUpdate(conn, query);
 
 updatePasswordsFile(conn);
 
 safef(cmd,sizeof(cmd),
 "echo 'Your new password is: %s' | mail -s \"Lost GSID HIV password\" %s"
-, password, email);
+, password, username);
 int result = system(cmd);
 if (result == -1)
     {
@@ -429,7 +430,7 @@ if (result == -1)
     "</p>"
     "<h3>Error emailing password to: %s</h3>"
     "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , email
+    , username
     );
     }
 else
@@ -440,7 +441,7 @@ else
     "</p>"
     "<h3>Password has been emailed to: %s</h3>"
     "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , email
+    , username
     );
     }
 
@@ -838,30 +839,43 @@ void accountHelp(struct sqlConnection *conn)
 // char **row;
 // char query[256];
 char *email = cartUsualString(cart, "hgLogin_email", "");
+char *username = cartUsualString(cart, "hgLogin_userName", "");
 char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 
-if (sameString(email,""))
+/* Forgot username */
+if (sameString(helpWith,"username"))
+{
+    if (sameString(email,""))
     {
     freez(&errMsg);
     errMsg = cloneString("Email address cannot be blank.");
     displayAccHelpPage(conn);
     return;
+    } else {
+    sendUsername(conn, email);
+    return;
     }
-/* TODO: validate the email address is in right format */
-/* Username selcted? */
-if (sameString(helpWith,"username"))
-    {
-    sendUsername(conn);
-    }
-
+}
+/* Forgot password */
 if (sameString(helpWith,"password"))
+{
+    if (sameString(username,""))
     {
     freez(&errMsg);
-    errMsg = cloneString("Forgot password selected!");
+    errMsg = cloneString("Username cannot be blank.");
+    displayAccHelpPage(conn);
+    return;
+    } else {
+/**** temp code before mail password function is done ****/
+/**** sendNewPassword(conn, username) *******************/
+    freez(&errMsg);
+    errMsg = cloneString("Will send a new password to you soon ...");
     displayAccHelpPage(conn);
     return;
     }
+}
 cartRemove(cart, "hgLogin_helpWith");
+
 cartRemove(cart, "hgLogin_email");
 // cartRemove(cart, "hgLogin_userName");
 displayAccHelpPage(conn);
