@@ -162,7 +162,7 @@ html wgEncodeCaltechRnaSeq.release1
 	pairEndsByName on
 	showNames 
 	noColorTag .
-	bamColorMode 
+	bamColorMode off
 	bamGrayMode aliQual
 	baseColorDefault diffBases
 	baseColorUseSequence lfExtra
