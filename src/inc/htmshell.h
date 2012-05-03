@@ -89,6 +89,13 @@ void htmlSetStyle(char *style);
  * which will remove underlines from links.
  * Needs to be called before htmlStart or htmShell. */
 
+void htmlSetStyleSheet(char *styleSheet);
+/* Set document wide style sheet by adding css name to HEAD part.
+ * Needs to be called before htmlStart or htmShell. */
+
+void htmlSetFormClass(char *formClass);
+/* Set class in the BODY part. */
+
 void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart
  * or htmShell. */
