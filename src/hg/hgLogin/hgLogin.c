@@ -760,8 +760,25 @@ void displayAccHelpPage(struct sqlConnection *conn)
 /* draw the account help page */
 {
 char *email = cartUsualString(cart, "hgLogin_email", "");
-// cartRemove(cart, "hgLogin_helpWith");
+char *username = cartUsualString(cart, "hgLogin_email", ""); 
+//cartRemove(cart, "hgLogin_helpWith");
 //cartRemove(cart, "hgLogin_email");
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+"function toggle(value){\n"
+"if(value=='show')\n"
+" document.getElementById('usernameBox').style.visibility='visible';\n"
+"else\n"
+" document.getElementById('usernameBox').style.visibility='hidden';\n"
+"}\n"
+"\n"
+"//-->"
+"\n"
+"</script>"
+"\n"
+);
 hPrintf(
 "<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
 "\n"
@@ -777,10 +794,10 @@ hPrintf(
 );
 hPrintf(
 "<div class=\"inputGroup\">"
-"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\" checked>"
-"<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
-"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" checked=\"checked\" onclick=\"toggle('show');\">"
 "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
+"<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\"  onclick=\"toggle('hide');\">"
+"<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
 "\n"
 "</div>"
 "\n"
@@ -791,6 +808,12 @@ hPrintf(
 "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailPassword\">"
 "</div>"    
 "\n"
+"<div class=\"inputGroup\" id=\"usernameBox\">"
+"<label for=\"emailUsername\">Username</label>"
+"<input type=\"text\" name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"emailUsername\">"
+"</div>"
+"\n"
+
 "<div class=\"formControls\">"  
 "    <input type=\"submit\" name=\"hgLogin.do.accountHelp\" value=\"Continue\" class=\"largeButton\">"
 "     &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
@@ -798,6 +821,7 @@ hPrintf(
 "</form>"
 "</div><!-- END - accountHelpBox -->"
 , email
+, username
 );
 cartSaveSession(cart);
 }
