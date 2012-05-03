@@ -20,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),   # Enable the admin
     url(r'^cvDb/', include('cvDb.urls')),
     url(r'^polls/', include('polls.urls')),
+    url(r'^djBook/', include('djBook.urls')),
 )

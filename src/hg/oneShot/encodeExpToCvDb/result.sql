@@ -5,7 +5,7 @@ CREATE TABLE `cvDb_results` (
     `view` varchar(50) NOT NULL,
     `objType` varchar(50) NOT NULL,
     `fileName` varchar(255) NOT NULL,
-    `md5sum` varchar(33) NOT NULL,
+    `md5sum` varchar(255) NOT NULL,
     `tableName` varchar(100) NOT NULL,
     `dateSubmitted` varchar(40) NOT NULL,
     `dateResubmitted` varchar(40) NOT NULL,

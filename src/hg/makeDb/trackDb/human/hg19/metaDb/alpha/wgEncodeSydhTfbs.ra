@@ -815,7 +815,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
@@ -839,7 +839,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
@@ -863,7 +863,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
