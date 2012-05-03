@@ -1,1 +1,1 @@
-alphaChain sample.txt sample.out chain=sample.chain -outSize=30
+alphaChain sample.txt sample.out chain=sample.chain -outSize=30 seed=0

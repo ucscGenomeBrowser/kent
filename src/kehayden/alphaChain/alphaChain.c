@@ -1,4 +1,5 @@
 /* alphaChain - Predicts faux centromere sequences using a probablistic model. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +9,6 @@
 /* Global vars - all of which can be set by command line options. */
 int maxChainSize = 3;
 int outSize = 10000;
-int minUse = 1;
 boolean fullOnly = FALSE;
 
 void usage()
@@ -21,21 +21,24 @@ errAbort(
   "   alphaChain alphaMonFile.fa significant_output.txt\n"
   "options:\n"
   "   -size=N - Set max chain size, default %d\n"
+  "   -fullOnly - Only output chains of size above\n"
   "   -chain=fileName - Write out word chain to file\n"
+  "   -afterChain=fileName - Write out word chain after faux generation to file for debugging\n"
   "   -outSize=N - Output this many words.\n"
-  "   -fullOnly - Only output chains of size\n"
-  "   -minUse=N - Set minimum use in output chain, default %d\n"
-  , maxChainSize, minUse
+  "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
+  "             it will generate different results each time it's run.\n"
+  , maxChainSize
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"size", OPTION_INT},
-   {"minUse", OPTION_INT},
    {"chain", OPTION_STRING},
+   {"afterChain", OPTION_STRING},
    {"fullOnly", OPTION_BOOLEAN},
    {"outSize", OPTION_INT},
+   {"seed", OPTION_INT},
    {NULL, 0},
 };
 
@@ -90,7 +93,7 @@ struct wordTree
     char *word;			/* The word itself including comma, period etc. */
     int useCount;		/* Number of times word used in input. */
     int outTarget;              /* Number of times want to output word. */
-    int outCount;	/* Number of times output. */
+    int outCount;		/* Number of times output. */
     double normVal;             /* value to place the normalization value */    
     };
 
@@ -108,7 +111,7 @@ int wordTreeCmpWord(const void *va, const void *vb)
 {
 const struct wordTree *a = *((struct wordTree **)va);
 const struct wordTree *b = *((struct wordTree **)vb);
-return strcmp(a->word, b->word);
+return cmpStringsWithEmbeddedNumbers(a->word, b->word);
 }
 
 struct wordTree *wordTreeFindInList(struct wordTree *list, char *word)
@@ -146,12 +149,6 @@ for (wt = list; wt != NULL; wt = wt->next)
 return total;
 }
 
-int wordTreeChildrenUseCount(struct wordTree *wt)
-/* Return sum of useCounts of all children */
-{
-return wordTreeSumUseCounts(wt->children);
-}
-
 int wordTreeSumOutTargets(struct wordTree *list)
 /* Sum up useCounts in list */
 {
@@ -180,11 +177,11 @@ void wordTreeNormalize(struct wordTree *wt, double outTarget, double normVal)
 {
 wt->normVal = normVal;
 wt->outTarget = outTarget;
-int totalChildUses = wordTreeChildrenUseCount(wt);
+int childrenTotalUses = wordTreeSumUseCounts(wt->children);
 struct wordTree *child;
 for (child = wt->children; child != NULL; child = child->next)
     {
-    double childRatio = (double)child->useCount / totalChildUses;
+    double childRatio = (double)child->useCount / childrenTotalUses;
     wordTreeNormalize(child, childRatio*outTarget, childRatio*normVal);
     }
 }
@@ -197,30 +194,26 @@ int i;
 assert(level < ArraySize(words));
 
 words[level] = wt->word;
-if (wt->useCount >= minUse)
+if (!fullOnly || level == maxChainSize)
     {
-    if (!fullOnly || level == maxChainSize)
+    fprintf(f, "%d\t%d\t%d\t%d\t%f\t", 
+	    level, wt->useCount, wt->outTarget, wt->outCount, wt->normVal);
+    
+    for (i=1; i<=level; ++i)
 	{
-	fprintf(f, "%d\t%d\t%d\t%d\t%f\t", level, wt->useCount, wt->outTarget, wt->outCount, wt->normVal);
-	
-	for (i=1; i<=level; ++i)
-            {
-            spaceOut(f, level*2);
-	    fprintf(f, "%s ", words[i]);
-            }
-	fprintf(f, "\n");
+	spaceOut(f, level*2);
+	fprintf(f, "%s ", words[i]);
 	}
+    fprintf(f, "\n");
     }
 struct wordTree *child;
 for (child = wt->children; child != NULL; child = child->next)
     wordTreeDump(level+1, child, f);
 }
 
-int totUseZeroCount;  // debugging aid
-
 struct wordTree *pickRandomOnOutTarget(struct wordTree *list)
-/* Pick word from list randomly, but so that words more
- * commonly seen are picked more often. */
+/* Pick word from list randomly, but so that words with higher outTargets
+ * are picked more often. */
 {
 struct wordTree *picked = NULL;
 
@@ -245,13 +238,54 @@ if (total > 0)
 	binStart = binEnd;
 	}
     }
+return picked;
+}
+
+struct wordTree *pickRandomOnUseCounts(struct wordTree *list)
+/* Pick word from list randomly, but so that words with higher useCounts
+ * are picked more often.  Much like above routine, but a little simple
+ * since we know useCounts are non-zero. */
+{
+struct wordTree *picked = NULL;
+
+/* Figure out total number and a random number between 0 and that total. */
+int total = wordTreeSumUseCounts(list);
+assert(total > 0);
+int threshold = rand() % total; 
+
+/* Loop through list returning selection corresponding to random threshold. */
+int binStart = 0;
+struct wordTree *wt;
+for (wt = list; wt != NULL; wt = wt->next)
+    {
+    int size = wt->useCount;
+    int binEnd = binStart + size;
+    if (threshold < binEnd)
+	{
+	picked = wt;
+	break;
+	}
+    binStart = binEnd;
+    }
+assert(picked != NULL);
+return picked;
+}
+
+int totUseZeroCount = 0;
+
+struct wordTree *pickRandom(struct wordTree *list)
+/* Pick word from list randomly, but so that words more
+ * commonly seen are picked more often. */
+{
+struct wordTree *picked = pickRandomOnOutTarget(list);
 
 /* If did not find anything, that's ok. It can happen on legitimate input due to unevenness
- * of read coverage.  In this case we just return an arbitrary element. */
+ * of read coverage.  In this case we pick a random number based on original counts
+ * rather than normalized/counted down counts. */
 if (picked == NULL)
     {
-    picked = list;
-    totUseZeroCount += 1;
+    picked = pickRandomOnUseCounts(list);
+    ++totUseZeroCount;
     }
 return picked;
 }
@@ -271,7 +305,7 @@ for (node = list; !dlEnd(node); node = node->next)
     }
 struct wordTree *result = NULL;
 if (wt != NULL && wt->children != NULL)
-    result = pickRandomOnOutTarget(wt->children);
+    result = pickRandom(wt->children);
 return result;
 }
 
@@ -288,7 +322,7 @@ for (node = recent->head; !dlEnd(node); node = node->next)
     if (result != NULL)
         return result;
     }
-return pickRandomOnOutTarget(wt->children); 
+return pickRandom(wt->children); 
 }
 
 void decrementOutputCounts(struct wordTree *wt)
@@ -296,7 +330,12 @@ void decrementOutputCounts(struct wordTree *wt)
 {
 while (wt != NULL)
     {
-    wt->outTarget -= 1;
+    /* Decrement target count, but don't let it go below zero. */
+    int outTarget = wt->outTarget - 1;
+    if (outTarget >= 0)
+        wt->outTarget = outTarget;
+    
+    /* Always bump outCount for debugging. */
     wt->outCount += 1;
     wt = wt->parent;
     }
@@ -431,7 +470,8 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 
-wordTreeSort(wt);   // ugly debug
+wordTreeSort(wt);  // Make output of chain file prettier
+verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
 
 return wt;
 }
@@ -457,27 +497,26 @@ if (optionExists("chain"))
     wordTreeWrite(wt, fileName);
     }
 
+wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->children), outSize, outFile);
 
-wordTreeGenerateFaux(wt, maxChainSize, pickRandomOnOutTarget(wt->children), outSize, outFile);
-
-uglyf("totUseZeroCount = %d\n", totUseZeroCount);
-wordTreeWrite(wt, "ugly.chain");
+if (optionExists("afterChain"))
+    {
+    char *fileName = optionVal("afterChain", NULL);
+    wordTreeWrite(wt, fileName);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-#ifdef SOON
-/* Seed random number generator with time, so it doesn't always generate same sequence of #s */
-srand( (unsigned)time(0) );
-#endif /* SOON */
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
-minUse = optionInt("minUse", minUse);
 outSize = optionInt("outSize", outSize);
 fullOnly = optionExists("fullOnly");
+int seed = optionInt("seed", (int)time(0));
+srand(seed);
 alphaChain(argv[1], argv[2]);
 return 0;
 }
