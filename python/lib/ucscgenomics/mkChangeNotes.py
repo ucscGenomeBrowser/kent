@@ -1,6 +1,7 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime, time
-from ucscgenomics import ra, track, qa, ucscUtils
+from ucscgenomics import ra, track, ucscUtils
+from ucscgenomics.qa.encode import tableCheck as qa
 
 class makeNotes(object):
     def checkMetaDbForFiles(self, status, state):
