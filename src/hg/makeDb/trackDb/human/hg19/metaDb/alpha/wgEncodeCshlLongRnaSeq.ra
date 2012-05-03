@@ -1487,6 +1487,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002624
+expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -1512,6 +1514,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002624
+expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -1988,6 +1992,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002625
+expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -2013,6 +2019,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002625
+expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -12225,7 +12233,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002679
 donorId 6090101.11
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -12692,7 +12702,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002680
 donorId 7071706.1
+expId 2680
 fileName wgEncodeCshlLongRnaSeqHaoecCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -12718,7 +12730,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002680
 donorId 8061102.1
+expId 2680
 fileName wgEncodeCshlLongRnaSeqHaoecCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -13239,7 +13253,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002674
 donorId 0011308.2P
+expId 2674
 fileName wgEncodeCshlLongRnaSeqHchCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -13265,7 +13281,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002674
 donorId 8100808.2
+expId 2674
 fileName wgEncodeCshlLongRnaSeqHchCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -20530,7 +20548,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002671
 donorId 0102703.3
+expId 2671
 fileName wgEncodeCshlLongRnaSeqHfdpcCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -20555,7 +20575,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002671
 donorId 0100503.2
+expId 2671
 fileName wgEncodeCshlLongRnaSeqHfdpcCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -21708,7 +21730,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002683
 donorId 6022801.3
+expId 2683
 fileName wgEncodeCshlLongRnaSeqHmepcCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -22661,7 +22685,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002669
 donorId 0102604.12
+expId 2669
 fileName wgEncodeCshlLongRnaSeqHmscatCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -22686,7 +22712,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002669
 donorId 9061601.12
+expId 2669
 fileName wgEncodeCshlLongRnaSeqHmscatCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -23179,7 +23207,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002673
 donorId 0051105.11
+expId 2673
 fileName wgEncodeCshlLongRnaSeqHmscbmCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -23204,7 +23234,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002673
 donorId 0050602.11
+expId 2673
 fileName wgEncodeCshlLongRnaSeqHmscbmCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -24165,7 +24197,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002675
 donorId 0091301
+expId 2675
 fileName wgEncodeCshlLongRnaSeqHobCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -24190,7 +24224,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002675
 donorId 0090202.1
+expId 2675
 fileName wgEncodeCshlLongRnaSeqHobCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -25650,7 +25686,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002676
 donorId 0022202.16
+expId 2676
 fileName wgEncodeCshlLongRnaSeqHsavecCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -25675,7 +25713,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002676
 donorId 9100101.15
+expId 2676
 fileName wgEncodeCshlLongRnaSeqHsavecCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -30599,7 +30639,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002681
 donorId 6091203.3
+expId 2681
 fileName wgEncodeCshlLongRnaSeqHvmfCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -30624,7 +30666,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002681
 donorId 6100401.3
+expId 2681
 fileName wgEncodeCshlLongRnaSeqHvmfCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -31117,7 +31161,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002682
 donorId 8120201.5
+expId 2682
 fileName wgEncodeCshlLongRnaSeqHwpCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -31142,7 +31188,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002682
 donorId 0092205
+expId 2682
 fileName wgEncodeCshlLongRnaSeqHwpCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -39785,6 +39833,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002633
+expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -39810,6 +39860,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002633
+expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -40286,6 +40338,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002627
+expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -40311,6 +40365,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002627
+expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -41755,7 +41811,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002677
 donorId 7071701.2
+expId 2677
 fileName wgEncodeCshlLongRnaSeqNhdfCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -41780,7 +41838,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002677
 donorId 0060801.3
+expId 2677
 fileName wgEncodeCshlLongRnaSeqNhdfCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -46173,7 +46233,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002686
 donorId 6022001
+expId 2686
 fileName wgEncodeCshlLongRnaSeqNhemfm2CellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -46198,7 +46260,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002686
 donorId 5071302.2
+expId 2686
 fileName wgEncodeCshlLongRnaSeqNhemfm2CellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -46691,7 +46755,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002687
 donorId 7012303
+expId 2687
 fileName wgEncodeCshlLongRnaSeqNhemm2CellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -46716,7 +46782,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002687
 donorId 7011001.2
+expId 2687
 fileName wgEncodeCshlLongRnaSeqNhemm2CellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -48365,7 +48433,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002678
 donorId 9011302
+expId 2678
 fileName wgEncodeCshlLongRnaSeqSkmcCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -48390,7 +48460,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002678
 donorId 8121902.17
+expId 2678
 fileName wgEncodeCshlLongRnaSeqSkmcCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -48815,6 +48887,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002632
+expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -48840,6 +48914,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002632
+expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -49316,6 +49392,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002630
+expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -49341,6 +49419,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002630
+expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -49817,6 +49897,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002631
+expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -49842,6 +49924,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002631
+expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -51039,4 +51123,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 1042977655
+# MAGIC: 1778687167
