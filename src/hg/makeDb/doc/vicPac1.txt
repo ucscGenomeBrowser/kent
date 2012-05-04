@@ -271,3 +271,41 @@ skipInvalid yes
     #   9241028 bases of 1922910435 (0.481%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/bed/genscan
+    cd /hive/data/genomes/vicPac1/bed/genscan
+    time doGenscan.pl vicPac1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    445m44.260s
+    # continuing:
+    time doGenscan.pl -continue=load vicPac1 > load.log 2>&1
+    #   real    40m21.604s
+    cat fb.vicPac1.genscan.txt
+    #   46607076 bases of 1922910435 (2.424%) in intersection
+    cat fb.vicPac1.genscanSubopt.txt
+    #   54656455 bases of 1922910435 (2.842%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S vicPac1
+    mkdir /hive/data/genomes/vicPac1/bed/windowMasker
+    cd /hive/data/genomes/vicPac1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev vicPac1 > do.log 2>&1
+    #   real    1042m31.380s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    9m4.895s
+
+    sed -e 's/^/    #\t/' fb.vicPac1.windowmaskerSdust.beforeClean.txt
+    #   1672360288 bases of 2962253608 (56.456%) in intersection
+    sed -e 's/^/    #\t/' fb.vicPac1.windowmaskerSdust.clean.txt
+    #   633017115 bases of 2962253608 (21.369%) in intersection
+    sed -e 's/^/    #\t/' fb.vicPac1.rmsk.windowmaskerSdust.txt
+    #   266161799 bases of 2962253608 (8.985%) in intersection
+
+#########################################################################

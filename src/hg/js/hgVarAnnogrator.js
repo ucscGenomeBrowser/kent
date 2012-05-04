@@ -8,7 +8,7 @@ function hgvaChangeRegion()
     } else {
 	$('#positionContainer').hide();
     }
-    $('#miniCart input[name="hgva_regionType"]').val(newVal);
+    setCartVar("hgva_regionType", newVal);
 }
 
 function hgvaShowNextHiddenSource()
@@ -25,25 +25,27 @@ function hgvaShowNextHiddenSource()
     }
 }
 
-function addJQToSettings(jq, settings)
+function makeHashAddFx(hashObject)
 {
-    jq.each(function(i,el) { settings[el.name] = el.value; });
+    return function(i, el) { hashObject[el.name] = el.value };
 }
 
 function hgvaDescribeSource(source)
 {
     var settings = {};
     settings.id = source.id + "Contents";
-    addJQToSettings($('#'+source.id+' select'), settings);
-    addJQToSettings($('#'+source.id+' :hidden'), settings);
-    addJQToSettings($('#'+source.id+' div[id="filter"] *').not(':submit'), settings);
+    var addToSettings = makeHashAddFx(settings);
+    $('#'+source.id+' select').each(addToSettings);
+    $('#'+source.id+' :hidden').each(addToSettings);
+    $('#'+source.id+' div[id="filter"] *').not(':submit').each(addToSettings);
     return settings;
 }
 
 function hgvaDescribeOutput()
 {
     var settings = {};
-    addJQToSettings($('#outFormat select, #outFormat input').not(':submit'), settings);
+    var addToSettings = makeHashAddFx(settings);
+    $('#outFormat select, #outFormat input').not(':submit').each(addToSettings);
     return settings;
 }
 
@@ -60,31 +62,55 @@ function hgvaBuildQuerySpec()
 function hgvaExpandCommand(command)
 {
     command.querySpec = hgvaBuildQuerySpec();
-    $('#miniCart input').each(function(i,el){ command[el.name] = el.value; });
+    var addToCommand = makeHashAddFx(command);
+    $('#mainForm input').not(':button').each(addToCommand);
+    $('#mainForm select').each(addToCommand);
 }
 
-function hgvaAjax(command)
+function hgvaAjax(command, async)
 {
+    if (async == null)
+	async = true;
     hgvaExpandCommand(command);
     $.ajax({
         type: "POST",
+	async: async,
         dataType: "JSON",
         url: "hgVarAnnogrator",
 	data: 'updatePage=' + JSON.stringify(command),
         trueSuccess: hgvaUpdatePage,
         success: catchErrorOrDispatch,
+        error: errorHandler,
         cache: false,
     });
+}
+
+function hgvaLookupPosition(async)
+{
+    hgvaAjax({'action': 'lookupPosition'}, async);
+}
+
+function hgvaLookupPositionIfNecessary()
+{
+    var regionType = $('#mainForm #hgva_regionType').val();
+    if (regionType == "range") {
+	var position = $('#mainForm input[name="position"]').val();
+	if (!position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
+	    hgvaLookupPosition(false);
+	}
+    }
 }
 
 function hgvaExecuteQuery()
 {
     showLoadingMessage("Executing your query may take some time. " +
 		       "Please leave this window open during processing.");
+    hgvaLookupPositionIfNecessary();
     var command = {'action': 'execute'};
     hgvaExpandCommand(command);
-    $('input[name="executeQuery"]').val(JSON.stringify(command));
-    $('form[name="executeForm"]').submit();
+    $('#mainForm').append("<INPUT TYPE=HIDDEN NAME='executeQuery' VALUE='" +
+			  JSON.stringify(command) + "'>);");
+    $('#mainForm').submit();
 }
 
 function hgvaEventBubble(event)
@@ -113,6 +139,13 @@ function hgvaSourceSortUpdate(event, ui)
 
 function hgvaUpdatePage(responseJson)
 {
+    var message = responseJson.serverSays;
+    if (message != null)
+	console.log('server says: ' + JSON.stringify(message));
+    if (responseJson.resubmit) {
+	$(responseJson.resubmit).submit();
+	return true;
+    }
     var updateList = responseJson.updates;
     if (updateList != null) {
 	for (var i=0;  i < updateList.length;  i++) {
@@ -124,10 +157,25 @@ function hgvaUpdatePage(responseJson)
 	    }
 	}
     }
-    var message = responseJson.serverSays;
-    if (message != null)
-	console.log('server says: ' + JSON.stringify(message));
+    var valueList = responseJson.values;
+    if (valueList != null) {
+	for (var i=0;  i < valueList.length;  i++) {
+	    var value = valueList[i];
+	    $(value.id).val(value.value);
+	}
+    }
+    var names = [ 'querySpec' ];
+    var values = [ JSON.stringify(hgvaBuildQuerySpec()) ];
+    var position = $('#mainForm input[name="position"]').val();
+    if (position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
+	names.push('position');
+	values.push(position);
+    }
+    // setCartVars returns error when this is called by synchronous ajax...
+    var ignoreError = function(){};
+    setCartVars(names, values, ignoreError, false);
 }
+
 
 //-------------------------- adapted from hgCustom.js: -----------------------------
 //#*** move to utils.js

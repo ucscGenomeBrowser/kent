@@ -170,6 +170,7 @@ else
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "

@@ -9755,5 +9755,23 @@ now works perfectly.
          mm8 mm9 >& do.log
 
 #############################################################################
+# construct liftOver to mm10 (DONE - 2012-05-01 - Hiram) 
+    screen -S mm8	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/mm8/bed/blat.mm10.2012-05-01
+    cd /hive/data/genomes/mm8/bed/blat.mm10.2012-05-01
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/mm8/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev mm8 mm10
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/mm8/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev mm8 mm10 > do.log 2>&1
+    #   real    86m46.700s
 
+    # verify this file exists:
+    og -L /gbdb/mm8/liftOver/mm8ToMm10.over.chain.gz
+# -rw-rw-r-- 1 279647 May  1 10:41 /gbdb/mm8/liftOver/mm8ToMm10.over.chain.gz
 
+    # and try out the conversion on genome-test from mm8 to mm10 
+############################################################################

@@ -477,10 +477,13 @@ Here is a 30-mer containing 2 blocks that align on the minus strand and
 2 blocks that align on the plus strand (this sometimes can happen in response to
 assembly errors): 
 <BR><BR>
-<PRE><TT>0         1         2         3 tens position in query  
+<PRE><TT>
+0         1         2         3 tens position in query  
 0123456789012345678901234567890 ones position in query   
             ++++          +++++ plus strand alignment on query   
     --------    ----------      minus strand alignment on query   
+0987654321098765432109876543210 ones position in query negative strand coordinates
+3         2         1         0 tens position in query negative strand coordinates
 
 Plus strand:   
      qStart=12 
@@ -498,8 +501,8 @@ Essentially, the minus strand <I>blockSizes</I> and <I>qStarts</I> are
 what you would get if you reverse-complemented the query.
 However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to the other:
 <PRE>
-     qStart = qSize - revQEnd
-     qEnd = qSize - revQStart
+     Negative-strand-coordinate-qStart = qSize - qEnd   = 31 - 26 =  5
+     Negative-strand-coordinate-qEnd   = qSize - qStart = 31 -  4 = 27
 </PRE>
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>

@@ -1710,3 +1710,35 @@ see doc/builds.txt for specific details.
     #	/gbdb/xenTro2/liftOver/xenTro2ToAnoCar2.over.chain.gz
     # and try out the conversion on genome-test from xenTro2 to xenTro3 
 ############################################################################
+
+##########################################################################pubStart
+# Publications track (DONE - 04-27-12 - Max)
+
+# article download and conversion is run every night on hgwdev:
+# 22 22 * * * /hive/data/inside/literature/pubtools/pubCronDailyUpdate.sh
+# the script downloads files into /hive/data/outside/literature/{PubMedCentral,ElsevierConsyn}/
+# then converts them to text into /hive/data/outside/literature/{pmc,elsevier}
+
+# all configuration of the pipeline is in /hive/data/inside/literature/pubtools/lib/pubConf.py
+
+# data processing was run manually like this
+export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/software/bin/:/cluster/software/bin:/cluster/home/max/projects/pubtools:/cluster/home/max/bin/x86_64:/hive/groups/recon/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/cluster/home/max/usr/src/scripts:/cluster/home/max/usr/src/oneshot:/cluster/home/max/bin:/cluster/bin/scripts:.:/cluster/home/max/usr/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/lpp/mmfs/bin/:/opt/dell/srvadmin/bin:/cluster/bin/scripts:/hive/users/hiram/cloud/ec2-api-tools-1.3-51254/bin:/cluster/home/max/bin:/usr/bin/X11:/usr/java/jdk1.6.0_20/bin:/cluster/home/max/bin:/hive/data/inside/literature/pubtools/
+# pmc
+cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
+pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
+ssh swarm 
+cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
+pubBlat steps:annot-tables
+exit
+pubBlat load
+
+# elsevier
+cd /hive/data/inside/literature/pubtools/runs/elsBlat/
+pubBlat init /hive/data/inside/literature/blat/elsevier/ /hive/data/inside/literature/text/elsevier
+ssh swarm 
+cd /hive/data/inside/literature/pubtools/runs/elsBlat/
+pubBlat steps:annot-tables
+exit
+pubBlat load
+#--pubEnd
+

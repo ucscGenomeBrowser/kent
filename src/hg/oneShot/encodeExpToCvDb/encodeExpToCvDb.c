@@ -360,23 +360,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
-    /* Write out required fields.  Order of required fields
-     * here needs to follow order in expRequiredFields. */
-    fprintf(f, "%u", ee->ix);
-    fprintf(f, "\t%s", ee->updateTime);
-    fprintf(f, "\t%s", composite);
-    fprintf(f, "\t%s", emptyForNull(ee->accession));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "organism", ee->organism));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "lab", ee->lab));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "dataType", ee->dataType));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "cellType", ee->cellType));
+    if (ee->accession != NULL)
+	{
+	/* Write out required fields.  Order of required fields
+	 * here needs to follow order in expRequiredFields. */
+	fprintf(f, "%u", ee->ix);
+	fprintf(f, "\t%s", ee->updateTime);
+	fprintf(f, "\t%s", composite);
+	fprintf(f, "\t%s", ee->accession);
+	fprintf(f, "\t%d", lookupId(cvDbConn, "organism", ee->organism));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "lab", ee->lab));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "dataType", ee->dataType));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "cellType", ee->cellType));
 
-    /* Now write out optional fields. */
-    for (i=0; i<optColCount; ++i)
-	fprintf(f, "\t%d", optCol[i]);
+	/* Now write out optional fields. */
+	for (i=0; i<optColCount; ++i)
+	    fprintf(f, "\t%d", optCol[i]);
 
-    /* End output record. */
-    fprintf(f, "\n");
+	/* End output record. */
+	fprintf(f, "\n");
+	}
     }
 
 /* Write out series list to a separate file. */

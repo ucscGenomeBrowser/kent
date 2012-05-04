@@ -2445,17 +2445,40 @@ age E0
 cell ES-E14
 composite wgEncodeUwDnase
 dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeUwDnaseEse14129olaME0AlnRep1.bam,wgEncodeUwDnaseEse14129olaME0AlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS21450
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 6918
+tissueSourceType None
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseEse14129olaME0AlnRep2
+objType file
+age E0
+cell ES-E14
+composite wgEncodeUwDnase
+dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseEse14129olaME0AlnRep1.bam,wgEncodeUwDnaseEse14129olaME0AlnRep1.bam.bai
+fileName wgEncodeUwDnaseEse14129olaME0AlnRep2.bam,wgEncodeUwDnaseEse14129olaME0AlnRep2.bam.bai
 grant Stam
 lab UW-m
 labExpId DS18505
 labVersion Bowtie 0.12.5
 md5sum 263f9d808b0d93e57816d3e2d807c1c7,7506b44efc40b29d3817e3bd99f466f1
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain 129/Ola
 subId 5894
@@ -2469,21 +2492,45 @@ age E0
 cell ES-E14
 composite wgEncodeUwDnase
 dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeUwDnaseEse14129olaME0HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS21450
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 6918
+tableName wgEncodeUwDnaseEse14129olaME0HotspotsRep1
+tissueSourceType None
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseEse14129olaME0HotspotsRep2
+objType table
+age E0
+cell ES-E14
+composite wgEncodeUwDnase
+dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseEse14129olaME0HotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseEse14129olaME0HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS18505
 labVersion Hotspot-v5.2
 md5sum 691b63157c7dabd1737b2f52fc11cd83
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain 129/Ola
 subId 5894
-tableName wgEncodeUwDnaseEse14129olaME0HotspotsRep1
+tableName wgEncodeUwDnaseEse14129olaME0HotspotsRep2
 tissueSourceType None
 treatment None
 view Hotspots
@@ -2494,21 +2541,45 @@ age E0
 cell ES-E14
 composite wgEncodeUwDnase
 dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeUwDnaseEse14129olaME0PkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS21450
+labVersion lmax-v1.1
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 6918
+tableName wgEncodeUwDnaseEse14129olaME0PkRep1
+tissueSourceType None
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseEse14129olaME0PkRep2
+objType table
+age E0
+cell ES-E14
+composite wgEncodeUwDnase
+dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseEse14129olaME0PkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseEse14129olaME0PkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS18505
 labVersion lmax-v1.1
 md5sum 5f1946fa1189716c3e542ce501100e46
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain 129/Ola
 subId 5894
-tableName wgEncodeUwDnaseEse14129olaME0PkRep1
+tableName wgEncodeUwDnaseEse14129olaME0PkRep2
 tissueSourceType None
 treatment None
 view Peaks
@@ -2519,17 +2590,40 @@ age E0
 cell ES-E14
 composite wgEncodeUwDnase
 dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeUwDnaseEse14129olaME0RawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS21450
+labVersion 1
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 6918
+tissueSourceType None
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseEse14129olaME0RawDataRep2
+objType file
+age E0
+cell ES-E14
+composite wgEncodeUwDnase
+dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseEse14129olaME0RawDataRep1.fastq.tgz
+fileName wgEncodeUwDnaseEse14129olaME0RawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS18505
 labVersion 1
 md5sum 6547398744e986d5c9bc32b74512445b
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain 129/Ola
 subId 5894
@@ -2543,21 +2637,45 @@ age E0
 cell ES-E14
 composite wgEncodeUwDnase
 dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeUwDnaseEse14129olaME0SigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS21450
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 6918
+tableName wgEncodeUwDnaseEse14129olaME0SigRep1
+tissueSourceType None
+treatment None
+view Signal
+
+metaObject wgEncodeUwDnaseEse14129olaME0SigRep2
+objType table
+age E0
+cell ES-E14
+composite wgEncodeUwDnase
+dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseEse14129olaME0SigRep1.bigWig
+fileName wgEncodeUwDnaseEse14129olaME0SigRep2.bigWig
 grant Stam
 lab UW-m
 labExpId DS18505
 labVersion WindowDensity-bin20-win+/-75
 md5sum 1c8ceffc29aecb7f85ef9a49c2cdf2c8
 project wgEncode
-replicate 1
+replicate 2
 sex M
 strain 129/Ola
 subId 5894
-tableName wgEncodeUwDnaseEse14129olaME0SigRep1
+tableName wgEncodeUwDnaseEse14129olaME0SigRep2
 tissueSourceType None
 treatment None
 view Signal
@@ -14503,4 +14621,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 222020165
+# MAGIC: -1658350985
