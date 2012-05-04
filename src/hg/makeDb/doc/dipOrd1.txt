@@ -194,3 +194,87 @@ skipInvalid yes
     #   46026502 bases of 1844961421 (2.495%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    mkdir /hive/data/genomes/dipOrd1/bed/windowMasker
+    cd /hive/data/genomes/dipOrd1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev dipOrd1 > do.log 2>&1
+    #   Elapsed time: 574m42s
+
+    sed -e 's/^/    #\t/' fb.dipOrd1.windowmaskerSdust.beforeClean.txt
+    #   1092394968 bases of 2158502098 (50.609%) in intersection
+    sed -e 's/^/    #\t/' fb.dipOrd1.windowmaskerSdust.clean.txt
+    #   778854291 bases of 2158502098 (36.083%) in intersection
+    sed -e 's/^/    #\t/' fb.dipOrd1.rmsk.windowmaskerSdust.txt
+    #   294876541 bases of 2158502098 (13.661%) in intersection
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Dipodomys ordii - does not exist in this file
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+# dipOrd1 (Kangaroo rat)
+dipOrd1.serverGenome = /hive/data/genomes/dipOrd1/dipOrd1.2bit
+dipOrd1.clusterGenome = /scratch/data/dipOrd1/dipOrd1.2bit
+dipOrd1.ooc = /scratch/data/dipOrd1/dipOrd1.11.ooc
+dipOrd1.lift = no
+dipOrd1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+dipOrd1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+dipOrd1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+dipOrd1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+dipOrd1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+dipOrd1.refseq.mrna.native.load = no
+dipOrd1.refseq.mrna.xeno.load = yes
+dipOrd1.genbank.mrna.xeno.load = yes
+dipOrd1.genbank.est.native.load = no
+dipOrd1.downloadDir = dipOrd1
+dipOrd1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding dipOrd1 kangaroo rat" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for dipOrdNames Dipodomys ordii" \
+        src/lib/gbGenome.c
+#	Western Painted Turtle - Chrysemys picta bellii - Dec 2011
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S dipOrd1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial dipOrd1 &
+    #	var/build/logs/2012.05.03-16:19:09.dipOrd1.initalign.log
+XXX - running - Thu May  3 16:19:18 PDT 2012
+    #	real    795m52.388s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dipOrd1 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #	real    114m56.461s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add dipOrd1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added dipOrd1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
