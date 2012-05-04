@@ -12,26 +12,25 @@ from ucscgenomics.qa.encode import tableCheck
 def parseCommandLine():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Runs the New Track Checklist table tests',
+        description='Validates tables and records table statistics',
         epilog="""
 The following tests are run:
+  positionalTblCheck
+  checkTblCoords
   genePredCheck
   pslCheck
-  checkTblCoords
-  positionalTblCheck
-  runBits.csh
-  check for the existence of table descriptions
-  check for shortLabels and longLabels that are too long
-  check for underscores in table names
-  check for tables missing an index
+  checks for the existence of table descriptions
+  (checks for shortLabels and longLabels that are too long)
+  checks for underscores in table names
+  featureBits
   (joinerCheck) - not yet implemented
   countPerChrom
+
+  creates 3 files:  outFile.summary, outFile.log, outFile.chrom
         """)
     parser.add_argument('db', help='the database to check')
     parser.add_argument('tableList', help='a file listing the tables to check')
-    parser.add_argument('outFileName', help='base name for results files')
-    parser.add_argument('-v', '--verbose', action='store_true',
-                        help='turn on verbose messages in error log')
+    parser.add_argument('outFile', help='base name for results files')
     return parser.parse_args()
 
 def getTableListFromFile():
@@ -39,15 +38,18 @@ def getTableListFromFile():
         raw = f.readlines()
     return [name.strip() for name in raw]
 
-def runValidators():
+delimiterLine = "==============================================="
+def runTests():
+    """Runs validate() and statistics() methods on each table. Writes log output."""
     reporter.writeTimestamp()
     reporter.writeBlankLine()
     for table in tableList:
-        reporter.writeLine("===============================================")
-        reporter.writeLine("Tests for " + args.db + "." + table +":\n")
+        reporter.writeLine(delimiterLine)
+        reporter.writeLine(args.db + "." + table +":\n")
         table = factory.tableQaFactory(args.db, table, reporter, sumTable)
         table.validate()
-    reporter.writeLine("===============================================")
+        table.statistics()
+    reporter.writeLine(delimiterLine)
     reporter.writeLine("Tests complete:")
     reporter.writeTimestamp()
 
@@ -65,12 +67,14 @@ def runChromCounts():
 args = parseCommandLine()
 tableList = getTableListFromFile()
 qaUtils.checkTablesExist(args.db, tableList)
-logFile = open(args.outFileName + ".log", "w")
-chromFile = open(args.outFileName + ".chroms", "w")
-sumFile = open(args.outFileName + ".summary", "w")
+
+logFile = open(args.outFile + ".log", "w")
+chromFile = open(args.outFile + ".chroms", "w")
+sumFile = open(args.outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
-runValidators()
+
+runTests()
 runChromCounts()
 writeSummaryFile()
 
