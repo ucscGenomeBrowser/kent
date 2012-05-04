@@ -1023,9 +1023,9 @@ hPrintf(
 "</script>\n"
 
 "<script language=\"JavaScript\">"
-"document.cookie =  \"hgLogin_UserName=%s; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\"; "
+"document.cookie =  \"wikidb_mw1_UserName=%s; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\"; "
 "\n"
-"document.cookie =  \"hgLogin_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
+"document.cookie =  \"wikidb_mw1_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
 " </script>"
 "\n",
 userName,userID);
@@ -1047,9 +1047,9 @@ hPrintf(
 );
 hPrintf(
 "<script language=\"JavaScript\">"
-"document.cookie =  \"hgLogin_UserName=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\"; "
+"document.cookie =  \"wikidb_mw1_UserName=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\"; "
 "\n"
-"document.cookie =  \"hgLogin_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
+"document.cookie =  \"wikidb_mw1_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
 "</script>\n"
 );
 /* TODO: cleanup the hgLogin_xxxx vars in the cart */

@@ -9,6 +9,15 @@
 #define CFG_WIKI_LOGGED_IN_COOKIE "wiki.loggedInCookie"
 #define CFG_WIKI_SESSION_COOKIE "wiki.sessionCookie"
 
+/* hg.conf login system parameter -- using non-wiki login system if defined */ 
+#define CFG_LOGIN_SYSTEM_NAME "login.systemName"
+
+char *loginSystemName();
+/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
+
+boolean loginSystemEnabled();
+/* Return TRUE if login.systemName  parameter is defined in hg.conf . */
+
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
 
