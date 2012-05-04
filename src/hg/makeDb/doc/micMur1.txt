@@ -192,3 +192,21 @@ sourceName="Broad Institute micMur1 (NCBI project 19967, ABDC00000000)" where na
     #   55072205 bases of 1852394361 (2.973%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S micMur1
+    mkdir /hive/data/genomes/micMur1/bed/windowMasker
+    cd /hive/data/genomes/micMur1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev micMur1 > do.log 2>&1
+    #   Elapsed time: 769m16s
+
+    sed -e 's/^/    #\t/' fb.micMur1.windowmaskerSdust.beforeClean.txt
+    #   1606982741 bases of 2902270736 (55.370%) in intersection
+    sed -e 's/^/    #\t/' fb.micMur1.windowmaskerSdust.clean.txt
+    #   557106366 bases of 2902270736 (19.196%) in intersection
+    sed -e 's/^/    #\t/' fb.micMur1.rmsk.windowmaskerSdust.txt
+    #   333189865 bases of 2902270736 (11.480%) in intersection
+
+#########################################################################
