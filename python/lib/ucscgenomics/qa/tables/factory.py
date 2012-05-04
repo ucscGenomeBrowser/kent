@@ -27,7 +27,9 @@ pslTypes = frozenset(["psl"])
 genePredTypes = frozenset(["genePred"])
 otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "expRatio", "maf",
                                   "netAlign", "rmsk", "sample", "wigMaf", "wig", "bedGraph",
-                                  "chromGraph", "factorSource", "bedDetail", "pgSnp"])
+                                  "chromGraph", "factorSource", "bedDetail", "pgSnp", "altGraphX",
+                                  "ld2", "bed5FloatScore", "bedRnaElements", "broadPeak", "gvf",
+                                  "narrowPeak", "peptideMapping"])
 pointerTypes = frozenset(["bigWig", "bigBed", "bam"])
 
 def tableQaFactory(db, table, reporter, sumTable):
