@@ -56,7 +56,7 @@ class Reporter(object):
 
     def writeStepInfo(self):
         """Writes current step information and timestamp to file."""
-        self.fh.write(self.db + " " + self.table + " " + self.description + "\n")
+        self.fh.write(self.description + "\n")
         self.fh.flush()
 
     def endStep(self):
