@@ -109,6 +109,7 @@ install:
 	cp -p --remove-destination printMan.csh            ${SCRIPTS}
 	cp -p --remove-destination qaConfig.csh            ${SCRIPTS}
 	cp -p --remove-destination qaConfig.bash           ${SCRIPTS}
+	cp -p --remove-destination qaGbTracks              ${SCRIPTS}
 	cp -p --remove-destination qaEncodeTracks.csh      ${SCRIPTS}
 	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
 	cp -p --remove-destination qaThis.csh              ${SCRIPTS}
