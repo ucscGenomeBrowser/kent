@@ -7,7 +7,7 @@ all: ${SUBDIRS:%=%.suball}
 
 # any changes must be committed (and this is checked).
 install: check-prefix installSub
-	cp omimWrapper.sh omim.tables buildOmimTracks.csh checkOmim.sh validateOmim.sh parseGeneMap.pl ${PREFIX}
+	cp omimWrapper.sh omim.tables buildOmimTracks.csh checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh ${PREFIX}
 
 installSub: ${SUBDIRS:%=%.install}
 
