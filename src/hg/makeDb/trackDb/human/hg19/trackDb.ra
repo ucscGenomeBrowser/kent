@@ -2747,6 +2747,24 @@ type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
 
+track multizBasal
+#subTrack consDinoViewalign on
+shortLabel Basal Align
+longLabel Basal Alignments of 7 
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multizBasalSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
+speciesOrder mm9 bosTau4 monDom5 anoCar1 galGal3 xenTro2 danRer6 fr2 gasAcu1 oryLat2 calMil0
+priority 100
+
 track multizDino
 #subTrack consDinoViewalign on
 shortLabel Dino Align
