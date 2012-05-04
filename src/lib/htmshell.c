@@ -364,6 +364,22 @@ void htmlSetStyle(char *style)
 htmlStyle = style;
 }
 
+
+static char *htmlStyleSheet = NULL;
+void htmlSetStyleSheet(char *styleSheet)
+/* Set document wide style sheet by adding css name to HEAD part.
+ * Needs to be called before htmlStart or htmShell. */
+{
+htmlStyleSheet = styleSheet;
+}
+
+static char *htmlFormClass = NULL;
+void htmlSetFormClass(char *formClass)
+/* Set class in the BODY part. */
+{
+htmlFormClass = formClass;
+}
+
 static char *htmlBackground = NULL;
 
 void htmlSetBackground(char *imageFile)
@@ -438,8 +454,13 @@ fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
+if (htmlStyleSheet != NULL)
+fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
+        , htmlStyleSheet);  
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
+if (htmlFormClass != NULL )
+    fprintf(f, " CLASS=\"%s\"", htmlFormClass);
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (gotBgColor)

@@ -216,3 +216,28 @@ skipInvalid yes
     #   102217862 bases of 1923624051 (5.314%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S ochPri2
+    mkdir /hive/data/genomes/ochPri2/bed/windowMasker
+    cd /hive/data/genomes/ochPri2/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev ochPri2 > do.log 2>&1
+    #   real    904m39.415s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    7m10.582s
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev ochPri2 > cleanup.log 2>&1
+    #   real    1m45.497s
+
+    cat fb.ochPri2.windowmaskerSdust.beforeClean.txt
+    #   2224659037 bases of 3445784354 (64.562%) in intersection
+    sed -e 's/^/    #\t/' fb.ochPri2.windowmaskerSdust.clean.txt
+    #   702498734 bases of 3445784354 (20.387%) in intersection
+    sed -e 's/^/    #\t/' fb.ochPri2.rmsk.windowmaskerSdust.txt
+    #   79974550 bases of 3445784354 (2.321%) in intersection
+
+#########################################################################
