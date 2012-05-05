@@ -1064,7 +1064,7 @@ hPrintf(
 "\n",
 userName,userID);
 //backToHgSession(2);
-returnToURL(20);
+returnToURL(2);
 }
 
 
@@ -1089,7 +1089,8 @@ hPrintf(
 );
 /* TODO: cleanup the hgLogin_xxxx vars in the cart */
 /* return to session */
-backToHgSession(2);
+// backToHgSession(2);
+returnToURL(2);
 }
 
 
