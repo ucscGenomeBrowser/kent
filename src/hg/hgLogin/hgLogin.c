@@ -40,6 +40,40 @@ struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
+void returnToURL(int nSec)
+/* delay for N micro seconds then go back to hgSession page */
+{
+char *returnURL = cartUsualString(cart, "returnto", "");
+char *hgLoginHost = wikiLinkHost();
+char returnTo[512];
+
+if (!returnURL || sameString(returnURL,""))
+   safef(returnTo, sizeof(returnTo),
+      "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
+else
+   safef(returnTo, sizeof(returnTo), returnURL);
+
+int delay=nSec*1000;
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+/* TODO: afterDelayBackTo("http....") */
+"window.setTimeout(afterDelay, %d);\n"
+"function afterDelay() {\n"
+"window.location =\"%s\";"
+"\n}"
+"\n"
+"//-->"
+"\n"
+"</script>"
+,delay
+,returnTo);
+}
+
+
+
+
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
@@ -1029,7 +1063,8 @@ hPrintf(
 " </script>"
 "\n",
 userName,userID);
-backToHgSession(2);
+//backToHgSession(2);
+returnToURL(20);
 }
 
 
