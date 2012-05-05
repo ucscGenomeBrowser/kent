@@ -1,6 +1,7 @@
 CREATE TABLE `cvDb_experiment` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `updateTime` varchar(40) NOT NULL,
+    `series` varchar(50) NOT NULL,
     `accession` varchar(16) NOT NULL UNIQUE,
     `organism` integer NOT NULL,
     `lab` integer NOT NULL,
@@ -30,7 +31,6 @@ CREATE TABLE `cvDb_experiment` (
     `strain` integer NOT NULL,
     `tissueSourceType` integer NOT NULL,
     `treatment` integer NOT NULL,
-    `version` integer NOT NULL,
-    `view` integer NOT NULL
+    `version` integer NOT NULL
 )
 ;
