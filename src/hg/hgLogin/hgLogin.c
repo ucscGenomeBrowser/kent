@@ -72,8 +72,6 @@ hPrintf(
 }
 
 
-
-
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
@@ -95,7 +93,7 @@ hPrintf(
 void sendMail(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
-char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
+char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[256];
 safef(cmd,sizeof(cmd),
 "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
@@ -108,13 +106,12 @@ if (result == -1)
     "</p>"
     "<h3>Error emailing %s to: %s</h3>"
     "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>"
-    , helpWith
+    , obj
     , email
     );
     }
 else
     {
-// cartSetString(cart, "hgLogin_helpWith", "password");
 hPrintf(
 "<script  language=\"JavaScript\">\n"
 "<!-- "
@@ -127,6 +124,7 @@ hPrintf(
 , hgLoginHost
 );
 }
+// cartRemove(cart, "hgLogin_helpWith");
 }
 
 void mailUsername(char *email, char *users)
@@ -148,7 +146,6 @@ void sendUsername(struct sqlConnection *conn, char *email)
 struct sqlResult *sr;
 char **row;
 char query[256];
-// char *email = cartUsualString(cart, "hgLogin_email", "");
 
 /* TODO: validate the email address is in right format */
 /* find all the user names assocaited with this email address */
@@ -165,8 +162,8 @@ sqlFreeResult(&sr);
 }
 
 
-void generateNewPassword(struct sqlConnection *conn, char *username)
-/* Generate a new password */
+void lostPassword(struct sqlConnection *conn, char *username)
+/* Generate and mail new password to user */
 {
 char query[256];
 //char cmd[256];
@@ -177,7 +174,6 @@ encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),newPassword='%s', newPasswordExpire=DATE_ADD(NOW(), INTERVAL 7 DAY), passwordChangeRequired='Y' where userName='%s'",
  sqlEscapeString(encPwd), sqlEscapeString(username));
 sqlUpdate(conn, query);
-/* quick return check table */
 sendNewPassword(conn, username, password);
 return;
 }
@@ -198,6 +194,7 @@ if (!email || sameString(email,""))
     displayAccHelpPage(conn);
     return;
     }
+
 mailNewPassword(username, email, password);
 sqlFreeResult(&sr);
 }
@@ -461,76 +458,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 hPrintf("</table>");
-}
-
-void lostPassword(struct sqlConnection *conn)
-/* process the lost password form */
-{
-char query[256];
-char cmd[256];
-char *username = cartUsualString(cart, "hgLogin_userName", "");
-if (!username || sameString(username,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Username cannot be blank.");
-    // lostPasswordPage(conn);
-    return;
-    }
-/**** scalfolding code before reset pwd is finished ***/
-    else {
-    freez(&errMsg);
-    errMsg = cloneString("Generating new password.....");
-    // lostPasswordPage(conn);
-    return;
-    }
-
-safef(query,sizeof(query), "select password from gbMembers where userName='%s'", username);
-char *password = sqlQuickString(conn, query);
-if (!password)
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Username not found.");
-    // lostPasswordPage(conn);
-    return;
-    }
-freez(&password);
-password = generateRandomPassword();
-char encPwd[45] = "";
-encryptNewPwd(password, encPwd, sizeof(encPwd));
-
-safef(query,sizeof(query), "update gbMembers set password='%s' where userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(username));
-sqlUpdate(conn, query);
-
-updatePasswordsFile(conn);
-
-safef(cmd,sizeof(cmd),
-"echo 'Your new password is: %s' | mail -s \"Lost GSID HIV password\" %s"
-, password, username);
-int result = system(cmd);
-if (result == -1)
-    {
-    hPrintf(
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Error emailing password to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , username
-    );
-    }
-else
-    {
-    hPrintf(
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Password has been emailed to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , username
-    );
-    }
-
-freez(&password);
 }
 
 void changePasswordPage(struct sqlConnection *conn)
@@ -964,11 +891,12 @@ if (sameString(helpWith,"password"))
         return;
         }
     }
-    generateNewPassword(conn, username);
+    lostPassword(conn, username);
+    //sendNewPassword(conn, username, password);
     return;
 }
-cartRemove(cart, "hgLogin_helpWith");
-cartRemove(cart, "hgLogin_email");
+// cartRemove(cart, "hgLogin_helpWith");
+// cartRemove(cart, "hgLogin_email");
 // cartRemove(cart, "hgLogin_userName");
 displayAccHelpPage(conn);
 return;
@@ -1271,16 +1199,6 @@ cart = theCart;
 
 if (cartVarExists(cart, "debug"))
     debugShowAllMembers(conn);
-/*******************************************************************
-else if (cartVarExists(cart, "hgLogin.do.lostUserNamePage"))
-    lostUserNamedPage(conn);
-else if (cartVarExists(cart, "hgLogin.do.lostUserName"))
-    lostUserName(conn);
-********************************************************************/
-// else if (cartVarExists(cart, "hgLogin.do.lostPasswordPage"))
-//    lostPasswordPage(conn);
-else if (cartVarExists(cart, "hgLogin.do.lostPassword"))
-    lostPassword(conn);
 else if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.changePassword"))

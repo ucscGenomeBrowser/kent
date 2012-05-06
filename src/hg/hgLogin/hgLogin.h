@@ -33,8 +33,8 @@ unsigned int randInt(unsigned int n);
 char *generateRandomPassword();
 /* Generate valid random password for users who have lost their old one.
  * Free the returned value.*/
-void generateNewPassword(struct sqlConnection *conn, char *username);
-/* Generate a new password */
+void lostPassword(struct sqlConnection *conn, char *username);
+/* Generate and mail new password to user */
 void mailNewPassword(char *username, char *email, char *password);
 /* send user new password */
 void sendNewPassword(struct sqlConnection *conn, char *username, char *password);
