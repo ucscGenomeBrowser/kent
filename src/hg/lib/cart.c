@@ -1515,11 +1515,16 @@ popWarnHandler();
 }
 
 void setThemeFromCart(struct cart *cart) 
-/* If 'theme' variable is set in cart: overwrite background with the one from
- * defined for this theme Also set the "styleTheme", with additional styles
- * that can overwrite the main style settings */
+/* If 'theme' variable is set in cart: overwrite background with the one 
+ * defined for this theme in hg.conf. Also set the "styleTheme", with additional
+ * styles that can overwrite the main style settings 
+ * config syntax in hg.conf is:
+ *   browser.theme.<name>=<cssFile>
+ * or:
+ *   browser.theme.<name>=<cssFile>,<backgroundFile>
+ * */
 {
-// get theme from cart and use it to get background file from config
+// get theme from cart and use it to get style/background file from config
 char *cartTheme = cartOptionalString(cart, "theme");
 if (cartTheme==NULL)
     return;
@@ -1530,22 +1535,24 @@ freeMem(themeKey);
 if (themeDefLine == NULL)
     return;
 
-char * background = cloneString(themeDefLine);
-chopSuffixAt(background, ',');
-htmlSetBackground(background);
-
-// set css style (optional, after ',' in hg.conf line)
-if (! stringIn(",", themeDefLine))
-    return;
+// set style file 
 char * styleFile = cloneString(themeDefLine);
-styleFile = chopPrefixAt(styleFile, ',');
-
+chopSuffixAt(styleFile, ',');
+if (strlen(styleFile)==0)
+    return;
 char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-if (link)
+if (link!=NULL)
     {
     htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
     webSetStyle(link);       // for web.c, used by hgc
     }
+
+// set background file (optional, after ',' in hg.conf line)
+if (! stringIn(",", themeDefLine))
+    return;
+char * backgroundFile = cloneString(themeDefLine);
+backgroundFile = chopPrefixAt(backgroundFile, ',');
+htmlSetBackground(backgroundFile);
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),

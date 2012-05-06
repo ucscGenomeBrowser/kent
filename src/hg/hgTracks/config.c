@@ -24,7 +24,6 @@ static void themeDropDown(struct cart* cart)
  * */
 {
 struct slName* themes = cfgNamesWithPrefix("browser.theme.");
-//struct slName* themes = cfgNames();
 if (themes==NULL)
     return;
 
