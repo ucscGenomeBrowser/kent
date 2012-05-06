@@ -165,6 +165,56 @@ sqlFreeResult(&sr);
 }
 
 
+void generateNewPassword(struct sqlConnection *conn, char *username)
+/* Generate a new password */
+{
+char query[256];
+//char cmd[256];
+char *password = generateRandomPassword();
+char encPwd[45] = "";
+encryptNewPwd(password, encPwd, sizeof(encPwd));
+
+safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),newPassword='%s', newPasswordExpire=DATE_ADD(NOW(), INTERVAL 7 DAY), passwordChangeRequired='Y' where userName='%s'",
+ sqlEscapeString(encPwd), sqlEscapeString(username));
+sqlUpdate(conn, query);
+/* quick return check table */
+sendNewPassword(conn, username, password);
+return;
+}
+
+void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
+/* email user new password  */
+{
+struct sqlResult *sr;
+char query[256];
+
+/* find all the user names assocaited with this email address */
+safef(query,sizeof(query),"select email from gbMembers where userName='%s'", username);
+char *email = sqlQuickString(conn, query);
+if (!email || sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email address not found.");
+    displayAccHelpPage(conn);
+    return;
+    }
+mailNewPassword(username, email, password);
+sqlFreeResult(&sr);
+}
+
+void mailNewPassword(char *username, char *email, char *password)
+/* send user new password */
+{
+char subject[256];
+char msg[256];
+char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
+safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
+safef(msg, sizeof(msg), "New password for user %s:  \n\n  %s \n", username, password);
+safecat (msg, sizeof(msg), signature);
+sendMail(email, subject, msg);
+}
+
+
 /*************** to-do below *********************/
 void activateAccount(struct sqlConnection *conn)
 /* activate account */
@@ -281,6 +331,7 @@ encryptPWD(password, salt, buf, bufsize);
 }
 
 void findSalt(char *encPassword, char *salt, int saltSize)
+/* find the salt part from the password field */
 {
 // /*DEBUG*/ printf("encPassword from database is: %s\n",encPassword);
 char tempStr1[45];
@@ -781,7 +832,8 @@ safef(query,sizeof(query), "insert into gbMembers set "
     sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
     sqlUpdate(conn, query);
 
-
+/* send out activate code mail, and display the main confirmation box */
+/* and comback here to contine back to URL */
 hPrintf(
 "<h2>UCSC Genome Browser</h2>\n"
 "<p align=\"left\">\n"
@@ -871,7 +923,7 @@ void accountHelp(struct sqlConnection *conn)
 {
 // struct sqlResult *sr;
 // char **row;
-// char query[256];
+char query[256];
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
@@ -893,23 +945,29 @@ if (sameString(helpWith,"username"))
 /* Forgot password */
 if (sameString(helpWith,"password"))
 {
+    /* validate username first */
     if (sameString(username,""))
     {
     freez(&errMsg);
     errMsg = cloneString("Username cannot be blank.");
     displayAccHelpPage(conn);
     return;
-    } else {
-/**** temp code before mail password function is done ****/
-/**** sendNewPassword(conn, username) *******************/
-    freez(&errMsg);
-    errMsg = cloneString("Will send a new password to you soon ...");
-    displayAccHelpPage(conn);
-    return;
+    } else { 
+    safef(query,sizeof(query), 
+        "select password from gbMembers where userName='%s'", username);
+    char *password = sqlQuickString(conn, query);
+    if (!password)
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Username not found.");
+        displayAccHelpPage(conn);
+        return;
+        }
     }
+    generateNewPassword(conn, username);
+    return;
 }
 cartRemove(cart, "hgLogin_helpWith");
-
 cartRemove(cart, "hgLogin_email");
 // cartRemove(cart, "hgLogin_userName");
 displayAccHelpPage(conn);
@@ -975,9 +1033,8 @@ cartSaveSession(cart);
 }
 
 
-/******* BEGIN dispalyLogin *************************/
 void displayLogin(struct sqlConnection *conn)
-/* display user account info */
+/* display and process login info */
 {
 struct sqlResult *sr;
 char **row;
@@ -1214,31 +1271,6 @@ cart = theCart;
 
 if (cartVarExists(cart, "debug"))
     debugShowAllMembers(conn);
-/* remove after a while when it is no longer needed
-else if (cartVarExists(cart, "fixMembers"))
-    {
-    upgradeMembersTable(conn);
-    updatePasswordsFile(conn);
-    hPrintf(
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Successfully updated the gbMembers table to store hashed passwords.</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    );
-    }
-*/
-else if (cartVarExists(cart, "update"))
-    {
-    updatePasswordsFile(conn);
-    hPrintf(
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Successfully updated the authentication file.</h3>"
-    "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    );
-    }
 /*******************************************************************
 else if (cartVarExists(cart, "hgLogin.do.lostUserNamePage"))
     lostUserNamedPage(conn);
