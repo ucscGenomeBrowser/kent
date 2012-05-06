@@ -19,8 +19,8 @@
 #include <openssl/md5.h>
 #include "net.h"
 
+#include "wikiLink.h"
 #include "hgLogin.h"
-#include "hgLoginLink.h"
 #include "gbMembers.h"
 
 #include "versionInfo.h"
@@ -40,6 +40,40 @@ struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
+void returnToURL(int nSec)
+/* delay for N micro seconds then go back to hgSession page */
+{
+char *returnURL = cartUsualString(cart, "returnto", "");
+char *hgLoginHost = wikiLinkHost();
+char returnTo[512];
+
+if (!returnURL || sameString(returnURL,""))
+   safef(returnTo, sizeof(returnTo),
+      "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
+else
+   safef(returnTo, sizeof(returnTo), returnURL);
+
+int delay=nSec*1000;
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+/* TODO: afterDelayBackTo("http....") */
+"window.setTimeout(afterDelay, %d);\n"
+"function afterDelay() {\n"
+"window.location =\"%s\";"
+"\n}"
+"\n"
+"//-->"
+"\n"
+"</script>"
+,delay
+,returnTo);
+}
+
+
+
+
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
@@ -60,7 +94,7 @@ hPrintf(
 }
 void sendMail(char *email, char *subject, char *msg)
 {
-char *hgLoginHost = hgLoginLinkHost();
+char *hgLoginHost = wikiLinkHost();
 char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[256];
 safef(cmd,sizeof(cmd),
@@ -86,7 +120,7 @@ hPrintf(
 "<!-- "
 "\n"
 
-"window.location =\"http://%s/cgi-bin//hgLogin?hgLogin.do.displayMailSuccess=1\""
+"window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
 "//-->"
 "\n"
 "</script>"
@@ -1006,7 +1040,7 @@ gbMembersFree(&m);
 void  displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
-// char *hgLoginHost = hgLoginLinkHost();
+// char *hgLoginHost = wikiLinkHost();
 
 hPrintf(
 "<h2>UCSC Genome Browser</h2>"
@@ -1023,20 +1057,21 @@ hPrintf(
 "</script>\n"
 
 "<script language=\"JavaScript\">"
-"document.cookie =  \"hgLogin_UserName=%s; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\"; "
+"document.cookie =  \"wikidb_mw1_UserName=%s; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\"; "
 "\n"
-"document.cookie =  \"hgLogin_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
+"document.cookie =  \"wikidb_mw1_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
 " </script>"
 "\n",
 userName,userID);
-backToHgSession(2);
+//backToHgSession(2);
+returnToURL(2);
 }
 
 
 void  displayLogoutSuccess()
 /* display logout success msg, and reset cookie */
 {
-// char *hgLoginHost = hgLoginLinkHost();
+// char *hgLoginHost = wikiLinkHost();
 
 hPrintf(
 "<h2>UCSC Genome Browser Sign Out</h2>"
@@ -1047,14 +1082,15 @@ hPrintf(
 );
 hPrintf(
 "<script language=\"JavaScript\">"
-"document.cookie =  \"hgLogin_UserName=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\"; "
+"document.cookie =  \"wikidb_mw1_UserName=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\"; "
 "\n"
-"document.cookie =  \"hgLogin_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
+"document.cookie =  \"wikidb_mw1_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
 "</script>\n"
 );
 /* TODO: cleanup the hgLogin_xxxx vars in the cart */
 /* return to session */
-backToHgSession(1);
+// backToHgSession(2);
+returnToURL(2);
 }
 
 
@@ -1062,7 +1098,7 @@ void backToHgSession(int nSec)
 /* delay for N micro seconds then go back to hgSession page */
 /* TODO: afterDelayBackTo("http....") */
 {
-char *hgLoginHost = hgLoginLinkHost();
+char *hgLoginHost = wikiLinkHost();
 int delay=nSec*1000;
 hPrintf(
 "<script  language=\"JavaScript\">\n"
@@ -1085,7 +1121,7 @@ void backToDoLoginPage(int nSec)
 /* delay for N micro seconds then go back to Login page */
 /* TODO: afterDelayBackTo("http....") */
 {
-char *hgLoginHost = hgLoginLinkHost();
+char *hgLoginHost = wikiLinkHost();
 int delay=nSec*1000;
 hPrintf(
 "<script  language=\"JavaScript\">\n"
@@ -1094,7 +1130,7 @@ hPrintf(
 /* TODO: afterDelayBackTo("http....") */
 "window.setTimeout(afterDelay, %d);\n"
 "function afterDelay() {\n"
-"window.location =\"http://%s/cgi-bin//hgLogin?hgLogin.do.displayLoginPage=1\";"
+"window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1\";"
 "\n}"
 "\n"
 "//-->"
