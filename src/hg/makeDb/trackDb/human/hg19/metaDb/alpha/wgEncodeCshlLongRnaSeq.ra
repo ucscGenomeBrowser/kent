@@ -4385,7 +4385,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002666
 donorId RO01794,RO01778
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4411,7 +4413,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002666
 donorId RO01794,RO01778
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4544,7 +4548,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002666
 donorId RO01794,RO01778
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4569,7 +4575,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002666
 donorId RO01794,RO01778
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4761,7 +4769,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002666
 donorId RO01794,RO01778
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4843,7 +4853,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -4869,7 +4881,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5002,7 +5016,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5027,7 +5043,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -5219,7 +5237,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24335,7 +24355,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002667
 donorId 0101504.13,0032601.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -24361,7 +24383,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24494,7 +24518,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24519,7 +24545,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002667
 donorId 0101504.13,0032601.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -24657,7 +24685,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002667
 donorId 0032601.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -24736,7 +24766,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24762,7 +24794,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHpiepcCellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -24816,7 +24850,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -24842,7 +24878,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24867,7 +24905,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -24919,7 +24959,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -24971,7 +25013,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24996,7 +25040,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -25022,7 +25068,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -25076,7 +25124,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -25130,7 +25180,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -25155,7 +25207,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002685
 donorId 9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -25180,7 +25234,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-14
 dateUnrestricted 2012-12-14
+dccAccession wgEncodeEH002685
 donorId 9041503.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalSpikeinsRep1.txt.gz
 grant Gingeras
 lab CSHL
@@ -25232,7 +25288,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -40555,7 +40613,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -40688,7 +40748,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -40907,7 +40969,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -41017,7 +41081,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -41150,7 +41216,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapGeneGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -41369,7 +41437,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapTranscriptGencV10.gtf.gz
 grant Gingeras
 lab CSHL
@@ -51147,4 +51217,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 2108375149
+# MAGIC: -141844552
