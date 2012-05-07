@@ -3223,3 +3223,31 @@ TMPDIR=/scratch/tmp
 # (see hg19.txt for multi-species build notes)
 
 ############################################################################
+# construct liftOver to canFam3 (DONE - 2012-05-02 - Hiram) 
+    screen -S canFam2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/canFam2/bed/blat.canFam3.2012-05-02
+    cd /hive/data/genomes/canFam2/bed/blat.canFam3.2012-05-02
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/canFam2/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev canFam2 canFam3 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/canFam2/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev canFam2 canFam3 > do.log 2>&1
+    # something odd with three jobs that took forever to complete
+    #   real    3649m15.243s
+# Completed: 7392 of 7392 jobs
+# CPU time in finished jobs:     997168s   16619.46m   276.99h   11.54d  0.032 y
+# IO & Wait Time:                238352s    3972.54m    66.21h    2.76d  0.008 y
+# Average job time:                 167s       2.79m     0.05h    0.00d
+# Longest finished job:          215892s    3598.20m    59.97h    2.50d
+# Submission to last job:        216676s    3611.27m    60.19h    2.51d
+
+    # verify this file exists:
+    og -L /gbdb/canFam2/liftOver/canFam2ToCanFam3.over.chain.gz
+# -rw-rw-r-- 1 583607 May  5 02:16 /gbdb/canFam2/liftOver/canFam2ToCanFam3.over.chain.gz
+
+    # and try out the conversion on genome-test from canFam2 to canFam3 
+
+############################################################################
