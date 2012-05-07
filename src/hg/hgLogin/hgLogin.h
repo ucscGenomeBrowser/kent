@@ -40,6 +40,9 @@ void mailNewPassword(char *username, char *email, char *password);
 void sendNewPassword(struct sqlConnection *conn, char *username, char *password);
 /* email user new password  */
 
+void clearNewPasswordFields(struct sqlConnection *conn, char *username);
+/* clear the newPassword fields */
+
 void displayLoginPage(struct sqlConnection *conn);
 /* draw the account login page */
 void displayLogin(struct sqlConnection *conn);

@@ -520,7 +520,7 @@ char *user = cartUsualString(cart, "hgLogin_userName", "");
 char *currentPassword = cartUsualString(cart, "hgLogin_password", "");
 char *newPassword1 = cartUsualString(cart, "hgLogin_newPassword1", "");
 char *newPassword2 = cartUsualString(cart, "hgLogin_newPassword2", "");
-
+char *changeRequired = cartUsualString(cart, "hgLogin_changeRequired", "");
 if (!user || sameString(user,""))
     {
     freez(&errMsg);
@@ -557,21 +557,40 @@ if (newPassword1 && newPassword2 && !sameString(newPassword1, newPassword2))
     changePasswordPage(conn);
     return;
     }
-/* check username existence first */
-safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
-char *password = sqlQuickString(conn, query);
+/* check username existence and is user using a new password */
+char *password;
+if (changeRequired && sameString(changeRequired, "YES"))
+{
+safef(query,sizeof(query), "select newPassword from gbMembers where userName='%s'", user);
+password = sqlQuickString(conn, query);
 if ((!password) || (password && !checkPwd(currentPassword,password)))
     {
     freez(&errMsg);
-    errMsg = cloneString("Invalid user name or password.");
+    errMsg = cloneString("Invalid user name or password. (changePwd YES)");
+    char temp[4256];
+    safef(temp, sizeof(temp),"currentPWD: %s passwd: %s", currentPassword,password);
+    hPrintf("<P>\n%s\n</P>", temp);
+    if (checkPwd(currentPassword,password)) hPrintf("<P> Password match!! </P>");
+    else hPrintf("<P> Password does NOT match!! </P>");
+    changePasswordPage(conn);
+    return;
+    }
+} else {
+safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
+password = sqlQuickString(conn, query);
+if ((!password) || (password && !checkPwd(currentPassword,password)))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid user name or password. (changePwd No)");
     changePasswordPage(conn);
     return;
     } 
-
+}
 char encPwd[45] = "";
 encryptNewPwd(newPassword1, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set password='%s' where userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(user));
 sqlUpdate(conn, query);
+clearNewPasswordFields(conn, user);
 
 hPrintf
     (
@@ -902,9 +921,29 @@ displayAccHelpPage(conn);
 return;
 }
 
+void clearNewPasswordFields(struct sqlConnection *conn, char *username)
+/* clear the newPassword fields */
+{
+char query[256];
+safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),newPassword='', newPasswordExpire='', passwordChangeRequired='N' where userName='%s'",
+sqlEscapeString(username));
+sqlUpdate(conn, query);
+cartRemove(cart, "hgLogin_changeRequired");
+return;
+}
 /* ----- account login/display functions ---- */
 
-
+boolean usingNewPassword(struct sqlConnection *conn, char *userName)
+/* The user is using  requested new password */
+{
+char query[256];
+safef(query,sizeof(query), "select passwordChangeRequired from gbMembers where userName='%s'", userName);
+char *change = sqlQuickString(conn, query);
+if (change || sameString(change, "Y"))
+  return TRUE;
+else
+  return FALSE;
+}
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
@@ -1007,12 +1046,17 @@ if (checkPwd(password,m->password))
     unsigned int userID=m->idx;  
     hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
             ,userName,userID);
+    clearNewPasswordFields(conn, userName);
     displayLoginSuccess(userName,userID);
     return;
+    } else if (usingNewPassword(conn, userName))
+    {
+       cartSetString(cart, "hgLogin_changeRequired", "YES");
+       changePasswordPage(conn);
     }
 else
     {
-    errMsg = cloneString("Invalid user name or password.");
+    errMsg = cloneString("Invalid user name or password. (login)");
     displayLoginPage(conn);
     return;
     }
