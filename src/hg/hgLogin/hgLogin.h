@@ -61,6 +61,11 @@ void displayAccHelpPage(struct sqlConnection *conn);
 /* draw the account help page */
 void accountHelp(struct sqlConnection *conn);
 /* email user username(s) or new password */
+void setupNewAccount(struct sqlConnection *conn, char *email, char *username);
+/* Send an activation mail to user */
+void sendActivateMail(char *email, char *username, char *encToken);
+/* Send activation mail with token to user*/
+
 
 
 

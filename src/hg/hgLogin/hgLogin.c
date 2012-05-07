@@ -94,7 +94,7 @@ void sendMail(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char cmd[256];
+char cmd[1024];
 safef(cmd,sizeof(cmd),
 "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
 int result = system(cmd);
@@ -184,7 +184,7 @@ void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
 struct sqlResult *sr;
 char query[256];
 
-/* find all the user names assocaited with this email address */
+/* find email address  assocaited with this username */
 safef(query,sizeof(query),"select email from gbMembers where userName='%s'", username);
 char *email = sqlQuickString(conn, query);
 if (!email || sameString(email,""))
@@ -213,21 +213,93 @@ sendMail(email, subject, msg);
 
 
 /*************** to-do below *********************/
+void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
+/* Send an activation mail to user */
+{
+char query[256];
+char *token = generateRandomPassword();
+// char encToken[45] = "";
+// encryptNewPwd(token, encToken, sizeof(encToken));
+
+  int i;
+  unsigned char result[MD5_DIGEST_LENGTH];
+  char tokenMD5[MD5_DIGEST_LENGTH*2 + 1];
+  i = MD5_DIGEST_LENGTH;
+  // /*DEBUG*/ printf("MD5_DIGEST_LENGT is -- %d\n",i);
+  MD5((unsigned char *) token, strlen(token), result);
+  // output
+/******************************************************  DEBUG
+  printf("result array:\n");
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    printf("%02x", result[i]);
+  printf("\n");
+************************************************************/
+  // Convert the tokenMD5 value to string
+  // /* DEBUG */ printf("Convert result to tokenMD5 .......\n");
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    {
+    sprintf(&tokenMD5[i*2], "%02x", result[i]);
+    }
+safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', emailTokenExpires=DATE_ADD(NOW(), INTERVAL 7 DAY), accountActivated='N' where userName='%s'"
+// , sqlEscapeString(encToken)
+, sqlEscapeString(tokenMD5)
+, sqlEscapeString(username)
+);
+sqlUpdate(conn, query);
+// sendActivateMail(email, username, encToken);
+sendActivateMail(email, username, tokenMD5);
+return;
+}
+
+void sendActivateMail(char *email, char *username, char *encToken)
+/* Send activation mail with token to user*/
+{
+char subject[256];
+char msg[4064];
+char activateURL[256];
+char *hgLoginHost = wikiLinkHost();
+safef(activateURL, sizeof(activateURL),
+      "http://%s/cgi-bin/hgLogin?do.activateAccount=1&user=%s&token=%s\n"
+, sqlEscapeString(hgLoginHost)
+, sqlEscapeString(username)
+, sqlEscapeString(encToken)
+);
+     
+char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
+safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
+safef(msg, sizeof(msg), 
+"You have sign up an account at UCSC Genome Browser with username \"%s\". \n Please click the following link to activate the account -- \n\n%s\n\n"
+, username
+, activateURL
+);
+safecat (msg, sizeof(msg), signature);
+sendMail(email, subject, msg);
+}
+
 void activateAccount(struct sqlConnection *conn)
 /* activate account */
 {
 // struct sqlResult *sr;
 // char **row;
 char query[256];
-char *token = cgiUsualString("hgLogin_activateAccount", "");
-safef(query,sizeof(query),"Token is %s ", token);
-if (!sameString(token,""))
-    {
+char *token = cgiUsualString("token", "");
+char *username = cgiUsualString("user","");
+safef(query,sizeof(query),
+    "select emailToken from gbMembers where userName='%s'", username);
+char *emailToken = sqlQuickString(conn, query);
+hPrintf("<p>emailToken in DB: %s  token: %s</P>", emailToken, token);
+if (sameString(emailToken, token))
+{
+    safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'"
+    , username
+    );
+    sqlUpdate(conn, query);
+} else {
     freez(&errMsg);
-    errMsg = cloneString(query);
-    displayLoginPage(conn);
-    return;
-    }
+    errMsg = cloneString("Token does not match.");
+}
+displayLoginPage(conn);
+return;
 }
 /* -------- password functions ---- */
 
@@ -777,7 +849,7 @@ safef(query,sizeof(query), "insert into gbMembers set "
     "lastUse=NOW(),accountActivated='N'",
     sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
     sqlUpdate(conn, query);
-
+setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the main confirmation box */
 /* and comback here to contine back to URL */
 hPrintf(
@@ -911,7 +983,6 @@ if (sameString(helpWith,"password"))
         }
     }
     lostPassword(conn, username);
-    //sendNewPassword(conn, username, password);
     return;
 }
 // cartRemove(cart, "hgLogin_helpWith");
@@ -1256,7 +1327,7 @@ else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
 else if (cartVarExists(cart, "hgLogin.do.activateAccount"))
     activateAccount(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayMailSuccess"))
-    displayMailSuccess(conn);
+    displayMailSuccess();
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
