@@ -65,6 +65,12 @@ void setupNewAccount(struct sqlConnection *conn, char *email, char *username);
 /* Send an activation mail to user */
 void sendActivateMail(char *email, char *username, char *encToken);
 /* Send activation mail with token to user*/
+boolean tokenExpired(char *dateTime);
+/* Is token expired? */
+void returnToURL(int nSec);
+/* delay for N micro seconds then return to the URL */
+
+
 
 
 
