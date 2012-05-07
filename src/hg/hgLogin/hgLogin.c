@@ -58,7 +58,6 @@ hPrintf(
 "<script  language=\"JavaScript\">\n"
 "<!-- "
 "\n"
-/* TODO: afterDelayBackTo("http....") */
 "window.setTimeout(afterDelay, %d);\n"
 "function afterDelay() {\n"
 "window.location =\"%s\";"
@@ -635,29 +634,26 @@ if (changeRequired && sameString(changeRequired, "YES"))
 {
 safef(query,sizeof(query), "select newPassword from gbMembers where userName='%s'", user);
 password = sqlQuickString(conn, query);
-if ((!password) || (password && !checkPwd(currentPassword,password)))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Invalid user name or password. (changePwd YES)");
-    char temp[4256];
-    safef(temp, sizeof(temp),"currentPWD: %s passwd: %s", currentPassword,password);
-    hPrintf("<P>\n%s\n</P>", temp);
-    if (checkPwd(currentPassword,password)) hPrintf("<P> Password match!! </P>");
-    else hPrintf("<P> Password does NOT match!! </P>");
-    changePasswordPage(conn);
-    return;
-    }
 } else {
 safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
 password = sqlQuickString(conn, query);
-if ((!password) || (password && !checkPwd(currentPassword,password)))
+}
+if (!password)
     {
     freez(&errMsg);
-    errMsg = cloneString("Invalid user name or password. (changePwd No)");
+    errMsg = cloneString("User not found.");
     changePasswordPage(conn);
     return;
-    } 
-}
+    }
+if (!checkPwd(currentPassword, password))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid current password.");
+    changePasswordPage(conn);
+    return;
+    }
+
+
 char encPwd[45] = "";
 encryptNewPwd(newPassword1, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set password='%s' where userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(user));
@@ -1010,11 +1006,12 @@ boolean usingNewPassword(struct sqlConnection *conn, char *userName)
 char query[256];
 safef(query,sizeof(query), "select passwordChangeRequired from gbMembers where userName='%s'", userName);
 char *change = sqlQuickString(conn, query);
-if (change || sameString(change, "Y"))
+if (change && sameString(change, "Y"))
   return TRUE;
 else
   return FALSE;
 }
+
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
