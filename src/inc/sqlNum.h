@@ -22,26 +22,62 @@ unsigned sqlUnsigned(char *s);
  * twice as fast as atoi (by not having to skip white 
  * space or stop except at the null byte.) */
 
+unsigned sqlUnsignedInList(char **pS);
+/* Convert series of digits to unsigned integer about
+ * twice as fast as atoi (by not having to skip white 
+ * space or stop except at the null byte.) 
+ * All of string is number. Number may be delimited by a comma. 
+ * Returns the position of the delimiter or the terminating 0. */
+
 unsigned long sqlUnsignedLong(char *s);
 /* Convert series of digits to unsigned long about
  * twice as fast as atol (by not having to skip white 
  * space or stop except at the null byte.) */
 
+unsigned long sqlUnsignedLongInList(char **pS);
+/* Convert series of digits to unsigned long about
+ * twice as fast as atol (by not having to skip white 
+ * space or stop except at the null byte.) 
+ * All of string is number. Number may be delimited by a comma. 
+ * Returns the position of the delimiter or the terminating 0. */
+
 int sqlSigned(char *s);
 /* Convert string to signed integer.  Unlike atol assumes 
  * all of string is number. */
+
+int sqlSignedInList(char **pS);
+/* Convert string to signed integer.  Unlike atol assumes 
+ * all of string is number. Number may be delimited by a comma. 
+ * Returns the position of the delimiter or the terminating 0. */
 
 long long sqlLongLong(char *s);
 /* Convert string to a long long.  Unlike atol assumes all of string is
  * number. */
 
+long long sqlLongLongInList(char **pS);
+/* Convert string to a long long.  Unlike atol, assumes 
+ * all of string is number. Number may be delimited by a comma. 
+ * Returns the position of the delimiter or the terminating 0. */
+
 float sqlFloat(char *s);
 /* Convert string to a float.  Assumes all of string is number
  * and aborts on an error. */
 
+float sqlFloatInList(char **pS);
+/* Convert string to a float.  Assumes all of string is number
+ * and aborts on an error. 
+ * Number may be delimited by a comma. 
+ * Returns the position of the delimiter or the terminating 0. */
+
 double sqlDouble(char *s);
 /* Convert string to a double.  Assumes all of string is number
  * and aborts on an error. */
+
+double sqlDoubleInList(char **pS);
+/* Convert string to a double.  Assumes all of string is number
+ * and aborts on an error.
+ * Number may be delimited by a comma.
+ * Returns the position of the delimiter or the terminating 0. */
 
 #endif /* SQLNUM_H */
  
