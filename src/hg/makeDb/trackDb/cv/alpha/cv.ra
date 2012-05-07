@@ -2627,7 +2627,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-ce
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
 lab Gingeras
-protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf HAoEC8061102.1_Gingeras_protocol.pdf
+protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf Gingeras:HAoEC8061102.1_Gingeras_protocol.pdf
 
 term HAoEC_8061102.1
 tag HAOEC80611021
@@ -2774,7 +2774,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
-protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf HCH0011308.2P_Gingeras_protocol.pdf
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf GingerasGingeras::HCH0011308.2P_Gingeras_protocol.pdf
 
 term HCH_8100808.2
 tag HCH81008082
@@ -2994,7 +2994,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-derma
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
 lab Gingeras
-protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf HFDPC0102703.3_Gingeras_protocol.pdf
+protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf Gingeras:HFDPC0102703.3_Gingeras_protocol.pdf
 
 term HFDPC_0100503.2
 tag HFDPC01005032
@@ -3244,7 +3244,7 @@ orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuc
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 lab Gingeras
-protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf hMNCPB0082430.9_Gingeras_protocol.pdf
+protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf Gingeras:hMNCPB0082430.9_Gingeras_protocol.pdf
 
 term hMNC-PB_0022330.9
 tag HMNCPB00223309
@@ -4213,7 +4213,7 @@ vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
-protocol Stam:HVMF_Stam_protocol.pdf
+protocol Stam:HVMF_Stam_protocol.pd Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pd
 
 #Cricket - duplicate term, need plan to resolve error
 #term HVMF
@@ -5044,7 +5044,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?s
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf NHEM.fM26022001_Gingeras_protocol.pdf
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
 
 term NHEM.f_M2_5071302.2
 tag NHEMFM250713022
