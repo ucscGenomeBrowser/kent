@@ -32,6 +32,5 @@ boolean trackLayoutInclFontExtras();
 
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 
-
 #endif /* TRACKLAYOUT_H */
 
