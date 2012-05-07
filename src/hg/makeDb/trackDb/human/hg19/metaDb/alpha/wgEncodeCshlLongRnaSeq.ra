@@ -1495,6 +1495,7 @@ lab CSHL
 labExpId LID45897
 labProtocolId 087C+
 localization cytosol
+md5sum 7e69f0218733811c05a229a3b7810807
 project wgEncode
 protocol None
 readType 2x101D
@@ -1522,6 +1523,7 @@ lab CSHL
 labExpId LID45898
 labProtocolId 088C+
 localization cytosol
+md5sum 6964f461dd1643d06b70496953ca3572
 project wgEncode
 protocol None
 readType 2x101D
@@ -2000,6 +2002,7 @@ lab CSHL
 labExpId LID45899
 labProtocolId 087N+
 localization nucleus
+md5sum 1e96894421e634223df6f1ab9b2ce0fa
 project wgEncode
 protocol None
 readType 2x101D
@@ -2027,6 +2030,7 @@ lab CSHL
 labExpId LID45900
 labProtocolId 088N+
 localization nucleus
+md5sum b21d1bbbfdcfc1d0a5b535f9a10901a1
 project wgEncode
 protocol None
 readType 2x101D
@@ -12262,6 +12266,7 @@ lab CSHL
 labExpId LID47021
 labProtocolId 056WCt
 localization cell
+md5sum e8bda9a226ac7fd929c555822881c5ea
 project wgEncode
 protocol None
 readType 2x101D
@@ -12731,6 +12736,7 @@ lab CSHL
 labExpId LID47022
 labProtocolId 057WCt
 localization cell
+md5sum a689023a15023db28a7fe3711339e926
 project wgEncode
 protocol None
 readType 2x101D
@@ -12759,6 +12765,7 @@ lab CSHL
 labExpId LID47023
 labProtocolId 058WCt
 localization cell
+md5sum 9bb124b2f404aa42aa4aafbca8dcf74f
 project wgEncode
 protocol None
 readType 2x101D
@@ -13282,6 +13289,7 @@ lab CSHL
 labExpId LID47024
 labProtocolId 059WCt
 localization cell
+md5sum 889ecb82aadcfd9395eba7186510aef8
 project wgEncode
 protocol None
 readType 2x101D
@@ -13310,6 +13318,7 @@ lab CSHL
 labExpId LID47025
 labProtocolId 060WCt
 localization cell
+md5sum d0a7bb9ade3909ecbdd4b9208a5c1e41
 project wgEncode
 protocol None
 readType 2x101D
@@ -20576,6 +20585,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47094
 localization cell
+md5sum 0c944e6e445e5f9a5333196ac37632ef
 project wgEncode
 protocol None
 readType 2x101D
@@ -20603,6 +20613,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47095
 localization cell
+md5sum 12f320e3ddeb4907fc55ebdbfb633107
 project wgEncode
 protocol None
 readType 2x101D
@@ -21758,6 +21769,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47096
 localization cell
+md5sum 5645a295ec59c58e0862d5cbc3b00f00
 project wgEncode
 protocol None
 readType 2x101D
@@ -21938,6 +21950,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47806
 localization cell
+md5sum 25900ef8f5bd43d545a76d03e15a6ac8
 project wgEncode
 protocol None
 readType 2x101D
@@ -21964,6 +21977,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47806
 localization cell
+md5sum a39147e1499318a8a76f2323126fa4b4
 project wgEncode
 protocol None
 readType 2x101D
@@ -21990,6 +22004,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47806
 localization cell
+md5sum e18387851efe91612a8bb548f8621c47
 project wgEncode
 protocol None
 readType 2x101D
@@ -22168,6 +22183,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum ad10b7de738eafbd410bbfb10bf228a9
 project wgEncode
 protocol None
 readType 2x101D
@@ -22194,6 +22210,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 2b574e2a42ad48edb382bd0f16b31ab8
 project wgEncode
 protocol None
 readType 2x101D
@@ -22220,6 +22237,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum cf2be06e53f4b8e1304a11f575c810de
 project wgEncode
 protocol None
 readType 2x101D
@@ -22713,6 +22731,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47097
 localization cell
+md5sum 3de6d2be31d84f522b91767008fc6d00
 project wgEncode
 protocol None
 readType 2x101D
@@ -22740,6 +22759,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47098
 localization cell
+md5sum 1cd35b82bf53fd0d524613321ea4cc85
 project wgEncode
 protocol None
 readType 2x101D
@@ -23235,6 +23255,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47099
 localization cell
+md5sum 9cd161ac1a3cd9999a2028fc0474d914
 project wgEncode
 protocol None
 readType 2x101D
@@ -23262,6 +23283,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47100
 localization cell
+md5sum ec782c2cae001170a2569349b3d86f8e
 project wgEncode
 protocol None
 readType 2x101D
@@ -24225,6 +24247,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47251
 localization cell
+md5sum edc758b5cb107d059d41e425beaad6b6
 project wgEncode
 protocol None
 readType 2x101D
@@ -24252,6 +24275,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47252
 localization cell
+md5sum ba275078d7f7e6c4c55a09473a02f282
 project wgEncode
 protocol None
 readType 2x101D
@@ -24693,6 +24717,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47104
 localization cell
+md5sum dbc3d6f44e488cbe8ad9a4705bd3b603
 project wgEncode
 protocol None
 readType 2x101D
@@ -25188,6 +25213,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47105
 localization cell
+md5sum 8fc7155b250e4f7e8e7de8743af63ccf
 project wgEncode
 protocol None
 readType 2x101D
@@ -25215,6 +25241,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47253
 localization cell
+md5sum 6fe51d2c4d408756ffb4419b4b06b2ed
 project wgEncode
 protocol None
 readType 2x101D
@@ -25752,6 +25779,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47260
 localization cell
+md5sum 866058fc6346258a88e62b07d65f7fbd
 project wgEncode
 protocol None
 readType 2x101D
@@ -25779,6 +25807,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47261
 localization cell
+md5sum 6bfba9f76dd3f2217872bf06642d9754
 project wgEncode
 protocol None
 readType 2x101D
@@ -30705,6 +30734,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47249
 localization cell
+md5sum 4605be57d0e022ce3392af5c4bc5d959
 project wgEncode
 protocol None
 readType 2x101D
@@ -30732,6 +30762,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47250
 localization cell
+md5sum 1c5bd7bffd386531b70275488471ef46
 project wgEncode
 protocol None
 readType 2x101D
@@ -31227,6 +31258,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47254
 localization cell
+md5sum 9cf446761ea46d05966d908f3a47cddd
 project wgEncode
 protocol None
 readType 2x101D
@@ -31254,6 +31286,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47255
 localization cell
+md5sum 77b6663fa8ec0998ff0288968e1de9fb
 project wgEncode
 protocol None
 readType 2x101D
@@ -39899,6 +39932,7 @@ lab CSHL
 labExpId LID46857
 labProtocolId 089C+
 localization cytosol
+md5sum 511eb84fa263d1cf684e2c76c87cfc00
 project wgEncode
 protocol None
 readType 2x101D
@@ -39926,6 +39960,7 @@ lab CSHL
 labExpId LID46858
 labProtocolId 090C+
 localization cytosol
+md5sum fea255c5e4e0c188c5f5e8ea72905600
 project wgEncode
 protocol None
 readType 2x101D
@@ -40404,6 +40439,7 @@ lab CSHL
 labExpId LID46859
 labProtocolId 089N+
 localization nucleus
+md5sum 545c67a58f3916afd0fd3698a50859c6
 project wgEncode
 protocol None
 readType 2x101D
@@ -40431,6 +40467,7 @@ lab CSHL
 labExpId LID46860
 labProtocolId 090N+
 localization nucleus
+md5sum c0d0819e3833ab4e5f7df7620d5f63af
 project wgEncode
 protocol None
 readType 2x101D
@@ -41913,6 +41950,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47247
 localization cell
+md5sum 5d3567b0fcd08a7a82affe4b9be1d4c9
 project wgEncode
 protocol None
 readType 2x101D
@@ -41940,6 +41978,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47248
 localization cell
+md5sum 1855427c19db51fb21ad0ce6eade2964
 project wgEncode
 protocol None
 readType 2x101D
@@ -46335,6 +46374,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47256
 localization cell
+md5sum 9cdddf098b5ff6673619d26e29f18cc6
 project wgEncode
 protocol None
 readType 2x101D
@@ -46362,6 +46402,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47257
 localization cell
+md5sum 477b792b3a6d4bab0b8477312f0a936a
 project wgEncode
 protocol None
 readType 2x101D
@@ -46857,6 +46898,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47258
 localization cell
+md5sum 6522d31822ae8984fa64b7261f588771
 project wgEncode
 protocol None
 readType 2x101D
@@ -46884,6 +46926,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47259
 localization cell
+md5sum a63b380c60193c26f8b682078d4d0e84
 project wgEncode
 protocol None
 readType 2x101D
@@ -48535,6 +48578,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47245
 localization cell
+md5sum b5c0174162ff1b525b2b87db55b0857c
 project wgEncode
 protocol None
 readType 2x101D
@@ -48562,6 +48606,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47246
 localization cell
+md5sum 178f9446ee008206a28d8849f1783064
 project wgEncode
 protocol None
 readType 2x101D
@@ -48989,6 +49034,7 @@ lab CSHL
 labExpId LID46598
 labProtocolId 085WC+
 localization cell
+md5sum 7e88e5f753d09cf2369623869bc995dc
 project wgEncode
 protocol None
 readType 2x101D
@@ -49016,6 +49062,7 @@ lab CSHL
 labExpId LID46599
 labProtocolId 086WC+
 localization cell
+md5sum 70b8fc4d0ab8560e1dfacff408669b82
 project wgEncode
 protocol None
 readType 2x101D
@@ -49494,6 +49541,7 @@ lab CSHL
 labExpId LID46594
 labProtocolId 085C+
 localization cytosol
+md5sum 9e038dc7eb6cea4dabb563f7b51dbd5b
 project wgEncode
 protocol None
 readType 2x101D
@@ -49521,6 +49569,7 @@ lab CSHL
 labExpId LID46595
 labProtocolId 086C+
 localization cytosol
+md5sum 37bd8dc137c7df6ccad0a9e1b096d6d3
 project wgEncode
 protocol None
 readType 2x101D
@@ -49999,6 +50048,7 @@ lab CSHL
 labExpId LID46596
 labProtocolId 085N+
 localization nucleus
+md5sum 2589e549931ba67a24ed436c1d21ecbf
 project wgEncode
 protocol None
 readType 2x101D
@@ -50026,6 +50076,7 @@ lab CSHL
 labExpId LID46597
 labProtocolId 086N+
 localization nucleus
+md5sum ad5d94a5f9b4a3a05d2a448d520e4e8d
 project wgEncode
 protocol None
 readType 2x101D
@@ -51217,4 +51268,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -141844552
+# MAGIC: 1446631944
