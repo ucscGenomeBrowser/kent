@@ -355,6 +355,10 @@ char *htmlStyleUndecoratedLink =
    "-->"
    "</STYLE>\n";
 
+// optional style set by theme, added after main style and thus
+// can overwrite main style settings
+static char *htmlStyleTheme = NULL;
+
 void htmlSetStyle(char *style)
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
@@ -362,6 +366,27 @@ void htmlSetStyle(char *style)
  * Needs to be called before htmlStart or htmShell. */
 {
 htmlStyle = style;
+}
+
+static char *htmlStyleSheet = NULL;
+void htmlSetStyleSheet(char *styleSheet)
+/* Set document wide style sheet by adding css name to HEAD part.
+ * Needs to be called before htmlStart or htmShell. */
+{
+htmlStyleSheet = styleSheet;
+}
+
+static char *htmlFormClass = NULL;
+void htmlSetFormClass(char *formClass)
+/* Set class in the BODY part. */
+{
+htmlFormClass = formClass;
+}
+
+void htmlSetStyleTheme(char *style)
+/* Set theme style. Needs to be called before htmlStart or htmShell. */
+{
+htmlStyleTheme = style;
 }
 
 static char *htmlBackground = NULL;
@@ -438,8 +463,16 @@ fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
+if (htmlStyleSheet != NULL)
+    fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
+        , htmlStyleSheet);  
+if (htmlStyleTheme != NULL)
+    fputs(htmlStyleTheme, f);
+
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
+if (htmlFormClass != NULL )
+    fprintf(f, " CLASS=\"%s\"", htmlFormClass);
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (gotBgColor)

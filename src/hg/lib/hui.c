@@ -404,6 +404,7 @@ return cfgOptionDefault("browser.cgiRoot", defaultDir);
 char *hBackgroundImage()
 /* get the path to the configured background image to use, or the default */
 {
+
 return cfgOptionDefault("browser.background", DEFAULT_BACKGROUND);
 }
 

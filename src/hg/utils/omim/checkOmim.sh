@@ -1,8 +1,7 @@
 #!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
-#	src/utils/omim/checkOmim.sh
-#	This script is used via a cron job and kept in $HOME/bin/scripts/
+#	src/hg/utils/omim/checkOmim.sh
 
 # set EMAIL here for notification list
 #EMAIL="braney@soe.ucsc.edu"

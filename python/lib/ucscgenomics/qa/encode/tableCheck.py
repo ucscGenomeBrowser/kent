@@ -25,6 +25,23 @@ def sorted_nicely(l):
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
     return sorted(l, key = alphanum_key)
 
+def getTrackType(database, table):
+    """ Use tdbQuery to get the track type associated with this table, if any.
+    Returns None on split tables."""
+    cmd = ["tdbQuery", "select type from " + database + " where track='" + table +
+           "' or table='" + table + "'"]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmdout, cmderr = p.communicate()
+    if p.returncode != 0:
+        # keep command arguments nicely quoted
+        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
+        raise Exception("Error from: " + cmdstr + ": " + cmderr)
+    if cmdout:
+        tableType = cmdout.split()[1]
+    else:
+        tableType = None
+    return tableType
+
 def countPerChrom(database, tables):
     """ Count the amount of rows per chromosome."""
     notgbdbtablelist = tables - getGbdbTables(database, tables)
