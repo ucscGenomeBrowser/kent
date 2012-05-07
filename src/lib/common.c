@@ -1757,6 +1757,23 @@ while ((c = *s++) != 0)
 return count;
 }
 
+int countSeparatedItems(char *string, char separator)
+/* Count number of items in string you would parse out with given
+ * separator,  assuming final separator is optional. */
+{
+int count = 0;
+char c, lastC = 0;
+while ((c = *string++) != 0)
+    {   
+    if (c == separator)
+       ++count;
+    lastC = c;
+    }
+if (lastC != separator && lastC != 0)
+    ++count;
+return count;
+}
+
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b)
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
