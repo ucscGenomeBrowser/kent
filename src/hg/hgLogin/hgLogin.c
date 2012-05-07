@@ -40,8 +40,14 @@ struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- utilities functions --- */
+boolean tokenExpired(char *dateTime)
+/* Is token expired? */
+{
+    return FALSE;
+}
+
 void returnToURL(int nSec)
-/* delay for N micro seconds then go back to hgSession page */
+/* delay for N micro seconds then return to the URL */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
@@ -211,7 +217,6 @@ sendMail(email, subject, msg);
 }
 
 
-/*************** to-do below *********************/
 void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
 /* Send an activation mail to user */
 {
@@ -258,7 +263,7 @@ char msg[4064];
 char activateURL[256];
 char *hgLoginHost = wikiLinkHost();
 safef(activateURL, sizeof(activateURL),
-      "http://%s/cgi-bin/hgLogin?do.activateAccount=1&user=%s&token=%s\n"
+      "http://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n"
 , sqlEscapeString(hgLoginHost)
 , sqlEscapeString(username)
 , sqlEscapeString(encToken)
@@ -286,7 +291,6 @@ char *username = cgiUsualString("user","");
 safef(query,sizeof(query),
     "select emailToken from gbMembers where userName='%s'", username);
 char *emailToken = sqlQuickString(conn, query);
-hPrintf("<p>emailToken in DB: %s  token: %s</P>", emailToken, token);
 if (sameString(emailToken, token))
 {
     safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'"
@@ -680,7 +684,7 @@ cartRemove(cart, "hgLogin_newPassword2");
 
 void signupPage(struct sqlConnection *conn)
 /* draw the signup page */
-/* XXXX TODO: 
+/* TODO: 
   cornfirm password, password help 
   like Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.
 optional real name */
@@ -1106,9 +1110,15 @@ if ((row = sqlNextRow(sr)) == NULL)
 struct gbMembers *m = gbMembersLoad(row);
 sqlFreeResult(&sr);
 
-/* TODO: check user name exist and activated */
+/* Check user name exist and account activated */
 /* ..... */
-
+if (!sameString(m->accountActivated,"Y"))
+{              
+    freez(&errMsg);
+    errMsg = cloneString("Account is not activated.");
+    displayLoginPage(conn);
+    return;
+}
 if (checkPwd(password,m->password))
     {
     unsigned int userID=m->idx;  
@@ -1124,7 +1134,7 @@ if (checkPwd(password,m->password))
     }
 else
     {
-    errMsg = cloneString("Invalid user name or password. (login)");
+    errMsg = cloneString("Invalid user name or password.");
     displayLoginPage(conn);
     return;
     }
@@ -1335,6 +1345,7 @@ else if (cartVarExists(cart, "hgLogin.do.signup"))
     signup(conn);
 else
     signupPage(conn);
+
 
 
 hDisconnectCentral(&conn);
