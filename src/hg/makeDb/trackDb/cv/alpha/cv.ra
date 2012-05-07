@@ -1776,6 +1776,7 @@ description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: 
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
@@ -1792,6 +1793,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
@@ -1847,6 +1849,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
+karyotype normal
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
 vendorId GM12864
@@ -1864,6 +1867,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
+karyotype normal
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
 vendorId GM12865
@@ -1884,6 +1888,7 @@ lineage mesoderm
 sex M
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12866
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12866&PgId=166
@@ -1902,6 +1907,7 @@ lineage mesoderm
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12867
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12867&PgId=166
@@ -1920,6 +1926,7 @@ lineage mesoderm
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12868
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12868&PgId=166
@@ -1938,6 +1945,7 @@ lineage mesoderm
 sex F
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12869
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12869&PgId=166
@@ -1956,6 +1964,7 @@ lineage mesoderm
 sex M
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12870
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12870&PgId=166
@@ -1974,6 +1983,7 @@ lineage mesoderm
 sex M
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12871
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12871&PgId=166
@@ -1990,6 +2000,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
@@ -2007,6 +2018,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
@@ -2024,6 +2036,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
@@ -2041,6 +2054,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12875
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
@@ -2056,6 +2070,7 @@ type Cell Line
 organism human
 description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
+karyotype normal
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
@@ -2093,6 +2108,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12891
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12891
@@ -2110,6 +2126,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM12892
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12892
@@ -2127,6 +2144,7 @@ description lymphoblastoid NIGMS Human Genetic Cell Repository, DNA Polymorphism
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
@@ -2184,6 +2202,7 @@ description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nige
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
@@ -2200,6 +2219,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
@@ -2218,6 +2238,7 @@ description lymphoblastoid, International HapMap Project, Han Chinese in Beijing
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
@@ -2235,6 +2256,7 @@ description lymphoblastoid, International HapMap Project, Japanese in Tokyo, Jap
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
@@ -2252,6 +2274,7 @@ description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nige
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
@@ -2269,6 +2292,7 @@ description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nige
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
@@ -2286,6 +2310,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba i
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM19238
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19238
@@ -2303,6 +2328,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba i
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM19239
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19239
@@ -2320,6 +2346,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba i
 tissue blood
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
+karyotype normal
 vendorName Coriell
 vendorId GM19240
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19240
@@ -5570,7 +5597,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf; Crawford:AdultCD4Th0_Crawford_protocol.pdf; Crawford:AdultCD4Th1_Crawford_protocol.pdf; Crawford:CordCD4naive_Crawford_protocol.pdf; Crawford:CordCD4Th0_Crawford_protocol.pdf; Crawford:CordCD4Th1_Crawford_protocol.pdf 
+protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf 
 label T_cells_CD4+
 
 term T98G

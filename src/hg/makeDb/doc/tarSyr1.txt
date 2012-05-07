@@ -295,3 +295,21 @@ skipInvalid yes
     #   46556603 bases of 2768536343 (1.682%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-03 - Hiram)
+    screen -S tarSyr1
+    mkdir /hive/data/genomes/tarSyr1/bed/windowMasker
+    cd /hive/data/genomes/tarSyr1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev tarSyr1 > do.log 2>&1
+    #   real    2741m46.799s
+
+    sed -e 's/^/    #\t/' fb.tarSyr1.windowmaskerSdust.beforeClean.txt
+    #   1510322967 bases of 3179905132 (47.496%) in intersection
+    sed -e 's/^/    #\t/' fb.tarSyr1.windowmaskerSdust.clean.txt
+    #   1098954178 bases of 3179905132 (34.559%) in intersection
+    sed -e 's/^/    #\t/' fb.tarSyr1.rmsk.windowmaskerSdust.txt
+    #   669452844 bases of 3179905132 (21.053%) in intersection
+
+#########################################################################
