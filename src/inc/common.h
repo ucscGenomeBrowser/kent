@@ -880,6 +880,10 @@ int countLeadingNondigits(const char *s);
 int countSame(char *a, char *b);
 /* Count number of characters that from start in a,b that are same. */
 
+int countSeparatedItems(char *string, char separator);
+/* Count number of items in string you would parse out with given
+ * separator,  assuming final separator is optional. */
+
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
