@@ -14,7 +14,7 @@ class GenePredQa(PositionalQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        self._TableQa__recordPassOrError(p.returncode)
+        self.recordPassOrError(p.returncode)
         self.reporter.endStep()
 
     def validate(self):

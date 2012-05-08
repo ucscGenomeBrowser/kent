@@ -26,7 +26,8 @@ class PositionalQa(TableQa):
             self.__getLabels(parent, shortList, longList)
 
     def __checkLabelLengths(self, shortLimit, longLimit):
-        """Checks that short and long labels (for this track + parents) are shorter than limits."""
+        """Checks that short and long labels (for this track + parents) are shorter than limits.
+        Writes labels to reporter."""
         self.reporter.beginStep(self.db, self.table, "checking label lengths")
         self.reporter.writeStepInfo()
         shortLabels = []
@@ -35,15 +36,15 @@ class PositionalQa(TableQa):
         for label in shortLabels:
             error = False
             self.reporter.writeLine("  " + label)
-            if len(label) > shortLimit:
+            if len(label) > shortLimit and label != "$o_Organism Chain/Net":
                 error = True
-            self._TableQa__recordPassOrError(error)
+            self.recordPassOrError(error)
         for label in longLabels:
             error = False
             self.reporter.writeLine("  " + label)
             if len(label) > longLimit:
                 error = True
-            self._TableQa__recordPassOrError(error)
+            self.recordPassOrError(error)
         self.reporter.endStep()
 
     def __positionalTblCheck(self):
@@ -54,7 +55,7 @@ class PositionalQa(TableQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        self._TableQa__recordPassOrError(p.returncode)
+        self.recordPassOrError(p.returncode)
         self.reporter.endStep()
 
     def __checkTableCoords(self):
@@ -64,7 +65,7 @@ class PositionalQa(TableQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        self._TableQa__recordPassOrError(p.returncode)
+        self.recordPassOrError(p.returncode)
         self.reporter.endStep()
 
     def __chromosomeCoverage(self):
