@@ -1,7 +1,7 @@
 import subprocess
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables.tableQa import TableQa
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables.tableQa import TableQa
 
 genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
 genbankTableListBeta = "/genbank/etc/genbank.tbls"

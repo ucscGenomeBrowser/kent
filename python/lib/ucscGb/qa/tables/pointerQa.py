@@ -1,4 +1,4 @@
-from ucscgenomics.qa.tables.tableQa import TableQa
+from ucscGb.qa.tables.tableQa import TableQa
 
 class PointerQa(TableQa):
     """

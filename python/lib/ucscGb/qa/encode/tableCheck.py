@@ -2,7 +2,7 @@ import re
 import subprocess
 import datetime
 import time
-from ucscgenomics.qa import qaUtils
+from ucscGb.qa import qaUtils
 
 """
     A collection of functions useful to the ENCODE QA Teams.
