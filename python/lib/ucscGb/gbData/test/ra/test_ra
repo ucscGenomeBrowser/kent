@@ -1,9 +1,9 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
 import sys
 import os
 import difflib
 import unittest
-from ucscgenomics import ra
+from ucscGb import ra
 
 def DiffExpected(outStr, expFileName, outFileName):
     file = open(os.getcwd() + '/input/' +  expFileName)
