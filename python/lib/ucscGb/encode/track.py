@@ -1,5 +1,6 @@
 import os, re
-from ucscgenomics import ra, mdb, encode
+from ucscGb.encode import  mdb, encodeUtils
+from ucscGb.gbData import ra 
 
 class TrackFile(object):
     '''
@@ -29,7 +30,7 @@ class TrackFile(object):
     def md5sum(self):
         '''The md5sum for this file, stored in the md5sum.txt file in the downloads directory'''
         if self._md5sum == None:
-            self._md5sum = encode.hashFile(self.fullname)
+            self._md5sum = encodeUtils.hashFile(self.fullname)
         return self._md5sum
         
     @property 
@@ -172,7 +173,7 @@ class CompositeTrack(object):
         try:
             return self._files
         except AttributeError:
-            md5sums = encode.readMd5sums(self._md5path)
+            md5sums = encodeUtils.readMd5sums(self._md5path)
             
             radict = dict()
             for stanza in self.alphaMetaDb.itervalues():
@@ -258,7 +259,7 @@ class CompositeTrack(object):
                 # if not os.path.exists(releasepath):
                     # break
                     
-                # md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
+                # md5s = encodeUtils.readMd5sums(releasepath + 'md5sum.txt')
                 # releasefiles = dict()
                 
                 # for file in os.listdir(releasepath):
@@ -282,7 +283,7 @@ class CompositeTrack(object):
             
             while os.path.exists(self.downloadsDirectory + 'release' + str(count)):
                 releasepath = self.downloadsDirectory + 'release' + str(count) + '/'
-                md5s = encode.readMd5sums(releasepath + 'md5sum.txt')
+                md5s = encodeUtils.readMd5sums(releasepath + 'md5sum.txt')
                 releasefiles = dict()
                 
                 for file in os.listdir(releasepath):
@@ -387,8 +388,8 @@ class CompositeTrack(object):
             if not self._trackPath.endswith('/'):
                 self._trackPath = self._trackPath + '/'
             
-        if database in encode.organisms:
-            self._organism = encode.organisms[database]
+        if database in encodeUtils.organisms:
+            self._organism = encodeUtils.organisms[database]
         else:
             raise KeyError(database + ' is not a valid database')
         
@@ -435,8 +436,8 @@ class TrackCollection(dict):
     
         self._database = database
         
-        if database in encode.organisms:
-            self._organism = encode.organisms[database]
+        if database in encodeUtils.organisms:
+            self._organism = encodeUtils.organisms[database]
         else:
             raise KeyError(database + ' is not a valid database')
     

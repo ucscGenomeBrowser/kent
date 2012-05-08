@@ -1,6 +1,7 @@
 import re
 import os
-from ucscgenomics import ra, encode
+from ucscGb.encode import  encodeUtils
+from ucscGb.gbData import ra
 
 def extractValue(val, prefix='', removeComments=1):
     val2 = val.replace(prefix, '')
@@ -43,7 +44,7 @@ class CvFile(ra.RaFile):
             self.handler = self.raiseException
             
         if filePath == None:
-            filePath = encode.defaultCvPath()
+            filePath = encodeUtils.defaultCvPath()
         
         self.protocolPath = protocolPath
         if protocolPath == None:

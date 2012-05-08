@@ -1,4 +1,5 @@
-from ucscgenomics import ra, ordereddict, encode
+from ucscGb.encode import encodeUtils
+from ucscGb.gbData import ra, ordereddict
 
 class MdbFile(ra.RaFile):
     '''
@@ -156,7 +157,7 @@ class MdbExp(list):
             for s in self.normalStanzas:
                 if 'dataType' in s:
                     if self._dataType == None:
-                        self._dataType = encode.dataTypes[s['dataType']]
+                        self._dataType = encodeUtils.dataTypes[s['dataType']]
                     elif self._dataType.name != s['dataType']:
                         self._dataType = None
                         break
