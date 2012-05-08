@@ -740,3 +740,90 @@ done
     #   59799363 bases of 2572853723 (2.324%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2572837410 / 2897316137 \) \* 1024
+    #	( 2572837410 / 2897316137 ) * 1024 = 909.319309
+
+    # round up to 950  (rn4 was 1024)
+
+    cd /hive/data/genomes/rn5
+    time blat rn5.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/rn5.11.ooc -repMatch=800
+    #   Wrote 34513 overused 11-mers to jkStuff/rn5.11.ooc
+    #   rn4 had: Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
+    #	real     1m13.627s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" rn5 | sort | uniq -c
+    #   8109 no
+    #   250293 yes
+
+    cd /hive/data/genomes/rn5/jkStuff
+    gapToLift rn5 rn5.nonBridged.lift -bedFile=rn5.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' rn5.nonBridged.bed | sort -nr | head
+    #   13151837 chr10  48884958        62036795        chr10.150
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Rattus norvegicus	123478	1103589	16820
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# rn5 (rat)
+rn5.serverGenome = /hive/data/genomes/rn5/rn5.2bit
+rn5.clusterGenome = /hive/data/genomes/rn5/rn5.2bit
+rn5.ooc = /hive/data/genomes/rn5/jkStuff/rn5.11.ooc
+rn5.lift = /hive/data/genomes/rn5/jkStuff/rn5.nonBridged.lift
+rn5.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+rn5.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+rn5.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+rn5.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+rn5.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+rn5.downloadDir = rn5
+rn5.refseq.mrna.xeno.load  = yes
+rn5.refseq.mrna.xeno.loadDesc = yes
+rn5.perChromTables = no
+rn5.mgc = yes
+# rn5.upstreamGeneTbl = refGene
+# rn5.upstreamMaf = multiz9way /hive/data/genomes/rn5/bed/multiz9way/species.lst
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding rn5 rat" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S rn5           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial rn5 &
+    #	var/build/logs/2012.05.04-10:28:06.rn5.initalign.log
+    #   real    1166m46.194s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rn5 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.07-13:39:54.dbload.log
+    #   real    63m53.369s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rn5 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rn5." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

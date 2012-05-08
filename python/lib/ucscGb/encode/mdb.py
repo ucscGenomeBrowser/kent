@@ -1,6 +1,9 @@
-from ucscgenomics import ra, ordereddict, encode
+from ucscGb.encode import encodeUtils
+from ucscGb.gbData import ordereddict
+from ucscGb.gbData.RaFile import RaFile
+from ucscGb.gbData.RaStanza import RaStanza
 
-class MdbFile(ra.RaFile):
+class MdbFile(RaFile):
     '''
     This should be used for all files in the metaDb, since they extend RaFile
     with useful functionality specific to metaDb ra files.
@@ -65,7 +68,7 @@ class MdbFile(ra.RaFile):
             return self._experiments
     
     def __init__(self, filepath):
-        ra.RaFile.__init__(self)
+        RaFile.__init__(self)
         self.read(filepath)
         
     def readStanza(self, stanza, key=None):
@@ -93,7 +96,7 @@ class MdbFile(ra.RaFile):
                 ids.append(str(id))
         return ids
         
-class MdbStanza(ra.RaStanza):
+class MdbStanza(RaStanza):
     
     @property
     def title(self):
@@ -112,7 +115,7 @@ class MdbStanza(ra.RaStanza):
             return self._title
         
     def __init__(self, parent):
-        ra.RaStanza.__init__(self)
+        RaStanza.__init__(self)
         self._parent = parent
         
     def __setitem__(self, key, value):
@@ -156,7 +159,7 @@ class MdbExp(list):
             for s in self.normalStanzas:
                 if 'dataType' in s:
                     if self._dataType == None:
-                        self._dataType = encode.dataTypes[s['dataType']]
+                        self._dataType = encodeUtils.dataTypes[s['dataType']]
                     elif self._dataType.name != s['dataType']:
                         self._dataType = None
                         break

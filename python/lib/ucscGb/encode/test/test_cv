@@ -1,7 +1,8 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
 import sys
 import unittest
-from ucscgenomics import track, ra, soft, cv
+from ucscGb.encode import track, cv
+from ucscGb.externalData.geo import soft
 
 curdir = sys.path[0]
 inputdir = '/test_cv_input/'
