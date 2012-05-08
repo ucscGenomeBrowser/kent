@@ -3,7 +3,6 @@ import sys
 import unittest
 from ucscGb.encode import track, cv
 from ucscGb.externalData.geo import soft
-from ucscGb.gbData import ra
 
 curdir = sys.path[0]
 inputdir = '/test_cv_input/'

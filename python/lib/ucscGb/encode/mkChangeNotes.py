@@ -1,7 +1,8 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime, time
 from ucscGb.encode import track
-from ucscGb.gbData import ra, ucscUtils
+from ucscGb.gbData import ucscUtils
+from ucscGb.gbData.ra import raFile
 from ucscGb.qa.encode import tableCheck as qa
 
 class makeNotes(object):
@@ -16,7 +17,7 @@ class makeNotes(object):
         revokedfiles = set()
         atticset = set()
         supplementalset = set()
-        filtermdb = ra.RaFile()
+        filtermdb = RaFile()
 
         for i in files:
             if re.match('supplemental', i):
@@ -554,7 +555,7 @@ class makeNotes(object):
             self.trackDb = None
             errors.append("track: There is no entry in trackDb.wgEncode.ra for %s with the alpha tag" % self.composite)
         else:
-            self.trackDb = ra.RaFile(self.trackDbFile, "track")
+            self.trackDb = RaFile(self.trackDbFile, "track")
             
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
             if self.verbose >= 2:

@@ -3,7 +3,8 @@ import sys
 import os
 import difflib
 import unittest
-from ucscGb import ra
+from ucscGb.gbData.ra.raFile import RaFile
+from ucscGb.gbData.ra.raStanza import RaStanza
 
 def DiffExpected(outStr, expFileName, outFileName):
     file = open(os.getcwd() + '/input/' +  expFileName)
@@ -29,19 +30,19 @@ class DiffCheck(unittest.TestCase):
 
     def testBasicDiff(self):                          
         """diffs basic input for core rafile functionality"""
-        rafile = ra.RaFile(os.getcwd() + '/input/BasicDiff.ra')
+        rafile = RaFile(os.getcwd() + '/input/BasicDiff.ra')
         self.failIf(DiffExpected(rafile.__str__(), 'BasicDiff.ra', 'BasicDiff.out'))
 
 
     def testCommentsDiff(self):
         """diff to ensure that comments are preserved"""
-        rafile = ra.RaFile(os.getcwd() + '/input/CommentsDiff.ra')
+        rafile = RaFile(os.getcwd() + '/input/CommentsDiff.ra')
         self.failIf(DiffExpected(rafile.__str__(), 'CommentsDiff.ra', 'CommentsDiff.out'))
         
 
 #    def testInlineCommentsDiff(self):
 #        """diff to ensure that inline comments are preserved"""
-#        rafile = ra.RaFile()
+#        rafile = RaFile()
 #        rafile.read(os.getcwd() + '/input/InlineCommentsDiff.ra')
 #        self.failIf(DiffExpected(rafile.__str__(),
 #            'InlineCommentsDiff.ra',
@@ -52,31 +53,31 @@ class InvalidFilesCheck(unittest.TestCase):
 
     def testDuplicateKeys(self):
         """makes sure that duplicate keys are caught"""
-        rafile = ra.RaFile()
+        rafile = RaFile()
         self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/DuplicateKeys.ra')
 
 
     def testMisplacedKeys(self):
         """checks if keys in the incorrect place are caught"""
-        rafile = ra.RaFile()
+        rafile = RaFile()
         self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/MisplacedKeys.ra')
 
 
     def testNonExistentFile(self):
         """checks if invalid files are caught"""
-        rafile = ra.RaFile()
+        rafile = RaFile()
         self.assertRaises(IOError, rafile.read, os.getcwd() + '/input/FileDoesNotExist.ra')
 
 
 #    def testNonNewlineFile(self):
 #        """ensures file ends in newline"""
-#        rafile = ra.RaFile()
+#        rafile = RaFile()
 #        self.assertRaises(IOError, rafile.read, os.getcwd() + '/input/NonNewlineFile.ra')
 
 
 #    def testInvalidComments(self):
 #        """ensures file doesn't have comments in the middle of stanzas"""
-#        rafile = ra.RaFile()
+#        rafile = RaFile()
 #        self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/InvalidComments.ra')
 
 
@@ -84,7 +85,7 @@ class FunctionalityCheck(unittest.TestCase):
  
     def testIterKeys(self):
         """tests that iterkeys works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
        
         outstr = ''
         for entry in rafile.iterkeys():
@@ -97,7 +98,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterValues(self):
         """tests that itervalues works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         for entry in rafile.itervalues():
@@ -110,7 +111,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterItems(self):
         """tests that iteritems works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         for entry in rafile.iteritems():
@@ -123,7 +124,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryKeys(self):
         """tests that iterkeys works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         for entry in rafile.itervalues():
@@ -137,7 +138,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryValues(self):
         """tests that iterkeys works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         for entry in rafile.itervalues():
@@ -151,7 +152,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryItems(self):
         """tests that iterkeys works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         for entry in rafile.itervalues():
@@ -163,7 +164,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testGetItem(self):
         """tests that getting stanzas works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         outstr += str(rafile['valA']) + '\n'
@@ -173,7 +174,7 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testDeleteItem(self):
         """tests that removing items works"""
-        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
+        rafile = RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
         del rafile['valA']

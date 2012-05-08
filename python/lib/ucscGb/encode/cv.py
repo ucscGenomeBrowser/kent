@@ -1,7 +1,8 @@
 import re
 import os
 from ucscGb.encode import  encodeUtils
-from ucscGb.gbData import ra
+from ucscGb.gbData.ra.raFile import RaFile
+from ucscGb.gbData.ra.raStanza import RaStanza
 
 def extractValue(val, prefix='', removeComments=1):
     val2 = val.replace(prefix, '')
@@ -15,7 +16,7 @@ def extractList(val, prefix='', removeComments=1):
         val2 = val2.split('#', 1)[0]
     return map(str.strip, val2.split(','))
 
-class CvFile(ra.RaFile):
+class CvFile(RaFile):
     '''
     cv.ra representation. Mainly adds CV-specific validation to the RaFile
     
@@ -37,7 +38,7 @@ class CvFile(ra.RaFile):
 
     def __init__(self, filePath=None, handler=None, protocolPath=None):
         '''sets up exception handling method, and optionally reads from a file'''
-        ra.RaFile.__init__(self)
+        RaFile.__init__(self)
         
         self.handler = handler
         if handler == None:
@@ -93,11 +94,11 @@ class CvFile(ra.RaFile):
             return None
         return types[0]
                 
-class CvStanza(ra.RaStanza):
+class CvStanza(RaStanza):
     '''base class for a single stanza in the cv, which adds validation'''
     
     def __init__(self):
-        ra.RaStanza.__init__(self)
+        RaStanza.__init__(self)
 
     def readStanza(self, stanza):
         '''

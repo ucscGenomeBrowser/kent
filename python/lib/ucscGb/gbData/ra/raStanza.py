@@ -1,7 +1,7 @@
 import sys, string
 import re
-from ucscgenomics.gbData.ordereddict import OrderedDict
-from ucscgenomics.gbData import ucscUtils
+from ucscGb.gbData.ordereddict import OrderedDict
+from ucscGb.gbData import ucscUtils
 import collections
 
 class RaStanza(OrderedDict):

@@ -1,6 +1,6 @@
 import os, re
 from ucscGb.encode import  mdb, encodeUtils
-from ucscGb.gbData import ra 
+from ucscGb.gbData.ra import raFile
 
 class TrackFile(object):
     '''
@@ -342,7 +342,7 @@ class CompositeTrack(object):
         try:
             return self._trackDb
         except AttributeError:
-            self._trackDb = ra.RaFile(self._trackDbPath)
+            self._trackDb = RaFile(self._trackDbPath)
             return self._trackDb
         
     @property 
