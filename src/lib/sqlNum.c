@@ -53,7 +53,7 @@ if (!(c == '\0' || c == ','))
 	*e = 0;
     errAbort("invalid unsigned integer: \"%s\"", s);
     }
-*pS = p;
+*pS = --p;
 return res;
 }
 
@@ -100,7 +100,7 @@ if (!(c == '\0' || c == ','))
 	*e = 0;
     errAbort("invalid unsigned long: \"%s\"", s);
     }
-*pS = p;
+*pS = --p;
 return res;
 }
 
@@ -146,7 +146,7 @@ while ((*p >= '0') && (*p <= '9'))
     res *= 10;
     res += *p - '0';
     p++;
-}
+    }
 /* test for invalid character, empty, or just a minus */
 if (!(*p == '\0' || *p == ',') || (p == p0))
     {
