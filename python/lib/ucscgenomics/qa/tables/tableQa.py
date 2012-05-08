@@ -18,8 +18,9 @@ class TableQa(object):
         self.sumRow = summary.SumRow(db, table, tableType)
         self.sumTable.addRow(self.sumRow)
 
-    def __recordPassOrError(self, error):
-        """Writes the word pass or ERROR to reporter, and sets error status in sumRow."""
+    def recordPassOrError(self, error):
+        """Writes the word pass or ERROR to reporter, and sets error status in sumRow.
+        Not really for TableQa public use (it is used by TableQa subclasses). """
         if not error:
             self.reporter.writeLine("pass")
         else:
@@ -37,7 +38,7 @@ class TableQa(object):
         if sqlOut.strip() == '':
             self.reporter.writeLine("ERROR: No table description for " + self.db + "." + self.table)
             error = True
-        self.__recordPassOrError(error)
+        self.recordPassOrError(error)
         self.reporter.endStep()
 
     def __checkForUnderscores(self):
@@ -45,11 +46,12 @@ class TableQa(object):
         self.reporter.beginStep(self.db, self.table, "checking table name for underscores")
         self.reporter.writeStepInfo()
         error = False
-        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all)_.*', self.table):
+        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all|trackDb|hgFindSpec)_.*',
+                                                            self.table):
             self.reporter.writeLine("ERROR: " + self.db + "." + self.table + 
                                     " has unexpected underscores")
             error = True
-        self.__recordPassOrError(error)
+        self.recordPassOrError(error)
         self.reporter.endStep()
 
     def __rowCount(self):
