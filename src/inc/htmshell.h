@@ -96,6 +96,11 @@ void htmlSetStyleSheet(char *styleSheet);
 void htmlSetFormClass(char *formClass);
 /* Set class in the BODY part. */
 
+
+void htmlSetStyleTheme(char *style);
+/* Set theme style, these styles can overwrite document wide styles.
+ * Needs to be called before htmlStart or htmShell. */
+
 void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart
  * or htmShell. */

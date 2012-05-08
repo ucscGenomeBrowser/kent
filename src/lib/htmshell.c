@@ -355,6 +355,10 @@ char *htmlStyleUndecoratedLink =
    "-->"
    "</STYLE>\n";
 
+// optional style set by theme, added after main style and thus
+// can overwrite main style settings
+static char *htmlStyleTheme = NULL;
+
 void htmlSetStyle(char *style)
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
@@ -363,7 +367,6 @@ void htmlSetStyle(char *style)
 {
 htmlStyle = style;
 }
-
 
 static char *htmlStyleSheet = NULL;
 void htmlSetStyleSheet(char *styleSheet)
@@ -378,6 +381,12 @@ void htmlSetFormClass(char *formClass)
 /* Set class in the BODY part. */
 {
 htmlFormClass = formClass;
+}
+
+void htmlSetStyleTheme(char *style)
+/* Set theme style. Needs to be called before htmlStart or htmShell. */
+{
+htmlStyleTheme = style;
 }
 
 static char *htmlBackground = NULL;
@@ -455,8 +464,11 @@ fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
 if (htmlStyleSheet != NULL)
-fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
+    fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
         , htmlStyleSheet);  
+if (htmlStyleTheme != NULL)
+    fputs(htmlStyleTheme, f);
+
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlFormClass != NULL )
