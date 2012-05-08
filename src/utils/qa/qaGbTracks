@@ -3,11 +3,11 @@ import sys
 import argparse
 import time
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables import factory
-from ucscgenomics.qa.tables import reporter
-from ucscgenomics.qa.tables import summary
-from ucscgenomics.qa.encode import tableCheck
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import factory
+from ucscGb.qa.tables import reporter
+from ucscGb.qa.tables import summary
+from ucscGb.qa.encode import tableCheck
 
 def parseCommandLine():
     parser = argparse.ArgumentParser(
