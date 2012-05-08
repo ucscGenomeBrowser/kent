@@ -1,7 +1,7 @@
 import sys, string
 import re
-from ucscgenomics.ordereddict import OrderedDict
-from ucscgenomics import ucscUtils
+from ucscgenomics.gbData.ordereddict import OrderedDict
+from ucscgenomics.gbData import ucscUtils
 import collections
 
 class RaFile(OrderedDict):
