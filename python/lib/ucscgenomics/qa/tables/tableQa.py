@@ -46,7 +46,8 @@ class TableQa(object):
         self.reporter.beginStep(self.db, self.table, "checking table name for underscores")
         self.reporter.writeStepInfo()
         error = False
-        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all)_.*', self.table):
+        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all|trackDb|hgFindSpec)_.*',
+                                                            self.table):
             self.reporter.writeLine("ERROR: " + self.db + "." + self.table + 
                                     " has unexpected underscores")
             error = True
