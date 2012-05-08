@@ -26,7 +26,8 @@ class PositionalQa(TableQa):
             self.__getLabels(parent, shortList, longList)
 
     def __checkLabelLengths(self, shortLimit, longLimit):
-        """Checks that short and long labels (for this track + parents) are shorter than limits."""
+        """Checks that short and long labels (for this track + parents) are shorter than limits.
+        Writes labels to reporter."""
         self.reporter.beginStep(self.db, self.table, "checking label lengths")
         self.reporter.writeStepInfo()
         shortLabels = []
@@ -35,7 +36,7 @@ class PositionalQa(TableQa):
         for label in shortLabels:
             error = False
             self.reporter.writeLine("  " + label)
-            if len(label) > shortLimit:
+            if len(label) > shortLimit and label != "$o_Organism Chain/Net":
                 error = True
             self.recordPassOrError(error)
         for label in longLabels:
