@@ -1553,7 +1553,7 @@ if(optionCount >= 2)
     {
     char *background = options[1];
     if(isNotEmpty(background))
-        htmlSetBackground(background);
+        htmlSetBackground(cloneString(background));
     }
 
 freeMem(options[0]);
