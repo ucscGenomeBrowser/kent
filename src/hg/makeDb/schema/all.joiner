@@ -3970,6 +3970,18 @@ tablesIgnored $hg
     cnpSharpSamples
     cnpTuzun
     darned
+    decodeFemale
+    decodeFemaleCarrier
+    decodeFemaleNonCarrier
+    decodeHotSpotFemale
+    decodeHotSpotMale
+    decodeMale
+    decodeMaleCarrier
+    decodeMaleFemaleDifference
+    decodeMaleNonCarrier
+    decodeSexAveraged
+    decodeSexAveragedCarrier
+    decodeSexAveragedNonCarrier
     delConrad
     delConrad2
     delHinds
@@ -3988,6 +4000,9 @@ tablesIgnored $hg
     genomicSuperDups
     grcIncidentDb
     haplotype
+    hapMapRelease24CEURecombMap
+    hapMapRelease24CombinedRecombMap
+    hapMapRelease24YRIRecombMap
     hgdpGeo
     hgdpFst
     hgdpHzy%
