@@ -17,6 +17,40 @@
 #include "hubConnect.h"
 #include "fileUi.h"
 
+static void themeDropDown(struct cart* cart)
+/* Create drop down for UI themes. 
+ * specfied in hg.conf like this
+ * browser.theme.modern=background.png,HGStyle
+ * */
+{
+struct slName* themes = cfgNamesWithPrefix("browser.theme.");
+//struct slName* themes = cfgNames();
+if (themes==NULL)
+    return;
+
+hPrintf("<TR><TD>website style:");
+hPrintf("<TD style=\"text-align: right\">");
+
+// create labels for drop down box by removing prefix from hg.conf keys
+char *labels[50];
+struct slName* el;
+int i = 0;
+el = themes;
+for (el = themes; el != NULL && i<50; el = el->next)
+    {
+    char* name = el->name;
+    name = chopPrefix(name); // chop off first two words
+    name = chopPrefix(name);
+    labels[i] = name;
+    i++;
+    }
+
+char* currentTheme = cartOptionalString(cart, "theme"); 
+hDropList("theme", labels, i, currentTheme);
+slFreeList(themes);
+hPrintf("</TD>");
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -366,9 +400,10 @@ hPrintf("<TD>characters<TD></TR>");
 hPrintf("<TR><TD>text size:");
 hPrintf("<TD style=\"text-align: right\">");
 textSizeDropDown();
-hPrintf("<TD>");
+hPrintf("</TD>");
 if (trackLayoutInclFontExtras())
     {
+    hPrintf("<TD>");
     char *defaultStyle = cartUsualString(cart, "fontType", "medium");
     cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);
     hPrintf("&nbsp;medium&nbsp;");
@@ -377,8 +412,12 @@ if (trackLayoutInclFontExtras())
     cartMakeRadioButton(cart, "fontType", "bold", defaultStyle);
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
+    hPrintf("</TD>");
     }
-hPrintf("<TR><BR>");
+hPrintf("</TR>");
+
+themeDropDown(cart);
+
 hTableStart();
 if (ideoTrack != NULL)
     {
@@ -459,7 +498,6 @@ freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
 }
-
 
 void configPage()
 /* Put up configuration page. */

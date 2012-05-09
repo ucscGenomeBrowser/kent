@@ -257,22 +257,20 @@ dipOrd1.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial dipOrd1 &
     #	var/build/logs/2012.05.03-16:19:09.dipOrd1.initalign.log
-XXX - running - Thu May  3 16:19:18 PDT 2012
-    #	real    795m52.388s
+    #   real    6078m6.247s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dipOrd1 &
-    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
-    #	real    114m56.461s
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-15:08:30.dbload.log
+    #   real    38m3.733s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add dipOrd1 to:
-        etc/align.dbs
-        etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
     git commit -m "Added dipOrd1." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
