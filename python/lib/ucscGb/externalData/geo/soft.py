@@ -1,6 +1,6 @@
 import sys
 import re
-from ucscgenomics.ordereddict import OrderedDict
+from ucscGb.gbData.ordereddict import OrderedDict
 	
 class SoftFile(OrderedDict):
 

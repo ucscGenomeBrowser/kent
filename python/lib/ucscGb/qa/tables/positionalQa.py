@@ -1,7 +1,7 @@
 import subprocess
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables.tableQa import TableQa
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables.tableQa import TableQa
 
 genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
 genbankTableListBeta = "/genbank/etc/genbank.tbls"
@@ -12,8 +12,9 @@ class PositionalQa(TableQa):
     """
 
     def __getAttributeForTrack(self, attribute, track):
-        """Uses tdbQuery to get attribute where track='track'. Removes trackDb label from result."""
-        cmd = ["tdbQuery", "select " + attribute + " from " + self.db + " where track='" + track + "'"]
+        """Uses tdbQuery to get an attribute where track or table == 'track' and removes label."""
+        cmd = ["tdbQuery", "select " + attribute + " from " + self.db + " where table='" + track +
+               "' or track='" + track + "'"]
         cmdout, cmderr = qaUtils.runCommand(cmd)
         return cmdout.strip(attribute).strip()
 
@@ -22,7 +23,8 @@ class PositionalQa(TableQa):
         shortList.append(self.__getAttributeForTrack("shortLabel", track))
         longList.append(self.__getAttributeForTrack("longLabel", track))
         parent = self.__getAttributeForTrack("parent", track)
-        if (parent):
+        if parent:
+            parent = parent.split()[0] # get rid of the "on" or "off" setting if present
             self.__getLabels(parent, shortList, longList)
 
     def __checkLabelLengths(self, shortLimit, longLimit):
