@@ -3819,22 +3819,6 @@ tablesIgnored hg19
     hinv70NonCoding
     hinv70PseudoGene
     uMassBrainHistone%
-    decodeRmap
-    decodeSexAveraged
-    decodeSexAveragedCarrier
-    decodeSexAveragedNonCarrier
-    decodeFemale
-    decodeFemaleCarrier
-    decodeFemaleNonCarrier
-    decodeMale
-    decodeMaleCarrier
-    decodeMaleNonCarrier
-    decodeMaleFemaleDifference
-    decodeHotSpotMale
-    decodeHotSpotFemale
-    hapMapRelease24CombinedRecombMap
-    hapMapRelease24CEURecombMap
-    hapMapRelease24YRIRecombMap
 
 tablesIgnored mm9
 	allMm9RS_BW
