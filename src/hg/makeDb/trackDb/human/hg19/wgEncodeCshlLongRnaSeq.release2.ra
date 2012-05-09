@@ -5972,7 +5972,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6015 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel SKSH cell pA+ C
         longLabel SK-N-SH whole cell polyA+ RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled rank=none cellType=2SKNSH localization=CELL rnaExtract=PAP
@@ -6689,7 +6689,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6050 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel SKSH cell pA+ J
         longLabel SK-N-SH whole cell polyA+ Long RNA-seq Junctions Pooled from ENCODE/CSHL
         subGroups view=Junctions cellType=2SKNSH localization=CELL rnaExtract=PAP rep=Pooled rank=none
