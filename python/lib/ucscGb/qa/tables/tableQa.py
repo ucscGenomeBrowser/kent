@@ -1,7 +1,7 @@
 import re
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables import summary
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import summary
 
 class TableQa(object):
     """

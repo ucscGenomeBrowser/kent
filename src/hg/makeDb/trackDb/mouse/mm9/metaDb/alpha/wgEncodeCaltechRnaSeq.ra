@@ -10,9 +10,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200AlnRep1.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200AlnRep1.bam.bai
@@ -25,6 +25,7 @@ md5sum 8323ccba1b81240540517a9387bb57a4,af80d8822d5e51bd01ee2a8b48fc1c10
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6082
@@ -39,9 +40,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAlnRep1.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAlnRep1.bam.bai
@@ -54,6 +55,7 @@ md5sum c3a4c88ae962d417dd0fa8cd8c29cbfb,4df4596aa4decb7aa3bc14ac96ff1edc
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6081
@@ -68,9 +70,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
@@ -83,6 +85,7 @@ md5sum 1875f7f7418e55e6877eed73bc7c236d
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6081
@@ -96,9 +99,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
@@ -111,6 +114,7 @@ md5sum 77cc9fff44e01327d0d78f72f20c074d
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6081
@@ -124,9 +128,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-04-16
 dateUnrestricted 2013-01-16
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
@@ -139,6 +143,7 @@ md5sum bde824d8d8f03f4a7828c6712e9515d1
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6081
@@ -153,9 +158,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
@@ -168,6 +173,7 @@ md5sum b8a8bbb10114c22ac0608a45f6db15ef
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6081
@@ -182,9 +188,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
@@ -197,6 +203,7 @@ md5sum 9a2fb7568049535186e918f3952a4f7e
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6082
@@ -210,9 +217,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
@@ -225,6 +232,7 @@ md5sum 4e24f9b9391cf7b741ce74baed38a1ef
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6082
@@ -238,9 +246,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-04-16
 dateUnrestricted 2013-01-16
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1.bigWig
@@ -253,6 +261,7 @@ md5sum 212ff9da9d6be6a39d5d5628c4afa373
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6082
@@ -267,9 +276,9 @@ cell 10T1/2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200SigRep1.bigWig
@@ -282,6 +291,7 @@ md5sum 0de4fbe228884dc8d329f8f33383dff8
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 6082
@@ -296,9 +306,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-17
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
-dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam.bai
@@ -311,6 +321,7 @@ md5sum 4cb0b035327226fca5a0451be168e94b,ed93b0d7103a9425cdd2c02b4ab9ae1b
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4910
@@ -325,9 +336,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-17
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
-dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam.bai
@@ -340,6 +351,7 @@ md5sum 816519a92e72bbae60d742bf5ffcc4c1,6ed497015084c626890e277d642f647d
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4936
@@ -354,9 +366,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-17
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
-dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
@@ -369,6 +381,7 @@ md5sum 25d259de0a0dd30481a34ec9128a9dab
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4936
@@ -382,9 +395,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-17
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
-dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
@@ -397,6 +410,7 @@ md5sum 56df5f1cae6d2b956920cd03aa749778
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4936
@@ -410,9 +424,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-04-16
 dateUnrestricted 2013-01-16
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
@@ -425,6 +439,7 @@ md5sum 7e27b5248e448491538355a6fbc8ff26
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4936
@@ -439,9 +454,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hSigRep1.bigWig
@@ -454,6 +469,7 @@ md5sum 3bb0070418d4520398fee5113d4b4b20
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4936
@@ -468,9 +484,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
@@ -483,6 +499,7 @@ md5sum 9098a7660e9b4334be29247bb1fadc4f
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4910
@@ -496,9 +513,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
@@ -511,6 +528,7 @@ md5sum 53e843c4719d1aa3d563cabf55bcdf64
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4910
@@ -524,9 +542,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-18
 dateSubmitted 2012-04-16
 dateUnrestricted 2013-01-16
-dateResubmitted 2012-04-18
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1.bigWig
@@ -539,6 +557,7 @@ md5sum 9429e5327e11b814f451cb2772354520
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4910
@@ -553,9 +572,9 @@ cell C2C12
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-04-17
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-11-31
-dateResubmitted 2012-04-17
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1.bigWig
@@ -568,6 +587,7 @@ md5sum 3d9eaf139f68b043ba0a65aeed18553d
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 sex F
 strain C3H
 subId 4910
@@ -575,4 +595,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1
 treatment None
 view Signal
 
-# MAGIC: -507332929
+# MAGIC: 680394222

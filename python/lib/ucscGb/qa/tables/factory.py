@@ -1,11 +1,11 @@
 import subprocess
 import pipes
 
-from ucscgenomics.qa.tables.genePredQa import GenePredQa
-from ucscgenomics.qa.tables.tableQa import TableQa
-from ucscgenomics.qa.tables.pslQa import PslQa
-from ucscgenomics.qa.tables.positionalQa import PositionalQa
-from ucscgenomics.qa.tables.pointerQa import PointerQa
+from ucscGb.qa.tables.genePredQa import GenePredQa
+from ucscGb.qa.tables.tableQa import TableQa
+from ucscGb.qa.tables.pslQa import PslQa
+from ucscGb.qa.tables.positionalQa import PositionalQa
+from ucscGb.qa.tables.pointerQa import PointerQa
 
 def getTrackType(db, table):
     """Looks for a track type via tdbQuery."""

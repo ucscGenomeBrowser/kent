@@ -1,7 +1,7 @@
 import subprocess
 
-from ucscgenomics.qa.tables.positionalQa import PositionalQa
-from ucscgenomics.qa import qaUtils
+from ucscGb.qa.tables.positionalQa import PositionalQa
+from ucscGb.qa import qaUtils
 
 class PslQa(PositionalQa):
     """

@@ -3,11 +3,11 @@ import sys
 import argparse
 import time
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables import factory
-from ucscgenomics.qa.tables import reporter
-from ucscgenomics.qa.tables import summary
-from ucscgenomics.qa.encode import tableCheck
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import factory
+from ucscGb.qa.tables import reporter
+from ucscGb.qa.tables import summary
+from ucscGb.qa.encode import tableCheck
 
 def parseCommandLine():
     parser = argparse.ArgumentParser(
@@ -34,6 +34,17 @@ The following tests are run:
                         'a file listing the tables to check, or the name of a single table')
     parser.add_argument('outFile', help='base name to give results files')
     return parser.parse_args()
+
+def tableExists(db, table):
+    """True if the table exists in the given database."""
+    sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
+    return sqlResult.strip() == table
+
+def checkTablesExist(db, tables):
+    """Raises an exception if any table in the tables list does not exist in the database."""
+    for name in tables:
+        if not tableExists(db, name):
+            raise Exception("Table " + name + " in " + db + " does not exist")
 
 def getTableList():
     if args.single:
@@ -71,7 +82,7 @@ def runChromCounts():
 
 args = parseCommandLine()
 tableList = getTableList()
-qaUtils.checkTablesExist(args.db, tableList)
+checkTablesExist(args.db, tableList)
 
 logFile = open(args.outFile + ".log", "w")
 chromFile = open(args.outFile + ".chroms", "w")
