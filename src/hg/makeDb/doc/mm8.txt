@@ -9775,8 +9775,3 @@ now works perfectly.
 
     # and try out the conversion on genome-test from mm8 to mm10 
 ############################################################################
-# orfeome 2012-03-16  (markd)
-
-enabled ORFeome tracks in etc/genbank.conf and reload genbank
-
-############################################################################
