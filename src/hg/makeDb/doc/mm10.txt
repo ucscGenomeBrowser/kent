@@ -5659,3 +5659,8 @@ TMPDIR=/scratch/tmp
     # for details about how the track was build.
 
 ##############################################################################
+# orfeome 2012-03-16  (markd)
+
+enabled ORFeome tracks in etc/genbank.conf and reload genbank
+
+############################################################################
