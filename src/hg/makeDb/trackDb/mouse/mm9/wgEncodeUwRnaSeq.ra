@@ -38,7 +38,9 @@ subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 subGroup6 sex Sex M=M F=F
 subGroup7 age Age ADULT8WKS=adult-8wks E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5 IMMORTAL=immortalized
 subGroup8 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss S129=129 SPBL6=Spretus.BL6-Xist UKN=Unknown
-dimensions dimensionX=cellType dimensionY=rep 
+dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=strain
+dimensionAchecked rep1
+filterComposite dimA=multi dimB=multi
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+ age=+ strain=+ sex=+
 fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
