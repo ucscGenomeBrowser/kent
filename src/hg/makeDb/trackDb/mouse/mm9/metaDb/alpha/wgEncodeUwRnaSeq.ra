@@ -2699,6 +2699,7 @@ view Alignments
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep3
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -2725,6 +2726,7 @@ view Alignments
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep4
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -2805,6 +2807,7 @@ view MinusRawSignal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep3
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -2832,6 +2835,7 @@ view MinusRawSignal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep4
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -2913,6 +2917,7 @@ view PlusRawSignal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep3
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -2940,6 +2945,7 @@ view PlusRawSignal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep4
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -3017,6 +3023,7 @@ view RawData
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep3
 objType file
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -3042,6 +3049,7 @@ view RawData
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep4
 objType file
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -3121,6 +3129,7 @@ view Signal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep3
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -3148,6 +3157,7 @@ view Signal
 metaObject wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep4
 objType table
 age adult-8wks
+attice auxExp
 cell Liver
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -5680,4 +5690,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1732875902
+# MAGIC: -1730090402
