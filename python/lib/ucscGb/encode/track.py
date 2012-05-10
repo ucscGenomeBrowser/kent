@@ -1,6 +1,6 @@
 import os, re
-from ucscGb.encode import  mdb, encodeUtils
-from ucscGb.gbData.ra import raFile
+from ucscGb.encode import mdb, encodeUtils
+from ucscGb.gbData.ra.raFile import RaFile
 
 class TrackFile(object):
     '''
@@ -253,25 +253,11 @@ class CompositeTrack(object):
                 else:
                     lastplace = statuses[i]
                     
-            # while(1):
-                # releasepath = self.downloadsDirectory + ('release%d' % count) + '/'
-                
-                # if not os.path.exists(releasepath):
-                    # break
-                    
-                # md5s = encodeUtils.readMd5sums(releasepath + 'md5sum.txt')
-                # releasefiles = dict()
-                
-                # for file in os.listdir(releasepath):
-                    # if os.path.isfile(releasepath + file) and file not in omit:
-                        # if md5s != None and file in md5s:
-                            # releasefiles[file] = TrackFile(releasepath + file, md5s[file])
-                        # else:
-                            # releasefiles[file] = TrackFile(releasepath + file, None)
             for i in range(1, maxcomposite + 1):    
                 self._releaseObjects.append(Release(i, statuses[i], None))
                 
             return self._releaseObjects
+            
     @property 
     def releases(self):
         '''A list of all files in the release directory of this composite'''
@@ -455,5 +441,4 @@ class TrackCollection(dict):
                 trackname = file.replace('.ra', '') 
                 if os.path.isfile(self._trackPath + self._organism + '/' + self._database + '/' + file):
                     self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
-                
                 
