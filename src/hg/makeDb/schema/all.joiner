@@ -102,11 +102,11 @@ set xrg $panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$canFam,$dp,$droYak,
 
 # Ensembl gene track lists constructed from update procedure
 # set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ci2,cioSav2,danRer7,dm3,equCab2,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,ponAbe2,rheMac2,rn4,sacCer3,susScr1,susScr2,taeGut1,tetNig2
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,equCab2,eriEur1,felCat3,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,myoLuc2,nomLeu1,ochPri2,ornAna1,oryCun2,oryLat2,otoGar1,panTro2,panTro4,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sorAra1,speTri1,susScr1,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ce10,ci2,cioSav2,danRer7,dm3,equCab2,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,mm10,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,panTro4,ponAbe2,rheMac2,rn4,sacCer3,susScr1,taeGut1,tetNig2,xenTro3
 
-set ensGeneWgs ce10,choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
+set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
-set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
+set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,choHof1,dipOrd1,echTel1,eriEur1,micMur1,ochPri2,proCap1,pteVam1,sorAra1,tarSyr1,tupBel1,vicPac1
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9,mm10
@@ -2430,10 +2430,15 @@ identifier ensemblGeneScaffold external=Ensembl dependency
     $ensGeneScaffold.chromInfo.chrom
     $ensGeneScaffold.ensemblGeneScaffold.chrom
 
+# to avoid the error on assemblies with Ensembl Gene scaffolds:
+# Error: 7771 duplicates in vicPac1.ensGene.name including 'ENSVPAT00000000004'
+# list on this avoid list:
+set avoidEnsemblTranscriptId2 !ce6,!ce9,!ce10,!felCat3,!choHof1,!dipOrd1,!echTel1,!eriEur1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!tarSyr1,!tupBel1,!vicPac1
+
 #pulled this line into its own rule to reflect lack of dependency
 identifier ensemblTranscriptId2 external=Ensembl
 "Ensembl Transcript ID"
-    $gbd,!ce6,!ce9,!ce10,!felCat3.ensGene.name chopAfter=.
+    $gbd,$avoidEnsemblTranscriptId2.ensGene.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30 
 
 identifier ensemblTranscriptIdCe external=Ensembl dependency
