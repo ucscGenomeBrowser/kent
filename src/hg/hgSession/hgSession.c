@@ -56,27 +56,28 @@ char *wikiHost = wikiLinkHost();
 
 cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
-if (loginSystemEnabled())
-{
-printf("If you are not %s (on the %s at "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
-       "and would like to sign out or change identity, \n",
-       wikiUserName, loginSystemName(), wikiHost, wikiHost);
-printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
-       wikiLinkUserLogoutUrl(cartSessionId(cart)));
- 
-} else {
-printf("If you are not %s (on the wiki at "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
-       "and would like to sign out or change identity, \n",
-       wikiUserName, wikiHost, wikiHost);
-printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
-       wikiLinkUserLogoutUrl(cartSessionId(cart)));
-}
+if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
+    {
+    printf("If you are not %s (on the %s at "
+        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
+        "and would like to sign out or change identity, \n",
+        wikiUserName, loginSystemName(), wikiHost, wikiHost);
+    printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
+        wikiLinkUserLogoutUrl(cartSessionId(cart)));
+    }
+else
+    {
+    printf("If you are not %s (on the wiki at "
+        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
+        "and would like to sign out or change identity, \n",
+        wikiUserName, wikiHost, wikiHost);
+    printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
+        wikiLinkUserLogoutUrl(cartSessionId(cart)));
+    }
 }
 
 void offerLogin()
-/* Tell the user they are not logged in to the wiki and tell them how to
+/* Tell the user they are not logged in to the system and tell them how to
  * do so. */
 {
 char *wikiHost = wikiLinkHost();
@@ -84,28 +85,29 @@ char *wikiHost = wikiLinkHost();
 cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 if (loginSystemEnabled())
-{
-printf("Signing in enables you to save current settings into a "
-       "named session, and then restore settings from the session later.\n"
-       "If you wish, you can share named sessions with other users.\n");
-printf("<P>The sign-in page is handled by our %s system. "
-       ,loginSystemName());
+    {
+    printf("Signing in enables you to save current settings into a "
+        "named session, and then restore settings from the session later.\n"
+        "If you wish, you can share named sessions with other users.\n");
+    printf("<P>The sign-in page is handled by our %s system. ", loginSystemName());
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
-       wikiLinkUserLoginUrl(cartSessionId(cart)));
+        wikiLinkUserLoginUrl(cartSessionId(cart)));
 printf("To register for an account, "
-       "<A HREF=\"http://%s/cgi-bin/hgLogin?do.signupPage=1\">"
-       "<B>click here to sign up.</B></A>\n",wikiHost);
-} else {
-printf("Signing in enables you to save current settings into a "
-       "named session, and then restore settings from the session later.\n"
-       "If you wish, you can share named sessions with other users.\n");
-printf("<P>The sign-in page is handled by our "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
-printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
-       wikiLinkUserLoginUrl(cartSessionId(cart)));
-printf("The wiki also serves as a forum for users "
-       "to share knowledge and ideas.\n");
-}
+        "<A HREF=\"http://%s/cgi-bin/hgLogin?do.signupPage=1\">"
+        "<B>click here to sign up.</B></A>\n",wikiHost);
+    }    
+else
+    {
+    printf("Signing in enables you to save current settings into a "
+        "named session, and then restore settings from the session later.\n"
+        "If you wish, you can share named sessions with other users.\n");
+    printf("<P>The sign-in page is handled by our "
+        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
+    printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
+        wikiLinkUserLoginUrl(cartSessionId(cart)));
+    printf("The wiki also serves as a forum for users "
+        "to share knowledge and ideas.\n");
+    }
 }
 
 
