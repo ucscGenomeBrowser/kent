@@ -628,13 +628,15 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 			overused) is:<BR> 
 		    	&nbsp;&nbsp;&nbsp;2 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
 			For example, with <em>stepSize</em> set to 5 and
-			<em>tileSize</em> set to 11, matches of query size 
-			2*5+11-1 = 20 bp will be found, if the query matches
-			the target exactly. The <em>stepSize</em> parameter can
-			range from 1 to <em>tileSize</em>. The <em>tileSize</em>
-			parameter can range from 6 to 15.
+			<em>tileSize</em> set to 11, <br>matches of query size 
+			2*5+11-1 = 20 bp will be found,<br> if the query matches
+			the target exactly. <br>The <em>stepSize</em> parameter can
+			range from 1 to <em>tileSize</em>. <br>The <em>tileSize</em>
+			parameter can range from 6 to 15. For protein the range starts lower.<br>
+			For minMatch=1 (e.g. protein), the minimum guaranteed match length is: <br>
+		    	&nbsp;&nbsp;&nbsp;1 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
 			<LI>
-		 	Use <em>-fine</em>.
+		 	Try using <em>-fine</em>.
 			<LI>
 			Use a large value for <em>repMatch</em> (e.g. 
 			<em>-repMatch</em> = 1000000) 
