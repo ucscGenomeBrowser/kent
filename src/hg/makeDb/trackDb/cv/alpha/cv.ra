@@ -13586,7 +13586,7 @@ label Transcripts De novo
 description 'De novo' transcripts with FPKM produced by Cufflinks
 
 term TranscriptGencV10
-tag TRANSGENCV7
+tag TRANSGENCV10
 type view
 label Transcript Gencode V10
 description Expression level estimates at the transcript level for the GENCODE V10 annotation in gtf format
