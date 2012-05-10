@@ -2,21 +2,18 @@
 
 <P>
 This track was produced as part of the ENCODE Project. 
- A chromatin interaction is
+It shows the locations of protein factor
+mediated chromatin interactions determined by 
+Chromatin Interaction Analysis with Paired-End Tag (ChIA-PET) data
+(Fullwood et al., 2010)
+extracted from five different human cancer cell lines 
+(K562 (chronic myeloid leukemia), HCT116 (colorectal cancer),
+ HeLa-S3 (cervical cancer), MCF-7 (breast cancer), and NB4
+(promyelocytic)). A chromatin interaction is
 defined as the association of two regions of the genome that are 
 far apart in terms of genomic distance, but are
 spatially proximate to each other in 
 the 3-dimensional cellular nucleus.
-Chromatin Interaction Analysis with Paired-End
-Tag (ChIA-PET) (Fullwood et al., 2010) shows the locations of 
-chromatin interactions determined by paired-end tag 
-sequencing using proximity-ligated
-chromatin extracts from five different human cancer cell lines: 
-K562 (chronic myeloid leukemia), 
-HCT-116 (colorectal cancer), 
-HeLa-S3 (cervical cancer), 
-MCF-7 (breast cancer),  
-and NB4 (promyelocytic).
 <P>
 Additionally, ChIA-PET experiments generate 
 transcription factor binding sites. A binding site
@@ -25,22 +22,25 @@ that is highly enriched by specific Chromatin
 ImmunoPrecipitation (ChIP) against a transcription 
 factor, which indicates that the transcription
 factor binds specifically to this region. 
-Generally, a chromatin interaction is more likely to
+The protein factors displayed in the track
+include estrogen receptor alpha (ERα), RNA polymerase II (RNAPII),
+and CCCTC binding factor (CTCF).
+<!- Generally, a chromatin interaction is more likely to
 connect two transcription factor binding sites together.
-
+->
 <h2>Display Conventions and Configuration</h2>
 
 <P>
-In the graphical display, the tags (ends) are 
-represented by blocks, and connected by a horizontal
-line if both ends are in the same chromosome 
-and in a viewable window. PET sequences that
-overlap at both ends form PET clusters and the 
-total count of PETs in a PET cluster reflects
+In the graphical display, the PETs are 
+represented by two blocks one for each end.  
+These blocks are  connected by a horizontal
+line if both ends are in the same chromosome. 
+PET sequences that overlap at both ends form 
+PET clusters. The number of PETs in a cluster reflects
 the strength of a chromatin interaction. 
 Singleton PETs (PET count = 1) are
-potentially false positives, whereas PET clusters with 
-PET count 3 and above could indicate genuine
+potentially false positives, whereas PET clusters of 
+more than 3 PETs could indicate genuine
 chromatin interactions. A density track of the 
 tags shows the ChIP enrichment at different points
 of genome, and high peaks indicate transcription
@@ -79,7 +79,8 @@ fragmented followed by chromatin immunoprecipitation.
 The DNA fragments that were brought together 
 by the chromatin interactions were then 
 proximity-ligated. During this proximity
-ligation step, the half-linkers containing flanking 
+ligation step, the half-linkers (created be the 
+fragmentation) containing flanking 
 MmeI sites (type IIS restriction enzymes) were
 first ligated to the DNA fragments and then
 ligated to each other to form full
@@ -108,10 +109,10 @@ validated by 3C, ChIP-3C, 4C and DNA-FISH (Fullwood et al., 2009).
 <H2>Credits</H2>
 
 <P>
-Guoliang Li, Xiaoan Ruan, Kuljeet Singh Sandhu, Fabianus Hendriyan Mulawadi, Huay Mei Poh, Yufen Goh, Su Qin Peh, Wing-Kin Sung, Yijun Ruan,
-Genome Institute of Singapore.</P>
+Genome Institute of Singapore: Guoliang Li, Xiaoan Ruan, Kuljeet Singh Sandhu, Fabianus Hendriyan Mulawadi, Huay Mei Poh, Yufen Goh, Su Qin Peh, Wing-Kin Sung, Yijun Ruan
+</P>
 <P>
-Collaborators: Raymond Auerbach, Michael Snyder, Department of Genetics, Stanford University, Stanford, CA.</P>
+Stanford University: Raymond Auerbach, Michael Snyder</P>
 
 Contact:
 <A HREF="mailto:&#114;&#117;a&#110;&#121;j&#64;&#103;&#105;&#115;.
