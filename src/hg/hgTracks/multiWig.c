@@ -12,7 +12,8 @@
 #include "wigCommon.h"
 #include "hui.h"
 
-static void minMaxVals(struct slRef *refList, double *retMin, double *retMax)
+static void minMaxVals(struct slRef *refList, double *retMin, double *retMax,
+     enum wiggleAlwaysZeroEnum alwaysZero)
 /* Figure out min/max of everything in list.  The refList contains pointers to
  * preDrawContainers */
 {
@@ -37,6 +38,13 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    ++p;
 	    }
 	}
+    }
+if (alwaysZero == wiggleAlwaysZeroOn)
+    {
+    if ( max < 0)
+	max = 0.0;
+    else if ( min > 0)
+	min = 0.0;
     }
 *retMax = max;
 *retMin = min;
@@ -83,7 +91,7 @@ if (wigCart->autoScale)
 	    }
 	}
     double minVal, maxVal;
-    minMaxVals(refList, &minVal, &maxVal);
+    minMaxVals(refList, &minVal, &maxVal, wigCart->alwaysZero);
     slFreeList(&refList);
 
     /* Cope with log transform if need be */
