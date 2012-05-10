@@ -1,18 +1,18 @@
-<H2>Description</H2>
-<P>
+<h2>Description</h2>
+<p>
 This track shows multiple alignments of 8 fish
 species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
-<A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
-PHAST package</A>.
+<a href="http://compgen.bscb.cornell.edu/phast/" target="_blank">
+PHAST package</a>.
 The multiple alignments were generated using multiz and 
-other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/" 
-TARGET=_blank>Penn State Bioinformatics</A>
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/" 
+target="_blank">Penn State Bioinformatics</a>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
 this track.
-</P>
-<P>
+</p>
+<p>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
 Markov model-based method that estimates the probability that each
 nucleotide belongs to a conserved element, based on the multiple alignment.
@@ -26,8 +26,8 @@ of conserved sites, and is therefore effective for picking out conserved
 elements.  PhyloP, on the other hand, is more appropriate for evaluating
 signatures of selection at particular nucleotides or classes of nucleotides
 (e.g., third codon positions, or first positions of miRNA target sites).
-</P>
-<P>
+</p>
+<p>
 Another important difference is that phyloP can measure acceleration
 (faster evolution than expected under neutral drift) as well as
 conservation (slower than expected evolution).  In the phyloP plots, sites
@@ -37,138 +37,140 @@ shown in red).  The absolute values of the scores represent -log p-values
 under a null hypothesis of neutral evolution.  The phastCons scores, by
 contrast, represent probabilities of negative selection and range between 0
 and 1.
-</P>
-<P>
+</p>
+<p>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters.
-</P>
+</p>
 
-<P>
+<p>
 The species aligned for this track include the 8 fish species.
-(<B>Table 1</B>).
-</P>
-<P>
+(<b>Table 1</b>).
+</p>
+<p>
 Missing sequence in the assemblies is highlighted in the track display
 by regions of yellow when zoomed out and Ns displayed at base level
-(see <EM>Gap Annotation</EM>, below). </P>
+(see <em>Gap Annotation</em>, below). </p>
 
-<P>
-<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
-<TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD><em>Fugu</em></TD><TD>Takifugu rubripes</TD><TD>
-    Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=fr3"
-    TARGET=_blank>FUGU5/fr3</A></TD><TD>reference species</TD></TR>
-<TR ALIGN=left><TD>Tetraodon</TD><TD>Tetraodon nigroviridis</TD><TD>
-    Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=tetNig2"
-    TARGET=_blank>Genoscope 8.0/tetNig2</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Nile tilapia</TD><TD>Oreochromis niloticus</TD><TD>
-    Jan. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oryNil1"
-    TARGET=_blank>Broad/oreNil1</A>*</TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Stickleback</TD><TD>Gasterosteus aculeatus</TD><TD>
-    Feb. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=gasAcu1"
-    TARGET=_blank>Broad/gasAcu1</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Atlantic cod</TD><TD>Gadus morhua</TD><TD>
-    May. 2010</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/gadMor1"
-    TARGET=_blank>Genofisk/gadMor1</A>*</TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>
-    Oct. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryLat2"
-    TARGET=_blank>NIG/oryLat2</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>
-    Jul. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=danRer7"
-    TARGET=_blank>Zv9/danRer7</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Coelacanth</TD><TD>Latimeria chalumnae</TD><TD>
-    Aug. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/latCha1"
-    TARGET=_blank>Broad/latCha1</A>*</TD><TD>Net</TD></TR>
-</TABLE><BR>
-<B>Table 1.</B> <EM>Genome assemblies included in the 8-way Conservation 
-track.</EM>
-</BLOCKQUOTE></P>
+<p>
+<blockquote><table class="stdTbl">
+<thead>
+<tr align="left"><th>Organism</th><th>Species</th><th>Release date</th><th>UCSC version</th><th>alignment type</th></tr>
+</thead>
+<tr><td><em>Fugu</em></td><td>Takifugu rubripes</td><td>
+    Oct. 2011</td><td><a href="../cgi-bin/hgGateway?db=fr3"
+    target="_blank">FUGU5/fr3</a></td><td>reference species</td></tr>
+<tr><td>Tetraodon</td><td>Tetraodon nigroviridis</td><td>
+    Mar. 2007</td><td><a href="../cgi-bin/hgGateway?db=tetNig2"
+    target="_blank">Genoscope 8.0/tetNig2</a></td><td>Net</td></tr>
+<tr><td>Nile tilapia</td><td>Oreochromis niloticus</td><td>
+    Jan. 2011</td><td><a href="ftp://hgdownload.cse.ucsc.edu/gbdb/oryNil1"
+    target="_blank">Broad/oreNil1</a>*</td><td>Net</td></tr>
+<tr><td>Stickleback</td><td>Gasterosteus aculeatus</td><td>
+    Feb. 2006</td><td><a href="../cgi-bin/hgGateway?db=gasAcu1"
+    target="_blank">Broad/gasAcu1</a></td><td>Net</td></tr>
+<tr><td>Atlantic cod</td><td>Gadus morhua</td><td>
+    May. 2010</td><td><a href="ftp://hgdownload.cse.ucsc.edu/gbdb/gadMor1"
+    target="_blank">Genofisk/gadMor1</a>*</td><td>Net</td></tr>
+<tr><td>Medaka</td><td>Oryzias latipes</td><td>
+    Oct. 2005</td><td><a href="../cgi-bin/hgGateway?db=oryLat2"
+    target="_blank">NIG/oryLat2</a></td><td>Net</td></tr>
+<tr><td>Zebrafish</td><td>Danio rerio</td><td>
+    Jul. 2010</td><td><a href="../cgi-bin/hgGateway?db=danRer7"
+    target="_blank">Zv9/danRer7</a></td><td>Net</td></tr>
+<tr><td>Coelacanth</td><td>Latimeria chalumnae</td><td>
+    Aug. 2011</td><td><a href="ftp://hgdownload.cse.ucsc.edu/gbdb/latCha1"
+    target="_blank">Broad/latCha1</a>*</td><td>Net</td></tr>
+</table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the 8-way Conservation 
+track.</em>
+</blockquote></p>
 
 Downloads for data in this track are available:
-<UL>
-<LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/multiz8way/">Multiz alignments</A> (MAF format), and phylogenetic trees
-<LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phyloP8way/">PhyloP conservation</A> (WIG format)
-<LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phastCons8way/">PhastCons conservation</A> (WIG format)
-</UL>
+<ul>
+<li>
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/multiz8way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phyloP8way/">PhyloP conservation</a> (WIG format)
+<li>
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phastCons8way/">PhastCons conservation</a> (WIG format)
+</ul>
 
-<H2>Display Conventions and Configuration</H2>
-<P>
+<h2>Display Conventions and Configuration</h2>
+<p>
 The track configuration options allow the user to display
 the conservation scores.
 In full and pack display modes, conservation scores are displayed as a
-<EM>wiggle track</EM> (histogram) in which the height reflects the 
+<em>wiggle track</em> (histogram) in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
-Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html" 
-TARGET=_blank>Graph configuration help</A> link for an explanation 
-of the configuration options.</P>
-<P>
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html" 
+target="_blank">Graph configuration help</a> link for an explanation 
+of the configuration options.</p>
+<p>
 Pairwise alignments of each species to the <em>$organism</em> genome are 
 displayed below the conservation histogram as a grayscale density plot (in 
 pack mode) or as a wiggle (in full mode) that indicates alignment quality.
 In dense display mode, conservation is shown in grayscale using
 darker values to indicate higher levels of overall conservation 
-as scored by phastCons.</P>
-<P>
+as scored by phastCons.</p>
+<p>
 Checkboxes on the track configuration page allow selections of the
 species to included in the pairwise display.  
-Configuration buttons are available to select all of the species (<EM>Set 
-all</EM>), deselect all of the species (<EM>Clear all</EM>), or 
-use the default settings (<EM>Set defaults</EM>).
+Configuration buttons are available to select all of the species (<em>Set 
+all</em>), deselect all of the species (<em>Clear all</em>), or 
+use the default settings (<em>Set defaults</em>).
 By default, all 9 species are included in the pairwise display:
 <em>X. tropicalis</em>, lizard, chicken, turkey, opossum, rat, mouse, human, zebrafish.
 Note that excluding species from the pairwise display does not alter the
-the conservation score display.</P>
-<P>
+the conservation score display.</p>
+<p>
 To view detailed information about the alignments at a specific
 position, zoom the display in to 30,000 or fewer bases, then click on
-the alignment.</P>
+the alignment.</p>
 
-<H3>Gap Annotation</H3>
-<P>
-The <EM>Display chains between alignments</EM> configuration option 
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option 
 enables display of gaps between alignment blocks in the pairwise alignments in 
 a manner similar to the Chain track display.  The following
 conventions are used:
-<UL>
-<LI><B>Single line:</B> No bases in the aligned species. Possibly due to a
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
 lineage-specific insertion between the aligned blocks in the <em>$organism</em> genome
 or a lineage-specific deletion between the aligned blocks in the aligning
 species.
-<LI><B>Double line:</B> Aligning species has one or more unalignable bases in
-the gap region. Possibly due to excessive evolutionary distance between 
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region; possibly due to excessive evolutionary distance between 
 species or independent indels in the region between the aligned blocks in both
 species. 
-<LI><B>Pale yellow coloring:</B> Aligning species has Ns in the gap region.
-Reflects uncertainty in the relationship between the DNA of both species, due
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+This reflects uncertainty in the relationship between the DNA of both species, due
 to lack of sequence in relevant portions of the aligning species. 
-</UL></P>
+</ul></p>
 
-<H3>Genomic Breaks</H3>
-<P>
+<h3>Genomic Breaks</h3>
+<p>
 Discontinuities in the genomic context (chromosome, scaffold or region) of the
 aligned DNA in the aligning species are shown as follows: 
-<UL>
-<LI>
-<B>Vertical blue bar:</B> Represents a discontinuity that persists indefinitely
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
 on either side, <em>e.g.</em> a large region of DNA on either side of the bar
 comes from a different chromosome in the aligned species due to a large scale
 rearrangement. 
-<LI>
-<B>Green square brackets:</B> Enclose shorter alignments consisting of DNA from
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
 one genomic context in the aligned species nested inside a larger chain of
 alignments from a different genomic context. The alignment within the
 brackets may represent a short misalignment, a lineage-specific insertion of a
 transposon in the <em>$organism</em> genome that aligns to a paralogous copy somewhere
 else in the aligned species, or other similar occurrence.
-</UL></P>
+</ul></p>
 
-<H3>Base Level</H3>
-<P>
+<h3>Base Level</h3>
+<p>
 When zoomed-in to the base-level display, the track shows the base 
 composition of each alignment, with bases in annotated repetitive 
 elements displayed in lower case. The numbers and symbols on the Gaps
@@ -176,46 +178,50 @@ line indicate the lengths of gaps in the <em>$organism</em> sequence at those
 alignment positions relative to the longest non-<em>$organism</em> sequence. 
 If there is sufficient space in the display, the size of the gap is shown. 
 If the space is insufficient and the gap size is a multiple of 3, a 
-&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
-<P>
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
 Codon translation is available in base-level display mode if the
 displayed region is identified as a coding segment. To display this annotation,
 select the species for translation from the pull-down menu in the Codon
 Translation configuration section at the top of the page. Then, select one of
 the following modes:
-<UL>
-<LI> 
-<B>No codon translation:</B> The gene annotation is not used; the bases are
+<ul>
+<li> 
+<b>No codon translation:</b> The gene annotation is not used; the bases are
 displayed without translation. 
-<LI>
-<B>Use default species reading frames for translation:</B> The annotations from
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
 the genome displayed 
-in the <EM>Default species to establish reading frame</EM> pull-down menu are used to
+in the <em>Default species to establish reading frame</em> pull-down menu are used to
 translate all the aligned species present in the alignment. 
-<LI>
-<B>Use reading frames for species if available, otherwise no translation:</B>
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
 Codon translation is performed only for those species where the region is
 annotated as protein coding.
-<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
 Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation. 
-</UL></P>
-<P>
+</ul></p>
+<p>
 Codon translation uses the following gene tracks as the basis for
-translation, depending on the species chosen (<B>Table 2</B>).  
+translation, depending on the species chosen (<b>Table 2</b>).  
 
-<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
-<TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes</TD><TD>fugu - v65 lifted from fr2</TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes v65</TD><TD>tetraodon, stickleback, medaka, zebrafish</TD></TR>
-<TR ALIGN=left><TD>no annotations</TD><TD>nile tilapia, atlantic cod, coelacanth</TD></TR>
-</TABLE>
-<B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
-</BLOCKQUOTE></P>
+<blockquote>
+<table class="stdTbl">
+<thead>
+<tr align="left"><th><b>Gene Track</b></th><th><b>Species</b></th></tr>
+</thead>
+<tr><td>Ensembl Genes</td><td>fugu - v65 lifted from fr2</td></tr>
+<tr><td>Ensembl Genes v65</td><td>tetraodon, stickleback, medaka, zebrafish</td></tr>
+<tr><td>no annotations</td><td>nile tilapia, atlantic cod, coelacanth</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
+</blockquote>
+</p>
 
-<H2>Methods</H2>
-<P> 
+<h2>Methods</h2>
+<p> 
 Pairwise alignments with the <em>$organism</em> genome were generated for 
 each species using lastz from repeat-masked genomic sequence. 
 Pairwise alignments were then linked into chains using a dynamic programming
@@ -227,8 +233,8 @@ High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process and 
 parameters for each species, see the description pages for the Chain and Net 
-tracks.</P>
-<P>
+tracks.</p>
+<p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ, 
 following the tree topology diagrammed above, to produce multiple alignments.
@@ -236,31 +242,31 @@ The multiple alignments were post-processed to
 add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/multiz8way"
-TARGET=_blank>bulk download</A>.
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/multiz8way"
+target="_blank">bulk download</a>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
 track display performance at large scales.
 Framing tables were constructed to enable
-visualization of codons in the multiple alignment display.</P>
+visualization of codons in the multiple alignment display.</p>
 
 <h3> Phylogenetic Tree Model</h3>
-<P>
+<p>
 Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that
 rely on a tree model containing the tree topology,
 branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phastCons8way/fish.mod"
-TARGET=_blank>8-way fish tree model</A> for this track was
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/fr3/phastCons8way/fish.mod"
+target="_blank">8-way fish tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
 4-fold degenerate sites extracted from the 8way alignment
 (msa_view).  The 4d sites were derived from the Ensembl (v63) gene set,
 filtered to select single-coverage long transcripts.
-</P>
+</p>
 <h3> PhastCons Conservation </h3>
-<P>
+<p>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA
 substitution at each site in a genome and the way this process changes from
@@ -278,14 +284,14 @@ phastCons does not rely on a sliding window
 of fixed size; therefore, short highly-conserved regions and long moderately
 conserved regions can both obtain high scores.  
 More information about
-phastCons can be found in Siepel <EM>et al</EM>. 2005.</P> 
-<P> 
-The phastCons parameters used were:<BR>
+phastCons can be found in Siepel <em>et al</em>. 2005.</p> 
+<p> 
+The phastCons parameters used were:<br>
 --expected-length=45 --target-coverage=0.3 and --rho=0.3
-</P>
+</p>
 
 <h3> PhyloP Conservation </h3>
-<P>
+<p>
 The phyloP program supports several different methods for computing
 p-values of conservation or acceleration, for individual nucleotides or
 larger elements (http://compgen.bscb.cornell.edu/phast).  Here it was used
@@ -295,9 +301,9 @@ all branches of the phylogeny rather than a particular subtree or lineage
 performing a likelihood ratio test at each alignment column (--method LRT),
 and scores for both conservation and acceleration were produced
 (--mode CONACC). 
-</P>
+</p>
 <h3> Conserved Elements </h3>
-<P>
+<p>
 The conserved elements were predicted by running phastCons with the
 --most-conserved (== --viterbi) option.  The predicted elements are
 segments of the alignment
@@ -310,89 +316,89 @@ are transformed using a monotonic function of the form a * log(x) + b.) The
 raw log odds scores are retained in the "name" field and can be seen on the
 details page or in the browser when the track's display mode is set to
 "pack" or "full".
-</P>
+</p>
 
-<H2>Credits</H2>
-<P> This track was created using the following programs:
-<UL>
-<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb 
-Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/" 
-TARGET=_blank>Penn State Bioinformatics Group</A>
-<LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
-<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb 
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/" 
+target="_blank">Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
 other programs in PHAST by 
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
-TARGET=_blank>Adam Siepel</A> at Cornell University (original development
+<a href="http://compgen.bscb.cornell.edu/~acs/software.html" 
+target="_blank">Adam Siepel</a> at Cornell University (original development
 done at the Haussler lab at UCSC).
-<LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
-<LI> Tree image generator: phyloGif by Galt Barber, UCSC
-<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle 
+<li> Tree image generator: phyloGif by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle 
 display), and Brian Raney (gap annotation and codon framing) at UCSC
-</UL>
-</P>
-<P>The phylogenetic tree is based on Murphy <EM>et al</EM>. (2001) and general 
+</ul>
+</p>
+<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general 
 consensus in the vertebrate phylogeny community as of March 2007.
-</P>
+</p>
 
-<H2>References</H2>
+<h2>References</h2>
 
-<H3>Phylo-HMMs, phastCons, and phyloP:</H3>
-<P>
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
 Pollard KS, Hubisz MJ, Siepel A.
-<A HREF="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract"
-TARGET=_blank>Detection of non-neutral substitution rates on
-mammalian phylogenies.</A> <EM>Genome Res</EM>. 2009 Oct 26. [Epub ahead of print]
-</P>
+<a href="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract"
+target="_blank">Detection of non-neutral substitution rates on
+mammalian phylogenies.</a> <em>Genome Res</em>. 2009 Oct 26. [Epub ahead of print]
+</p>
 
-<P>
+<p>
 Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
-Clawson H, Spieth J, Hillier LW, Richards S <EM>et al.</EM>
-<A HREF="http://genome.cshlp.org/content/15/8/1034.full"
-TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
-and yeast genomes</A>.
-<EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.
-</P>
+Clawson H, Spieth J, Hillier LW, Richards S <em>et al.</em>
+<a href="http://genome.cshlp.org/content/15/8/1034.full"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+</p>
 
-<H3>Chain/Net:</H3>
-<P>
+<h3>Chain/Net:</h3>
+<p>
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<A HREF="http://www.pnas.org/content/100/20/11484.full"
-TARGET=_blank>Evolution's cauldron:
-duplication, deletion, and rearrangement in the mouse and human genomes</A>.
-<EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.
-</P>
+<a href="http://www.pnas.org/content/100/20/11484.full"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
 
-<H3>Multiz:</H3>
-<P>
+<h3>Multiz:</h3>
+<p>
 Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
-Baertsch R, Rosenbloom K, Clawson H, Green ED <EM>et al.</EM>
-<A HREF="http://genome.cshlp.org/content/14/4/708.full"
-TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
-<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.
-</P>
+Baertsch R, Rosenbloom K, Clawson H, Green ED <em>et al.</em>
+<a href="http://genome.cshlp.org/content/14/4/708.full"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+</p>
 
-<H3>Blastz:</H3>
-<P>
+<h3>Blastz:</h3>
+<p>
 Chiaromonte F, Yap VB, Miller W.
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
-TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
-<EM>Pac Symp Biocomput</EM>. 2002;:115-26.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002;:115-26.
+</p>
 
-<P>
+<p>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
 Haussler D, Miller W.
-<A HREF="http://genome.cshlp.org/content/13/1/103.full"
-TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
-<EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
-</P>
+<a href="http://genome.cshlp.org/content/13/1/103.full"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>
 
-<H3>Phylogenetic Tree:</H3>
-<P>
+<h3>Phylogenetic Tree:</h3>
+<p>
 Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
 Ryder OA, Stanhope MJ, de Jong WW <em>et al.</em>
-<A HREF="http://www.sciencemag.org/content/294/5550/2348.abstract"
-TARGET=_blank>Resolution of the early placental mammal radiation using Bayesian phylogenetics</A>.
-<EM>Science</EM>. 2001 Dec 14;294(5550):2348-51.
-</P>
+<a href="http://www.sciencemag.org/content/294/5550/2348.abstract"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+</p>

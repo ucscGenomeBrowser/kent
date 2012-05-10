@@ -2774,7 +2774,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
-protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf GingerasGingeras::HCH0011308.2P_Gingeras_protocol.pdf
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf Gingeras:HCH0011308.2P_Gingeras_protocol.pdf
 
 term HCH_8100808.2
 tag HCH81008082
