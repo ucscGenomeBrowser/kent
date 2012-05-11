@@ -815,7 +815,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
@@ -839,7 +839,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
@@ -863,7 +863,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
-dataVersion ENCODE Freeze
+dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
 dccAccession wgEncodeEH002870
@@ -49830,7 +49830,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -49858,7 +49858,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
@@ -49886,7 +49886,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
@@ -49912,7 +49912,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -49940,7 +49940,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -49968,7 +49968,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/MNaseD/Input/UCDavis
+controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
@@ -59768,4 +59768,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 973874246
+# MAGIC: -555200632

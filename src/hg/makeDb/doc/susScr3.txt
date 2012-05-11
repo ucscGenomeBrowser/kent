@@ -449,3 +449,97 @@ close (FH);
     #   53271634 bases of 2525294057 (2.110%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2518987191 / 2897316137 \) \* 1024
+    #	( 2518987191 / 2897316137 ) * 1024 = 890.286997
+
+    # round up to 900  (susScr2 was 750)
+
+    cd /hive/data/genomes/susScr3
+    time blat susScr3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/susScr3.11.ooc -repMatch=900
+    #   Wrote 27633 overused 11-mers to jkStuff/susScr3.11.ooc
+    #   susScr2 had: Wrote 31605 overused 11-mers to jkStuff/susScr2.11.ooc
+    #	real     1m33.117s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" susScr3 | sort | uniq -c
+    #    169119 no
+    #   14502 yes
+
+    cd /hive/data/genomes/susScr3/jkStuff
+    gapToLift susScr3 susScr3.nonBridged.lift -bedFile=susScr3.nonBridged.bed
+    # this assembly has gaps abutting each other which produces warnings
+    #   from this gapToLift program.
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' susScr3.nonBridged.bed | sort -nr | head
+    #   3862550 chr13   35251702        39114252        chr13.72
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Sus scrofa	39994	1669350	3943
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+#       ORGANISM:       Sus scrofa
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# susScr3 (pig)
+susScr3.serverGenome = /hive/data/genomes/susScr3/susScr3.2bit
+susScr3.clusterGenome = /hive/data/genomes/susScr3/susScr3.2bit
+susScr3.ooc = /hive/data/genomes/susScr3/jkStuff/susScr3.11.ooc
+susScr3.lift = /hive/data/genomes/susScr3/jkStuff/susScr3.nonBridged.lift
+susScr3.perChromTables = no
+susScr3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+susScr3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+susScr3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+susScr3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+susScr3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+susScr3.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+susScr3.downloadDir = susScr3
+susScr3.refseq.mrna.native.load  = yes
+susScr3.refseq.mrna.xeno.load  = yes
+susScr3.genbank.mrna.xeno.load = yes
+susScr3.genbank.mrna.xeno.loadDesc = yes
+susScr3.genbank.est.native.load = yes
+# susScr3.upstreamGeneTbl = ensGene
+# susScr3.upstreamMaf = multiz12way
+# /hive/data/genomes/susScr3/bed/multiz12way/species.list
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding susScr3 pig" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S susScr3           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial susScr3 &
+    #	  var/build/logs/2012.05.04-17:32:17.susScr3.initalign.log
+    #   real    1612m51.055s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad susScr3 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-11:06:15.dbload.log
+    #   real    100m45.660s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add susScr3 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added susScr3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

@@ -23,7 +23,7 @@ def find_packages(path, base="" ):
 
 
 setup(
-		name='ucscgenomics',
+		name='ucscGb',
 		version='0.1.0',
 		author='Morgan Maddren',
 		packages=find_packages("."),

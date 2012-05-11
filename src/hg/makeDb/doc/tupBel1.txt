@@ -217,3 +217,28 @@ skipInvalid yes
     #   76071378 bases of 2137225476 (3.559%) in intersection
 
 #########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S tupBel1
+    mkdir /hive/data/genomes/tupBel1/bed/windowMasker
+    cd /hive/data/genomes/tupBel1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev tupBel1 > do.log 2>&1
+    #   real    989m54.597s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    7m1.961s
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev tupBel1 > cleanup.log 2>&1
+    #   real    2m10.270s
+
+    sed -e 's/^/    #\t/' fb.tupBel1.windowmaskerSdust.beforeClean.txt
+    #   2375760953 bases of 3660774957 (64.898%) in intersection
+    sed -e 's/^/    #\t/' fb.tupBel1.windowmaskerSdust.clean.txt
+    #   852211472 bases of 3660774957 (23.280%) in intersection
+    sed -e 's/^/    #\t/' fb.tupBel1.rmsk.windowmaskerSdust.txt
+    #   191436221 bases of 3660774957 (5.229%) in intersection
+
+#########################################################################

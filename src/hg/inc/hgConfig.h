@@ -35,6 +35,9 @@ char *cfgVal(char *name);
 struct slName *cfgNames();
 /* get list of names in config file. slFreeList when finished */
 
+struct slName *cfgNamesWithPrefix();
+/* get list of names in config file with prefix. slFreeList when finished */
+
 unsigned long cfgModTime();
 /* Return modification time of config file */
 

@@ -1239,3 +1239,13 @@ just as composite tracks do.  Other tags associated with a container are:
     o showSubtrackColorOnUi on - Puts a small patch of color by the list of subtracks in
                   the track UI page.
 
+
+---
+Below needs be add to the shiny new HTML doc when it is ready.
+
+   o itemDetailsHtmlTable - The name of a table, indexed by item name, that
+     contains an optional HTML fragment to display on the details page for
+     this item.  This is currently supported on generic genePred, BED, and PSL
+     tables with no track-specific handler.  The expected columns are
+     "name" and "html".
+

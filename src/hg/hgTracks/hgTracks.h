@@ -346,15 +346,6 @@ struct gsidSeq
     char *subjId;
     };
 
-/* list of links to display in a menu */
-struct hotLink
-    {
-    struct hotLink *next;
-    char *name;
-    char *url;
-    char *id;
-    };
-
 extern char *excludeVars[];
 extern struct trackLayout tl;
 extern struct jsonElement *jsonForClient;
@@ -1344,6 +1335,9 @@ int gCmpPriority(const void *va, const void *vb);
 
 int tgCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
+
+void menuBar();
+/* Put up the menu bar. */
 
 #define measureTime uglyTime
 

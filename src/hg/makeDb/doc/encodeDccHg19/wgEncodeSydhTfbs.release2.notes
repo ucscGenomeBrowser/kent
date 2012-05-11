@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeSydhTfbs Release 2 vs Release 1
-2012-05-02
+2012-05-10
 
 QA Count Summaries for Release 2:
-Tables: 713
-Files: 3114
-Gbdbs: 390
+Tables: 715
+Files: 3122
+Gbdbs: 391
 Supplemental: 0
-Other: 2
+Other: 3
 
 REVOKED:
 Tables: 4
@@ -16,21 +16,21 @@ Gbdbs: 2
 
 Sizes of New:
 Table: 586 MB
-Files: 280908 MB (274 GB)
-Gbdbs: 29943 MB (29 GB)
+Files: 283907 MB (277 GB)
+Gbdbs: 30334 MB (30 GB)
 Supplemental: 0 MB
 Other: 2 MB
-Total: 311439 MB (304 GB)
+Total: 314829 MB (307 GB)
 
 
 TABLES:
-New: 154
+New: 156
 Untouched: 559
 Revoked/Replaced/Renamed: 4
-New + Untouched: 713
-Total (New + Untouched + Revoked/Replaced/Renamed): 717
+New + Untouched: 715
+Total (New + Untouched + Revoked/Replaced/Renamed): 719
 
-New Tables (154):
+New Tables (156):
 wgEncodeSydhTfbsA549Bhlhe40IggrabPk
 wgEncodeSydhTfbsA549Bhlhe40IggrabSig
 wgEncodeSydhTfbsA549CebpbIggrabPk
@@ -158,6 +158,8 @@ wgEncodeSydhTfbsK562P300IggrabPk
 wgEncodeSydhTfbsK562P300IggrabSig
 wgEncodeSydhTfbsK562Pol2s2IggrabPk
 wgEncodeSydhTfbsK562Pol2s2IggrabSig
+wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
+wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
 wgEncodeSydhTfbsK562Tblr1ab24550IggrabPk
 wgEncodeSydhTfbsK562Tblr1ab24550IggrabSig
 wgEncodeSydhTfbsK562Tblr1nb600270IggrabPk
@@ -755,17 +757,17 @@ wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig
 
 
 DOWNLOAD FILES:
-New: 637
+New: 645
 Untouched: 2479
 Revoked/Replaced/Renamed: 18
-New + Untouched: 3116
-Total (New + Untouched + Revoked/Replaced/Renamed): 3132
+New + Untouched: 3124
+Total (New + Untouched + Revoked/Replaced/Renamed): 3140
 
 These 2 objects exist in both new and revoked download files:
 wgEncodeSydhTfbsGm12878Pol2RawDataRep1.fastq.gz
 wgEncodeSydhTfbsGm12878Pol2RawDataRep2.fastq.gz
 
-New Download Files (637):
+New Download Files (645):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsA549Bhlhe40IggrabAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsA549Bhlhe40IggrabAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsA549Bhlhe40IggrabAlnRep2.bam
@@ -1295,6 +1297,14 @@ New Download Files (637):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Pol2s2IggrabRawDataRep1.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Pol2s2IggrabRawDataRep2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Pol2s2IggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Setdb1MnasedUcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Tblr1ab24550IggrabAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Tblr1ab24550IggrabAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/wgEncodeSydhTfbsK562Tblr1ab24550IggrabAlnRep2.bam
@@ -3907,13 +3917,13 @@ Revoked/Replaced/Renamed Download Files (18):
 
 
 GBDBS:
-New: 79
+New: 80
 Untouched: 311
 Revoked/Replaced/Renamed: 2
-New + Untouched: 390
-Total (New + Untouched + Revoked/Replaced/Renamed): 392
+New + Untouched: 391
+Total (New + Untouched + Revoked/Replaced/Renamed): 393
 
-New Gbdb Files (79):
+New Gbdb Files (80):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsA549Bhlhe40IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsA549CebpbIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsA549InputIggrabSig.bigWig
@@ -3979,6 +3989,7 @@ New Gbdb Files (79):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Mazab85725IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562P300IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Pol2s2IggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsK562Setdb1MnasedUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Tblr1ab24550IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Tblr1nb600270IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Ubfsc13125IggmusSig.bigWig
@@ -4314,11 +4325,12 @@ Revoked/Replaced/Renamed Gbdb Files (2):
 
 
 OTHER FILES:
-New: 2
+New: 3
 Revoked/Replace: 0
-Total: 2
+Total: 3
 
-New Other Files (2):
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/md5sum.txt
 
@@ -4326,7 +4338,7 @@ Revoked Other Files (0):
 
 
 Files that dropped between releases (1):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/md5sum.history.bak
 
 
 

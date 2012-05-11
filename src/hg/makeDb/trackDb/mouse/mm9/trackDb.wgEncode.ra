@@ -32,8 +32,7 @@ include wgEncodeLicrTfbs.release2.ra
 include wgEncodeSydhRnaSeq.ra alpha
 
 # Licr RNA-Seq (wrangler: Fang)
-include wgEncodeLicrRnaSeq.ra public
-include wgEncodeLicrRnaSeq.release2.ra alpha,beta
+include wgEncodeLicrRnaSeq.release2.ra
 
 # Uw RNA-Seq (wrangler: Venkat)
 include wgEncodeUwRnaSeq.ra alpha
@@ -54,7 +53,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha
-include wgEncodeCaltechRnaSeq.release1.ra alpha,beta
+include wgEncodeCaltechRnaSeq.release1.ra
 
 # FSU Repli-chip (wrangler: Venkat)
 include wgEncodeFsuRepliChip.ra

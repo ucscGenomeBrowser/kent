@@ -620,3 +620,217 @@ done
     #   10377460 bases of 2572853723 (0.403%) in intersection
 
 #########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/rn5/bed/genscan
+    cd /hive/data/genomes/rn5/bed/genscan
+    time doGenscan.pl rn5 > do.log 2>&1
+    #   real    104m9.716s
+    # a number of jobs did not finish, rerunning with window size 2000000
+    #   only chr7 completed at 15000000
+    # rerunning with window size of 1000000
+    #   real    78m10.904s
+    # rerunning with window size of 500000
+    # rerunning with window size of 250000
+    # rerunning with window size of 100000
+    #   real    85m5.776s
+    # rerunning with window size of 50000
+    #   real    86m57.706s
+    #   This is not working.  Need to run these split
+    mkdir /hive/data/genomes/rn5/bed/genscan/splitRun
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun
+    gapToLift rn5 rn5.nonBridged.lift -bedFile=rn5.nonBridged.bed
+
+    for C in 2 3 4 5 6 7 11 13 15 19
+do
+    echo chr${C}
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun
+    grep -w "chr${C}" rn5.nonBridged.lift | grep -v random \
+        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
+    mkdir chr${C}
+    faToTwoBit ../hardMaskedFa/000/chr${C}.fa chr${C}/chr${C}.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr${C}/chr${C}.2bit \
+        chr${C}.nonBridged.lift > chr${C}/chr${C}.nonBridged.fa
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun/chr${C}
+    mkdir split${C}
+    faSplit sequence chr${C}.nonBridged.fa 100 split${C}/chr${C}_
+done
+
+    for C in 2 3 4 5 6 7 11 13 15 19
+do
+    grep -w "chr${C}" rn5.nonBridged.lift | grep -v random \
+        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
+done
+
+    for C in 2 3 4 5 6 7 11 13 15 19
+do
+    echo chr${C}
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun/chr${C}
+    echo '#!/bin/sh' > cmdList.sh
+    export NL=-1
+    ls split${C} | while read F
+  do
+  NL=`echo $NL | awk '{print $1+1}'`
+  if [ "${NL}" -gt 7 ]; then
+    NL=0
+    echo "echo waiting before $F" >> cmdList.sh
+    echo wait >> cmdList.sh
+  fi
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &" 
+  done >> cmdList.sh
+    echo "echo waiting at end" >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    rm -fr gtf pep subopt
+    mkdir gtf pep subopt
+done
+
+# running chr15 - real    345m30.138s
+    # running them all:
+    time ./runAll.sh > runAll.log 2>&1
+    #   real    458m23.357s
+
+    # collecting the results:
+for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
+do
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun/${C}
+    cat gtf/${C}_*.gtf | liftUp -type=.gtf stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.gtf
+cat subopt/${C}_*.bed | liftUp -type=.bed stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.subopt.bed
+cat pep/${C}_*.pep | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.pep
+ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+done
+
+    # after verifying the sizes of the files seem same compared to what
+    #   happened in the main run:
+for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
+do
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun/${C}
+   ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+    ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun
+done
+
+    # this is tricky, it is counting on the file existing, empty or otherwise
+for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
+do
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun/${C}
+    D=`ls ../../gtf/00?/${C}.gtf`
+    rm -f "${D}"
+    cp -p ${C}.gtf "${D}"
+    D=`ls ../../pep/00?/${C}.pep`
+    rm -f "${D}"
+    cp -p ${C}.pep "${D}"
+    D=`ls ../../subopt/00?/${C}.bed`
+    rm -f "${D}"
+    cp -p ${C}.subopt.bed "${D}"
+    cd /hive/data/genomes/rn5/bed/genscan/splitRun
+done
+
+    # Now, we can continue
+    cd /hive/data/genomes/rn5/bed/genscan
+    time doGenscan.pl -continue=makeBed -workhorse=hgwdev -dbHost=hgwdev \
+        rn5 > makeBed.log 2>&1
+    #   real    1m51.711s
+
+    cat fb.rn5.genscan.txt
+    #   56153914 bases of 2572853723 (2.183%) in intersection
+    cat fb.rn5.genscanSubopt.txt
+    #   59799363 bases of 2572853723 (2.324%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2572837410 / 2897316137 \) \* 1024
+    #	( 2572837410 / 2897316137 ) * 1024 = 909.319309
+
+    # round up to 950  (rn4 was 1024)
+
+    cd /hive/data/genomes/rn5
+    time blat rn5.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/rn5.11.ooc -repMatch=800
+    #   Wrote 34513 overused 11-mers to jkStuff/rn5.11.ooc
+    #   rn4 had: Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
+    #	real     1m13.627s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" rn5 | sort | uniq -c
+    #   8109 no
+    #   250293 yes
+
+    cd /hive/data/genomes/rn5/jkStuff
+    gapToLift rn5 rn5.nonBridged.lift -bedFile=rn5.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' rn5.nonBridged.bed | sort -nr | head
+    #   13151837 chr10  48884958        62036795        chr10.150
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Rattus norvegicus	123478	1103589	16820
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# rn5 (rat)
+rn5.serverGenome = /hive/data/genomes/rn5/rn5.2bit
+rn5.clusterGenome = /hive/data/genomes/rn5/rn5.2bit
+rn5.ooc = /hive/data/genomes/rn5/jkStuff/rn5.11.ooc
+rn5.lift = /hive/data/genomes/rn5/jkStuff/rn5.nonBridged.lift
+rn5.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+rn5.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+rn5.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+rn5.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+rn5.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+rn5.downloadDir = rn5
+rn5.refseq.mrna.xeno.load  = yes
+rn5.refseq.mrna.xeno.loadDesc = yes
+rn5.perChromTables = no
+rn5.mgc = yes
+# rn5.upstreamGeneTbl = refGene
+# rn5.upstreamMaf = multiz9way /hive/data/genomes/rn5/bed/multiz9way/species.lst
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding rn5 rat" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S rn5           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial rn5 &
+    #	var/build/logs/2012.05.04-10:28:06.rn5.initalign.log
+    #   real    1166m46.194s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rn5 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.07-13:39:54.dbload.log
+    #   real    63m53.369s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rn5 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rn5." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# constructing downloads
+    # first add rn5 to all.joiner and make sure joinerCheck is clean on it
+    cd /hive/data/genomes/rn5
+    time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev rn5 \
+        > downloads.log 2>&1
+    #   real    24m32.649s
+    # need to edit the README.txt files to make sure they are correct.

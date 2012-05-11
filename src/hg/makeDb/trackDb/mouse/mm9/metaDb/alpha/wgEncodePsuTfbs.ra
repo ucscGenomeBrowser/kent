@@ -781,7 +781,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam.bai
@@ -808,7 +807,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam.bai
@@ -835,7 +833,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk.broadPeak.gz
@@ -863,7 +860,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep1.fastq.gz
@@ -891,7 +887,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep2.fastq.gz
@@ -919,7 +914,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep1.broadPeak.gz
@@ -947,7 +941,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep2.broadPeak.gz
@@ -975,7 +968,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep1.bigWig
@@ -1003,7 +995,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep2.bigWig
@@ -1031,7 +1022,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002349
 expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig.bigWig
@@ -1060,7 +1050,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam.bai
@@ -1088,7 +1077,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam.bai
@@ -1116,7 +1104,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
@@ -1145,7 +1132,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
@@ -1174,7 +1160,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
@@ -1203,7 +1188,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
@@ -1232,7 +1216,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
-dateUnrestricted 2012-05-17
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputSig.bigWig
@@ -1260,7 +1243,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep1.bam.bai
@@ -1287,7 +1269,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep2.bam.bai
@@ -1314,7 +1295,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep3.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep3.bam.bai
@@ -1341,7 +1321,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputPk.broadPeak.gz
@@ -1369,7 +1348,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep1.fastq.gz
@@ -1397,7 +1375,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep2.fastq.gz
@@ -1425,7 +1402,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep3.fastq.gz
@@ -1453,7 +1429,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
@@ -1481,7 +1456,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
@@ -1509,7 +1483,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep3.broadPeak.gz
@@ -1537,7 +1510,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep1.bigWig
@@ -1565,7 +1537,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep2.bigWig
@@ -1593,7 +1564,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep3.bigWig
@@ -1621,7 +1591,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-08-01
 dccAccession wgEncodeEM002359
 expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputSig.bigWig
@@ -2217,7 +2186,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam.bai
@@ -2244,7 +2212,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam.bai
@@ -2271,7 +2238,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk.broadPeak.gz
@@ -2299,7 +2265,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep1.fastq.gz
@@ -2327,7 +2292,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep2.fastq.gz
@@ -2355,7 +2319,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -2383,7 +2346,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -2411,7 +2373,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep1.bigWig
@@ -2439,7 +2400,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep2.bigWig
@@ -2467,7 +2427,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002356
 expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig.bigWig
@@ -2496,7 +2455,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam.bai
@@ -2524,7 +2482,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam.bai
@@ -2552,7 +2509,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1.fastq.gz
@@ -2581,7 +2537,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2.fastq.gz
@@ -2610,7 +2565,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep1.bigWig
@@ -2639,7 +2593,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep2.bigWig
@@ -2668,7 +2621,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputSig.bigWig
@@ -2974,7 +2926,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam.bai
@@ -3002,7 +2953,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam.bai
@@ -3030,7 +2980,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputPk.broadPeak.gz
@@ -3059,7 +3008,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep1.fastq.gz
@@ -3088,7 +3036,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep2.fastq.gz
@@ -3117,7 +3064,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -3146,7 +3092,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -3175,7 +3120,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep1.bigWig
@@ -3204,7 +3148,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep2.bigWig
@@ -3233,7 +3176,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
 dccAccession wgEncodeEM001930
 expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputSig.bigWig
@@ -3564,7 +3506,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam.bai
@@ -3593,7 +3534,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam.bai
@@ -3622,7 +3562,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk.broadPeak.gz
@@ -3652,7 +3591,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1.fastq.gz
@@ -3682,7 +3620,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2.fastq.gz
@@ -3712,7 +3649,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1.broadPeak.gz
@@ -3742,7 +3678,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep2.broadPeak.gz
@@ -3772,7 +3707,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1.bigWig
@@ -3802,7 +3736,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2.bigWig
@@ -3832,7 +3765,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001927
 expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig.bigWig
@@ -3861,7 +3793,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam.bai
@@ -3889,7 +3820,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam.bai
@@ -3917,7 +3847,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk.broadPeak.gz
@@ -3946,7 +3875,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1.fastq.gz
@@ -3975,7 +3903,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2.fastq.gz
@@ -4004,7 +3931,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -4033,7 +3959,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -4062,7 +3987,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1.bigWig
@@ -4091,7 +4015,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2.bigWig
@@ -4120,7 +4043,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-21
-dateUnrestricted 2012-07-21
 dccAccession wgEncodeEM002357
 expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig.bigWig
@@ -4150,7 +4072,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam.bai
@@ -4180,7 +4101,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam.bai
@@ -4209,7 +4129,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
@@ -4240,7 +4159,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
@@ -4270,7 +4188,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1.bigWig
@@ -4300,7 +4217,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2.bigWig
@@ -4330,7 +4246,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig.bigWig
@@ -4762,7 +4677,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam.bai
@@ -4790,7 +4704,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam.bai
@@ -4818,7 +4731,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk.broadPeak.gz
@@ -4847,7 +4759,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1.fastq.gz
@@ -4876,7 +4787,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2.fastq.gz
@@ -4905,7 +4815,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -4934,7 +4843,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -4963,7 +4871,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep1.bigWig
@@ -4992,7 +4899,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep2.bigWig
@@ -5021,7 +4927,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
 dccAccession wgEncodeEM002348
 expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig.bigWig
@@ -6995,4 +6900,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1991968028
+# MAGIC: 752254262

@@ -12230,3 +12230,9 @@ exit
 pubBlat load
 #--pubEnd
 
+############################################################################
+# orfeome 2012-03-16  (markd)
+
+enabled ORFeome tracks in etc/genbank.conf and reload genbank
+
+############################################################################
