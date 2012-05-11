@@ -13,7 +13,7 @@ When extending packages and modules please follow the python style located in py
 
 MAJOR MODULES
 
-Here is a list of some of the more useful modules in the ucscGenomics library.
+Here is a list of some of the more useful modules in the ucscGb library.
 
 o - ra - Basic storage and filtering of RA files
 o - orderedDict - A Dictionary ADT (abstract data type) that preserves ordering of its keys through a parallel list.

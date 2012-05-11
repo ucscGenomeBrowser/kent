@@ -5,6 +5,8 @@ from ucscGb.qa.tables.tableQa import TableQa
 
 genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
 genbankTableListBeta = "/genbank/etc/genbank.tbls"
+shortLabelLimit = 17
+longLabelLimit = 80
 
 class PositionalQa(TableQa):
     """
@@ -27,7 +29,7 @@ class PositionalQa(TableQa):
             parent = parent.split()[0] # get rid of the "on" or "off" setting if present
             self.__getLabels(parent, shortList, longList)
 
-    def __checkLabelLengths(self, shortLimit, longLimit):
+    def checkLabelLengths(self):
         """Checks that short and long labels (for this track + parents) are shorter than limits.
         Writes labels to reporter."""
         self.reporter.beginStep(self.db, self.table, "checking label lengths")
@@ -38,13 +40,13 @@ class PositionalQa(TableQa):
         for label in shortLabels:
             error = False
             self.reporter.writeLine("  " + label)
-            if len(label) > shortLimit and label != "$o_Organism Chain/Net":
+            if len(label) > shortLabelLimit and label != "$o_Organism Chain/Net":
                 error = True
             self.recordPassOrError(error)
         for label in longLabels:
             error = False
             self.reporter.writeLine("  " + label)
-            if len(label) > longLimit:
+            if len(label) > longLabelLimit:
                 error = True
             self.recordPassOrError(error)
         self.reporter.endStep()
@@ -87,7 +89,7 @@ class PositionalQa(TableQa):
     def validate(self):
         """Adds positional-table-specific checks to basic table checks."""
         super(PositionalQa, self).validate()
-        self.__checkLabelLengths(17, 80)
+        self.checkLabelLengths()
         self.__positionalTblCheck()
         self.__checkTableCoords()
 
