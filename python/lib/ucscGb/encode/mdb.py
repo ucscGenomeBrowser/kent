@@ -1,7 +1,7 @@
 from ucscGb.encode import encodeUtils
 from ucscGb.gbData import ordereddict
-from ucscGb.gbData.RaFile import RaFile
-from ucscGb.gbData.RaStanza import RaStanza
+from ucscGb.gbData.ra.raFile import RaFile
+from ucscGb.gbData.ra.raStanza import RaStanza
 
 class MdbFile(RaFile):
     '''
@@ -29,12 +29,17 @@ class MdbFile(RaFile):
             return self._dataType
         except AttributeError:
             self._dataType = None
+            #print '%s mdb exps: %d' % (self.name, len(self.experiments.values()))
             for e in self.experiments.itervalues():
                 if self._dataType == None and e.dataType != None:
+                    #print '%s mdb set: %s' % (self.name, e.dataType)
                     self._dataType = e.dataType
-                elif self._dataType != e.dataType or e.dataType == None:
+                elif (self._dataType != e.dataType or e.dataType == None) and len(e.normalStanzas) > 0:
+                    #print '%s mdb warning: %s != %s' % (self.name, self._dataType, e.dataType)
                     self._dataType = None
                     break
+                #else:
+                #    print '%s mdb same: %s' % (self.name, e.dataType)
             return self._dataType
     
     @property
@@ -156,13 +161,20 @@ class MdbExp(list):
             return self._dataType
         except AttributeError:
             self._dataType = None
+            #print '%s exp normalstanzas: %d' % (self.name, len(self.normalStanzas))
             for s in self.normalStanzas:
                 if 'dataType' in s:
                     if self._dataType == None:
+                        #print '%s exp set: %s' % (self.name, s['dataType'])
                         self._dataType = encodeUtils.dataTypes[s['dataType']]
                     elif self._dataType.name != s['dataType']:
+                        #print '%s exp warning: %s != %s' % (self.name, self._dataType.name, s['dataType'])
                         self._dataType = None
                         break
+                    #else:
+                    #    print '%s exp same: %s' % (self.name, s['dataType'])
+                #else:
+                #    print '%s exp warning: no dataType in %s' % (self.name, s.name)
             return self._dataType
     
     @property

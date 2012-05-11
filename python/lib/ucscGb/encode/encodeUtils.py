@@ -17,11 +17,14 @@ class DataType(object):
     @property
     def shouldSubmit(self):
         return self.type != 'NotGeo'
-
+       
+    def __str__(self):
+        return self.name
 
 dataTypes = {
     'Cage': DataType(           'Cage',             'RNA',          'OTHER',                                            'transcriptomic',   'CAGE',                                         'HighThroughput'),
     'ChipSeq': DataType(        'ChipSeq',          'genomic DNA',  'ChIP-Seq',                                         'genomic',          'ChIP',                                         'HighThroughput'),
+    'Combined': DataType(       'Combined',         'genomic DNA',  'ChIP-Seq',                                         'genomic',          'ChIP',                                         'HighThroughput'), #copy of chipseq
     'DnaPet': DataType(         'DnaPet',           'genomic DNA',  'OTHER',                                            'genomic',          'size fractionation',                           'HighThroughput'),
     'DnaseDgf': DataType(       'DnaseDgf',         'genomic DNA',  'DNase-Hypersensitivity',                           'genomic',          'DNase',                                        'HighThroughput'),
     'DnaseSeq': DataType(       'DnaseSeq',         'genomic DNA',  'DNase-Hypersensitivity',                           'genomic',          'DNase',                                        'HighThroughput'),
@@ -33,9 +36,12 @@ dataTypes = {
     'RnaPet': DataType(         'RnaPet',           'RNA',          'OTHER',                                            'transcriptomic',   'other',                                        'HighThroughput'),
     'RnaSeq': DataType(         'RnaSeq',           'RNA',          'RNA-Seq',                                          'transcriptomic',   'cDNA',                                         'HighThroughput'),
     
+    #need this
+    'RepliSeq': DataType(       'RepliSeq', 'genomic DNA', 'OTHER', 'genomic', 'ChIP', 'HighThroughput'),
+    
     #doublecheck
     'ChiaPet': DataType(        'ChiaPet',          'genomic DNA',  'ChIP-Seq followed by ligation',                    'genomic',          'other',                                      'HighThroughput'),
-    'Nucleosome': DataType(     'Nucleosome',       'genomic DNA',  'ChIP-Seq',                                         'genomic',          'ChIP',                                         'HighThroughput'),
+    'Nucleosome': DataType(     'Nucleosome',       'genomic DNA',  'MNase-Seq',                                         'genomic',          'MNase',                                         'HighThroughput'),
     'RipSeq': DataType(         'RipSeq',           'RNA',          'OTHER',                                          'transcriptomic',   'RNA binding protein antibody',                 'HighThroughput'),
     #for ripseq, ask geo about new 'ripseq'
     
@@ -54,15 +60,12 @@ dataTypes = {
     'MethylArray': DataType(    'MethylArray',      'genomic DNA',  'REPLACE',                                          'genomic',          'REPLACE',                                      'MicroArray'),
     'RipGeneSt': DataType(      'RipGeneSt',        'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 'MicroArray'), #this isn't correct
     'RipTiling': DataType(      'RipTiling',        'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 'MicroArray'),
+    'Genotype': DataType(       'Genotype',         'genomic DNA',  'REPLACE',                                          'genomic',          'REPLACE',                                      'MicroArray'),
     
     #these need to be curated
     'Cnv': DataType(            'Cnv',              'REPLACE',      'REPLACE',                                          'REPLACE',          'REPLACE',                                      None),
-    'Combined': DataType(       'Combined',         'REPLACE',      'REPLACE',                                          'REPLACE',          'REPLACE',                                      None),
-    'Genotype': DataType(       'Genotype',         'genomic DNA',  'REPLACE',                                          'genomic',          'REPLACE',                                      None),
     'RnaChip': DataType(        'RnaChip',          'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 None),
     'RipChip': DataType(        'RipChip',          'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 None)
-    
-    
 }
 
 #compare this to the source in datatype, give GP ids depending on the type
@@ -112,4 +115,3 @@ def hashFile(filename, hasher=hashlib.md5(), blocksize=65536):
         hasher.update(buf)
         buf = afile.read(blocksize)
     return hasher.hexdigest()
-    

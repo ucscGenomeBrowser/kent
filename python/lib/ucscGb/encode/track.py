@@ -1,6 +1,6 @@
 import os, re
-from ucscGb.encode import  mdb, encodeUtils
-from ucscGb.gbData.ra import raFile
+from ucscGb.encode import mdb, encodeUtils
+from ucscGb.gbData.ra.raFile import RaFile
 
 class TrackFile(object):
     '''
@@ -95,10 +95,47 @@ class Release(object):
     @property
     def files(self):
         '''A dictionary of TrackFiles belonging to this release where the filename is the key'''
-        return self._files
+        try:
+            return self._files
+        except AttributeError:
+            
+            self._files = dict()
+            omit = ['README.txt', 'md5sum.txt', 'md5sum.history', 'files.txt', 'index.html', 'preamble.html', 'md5sum.history.bak']
+            
+            releasepath = '%srelease%d/' % (self._parent.downloadsDirectory, self.index)
+            for file in os.listdir(releasepath):
+                if os.path.isfile(releasepath + file) and file not in omit:
+                    if self.index > 1 and os.path.isfile('%srelease%d/%s' % (self._parent.downloadsDirectory, self.index - 1, file)):
+                        continue
+                    self._files[file] = self._parent.files[file]
+            return self._files
     
-    def __init__(self, index, status, files):
-        self._files = files
+    @property
+    def expIds(self):
+        '''The list of experiment IDs for this release'''
+        try:
+            return self._expIds
+        except AttributeError:
+            
+            expIdSet = set()
+            for f in self.files.iterkeys():
+                if f not in self._parent.files:
+                    print f + ': not in files list?'
+                elif self._parent.files[f].metaObject == None:
+                    print f + ': no metadata linked'
+                else:
+                    expIdSet.add(self._parent.files[f].metaObject['expId'])
+                
+            self._expIds = list()    
+            for id in expIdSet:
+                self._expIds.append(int(id))
+            self._expIds.sort()
+            for i in range(len(self._expIds)):
+                self._expIds[i] = str(self._expIds[i])
+            return self._expIds
+        
+    def __init__(self, parent, index, status):
+        self._parent = parent
         self._index = index
         if (status.strip() == ''):
             self._alpha = self._beta = self._public = 1
@@ -253,25 +290,11 @@ class CompositeTrack(object):
                 else:
                     lastplace = statuses[i]
                     
-            # while(1):
-                # releasepath = self.downloadsDirectory + ('release%d' % count) + '/'
-                
-                # if not os.path.exists(releasepath):
-                    # break
-                    
-                # md5s = encodeUtils.readMd5sums(releasepath + 'md5sum.txt')
-                # releasefiles = dict()
-                
-                # for file in os.listdir(releasepath):
-                    # if os.path.isfile(releasepath + file) and file not in omit:
-                        # if md5s != None and file in md5s:
-                            # releasefiles[file] = TrackFile(releasepath + file, md5s[file])
-                        # else:
-                            # releasefiles[file] = TrackFile(releasepath + file, None)
-            for i in range(1, maxcomposite + 1):    
-                self._releaseObjects.append(Release(i, statuses[i], None))
+            for i in range(1, maxcomposite + 1):  
+                self._releaseObjects.append(Release(self, i, statuses[i]))
                 
             return self._releaseObjects
+            
     @property 
     def releases(self):
         '''A list of all files in the release directory of this composite'''
@@ -455,5 +478,4 @@ class TrackCollection(dict):
                 trackname = file.replace('.ra', '') 
                 if os.path.isfile(self._trackPath + self._organism + '/' + self._database + '/' + file):
                     self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
-                
                 
