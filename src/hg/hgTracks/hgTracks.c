@@ -57,6 +57,7 @@
 #include "suggest.h"
 #include "search.h"
 #include "errCatch.h"
+#include "iupac.h"
 
 
 /* Other than submit and Submit all these vars should start with hgt.
@@ -969,7 +970,7 @@ if (s != NULL)
     {
     int len;
     tolowers(s);
-    dnaFilter(s, s);
+    iupacFilter(s, s);
     len = strlen(s);
     if (len < 2)
        s = NULL;
@@ -998,12 +999,18 @@ if (seq == NULL)
 return seq->dna;
 }
 
+char *stringInWrapper(char *needle, char *haystack)
+/* Wrapper around string in to make it so it's a function rather than a macro. */
+{
+return stringIn(needle, haystack);
+}
 
 void oligoMatchLoad(struct track *tg)
 /* Create track of perfect matches to oligo on either strand. */
 {
 char *dna = dnaInWindow();
 char *fOligo = oligoMatchSeq();
+char *(*finder)(char *needle, char *haystack) = (anyIupac(fOligo) ? iupacIn : stringInWrapper);
 int oligoSize = strlen(fOligo);
 char *rOligo = cloneString(fOligo);
 char *rMatch = NULL, *fMatch = NULL;
@@ -1013,12 +1020,12 @@ int count = 0, maxCount = 1000000;
 
 if (oligoSize >= 2)
     {
-    fMatch = stringIn(fOligo, dna);
-    reverseComplement(rOligo, oligoSize);
+    fMatch = finder(fOligo, dna);
+    iupacReverseComplement(rOligo, oligoSize);
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else
-    rMatch = stringIn(rOligo, dna);
+	rMatch = finder(rOligo, dna);
     for (;;)
         {
 	char *oneMatch = NULL;
@@ -1029,26 +1036,26 @@ if (oligoSize >= 2)
 	    else
 		{
 		oneMatch = fMatch;
-		fMatch = stringIn(fOligo, fMatch+1);
+		fMatch = finder(fOligo, fMatch+1);
 		strand = '+';
 		}
 	    }
 	else if (fMatch == NULL)
 	    {
 	    oneMatch = rMatch;
-	    rMatch = stringIn(rOligo, rMatch+1);
+	    rMatch = finder(rOligo, rMatch+1);
 	    strand = '-';
 	    }
 	else if (rMatch < fMatch)
 	    {
 	    oneMatch = rMatch;
-	    rMatch = stringIn(rOligo, rMatch+1);
+	    rMatch = finder(rOligo, rMatch+1);
 	    strand = '-';
 	    }
 	else
 	    {
 	    oneMatch = fMatch;
-	    fMatch = stringIn(fOligo, fMatch+1);
+	    fMatch = finder(fOligo, fMatch+1);
 	    strand = '+';
 	    }
 	if (count < maxCount)
