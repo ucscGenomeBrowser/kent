@@ -30,7 +30,7 @@ instrumentModels = {
     'Illumina_GA1': 'Illumina Genome Analyzer',
     'Illumina_GA1_or_GA2': 'Illumina Genome Analyzer, Illumina Genome Analyzer II',
     'SOLiD_Unknown': 'SOLiD',
-    'AB_SOLiD_3.5': 'AB SOLiD 3.5',
+    'AB_SOLiD_3.5': 'AB SOLiD 3.0 Plus',
     'Unknown': 'Illumina Genome Analyzer'
 }
 
@@ -76,12 +76,12 @@ def getGSM(html):
     suppfiles = re.findall('<tr valign="top"><td bgcolor="#[0-9A-F]+">([^<]+)</td>', html)
     d = dict()
     for f in suppfiles:
-        print f
+        if f.startswith('SRX'):
+            continue
         fname = f.rsplit('_', 1)[1]
         d[fname] = fname
     return d
         
-    
 def getDateSubmitted(html):
     datestr = re.search('<td>Submission date</td>\n<td>([^<]+)</td>', html)
     if datestr == None:
