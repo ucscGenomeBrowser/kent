@@ -625,16 +625,15 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 			<LI>
 			The formula to find the shortest query size that will
 			guarantee a match (if matching tiles are not marked as
-			overused) is:<BR> 
-		    	&nbsp;&nbsp;&nbsp;2 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
+			overused) is: 2 * <em>stepSize</em> + <em>tileSize</em> - 1<br>
 			For example, with <em>stepSize</em> set to 5 and
-			<em>tileSize</em> set to 11, <br>matches of query size 
-			2*5+11-1 = 20 bp will be found,<br> if the query matches
-			the target exactly. <br>The <em>stepSize</em> parameter can
-			range from 1 to <em>tileSize</em>. <br>The <em>tileSize</em>
-			parameter can range from 6 to 15. For protein the range starts lower.<br>
-			For minMatch=1 (e.g. protein), the minimum guaranteed match length is: <br>
-		    	&nbsp;&nbsp;&nbsp;1 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
+			<em>tileSize</em> set to 11, matches of query size
+                        2 * 5 + 11 - 1 = 20 bp will be found if the query matches the target exactly.<br>
+                        The <em>stepSize</em> parameter can range from 1 to <em>tileSize</em>.<br>
+                        The <em>tileSize</em> parameter can range from 6 to 15. For protein, the
+                        range starts lower.<br>
+			For <em>minMatch</em>=1 (e.g., protein), the minimum guaranteed match length is:
+                        1 * <em>stepSize</em> + <em>tileSize</em> - 1<br>
 			<LI>
 		 	Try using <em>-fine</em>.
 			<LI>
