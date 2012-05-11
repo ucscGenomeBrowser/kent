@@ -34,23 +34,23 @@ distinguishing between the different cell types and compartments.</p>
 
 <dl>
 <dt><i>Contigs</i>
-</dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates.
+</dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates. Specific column specifications can be found in the <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
 </dd><dt><i>Raw Signals</i>
 </dt><dd>The Plus Raw Signal and Minus Raw Signal views show the density of mapped reads on the plus and minus strands (wiggle format), respectively.
 </dd>
 <dt><i>Alignments</i>
 </dt><dd>The Alignments view shows individual reads mapped from biological replicates to the genome and indicates where
-bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The alignment file follows the standard SAM format of Bowtie output. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The alignment file follows the standard SAM format. See the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
 </dd>
 <dt><i>Splice Junctions</i>
-</dt><dd>Subset of aligned reads that cross splice junctions.
+</dt><dd>Subset of aligned reads that cross splice junctions. Specific column specifications can be found in the <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
 </dd>
 </dl>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
 <P>
 <!--echo var="BROWSER_HOST" -->
-Additional <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,PRTCL,RAW,SPKNS,TRANSGENCV7,TRANSDENOVO">views</A> are available on the Downloads page. 
+Additional <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,GENEGENCV10,EXONGENCV10,PRTCL,SPKNS,TRANSGENCV7,TRANSDENOVO">views</A> are available on the Downloads page. 
 </P>
 
 <H2>Methods</H2>
@@ -94,7 +94,7 @@ HREF="http://gingeraslab.cshl.edu/STAR/">Gingeras lab</A>.
 
 <P>
 The following processed
-&ldquo;<a target="_BLANK" href="../cgi-bin/hgEncodeVocab?tag=Contigs,Junctions,ExonsGencV7,GeneDeNovo,GeneGencV7,TranscriptDeNovo,TranscriptGencV7">elements</a>&rdquo;
+&ldquo;<a target="_BLANK" href="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,GENEDENO,GENEGENCV7,GENEGENCV10,EXONGENCV10,TRANSGENCV7,TRANSDENOVO">elements</a>&rdquo;
 data files are available for download.
 These elements were assessed for reproducibility using a nonparametric 
 irreproducible detection (IDR) rate script.  The IDR values for each element

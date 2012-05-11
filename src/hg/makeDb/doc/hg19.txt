@@ -18502,3 +18502,44 @@ exit
 pubBlat load
 #--pubEnd
 
+#############################################################################
+# lifting HapMap recombination maps from hg18 (DONE - 2012-05-09 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/bed/hapmap/release24FromHg18
+    cd /hive/data/genomes/hg19/bed/hapmap/release24FromHg18
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24CEURecombMap.bedGraph hg18.hapMapRelease24CEURecombMap.bedGraph
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24YRIRecombMap.bedGraph hg18.hapMapRelease24YRIRecombMap.bedGraph
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24CombinedRecombMap.bedGraph hg18.hapMapRelease24CombinedRecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24CEURecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24CEURecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24CEURecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24YRIRecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24YRIRecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24YRIRecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24CombinedRecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24CombinedRecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24CombinedRecombMap.bedGraph
+
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg19/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg19/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg19/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg19
+    hgBbiDbLink hg19 ${T} /gbdb/hg19/decode/${T}.bw
+done
+
+#############################################################################
