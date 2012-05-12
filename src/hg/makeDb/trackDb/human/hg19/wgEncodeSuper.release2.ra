@@ -2,7 +2,7 @@ track wgEncodeGencodeSuper
 superTrack on
 group genes
 shortLabel GENCODE Genes
-longLabel Gene Annotations from ENCODE/GENCODE
+longLabel GENCODE Gene Annotation 
 wgEncode 1
 
 track wgEncodeTfBindingSuper
