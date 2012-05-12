@@ -1,7 +1,8 @@
 track wgEncodeGencodeV4
 compositeTrack on
+superTrack wgEncodeGencodeSuper dense
 shortLabel GENCODE Genes V4
-longLabel ENCODE GENCODE V4 Gene Annotations
+longLabel Gene Annotations from GENCODE/ENCODE Version 4
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks

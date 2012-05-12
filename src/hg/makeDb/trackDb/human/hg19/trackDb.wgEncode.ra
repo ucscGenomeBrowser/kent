@@ -1,16 +1,20 @@
 # Genome-wide ENCODE tracks
 
-include wgEncodeSuper.ra
+include wgEncodeSuper.ra beta,public
+include wgEncodeSuper.release2.ra alpha 
 
-# GENCODE genes (wrangler: braney,cricket)
+# GENCODE genes on alpha only (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
-
-#include wgEncodeGencodeV5.ra alpha
-include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
-include wgEncodeGencodeV10.ra
-include wgEncodeGencodeV11.ra
+
+# GENCODE genes on public (wrangler: cricket)
+include wgEncodeGencodeV7.ra beta,public
+include wgEncodeGencodeV7.release2.ra alpha
+include wgEncodeGencodeV10.ra beta,public
+include wgEncodeGencodeV10.release2.ra alpha
+include wgEncodeGencodeV11.ra beta,public
+include wgEncodeGencodeV11.release2.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
