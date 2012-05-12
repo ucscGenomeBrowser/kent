@@ -827,3 +827,10 @@ rn5.mgc = yes
     make etc-update
 
 #########################################################################
+# constructing downloads
+    # first add rn5 to all.joiner and make sure joinerCheck is clean on it
+    cd /hive/data/genomes/rn5
+    time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev rn5 \
+        > downloads.log 2>&1
+    #   real    24m32.649s
+    # need to edit the README.txt files to make sure they are correct.

@@ -59,7 +59,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
     HInv.o hubConnect.o hui.o humanParalog.o \
-    imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o jalview.o \
+    imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
