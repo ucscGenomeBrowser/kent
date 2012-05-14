@@ -6,7 +6,7 @@
 #table that allows adding html to details page for various items
 CREATE TABLE itemDetailsHtml (
     name varchar(255) not null,	# Name of item
-    html varchar(255) not null,	# HTML fragment to include
+    html longblob not null,	# HTML fragment to include
               #Indices
-    INDEX(name)
+    PRIMARY KEY(name)
 );
