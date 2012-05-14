@@ -1896,6 +1896,139 @@ tableName wgEncodeSydhHistoneMcf7H3k09me3UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistoneMcf7InputUcdAlnRep1
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
+fileName wgEncodeSydhHistoneMcf7InputUcdAlnRep1.bam,wgEncodeSydhHistoneMcf7InputUcdAlnRep1.bam.bai
+grant Snyder
+lab USC
+labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
+md5sum 29a3a629a9f05b394398a42f88373d86,870fb5e651ca7dd29b48aa566f8a7a23
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7InputUcdAlnRep2
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
+fileName wgEncodeSydhHistoneMcf7InputUcdAlnRep2.bam,wgEncodeSydhHistoneMcf7InputUcdAlnRep2.bam.bai
+grant Snyder
+lab USC
+labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
+md5sum b9c87ec1e94f7a626f64e241eaef0280,d767f39e59bd9a022ac1f0c2c6cf3567
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7InputUcdRawDataRep1
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
+fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep1.fastq.gz
+grant Snyder
+lab USC
+labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
+md5sum 65a69cbb3037a2b509a822545a21e99b
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1090
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7InputUcdRawDataRep2
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000762
+expId 762
+fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep2.fastq.gz
+grant Snyder
+lab USC
+labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
+md5sum 524cbaafae9373f2be82e5d6e2b64ed0
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1090
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7InputUcdSig
+objType table
+antibody Input
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-04-08
+dccAccession wgEncodeEH000762
+expId 762
+fileName wgEncodeSydhHistoneMcf7InputUcdSig.bigWig
+grant Snyder
+lab USC
+md5sum 28127f15e2564c9fbece2adfa80f4394
+origAssembly hg18
+project wgEncode
+setType input
+subId 3056
+tableName wgEncodeSydhHistoneMcf7InputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1
 objType file
 antibody H3K9me3
@@ -4479,4 +4612,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -1873250040
+# MAGIC: -663179134
