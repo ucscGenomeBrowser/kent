@@ -1,12 +1,26 @@
 import subprocess
+import re
 
 from ucscGb.qa import qaUtils
 from ucscGb.qa.tables.tableQa import TableQa
 
-genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
-genbankTableListBeta = "/genbank/etc/genbank.tbls"
 shortLabelLimit = 17
 longLabelLimit = 80
+genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
+genbankTableListBeta = "/genbank/etc/genbank.tbls"
+
+# Read the list of genbank tables once, for __positionalTblCheck()
+try:
+    with open(genbankTableListDev, "r") as f:
+        raw = f.readlines()
+except IOError:
+    try:
+        with open(genbankTableListBeta, "r") as f:
+            raw = f.readlines()
+    except IOError:
+        raise Exception("Cannot open either " + genbankTableListDev + " or " + genbankTableListBeta)
+genbankRegexes = [name.strip() for name in raw]
+
 
 class PositionalQa(TableQa):
     """
@@ -56,28 +70,33 @@ class PositionalQa(TableQa):
             self.__getLabels(parent, shortLabels, longLabels)
         for label in shortLabels:
             error = False
-            self.reporter.writeLine('  "' + label + '"')
+            self.reporter.writeLine('"' + label + '"')
             if len(label) > shortLabelLimit and label != "$o_Organism Chain/Net":
                 error = True
             self.recordPassOrError(error)
         for label in longLabels:
             error = False
-            self.reporter.writeLine('  "' + label + '"')
+            self.reporter.writeLine('"' + label + '"')
             if len(label) > longLabelLimit:
                 error = True
             self.recordPassOrError(error)
         self.reporter.endStep()
 
+    def __isGenbankTable(self):
+        for regex in genbankRegexes:
+            if re.match(regex, self.table):
+                return True
+
     def __positionalTblCheck(self):
         """Runs positionalTblCheck program on this table. Excludes GenBank tables."""
-        #TODO: make it exclude genbank tables
-        self.reporter.beginStep(self.db, self.table, "positionalTblCheck")
-        command = ["positionalTblCheck", self.db, self.table]
-        self.reporter.writeCommand(command)
-        p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
-        p.wait()
-        self.recordPassOrError(p.returncode)
-        self.reporter.endStep()
+        if not self.__isGenbankTable():
+            self.reporter.beginStep(self.db, self.table, "positionalTblCheck")
+            command = ["positionalTblCheck", self.db, self.table]
+            self.reporter.writeCommand(command)
+            p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
+            p.wait()
+            self.recordPassOrError(p.returncode)
+            self.reporter.endStep()
 
     def __checkTableCoords(self):
         """Runs checkTableCoords program on this table."""
