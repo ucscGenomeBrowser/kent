@@ -134,7 +134,7 @@ char *generateRandomPassword()
 /* Generate random password for users who have lost their old one. */
 {
 char boundary[256];
-char punc[] = "!@#$%^&*()";
+char punc[] = "!@#$%&()";
 /* choose a new string for the boundary */
 /* Set initial seed */
 int i = 0;
@@ -157,7 +157,7 @@ for(i=0;i<8;++i)
             c = '0' + randInt(10);
         break;
     default:
-            c = punc[randInt(10)];
+            c = punc[randInt(8)];
         break;
         }
     boundary[i] = c;
@@ -239,12 +239,12 @@ hPrintf(
     "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>", email, obj);
 }
 
-void sendMail(char *email, char *subject, char *msg)
+void sendMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char cmd[1024];
+char cmd[4096];
 safef(cmd,sizeof(cmd),
 "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
 int result = system(cmd);
@@ -277,7 +277,7 @@ char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
 safef(msg, sizeof(msg), "User name(s) associated with this email address at UCSC Genome Browser: \n\n  %s \n", users);
 safecat (msg, sizeof(msg), signature);
-sendMail(email, subject, msg);
+sendMailOut(email, subject, msg);
 }
 
 
@@ -301,16 +301,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void mailNewPassword(char *username, char *email, char *password)
+void sendNewPwdMail(char *username, char *email, char *password)
 /* send user new password */
 {
 char subject[256];
-char msg[256];
+char msg[4096];
 char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
-safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
-safef(msg, sizeof(msg), "New password for user %s:  \n\n  %s \n", username, password);
+char *remoteAddr=getenv("REMOTE_ADDR");
+safef(subject, sizeof(subject),"New temporary password for UCSC Genome Browse");
+safef(msg, sizeof(msg),
+    "Someone (probably you, from IP address %s) requested a new password for UCSC Genome Browser (http://genome.ucsc.edu). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\nIf someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n",
+    remoteAddr, username, password);
 safecat (msg, sizeof(msg), signature);
-sendMail(email, subject, msg);
+sendMailOut(email, subject, msg);
 }
 
 void displayAccHelpPage(struct sqlConnection *conn)
@@ -389,7 +392,7 @@ if (!email || sameString(email,""))
     displayAccHelpPage(conn);
     return;
     }
-mailNewPassword(username, email, password);
+sendNewPwdMail(username, email, password);
 sqlFreeResult(&sr);
 }
 
@@ -418,25 +421,26 @@ cartRemove(cart, "hgLogin_changeRequired");
 return;
 }
 
-void sendActivateMail(char *email, char *username, char *encToken)
+void sendActivateMail(char *email, char *username, char *encToken, char *expireTime, char *expireDate)
 /* Send activation mail with token to user*/
 {
 char subject[256];
-char msg[4064];
+char msg[4096];
 char activateURL[256];
 char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 char *hgLoginHost = wikiLinkHost();
+char *remoteAddr=getenv("REMOTE_ADDR");
 safef(activateURL, sizeof(activateURL),
     "http://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
     sqlEscapeString(hgLoginHost),
     sqlEscapeString(username),
     sqlEscapeString(encToken));
-safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
+safef(subject, sizeof(subject),"UCSC Genome Browser account e-mail address confirmation");
 safef(msg, sizeof(msg),
-    "You have sign up an account at UCSC Genome Browser with username \"%s\". \n Please click the following link to activate the account -- \n\n%s\n\n",
-    username, activateURL);
+    "Someone, probably you from IP address  %s, has requested an account %s with this e-mail address on the UCSC Genome Browser.\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\ni\n%s\nIf the account is created, only you will be e-mailed this confirmation.\nIf this is *not* you, do not follow the link. This confirmation code will expire at %s, %s.\n", 
+     remoteAddr, username, activateURL, expireTime, expireDate);
 safecat (msg, sizeof(msg), signature);
-sendMail(email, subject, msg);
+sendMailOut(email, subject, msg);
 }
 
 void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
@@ -459,7 +463,13 @@ safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', 
     sqlEscapeString(username)
     );
 sqlUpdate(conn, query);
-sendActivateMail(email, username, tokenMD5);
+safef(query,sizeof(query),
+    "select TIME(emailTokenExpires) from gbMembers where userName='%s'", username);
+char *expireTime = sqlQuickString(conn, query);
+safef(query,sizeof(query),
+    "select DATE(emailTokenExpires) from gbMembers where userName='%s'", username);
+char *expireDate = sqlQuickString(conn, query);
+sendActivateMail(email, username, tokenMD5, expireTime, expireDate);
 return;
 }
 
@@ -661,10 +671,10 @@ hPrintf("<h2>UCSC Genome Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Password has been changed.</h3>");
-backToDoLoginPage(1);
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
+backToDoLoginPage(1);
 }
 
 void signupPage(struct sqlConnection *conn)
@@ -808,6 +818,11 @@ hPrintf("<h2>UCSC Genome Browser</h2>\n"
     "<p align=\"left\">\n"
     "</p>\n"
     "<h3>User %s successfully added.</h3>\n", user);
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_email2");
+cartRemove(cart, "hgLogin_userName");
+cartRemove(cart, "user");
+cartRemove(cart, "token");
 backToHgSession(1);
 }
 
