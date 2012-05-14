@@ -60,12 +60,14 @@ include wgEncodeAffyRnaChip.ra
 # GIS ChIA-pet (wrangler: braney)
 include wgEncodeGisChiaPet.ra alpha
 
-# UMass-Dekker 5C (wrangler: kate)
-include wgEncodeUmassDekker5C.ra 
+# UMass-Dekker 5C (wrangler: Venkat)
+include wgEncodeUmassDekker5C.ra beta,public
+include wgEncodeUmassDekker5C.patch.ra alpha
 
-# UW 5C (wrangler: kate)
+# UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.patch.ra beta,public
-include wgEncodeUw5C.release2.ra alpha
+include wgEncodeUw5C.patch2.ra alpha
+#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
