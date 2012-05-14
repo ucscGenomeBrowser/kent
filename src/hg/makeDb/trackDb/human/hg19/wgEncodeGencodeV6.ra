@@ -1,6 +1,7 @@
 
 track wgEncodeGencodeV6test
 compositeTrack on
+superTrack wgEncodeGencodeSuper dense
 shortLabel Gencode Genes V6test
 longLabel ENCODE Gencode V6test Gene Annotations
 group genes

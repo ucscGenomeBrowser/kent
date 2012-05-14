@@ -10,6 +10,8 @@ How To
 
 1) Generate a virtual environment
 
+Note: Run commands outside repositories, suggested place is home directory
+
 Generate a blank virtual environment using python2.7: 
 
 virtualenv -p python2.7 ENV

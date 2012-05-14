@@ -2774,7 +2774,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
-protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf GingerasGingeras::HCH0011308.2P_Gingeras_protocol.pdf
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf Gingeras:HCH0011308.2P_Gingeras_protocol.pdf
 
 term HCH_8100808.2
 tag HCH81008082
@@ -6238,7 +6238,7 @@ termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 color 65,105,225
 sex M
-protocol mising
+protocol missing
 
 term ES-Bruce4
 tag ESB4
@@ -13463,6 +13463,7 @@ tag PRIMER
 type view
 label Primer
 description The sequences of the primers used in the experiments and sequences for the control sites.
+deprecated Data linked to view is specific to the composite and not considered an experiment
 #snippet for UW5c's primer view
 
 term Protocol
