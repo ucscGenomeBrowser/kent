@@ -134,7 +134,7 @@ char *generateRandomPassword()
 /* Generate random password for users who have lost their old one. */
 {
 char boundary[256];
-char punc[] = "!@#$%^&*()";
+char punc[] = "!@#$%&()";
 /* choose a new string for the boundary */
 /* Set initial seed */
 int i = 0;
@@ -157,7 +157,7 @@ for(i=0;i<8;++i)
             c = '0' + randInt(10);
         break;
     default:
-            c = punc[randInt(10)];
+            c = punc[randInt(8)];
         break;
         }
     boundary[i] = c;
@@ -301,14 +301,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void mailNewPassword(char *username, char *email, char *password)
+void sendNewPwdMail(char *username, char *email, char *password)
 /* send user new password */
 {
 char subject[256];
-char msg[256];
+char msg[4096];
 char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
-safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
-safef(msg, sizeof(msg), "New password for user %s:  \n\n  %s \n", username, password);
+char *remoteAddr=getenv("REMOTE_ADDR");
+safef(subject, sizeof(subject),"New temporary password for UCSC Genome Browse");
+safef(msg, sizeof(msg),
+    "Someone (probably you, from IP address %s) requested a new password for UCSC Genome Browser (http://genome.ucsc.edu). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\nIf someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n",
+    remoteAddr, username, password);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
@@ -389,7 +392,7 @@ if (!email || sameString(email,""))
     displayAccHelpPage(conn);
     return;
     }
-mailNewPassword(username, email, password);
+sendNewPwdMail(username, email, password);
 sqlFreeResult(&sr);
 }
 
