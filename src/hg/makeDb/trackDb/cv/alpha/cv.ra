@@ -13463,6 +13463,7 @@ tag PRIMER
 type view
 label Primer
 description The sequences of the primers used in the experiments and sequences for the control sites.
+deprecated Data linked to view is specific to the composite and not considered an experiment
 #snippet for UW5c's primer view
 
 term Protocol
