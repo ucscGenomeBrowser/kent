@@ -4459,7 +4459,7 @@ if (!hideControls)
     /* set white-space to nowrap to prevent buttons from wrapping when screen is
      * narrow */
     hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
-    menuBar();
+    printMenuBar();
 
     /* Show title . */
     freezeName = hFreezeFromDb(database);
@@ -5067,7 +5067,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 
 if(!trackImgOnly)
     {
-    menuBar();
+    printMenuBar();
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
