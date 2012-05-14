@@ -45,8 +45,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeManualV3
     parent wgEncodeGencodeV3
-    shortLabel Gencode Manual
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct 2009)
+    shortLabel GENCODE Manual
+    longLabel ENCODE GENCODE Manual Gene Annotations (level 1+2) (Oct 2009)
     type genePred
     priority 1
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
@@ -55,8 +55,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeAutoV3
     parent wgEncodeGencodeV3
-    shortLabel Gencode Auto
-    longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct 2009)
+    shortLabel GENCODE Auto
+    longLabel ENCODE GENCODE Automated Gene Annotations (level 3) (Oct 2009)
     type genePred
     priority 2
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
@@ -65,8 +65,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodePolyaV3
     parent wgEncodeGencodeV3 off
-    shortLabel Gencode PolyA
-    longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
+    shortLabel GENCODE PolyA
+    longLabel ENCODE GENCODE PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
     priority 4
 
