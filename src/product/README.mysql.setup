@@ -1,6 +1,15 @@
 
 MySQL - database setup
 
+IMPORTANT NOTE!!!  Our code uses "LOAD DATA LOCAL INFILE" extensively.
+Later versions of MySQL have disabled the use of "LOAD DATA LOCAL INFILE"
+by default.  For new installations of MySQL, this option must be enabled in
+order for the Browser to function properly.  For affected versions, existing
+MySQL installations and libraries will need to be reinstalled with this option
+enabled.  Please see the MySQL page at
+http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html
+for more information regarding this issue.
+
 There are three cases of identity to consider when providing
 access to the MySQL system for the browser CGI binaries
 and browser developers:
