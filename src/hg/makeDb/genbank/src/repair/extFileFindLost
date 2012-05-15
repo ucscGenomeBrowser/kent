@@ -12,7 +12,7 @@ if [ $HOST = "hgwbeta" ] ; then
     dbsFile=/genbank/etc/hgwbeta.dbs
 fi
 if [ $HOST = "hgwdev" ] ; then
-    dbsFile=/cluster/data/genbank/etc/hgwdev.dbs
+    dbsFile=/hive/data/outside/genbank/etc/hgwdev.dbs
 fi
    
 gbRoot=`dirname $dbsFile`

@@ -1,4 +1,4 @@
-#!/usr/bin/env /cluster/data/genbank/bin/gbPython
+#!/hive/data/outside/genbank/bin/gbPython
 import sys, os
 
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))

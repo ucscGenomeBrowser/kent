@@ -1,4 +1,4 @@
-#!/usr/bin/env /cluster/data/genbank/bin/gbPython
+#!/hive/data/outside/genbank/bin/gbPython
 #
 # $Id: gbAlignSetup,v 1.24 2009/04/19 01:36:13 markd Exp $
 #
