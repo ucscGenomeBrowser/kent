@@ -2,7 +2,7 @@
 MySQL - database setup
 
 IMPORTANT NOTE!!!  Our code uses "LOAD DATA LOCAL INFILE" extensively.
-Later versions of MySQL have disabled the use of "LOAD DATA LOCAL INFILE"
+Some versions of MySQL have disabled the use of "LOAD DATA LOCAL INFILE"
 by default.  For new installations of MySQL, this option must be enabled in
 order for the Browser to function properly.  For affected versions, existing
 MySQL installations and libraries will need to be reinstalled with this option
