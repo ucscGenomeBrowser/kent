@@ -6238,7 +6238,7 @@ termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 color 65,105,225
 sex M
-protocol mising
+protocol missing
 
 term ES-Bruce4
 tag ESB4
@@ -13463,6 +13463,7 @@ tag PRIMER
 type view
 label Primer
 description The sequences of the primers used in the experiments and sequences for the control sites.
+deprecated Data linked to view is specific to the composite and not considered an experiment
 #snippet for UW5c's primer view
 
 term Protocol

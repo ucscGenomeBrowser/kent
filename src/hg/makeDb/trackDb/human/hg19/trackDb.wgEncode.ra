@@ -58,14 +58,16 @@ include wgEncodeAffyRnaChip.ra
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha
+include wgEncodeGisChiaPet.ra alpha,beta
 
-# UMass-Dekker 5C (wrangler: kate)
-include wgEncodeUmassDekker5C.ra 
+# UMass-Dekker 5C (wrangler: Venkat)
+include wgEncodeUmassDekker5C.ra public
+include wgEncodeUmassDekker5C.patch.ra alpha,beta
 
-# UW 5C (wrangler: kate)
-include wgEncodeUw5C.patch.ra beta,public
-include wgEncodeUw5C.release2.ra alpha
+# UW 5C (wrangler: Venkat and Kate)
+include wgEncodeUw5C.patch.ra public
+include wgEncodeUw5C.patch2.ra alpha,beta
+#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
@@ -177,8 +179,7 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.release3.ra alpha
 include wgEncodeHaibTfbs.release2.ra beta,public
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra public
-include wgEncodeSydhTfbs.release2.ra alpha,beta
+include wgEncodeSydhTfbs.release2.ra
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public

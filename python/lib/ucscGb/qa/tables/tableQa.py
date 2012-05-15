@@ -41,8 +41,9 @@ class TableQa(object):
         self.recordPassOrError(error)
         self.reporter.endStep()
 
-    def __checkForUnderscores(self):
-        """Checks the table name for underscores. Allows 'all_' and 'chr.*_' for split tables."""
+    def checkForUnderscores(self):
+        """Checks the table name for underscores. Allows 'all_' and 'chr.*_' for split tables, and
+        'trackDb_*' and 'hgFindSpec_*'. Method is "public" for use by other table types."""
         self.reporter.beginStep(self.db, self.table, "checking table name for underscores")
         self.reporter.writeStepInfo()
         error = False
@@ -62,7 +63,7 @@ class TableQa(object):
     def validate(self):
         """Runs validation methods.  Puts errors captured from programs in errorLog."""
         self.__checkTableDescription()
-        self.__checkForUnderscores()
+        self.checkForUnderscores()
 
     def statistics(self):
         """Adds statistics to sumRow."""
