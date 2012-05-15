@@ -1,8 +1,9 @@
 
 track wgEncodeGencodeV5
 compositeTrack on
+superTrack wgEncodeGencodeSuper dense
 shortLabel Gencode Genes V5
-longLabel ENCODE Gencode V5 Gene Annotations
+longLabel Gene Annotations from ENCODE/GENCODE Version 5
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks

@@ -37,6 +37,18 @@ var encodeMatrix = (function () {
 
     return {
 
+        // Page names for other pages in this application
+
+        pageForChipMatrix: function(organism) {
+            // URL for Chip-seq matrix
+            return 'encodeChipMatrix' + organism.charAt(0).toUpperCase() + organism.substring(1) + '.html';
+        },
+
+        pageForDataMatrix: function(organism) {
+            // URL for Chip-seq matrix
+            return 'encodeDataMatrix' + organism.charAt(0).toUpperCase() + organism.substring(1) + '.html';
+        },
+
         // UI panel for search: select tracks or files
 
         setFileSearch: function (isFile) {
@@ -123,7 +135,6 @@ var encodeMatrix = (function () {
                 // or document.domain ?
             }
             // variables from calling page
-            organism = encodeMatrix_organism;
             assembly = encodeMatrix_assembly;
             $('#assemblyLabel').text(assembly);
             header = encodeMatrix_pageHeader;
@@ -254,7 +265,7 @@ var encodeMatrix = (function () {
         }
     },
 
-    tableMatrixOut: function ($table, matrix, cellTiers, groups, expCounts, rowAddCells) {
+    tableMatrixOut: function ($table, matrix, cellTiers, groups, rowAddCells) {
         // Fill in matrix --
         // add rows with cell type labels (column 1) and cells for experiments
         // add sections for each Tier of cell type
@@ -268,10 +279,14 @@ var encodeMatrix = (function () {
             if (tier === undefined) {
                 return true;
             }
-            $row = $('<tr class="matrix"><th class="groupType">' +
+            if (cellTiers.length > 1) {
+                // add row for tier label if there are more than one tier
+                // (i.e. suppress for mouse)
+                $row = $('<tr class="matrix"><th class="groupType">' +
                                 "Tier " + tier.term + '</th></td></tr>');
-            rowAddCells($row, groups, expCounts, matrix, null);
-            $table.append($row);
+                rowAddCells($row, groups, matrix, null);
+                $table.append($row);
+            }
             maxLen = 0;
 
             $.each(tier.cellTypes, function (i, term) {
@@ -299,7 +314,7 @@ var encodeMatrix = (function () {
                     );
                 maxLen = Math.max(maxLen, cellType.term.length);
 
-                rowAddCells($row, groups, expCounts, matrix, cellType.term);
+                rowAddCells($row, groups, matrix, cellType.term);
                 $table.append($row);
             });
             // adjust size of row headers based on longest label length
@@ -309,11 +324,13 @@ var encodeMatrix = (function () {
         $('body').append($table);
     },
 
-    tableOut: function ($table, matrix, cellTiers, groups, expCounts, tableHeaderOut, rowAddCells) {
+    tableOut: function ($table, matrix, cellTiers, groups, dataTypeExps, 
+                                pruneToExps, tableHeaderOut, rowAddCells) {
         // Create table with rows for each cell type and columns for each antibody target
 
-        tableHeaderOut($table, groups, expCounts);
-        encodeMatrix.tableMatrixOut($table, matrix, cellTiers, groups, expCounts, rowAddCells);
+        var dataGroups = pruneToExps(groups, dataTypeExps);
+        tableHeaderOut($table, dataGroups);
+        encodeMatrix.tableMatrixOut($table, matrix, cellTiers, dataGroups, rowAddCells);
         encodeMatrix.addTableFloatingHeader($table);
         encodeMatrix.rotateTableCells($table);
         encodeMatrix.hoverTableCrossHair($table);

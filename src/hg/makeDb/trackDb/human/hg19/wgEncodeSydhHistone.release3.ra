@@ -585,4 +585,10 @@ html wgEncodeSydhHistone.release3
         type bigWig 1.000000 8904.000000
         # subId=6568 dateSubmitted=2012-03-29
 
-
+        track wgEncodeSydhHistoneMcf7InputUcdSig
+        parent wgEncodeSydhHistoneViewSignal off
+        shortLabel MCF7 Inpt UCD
+        longLabel MCF-7 Input UC Davis Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH
+        subGroups view=Signal factor=INPUT cellType=MCF7 control=UCD treatment=NONE
+        type bigWig 0.000000 12982.900391
+        # subId=3056 dateSubmitted=2010-12-02
