@@ -106,7 +106,7 @@ for (i = 3; i <= strlen(encPassword); i++)
     tempStr1[i-3] = encPassword[i];
 i = strcspn(tempStr1,":");
 safencpy(tempStr2, sizeof(tempStr2), tempStr1, i);
-safef(salt, saltSize,tempStr2);
+safecpy(salt, saltSize,tempStr2);
 }
 
 bool checkPwd(char *password, char *encPassword)
@@ -210,7 +210,7 @@ if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
 else
-   safef(returnTo, sizeof(returnTo), returnURL);
+   safecpy(returnTo, sizeof(returnTo), returnURL);
 
 int delay=nSec*100;
 hPrintf(
@@ -295,7 +295,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-    safef(user, sizeof(user), m->userName);
+    safecpy(user, sizeof(user), m->userName);
     mailUsername(email, user);   
     }
 sqlFreeResult(&sr);
