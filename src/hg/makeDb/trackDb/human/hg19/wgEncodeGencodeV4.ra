@@ -1,7 +1,8 @@
 track wgEncodeGencodeV4
 compositeTrack on
+superTrack wgEncodeGencodeSuper dense
 shortLabel GENCODE Genes V4
-longLabel ENCODE GENCODE V4 Gene Annotations
+longLabel Gene Annotations from ENCODE/GENCODE Version 4
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
@@ -47,7 +48,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeManualV4
     subTrack wgEncodeGencodeV4
-    shortLabel Gencode Manual
+    shortLabel GENCODE Manual
     longLabel ENCODE GENCODE V4 Manual Gene Annotations (level 1+2) (May 2010)
     type genePred
     priority 1
@@ -57,7 +58,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeAutoV4
     subTrack wgEncodeGencodeV4
-    shortLabel Gencode Auto
+    shortLabel GENCODE Auto
     longLabel ENCODE GENCODE V4 Automated Gene Annotations (level 3) (May 2010)
     type genePred
     priority 2
@@ -67,14 +68,14 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodePolyaV4
     subTrack wgEncodeGencodeV4 off
-    shortLabel Gencode PolyA
+    shortLabel GENCODE PolyA
     longLabel ENCODE GENCODE V4 PolyA Transcript Annotations (level 2) (May 2010)
     type genePred
     priority 4
 
     track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencodeV4 off
-    shortLabel Gencode Pseudo
+    shortLabel GENCODE Pseudo
     longLabel ENCODE GENCODE V4 2way Pseudogenes (level 3) (May 2010)
     type genePred
     priority 5

@@ -77,7 +77,7 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $bigClusterHub = 'swarm';
-my $smallClusterHub = 'memk';
+my $smallClusterHub = 'encodek';
 my $dbHost = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultChainLinearGap = "loose";
@@ -214,11 +214,11 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
    Blastz parameter tuning is somewhat of an art and is beyond the scope 
-   here.  Webb Miller and Jim can provide guidance on how to set these for 
-   a new pair of organisms.  
-9. DEF's PATH variable, if set, must specify a path that contains programs 
-   necessary for blastz to run: blastz, and if BLASTZ_ABRIDGE_REPEATS is set, 
-   then also fasta_subseq, strip_rpts, restore_rpts, and revcomp.  
+   here.  Webb Miller and Jim can provide guidance on how to set these for
+   a new pair of organisms.
+9. DEF's PATH variable, if set, must specify a path that contains programs
+   necessary for blastz to run: blastz, and if BLASTZ_ABRIDGE_REPEATS is set,
+   then also fasta-subseq, strip_rpts, restore_rpts, and revcomp.
    If DEF does not contain a PATH, blastz-run-ucsc will use its own default.
 10. DEF's BLASTZ variable can specify an alternate path for blastz.
 11. DEF's BASE variable can specify the blastz/chain/net build directory 

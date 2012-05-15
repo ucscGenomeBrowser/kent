@@ -30635,6 +30635,32 @@ spikeInPool Nist13
 subId 5873
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqHvmfCellTotalContigs
+objType table
+bioRep 051WC,052WC
+cell HVMF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-16
+dateUnrestricted 2012-12-16
+donorId 6091203.3,6100401.3
+fileName wgEncodeCshlLongRnaSeqHvmfCellTotalContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47249,LID47250
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 6023
+tableName wgEncodeCshlLongRnaSeqHvmfCellTotalContigs
+view Contigs
+
 metaObject wgEncodeCshlLongRnaSeqHvmfCellTotalExonsGencV10
 objType file
 bioRep 051WC,052WC
@@ -51268,4 +51294,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 1446631944
+# MAGIC: -1901573794

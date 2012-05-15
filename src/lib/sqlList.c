@@ -240,9 +240,12 @@ if (s)
 	count = 0;
 	for (;;)
 	    {
+	    if (*s == ',')
+		errAbort("Empty element in list. Each element should contain one character.");
 	    array[count++] = *s++;
 	    if (!(*s == 0 || *s == ','))
 		{
+		--s;
 		char *e = strchr(s, ',');
 		if (e)
 		    *e = 0;

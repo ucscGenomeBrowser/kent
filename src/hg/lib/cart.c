@@ -1485,7 +1485,13 @@ va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
-cgiMakeHiddenVar("db", db);
+// WTF - variable outside of a form on almost every page we make below?
+// Tim put this in.  Talking with him it sounds like some pages might actually
+// depend on it.  Not removing it until we have a chance to test.  Best fix
+// might be to add it to cartSaveSession, though this would then no longer be
+// well named, and not all things have 'db.'  Arrr.  Probably best to remove
+// and test a bunch.
+cgiMakeHiddenVar("db", db);  
 }
 
 void cartWebEnd()
@@ -1519,33 +1525,45 @@ void setThemeFromCart(struct cart *cart)
  * defined for this theme Also set the "styleTheme", with additional styles
  * that can overwrite the main style settings */
 {
-// get theme from cart and use it to get background file from config
+// Get theme from cart and use it to get background file from config;
+// format is browser.theme.<name>=<stylesheet>[,<background>]
+
+char **options;
+int optionCount;
 char *cartTheme = cartOptionalString(cart, "theme");
 if (cartTheme==NULL)
     return;
 
 char *themeKey = catTwoStrings("browser.theme.", cartTheme);
 char *themeDefLine = cfgOption(themeKey);
-freeMem(themeKey);
+freez(&themeKey);
 if (themeDefLine == NULL)
     return;
 
-char * background = cloneString(themeDefLine);
-chopSuffixAt(background, ',');
-htmlSetBackground(background);
-
-// set css style (optional, after ',' in hg.conf line)
-if (! stringIn(",", themeDefLine))
+sqlStringDynamicArray(themeDefLine, &options, &optionCount);
+if(options == NULL)
     return;
-char * styleFile = cloneString(themeDefLine);
-styleFile = chopPrefixAt(styleFile, ',');
 
-char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-if (link)
+char *styleFile = options[0];
+if(isNotEmpty(styleFile))
     {
-    htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
-    webSetStyle(link);       // for web.c, used by hgc
+    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
+    if (link)
+        {
+        htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
+        webSetStyle(link);       // for web.c, used by hgc
+        }
     }
+
+if(optionCount >= 2)
+    {
+    char *background = options[1];
+    if(isNotEmpty(background))
+        htmlSetBackground(cloneString(background));
+    }
+
+freeMem(options[0]);
+freez(&options);
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),

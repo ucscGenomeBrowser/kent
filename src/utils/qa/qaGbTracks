@@ -3,11 +3,11 @@ import sys
 import argparse
 import time
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables import factory
-from ucscgenomics.qa.tables import reporter
-from ucscgenomics.qa.tables import summary
-from ucscgenomics.qa.encode import tableCheck
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import factory
+from ucscGb.qa.tables import reporter
+from ucscGb.qa.tables import summary
+from ucscGb.qa.encode import tableCheck
 
 def parseCommandLine():
     parser = argparse.ArgumentParser(
@@ -15,28 +15,44 @@ def parseCommandLine():
         description='Validates tables and records table statistics',
         epilog="""
 The following tests are run:
+  checks for underscores in table names
+  checks for the existence of table descriptions
+  checks shortLabel and longLabel length
   positionalTblCheck
   checkTblCoords
   genePredCheck
   pslCheck
-  checks for the existence of table descriptions
-  (checks for shortLabels and longLabels that are too long)
-  checks for underscores in table names
   featureBits
-  (joinerCheck) - not yet implemented
-  countPerChrom
+  (a version of) countPerChrom
 
   creates 3 files:  outFile.summary, outFile.log, outFile.chrom
         """)
     parser.add_argument('db', help='the database to check')
-    parser.add_argument('tableList', help='a file listing the tables to check')
-    parser.add_argument('outFile', help='base name for results files')
+    parser.add_argument('-s, --single', help ='tableList is the name of a single table',
+                        action="store_true", dest="single")
+    parser.add_argument('tableList', help=
+                        'a file listing the tables to check, or the name of a single table')
+    parser.add_argument('outFile', help='base name to give results files')
     return parser.parse_args()
 
-def getTableListFromFile():
-    with open(args.tableList, "r") as f:
-        raw = f.readlines()
-    return [name.strip() for name in raw]
+def tableExists(db, table):
+    """True if the table exists in the given database."""
+    sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
+    return sqlResult.strip() == table
+
+def checkTablesExist(db, tables):
+    """Raises an exception if any table in the tables list does not exist in the database."""
+    for name in tables:
+        if not tableExists(db, name):
+            raise Exception("Table " + name + " in " + db + " does not exist")
+
+def getTableList():
+    if args.single:
+        return [args.tableList]
+    else:
+        with open(args.tableList, "r") as f:
+            raw = f.readlines()
+        return [name.strip() for name in raw]
 
 delimiterLine = "==============================================="
 def runTests():
@@ -65,8 +81,8 @@ def runChromCounts():
         chromFile.write(line + "\n")
 
 args = parseCommandLine()
-tableList = getTableListFromFile()
-qaUtils.checkTablesExist(args.db, tableList)
+tableList = getTableList()
+checkTablesExist(args.db, tableList)
 
 logFile = open(args.outFile + ".log", "w")
 chromFile = open(args.outFile + ".chroms", "w")

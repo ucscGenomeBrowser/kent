@@ -24,7 +24,9 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res *= 10;
     res += c - '0';
     }
-if (c != '\0')
+--p;
+/* test for invalid character or empty */
+if ((c != '\0') || (p == s))
     errAbort("invalid unsigned integer: \"%s\"", s);
 return res;
 }
@@ -46,7 +48,8 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res *= 10;
     res += c - '0';
     }
-if (!(c == '\0' || c == ','))
+--p;
+if (!(c == '\0' || c == ',') || (p == s))
     {
     char *e = strchr(s, ',');
     if (e)
@@ -71,7 +74,8 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res *= 10;
     res += c - '0';
     }
-if (c != '\0')
+--p;
+if ((c != '\0') || (p == s))
     errAbort("invalid unsigned long: \"%s\"", s);
 return res;
 }
@@ -93,7 +97,8 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     res *= 10;
     res += c - '0';
     }
-if (!(c == '\0' || c == ','))
+--p;
+if (!(c == '\0' || c == ',') || (p == s))
     {
     char *e = strchr(s, ',');
     if (e)
@@ -146,7 +151,7 @@ while ((*p >= '0') && (*p <= '9'))
     res *= 10;
     res += *p - '0';
     p++;
-}
+    }
 /* test for invalid character, empty, or just a minus */
 if (!(*p == '\0' || *p == ',') || (p == p0))
     {

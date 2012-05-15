@@ -1,7 +1,14 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
 
 import sys, os, shutil, stat, argparse, datetime, hashlib
-from ucscgenomics import track, ra, soft, cv, mdb, geo, encode
+
+from ucscGb.gbData.ra.raFile import RaFile
+from ucscGb.externalData.geo import submission
+from ucscGb.externalData.geo import soft
+from ucscGb.encode import encodeUtils
+from ucscGb.encode.cv import CvFile
+from ucscGb.encode.track import CompositeTrack, TrackFile
+
 
 '''
 mkGeoPkg - create a soft file and upload script for a given track, so that it
@@ -110,10 +117,10 @@ mdbWhitelist = [
 ]
     
 def isRawFile(file):
-    return (file.extension == 'fastq' or file.extension == 'fasta')
+    return (file.extension == 'fastq' or file.extension == 'csfasta' or file.extension == 'csqual')
     
 def isSupplimentaryFile(file):
-    return not isRawFile(file)
+    return (not isRawFile(file)) and file.extension != 'fasta' and file.extension != 'bam' and file.extension != 'bai'
     
 def sampleTitle(stanza, expVars, warn=False):
     concat = stanza[expVars[0]].replace('-m', '')
@@ -171,7 +178,7 @@ def createMappings(metadb):
 
     try:
         dt = datatype
-        datatype = encode.dataTypes[dt]
+        datatype = encodeUtils.dataTypes[dt]
         datatype.name = dt
     except KeyError:
         raise KeyError(datatype)
@@ -216,7 +223,7 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, 
         if audit:
             print seriesStanza.name + ': no contributor'
         
-    seriesStanza['!Series_gp_id'] = mdb.gpIds[compositeTrack.organism + ' ' + datatype.source]
+    seriesStanza['!Series_gp_id'] = encodeUtils.gpIds[compositeTrack.organism + ' ' + datatype.source]
     
     # could use !Series_variable_* and !Series_repeats_*
     
@@ -264,9 +271,9 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
         for stanza in expId:    
             if 'seqPlatform' in stanza:
                 if instrumentModel == None:
-                    instrumentModel = geo.instrumentModels[stanza['seqPlatform']]
+                    instrumentModel = submission.instrumentModels[stanza['seqPlatform']]
                 else:
-                    if instrumentModel != geo.instrumentModels[stanza['seqPlatform']]:
+                    if instrumentModel != submission.instrumentModels[stanza['seqPlatform']]:
                         instrumentModel = None
                         if audit:
                             print 'expId' + str(expId) + ': inconsistent instrument model'
@@ -279,6 +286,9 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
                 file = compositeTrack.files[fname]
                 filelist = list()
                 
+                if file.extension == 'fasta':
+                    print 'WARNING: fastas detected!!!'
+                
                 if isRawFile(file):
                 
                     if file.name.endswith('.tgz') or file.name.endswith('.tar.gz'):
@@ -287,21 +297,20 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
                             raise IOError('this track contains tarred fastqs. Please specify a path through the -z option')
                         dirname = tarpath + file.name.split('.')[0] + '/'
                         if os.path.exists(dirname):
-                            raise IOError(dirname + ' already exists')
+                            print dirname + ' already exists, so not unzipping'
                         else:
                             os.mkdir(dirname)
-
-                        os.system('tar -xf %s -C %s' % (file.path + file.name, dirname))
+                            os.system('tar -xf %s -C %s' % (file.path + file.name, dirname))
                         
-                        for root, dirnames, filenames in os.walk(dirname):
-                            for filename in filenames:
-                                if filename.endswith('.fastq') or filename.endswith('.txt'):
-                                    os.system('gzip %s' % (root + '/' + filename))
+                            for root, dirnames, filenames in os.walk(dirname):
+                                for filename in filenames:
+                                    if filename.endswith('.fastq') or filename.endswith('.txt'):
+                                        os.system('gzip %s' % (root + '/' + filename))
                         
                         for root, dirnames, filenames in os.walk(dirname):
                             for filename in filenames:
                                 print root + '/' + filename
-                                filelist.append(track.TrackFile(root + '/' + filename))
+                                filelist.append(TrackFile(root + '/' + filename))
 
                     else:
                         filelist.append(file)
@@ -311,13 +320,17 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
                         sample['!Sample_raw_file_' + str(count)] = linkName(f, compositeTrack)
                         if f.extension == 'txt':
                             sample['!Sample_raw_file_type_' + str(count)] = 'fastq'
+                        elif f.extension == 'csfasta':
+                            sample['!Sample_raw_file_type_' + str(count)] = 'SOLiD_native_csfasta'
+                        elif f.extension == 'csqual':
+                            sample['!Sample_raw_file_type_' + str(count)] = 'SOLiD_native_qual'
                         else:
                             sample['!Sample_raw_file_type_' + str(count)] = f.extension
                         
                         sample['!Sample_raw_file_checksum_' + str(count)] = f.md5sum
 
                         if instrumentModel == None and 'seqPlatform' in stanza:
-                            sample['!Sample_raw_file_instrument_model_' + str(count)] = geo.instrumentModels[stanza['seqPlatform']]
+                            sample['!Sample_raw_file_instrument_model_' + str(count)] = submission.instrumentModels[stanza['seqPlatform']]
                             
                         fileList.append(f)    
                         count = count + 1
@@ -338,7 +351,7 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
                     sample['!Sample_supplementary_file_build_' + str(count)] = compositeTrack.database
                     
                     if instrumentModel == None and 'seqPlatform' in stanza:
-                        sample['!Sample_supplementary_file_instrument_model_' + str(count)] = geo.instrumentModels[stanza['seqPlatform']]
+                        sample['!Sample_supplementary_file_instrument_model_' + str(count)] = submission.instrumentModels[stanza['seqPlatform']]
                     
                     fileList.append(file)
                     count = count + 1
@@ -379,16 +392,16 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
                         sample['!Sample_growth_protocol'] = val
         
         if datatype.molecule == 'RNA':
-            if firstStanza['rnaExtract'] in geo.rnaExtractMapping:
-                sample['!Sample_molecule'] = geo.rnaExtractMapping[firstStanza['rnaExtract']]
-            elif firstStanza['localization'] in geo.localizationMapping:
-                sample['!Sample_molecule'] = geo.localizationMapping[firstStanza['localization']]
+            if firstStanza['rnaExtract'] in submission.rnaExtractMapping:
+                sample['!Sample_molecule'] = submission.rnaExtractMapping[firstStanza['rnaExtract']]
+            elif firstStanza['localization'] in submission.localizationMapping:
+                sample['!Sample_molecule'] = submission.localizationMapping[firstStanza['localization']]
                 
         else:
             sample['!Sample_molecule'] = datatype.molecule
             
         if '!Sample_instrument_model' in replace and replace['!Sample_instrument_model'][0] == 'Unknown':
-            sample['!Sample_extract_protocol'] = 'Instrument model unknown. ("%s" specified by default). For more information, see %s' % (geo.instrumentModels[replace['!Sample_instrument_model'][0]], compositeTrack.url)
+            sample['!Sample_extract_protocol'] = 'Instrument model unknown. ("%s" specified by default). For more information, see %s' % (submission.instrumentModels[replace['!Sample_instrument_model'][0]], compositeTrack.url)
         else:
             sample['!Sample_extract_protocol'] = compositeTrack.url
         sample['!Sample_library_strategy'] = datatype.strategy
@@ -404,11 +417,11 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
         else:
             for stanza in expId:    
                 if 'seqPlatform' in stanza:
-                    sample['!Sample_instrument_model'] = geo.instrumentModels[stanza['seqPlatform']]
+                    sample['!Sample_instrument_model'] = submission.instrumentModels[stanza['seqPlatform']]
                     break
             if '!Sample_instrument_model' not in sample:
                 if '!Sample_instrument_model' in replace:
-                    sample['!Sample_instrument_model'] = geo.instrumentModels[replace['!Sample_instrument_model'][0]]
+                    sample['!Sample_instrument_model'] = submission.instrumentModels[replace['!Sample_instrument_model'][0]]
             if '!Sample_instrument_model' not in sample:
                 sample['!Sample_instrument_model'] = '[REPLACE]'
                 if audit:
@@ -569,10 +582,10 @@ def main():
     
     args = parser.parse_args(sys.argv[1:])
         
-    compositeTrack = track.CompositeTrack(args.database, args.composite, args.trackPath)
+    compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
 
     cvPath = compositeTrack.trackPath + 'cv/alpha/cv.ra'
-    controlledVocab = cv.CvFile(cvPath)
+    controlledVocab = CvFile(cvPath)
     
     if args.zip != None and not args.zip.endswith('/'):
         args.zip += '/'
