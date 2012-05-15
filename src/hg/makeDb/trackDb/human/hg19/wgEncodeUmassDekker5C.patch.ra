@@ -19,7 +19,7 @@ type bed 12 +
 scoreFilter 0
 noInherit on
 wgEncode 1
-html wgEncodeUmassDekker5c.patch
+html wgEncodeUmassDekker5C.patch
 
         track wgEncodeUmassDekker5CGm12878Pk
         parent wgEncodeUmassDekker5C
