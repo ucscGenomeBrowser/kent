@@ -878,6 +878,11 @@ void printSubmitSection()
 /* Print an output format section that can't be removed like data source sections can. */
 {
 webNewHackSection(FALSE, "submitSection", TRUE, "Get Results");
+cgiMakeButtonWithOnClick("startQuery", "Go!",
+			 "get the results of your query",
+			 "hgvaExecuteQuery();");
+printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
+printf("<span id='loadingMsg'></span>\n");
 puts("<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>");
 puts("<p><span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>");
 puts("This tool is for research use only. While this tool is open to the "
@@ -885,11 +890,6 @@ puts("This tool is for research use only. While this tool is open to the "
      "condition are urged to consult with a qualified physician for "
      "diagnosis and for answers to personal questions.");
 puts("</p></div>");
-cgiMakeButtonWithOnClick("startQuery", "Go!",
-			 "get the results of your query",
-			 "hgvaExecuteQuery();");
-printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
-printf("<span id='loadingMsg'></span>\n");
 }
 
 //#*** --------------------- verbatim from hgTables/wikiTrack.c -------------------------
