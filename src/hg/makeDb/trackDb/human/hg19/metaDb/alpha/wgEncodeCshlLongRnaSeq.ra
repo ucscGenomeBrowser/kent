@@ -42644,6 +42644,7 @@ view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -42920,6 +42921,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -43364,6 +43366,7 @@ view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -43810,6 +43813,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -51308,4 +51312,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 612773051
+# MAGIC: 613470871
