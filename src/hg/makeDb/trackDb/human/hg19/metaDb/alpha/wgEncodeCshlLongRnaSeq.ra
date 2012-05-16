@@ -194,7 +194,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3124
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -222,7 +222,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3125
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -250,7 +250,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3124
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -278,7 +278,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3125
 tableName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamContigs
 objType table
@@ -855,7 +855,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2404
 tableName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep2
 objType table
@@ -883,7 +883,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2405
 tableName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep1
 objType table
@@ -911,7 +911,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2404
 tableName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep2
 objType table
@@ -939,7 +939,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2405
 tableName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapProtocolRep1
 objType file
@@ -1370,7 +1370,7 @@ subId 6068
 tableName wgEncodeCshlLongRnaSeqA549CytosolPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep3
 objType table
 bioRep 087C
 cell A549
@@ -1381,7 +1381,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45897
@@ -1394,10 +1394,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5766
-tableName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep4
 objType table
 bioRep 088C
 cell A549
@@ -1408,7 +1408,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45898
@@ -1421,10 +1421,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5784
-tableName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep3
 objType table
 bioRep 087C
 cell A549
@@ -1435,7 +1435,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45897
@@ -1448,10 +1448,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5766
-tableName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep4
 objType table
 bioRep 088C
 cell A549
@@ -1462,7 +1462,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45898
@@ -1475,8 +1475,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5784
-tableName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep3
 objType file
@@ -1877,7 +1877,7 @@ subId 6059
 tableName wgEncodeCshlLongRnaSeqA549NucleusPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep3
 objType table
 bioRep 087N
 cell A549
@@ -1888,7 +1888,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45899
@@ -1901,10 +1901,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5788
-tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep4
 objType table
 bioRep 088N
 cell A549
@@ -1915,7 +1915,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45900
@@ -1928,10 +1928,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5763
-tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep3
 objType table
 bioRep 087N
 cell A549
@@ -1942,7 +1942,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45899
@@ -1955,10 +1955,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5788
-tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep4
 objType table
 bioRep 088N
 cell A549
@@ -1969,7 +1969,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45900
@@ -1982,8 +1982,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5763
-tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep3
 objType file
@@ -2310,7 +2310,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2707
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -2338,7 +2338,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3127
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -2366,7 +2366,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2707
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -2394,7 +2394,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3127
 tableName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamContigs
 objType table
@@ -2971,7 +2971,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2345
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep2
 objType table
@@ -2999,7 +2999,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2406
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep1
 objType table
@@ -3027,7 +3027,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2345
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep2
 objType table
@@ -3055,7 +3055,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2406
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapProtocolRep1
 objType file
@@ -3412,7 +3412,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3128
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -3440,7 +3440,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3129
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -3468,7 +3468,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3128
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -3496,7 +3496,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3129
 tableName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamContigs
 objType table
@@ -4073,7 +4073,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2456
 tableName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep2
 objType table
@@ -4101,7 +4101,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2477
 tableName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep1
 objType table
@@ -4129,7 +4129,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2456
 tableName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep2
 objType table
@@ -4157,7 +4157,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2477
 tableName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapProtocolRep1
 objType file
@@ -4598,7 +4598,7 @@ subId 6064
 tableName wgEncodeCshlLongRnaSeqCd20CellPamJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd20CellPamMinusRep1
 objType table
 bioRep 041WC
 cell CD20+
@@ -4610,7 +4610,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002666
 donorId RO01794
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPamMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44659
@@ -4623,10 +4623,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5793
-tableName wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPamMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPamMinusRep2
 objType table
 bioRep 042WC
 cell CD20+
@@ -4638,7 +4638,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002666
 donorId RO01778
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPamMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44660
@@ -4651,10 +4651,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5761
-tableName wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPamMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd20CellPamPlusRep1
 objType table
 bioRep 041WC
 cell CD20+
@@ -4666,7 +4666,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002666
 donorId RO01794
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPamPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44659
@@ -4679,10 +4679,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5793
-tableName wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPamPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPamPlusRep2
 objType table
 bioRep 042WC
 cell CD20+
@@ -4694,7 +4694,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002666
 donorId RO01778
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPamPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44660
@@ -4707,8 +4707,8 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5761
-tableName wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPamPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPamSpikeinsRep1
 objType file
@@ -5066,7 +5066,7 @@ subId 6067
 tableName wgEncodeCshlLongRnaSeqCd20CellPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapMinusRep1
 objType table
 bioRep 041WC
 cell CD20+
@@ -5078,7 +5078,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPapMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44498
@@ -5091,10 +5091,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5758
-tableName wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPapMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapMinusRep2
 objType table
 bioRep 042WC
 cell CD20+
@@ -5106,7 +5106,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPapMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44499
@@ -5119,10 +5119,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5772
-tableName wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPapMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapPlusRep1
 objType table
 bioRep 041WC
 cell CD20+
@@ -5134,7 +5134,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44498
@@ -5147,10 +5147,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5758
-tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2
 objType table
 bioRep 042WC
 cell CD20+
@@ -5162,7 +5162,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44499
@@ -5175,8 +5175,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5772
-tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep1
 objType file
@@ -5444,7 +5444,7 @@ spikeInPool Nist14
 subId 6399
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRep1
 objType table
 bioRep 043WC
 cell CD34+_Mobilized
@@ -5455,7 +5455,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002670
 expId 2670
-fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45901
@@ -5468,10 +5468,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5780
-tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1
 objType table
 bioRep 043WC
 cell CD34+_Mobilized
@@ -5482,7 +5482,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002670
 expId 2670
-fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45901
@@ -5495,8 +5495,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5780
-tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalSpikeinsRep1
 objType file
@@ -5741,7 +5741,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3230
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -5769,7 +5769,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2402
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -5797,7 +5797,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3230
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -5825,7 +5825,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2402
 tableName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamContigs
 objType table
@@ -6456,7 +6456,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2097
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep2
 objType table
@@ -6484,7 +6484,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2445
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep1
 objType table
@@ -6512,7 +6512,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2097
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep2
 objType table
@@ -6540,7 +6540,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2445
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapProtocolRep1
 objType file
@@ -6829,7 +6829,7 @@ replicate 1
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
 objType table
@@ -6855,7 +6855,7 @@ replicate 2
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
 objType table
@@ -6881,7 +6881,7 @@ replicate 1
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
 objType table
@@ -6907,7 +6907,7 @@ replicate 2
 rnaExtract total
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1
 objType table
@@ -7099,7 +7099,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3130
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep2
 objType table
@@ -7127,7 +7127,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep1
 objType table
@@ -7155,7 +7155,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3130
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2
 objType table
@@ -7183,7 +7183,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamContigs
 objType table
@@ -7814,7 +7814,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1911
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep2
 objType table
@@ -7842,7 +7842,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2441
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep1
 objType table
@@ -7870,7 +7870,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1911
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep2
 objType table
@@ -7898,7 +7898,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2441
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapProtocolRep1
 objType file
@@ -8255,7 +8255,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
 objType table
@@ -8283,7 +8283,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3236
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
 objType table
@@ -8311,7 +8311,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 objType table
@@ -8339,7 +8339,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3236
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamContigs
 objType table
@@ -8970,7 +8970,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1926
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2
 objType table
@@ -8998,7 +8998,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1927
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1
 objType table
@@ -9026,7 +9026,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1926
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2
 objType table
@@ -9054,7 +9054,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1927
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapProtocolRep1
 objType file
@@ -9411,7 +9411,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2457
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -9439,7 +9439,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2407
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -9467,7 +9467,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2457
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -9495,7 +9495,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2407
 tableName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamContigs
 objType table
@@ -10126,7 +10126,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2098
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep2
 objType table
@@ -10154,7 +10154,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1929
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1
 objType table
@@ -10182,7 +10182,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2098
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2
 objType table
@@ -10210,7 +10210,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1929
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapProtocolRep1
 objType file
@@ -10485,7 +10485,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3221
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
 objType table
@@ -10513,7 +10513,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3221
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs
 objType table
@@ -11063,7 +11063,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1912
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapPlusRawSigRep2
 objType table
@@ -11091,7 +11091,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1912
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapProtocolRep2
 objType file
@@ -11311,7 +11311,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3227
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
 objType table
@@ -11339,7 +11339,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3227
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs
 objType table
@@ -11889,7 +11889,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1913
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapPlusRawSigRep2
 objType table
@@ -11917,7 +11917,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1913
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapProtocolRep2
 objType file
@@ -12111,7 +12111,7 @@ spikeInPool Nist13
 subId 5871
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRep2
 objType table
 bioRep 056WC
 cell HAoAF
@@ -12123,7 +12123,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002679
 donorId 6090101.11
 expId 2679
-fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47021
@@ -12136,10 +12136,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5871
-tableName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRep2
 objType table
 bioRep 056WC
 cell HAoAF
@@ -12151,7 +12151,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002679
 donorId 6090101.11
 expId 2679
-fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47021
@@ -12164,8 +12164,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5871
-tableName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalSpikeinsRep2
 objType file
@@ -12387,7 +12387,7 @@ spikeInPool Nist13
 subId 5874
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRep1
 objType table
 bioRep 057WC
 cell HAoEC
@@ -12399,7 +12399,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002680
 donorId 7071706.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47022
@@ -12412,10 +12412,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5874
-tableName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRep1
 objType table
 bioRep 057WC
 cell HAoEC
@@ -12427,7 +12427,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002680
 donorId 7071706.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47022
@@ -12440,8 +12440,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5874
-tableName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHaoec70717061CellTotalSpikeinsRep1
 objType file
@@ -12662,7 +12662,7 @@ subId 6077
 tableName wgEncodeCshlLongRnaSeqHaoecCellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRep2
 objType table
 bioRep 058WC
 cell HAoEC
@@ -12674,7 +12674,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002680
 donorId 8061102.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47023
@@ -12687,10 +12687,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5994
-tableName wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRep2
 objType table
 bioRep 058WC
 cell HAoEC
@@ -12702,7 +12702,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002680
 donorId 8061102.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47023
@@ -12715,8 +12715,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5994
-tableName wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalProtocolRep1
 objType file
@@ -12913,7 +12913,7 @@ spikeInPool Nist13
 subId 5868
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRep1
 objType table
 bioRep 059WC
 cell HCH
@@ -12925,7 +12925,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 0011308.2P
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47024
@@ -12938,10 +12938,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5868
-tableName wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRep1
 objType table
 bioRep 059WC
 cell HCH
@@ -12953,7 +12953,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 0011308.2P
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47024
@@ -12966,8 +12966,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5868
-tableName wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHch00113082pCellTotalSpikeinsRep1
 objType file
@@ -13078,7 +13078,7 @@ spikeInPool Nist13
 subId 5866
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRep2
 objType table
 bioRep 060WC
 cell HCH
@@ -13090,7 +13090,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 8100808.2
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47025
@@ -13103,10 +13103,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5866
-tableName wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRep2
 objType table
 bioRep 060WC
 cell HCH
@@ -13118,7 +13118,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 8100808.2
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47025
@@ -13131,8 +13131,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5866
-tableName wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHch81008082CellTotalSpikeinsRep2
 objType file
@@ -13547,7 +13547,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3486
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -13575,7 +13575,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3140
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -13603,7 +13603,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3486
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -13631,7 +13631,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3140
 tableName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamContigs
 objType table
@@ -14262,7 +14262,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1944
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep2
 objType table
@@ -14290,7 +14290,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1957
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1
 objType table
@@ -14318,7 +14318,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1944
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep2
 objType table
@@ -14346,7 +14346,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1957
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapProtocolRep1
 objType file
@@ -14621,7 +14621,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3223
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
 objType table
@@ -14649,7 +14649,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3223
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamContigs
 objType table
@@ -15253,7 +15253,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1951
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep2
 objType table
@@ -15281,7 +15281,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2447
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep1
 objType table
@@ -15309,7 +15309,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1951
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep2
 objType table
@@ -15337,7 +15337,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2447
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapProtocolRep1
 objType file
@@ -15694,7 +15694,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3234
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2
 objType table
@@ -15722,7 +15722,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3142
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1
 objType table
@@ -15750,7 +15750,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3234
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep2
 objType table
@@ -15778,7 +15778,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3142
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamContigs
 objType table
@@ -16409,7 +16409,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1952
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep2
 objType table
@@ -16437,7 +16437,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1916
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep1
 objType table
@@ -16465,7 +16465,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1952
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep2
 objType table
@@ -16493,7 +16493,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1916
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapProtocolRep1
 objType file
@@ -16850,7 +16850,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -16878,7 +16878,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3487
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -16906,7 +16906,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -16934,7 +16934,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3487
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamContigs
 objType table
@@ -17565,7 +17565,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1958
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep2
 objType table
@@ -17593,7 +17593,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1960
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1
 objType table
@@ -17621,7 +17621,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1958
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep2
 objType table
@@ -17649,7 +17649,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1960
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapProtocolRep1
 objType file
@@ -18006,7 +18006,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3235
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
 objType table
@@ -18034,7 +18034,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3228
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1
 objType table
@@ -18062,7 +18062,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3235
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
 objType table
@@ -18090,7 +18090,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3228
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamContigs
 objType table
@@ -18721,7 +18721,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1959
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep2
 objType table
@@ -18749,7 +18749,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1917
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep1
 objType table
@@ -18777,7 +18777,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1959
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep2
 objType table
@@ -18805,7 +18805,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1917
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapProtocolRep1
 objType file
@@ -19162,7 +19162,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
 objType table
@@ -19190,7 +19190,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3237
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
 objType table
@@ -19218,7 +19218,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
 objType table
@@ -19246,7 +19246,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3237
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamContigs
 objType table
@@ -19877,7 +19877,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1918
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep2
 objType table
@@ -19905,7 +19905,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1961
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep1
 objType table
@@ -19933,7 +19933,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1918
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep2
 objType table
@@ -19961,7 +19961,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1961
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapProtocolRep1
 objType file
@@ -20210,7 +20210,7 @@ spikeInPool Nist13
 subId 5791
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRep2
 objType table
 bioRep 062WC
 cell HFDPC
@@ -20222,7 +20222,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0100503.2
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47095
@@ -20235,10 +20235,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5791
-tableName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRep2
 objType table
 bioRep 062WC
 cell HFDPC
@@ -20250,7 +20250,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0100503.2
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47095
@@ -20263,8 +20263,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5791
-tableName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalSpikeinsRep2
 objType file
@@ -20375,7 +20375,7 @@ spikeInPool Nist13
 subId 5777
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRep1
 objType table
 bioRep 061WC
 cell HFDPC
@@ -20387,7 +20387,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0102703.3
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47094
@@ -20400,10 +20400,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5777
-tableName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRep1
 objType table
 bioRep 061WC
 cell HFDPC
@@ -20415,7 +20415,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0102703.3
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47094
@@ -20428,8 +20428,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5777
-tableName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalSpikeinsRep1
 objType file
@@ -20760,7 +20760,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -20788,7 +20788,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2555
 tableName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamContigs
 objType table
@@ -21338,7 +21338,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2458
 tableName wgEncodeCshlLongRnaSeqHmecCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapPlusRawSigRep1
 objType table
@@ -21366,7 +21366,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2458
 tableName wgEncodeCshlLongRnaSeqHmecCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapProtocolRep1
 objType file
@@ -21669,7 +21669,7 @@ spikeInPool Nist13
 subId 6400
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1
 objType table
 bioRep 063WC
 cell HMEpC
@@ -21681,7 +21681,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002683
 donorId 6022801.3
 expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47096
@@ -21694,10 +21694,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1
 objType table
 bioRep 063WC
 cell HMEpC
@@ -21709,7 +21709,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002683
 donorId 6022801.3
 expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47096
@@ -21722,8 +21722,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalProtocolRep1
 objType file
@@ -21935,7 +21935,7 @@ spikeInPool Nist13
 subId 6784
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2
 objType table
 bioRep 076WC
 cell hMNC-CB
@@ -21945,7 +21945,7 @@ dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
 donorId 9111701.6
-fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47806
@@ -21959,10 +21959,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6859
-tableName wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2
 objType table
 bioRep 076WC
 cell hMNC-CB
@@ -21972,7 +21972,7 @@ dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
 donorId 9111701.6
-fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47806
@@ -21986,8 +21986,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6859
-tableName wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalProtocolRep2
 objType file
@@ -22168,7 +22168,7 @@ spikeInPool Nist13
 subId 6783
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
 objType table
 bioRep 077WC
 cell hMNC-PB
@@ -22178,7 +22178,7 @@ dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
 donorId 0082430.9
-fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47807
@@ -22192,10 +22192,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6858
-tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
 objType table
 bioRep 077WC
 cell hMNC-PB
@@ -22205,7 +22205,7 @@ dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
 donorId 0082430.9
-fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47807
@@ -22219,8 +22219,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6858
-tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalProtocolRep1
 objType file
@@ -22356,7 +22356,7 @@ spikeInPool Nist13
 subId 5765
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1
 objType table
 bioRep 065WC
 cell hMSC-AT
@@ -22368,7 +22368,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 0102604.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47097
@@ -22381,10 +22381,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5765
-tableName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRep1
 objType table
 bioRep 065WC
 cell hMSC-AT
@@ -22396,7 +22396,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 0102604.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47097
@@ -22409,8 +22409,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5765
-tableName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalSpikeinsRep1
 objType file
@@ -22521,7 +22521,7 @@ spikeInPool Nist13
 subId 5769
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRep2
 objType table
 bioRep 066WC
 cell hMSC-AT
@@ -22533,7 +22533,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 9061601.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47098
@@ -22546,10 +22546,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5769
-tableName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRep2
 objType table
 bioRep 066WC
 cell hMSC-AT
@@ -22561,7 +22561,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 9061601.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47098
@@ -22574,8 +22574,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5769
-tableName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscat906160112CellTotalSpikeinsRep2
 objType file
@@ -22880,7 +22880,7 @@ spikeInPool Nist13
 subId 5878
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRep2
 objType table
 bioRep 068WC
 cell hMSC-BM
@@ -22892,7 +22892,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002673
 donorId 0050602.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47100
@@ -22905,10 +22905,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5878
-tableName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRep2
 objType table
 bioRep 068WC
 cell hMSC-BM
@@ -22920,7 +22920,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002673
 donorId 0050602.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47100
@@ -22933,8 +22933,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5878
-tableName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalSpikeinsRep2
 objType file
@@ -23045,7 +23045,7 @@ spikeInPool Nist13
 subId 5786
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRep1
 objType table
 bioRep 067WC
 cell hMSC-BM
@@ -23057,7 +23057,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002673
 donorId 0051105.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47099
@@ -23070,10 +23070,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5786
-tableName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRep1
 objType table
 bioRep 067WC
 cell hMSC-BM
@@ -23085,7 +23085,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002673
 donorId 0051105.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47099
@@ -23098,8 +23098,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5786
-tableName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalSpikeinsRep1
 objType file
@@ -23404,7 +23404,7 @@ spikeInPool Nist13
 subId 5892
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRep1
 objType table
 bioRep 069WC
 cell hMSC-UC
@@ -23416,7 +23416,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002684
 donorId 0052501.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47299
@@ -23429,10 +23429,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5892
-tableName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRep1
 objType table
 bioRep 069WC
 cell hMSC-UC
@@ -23444,7 +23444,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002684
 donorId 0052501.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47299
@@ -23457,8 +23457,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5892
-tableName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalSpikeinsRep1
 objType file
@@ -23569,7 +23569,7 @@ spikeInPool Nist13
 subId 5885
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRep2
 objType table
 bioRep 070WC
 cell hMSC-UC
@@ -23581,7 +23581,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002684
 donorId 0081101.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47300
@@ -23594,10 +23594,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5885
-tableName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRep2
 objType table
 bioRep 070WC
 cell hMSC-UC
@@ -23609,7 +23609,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002684
 donorId 0081101.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47300
@@ -23622,8 +23622,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5885
-tableName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalSpikeinsRep2
 objType file
@@ -23872,7 +23872,7 @@ spikeInPool Nist13
 subId 5881
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRep2
 objType table
 bioRep 054WC
 cell HOB
@@ -23884,7 +23884,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002675
 donorId 0090202.1
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47252
@@ -23897,10 +23897,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5881
-tableName wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRep2
 objType table
 bioRep 054WC
 cell HOB
@@ -23912,7 +23912,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002675
 donorId 0090202.1
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47252
@@ -23925,8 +23925,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5881
-tableName wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHob00902021CellTotalSpikeinsRep2
 objType file
@@ -24037,7 +24037,7 @@ spikeInPool Nist13
 subId 5869
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRep1
 objType table
 bioRep 053WC
 cell HOB
@@ -24049,7 +24049,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002675
 donorId 0091301
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47251
@@ -24062,10 +24062,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5869
-tableName wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRep1
 objType table
 bioRep 053WC
 cell HOB
@@ -24077,7 +24077,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002675
 donorId 0091301
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47251
@@ -24090,8 +24090,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5869
-tableName wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHob0091301CellTotalSpikeinsRep1
 objType file
@@ -24588,7 +24588,7 @@ subId 6065
 tableName wgEncodeCshlLongRnaSeqHpcplCellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep1
 objType table
 bioRep 071WC
 cell HPC-PL
@@ -24600,7 +24600,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002667
 donorId 0101504.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47301
@@ -24613,10 +24613,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5876
-tableName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep2
 objType table
 bioRep 072WC
 cell HPC-PL
@@ -24628,7 +24628,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002667
 donorId 0032601.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47104
@@ -24641,10 +24641,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5759
-tableName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep1
 objType table
 bioRep 071WC
 cell HPC-PL
@@ -24656,7 +24656,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002667
 donorId 0101504.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47301
@@ -24669,10 +24669,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5876
-tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2
 objType table
 bioRep 072WC
 cell HPC-PL
@@ -24684,7 +24684,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002667
 donorId 0032601.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47104
@@ -24697,8 +24697,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5759
-tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2
 objType file
@@ -25084,7 +25084,7 @@ subId 6073
 tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep1
 objType table
 bioRep 073WC
 cell HPIEpC
@@ -25096,7 +25096,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002685
 donorId 9041503.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47105
@@ -25109,10 +25109,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5995
-tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep2
 objType table
 bioRep 074WC
 cell HPIEpC
@@ -25124,7 +25124,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002685
 donorId 9012801.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47253
@@ -25137,10 +25137,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5884
-tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep1
 objType table
 bioRep 073WC
 cell HPIEpC
@@ -25152,7 +25152,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002685
 donorId 9041503.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47105
@@ -25165,10 +25165,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5995
-tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep2
 objType table
 bioRep 074WC
 cell HPIEpC
@@ -25180,7 +25180,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002685
 donorId 9012801.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47253
@@ -25193,8 +25193,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5884
-tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalProtocolRep1
 objType file
@@ -25608,7 +25608,7 @@ subId 6069
 tableName wgEncodeCshlLongRnaSeqHsavecCellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep1
 objType table
 bioRep 093WC
 cell HSaVEC
@@ -25620,7 +25620,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002676
 donorId 0022202.16
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47260
@@ -25633,10 +25633,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5888
-tableName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep2
 objType table
 bioRep 094WC
 cell HSaVEC
@@ -25648,7 +25648,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002676
 donorId 9100101.15
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47261
@@ -25661,10 +25661,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5867
-tableName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep1
 objType table
 bioRep 093WC
 cell HSaVEC
@@ -25676,7 +25676,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002676
 donorId 0022202.16
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47260
@@ -25689,10 +25689,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5888
-tableName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep2
 objType table
 bioRep 094WC
 cell HSaVEC
@@ -25704,7 +25704,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002676
 donorId 9100101.15
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47261
@@ -25717,8 +25717,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5867
-tableName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalProtocolRep1
 objType file
@@ -26048,7 +26048,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2552
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -26076,7 +26076,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2556
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -26104,7 +26104,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2552
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -26132,7 +26132,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2556
 tableName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamContigs
 objType table
@@ -26763,7 +26763,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2459
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep2
 objType table
@@ -26791,7 +26791,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2460
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep1
 objType table
@@ -26819,7 +26819,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2459
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep2
 objType table
@@ -26847,7 +26847,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2460
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapProtocolRep1
 objType file
@@ -27204,7 +27204,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3134
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -27232,7 +27232,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3135
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -27260,7 +27260,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3134
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -27288,7 +27288,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3135
 tableName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamContigs
 objType table
@@ -27919,7 +27919,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1930
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep2
 objType table
@@ -27947,7 +27947,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1914
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep1
 objType table
@@ -27975,7 +27975,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1930
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep2
 objType table
@@ -28003,7 +28003,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1914
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapProtocolRep1
 objType file
@@ -28278,7 +28278,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3225
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
 objType table
@@ -28306,7 +28306,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3225
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
 objType table
@@ -28910,7 +28910,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2461
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep4
 objType table
@@ -28938,7 +28938,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2462
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep3
 objType table
@@ -28966,7 +28966,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2461
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep4
 objType table
@@ -28994,7 +28994,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2462
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapProtocolRep3
 objType file
@@ -29351,7 +29351,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3136
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep4
 objType table
@@ -29379,7 +29379,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3137
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep3
 objType table
@@ -29407,7 +29407,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3136
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep4
 objType table
@@ -29435,7 +29435,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3137
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamContigs
 objType table
@@ -30066,7 +30066,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1931
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep4
 objType table
@@ -30094,7 +30094,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2408
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep3
 objType table
@@ -30122,7 +30122,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1931
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4
 objType table
@@ -30150,7 +30150,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2408
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapProtocolRep3
 objType file
@@ -30399,7 +30399,7 @@ spikeInPool Nist13
 subId 5872
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRep1
 objType table
 bioRep 051WC
 cell HVMF
@@ -30411,7 +30411,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002681
 donorId 6091203.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47249
@@ -30424,10 +30424,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5872
-tableName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRep1
 objType table
 bioRep 051WC
 cell HVMF
@@ -30439,7 +30439,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002681
 donorId 6091203.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47249
@@ -30452,8 +30452,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5872
-tableName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHvmf60912033CellTotalSpikeinsRep1
 objType file
@@ -30564,7 +30564,7 @@ spikeInPool Nist13
 subId 5873
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRep2
 objType table
 bioRep 052WC
 cell HVMF
@@ -30576,7 +30576,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002681
 donorId 6100401.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47250
@@ -30589,10 +30589,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5873
-tableName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRep2
 objType table
 bioRep 052WC
 cell HVMF
@@ -30604,7 +30604,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002681
 donorId 6100401.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47250
@@ -30617,8 +30617,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5873
-tableName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHvmf61004013CellTotalSpikeinsRep2
 objType file
@@ -30923,7 +30923,7 @@ spikeInPool Nist13
 subId 5875
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRep2
 objType table
 bioRep 080WC
 cell HWP
@@ -30935,7 +30935,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 0092205
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47255
@@ -30948,10 +30948,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5875
-tableName wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRep2
 objType table
 bioRep 080WC
 cell HWP
@@ -30963,7 +30963,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 0092205
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47255
@@ -30976,8 +30976,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5875
-tableName wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHwp0092205CellTotalSpikeinsRep2
 objType file
@@ -31088,7 +31088,7 @@ spikeInPool Nist13
 subId 5886
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRep1
 objType table
 bioRep 079WC
 cell HWP
@@ -31100,7 +31100,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 8120201.5
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47254
@@ -31113,10 +31113,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5886
-tableName wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRep1
 objType table
 bioRep 079WC
 cell HWP
@@ -31128,7 +31128,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 8120201.5
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47254
@@ -31141,8 +31141,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5886
-tableName wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHwp81202015CellTotalSpikeinsRep1
 objType file
@@ -31633,7 +31633,7 @@ subId 6074
 tableName wgEncodeCshlLongRnaSeqImr90CellPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapMinusRep1
 objType table
 bioRep 045WC
 cell IMR90
@@ -31644,7 +31644,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45016
@@ -31657,10 +31657,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5781
-tableName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellPapMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapMinusRep2
 objType table
 bioRep 046WC
 cell IMR90
@@ -31671,7 +31671,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45017
@@ -31684,10 +31684,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5771
-tableName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellPapMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapPlusRep1
 objType table
 bioRep 045WC
 cell IMR90
@@ -31698,7 +31698,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45016
@@ -31711,10 +31711,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5781
-tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2
 objType table
 bioRep 046WC
 cell IMR90
@@ -31725,7 +31725,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45017
@@ -31738,8 +31738,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5771
-tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1
 objType file
@@ -32089,7 +32089,7 @@ subId 6058
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep1
 objType table
 bioRep 045WC
 cell IMR90
@@ -32100,7 +32100,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45238
@@ -32113,10 +32113,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5768
-tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep2
 objType table
 bioRep 046WC
 cell IMR90
@@ -32127,7 +32127,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45239
@@ -32140,10 +32140,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5783
-tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep1
 objType table
 bioRep 045WC
 cell IMR90
@@ -32154,7 +32154,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45238
@@ -32167,10 +32167,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5768
-tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2
 objType table
 bioRep 046WC
 cell IMR90
@@ -32181,7 +32181,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45239
@@ -32194,8 +32194,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5783
-tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1
 objType file
@@ -32545,7 +32545,7 @@ subId 6072
 tableName wgEncodeCshlLongRnaSeqImr90CytosolPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep1
 objType table
 bioRep 045C
 cell IMR90
@@ -32556,7 +32556,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45611
@@ -32569,10 +32569,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5779
-tableName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep2
 objType table
 bioRep 046C
 cell IMR90
@@ -32583,7 +32583,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45612
@@ -32596,10 +32596,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5762
-tableName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep1
 objType table
 bioRep 045C
 cell IMR90
@@ -32610,7 +32610,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45611
@@ -32623,10 +32623,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5779
-tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2
 objType table
 bioRep 046C
 cell IMR90
@@ -32637,7 +32637,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45612
@@ -32650,8 +32650,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5762
-tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1
 objType file
@@ -33001,7 +33001,7 @@ subId 6054
 tableName wgEncodeCshlLongRnaSeqImr90NucleusPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep1
 objType table
 bioRep 045N
 cell IMR90
@@ -33012,7 +33012,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45613
@@ -33025,10 +33025,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5776
-tableName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep2
 objType table
 bioRep 046N
 cell IMR90
@@ -33039,7 +33039,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45635
@@ -33052,10 +33052,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5778
-tableName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep1
 objType table
 bioRep 045N
 cell IMR90
@@ -33066,7 +33066,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45613
@@ -33079,10 +33079,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5776
-tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2
 objType table
 bioRep 046N
 cell IMR90
@@ -33093,7 +33093,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID45635
@@ -33106,8 +33106,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5778
-tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1
 objType file
@@ -33379,7 +33379,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2397
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -33407,7 +33407,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2411
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -33435,7 +33435,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2397
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -33463,7 +33463,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2411
 tableName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamContigs
 objType table
@@ -34094,7 +34094,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2478
 tableName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep2
 objType table
@@ -34122,7 +34122,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1919
 tableName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1
 objType table
@@ -34150,7 +34150,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2478
 tableName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep2
 objType table
@@ -34178,7 +34178,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1919
 tableName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapProtocolRep1
 objType file
@@ -34467,7 +34467,7 @@ replicate 1
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
 objType table
@@ -34493,7 +34493,7 @@ replicate 2
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
 objType table
@@ -34519,7 +34519,7 @@ replicate 1
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
 objType table
@@ -34545,7 +34545,7 @@ replicate 2
 rnaExtract total
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3
 objType table
@@ -34874,7 +34874,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2711
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4
 objType table
@@ -34902,7 +34902,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3
 objType table
@@ -34930,7 +34930,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2711
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 objType table
@@ -34958,7 +34958,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep3
 objType file
@@ -35261,7 +35261,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3144
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
 objType table
@@ -35289,7 +35289,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1
 objType table
@@ -35317,7 +35317,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3144
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 objType table
@@ -35345,7 +35345,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3229
 tableName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamContigs
 objType table
@@ -35974,7 +35974,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1920
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep2
 objType table
@@ -36002,7 +36002,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1876
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep1
 objType table
@@ -36030,7 +36030,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1920
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep2
 objType table
@@ -36058,7 +36058,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1876
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapProtocolRep1
 objType file
@@ -36550,7 +36550,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2706
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4
 objType table
@@ -36578,7 +36578,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
 objType table
@@ -36606,7 +36606,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2706
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 objType table
@@ -36634,7 +36634,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep3
 objType file
@@ -37074,7 +37074,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2710
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4
 objType table
@@ -37102,7 +37102,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3
 objType table
@@ -37130,7 +37130,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2710
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
 objType table
@@ -37158,7 +37158,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep3
 objType file
@@ -37461,7 +37461,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3145
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep2
 objType table
@@ -37489,7 +37489,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3146
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep1
 objType table
@@ -37517,7 +37517,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3145
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep2
 objType table
@@ -37545,7 +37545,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3146
 tableName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamContigs
 objType table
@@ -38176,7 +38176,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1921
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep2
 objType table
@@ -38204,7 +38204,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1946
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1
 objType table
@@ -38232,7 +38232,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1921
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2
 objType table
@@ -38260,7 +38260,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1946
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapProtocolRep1
 objType file
@@ -38617,7 +38617,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2714
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep2
 objType table
@@ -38645,7 +38645,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2708
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1
 objType table
@@ -38673,7 +38673,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2714
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2
 objType table
@@ -38701,7 +38701,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2708
 tableName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamContigs
 objType table
@@ -39332,7 +39332,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2475
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2
 objType table
@@ -39360,7 +39360,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2476
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1
 objType table
@@ -39388,7 +39388,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2475
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2
 objType table
@@ -39416,7 +39416,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2476
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapProtocolRep1
 objType file
@@ -39847,7 +39847,7 @@ subId 6055
 tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep3
 objType table
 bioRep 089C
 cell MCF-7
@@ -39858,7 +39858,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46857
@@ -39871,10 +39871,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5792
-tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep4
 objType table
 bioRep 090C
 cell MCF-7
@@ -39885,7 +39885,7 @@ dateSubmitted 2012-02-25
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46858
@@ -39898,10 +39898,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5883
-tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep3
 objType table
 bioRep 089C
 cell MCF-7
@@ -39912,7 +39912,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46857
@@ -39925,10 +39925,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5792
-tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep4
 objType table
 bioRep 090C
 cell MCF-7
@@ -39939,7 +39939,7 @@ dateSubmitted 2012-02-25
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46858
@@ -39952,8 +39952,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5883
-tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep3
 objType file
@@ -40354,7 +40354,7 @@ subId 6056
 tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep3
 objType table
 bioRep 089N
 cell MCF-7
@@ -40365,7 +40365,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46859
@@ -40378,10 +40378,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5774
-tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep4
 objType table
 bioRep 090N
 cell MCF-7
@@ -40392,7 +40392,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46860
@@ -40405,10 +40405,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5760
-tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep3
 objType table
 bioRep 089N
 cell MCF-7
@@ -40419,7 +40419,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46859
@@ -40432,10 +40432,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5774
-tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep4
 objType table
 bioRep 090N
 cell MCF-7
@@ -40446,7 +40446,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46860
@@ -40459,8 +40459,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5760
-tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep3
 objType file
@@ -40871,7 +40871,7 @@ subId 6071
 tableName wgEncodeCshlLongRnaSeqMonocd14CellPamJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep1
 objType table
 bioRep 039WC
 cell Monocytes-CD14+
@@ -40883,7 +40883,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44657
@@ -40896,10 +40896,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5789
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep2
 objType table
 bioRep 040WC
 cell Monocytes-CD14+
@@ -40911,7 +40911,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44658
@@ -40924,10 +40924,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5764
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep1
 objType table
 bioRep 039WC
 cell Monocytes-CD14+
@@ -40939,7 +40939,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44657
@@ -40952,10 +40952,10 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5789
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep2
 objType table
 bioRep 040WC
 cell Monocytes-CD14+
@@ -40967,7 +40967,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44658
@@ -40980,8 +40980,8 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5764
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamSpikeinsRep1
 objType file
@@ -41339,7 +41339,7 @@ subId 6060
 tableName wgEncodeCshlLongRnaSeqMonocd14CellPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep1
 objType table
 bioRep 039WC
 cell Monocytes-CD14+
@@ -41351,7 +41351,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44594
@@ -41364,10 +41364,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5785
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep2
 objType table
 bioRep 040WC
 cell Monocytes-CD14+
@@ -41379,7 +41379,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44497
@@ -41392,10 +41392,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5773
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep1
 objType table
 bioRep 039WC
 cell Monocytes-CD14+
@@ -41407,7 +41407,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44594
@@ -41420,10 +41420,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5785
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep1
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2
 objType table
 bioRep 040WC
 cell Monocytes-CD14+
@@ -41435,7 +41435,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44497
@@ -41448,8 +41448,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5773
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep1
 objType file
@@ -41615,7 +41615,7 @@ spikeInPool Nist13
 subId 5865
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRep2
 objType table
 bioRep 050WC
 cell NHDF
@@ -41627,7 +41627,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002677
 donorId 0060801.3
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47248
@@ -41640,10 +41640,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5865
-tableName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRep2
 objType table
 bioRep 050WC
 cell NHDF
@@ -41655,7 +41655,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002677
 donorId 0060801.3
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47248
@@ -41668,8 +41668,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5865
-tableName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhdf00608013CellTotalSpikeinsRep2
 objType file
@@ -41780,7 +41780,7 @@ spikeInPool Nist13
 subId 5893
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRep1
 objType table
 bioRep 049WC
 cell NHDF
@@ -41792,7 +41792,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002677
 donorId 7071701.2
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47247
@@ -41805,10 +41805,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5893
-tableName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRep1
 objType table
 bioRep 049WC
 cell NHDF
@@ -41820,7 +41820,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002677
 donorId 7071701.2
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47247
@@ -41833,8 +41833,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5893
-tableName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhdf70717012CellTotalSpikeinsRep1
 objType file
@@ -42332,7 +42332,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2413
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -42360,7 +42360,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2414
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 objType file
@@ -42389,7 +42389,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2558
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -42417,7 +42417,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2413
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -42445,7 +42445,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2414
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 objType file
@@ -42474,7 +42474,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2558
 tableName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamContigs
 objType table
@@ -42644,6 +42644,7 @@ view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -42920,6 +42921,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -43364,6 +43366,7 @@ view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -43443,7 +43446,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1947
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
 objType table
@@ -43471,7 +43474,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1948
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 objType file
@@ -43500,7 +43503,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2467
 tableName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
 objType table
@@ -43528,7 +43531,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1947
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
 objType table
@@ -43556,7 +43559,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 1948
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 objType file
@@ -43585,7 +43588,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2467
 tableName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapProtocolRep1
 objType file
@@ -43810,6 +43813,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 objType file
+attic auxExp
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -43944,7 +43948,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3147
 tableName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep3
 objType table
@@ -43972,7 +43976,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3147
 tableName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamContigs
 objType table
@@ -44549,7 +44553,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2415
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4
 objType table
@@ -44577,7 +44581,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2416
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3
 objType table
@@ -44605,7 +44609,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2415
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4
 objType table
@@ -44633,7 +44637,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2416
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapProtocolRep3
 objType file
@@ -44990,7 +44994,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3231
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep4
 objType table
@@ -45018,7 +45022,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3148
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep3
 objType table
@@ -45046,7 +45050,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3231
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep4
 objType table
@@ -45074,7 +45078,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3148
 tableName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamContigs
 objType table
@@ -45706,7 +45710,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2417
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep4
 objType table
@@ -45734,7 +45738,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2468
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep3
 objType table
@@ -45762,7 +45766,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2417
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep4
 objType table
@@ -45790,7 +45794,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2468
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapProtocolRep3
 objType file
@@ -46039,7 +46043,7 @@ spikeInPool Nist13
 subId 5877
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRep2
 objType table
 bioRep 082WC
 cell NHEM.f_M2
@@ -46051,7 +46055,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 5071302.2
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47257
@@ -46064,10 +46068,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5877
-tableName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRep2
 objType table
 bioRep 082WC
 cell NHEM.f_M2
@@ -46079,7 +46083,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 5071302.2
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47257
@@ -46092,8 +46096,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5877
-tableName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalSpikeinsRep2
 objType file
@@ -46204,7 +46208,7 @@ spikeInPool Nist13
 subId 5870
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRep1
 objType table
 bioRep 081WC
 cell NHEM.f_M2
@@ -46216,7 +46220,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 6022001
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47256
@@ -46229,10 +46233,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5870
-tableName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRep1
 objType table
 bioRep 081WC
 cell NHEM.f_M2
@@ -46244,7 +46248,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 6022001
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47256
@@ -46257,8 +46261,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5870
-tableName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalSpikeinsRep1
 objType file
@@ -46563,7 +46567,7 @@ spikeInPool Nist13
 subId 5882
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRep2
 objType table
 bioRep 084WC
 cell NHEM_M2
@@ -46575,7 +46579,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7011001.2
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47259
@@ -46588,10 +46592,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5882
-tableName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRep2
 objType table
 bioRep 084WC
 cell NHEM_M2
@@ -46603,7 +46607,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7011001.2
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47259
@@ -46616,8 +46620,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5882
-tableName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhemm270110012CellTotalSpikeinsRep2
 objType file
@@ -46728,7 +46732,7 @@ spikeInPool Nist13
 subId 5863
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRep1
 objType table
 bioRep 083WC
 cell NHEM_M2
@@ -46740,7 +46744,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7012303
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47258
@@ -46753,10 +46757,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5863
-tableName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRep1
 objType table
 bioRep 083WC
 cell NHEM_M2
@@ -46768,7 +46772,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7012303
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47258
@@ -46781,8 +46785,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5863
-tableName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhemm27012303CellTotalSpikeinsRep1
 objType file
@@ -47195,7 +47199,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2557
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -47223,7 +47227,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2554
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -47251,7 +47255,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2557
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -47279,7 +47283,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2554
 tableName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamContigs
 objType table
@@ -47910,7 +47914,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2469
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep2
 objType table
@@ -47938,7 +47942,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2470
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep1
 objType table
@@ -47966,7 +47970,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2469
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep2
 objType table
@@ -47994,7 +47998,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2470
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapProtocolRep1
 objType file
@@ -48243,7 +48247,7 @@ spikeInPool Nist13
 subId 5887
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRawRep2
+metaObject wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRep2
 objType table
 bioRep 048WC
 cell SkMC
@@ -48255,7 +48259,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002678
 donorId 8121902.17
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47246
@@ -48268,10 +48272,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5887
-tableName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRawRep2
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRep2
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRawRep2
+metaObject wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRep2
 objType table
 bioRep 048WC
 cell SkMC
@@ -48283,7 +48287,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002678
 donorId 8121902.17
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRawRep2.bigWig
+fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47246
@@ -48296,8 +48300,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5887
-tableName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRawRep2
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRep2
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSkmc812190217CellTotalSpikeinsRep2
 objType file
@@ -48408,7 +48412,7 @@ spikeInPool Nist13
 subId 5864
 view FastqRd2
 
-metaObject wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRawRep1
+metaObject wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRep1
 objType table
 bioRep 047WC
 cell SkMC
@@ -48420,7 +48424,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002678
 donorId 9011302
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47245
@@ -48433,10 +48437,10 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5864
-tableName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRawRep1
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRep1
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRawRep1
+metaObject wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRep1
 objType table
 bioRep 047WC
 cell SkMC
@@ -48448,7 +48452,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002678
 donorId 9011302
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRawRep1.bigWig
+fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID47245
@@ -48461,8 +48465,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5864
-tableName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRawRep1
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSkmc9011302CellTotalSpikeinsRep1
 objType file
@@ -48949,7 +48953,7 @@ subId 6053
 tableName wgEncodeCshlLongRnaSeqSknshCellPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRep3
 objType table
 bioRep 085WC
 cell SK-N-SH
@@ -48960,7 +48964,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46598
@@ -48973,10 +48977,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5787
-tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRep4
 objType table
 bioRep 086WC
 cell SK-N-SH
@@ -48987,7 +48991,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46599
@@ -49000,10 +49004,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5775
-tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRep3
 objType table
 bioRep 085WC
 cell SK-N-SH
@@ -49014,7 +49018,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46598
@@ -49027,10 +49031,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5787
-tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRep4
 objType table
 bioRep 086WC
 cell SK-N-SH
@@ -49041,7 +49045,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46599
@@ -49054,8 +49058,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5775
-tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep3
 objType file
@@ -49456,7 +49460,7 @@ subId 6050
 tableName wgEncodeCshlLongRnaSeqSknshCytosolPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep3
 objType table
 bioRep 085C
 cell SK-N-SH
@@ -49467,7 +49471,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46594
@@ -49480,10 +49484,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5770
-tableName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep4
 objType table
 bioRep 086C
 cell SK-N-SH
@@ -49494,7 +49498,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46595
@@ -49507,10 +49511,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5782
-tableName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep3
 objType table
 bioRep 085C
 cell SK-N-SH
@@ -49521,7 +49525,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46594
@@ -49534,10 +49538,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5770
-tableName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep4
 objType table
 bioRep 086C
 cell SK-N-SH
@@ -49548,7 +49552,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46595
@@ -49561,8 +49565,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5782
-tableName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep3
 objType file
@@ -49963,7 +49967,7 @@ subId 6076
 tableName wgEncodeCshlLongRnaSeqSknshNucleusPapJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep3
 objType table
 bioRep 085N
 cell SK-N-SH
@@ -49974,7 +49978,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46596
@@ -49987,10 +49991,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5790
-tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep3
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep4
 objType table
 bioRep 086N
 cell SK-N-SH
@@ -50001,7 +50005,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46597
@@ -50014,10 +50018,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5767
-tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
-view MinusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep4
+view MinusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep3
 objType table
 bioRep 085N
 cell SK-N-SH
@@ -50028,7 +50032,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46596
@@ -50041,10 +50045,10 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5790
-tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep3
+view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep4
 objType table
 bioRep 086N
 cell SK-N-SH
@@ -50055,7 +50059,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4.bigWig
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46597
@@ -50068,8 +50072,8 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5767
-tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
-view PlusRawSignal
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep4
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep3
 objType file
@@ -50396,7 +50400,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
 objType table
@@ -50424,7 +50428,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3151
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
 objType table
@@ -50452,7 +50456,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3149
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
 objType table
@@ -50480,7 +50484,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3151
 tableName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamContigs
 objType table
@@ -51057,7 +51061,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2341
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
 objType table
@@ -51085,7 +51089,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
 objType table
@@ -51113,7 +51117,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2341
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 objType table
@@ -51141,7 +51145,7 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapProtocolRep1
 objType file
@@ -51308,4 +51312,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 612773051
+# MAGIC: -1199399525
