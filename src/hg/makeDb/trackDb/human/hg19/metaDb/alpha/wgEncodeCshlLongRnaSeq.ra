@@ -6709,6 +6709,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
 objType table
+attic auxExp
 bioRep gen0102WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6734,6 +6735,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
 objType table
+attic auxExp
 bioRep gen0103WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6759,6 +6761,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep1
 objType file
+attic auxExp
 bioRep gen0102WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6783,6 +6786,7 @@ view RawData
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep2
 objType file
+attic auxExp
 bioRep gen0103WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6807,6 +6811,7 @@ view RawData
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
 objType table
+attic auxExp
 bioRep gen0102WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6833,6 +6838,7 @@ view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
 objType table
+attic auxExp
 bioRep gen0103WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6859,6 +6865,7 @@ view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
 objType table
+attic auxExp
 bioRep gen0102WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6885,6 +6892,7 @@ view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
 objType table
+attic auxExp
 bioRep gen0103WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -34347,6 +34355,7 @@ view TranscriptGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
 objType table
+attic auxExp
 bioRep gen0131WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34372,6 +34381,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
 objType table
+attic auxExp
 bioRep gen0132WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34397,6 +34407,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalFastqRep1
 objType file
+attic auxExp
 bioRep gen0131WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34421,6 +34432,7 @@ view RawData
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalFastqRep2
 objType file
+attic auxExp
 bioRep gen0132WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34445,6 +34457,7 @@ view RawData
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
 objType table
+attic auxExp
 bioRep gen0131WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34471,6 +34484,7 @@ view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
 objType table
+attic auxExp
 bioRep gen0132WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34497,6 +34511,7 @@ view MinusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
 objType table
+attic auxExp
 bioRep gen0131WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -34523,6 +34538,7 @@ view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
 objType table
+attic auxExp
 bioRep gen0132WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -51312,4 +51328,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1199399525
+# MAGIC: -1196608245

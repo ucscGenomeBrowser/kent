@@ -1196,15 +1196,16 @@ html wgEncodeCshlLongRnaSeq.release2
         color 189,0,157
         # subId=3487 dateSubmitted=2011-01-21
 
-        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IM90 cell tot + 1
         longLabel IMR90 whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 5416102.000000
         # subId=5120 dateSubmitted=2011-12-06
+        # was wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1 wong Wed May 16 10:55:59 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep1
+        track wgEncodeCshlLongRnaSeqCd20CellPapPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD20 cell pA+ + 1
         longLabel CD20+ whole cell polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1212,8 +1213,9 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 128659.000000
         # subId=5758 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqCd20ro01794CellPapPlusRawRep1 wong Mon May  7 12:47:36 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep1 wong Wed May 16 10:55:42 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep2
+        track wgEncodeCshlLongRnaSeqCd20CellPamPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD20 cell pA- + 2
         longLabel CD20+ whole cell polyA- RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1221,32 +1223,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 2185589.000000
         # subId=5761 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqCd20ro01778CellPamPlusRawRep2 wong Mon May  7 12:52:08 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep2 wong Wed May 16 10:55:41 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel MCF7 nucl pA+ + 4
         longLabel MCF-7 nucleus polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 219145.000000
         # subId=5760 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4 wong Wed May 16 10:56:03 2012
 
-        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel A549 nucl pA+ + 4
         longLabel A549 nucleus polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2A549 localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 181472.000000
         # subId=5763 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4 wong Wed May 16 10:55:40 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 cyto pA+ + 2
         longLabel IMR90 cytosol polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 1581512.000000
         # subId=5762 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2 wong Wed May 16 10:56:00 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep2
+        track wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD14 cell pA- + 2
         longLabel MonocytesCD14+ whole cell polyA- RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1254,32 +1260,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 2583502.000000
         # subId=5764 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep2 wong Mon May  7 13:08:53 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep2 wong Wed May 16 10:56:04 2012
 
-        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel A549 cyto pA+ + 3
         longLabel A549 cytosol polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2A549 localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 770362.000000
         # subId=5766 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3 wong Wed May 16 10:55:39 2012
 
-        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH nucl pA+ + 4
         longLabel SK-N-SH nucleus polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 207210.000000
         # subId=5767 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4 wong Wed May 16 10:56:13 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 cell pA+ + 2
         longLabel IMR90 whole cell polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CELL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 261016.000000
         # subId=5771 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2 wong Wed May 16 10:55:58 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep2
+        track wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD20 cell pA+ + 2
         longLabel CD20+ whole cell polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1287,8 +1297,9 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 153183.000000
         # subId=5772 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqCd20ro01778CellPapPlusRawRep2 wong Mon May  7 12:47:35 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPapPlusRawRep2 wong Wed May 16 10:55:42 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep2
+        track wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD14 cell pA+ + 2
         longLabel MonocytesCD14+ whole cell polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1296,96 +1307,108 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 281379.000000
         # subId=5773 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapPlusRawRep2 wong Mon May  7 13:10:21 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep2 wong Wed May 16 10:56:05 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH cell pA+ + 4
         longLabel SK-N-SH whole cell polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=CELL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 665967.000000
         # subId=5775 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4 wong Wed May 16 10:56:11 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel MCF7 nucl pA+ + 3
         longLabel MCF-7 nucleus polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 260473.000000
         # subId=5774 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3 wong Wed May 16 10:56:03 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH cyto pA+ + 3
         longLabel SK-N-SH cytosol polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 1357547.000000
         # subId=5770 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3 wong Wed May 16 10:56:12 2012
 
-        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 nucl pA+ + 1
         longLabel IMR90 nucleus polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 246866.000000
         # subId=5776 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1 wong Wed May 16 10:56:01 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 cyto pA+ + 1
         longLabel IMR90 cytosol polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 1124582.000000
         # subId=5779 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1 wong Wed May 16 10:56:00 2012
 
-        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 nucl pA+ + 2
         longLabel IMR90 nucleus polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 122470.000000
         # subId=5778 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2 wong Wed May 16 10:56:01 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 cell pA+ + 1
         longLabel IMR90 whole cell polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CELL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 423262.000000
         # subId=5781 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1 wong Wed May 16 10:55:58 2012
 
-        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD34 cell tot + 1
         longLabel CD34+ Mobilized whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 17965708.000000
         # subId=5780 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1 wong Wed May 16 10:55:43 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IMR9 cell tot + 2
         longLabel IMR90 whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2IMR90 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 4710285.000000
         # subId=5783 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2 wong Wed May 16 10:55:59 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH cyto pA+ + 4
         longLabel SK-N-SH cytosol polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 1847796.000000
         # subId=5782 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4 wong Wed May 16 10:56:12 2012
 
-        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel A549 cyto pA+ + 4
         longLabel A549 cytosol polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2A549 localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 686611.000000
         # subId=5784 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4 wong Wed May 16 10:55:39 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep1
+        track wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD14 cell pA+ + 1
         longLabel MonocytesCD14+ whole cell polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1393,24 +1416,27 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 240362.000000
         # subId=5785 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapPlusRawRep1 wong Mon May  7 13:10:21 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRawRep1 wong Wed May 16 10:56:05 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH cell pA+ + 3
         longLabel SK-N-SH whole cell polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=CELL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 724140.000000
         # subId=5787 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3 wong Wed May 16 10:56:11 2012
 
-        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel A549 nucl pA+ + 3
         longLabel A549 nucleus polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2A549 localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 591420.000000
         # subId=5788 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3 wong Wed May 16 10:55:40 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep1
+        track wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD14 cell pA- + 1
         longLabel MonocytesCD14+ whole cell polyA- RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1418,24 +1444,27 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 4891235.000000
         # subId=5789 dateSubmitted=2012-02-18
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep1 wong Mon May  7 13:08:53 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPamPlusRawRep1 wong Wed May 16 10:56:04 2012
 
-        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SKSH nucl pA+ + 3
         longLabel SK-N-SH nucleus polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 229125.000000
         # subId=5790 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3 wong Wed May 16 10:56:13 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep3
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel MCF7 cyto pA+ + 3
         longLabel MCF-7 cytosol polyA+ RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 810947.000000
         # subId=5792 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3 wong Wed May 16 10:56:02 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep1
+        track wgEncodeCshlLongRnaSeqCd20CellPamPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel CD20 cell pA- + 1
         longLabel CD20+ whole cell polyA- RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1443,32 +1472,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 3144462.000000
         # subId=5793 dateSubmitted=2012-02-18
         # was wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1 wong Mon May  7 12:52:09 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPamPlusRawRep1 wong Wed May 16 10:55:41 2012
 
-        track wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SkMC cell tot + 1
         longLabel SkMC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=SKMC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 11029152.000000
         # subId=5864 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqSkmc9011302CellTotalPlusRawRep1 wong Wed May 16 10:56:10 2012
 
-        track wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHDF cell tot + 2
         longLabel NHDF whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHDF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 9395375.000000
         # subId=5865 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqNhdf00608013CellTotalPlusRawRep2 wong Wed May 16 10:56:06 2012
 
-        track wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HCH cell tot + 2
         longLabel HCH whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HCH localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 4260191.000000
         # subId=5866 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHch81008082CellTotalPlusRawRep2 wong Wed May 16 10:55:45 2012
 
-        track wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HSaV cell tot + 2
         longLabel HSaVEC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1476,72 +1509,81 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 7667168.000000
         # subId=5867 dateSubmitted=2012-02-24
         # was wgEncodeCshlLongRnaSeqHsavec910010115CellTotalPlusRawRep2 wong Wed May 16 08:39:44 2012
+        # was wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep2 wong Wed May 16 10:55:55 2012
 
-        track wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HCH cell tot + 1
         longLabel HCH whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HCH localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 3708924.000000
         # subId=5868 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHch00113082pCellTotalPlusRawRep1 wong Wed May 16 10:55:45 2012
 
-        track wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HOB cell tot + 1
         longLabel HOB whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HOB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 16707863.000000
         # subId=5869 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHob0091301CellTotalPlusRawRep1 wong Wed May 16 10:55:52 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRep4
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel MCF7 cyto pA+ + 4
         longLabel MCF-7 cytosol polyA+ RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=2MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 628170.000000
         # subId=5883 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4 wong Wed May 16 10:56:02 2012
 
-        track wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HAoA cell tot + 2
         longLabel HAoAF whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HAOAF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 5730470.000000
         # subId=5871 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalPlusRawRep2 wong Wed May 16 10:55:43 2012
 
-        track wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HVMF cell tot + 1
         longLabel HVMF whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HVMF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 25863542.000000
         # subId=5872 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHvmf60912033CellTotalPlusRawRep1 wong Wed May 16 10:55:56 2012
 
-        track wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HVMF cell tot + 2
         longLabel HVMF whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HVMF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 24006272.000000
         # subId=5873 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHvmf61004013CellTotalPlusRawRep2 wong Wed May 16 10:55:56 2012
 
-        track wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HAoE cell tot + 1
         longLabel HAoEC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HAOEC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 3504310.000000
         # subId=5874 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHaoec70717061CellTotalPlusRawRep1 wong Wed May 16 10:55:44 2012
 
-        track wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HWP cell tot + 2
         longLabel HWP whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HWP localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 17458116.000000
         # subId=5875 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHwp0092205CellTotalPlusRawRep2 wong Wed May 16 10:55:57 2012
 
-        track wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HPCP cell tot + 1
         longLabel HPC-PL whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1549,40 +1591,45 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 6839389.000000
         # subId=5876 dateSubmitted=2012-02-25
         # was wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalPlusRawRep1 wong Mon May  7 13:00:30 2012
+        # was wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep1 wong Wed May 16 10:55:53 2012
 
-        track wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMBM cell tot + 2
         longLabel hMSC-BM whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCBM localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 5251201.000000
         # subId=5878 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalPlusRawRep2 wong Wed May 16 10:55:50 2012
 
-        track wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HOB cell tot + 2
         longLabel HOB whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HOB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 17611104.000000
         # subId=5881 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHob00902021CellTotalPlusRawRep2 wong Wed May 16 10:55:52 2012
 
-        track wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMUC cell tot + 2
         longLabel hMSC-UC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCUC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 4177131.000000
         # subId=5885 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalPlusRawRep2 wong Wed May 16 10:55:51 2012
 
-        track wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HWP cell tot + 1
         longLabel HWP whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HWP localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 12315278.000000
         # subId=5886 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHwp81202015CellTotalPlusRawRep1 wong Wed May 16 10:55:57 2012
 
-        track wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HSaV cell tot + 1
         longLabel HSaVEC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1590,16 +1637,18 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 3392682.000000
         # subId=5888 dateSubmitted=2012-02-26
         # was wgEncodeCshlLongRnaSeqHsavec002220216CellTotalPlusRawRep1 wong Wed May 16 08:39:46 2012
+        # was wgEncodeCshlLongRnaSeqHsavecCellTotalPlusRawRep1 wong Wed May 16 10:55:55 2012
 
-        track wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel SkMC cell tot + 2
         longLabel SkMC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=SKMC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 12582738.000000
         # subId=5887 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqSkmc812190217CellTotalPlusRawRep2 wong Wed May 16 10:56:09 2012
 
-        track wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HMEpC cell tot + 1
         longLabel HMEpC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
@@ -1607,48 +1656,54 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 5904130.000000
         # subId=5889 dateSubmitted=2012-02-26
         # was wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1 wong Wed May 16 08:57:52 2012
+        # was wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1 wong Wed May 16 10:55:47 2012
 
-        track wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMUC cell tot + 1
         longLabel hMSC-UC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCUC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 7778390.000000
         # subId=5892 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalPlusRawRep1 wong Wed May 16 10:55:51 2012
 
-        track wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHDF cell tot + 1
         longLabel NHDF whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHDF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 8110550.000000
         # subId=5893 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqNhdf70717012CellTotalPlusRawRep1 wong Wed May 16 10:56:07 2012
 
-        track wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHEf cell tot + 2
         longLabel NHEM.f M2 whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 5141214.000000
         # subId=5877 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalPlusRawRep2 wong Wed May 16 10:56:07 2012
 
-        track wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHEM cell tot + 2
         longLabel NHEM M2 whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHEMM2 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 10995237.000000
         # subId=5882 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemm270110012CellTotalPlusRawRep2 wong Wed May 16 10:56:08 2012
 
-        track wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHEf cell tot + 1
         longLabel NHEM.f M2 whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 14501172.000000
         # subId=5870 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalPlusRawRep1 wong Wed May 16 10:56:08 2012
 
-        track wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HPIE cell tot + 2
         longLabel HPIEpC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1656,56 +1711,63 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 22049012.000000
         # subId=5884 dateSubmitted=2012-02-27
         # was wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalPlusRawRep2 wong Mon May  7 12:56:57 2012
+        # was wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep2 wong Wed May 16 10:55:54 2012
 
-        track wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel NHEM cell tot + 1
         longLabel NHEM M2 whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=NHEMM2 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 13176416.000000
         # subId=5863 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemm27012303CellTotalPlusRawRep1 wong Wed May 16 10:56:09 2012
 
-        track wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HFDP cell tot + 1
         longLabel HFDPC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HFDPC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2136746.000000
         # subId=5777 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalPlusRawRep1 wong Wed May 16 10:55:47 2012
 
-        track wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HFDP cell tot + 2
         longLabel HFDPC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HFDPC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 6315458.000000
         # subId=5791 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalPlusRawRep2 wong Wed May 16 10:55:46 2012
 
-        track wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMBM cell tot + 1
         longLabel hMSC-BM whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCBM localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 6189653.000000
         # subId=5786 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalPlusRawRep1 wong Wed May 16 10:55:50 2012
 
-        track wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMAT cell tot + 1
         longLabel hMSC-AT whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCAT localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 4730259.000000
         # subId=5765 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRawRep1 wong Wed May 16 10:55:49 2012
 
-        track wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMAT cell tot + 2
         longLabel hMSC-AT whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMSCAT localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 2735253.000000
         # subId=5769 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHmscat906160112CellTotalPlusRawRep2 wong Wed May 16 10:55:49 2012
 
-        track wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HPCP cell tot + 2
         longLabel HPC-PL whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
@@ -1713,38 +1775,43 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 7334678.000000
         # subId=5759 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalPlusRawRep2 wong Mon May  7 13:00:29 2012
+        # was wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRawRep2 wong Wed May 16 10:55:53 2012
 
-        track wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HAoE cell tot + 2
         longLabel HAoEC whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HAOEC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 4591305.000000
         # subId=5994 dateSubmitted=2012-03-14
+        # was wgEncodeCshlLongRnaSeqHaoecCellTotalPlusRawRep2 wong Wed May 16 10:55:44 2012
 
-        track wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel HPIE cell tot + 1
         longLabel HPIEpC whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HPIEPC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2588897.000000
         # subId=5995 dateSubmitted=2012-03-14
+        # was wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1 wong Wed May 16 10:55:54 2012
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1
+        track wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMNC-PB cell total PlusRaw 1
         longLabel hMNC-PB whole cell total RNA-seq Plus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 764308.000000
         # subId=6858 dateSubmitted=2012-04-25
+        # was wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1 wong Wed May 16 10:55:48 2012
 
-        track wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRawRep2
+        track wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel hMNC-CB cell total PlusRaw 2
         longLabel hMNC-CB whole cell total RNA-seq Plus Raw Signal Rep 2 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
+        subGroups view=PlusSignal cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank1
         type bigWig 1.000000 4058730.000000
         # subId=6859 dateSubmitted=2012-04-25
+        # was wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRawRep2 wong Wed May 16 10:55:48 2012
 
     track wgEncodeCshlLongRnaSeqViewMinusRawSig
     shortLabel Minus Raw Signal
@@ -2917,15 +2984,16 @@ html wgEncodeCshlLongRnaSeq.release2
         color 189,0,157
         # subId=3487 dateSubmitted=2011-01-21
 
-        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IM90 cell tot - 1
         longLabel IMR90 whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 1657789.000000
         # subId=5120 dateSubmitted=2011-12-06
+        # was wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1 wong Wed May 16 10:55:58 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep1
+        track wgEncodeCshlLongRnaSeqCd20CellPapMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD20 cell pA+ - 1
         longLabel CD20+ whole cell polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -2933,8 +3001,9 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 115834.000000
         # subId=5758 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqCd20ro01794CellPapMinusRawRep1 wong Mon May  7 12:47:36 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep1 wong Wed May 16 10:55:42 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep2
+        track wgEncodeCshlLongRnaSeqCd20CellPamMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD20 cell pA- - 2
         longLabel CD20+ whole cell polyA- RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -2942,32 +3011,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 1807477.000000
         # subId=5761 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqCd20ro01778CellPamMinusRawRep2 wong Mon May  7 12:52:08 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep2 wong Wed May 16 10:55:41 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel MCF7 nucl pA+ - 4
         longLabel MCF-7 nucleus polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 171431.000000
         # subId=5760 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4 wong Wed May 16 10:56:03 2012
 
-        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel A549 nucl pA+ - 4
         longLabel A549 nucleus polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2A549 localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 212255.000000
         # subId=5763 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4 wong Wed May 16 10:55:40 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 cyto pA+ - 2
         longLabel IMR90 cytosol polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 922437.000000
         # subId=5762 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2 wong Wed May 16 10:56:00 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep2
+        track wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD14 cell pA- - 2
         longLabel MonocytesCD14+ whole cell polyA- RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -2975,32 +3048,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 2792428.000000
         # subId=5764 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep2 wong Mon May  7 13:08:52 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep2 wong Wed May 16 10:56:04 2012
 
-        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel A549 cyto pA+ - 3
         longLabel A549 cytosol polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2A549 localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 553569.000000
         # subId=5766 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3 wong Wed May 16 10:55:38 2012
 
-        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH nucl pA+ - 4
         longLabel SK-N-SH nucleus polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 154353.000000
         # subId=5767 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4 wong Wed May 16 10:56:13 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 cell pA+ - 2
         longLabel IMR90 whole cell polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CELL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 238947.000000
         # subId=5771 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2 wong Wed May 16 10:55:58 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep2
+        track wgEncodeCshlLongRnaSeqCd20CellPapMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD20 cell pA+ - 2
         longLabel CD20+ whole cell polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -3008,8 +3085,9 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 198056.000000
         # subId=5772 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqCd20ro01778CellPapMinusRawRep2 wong Mon May  7 12:47:35 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPapMinusRawRep2 wong Wed May 16 10:55:42 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep2
+        track wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD14 cell pA+ - 2
         longLabel MonocytesCD14+ whole cell polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -3017,96 +3095,108 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 420927.000000
         # subId=5773 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapMinusRawRep2 wong Mon May  7 13:10:20 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep2 wong Wed May 16 10:56:05 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH cell pA+ - 4
         longLabel SK-N-SH whole cell polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=CELL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 236639.000000
         # subId=5775 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4 wong Wed May 16 10:56:10 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel MCF7 nucl pA+ - 3
         longLabel MCF-7 nucleus polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 268921.000000
         # subId=5774 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3 wong Wed May 16 10:56:02 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH cyto pA+ - 3
         longLabel SK-N-SH cytosol polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 777524.000000
         # subId=5770 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3 wong Wed May 16 10:56:11 2012
 
-        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 nucl pA+ - 1
         longLabel IMR90 nucleus polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 690540.000000
         # subId=5776 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1 wong Wed May 16 10:56:00 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 cyto pA+ - 1
         longLabel IMR90 cytosol polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 708440.000000
         # subId=5779 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1 wong Wed May 16 10:55:59 2012
 
-        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 nucl pA+ - 2
         longLabel IMR90 nucleus polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 470206.000000
         # subId=5778 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2 wong Wed May 16 10:56:01 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1
+        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 cell pA+ - 1
         longLabel IMR90 whole cell polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CELL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 300454.000000
         # subId=5781 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1 wong Wed May 16 10:55:57 2012
 
-        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD34 cell tot - 1
         longLabel CD34+ Mobilized whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 10512010.000000
         # subId=5780 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1 wong Wed May 16 10:55:43 2012
 
-        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IMR9 cell tot - 2
         longLabel IMR90 whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2IMR90 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 2961529.000000
         # subId=5783 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2 wong Wed May 16 10:55:59 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH cyto pA+ - 4
         longLabel SK-N-SH cytosol polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 1082381.000000
         # subId=5782 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4 wong Wed May 16 10:56:12 2012
 
-        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel A549 cyto pA+ - 4
         longLabel A549 cytosol polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2A549 localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 478575.000000
         # subId=5784 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4 wong Wed May 16 10:55:39 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep1
+        track wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD14 cell pA+ - 1
         longLabel MonocytesCD14+ whole cell polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3114,24 +3204,27 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 577352.000000
         # subId=5785 dateSubmitted=2012-02-17
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapMinusRawRep1 wong Mon May  7 13:10:20 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPapMinusRawRep1 wong Wed May 16 10:56:05 2012
 
-        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH cell pA+ - 3
         longLabel SK-N-SH whole cell polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=CELL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 662709.000000
         # subId=5787 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3 wong Wed May 16 10:56:10 2012
 
-        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel A549 nucl pA+ - 3
         longLabel A549 nucleus polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2A549 localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 505459.000000
         # subId=5788 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3 wong Wed May 16 10:55:40 2012
 
-        track wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep1
+        track wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD14 cell pA- - 1
         longLabel MonocytesCD14+ whole cell polyA- RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3139,24 +3232,27 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 4143578.000000
         # subId=5789 dateSubmitted=2012-02-18
         # was wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep1 wong Mon May  7 13:08:52 2012
+        # was wgEncodeCshlLongRnaSeqMonocd14CellPamMinusRawRep1 wong Wed May 16 10:56:04 2012
 
-        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SKSH nucl pA+ - 3
         longLabel SK-N-SH nucleus polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 158821.000000
         # subId=5790 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3 wong Wed May 16 10:56:12 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep3
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel MCF7 cyto pA+ - 3
         longLabel MCF-7 cytosol polyA+ RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep3 rank=rank1
         type bigWig 1.000000 777550.000000
         # subId=5792 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3 wong Wed May 16 10:56:01 2012
 
-        track wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep1
+        track wgEncodeCshlLongRnaSeqCd20CellPamMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel CD20 cell pA- - 1
         longLabel CD20+ whole cell polyA- RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3164,32 +3260,36 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 1599361.000000
         # subId=5793 dateSubmitted=2012-02-18
         # was wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1 wong Mon May  7 12:52:09 2012
+        # was wgEncodeCshlLongRnaSeqCd20CellPamMinusRawRep1 wong Wed May 16 10:55:41 2012
 
-        track wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SkMC cell tot - 1
         longLabel SkMC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=SKMC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 13815129.000000
         # subId=5864 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqSkmc9011302CellTotalMinusRawRep1 wong Wed May 16 10:56:09 2012
 
-        track wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHDF cell tot - 2
         longLabel NHDF whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHDF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 10792173.000000
         # subId=5865 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqNhdf00608013CellTotalMinusRawRep2 wong Wed May 16 10:56:06 2012
 
-        track wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HCH cell tot - 2
         longLabel HCH whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HCH localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 6570549.000000
         # subId=5866 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHch81008082CellTotalMinusRawRep2 wong Wed May 16 10:55:45 2012
 
-        track wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HSaV cell tot - 2
         longLabel HSaVEC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -3197,72 +3297,81 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 10007770.000000
         # subId=5867 dateSubmitted=2012-02-24
         # was wgEncodeCshlLongRnaSeqHsavec910010115CellTotalMinusRawRep2 wong Wed May 16 08:39:44 2012
+        # was wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep2 wong Wed May 16 10:55:55 2012
 
-        track wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HCH cell tot - 1
         longLabel HCH whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HCH localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2863952.000000
         # subId=5868 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHch00113082pCellTotalMinusRawRep1 wong Wed May 16 10:55:45 2012
 
-        track wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HOB cell tot - 1
         longLabel HOB whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HOB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 17470382.000000
         # subId=5869 dateSubmitted=2012-02-24
+        # was wgEncodeCshlLongRnaSeqHob0091301CellTotalMinusRawRep1 wong Wed May 16 10:55:52 2012
 
-        track wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRep4
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel MCF7 cyto pA+ - 4
         longLabel MCF-7 cytosol polyA+ RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=2MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep4 rank=rank2
         type bigWig 1.000000 654289.000000
         # subId=5883 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4 wong Wed May 16 10:56:01 2012
 
-        track wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HAoA cell tot - 2
         longLabel HAoAF whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HAOAF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 2638971.000000
         # subId=5871 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalMinusRawRep2 wong Wed May 16 10:55:43 2012
 
-        track wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HVMF cell tot - 1
         longLabel HVMF whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HVMF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 26941320.000000
         # subId=5872 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHvmf60912033CellTotalMinusRawRep1 wong Wed May 16 10:55:55 2012
 
-        track wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HVMF cell tot - 2
         longLabel HVMF whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HVMF localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 24374862.000000
         # subId=5873 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHvmf61004013CellTotalMinusRawRep2 wong Wed May 16 10:55:56 2012
 
-        track wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HAoE cell tot - 1
         longLabel HAoEC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HAOEC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2705488.000000
         # subId=5874 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHaoec70717061CellTotalMinusRawRep1 wong Wed May 16 10:55:44 2012
 
-        track wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HWP cell tot - 2
         longLabel HWP whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HWP localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 23840584.000000
         # subId=5875 dateSubmitted=2012-02-25
+        # was wgEncodeCshlLongRnaSeqHwp0092205CellTotalMinusRawRep2 wong Wed May 16 10:55:56 2012
 
-        track wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HPCP cell tot - 1
         longLabel HPC-PL whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3270,40 +3379,45 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 9576609.000000
         # subId=5876 dateSubmitted=2012-02-25
         # was wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalMinusRawRep1 wong Mon May  7 13:00:30 2012
+        # was wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep1 wong Wed May 16 10:55:52 2012
 
-        track wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMBM cell tot - 2
         longLabel hMSC-BM whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCBM localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 4436744.000000
         # subId=5878 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalMinusRawRep2 wong Wed May 16 10:55:49 2012
 
-        track wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HOB cell tot - 2
         longLabel HOB whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HOB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 15597462.000000
         # subId=5881 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHob00902021CellTotalMinusRawRep2 wong Wed May 16 10:55:51 2012
 
-        track wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMUC cell tot - 2
         longLabel hMSC-UC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCUC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 5565364.000000
         # subId=5885 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalMinusRawRep2 wong Wed May 16 10:55:51 2012
 
-        track wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HWP cell tot - 1
         longLabel HWP whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HWP localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 10897347.000000
         # subId=5886 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHwp81202015CellTotalMinusRawRep1 wong Wed May 16 10:55:57 2012
 
-        track wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HSaV cell tot - 1
         longLabel HSaVEC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3311,16 +3425,18 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 1869311.000000
         # subId=5888 dateSubmitted=2012-02-26
         # was wgEncodeCshlLongRnaSeqHsavec002220216CellTotalMinusRawRep1 wong Wed May 16 08:39:46 2012
+        # was wgEncodeCshlLongRnaSeqHsavecCellTotalMinusRawRep1 wong Wed May 16 10:55:54 2012
 
-        track wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel SkMC cell tot - 2
         longLabel SkMC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=SKMC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 15928128.000000
         # subId=5887 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqSkmc812190217CellTotalMinusRawRep2 wong Wed May 16 10:56:09 2012
 
-        track wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HMEpC cell tot - 1
         longLabel HMEpC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
@@ -3328,48 +3444,54 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 6497699.000000
         # subId=5889 dateSubmitted=2012-02-26
         # was wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1 wong Wed May 16 08:57:52 2012
+        # was wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1 wong Wed May 16 10:55:47 2012
 
-        track wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMUC cell tot - 1
         longLabel hMSC-UC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCUC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 8409200.000000
         # subId=5892 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalMinusRawRep1 wong Wed May 16 10:55:50 2012
 
-        track wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHDF cell tot - 1
         longLabel NHDF whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHDF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 8564766.000000
         # subId=5893 dateSubmitted=2012-02-26
+        # was wgEncodeCshlLongRnaSeqNhdf70717012CellTotalMinusRawRep1 wong Wed May 16 10:56:06 2012
 
-        track wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHEf cell tot - 2
         longLabel NHEM.f M2 whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 6662958.000000
         # subId=5877 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalMinusRawRep2 wong Wed May 16 10:56:07 2012
 
-        track wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHEM cell tot - 2
         longLabel NHEM M2 whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHEMM2 localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 15766267.000000
         # subId=5882 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemm270110012CellTotalMinusRawRep2 wong Wed May 16 10:56:08 2012
 
-        track wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHEf cell tot - 1
         longLabel NHEM.f M2 whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 19337782.000000
         # subId=5870 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalMinusRawRep1 wong Wed May 16 10:56:07 2012
 
-        track wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HPIE cell tot - 2
         longLabel HPIEpC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -3377,56 +3499,63 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 20406896.000000
         # subId=5884 dateSubmitted=2012-02-27
         # was wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalMinusRawRep2 wong Mon May  7 12:56:57 2012
+        # was wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep2 wong Wed May 16 10:55:54 2012
 
-        track wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel NHEM cell tot - 1
         longLabel NHEM M2 whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=NHEMM2 localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 13177115.000000
         # subId=5863 dateSubmitted=2012-02-27
+        # was wgEncodeCshlLongRnaSeqNhemm27012303CellTotalMinusRawRep1 wong Wed May 16 10:56:08 2012
 
-        track wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HFDP cell tot - 1
         longLabel HFDPC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HFDPC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2109292.000000
         # subId=5777 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalMinusRawRep1 wong Wed May 16 10:55:47 2012
 
-        track wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HFDP cell tot - 2
         longLabel HFDPC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HFDPC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 6250110.000000
         # subId=5791 dateSubmitted=2012-02-18
+        # was wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalMinusRawRep2 wong Wed May 16 10:55:46 2012
 
-        track wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMBM cell tot - 1
         longLabel hMSC-BM whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCBM localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 6498245.000000
         # subId=5786 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalMinusRawRep1 wong Wed May 16 10:55:50 2012
 
-        track wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMAT cell tot - 1
         longLabel hMSC-AT whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCAT localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 4727843.000000
         # subId=5765 dateSubmitted=2012-02-16
+        # was wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRawRep1 wong Wed May 16 10:55:48 2012
 
-        track wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMAT cell tot - 2
         longLabel hMSC-AT whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMSCAT localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 1308002.000000
         # subId=5769 dateSubmitted=2012-02-17
+        # was wgEncodeCshlLongRnaSeqHmscat906160112CellTotalMinusRawRep2 wong Wed May 16 10:55:49 2012
 
-        track wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HPCP cell tot - 2
         longLabel HPC-PL whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
@@ -3434,38 +3563,43 @@ html wgEncodeCshlLongRnaSeq.release2
         type bigWig 1.000000 7540835.000000
         # subId=5759 dateSubmitted=2012-02-16
         # was wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalMinusRawRep2 wong Mon May  7 13:00:29 2012
+        # was wgEncodeCshlLongRnaSeqHpcplCellTotalMinusRawRep2 wong Wed May 16 10:55:53 2012
 
-        track wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HAoE cell tot - 2
         longLabel HAoEC whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HAOEC localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
         type bigWig 1.000000 8796497.000000
         # subId=5994 dateSubmitted=2012-03-14
+        # was wgEncodeCshlLongRnaSeqHaoecCellTotalMinusRawRep2 wong Wed May 16 10:55:44 2012
 
-        track wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel HPIE cell tot - 1
         longLabel HPIEpC whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HPIEPC localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 2704101.000000
         # subId=5995 dateSubmitted=2012-03-14
+        # was wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1 wong Wed May 16 10:55:53 2012
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1
+        track wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMNC-PB cell total MinusRaw 1
         longLabel hMNC-PB whole cell total RNA-seq Minus Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 783818.000000
         # subId=6858 dateSubmitted=2012-04-25
+        # was wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1 wong Wed May 16 10:55:48 2012
 
-        track wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRawRep2
+        track wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel hMNC-CB cell total MinusRaw 2
         longLabel hMNC-CB whole cell total RNA-seq Minus Raw Signal Rep 2 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
+        subGroups view=MinusSignal cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank1
         type bigWig 1.000000 3046309.000000
         # subId=6859 dateSubmitted=2012-04-25
+        # was wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRawRep2 wong Wed May 16 10:55:47 2012
 
     track wgEncodeCshlLongRnaSeqViewAlignments
     shortLabel Alignments
@@ -5184,7 +5318,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel hMNC-CB cell tot A 2
         longLabel hMNC-CB whole cell total RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank2
+        subGroups view=Alignments cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=rep2 rank=rank1
         type bam
         # subId=6786 dateSubmitted=2012-03-30
 
