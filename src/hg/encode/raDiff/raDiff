@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 import sys, re, argparse
-from ucscgenomics import ra
+from ucscGb.gbData import ra
 
 
 def addChange(changelist, obj, change):
