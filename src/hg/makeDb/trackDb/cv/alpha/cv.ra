@@ -13417,6 +13417,13 @@ type view
 label Minus Raw signal 
 description Graphs the base-by-base density of tags on the minus strand
 
+term MinusSignal
+tag MINUSSIG
+type view
+label Minus signal
+description Graphs the base-by-base density of tags on the minus strand
+
+
 term Peaks
 tag PKS
 type view
@@ -13500,6 +13507,13 @@ tag PLUSRAWSIG
 type view
 label Plus Raw signal
 description Graphs the base-by-base density of tags on the plus strand
+
+term PlusSignal
+tag PLUSSIG
+type view
+label Plus signal
+description Graphs the base-by-base density of tags on the plus strand
+
 
 term Primer
 tag PRIMER
