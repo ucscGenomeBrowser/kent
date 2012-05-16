@@ -19,7 +19,11 @@ return cloneString(cfgOption(CFG_LOGIN_SYSTEM_NAME));
 boolean loginSystemEnabled()
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
 {
+#ifdef USE_SSL
 return (cfgOption(CFG_LOGIN_SYSTEM_NAME) != NULL);
+#else
+return FALSE;
+#endif
 }
 
 char *wikiLinkHost()
