@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <META name="description" content="UCSC trackDb Library - Test Blurbs">
+    <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
+    <TITLE>UCSC trackDb Library - Test Blurbs</TITLE>
+    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+    <LINK REL="STYLESHEET" HREF="trackDbDoc.css">
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="trackDbDoc.js"></script>
+    <STYLE TYPE="text/css">
+    <!--
+    BODY { background-color:#CCFFEE; }
+    DIV { margin:.5em; background-color:#FFFEE8; border:1px inset gray; padding:10px; }
+    DIV#library { background-color:#CCFFEE; border-style:none; margin-left:0em; max-width:900px; }
+    DIV.format { margin:0em; display:-moz-inline-stack;
+                 display:inline-block; zoom:1; *display:inline;
+            border-style:none; padding:0px; }
+    -->
+    </STYLE>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            tdbDoc.checkLibrary();
+        });
+    </script>
+
+</HEAD>
+<BODY>
+
+<H3 style="color:#880000;">This page is for testing the trackDbLibrary blurbs only.
+            No "jumpTo" links will work.</H3>
+<!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
+<div id="library">
+<!--#include virtual="trackDbLibrary.shtml" -->
+</div>
+
+<div style="height:100%;">&nbsp;<!-- This tricl helps jumpTo hit the right spot --></div>
+</BODY></HTML>
