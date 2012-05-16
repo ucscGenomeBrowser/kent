@@ -463,7 +463,7 @@ cartRemove(cart, "hgLogin_changeRequired");
 return;
 }
 
-void sendActivateMail(char *email, char *username, char *encToken, char *expireTime, char *expireDate)
+void sendActivateMail(char *email, char *username, char *encToken)
 /* Send activation mail with token to user*/
 {
 char subject[256];
@@ -479,8 +479,8 @@ safef(activateURL, sizeof(activateURL),
     sqlEscapeString(encToken));
 safef(subject, sizeof(subject),"UCSC Genome Browser account e-mail address confirmation");
 safef(msg, sizeof(msg),
-    "Someone, probably you from IP address  %s, has requested an account %s with this e-mail address on the UCSC Genome Browser.\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\ni\n%s\nIf the account is created, only you will be e-mailed this confirmation.\nIf this is *not* you, do not follow the link. This confirmation code will expire at %s, %s.\n", 
-     remoteAddr, username, activateURL, expireTime, expireDate);
+    "Someone, probably you, from IP address %s, has requested an account %s with this e-mail address on the UCSC Genome Browser.\n\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n", 
+     remoteAddr, username, activateURL);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
@@ -496,13 +496,7 @@ safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', 
     sqlEscapeString(username)
     );
 sqlUpdate(conn, query);
-safef(query,sizeof(query),
-    "select TIME(emailTokenExpires) from gbMembers where userName='%s'", username);
-char *expireTime = sqlQuickString(conn, query);
-safef(query,sizeof(query),
-    "select DATE(emailTokenExpires) from gbMembers where userName='%s'", username);
-char *expireDate = sqlQuickString(conn, query);
-sendActivateMail(email, username, tokenMD5, expireTime, expireDate);
+sendActivateMail(email, username, tokenMD5);
 return;
 }
 
@@ -928,7 +922,7 @@ else
     return FALSE;
 }
 
-void  displayLoginSuccess(char *userName, int userID)
+void displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
 hPrintf("<h2>UCSC Genome Browser</h2>"
@@ -946,6 +940,7 @@ hPrintf("<script language=\"JavaScript\">"
     "document.cookie =  \"wikidb_mw1_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
     " </script>"
     "\n", userName,userID);
+cartRemove(cart,"hgLogin_userName");
 returnToURL(1);
 }
 
