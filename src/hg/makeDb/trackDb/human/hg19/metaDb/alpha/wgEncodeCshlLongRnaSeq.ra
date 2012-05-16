@@ -21478,7 +21478,7 @@ subId 4556
 tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
 view TranscriptGencV7
 
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1
 objType table
 bioRep 063WC
 cell HMEpC
@@ -21490,7 +21490,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002683
 donorId 6022801.3
 expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1.bam.bai
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID47096
@@ -21503,145 +21503,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1
 view Alignments
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd1Rep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd1Rep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 30671aa21b65d8e72059113fe135ef62
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view FastqRd1
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd2Rep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd2Rep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 1594f8c658f5cc39b6547bdc670c2353
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view FastqRd2
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1
-objType table
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 4c4f9a50c339ddd7246584dfbb4ab5c3
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1
-objType table
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 2c193a2af20cd63864f1f888478395a0
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalSpikeinsRep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalSpikeinsRep1.txt.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 239f6183ceeeb9f8fea8afba0ed8b979
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalContigs
 objType table
@@ -21698,6 +21561,60 @@ spikeInPool Nist13
 subId 6393
 view ExonsGencV10
 
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd1Rep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 30671aa21b65d8e72059113fe135ef62
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd2Rep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 1594f8c658f5cc39b6547bdc670c2353
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalGeneGencV10
 objType file
 bioRep 063WC
@@ -21752,6 +21669,62 @@ spikeInPool Nist13
 subId 6400
 view Junctions
 
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+objType table
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 4c4f9a50c339ddd7246584dfbb4ab5c3
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+objType table
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 2c193a2af20cd63864f1f888478395a0
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalProtocolRep1
 objType file
 bioRep 063WC
@@ -21779,6 +21752,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6909
 view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 239f6183ceeeb9f8fea8afba0ed8b979
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptGencV10
 objType file
@@ -51308,4 +51308,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 612837869
+# MAGIC: 612831373
