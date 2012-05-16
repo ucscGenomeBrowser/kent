@@ -16,7 +16,6 @@
 #include "ra.h"
 #include "hgColors.h"
 #include <crypt.h>
-#include <openssl/md5.h>
 #include "net.h"
 #include "wikiLink.h"
 #include "hgLogin.h"
@@ -34,7 +33,10 @@ char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
 
-/* -------- password functions ---- */
+/* -------- password functions depend on optionally installed openssl lib ---- */
+#ifdef USE_SSL
+#include <openssl/md5.h>
+
 
 void cryptWikiWay(char *password, char *salt, char* result)
 /* encrypt password in mediawiki format - 
@@ -95,6 +97,46 @@ for (i = 0; i < 8; i++)
 encryptPWD(password, salt, buf, bufsize);
 }
 
+char *generateTokenMD5(char *token)
+/* Generate an unsalted MD5 string from token. */
+{
+unsigned char result[MD5_DIGEST_LENGTH];
+char tokenMD5[MD5_DIGEST_LENGTH*2 + 1];
+int i = MD5_DIGEST_LENGTH;
+MD5((unsigned char *) token, strlen(token), result);
+// Convert the tokenMD5 value to string
+for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    {
+    sprintf(&tokenMD5[i*2], "%02x", result[i]);
+    }
+return cloneString(tokenMD5);
+}
+
+#else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
+
+#define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
+
+void encryptPWD(char *password, char *salt, char *buf, int bufsize)
+/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
+{
+errAbort(NEED_OPENSSL);
+}
+
+void encryptNewPwd(char *password, char *buf, int bufsize)
+/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
+{
+errAbort(NEED_OPENSSL);
+}
+
+char *generateTokenMD5(char *token)
+/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
+{
+errAbort(NEED_OPENSSL);
+return NULL; // Compiler doesn't know that we never get here.
+}
+
+#endif//ndef USE_SSL
+
 void findSalt(char *encPassword, char *salt, int saltSize)
 /* find the salt part from the password field */
 {
@@ -106,7 +148,7 @@ for (i = 3; i <= strlen(encPassword); i++)
     tempStr1[i-3] = encPassword[i];
 i = strcspn(tempStr1,":");
 safencpy(tempStr2, sizeof(tempStr2), tempStr1, i);
-safef(salt, saltSize,tempStr2);
+safecpy(salt, saltSize,tempStr2);
 }
 
 bool checkPwd(char *password, char *encPassword)
@@ -210,7 +252,7 @@ if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
 else
-   safef(returnTo, sizeof(returnTo), returnURL);
+   safecpy(returnTo, sizeof(returnTo), returnURL);
 
 int delay=nSec*100;
 hPrintf(
@@ -295,7 +337,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-    safef(user, sizeof(user), m->userName);
+    safecpy(user, sizeof(user), m->userName);
     mailUsername(email, user);   
     }
 sqlFreeResult(&sr);
@@ -448,16 +490,7 @@ void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
 {
 char query[256];
 char *token = generateRandomPassword();
-int i;
-unsigned char result[MD5_DIGEST_LENGTH];
-char tokenMD5[MD5_DIGEST_LENGTH*2 + 1];
-i = MD5_DIGEST_LENGTH;
-MD5((unsigned char *) token, strlen(token), result);
-// Convert the tokenMD5 value to string
-for(i = 0; i < MD5_DIGEST_LENGTH; i++)
-    {
-    sprintf(&tokenMD5[i*2], "%02x", result[i]);
-    }
+char *tokenMD5 = generateTokenMD5(token);
 safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', emailTokenExpires=DATE_ADD(NOW(), INTERVAL 7 DAY), accountActivated='N' where userName='%s'",
     sqlEscapeString(tokenMD5),
     sqlEscapeString(username)
