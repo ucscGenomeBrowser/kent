@@ -120,6 +120,18 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
    # 0 lower) in 11660 sequences in 1 files
 
+XXXX 2012-05-16 N50
+    # N50
+    cd /hive/data/genomes/bosTau7/
+    n50.pl chrom.sizes
+    #   reading: chrom.sizes
+    #   contig count: 11692, total size: 2981119579, one half size: 1490559789
+    # cumulative    N50 count   contig  contig size
+    # 1444820354  12  chrX    88654062
+    # 1490559789 one half size
+    # 1529939826  13  chr12   85119472
+
+
 #########################################################################
 # Initial  database build (DONE - 2012-01-03 - Chin)
     cd /hive/data/genomes/bosTau7
