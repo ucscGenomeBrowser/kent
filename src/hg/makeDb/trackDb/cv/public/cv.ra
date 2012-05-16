@@ -12964,7 +12964,6 @@ tag TAX24H
 description 500 nM Taxol for 24 hours, then sorted for 4n DNA content (Crawford)
 type treatment
 label Taxol_500nM_24hr
-#provisional - added by wong
 
 term TGFb
 tag TGFB
