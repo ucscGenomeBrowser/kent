@@ -7046,7 +7046,7 @@ age ageUnknown
 strain Unknown
 description Spleen
 vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
-vendorId Spleen; Spleen
+vendorId Spleen; Spleen; Spleen
 orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
@@ -12978,7 +12978,6 @@ tag TAX24H
 description 500 nM Taxol for 24 hours, then sorted for 4n DNA content (Crawford)
 type treatment
 label Taxol_500nM_24hr
-#provisional - added by wong
 
 term TGFb
 tag TGFB
