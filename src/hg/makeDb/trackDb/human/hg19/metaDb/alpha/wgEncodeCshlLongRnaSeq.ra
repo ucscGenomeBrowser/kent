@@ -1114,7 +1114,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep3.bam.bai
@@ -1141,7 +1141,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep4.bam,wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep4.bam.bai
@@ -1168,7 +1168,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapContigs.bedRnaElements.gz
@@ -1195,7 +1195,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapExonsGencV10.gtf.gz
@@ -1221,7 +1221,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapFastqRd1Rep3.fastq.gz
@@ -1247,7 +1247,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapFastqRd1Rep4.fastq.gz
@@ -1273,7 +1273,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapFastqRd2Rep3.fastq.gz
@@ -1299,7 +1299,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapFastqRd2Rep4.fastq.gz
@@ -1325,7 +1325,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapGeneGencV10.gtf.gz
@@ -1351,7 +1351,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapJunctions.bedRnaElements.gz
@@ -1378,7 +1378,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3.bigWig
@@ -1405,7 +1405,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4.bigWig
@@ -1432,7 +1432,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3.bigWig
@@ -1459,7 +1459,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4.bigWig
@@ -1486,7 +1486,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep3.pdf.gz
@@ -1514,7 +1514,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep4.pdf.gz
@@ -1542,7 +1542,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep3.txt.gz
@@ -1568,7 +1568,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep4.txt.gz
@@ -1594,7 +1594,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapTranscriptGencV10.gtf.gz
@@ -1621,7 +1621,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3.bam.bai
@@ -1648,7 +1648,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep4.bam,wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep4.bam.bai
@@ -1675,7 +1675,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapContigs.bedRnaElements.gz
@@ -1702,7 +1702,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapExonsGencV10.gtf.gz
@@ -1728,7 +1728,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd1Rep3.fastq.gz
@@ -1754,7 +1754,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd1Rep4.fastq.gz
@@ -1780,7 +1780,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd2Rep3.fastq.gz
@@ -1806,7 +1806,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd2Rep4.fastq.gz
@@ -1832,7 +1832,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapGeneGencV10.gtf.gz
@@ -1858,7 +1858,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapJunctions.bedRnaElements.gz
@@ -1885,7 +1885,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3.bigWig
@@ -1912,7 +1912,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4.bigWig
@@ -1939,7 +1939,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3.bigWig
@@ -1966,7 +1966,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4.bigWig
@@ -1993,7 +1993,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep3.pdf.gz
@@ -2021,7 +2021,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep4.pdf.gz
@@ -2049,7 +2049,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep3.txt.gz
@@ -2075,7 +2075,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep4.txt.gz
@@ -2101,7 +2101,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapTranscriptGencV10.gtf.gz
@@ -4800,7 +4800,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -4828,7 +4828,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -4856,7 +4856,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
 expId 2665
@@ -4884,7 +4884,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
 expId 2665
@@ -4911,7 +4911,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -4938,7 +4938,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -4965,7 +4965,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -4992,7 +4992,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -5019,7 +5019,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
 expId 2665
@@ -5046,7 +5046,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
 expId 2665
@@ -5074,7 +5074,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -5102,7 +5102,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -5130,7 +5130,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -5158,7 +5158,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -5186,7 +5186,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
@@ -5213,7 +5213,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
@@ -5240,7 +5240,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794,RO01778
 expId 2665
@@ -10855,7 +10855,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH000151
 expId 151
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigsV2.bedRnaElements.gz
@@ -11681,7 +11681,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH000152
 expId 152
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigsV2.bedRnaElements.gz
@@ -21130,7 +21130,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH000153
 expId 153
 fileName wgEncodeCshlLongRnaSeqHmecCellPapContigsV2.bedRnaElements.gz
@@ -21478,7 +21478,7 @@ subId 4556
 tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
 view TranscriptGencV7
 
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1
 objType table
 bioRep 063WC
 cell HMEpC
@@ -21490,7 +21490,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002683
 donorId 6022801.3
 expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1.bam.bai
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID47096
@@ -21503,145 +21503,8 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalAlnRep1
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1
 view Alignments
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd1Rep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd1Rep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 30671aa21b65d8e72059113fe135ef62
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view FastqRd1
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd2Rep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalFastqRd2Rep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 1594f8c658f5cc39b6547bdc670c2353
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view FastqRd2
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1
-objType table
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 4c4f9a50c339ddd7246584dfbb4ab5c3
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalMinusRawRep1
-view MinusRawSignal
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1
-objType table
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 2c193a2af20cd63864f1f888478395a0
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-tableName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalPlusRawRep1
-view PlusRawSignal
-
-metaObject wgEncodeCshlLongRnaSeqHmepc60228013CellTotalSpikeinsRep1
-objType file
-bioRep 063WC
-cell HMEpC
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-26
-dateUnrestricted 2012-11-26
-dccAccession wgEncodeEH002683
-donorId 6022801.3
-expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepc60228013CellTotalSpikeinsRep1.txt.gz
-grant Gingeras
-lab CSHL
-labExpId LID47096
-localization cell
-md5sum 239f6183ceeeb9f8fea8afba0ed8b979
-project wgEncode
-readType 2x101D
-replicate 1
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 5889
-view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalContigs
 objType table
@@ -21698,6 +21561,60 @@ spikeInPool Nist13
 subId 6393
 view ExonsGencV10
 
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd1Rep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 30671aa21b65d8e72059113fe135ef62
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd2Rep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 1594f8c658f5cc39b6547bdc670c2353
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalGeneGencV10
 objType file
 bioRep 063WC
@@ -21752,6 +21669,62 @@ spikeInPool Nist13
 subId 6400
 view Junctions
 
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+objType table
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 4c4f9a50c339ddd7246584dfbb4ab5c3
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+objType table
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 2c193a2af20cd63864f1f888478395a0
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRawRep1
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalProtocolRep1
 objType file
 bioRep 063WC
@@ -21779,6 +21752,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6909
 view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1
+objType file
+bioRep 063WC
+cell HMEpC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-26
+dateUnrestricted 2012-11-26
+dccAccession wgEncodeEH002683
+donorId 6022801.3
+expId 2683
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID47096
+localization cell
+md5sum 239f6183ceeeb9f8fea8afba0ed8b979
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 5889
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptGencV10
 objType file
@@ -31373,7 +31373,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CellPapAlnRep1.bam.bai
@@ -31400,7 +31400,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqImr90CellPapAlnRep2.bam.bai
@@ -31427,7 +31427,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
@@ -31455,7 +31455,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
@@ -31482,7 +31482,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapFastqRd1Rep1.fastq.gz
@@ -31508,7 +31508,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapFastqRd1Rep2.fastq.gz
@@ -31534,7 +31534,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapFastqRd2Rep1.fastq.gz
@@ -31560,7 +31560,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapFastqRd2Rep2.fastq.gz
@@ -31586,7 +31586,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
@@ -31613,7 +31613,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
@@ -31641,7 +31641,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1.bigWig
@@ -31668,7 +31668,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2.bigWig
@@ -31695,7 +31695,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1.bigWig
@@ -31722,7 +31722,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2.bigWig
@@ -31749,7 +31749,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1.txt.gz
@@ -31775,7 +31775,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep2.txt.gz
@@ -31801,7 +31801,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
@@ -32285,7 +32285,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep1.bam.bai
@@ -32312,7 +32312,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep2.bam.bai
@@ -32339,7 +32339,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
@@ -32367,7 +32367,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
@@ -32394,7 +32394,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapFastqRd1Rep1.fastq.gz
@@ -32420,7 +32420,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapFastqRd1Rep2.fastq.gz
@@ -32446,7 +32446,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapFastqRd2Rep1.fastq.gz
@@ -32472,7 +32472,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapFastqRd2Rep2.fastq.gz
@@ -32498,7 +32498,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
@@ -32525,7 +32525,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
@@ -32553,7 +32553,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1.bigWig
@@ -32580,7 +32580,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2.bigWig
@@ -32607,7 +32607,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1.bigWig
@@ -32634,7 +32634,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2.bigWig
@@ -32661,7 +32661,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1.txt.gz
@@ -32687,7 +32687,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep2.txt.gz
@@ -32713,7 +32713,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
@@ -32741,7 +32741,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep1.bam.bai
@@ -32768,7 +32768,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep2.bam.bai
@@ -32795,7 +32795,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
@@ -32823,7 +32823,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
@@ -32850,7 +32850,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapFastqRd1Rep1.fastq.gz
@@ -32876,7 +32876,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapFastqRd1Rep2.fastq.gz
@@ -32902,7 +32902,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapFastqRd2Rep1.fastq.gz
@@ -32928,7 +32928,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapFastqRd2Rep2.fastq.gz
@@ -32954,7 +32954,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
@@ -32981,7 +32981,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
@@ -33009,7 +33009,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1.bigWig
@@ -33036,7 +33036,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2.bigWig
@@ -33063,7 +33063,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1.bigWig
@@ -33090,7 +33090,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2.bigWig
@@ -33117,7 +33117,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1.txt.gz
@@ -33143,7 +33143,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep2.txt.gz
@@ -33169,7 +33169,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
@@ -39591,7 +39591,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3.bam.bai
@@ -39618,7 +39618,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep4.bam,wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep4.bam.bai
@@ -39645,7 +39645,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapContigs.bedRnaElements.gz
@@ -39672,7 +39672,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapExonsGencV10.gtf.gz
@@ -39698,7 +39698,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd1Rep3.fastq.gz
@@ -39724,7 +39724,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd1Rep4.fastq.gz
@@ -39750,7 +39750,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd2Rep3.fastq.gz
@@ -39776,7 +39776,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd2Rep4.fastq.gz
@@ -39802,7 +39802,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapGeneGencV10.gtf.gz
@@ -39828,7 +39828,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapJunctions.bedRnaElements.gz
@@ -39855,7 +39855,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3.bigWig
@@ -39882,7 +39882,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep4.bigWig
@@ -39909,7 +39909,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3.bigWig
@@ -39936,7 +39936,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep4.bigWig
@@ -39963,7 +39963,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep3.pdf.gz
@@ -39991,7 +39991,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep4.pdf.gz
@@ -40019,7 +40019,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep3.txt.gz
@@ -40045,7 +40045,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-25
-dateUnrestricted 2012-11-24
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep4.txt.gz
@@ -40071,7 +40071,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapTranscriptGencV10.gtf.gz
@@ -40098,7 +40098,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep3.bam.bai
@@ -40125,7 +40125,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep4.bam,wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep4.bam.bai
@@ -40152,7 +40152,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapContigs.bedRnaElements.gz
@@ -40179,7 +40179,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapExonsGencV10.gtf.gz
@@ -40205,7 +40205,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapFastqRd1Rep3.fastq.gz
@@ -40231,7 +40231,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapFastqRd1Rep4.fastq.gz
@@ -40257,7 +40257,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapFastqRd2Rep3.fastq.gz
@@ -40283,7 +40283,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapFastqRd2Rep4.fastq.gz
@@ -40309,7 +40309,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapGeneGencV10.gtf.gz
@@ -40335,7 +40335,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapJunctions.bedRnaElements.gz
@@ -40362,7 +40362,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3.bigWig
@@ -40389,7 +40389,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4.bigWig
@@ -40416,7 +40416,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3.bigWig
@@ -40443,7 +40443,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4.bigWig
@@ -40470,7 +40470,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep3.pdf.gz
@@ -40498,7 +40498,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep4.pdf.gz
@@ -40526,7 +40526,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep3.txt.gz
@@ -40552,7 +40552,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep4.txt.gz
@@ -40578,7 +40578,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapTranscriptGencV10.gtf.gz
@@ -41073,7 +41073,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41101,7 +41101,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41129,7 +41129,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41157,7 +41157,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41184,7 +41184,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41211,7 +41211,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41238,7 +41238,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41265,7 +41265,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41292,7 +41292,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41319,7 +41319,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41347,7 +41347,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41375,7 +41375,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41403,7 +41403,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41431,7 +41431,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41459,7 +41459,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41486,7 +41486,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -41513,7 +41513,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
@@ -43069,7 +43069,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapContigsV2.bedRnaElements.gz
@@ -48693,7 +48693,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3.bam,wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3.bam.bai
@@ -48720,7 +48720,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapAlnRep4.bam,wgEncodeCshlLongRnaSeqSknshCellPapAlnRep4.bam.bai
@@ -48747,7 +48747,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapContigs.bedRnaElements.gz
@@ -48774,7 +48774,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapExonsGencV10.gtf.gz
@@ -48800,7 +48800,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd1Rep3.fastq.gz
@@ -48826,7 +48826,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd1Rep4.fastq.gz
@@ -48852,7 +48852,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd2Rep3.fastq.gz
@@ -48878,7 +48878,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd2Rep4.fastq.gz
@@ -48904,7 +48904,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapGeneGencV10.gtf.gz
@@ -48930,7 +48930,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapJunctions.bedRnaElements.gz
@@ -48957,7 +48957,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3.bigWig
@@ -48984,7 +48984,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4.bigWig
@@ -49011,7 +49011,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3.bigWig
@@ -49038,7 +49038,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4.bigWig
@@ -49065,7 +49065,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep3.pdf.gz
@@ -49093,7 +49093,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep4.pdf.gz
@@ -49121,7 +49121,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep3.txt.gz
@@ -49147,7 +49147,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep4.txt.gz
@@ -49173,7 +49173,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapTranscriptGencV10.gtf.gz
@@ -49200,7 +49200,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep3.bam.bai
@@ -49227,7 +49227,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep4.bam,wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep4.bam.bai
@@ -49254,7 +49254,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapContigs.bedRnaElements.gz
@@ -49281,7 +49281,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapExonsGencV10.gtf.gz
@@ -49307,7 +49307,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapFastqRd1Rep3.fastq.gz
@@ -49333,7 +49333,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapFastqRd1Rep4.fastq.gz
@@ -49359,7 +49359,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapFastqRd2Rep3.fastq.gz
@@ -49385,7 +49385,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapFastqRd2Rep4.fastq.gz
@@ -49411,7 +49411,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapGeneGencV10.gtf.gz
@@ -49437,7 +49437,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapJunctions.bedRnaElements.gz
@@ -49464,7 +49464,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3.bigWig
@@ -49491,7 +49491,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4.bigWig
@@ -49518,7 +49518,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3.bigWig
@@ -49545,7 +49545,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4.bigWig
@@ -49572,7 +49572,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep3.pdf.gz
@@ -49600,7 +49600,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep4.pdf.gz
@@ -49628,7 +49628,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep3.txt.gz
@@ -49654,7 +49654,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep4.txt.gz
@@ -49680,7 +49680,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapTranscriptGencV10.gtf.gz
@@ -49707,7 +49707,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3.bam.bai
@@ -49734,7 +49734,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep4.bam,wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep4.bam.bai
@@ -49761,7 +49761,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapContigs.bedRnaElements.gz
@@ -49788,7 +49788,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapExonsGencV10.gtf.gz
@@ -49814,7 +49814,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd1Rep3.fastq.gz
@@ -49840,7 +49840,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd1Rep4.fastq.gz
@@ -49866,7 +49866,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd2Rep3.fastq.gz
@@ -49892,7 +49892,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd2Rep4.fastq.gz
@@ -49918,7 +49918,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapGeneGencV10.gtf.gz
@@ -49944,7 +49944,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
-dateUnrestricted 2012-12-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapJunctions.bedRnaElements.gz
@@ -49971,7 +49971,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3.bigWig
@@ -49998,7 +49998,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4.bigWig
@@ -50025,7 +50025,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3.bigWig
@@ -50052,7 +50052,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4.bigWig
@@ -50079,7 +50079,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep3.pdf.gz
@@ -50107,7 +50107,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
-dateUnrestricted 2013-01-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep4.pdf.gz
@@ -50135,7 +50135,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-17
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep3.txt.gz
@@ -50161,7 +50161,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-17
-dateUnrestricted 2012-11-16
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep4.txt.gz
@@ -50187,7 +50187,7 @@ composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
-dateUnrestricted 2012-12-27
+dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapTranscriptGencV10.gtf.gz
@@ -51308,4 +51308,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 612837869
+# MAGIC: 612773051
