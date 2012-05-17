@@ -1,0 +1,3884 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <META name="description" content="UCSC Track Database Definition">
+    <META name="keywords" content="tracDb, tracks, UCSC, bioinformatics">
+    <TITLE>UCSC Track Database Definition</TITLE>
+    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+    <LINK REL="STYLESHEET" HREF="trackDbDoc.css">
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/staticDoc.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="trackDbDoc.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            //tdbDoc.checkLibrary(); // Run this test during development only
+            // TOC Self assembly EXPERIMENTAL
+            tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
+                                    "parent_view","parent_container"] );
+            tdbDoc.documentLoad();
+        });
+    </script>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+
+<!-- Format everthing inside this narrower window -->
+<div style="width=100%; max-width:1000px;">
+<IMG SRC="/images/title.jpg">
+
+<!-- This file generates the top menu bar on Genome Browser static pages-->
+<div class='topBlueBar' style="width:inherit; height:26px;">
+      <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="2636D1" HEIGHT="24" class="topbar">
+
+    <TR><TD VALIGN="middle"><FONT COLOR="#89A1DE">
+        <A HREF="/index.html" class="topbar">Home</A>-
+        <A HREF="/cgi-bin/hgGateway" class="topbar">Genomes</A>-
+        <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">Blat</A>-
+        <A HREF="/cgi-bin/hgTables?command=start" class="topbar">Tables</A>-
+        <A HREF="/cgi-bin/hgNear" class="topbar">Gene Sorter</A>-
+        <A HREF="/cgi-bin/hgPcr?command=start" class="topbar">PCR</A>-
+        <A HREF="/cgi-bin/hgVisiGene?command=start" class="topbar">VisiGene</A>-
+        <A HREF="/cgi-bin/pbGateway?command=start" class="topbar">Proteome</A>-
+        <A HREF="/cgi-bin/hgSession?hgS_doMainPage=1" class="topbar">Session</A>-
+        <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
+
+    </FONT></TD></TR>
+      </TABLE>
+<!-- end topbar -->
+</div>
+<div style='height:.4em;'></div> <!-- vertical spacing -->
+
+<!--Content Tables-->
+    <!--outer table is for border purposes-->
+
+<div class="contentBorder"><!-- Content Border -->
+
+
+<!-- light blue bar -->
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Track Database Definition</div>
+</div>
+<div style='height:.4em;'></div> <!-- vertical spacing -->
+
+<!-- Finally to the content -->
+<div style="padding:10px;">  <!-- border partol -->
+
+<DIV ID="trackDbDoc_intro" class="intro"></DIV>
+
+<P>The remainder of this document will be broken into the following sections and should be
+used as a ready reference.</P>
+
+<OL>
+    <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
+    <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
+    <UL>
+        <LI><A HREF="#bed_-_Item_or_Region_Track_Settings">bed/bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#wig_-_Signal_Graphing_Track_Settings">wig/bigwig/bedGraph/bamWig</A>:
+                                                                signal graphing tracks</LI>
+        <LI><A HREF="#genePred">genePred</A>: Gene models and predictions</LI>
+        <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
+        <LI><A HREF="#psl">psl</A>: sequence alignments</LI>
+        <LI><A HREF="#chain">chain and netAlign</A>: paired sequence alignments</LI>
+        <LI><A HREF="#wigMaf">wigMaf</A>: Multiple alignments</LI>
+        <LI><A HREF="#expRatio">expRatio</A>: Microarray expression data</LI>
+        <LI><A HREF="#vcfTabix">vcfTabix</A>: Variable Call Format</LI>
+        <LI><A HREF="#pgSnp">pgSnp</A>: Personal Genome SNP tracks</LI>
+        <LI>Specialize or rarely used: <A HREF="#altGraphX">altGraphX</A>,
+            <A HREF="#bedDetail">bedDetail</A>, <A HREF="#clonePos">clonePos</A>,
+            <A HREF="#ctgPos">ctgPos</A>, <A HREF="#downloadsOnly">downloadsOnly</A>,
+            <A HREF="#encodeFiveC">encodeFiveC</A>, <A HREF="#factorSource">factorSource</A>,
+            <A HREF="#rmsk">rmsk</A> and <A HREF="#snake">snake</A>.</LI>
+    </UL></LI>
+    <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
+        &ndash; with examples
+    <UL>
+        <LI><A HREF="#group">Predefined major track groupings</A></LI>
+        <LI><A HREF="#superTrack">Supertracks (AKA Folders or Containers)</A></LI>
+        <LI><A HREF="#compositeTrack">Composite Tracks</A>
+        <UL>
+            <LI><A HREF="#subGroups">Subgroups</A></LI>
+            <LI><A HREF="#view">Views</A></LI>
+        </UL></LI>
+        <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
+    </UL></LI>
+    <LI><A HREF="#customTracks">Special settings for custom tracks</A></LI>
+    <LI><A HREF="#alphabetical">Alphabetical list of all settings</A></LI>
+    <LI><A HREF="#loosers">Obscure or special cases</A> &ndash; (aka Rejections)</LI>
+    <LI><A HREF="#toc">Table of Contents (self-assembled)</A> &ndash;
+                                    <I>experimental</i></LI>
+</OL>
+<IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+
+<A name="commonSettings">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Common trackDb settings</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<TABLE class="settingsTable" id="Common_Settings">
+<THEAD><TR><TD><DIV ID="commonSettings_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection' />&nbsp;Common Settings</TH></TR>
+    <TR VALIGN=TOP><TD class="track"><A name="track"><IMG class='toggle detail'>
+        <div class="format"><code>track</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="type"><A name="type"><IMG class='toggle detail'>
+        <div class="format"><code>type</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="shortLabel"><A name="shortLabel"><IMG class='toggle detail'>
+        <div class="format"><code>shortLabel</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="longLabel"><A name="longLabel"><IMG class='toggle detail'>
+        <div class="format"><code>longLabel</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="visibility"><A name="visibility"><IMG class='toggle detail'>
+        <div class="format"><code>visibility</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="html"><A name="html"><IMG class='toggle detail'>
+        <div class="format"><code>html</code></div>
+    </TD></TR>
+</TABLE>
+
+<TABLE class="settingsTable" id="Common_Settings_-_less_frequent">
+    <TR VALIGN=TOP><TH><A name="commonLessFrequent">
+            <IMG class='toggle oneSection' />&nbsp;Common, though less frequently used settings
+    </TH> </TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><A name="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="boxedCfg"><A name="boxedCfg"><IMG class='toggle detail'>
+        <div class="format"><code>boxedCfg &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="canPack"><A name="canPack"><IMG class='toggle detail'>
+        <div class="format"><code>canPack &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="color"><A name="color"><IMG class='toggle detail'>
+        <div class="format"><code>color &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="altColor"><A name="altColor"><IMG class='toggle detail'>
+        <div class="format"><code>altColor &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chromosomes"><A name="chromosomes"><IMG class='toggle detail'>
+        <div class="format"><code>chromosomes &lt;chr1,chr2,...&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="configureByPopup"><A name="configureByPopup">
+        <IMG class='toggle detail'>
+        <div class="format"><code>configureByPopup &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dataVersion"><A name="dataVersion"><IMG class='toggle detail'>
+        <div class="format"><code>dataVersion &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="directUrl">
+        <A name="directUrl">
+        <A name="hgsid"><IMG class='toggle detail setA'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>directUrl &lt;url&gt;</code><div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="hgsid">
+        <IMG class='toggle detail setA'>
+        <div class="format"><code>hgsid on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"><IMG class='toggle detail'>
+        <div class="format"><code>otherDb &lt;otherDb&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="origAssembly"><A name="origAssembly"><IMG class='toggle detail'>
+        <div class="format"><code>origAssembly &lt;db&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pennantIcon"><A name="pennantIcon"><IMG class='toggle detail'>
+        <div class="format"><code>pennantIcon &lt;icon&gt; [html [tip]]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="priority"><A name="priority"><IMG class='toggle detail'>
+        <div class="format"><code>priority &lt;float&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="release"><A name="release"><IMG class='toggle detail'>
+        <div class="format"><code>release &lt;alpha/beta/public&gt;[,beta/public]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="table"><A name="table"><IMG class='toggle detail'>
+        <div class="format"><code>table &lt;tableName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="tableBrowser"><A name="tableBrowser"><IMG class='toggle detail'>
+        <div class="format"><code>tableBrowser &lt;off/on&gt; [table1 ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="url">
+            <A name="url">
+            <A name="url2">
+            <A name="idInUrlSql"><IMG class='toggle detail'>
+        <div class="format">
+            <code>url &lt;url&gt;</code><BR>
+            <code>url2 &lt;url&gt;</code><BR>
+            <code>idInUrlSql &lt;sql for id&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="urlLabel">
+            <A name="urlLabel">
+            <A name="url2Label"><IMG class='toggle detail'>
+        <div class="format">
+            <code>urlLabel &lt;label&gt;</code><BR>
+            <code>url2Label &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP>
+        <TD class="wgEncode"><A name="wgEncode"><IMG class='toggle detail'>
+        <div class="format"><code>wgEncode on</code></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+
+<A name="settingsByType">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Settings by track type</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<P>Many settings are only
+valid for certain types of tracks.  Below many of these track types
+are described along with their type specific settings.</P>
+
+<A name="bed"><A name="bigBed">
+<TABLE class="settingsTable" id="bed_-_Item_or_Region_Track_Settings">
+<THEAD><TR><TD><DIV ID="bed_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bed/bigBed - Item or region track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bed"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bed &lt;3-12&gt; [+/.]</code><BR>
+            <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bed_flavors">
+            <A name="bed5FloatScore">
+            <A name="bedRnaElements">
+            <A name="broadPeak">
+            <A name="coloredExon">
+            <A name="gvf">
+            <A name="ld2">
+            <A name="narrowPeak">
+            <A name="peptideMapping"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bed5FloatScore</code><BR>
+            <code>type bedRnaElements</code><BR>
+            <code>type broadPeak</code><BR>
+            <code>type coloredExon</code><BR>
+            <code>type gvf</code><BR>
+            <code>type ld2</code><BR>
+            <code>type narrowPeak</code><BR>
+            <code>type peptideMapping</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="colorByStrand"><A name="colorByStrand"><IMG class='toggle detail'>
+        <div class="format"><code>colorByStrand &lt;red.green.blue&gt;
+                                            &lt;red.green.blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="compareGenomeLinks"><A name="compareGenomeLinks">
+        <IMG class='toggle detail'>
+        <div class="format"><code>compareGenomeLinks &lt;db[.table[.column]]=label&gt;
+                                    [db[.table[.column] =label &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="denseCoverage"><A name="denseCoverage"><IMG class='toggle detail'>
+        <div class="format"><code>denseCoverage &lt;maxVal &gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="exonArrows"><A name="exonArrows"><IMG class='toggle detail'>
+        <div class="format"><code>exonArrows &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="Filter">
+            <A name="Filter">
+            <A name="scoreFilter">
+            <A name="pValueFilter">
+            <A name="qValueFilter">
+            <A name="signalFilter">
+            <A name="FilterLimits">
+            <A name="FilterByRange"><IMG class='toggle detail'>
+        <div class="format">
+            <code>&lt;column&gt;Filter &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            <code>scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            <code>pValueFilter</code><BR>
+            <code>qValueFilter</code><BR>
+            <code>signalFilter</code><BR>
+            <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
+            </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterBy"><A name="filterBy"><IMG class='toggle detail'>
+        <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
+                                                    [field2:title=[+]opt2a...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"><IMG class='toggle detail'>
+        <div class="format"><code>itemRgb on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"><IMG class='toggle detail'>
+        <div class="format"><code>maxItems &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToDraw"><A name="maxWindowToDraw"><IMG class='toggle detail'>
+        <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToQuery">
+        <A name="maxWindowToQuery"><IMG class='toggle detail'>
+        <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="minGrayLevel"><A name="minGrayLevel"><IMG class='toggle detail'>
+        <div class="format"><code>minGrayLevel  &lt;1-9&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="noScoreFilter"><A name="noScoreFilter"><IMG class='toggle detail'>
+        <div class="format"><code>noScoreFilter  on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="spectrum">
+            <A name="spectrum">
+            <A name="scoreMax">
+            <A name="scoreMin"><IMG class='toggle detail'>
+        <div class="format">
+            <code>spectrum on</code><BR>
+            <code>scoreMax &lt;integer&gt;</code><BR>
+            <code>scoreMin &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"><IMG class='toggle detail'>
+        <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
+    </TD></TR>
+</TABLE>
+
+<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
+    <TR VALIGN=TOP><TH><A name="item_lessFrequent">
+            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings:
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bedFilter"><A name="bedFilter"><IMG class='toggle detail'>
+        <div class="format"><code>bedFilter on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bedNameLabel"><A name="bedNameLabel"><IMG class='toggle detail'>
+        <div class="format"><code>bedNameLabel &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR>
+    <TR class="related1st" VALIGN=TOP><TD class="baseColorUseSequence">
+        <A name="baseColorUseSequence"><IMG class='toggle detail setB'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
+                        hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="baseColorUseCds">
+        <A name="baseColorUseCds"><IMG class='toggle detail setB'>
+        <div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="baseColorDefault">
+        <A name="baseColorDefault"><IMG class='toggle detail setB'>
+        <div class="format"><code>baseColorDefault
+                        &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="baseColorTickColor">
+        <A name="baseColorTickColor"><IMG class='toggle detail setB'>
+        <div class="format"><code>baseColorTickColor
+                                    &lt;lighterShade/contrastingColor&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="showDiffBasesAllScales">
+        <A name="showDiffBasesAllScales"><IMG class='toggle detail setB'>
+        <div class="format"><code>showDiffBasesAllScales on</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="showDiffBasesMaxZoom">
+        <A name="showDiffBasesMaxZoom"><IMG class='toggle detail setB'>
+        <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="showCdsAllScales">
+        <A name="showCdsAllScales"><IMG class='toggle detail setB'>
+        <div class="format"><code>showCdsAllScales</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="showCdsMaxZoom">
+        <A name="showCdsMaxZoom"><IMG class='toggle detail setB'>
+        <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultGeneTracks">
+        <A name="defaultGeneTracks"><IMG class='toggle detail'>
+        <div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="exonArrowsDense">
+        <A name="exonArrowsDense"><IMG class='toggle detail'>
+        <div class="format"><code>exonArrowsDense &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemDetailsHtmlTable">
+        <A name="itemDetailsHtmlTable"><IMG class='toggle detail'>
+        <div class="format"><code>itemDetailsHtmlTable &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemImagePath">
+            <A name="itemImagePath">
+            <A name="itemBigImagePath"><IMG class='toggle detail'>
+        <div class="format"><code>itemImagePath &lt;path&gt; &lt;suffix&gt;</code><BR>
+            <code>itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mafTrack"><A name="mafTrack"><IMG class='toggle detail'>
+        <div class="format"><code>mafTrack &lt;trackName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="nextExonText">
+            <A name="nextExonText">
+            <A name="prevExonText"><IMG class='toggle detail'>
+        <div class="format">
+            <code>nextExonText &lt;str&gt;</code><BR>
+            <code>prevExonText &lt;str&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showTopScorers"><A name="showTopScorers"><IMG class='toggle detail'>
+        <div class="format"><code>showTopScorers #</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bed_example">
+        <A name="bed_Examples"><IMG class='toggle detail'>
+        <div class="format"><B>Examples of item base types:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="wig"><A name="bigWig"><A name="bedGraph"><A name="bamWig">
+<TABLE class="settingsTable" id="wig_-_Signal_Graphing_Track_Settings">
+<THEAD><TR><TD><DIV ID="wig_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;wig/bigWig - Signal graphing track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="wig"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
+            <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
+            <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="minLimit">
+            <A name="minLimit">
+            <A name="maxLimit"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bedGraph &lt;field&gt;</code><BR>
+            <code>minLimit &lt;#&gt;</code><BR>
+            <code>maxLimit&lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"><IMG class='toggle detail'>
+        <div class="format"><code>alwaysZero  &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"><IMG class='toggle detail'>
+        <div class="format"><code>autoScale &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="graphTypeDefault">
+        <A name="graphTypeDefault"><IMG class='toggle detail'>
+        <div class="format"><code>graphTypeDefault points</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxHeightPixels">
+        <A name="maxHeightPixels"><IMG class='toggle detail'>
+        <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="spanList"><A name="spanList"><IMG class='toggle detail'>
+        <div class="format"><code>spanList &lt;s1&gt;[,s2&hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="smoothingWindow">
+        <A name="smoothingWindow"><IMG class='toggle detail'>
+        <div class="format"><code>smoothingWindow &lt;off/1-16&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="transformFunc">
+        <A name="transformFunc"><IMG class='toggle detail'>
+        <div class="format"><code>transformFunc &lt;NONE/LOG&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="viewLimits">
+            <A name="viewLimits">
+            <A name="viewLimitsMax"><IMG class='toggle detail'>
+        <div class="format">
+            <code>viewLimits &lt;lower:upper&gt;</code><BR>
+            <code>viewLimitsMax &lt;lower:upper&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="wigColorBy"><A name="wigColorBy"><IMG class='toggle detail'>
+        <div class="format"><code>wigColorBy &lt;bedTable&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="windowingFunction">
+        <A name="windowingFunction"><IMG class='toggle detail'>
+        <div class="format"><code>windowingFunction
+                                    &lt;mean/mean+whiskers/maximum/minimum&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="yLineMark">
+            <A name="yLineMark">
+            <A name="yLineOnOff">
+            <A name="gridDefault"><IMG class='toggle detail'>
+        <div class="format">
+            <code>yLineMark &lt;#&gt;</code><BR>
+            <code>yLineOnOff &lt;off/on&gt;</code><BR>
+            <code>gridDefault   on</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="wig_example"><IMG class='toggle detail'>
+        <div class="format"><B>Examples of signal graphing tracks:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="genePred">
+<TABLE class="settingsTable" id="genePred_-_Gene_Model_Track_Settings">
+<THEAD><TR><TD><DIV ID="genePred_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;genePred - Gene model track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="genePred"><IMG class='toggle detail'>
+        <div class="format"><code>type genePred [pepTable [mrnaTable]]</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="geneClasses">
+        <A name="geneClasses"><IMG class='toggle detail setC'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>geneClasses &lt;cl1 cl2...&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="gClass_">
+        <A name="gClass_"><IMG class='toggle detail setC'>
+        <div class="format"><code>gClass_&lt;xxx&gt; &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="itemClassTbl">
+        <A name="itemClassTbl"><IMG class='toggle detail setC'>
+        <div class="format"><code>itemClassTbl &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="itemClassNameColumn">
+        <A name="itemClassNameColumn"><IMG class='toggle detail setC'>
+        <div class="format"><code>itemClassNameColumn &lt;col&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="itemClassClassColumn">
+        <A name="itemClassClassColumn"><IMG class='toggle detail setC'>
+        <div class="format"><code>itemClassClassColumn &lt;col&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterBy_genePred">
+        <A name="filterBy_genePred"><IMG class='toggle detail'>
+        <div class="format"><code>filterBy &lt;field1:title=[+]option1a...&gt;
+                                                    [field2:title=[+]opt2a...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="autoTranslate"><A name="autoTranslate"><IMG class='toggle detail'>
+        <div class="format"><code>autoTranslate 0</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="intronGap"><A name="intronGap"><IMG class='toggle detail'>
+        <div class="format"><code>intronGap &lt;#bases&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultLinkedTables">
+        <A name="defaultLinkedTables"><IMG class='toggle detail'>
+        <div class="format"><code>defaultLinkedTables &lt;table1&gt;[,table2...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="idXref"><A name="idXref"><IMG class='toggle detail'>
+        <div class="format"><code>idXref &lt;idColumn&gt; &lt;altIdColumn&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="oldToNew"><A name="oldToNew"><IMG class='toggle detail'>
+        <div class="format"><code>oldToNew &lt;tableName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings
+            found in the "Item or region tracks" section are also
+            available for displaying gene models.</P>
+            <A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A>,
+            <A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A>,
+            <A onclick="return jumpTo(this);" HREF="#">itemDetailsHtmlTable</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP>
+        <TD class="genePred_example"><IMG class='toggle detail'>
+        <div class="format"><B>Examples of genePred track: </B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="bam">
+<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bam - Compressed Sequence Alignment track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="bam"><IMG class='toggle detail'>
+        <div class="format"><code>type bam</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
+        <A name="bamColorMode"><IMG class='toggle detail setD'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>bamColorMode &lt;strand/gray/tag/off&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamGrayMode">
+            <A name="bamGrayMode">
+            <A name="aliQualRange">
+            <A name="baseQualRange"><IMG class='toggle detail setD'>
+        <div class="format">
+            <code>bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
+            <code>aliQualRange &lt;min:max&gt;</code><BR>
+            <code>baseQualRange &lt;min:max&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamColorTag">
+        <A name="bamColorTag"><IMG class='toggle detail setD'>
+        <div class="format"><code>bamColorTag &lt;XX&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="noColorTag">
+        <A name="noColorTag"><IMG class='toggle detail setD'>
+        <div class="format"><code>noColorTag .</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore">
+        <div class="format"><code>bamSkipPrintQualScore .</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="indelDoubleInsert">
+            <A name="indelDoubleInsert">
+            <A name="indelQueryInsert">
+            <A name="indelPolyA"><IMG class='toggle detail'>
+        <div class="format">
+            <code>indelDoubleInsert &lt;off/on&gt;</code><BR>
+            <code>indelQueryInsert &lt;off/on&gt;</code><BR>
+            <code>indelPolyA &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="minAliQual"><A name="minAliQual"><IMG class='toggle detail'>
+        <div class="format"><code>minAliQual &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="pairEndsByName">
+        <A name="pairEndsByName"><IMG class='toggle detail setE'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>pairEndsByName .</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="pairSearchRange">
+        <A name="pairSearchRange"><IMG class='toggle detail setE'>
+        <div class="format"><code>pairSearchRange &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showNames"><A name="showNames"><IMG class='toggle detail'>
+        <div class="format"><code>showNames &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings
+            found in the "Item or region tracks" section are also
+            available for displaying bam tags.</P>
+            <A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A>,
+            <A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example for bam track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="psl">
+<TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="psl_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;psl - sequence alignment tracks settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="psl"><IMG class='toggle detail'>
+        <div class="format"><code>type psl &lt;subtype&gt; [otherDb]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="blastRef"><A name="blastRef"><IMG class='toggle detail'>
+        <div class="format"><code>blastRef &lt;assembly.table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="colorChromDefault">
+        <A name="colorChromDefault"><IMG class='toggle detail'>
+        <div class="format"><code>colorChromDefault off</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pred"><A name="pred"><IMG class='toggle detail'>
+        <div class="format"><code>pred &lt;assembly.table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pslSequence"><A name="pslSequence"><IMG class='toggle detail'>
+        <div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="transMapGene">
+            <A name="transMapGene">
+            <A name="transMapInfo">
+            <A name="transMapSrc">
+            <A name="transMapTypeDesc"><IMG class='toggle detail'>
+        <div class="format">
+            <code>transMapGene &lt;assembly.table&gt;</code><BR>
+            <code>transMapInfo &lt;table&gt;</code><BR>
+            <code>transMapSrc &lt;assembly.table&gt;</code><BR>
+            <code>transMapTypeDesc &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="ucscRetroInfo"><A name="ucscRetroInfo"><IMG class='toggle detail'>
+        <div class="format"><code>ucscRetroInfo</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings defined elsewhere in this document are also available for
+            displaying psl tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A>,
+            <A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A>,
+            <A onclick="return jumpTo(this);" HREF="#">chainLinearGap</A>,
+            <A onclick="return jumpTo(this);" HREF="#">chainMinScore</A>,
+            <A onclick="return jumpTo(this);" HREF="#">indelDoubleInsert</A>,
+            <A onclick="return jumpTo(this);" HREF="#">indelQueryInsert</A>,
+            <A onclick="return jumpTo(this);" HREF="#">indelPolyA</A>,
+            <A onclick="return jumpTo(this);" HREF="#">itemDetailsHtmlTable</A>,
+            <A onclick="return jumpTo(this);" HREF="#">matrix</A>,
+            <A onclick="return jumpTo(this);" HREF="#">matrixHeader</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxItems</A>,
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showCdsAllScales</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showCdsMaxZoom</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A>,
+            <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>,
+            <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="psl_example"><IMG class='toggle detail'>
+        <div class="format"><B>Examples of psl alignment tracks:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="chain"><A name="netAlign">
+<TABLE class="settingsTable" id="chain_netAlign_-_Paired_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="chain_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;chain and netAlign - paired species alignment track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="chain"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type chain &lt;otherDb&gt;</code><BR>
+            <code>otherDb &lt;otherDb&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="netAlign"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type netAlign &lt;otherDb&gt; &lt;otherChainTable&gt;</code><BR>
+            <code>otherDb &lt;otherDb&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chainColor"><A name="chainColor"><IMG class='toggle detail'>
+        <div class="format"><code>chainColor &lt;scheme&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chainLinearGap"><A name="chainLinearGap"><IMG class='toggle detail'>
+        <div class="format"><code>chainLinearGap &lt;loose/medium&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chainMinScore"><A name="chainMinScore"><IMG class='toggle detail'>
+        <div class="format"><code>chainMinScore &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chainNormScoreAvailable">
+        <A name="chainNormScoreAvailable"><IMG class='toggle detail'>
+        <div class="format"><code>chainNormScoreAvailable &lt;yes/no&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="matrix">
+            <A name="matrix">
+            <A name="matrixHeader"><IMG class='toggle detail'>
+        <div class="format">
+            <code>matrix &lt;size&gt; &lt;#,#,#,#,&hellip;&gt;</code><BR>
+            <code>matrixHeader &lt;b1,b2,b3,b4&gt;</code><BR>
+            <code>$matrix</code> token in html.</div>
+        </DIV>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="spectrum"><IMG class='toggle detail'>
+        <div class="format"><code>spectrum on</code></div>
+    </TD></TR>
+    <!-- <TR VALIGN=TOP><TD>
+            <P>Additional settings
+            found in the "Item or region tracks" section are also
+            available for displaying chains and netAligns.</P>
+            <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+    </TD></TR> -->
+    <TR class="examples" VALIGN=TOP><TD class="chain_netAlign_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Examples of chain and netAlign tracks:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="wigMaf">
+<TABLE class="settingsTable" id="wigMaf_-_Multiple_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="wigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;wigMaf - Multiple alignment track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="wigMaf"><IMG class='toggle detail'>
+        <div class="format"><code>type wigMaf &lt;minVal&gt; &lt;maxVal&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="frames"><A name="frames"><IMG class='toggle detail'>
+        <div class="format"><code>frames &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="irows"><A name="irows"><IMG class='toggle detail'>
+        <div class="format"><code>irows off</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemFirstCharCase">
+        <A name="itemFirstCharCase"><IMG class='toggle detail'>
+        <div class="format"><code>itemFirstCharCase noChange</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pairwiseHeight">
+        <A name="pairwiseHeight"><IMG class='toggle detail'>
+        <div class="format"><code>pairwiseHeight &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesCodonDefault">
+        <A name="speciesCodonDefault"><IMG class='toggle detail'>
+        <div class="format"><code>speciesCodonDefault &lt;species&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesDefaultOff">
+        <A name="speciesDefaultOff"><IMG class='toggle detail'>
+        <div class="format"><code>speciesDefaultOff &lt;species1&gt; [species2 ...]</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="speciesOrder">
+        <A name="speciesOrder"><IMG class='toggle detail setF'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code>speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="speciesGroups">
+            <A name="speciesGroups">
+            <A name="sGroup_"><IMG class='toggle detail setF'>
+        <div class="format">
+            <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
+            <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="speciesUseFile">
+        <A name="speciesUseFile"><IMG class='toggle detail setF'>
+        <div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="summary"><A name="summary"><IMG class='toggle detail'>
+        <div class="format"><code>summary &lt;tableName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="treeImage"><A name="treeImage"><IMG class='toggle detail'>
+        <div class="format"><code>treeImage &lt;imageFile&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="wiggle"><A name="wiggle"><IMG class='toggle detail'>
+        <div class="format"><code>wiggle &lt;table1&gt; &lt;leftLabel1&gt;
+                                &lt;uiLabel1&gt; [table2 leftLabel2  uiLabelN ...]</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="wigMaf_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Examples of wigMaf tracks:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="expRatio">
+<TABLE class="settingsTable" id="expRatio_-_Microarray_Expression_Track_Settings">
+<THEAD><TR><TD><DIV ID="expRatio_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;expRatio - Microarray expression track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="expRatio"><IMG class='toggle detail'>
+        <div class="format"><code>type expRatio</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="expDrawExons"><A name="expDrawExons"><IMG class='toggle detail'>
+        <div class="format"><code>expDrawExons on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="expScale"><A name="expScale"><IMG class='toggle detail'>
+        <div class="format"><code>expScale &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="expStep"><A name="expStep"><IMG class='toggle detail'>
+        <div class="format"><code>expStep &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="expTable"><A name="expTable"><IMG class='toggle detail'>
+        <div class="format"><code>expTable &lt;tableName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="groupings"><A name="groupings"><IMG class='toggle detail'>
+        <div class="format"><code>groupings &lt;fileName&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP>
+        <TD class="expRatio_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of an expRatio track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="vcfTabix">
+<TABLE class="settingsTable" id="vcfTabix_-_Variable_Call_Format_Track_Settings">
+<THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
+        &nbsp;vcfTabix - Variable Call Format track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
+        <div class="format"><code>type vcfTabIx</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            varaible call format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
+        </DIV>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="vcfTabix_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a VCF track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="pgSnp">
+<TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
+<THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;pgSnp - Personal Genome SNP track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="pgSnp"><IMG class='toggle detail'>
+        <div class="format"><code>type pgSnp</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="pgSnp_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Personal Genome SNP track:</B></div>
+    </TD></TR>
+</TABLE>
+<P>
+</P>
+<H2>Specialized or rarely used types:</H2>
+
+<A name="altGraphX">
+<TABLE class="settingsTable" id="altGraphX_-_Alternate_Splicing_Track_Settings">
+<THEAD><TR><TD><DIV ID="altGraphX_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;altGraphX - Alternate splicing gene model track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="altGraphX"><IMG class='toggle detail'>
+        <div class="format"><code>type altGraphX</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="altGraphX_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of an altGraphX track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="bedDetail">
+<TABLE class="settingsTable" id="bedDetail_-_Text_Extended_BED_Track_Settings">
+<THEAD><TR><TD><DIV ID="bedDetail_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bedDetail - Text extended bed track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bedDetail"><IMG class='toggle detail'>
+        <div class="format"><code>type bedDetail &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings defined elsewhere in this document are also
+            available for displaying bedDetail tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">itemRgb</A>,
+            <A onclick="return jumpTo(this);" HREF="#">url</A>,
+            <A onclick="return jumpTo(this);" HREF="#">urlLabel</A>
+            <P><I>TODO: Currently almost no settings or
+            configuration options are supported by bedDetail tracks.  However,
+            there is very little, in principle, that should prevent adding
+            support for almost all the "Item or region tracks"
+            settings.</I></P>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bedDetail_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a bedDetail track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="clonePos">
+<TABLE class="settingsTable" id="clonePos_-_Genome_Coverage_Track_Settings">
+<THEAD><TR><TD><DIV ID="clonePos_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;clonePos - Genome coverage track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="clonePos"><IMG class='toggle detail'>
+        <div class="format"><code>type clonePos</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="clonePos_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a clonePos track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="ctgPos">
+<TABLE class="settingsTable" id="ctgPos_-_Physical_Map_Contig_Track_Settings">
+<THEAD><TR><TD><DIV ID="ctgPos_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;ctgPos - Physical map contigs track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="ctgPos"><IMG class='toggle detail'>
+        <div class="format"><code>type ctgPos</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="ctgPos_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a ctgPos track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="downloadsOnly">
+<TABLE class="settingsTable" id="downloadsOnly_Track_Settings">
+<THEAD><TR><TD><DIV ID="downloadsOnly_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;downloadsOnly - Specialized downloadable file track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="downloadsOnly"><IMG class='toggle detail'>
+        <div class="format"><code>type downloadsOnly</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="fileSortOrder_downloadsOnly">
+        <A name="fileSortOrder_downloadsOnly"><IMG class='toggle detail'>
+        <div class="format"><code>fileSortOrder ...</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="downloadsOnly_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Downloads Only track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="encodeFiveC">
+<TABLE class="settingsTable" id="encodeFiveC_-_Five_C_Chromatin_Interaction_Track_Settings">
+<THEAD><TR><TD><DIV ID="encodeFiveC_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;encodeFiveC - Five C Chromatin interaction track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="encodeFiveC"><IMG class='toggle detail'>
+        <div class="format"><code>type encodeFiveC</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="interTable"><A name="interTable"><IMG class='toggle detail'>
+        <div class="format"><code>interTable &lt;tableName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="interTableKind"><A name="interTableKind"><IMG class='toggle detail'>
+        <div class="format"><code>interTableKind &lt;label&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="encodeFiveC_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of an encodeFiveC track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="factorSource">
+<TABLE class="settingsTable" id="factorSource_-_Combined_Item_Track_Settings">
+<THEAD><TR><TD><DIV ID="factorSource_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;factorSource - Combined items track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="factorSource"><IMG class='toggle detail'>
+        <div class="format"><code>type factorSource</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="sourceTable"><A name="sourceTable"><IMG class='toggle detail'>
+        <div class="format"><code>sourceTable &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="inputTrackTable">
+        <A name="inputTrackTable"><IMG class='toggle detail'>
+        <div class="format"><code>inputTrackTable &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="inputTableFieldDisplay">
+        <A name="inputTableFieldDisplay"><IMG class='toggle detail'>
+        <div class="format"><code>inputTableFieldDisplay &lt;f1&gt; [f2...]</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="factorSource_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a factorSource track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="rmsk">
+<TABLE class="settingsTable" id="rmsk_-_Repeat_Masking_Track_Settings">
+<THEAD><TR><TD><DIV ID="rmsk_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;rmsk - Repeat masking track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="rmsk"><IMG class='toggle detail'>
+        <div class="format"><code>type rmsk</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying gene
+            models.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+            <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="rmsk_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a Repeat Masking track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="snake">
+<TABLE class="settingsTable" id="snake_-_Self_Referencing_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="snake_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;snake - Self referencing alignment track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="snake"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type snake &lt;db&gt;</code><BR>
+            <code>otherDb &lt;otherDb&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            snake tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+            <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="snake_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a snake track:</B></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+
+<A name="groupingTracks">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Grouping tracks
+into sets and hierarchies</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<P>All tracks are
+organized into one of the major groupings.  However there are several
+more advanced hierarchical organizing options.  There is even an
+option to combine the data of multiple tables of remote data files
+into a single image.</P>
+
+<A name="group">
+<TABLE class="settingsTable" id="Predefined_Group_Setting">
+<THEAD><TR><TD><DIV ID="group_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Predefined major track groupings setting
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="group"><IMG class='toggle detail'>
+        <div class="format"><code>group &lt;groupId&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="group_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a track belonging to a predefined group:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="superTrack">
+<TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
+<THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Supertrack (aka Folders or Containers) track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
+        <div class="format"><code>superTrack on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_supertrack">
+            <A name="parent_supertrack"><IMG class='toggle detail'>
+        <div class="format"><code>parent &lt;superTrack&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="superTrack_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Supertrack track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="compositeTrack">
+<TABLE class="settingsTable" id="Composite_Track_Settings">
+<THEAD><TR><TD><DIV ID="compositeTrack_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
+        <div class="format"><code>compositeTrack on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent"><A name="parent"><IMG class='toggle detail'>
+        <div class="format"><code>parent &lt;composite&gt; [off/on]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="allButtonPair"><A name="allButtonPair"><IMG class='toggle detail'>
+        <div class="format"><code>allButtonPair on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="centerLabelsDense">
+        <A name="centerLabelsDense"><IMG class='toggle detail'>
+        <div class="format"><code>centerLabelsDense &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dragAndDrop"><A name="dragAndDrop"><IMG class='toggle detail'>
+        <div class="format"><code>dragAndDrop on</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Composite track:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="subGroups">
+<TABLE class="settingsTable" id="Composite_-_Subgroups_Settings">
+<THEAD><TR><TD><DIV ID="subGroups_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Composite track subgroup settings</TH></TR>
+    <TR VALIGN=TOP><TD class="subGroupN">
+            <A name="subGroupN"><IMG class='toggle detail'>
+        <div class="format">
+            <code>subGroup1 &lt;gTag1&gt; &lt;gTitle1&gt; &lt;mTag1a=mTitle1a&gt;
+                                                        [mTag1b=mTitle1b&hellip;]</code><BR>
+            <code>subGroup2 &lt;gTag2&gt; &lt;gTitle2&gt; &lt;mTag2a=mTitle2a&gt;
+                                                        [mTag2b= mTitle2b&hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="subGroups"><IMG class='toggle detail'>
+        <div class="format">
+            <code>subGroups &lt;gTag1=mTag1?&gt; [gTag2= mTag2?]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dimensions"><A name="dimensions"><IMG class='toggle detail'>
+        <div class="format"><code>dimensions &lt;dimX=gTag#&gt;
+                                                    [dimY=gTag#] [dimA=gTag# ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterComposite">
+        <A name="filterComposite"><IMG class='toggle detail'>
+        <div class="format"><code>filterComposite &lt;dim[A/B/C][=one]&gt;
+                                                                [dimB dimC ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dimensionAchecked">
+         <A name="dimensionAchecked"><IMG class='toggle detail'>
+         <div class="format"><code>dimension&lt;?&gt;checked &lt;mTag1a&gt;
+                                                                [mTag1b &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="controlledVocabulary">
+        <A name="controlledVocabulary"><IMG class='toggle detail'>
+        <div class="format"><code>controlledVocabulary &lt;pathToFile&gt; &lt;gTag#=mdbVar&gt;
+                                                            [gTag#=mdbVar &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="sortOrder"><A name="sortOrder"><IMG class='toggle detail'>
+        <div class="format"><code>sortOrder &lt;gTag#=+/-&gt; [gTag#=- &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="fileSortOrder"><A name="fileSortOrder"><IMG class='toggle detail'>
+        <div class="format"><code>fileSortOrder &lt;var=val&gt; [var=val ...]</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="subGroups_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Composite track with Subgroups:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="view">
+<TABLE class="settingsTable" id="Composite_-_Views_Settings">
+<THEAD><TR><TD><DIV ID="view_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Composite track View settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="view"><IMG class='toggle detail'>
+        <div class="format">
+            <code>subGroup1 view &lt;Views&gt; &lt;vTag1a=vTitle1a&gt;
+                                                [vTag1b=vTitle1b&hellip;]</code><BR>
+            <code>track &lt;viewName&gt;</code><BR>
+            <code>view &lt;viewTag&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_view"><A name="parent_view"><IMG class='toggle detail'>
+        <div class="format">
+            <code>subGroups view=&lt;vTag1&gt;&hellip;</code><BR>
+            <code>parent &lt;viewName&gt; [off/on]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="viewUi"><A name="viewUi"><IMG class='toggle detail'>
+        <div class="format"><code>viewUi on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="configurable"><A name="configurable"><IMG class='toggle detail'>
+        <div class="format"><code>configurable &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="view_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a Composite track with Views:</B></div>
+    </TD></TR>
+</TABLE>
+
+<A name="container"><A name="aggregate"><A name="multiWig">
+<TABLE class="settingsTable" id="Aggregate_or_Overlay_Track_Settings">
+<THEAD><TR><TD><DIV ID="container_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Aggregate or Overlay track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="container"><IMG class='toggle detail'>
+        <div class="format"><code>container multiWig</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="parent_container">
+        <A name="parent_container"><IMG class='toggle detail'>
+        <div class="format"><code>parent &lt;containerTrack&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="aggregate"><IMG class='toggle detail'>
+        <div class="format"><code>aggregate &lt;transparentOverly/solidOverlay/none&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showSubtrackColorOnUi">
+        <A name="showSubtrackColorOnUi"><IMG class='toggle detail'>
+        <div class="format"><code>showSubtrackColorOnUi on</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="container_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of an Aggregate track:</B></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+
+<A name="customTracks">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">
+        &nbsp;&nbsp;Special settings for custom tracks</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<TABLE class="settingsTable" id="Custom_Tracks_Special_Settings">
+<THEAD><TR><TD><DIV ID="customTracks_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;Custom track specific settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="genome"><A name="genome"><IMG class='toggle detail'>
+        <div class="format"><code>genome</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="offset"><A name="offset"><IMG class='toggle detail'>
+        <div class="format"><code>offset</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+        <P>The following trackDb style settings are only set internally by the hgCustom CGI code.
+        </P>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="browserLines">
+        <A name="browserLines"><IMG class='toggle detail'>
+        <div class="format"><code>browserLines</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dataUrl"><A name="dataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>dataUrl</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dbTrackType"><A name="dbTrackType"><IMG class='toggle detail'>
+        <div class="format"><code>dbTrackType</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="fieldCount"><A name="fieldCount"><IMG class='toggle detail'>
+        <div class="format"><code>fieldCount</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="firstItemPos"><A name="firstItemPos"><IMG class='toggle detail'>
+        <div class="format"><code>firstItemPos</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="htmlFile"><A name="htmlFile"><IMG class='toggle detail'>
+        <div class="format"><code>htmlFile</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="htmlUrl"><A name="htmlUrl"><IMG class='toggle detail'>
+        <div class="format"><code>htmlUrl</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="initialPos"><A name="initialPos"><IMG class='toggle detail'>
+        <div class="format"><code>initialPos</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP>
+        <TD class="inputType"><A name="inputType"><IMG class='toggle detail'>
+        <div class="format"><code>inputType</code></div>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP><TD class="itemCount"><A name="itemCount"><IMG class='toggle detail'>
+        <div class="format"><code>itemCount</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mafFile"><A name="mafFile"><IMG class='toggle detail'>
+        <div class="format"><code>mafFile</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxChromName"><A name="maxChromName"><IMG class='toggle detail'>
+        <div class="format"><code>maxChromName</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="origTrackLine"><A name="origTrackLine"><IMG class='toggle detail'>
+        <div class="format"><code>origTrackLine</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="tdbType"><A name="tdbType"><IMG class='toggle detail'>
+        <div class="format"><code>tdbType</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="wibFile"><A name="wibFile"><IMG class='toggle detail'>
+        <div class="format"><code>wibFile</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="wigFile"><A name="wigFile"><IMG class='toggle detail'>
+        <div class="format"><code>wigFile</code></div>
+    </TD></TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+
+<A name="alphabetical">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">
+        &nbsp;&nbsp;Alphabetical list of all settings</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<TABLE class="settingsTable" id="Alphabetical_Settings_List">
+    <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH="25%">For Types</TH><TH>Documented</TH></TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">accession</A></TD>
+        <TD>all</TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">aggregate</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bigWig</A>
+            <A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A></TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#aggregate">Aggregates</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">aliQualRange</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD> <A onclick="return jumpTo(this);" HREF="#">bam</A> </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">allButtonPair</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#compositeTrack">Composites</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">altColor</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">alwaysZero</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">autoScale</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">autoTranslate</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bamColorMode</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bamColorTag</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+            <I>** README not in tagTypes.tab.</I></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bamGrayMode</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A> <TD>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bamSkipPrintQualScore</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A> <TD>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">baseColorDefault</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">baseColorTickColor</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">baseColorUseCds</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">baseColorUseSequence</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">baseQualRange</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bedFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bedNameLabel</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bigDataUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">blastRef</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">boxedCfg</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">browserLines</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">canPack</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">cdsDrawDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">cdsDrawOptions</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">cdsEvidence</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">cell</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">centerLabelsDense</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#compositeTrack">Composites</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chainColor</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chain</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chainLinearGap</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chainMinScore</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chainNormScoreAvailable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chimpDb</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chimpMacaqueOrthoTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chimpOrangMacOrthoTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chip</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chromosomes</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#codingAnnoLabel_snp">codingAnnoLabel_snp&lt;*&gt;</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">codingAnnotations</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">color</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">colorByStrand</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">colorChromDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">compareGenomeLinks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">compositeTrack</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#compositeTrack">Composites</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">configurable</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#compositeTrack">Composites</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">configureByPopup</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">container</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#aggregate">Aggregates</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">controlledVocabulary</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dataUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dataVersion</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dateSubmitted</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dateUnrestricted</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">db</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dbProfile</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dbTrackType</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">defaultGeneTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">defaultLinkedTables</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">defaultMaxWeight</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">denseCoverage</P></A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+            <I>** README not in tagTypes.tab.</I></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#dimensionAchecked">dimension&lt;?&gt;checked</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">subGroups</A></TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dimensions</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">subGroups</A></TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">directUrl</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dividers</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. OBSOLETE: use
+            <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> instead.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">dragAndDrop</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#compositeTrack">Composites</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">endFudge</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ensArchive</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ensemblGeneIdUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ensemblIdUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ensemblTranscriptIdUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">exonArrows</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">exonArrowsDense</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expDrawExons</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expProbeTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expScale</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expStep</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">extTable</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>.  Should be replaced by:
+            <A onclick="return jumpTo(this);" HREF="#">track</A>,
+            <A onclick="return jumpTo(this);" HREF="#">table</A> or
+            <A onclick="return jumpTo(this);" HREF="#">bigDataUrl</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">fieldCount</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">filePos</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">fileSortOrder</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A> AND
+            <A HREF="#fileSortOrder_downloadsOnly">downloadsOnly</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#Filter">&lt;column&gt;Filter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">filterBy</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#filterBy">bed/bigBed</A> AND <A HREF="#filterBy_genePred">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterByRange">&lt;column&gt;FilterByRange</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterLimits">&lt;column&gt;FilterLimits</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">filterComposite</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">filterTopScorers</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">firstItemPos</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">frames</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#gClass_">gClass_&lt;xxx&gt;</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">gainColor</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">geneClasses</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genome</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">graphType</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">graphTypeDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">gridDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">group</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#group">predefined</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">groupings</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">hapmapPhase</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">hgGene</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">hgsid</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">html</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">htmlFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">htmlUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">idInUrlSql</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">altGraphX</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">idXref</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">indelDoubleInsert</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">indelPolyA</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">indelQueryInsert</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">informant</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">initialPos</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">inputTableFieldDisplay</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">inputTrackTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">inputTracksSubgroupDisplay</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">inputType</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">interTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">encodeFiveC</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">encodeFiveC</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">interTableKind</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">encodeFiveC</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">encodeFiveC</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">intronGap</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">irows</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemAttrTbl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemBigImagePath</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemClassClassColumn</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemClassNameColumn</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemClassTbl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemCount</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemFirstCharCase</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemDetailsHtmlTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemImagePath</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">itemRgb</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedDetail</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">linesAt</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chromGraph</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">longLabel</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">longLabelClip</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">longlabel</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Typo, should be
+            <A onclick="return jumpTo(this);" HREF="#">longLabel</P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">lossColor</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">macaqueDb</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mafDot</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mafDotDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mafFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mafTrack</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mapDispatcher</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">matrix</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">matrixHeader</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxChromName</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxHeightPixels</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxItems</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxLimit</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxScore</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+            <A onclick="return jumpTo(this);" HREF="#">rmsk</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A>
+        </TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">maxWindowToQuery</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bigWig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">metadata</A></TD>
+        <TD>all</TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A> OBSOLETE.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mgiUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">mgiUrlLabel</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">minAliQual</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+            <I>** README not in tagTypes.tab.</I></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">minGrayLevel</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">minLimit</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">minMax</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">chromGraph</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">minScore</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">msaTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ncbiAccXref</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">nextExonText</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">nextItemButton</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">noColorTag</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">noInherit</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">noScoreFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">gvf</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">nonBedFieldsLabel</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">notNCBI</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ococci</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">offset</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">oldToNew</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">onlyVisibility</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">orangDb</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">origAssembly</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">origTrackLine</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">otherDb</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#chain">chain/netAlign</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">otherDbTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">otherOrg</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">netAlign</A>
+            <A onclick="return jumpTo(this);" HREF="#">chain</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Should be
+            <A onclick="return jumpTo(this);" HREF="#">otherDb</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pairEndsByName</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pairedEndUrlFormat</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pairSearchRange</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+            <I>** README not in tagTypes.tab.</I></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pairwise</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced by
+            <A onclick="return jumpTo(this);" HREF="#">summary</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pairwiseHeight</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">parent</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#parent_supertrack">Supertracks</A>,
+            <A HREF="#parent">Composites</A>, <A HREF="#parent_view">Views</A>
+            and <A HREF="#parent_container">Aggregates</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">patDb</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">patKey</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">patTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">expRatio</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A> </TD></TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pennantIcon</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pgDbLink</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pgPolyphenPredTab</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pgSiftPredTab</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pred</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">prevExonText</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">priority</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">private</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pslSequence</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pslTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pubsArticleTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pubsMarkerTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pubsPslTrack</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pubsSequenceTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">pValueFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterLimits">pValueFilterLimits</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">qValueFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterLimits">qValueFilterLimits</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">refSeqAnnoVersion</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">release</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#sGroup_">sGroup_&lt;group&gt;</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">scoreFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+        </TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterByRange">scoreFilterByRange</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterLimits">scoreFilterLimits</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+        </TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">scoreFilterMax</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced by
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">scoreMax</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">scoreMin</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">peptideMapping</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A>
+        </TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">searchMethod</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">searchType</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">selectSubject</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">seqTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">settingsByView</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced with "view in the
+            middle" <A onclick="return jumpTo(this);" HREF="#">view</A>
+            as separate track.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">shortLabel</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showCdsAllScales</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showCdsMaxZoom</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showDiffBasesAllScales</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showNames</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showSubtrackColorOnUi</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt; <A HREF="#aggregate">Aggregates</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">showTopScorers</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
+            <A HREF="#item_lessFrequent">Less frequently used</A></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">signalFilter</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#FilterLimits">signalFilterLimits</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigBed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">smoothingWindow</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpExceptionDesc</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpExceptions</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpSeq</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpSeqFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snpVersion</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">sortOrder</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">sourceTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">factorSource</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">spanList</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesCodonDefault</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesDefaultOff</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesGroups</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesOrder</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesTarget</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A> - OBSOLETE</P></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesTree</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced by
+            <A onclick="return jumpTo(this);" HREF="#">treeImage</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">speciesUseFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">spectrum</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">stripPrefix</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bam</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#subGroupN">subGroup&lt;N&gt;</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">subGroups</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#subGroups">Subgroups</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">subTrack</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced with
+            <A HREF="#parent">parent</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">subgroups</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Should be
+            <A onclick="return jumpTo(this);" HREF="#">subGroups</R>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">summary</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">superTrack</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#superTracks">Supertracks</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">symbolTable</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">table</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">tableBrowser</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">tdbType</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">thickDrawItem</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
+        <TD><A HREF="#bed">bed/bigBed</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">track</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">transMapGene</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">transMapInfo</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">transMapSrc</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">transMapTypeDesc</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">transformFunc</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">wig</A>
+            <A onclick="return jumpTo(this);" HREF="#">bigWig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">treeImage</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">txInfo</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">type</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">ucscRetroInfo</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">url</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">url2</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">url2Label</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">urlLabel</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+    <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">urlName</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A>
+            <A onclick="return jumpTo(this);" HREF="#">psl</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">useScore</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Replaced with
+            <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+            as a slighly less obscurely named setting.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">vegaGeneIdUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">vegaTranscriptIdUrl</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">view</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#view">Views</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">viewLimits</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">viewLimitsMax</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A>
+            <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>
+            <A onclick="return jumpTo(this);" HREF="#">wig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">viewUi</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#groupingTracks">Grouping tracks</A> -&gt;
+            <A HREF="#view">Views</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">visibility</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">visibilityViewDefaults</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wgEncode</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
+            <A HREF="#commonLessFrequent">Less Frequent</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A HREF="#wgEncodeGencode">wgEncodeGencode&lt;xxx&gt;</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">genePred</A></TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wibFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigColorBy</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wig</A></TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigFile</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">customTracks</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wiggle</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">windowingFunction</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yLinOnOff</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">wigMaf</A></TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A>. Should be
+            <A onclick="return jumpTo(this);" HREF="#">
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yLineMark</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yLineOnOff</A></TD>
+        <TD>all</TD>
+        <TD><A HREF="#wig">wig/bigWig/bedGraph</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yalePseudoAssoc</A></TD>
+        <TD>all</TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yalePseudoUrl</A></TD>
+        <TD>all</TD>
+        <TD>Special for <A HREF="#encodeGencode">ENCODE Gencode</A></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><A onclick="return jumpTo(this);" HREF="#">yaleUrl</A></TD>
+        <TD>all</TD>
+        <TD>Special for <A HREF="#encodeOnly">ENCODE</A></TD>
+    </TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder" style="background-color:#F8F8F8;"><!-- Content Border -->
+
+<A name="loosers">
+<div class="lightBlueBar">
+    <div style='height:.3em;'></div> <!-- vertical spacing -->
+    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;
+                                    Obscure or special case settings. (aka Rejections)</div>
+</div>
+<div style="padding:10px;">  <!-- border partol -->
+
+<H3>Rejected "types":</H3>
+<P>axt &ndash; rare bed 3 variant (replaced with
+netAlign?), panTro1.axtNetHg16</P>
+<P>    drosophila/dp1/trackDb.ra:type axt dm1</P>
+<P>    human/hg13/trackDb.ra:type axt mm3</P>
+<P>    human/hg15/trackDb.ra:type axt mm3</P>
+<P>    worm/ce1/trackDb.ra:type axt cb1</P>
+<P>    worm/ce2/trackDb.ra:type axt cb1</P>
+<P>bedLogR &ndash; encode 1% test only???   Not found
+with tdbQuery from *</P>
+<P>    human/encodeTest/wgEncodeMetaCheckTest.ra</P>
+<P>chromGraph - ??? Not found in tdbQuery -strict
+from *</P>
+<P>gff
+<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format3">
+         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format3</A></P>
+<P>    Not found in tdbQuery -strict from *</P>
+<P>gtf
+<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format4">
+         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format4</A></P>
+<P>    Not found in tdbQuery -strict from *</P>
+<P>maf &ndash; replaced by wigMaf hg17, tdbQuery
+-strict: 1 track: fr1.tbaFishBirdCFTR
+</P>
+<P>
+<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format5">
+         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format5</A></P>
+<P>net but not netAlign - custom only??? Not found
+with tdbQuery non strict</P>
+<P>sample &ndash; RARE bed variant,
+hg15.affyTranscriptome, Affymetrix Transcriptome</P>
+<P>    hg15.hg15Mm3L</P>
+<P>    Completely replaced by type wig and more recently
+bigWig</P>
+
+<A name="encodeOnly">
+<H3>Special settings for ENCODE only</H3>
+<TABLE class="settingsTable" id="Encode_Only_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="accession"><A name="accession"><code>accession</code></TD><TD>all</TD>
+        <TD>ENCODE only; DEPRCATED (replaced with mdb )</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="cell"><A name="cell"><code>cell</code></TD><TD>bed, bedGraph</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="chip"><A name="chip"><code>chip</code></TD><TD>expRatio, bed</TD>
+        <TD>DROP (no takers in any of our trackDb.ra files)</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="dateSubmitted"><A name="dateSubmitted">
+            <code>dateSubmitted</code></TD><TD>bedGraph, bed</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="dateUnrestricted"><A name="dateUnrestricted">
+            <code>dateUnrestricted</code></TD><TD>bed</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="filterTopScorers"><A name="filterTopScorers">
+            <code>filterTopScorers</code></TD><TD>bed5FloatScoreWithFdr, bed5FloatScore</TD>
+        <TD>Currently only used by pilot encode 1%.
+            <P>Presents user option to limit to the top
+            scoring N items.  Might be useful in other MySQL table based
+            tracks but how valuable is it?</P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD>
+            <A name="gainColor">
+            <A name="lossColor">
+            <code>gainColor</code><BR>
+            <code>lossColor</code></TD><TD>bed
+        </TD>
+        <TD>Currently only used by pilot encode 1% in hg17.encodeDless.
+            <P>Provides special color for "gain"
+            and "loss" items.</P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="inputTracksSubgroupDisplay"><A name="inputTracksSubgroupDisplay">
+            <code>inputTracksSubgroupDisplay</code></TD><TD>bed, factorSource</TD>
+        <TD>Only in hg18/hg19 wgEncodeReg*Clustered tracks. In code #ifdef TO_BE_REMOVED.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="metadata"><A name="metadata"><code>metadata</code></TD><TD>all</TD>
+        <TD>OBSOLETE: replaced by metaDb. <I>Currently only way for datHubs to have
+            metadata dropdowns.  Used by WashU hubs.</I>
+        </TD>
+    </TR>
+</TABLE>
+
+<A name="encodeGencode">
+<H3>Special settings for ENCODE Gencode</H3>
+<TABLE class="settingsTable" id="Encode_Gencode_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ensemblTranscriptIdUrl"><A name="ensemblTranscriptIdUrl">
+            <code>ensemblTranscriptIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ensemblGeneIdUrl"><A name="ensemblGeneIdUrl">
+            <code>ensemblGeneIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ensemblIdUrl"><A name="ensemblIdUrl"><code>ensemblIdUrl</code></TD>
+        <TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="vegaGeneIdUrl"><A name="vegaGeneIdUrl"><code>vegaGeneIdUrl</code></TD>
+        <TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="vegaTranscriptIdUrl"><A name="vegaTranscriptIdUrl">
+            <code>vegaTranscriptIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="wgEncodeGencode"><A name="wgEncodeGencode">
+            <code>wgEncodeGencodeVersion</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeAttrs</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeExonSupport</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeGeneSource</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeTranscriptSource</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodePdb</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodePubMed</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeRefSeq</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeTag</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeTranscriptSupport</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeUniProt</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodePolyAFeature</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeAnnotationRemark</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD><code>wgEncodeGencodeTranscriptionSupportLevel</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="yalePseudoAssoc"><A name="yalePseudoAssoc"><code>yalePseudoAssoc</code></TD>
+        <TD>all</TD>
+        <TD>Special for ENCODE Genecode.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="yalePseudoUrl"><A name="yalePseudoUrl"><code>yalePseudoUrl</code></TD>
+        <TD>all</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="yaleUrl"><A name="yaleUrl"><code>yaleUrl</code></TD><TD>all</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
+    </TR>
+</TABLE>
+
+<A name="snpSpecial">
+<H3>Special settings for SNP tracks</H3>
+<P>    </P>
+<TABLE class="settingsTable" id="SNP_Specialized_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
+    </TR>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="chimpDb"><A name="chimpDb"><code>chimpDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="chimpMacaqueOrthoTable"><A name="chimpMacaqueOrthoTable">
+            <code>chimpMacaqueOrthoTable</code></TD><TD>bed</TD>
+        <TD>Special case: snp125Ui (rare hg18.snp128, hg18.snp126)</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="chimpOrangMacOrthoTable"><A name="chimpOrangMacOrthoTable">
+            <code>chimpOrangMacOrthoTable</code></TD><TD>bed 6 +</TD>
+        <TD>Special case: snp125Ui (only snp###)</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="codingAnnoLabel_snp"><A name="codingAnnoLabel_snp">
+            <code>codingAnnoLabel_snp130CodingDbSnp</code></TD><TD>bed</TD>
+        <TD>Special case: snp125 hgc only</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="codingAnnotations"><A name="codingAnnotations">
+            <code>codingAnnotations</code></TD><TD>bed</TD>
+        <TD>Special case: snp125 hgc only</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="defaultMaxWeight"><A name="defaultMaxWeight">
+            <code>defaultMaxWeight</code></TD><TD>bed</TD>
+        <TD>Special for "snp" tracks.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="hapmapPhase"><A name="hapmapPhase"><code>hapmapPhase</code></TD><TD>bed</TD>
+        <TD>Special case HapMap SNPs</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="macaqueDb"><A name="macaqueDb"><code>macaqueDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="orangDb"><A name="orangDb"><code>orangDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pgPolyphenPredTab"><A name="pgPolyphenPredTab">
+            <code>pgPolyphenPredTab</code></TD><TD>bed</TD>
+        <TD>Special for pgSnp track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pgSiftPredTab"><A name="pgSiftPredTab"><code>pgSiftPredTab</code></TD>
+        <TD>bed</TD>
+        <TD>Special for pgSnp track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpExceptions"><A name="snpExceptions"><code>snpExceptions</code></TD>
+        <TD>bed</TD>
+        <TD>Special for snp tracks</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpExceptionDesc"><A name="snpExceptionDesc">
+            <code>snpExceptionDesc</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpSeq"><A name="snpSeq"><code>snpSeq</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpSeqFile"><A name="snpSeqFile"><code>snpSeqFile</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpTable"><A name="snpTable"><code>snpTable</code></TD><TD>bed</TD>
+        <TD>Special for gwasCatelog and shown in hgc</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpVersion"><A name="snpVersion"><code>snpVersion</code></TD><TD>bed</TD>
+        <TD>Special for gwasCatelog and shown in hgc</TD>
+    </TR>
+</TABLE>
+
+<A name="miscLosers">
+<H3>List of Miscellaneous Losers or SPECIAL CASE</H3>
+<TABLE class="settingsTable" id="Miscellaneous_Rejected_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="cdsDrawDefault"><A name="cdsDrawDefault">
+            <code>cdsDrawDefault</code></TD><TD>genePred</TD>
+        <TD>There are a number of occurrences of
+            cdsDrawDefault in our trackDbs, always set to &lsquo;genomic\
+            codons &lsquo;.  However, I have found no documentation and no
+            code that references this setting.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="cdsDrawOptions"><A name="cdsDrawOptions">
+            <code>cdsDrawOptions</code></TD><TD>psl</TD>
+        <TD>I have found no documentation and no code that
+            references this setting.  Also, I do not see it in our trackDbs.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="cdsEvidence"><A name="cdsEvidence"><code>cdsEvidence</code></TD>
+        <TD>genePred</TD>
+        <TD>Used by JK experimental tracks only as either
+            <code>jkgTxCdsEvidence</code> or <code>jkgTxCdsEvidence2</code>.
+             This will show an evidence table named in the setting.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="db"><A name="db"><code>db</code></TD>
+        <TD>chain, netAlign, genePred, bed 3</TD>
+        <TD>Not found in any of our trackDb.ras.  Further,
+            this is the same as assembly so implicit.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="dbProfile"><A name="dbProfile"><code>dbProfile</code></TD><TD>all</TD>
+        <TD>In hg18 experimental and cancerGenomics only.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="dividers"><A name="dividers"><code>dividers</code></TD>
+        <TD>all</TD>
+        <TD><I>(Jim says KEEP_UGLY)</I>
+            OBSOLETE: use <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> instead.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="endFudge"><A name="endFudge"><code>endFudge</code></TD><TD>bed</TD>
+        <TD>Special case for hg17 HGSV Discordant
+            (variation) tracks.  Used in hgc to fudge chromEnd, I think.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ensArchive"><A name="ensArchive"><code>ensArchive</code></TD><TD>genePred</TD>
+        <TD>Only in danRer4 Ensembl NonCoding to generate an Ensembl URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="expProbeTable"><A name="expProbeTable"><code>expProbeTable</code></TD>
+        <TD>expRatio</TD>
+        <TD>Can't find code that supports this.Rare: only in human. affyHumanExon "Affy All Exon"
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="extTable"><A name="extTable"><code>extTable</code></TD><TD>all</TD>
+        <TD>This setting points to a one record table that holds the external filename.  This
+            should be replaced by:
+            <A onclick="return jumpTo(this);" HREF="#">track</A>,
+            <A onclick="return jumpTo(this);" HREF="#">table</A> or
+            <A onclick="return jumpTo(this);" HREF="#">bigDataUrl</A>.
+            <P>(rare bigWig hg18.brTestPlus experimental track)</P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="extraFields"><A name="extraFields"><code>extraFields</code></TD><TD>bed</TD>
+        <TD>OBSOLETE:  (Jim hates it) replaced by looking up "as" table
+            description.  However, that method does not allow for:
+            <UL>
+            <LI> selective inclusion/exclusion of fields</LI>
+            <LI> reordering fields</LI>
+            <LI> formatting titles</LI>
+            </UL>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="filePos"><A name="filePos"><code>filePos</code></TD><TD>all</TD>
+        <TD>Can't find this in any of our trackDb.ra files.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="graphType"><A name="graphType"><code>graphType</code></TD>
+        <TD>bedGraph</TD>
+        <TD><I>(Jim says KEEP)</I> Not found in code.  Probably typo of graphTypeDefault.
+            (rare hg18.encodeRegulomeDnaseArray)
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="hgGene"><A name="hgGene"><code>hgGene</code></TD><TD>genePred</TD>
+        <TD>Cannot find code for this.  No effect. ???</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="informant"><A name="informant"><code>informant</code></TD><TD>genePred</TD>
+        <TD>Special setting for N-SCAN genes.  Swapped into html description page.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="itemAttrTbl"><A name="itemAttrTbl"><code>itemAttrTbl</code></TD><TD>genePred</TD>
+        <TD>Only used in borEut13. transMapRefGene.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="linesAt"><A name="linesAt"><code>linesAt</code></TD><TD>chromGraph</TD>
+        <TD>Unused track type (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="longlabel"><A name="longlabel"><code>longlabel</code></TD><TD>genePred</TD>
+        <TD>Typo, should be <A onclick="return jumpTo(this);" HREF="#">longLabel</A>.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="longLabelClip"><A name="longLabelClip"><code>longLabelClip</code></TD>
+        <TD>all</TD>
+        <TD>Only used in sacCer3 (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mafDot"><A name="mafDot"><code>mafDot</code></TD><TD>wigMaf</TD>
+        <TD>Can't find this in any of our trackDb.ra files and only supported as cart var.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mafDotDefault"><A name="mafDotDefault"><code>mafDotDefault</code></TD>
+        <TD>wigMaf</TD>
+        <TD>Can't find this in any of our trackDb.ra files.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mapDispatcher"><A name="mapDispatcher"><code>mapDispatcher</code></TD>
+        <TD>expRatio</TD>
+        <TD>Only hg17 group "x" [tingwang 2007] and not in C.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="maxScore"><A name="maxScore"><code>maxScore</code></TD><TD>broadPeak</TD>
+        <TD>Obsolete, replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mgiUrl"><A name="mgiUrl"><code>mgiUrl</code></TD><TD>bed</TD>
+        <TD>Special case variant of url used by no current tracks (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mgiUrlLabel"><A name="mgiUrlLabel"><code>mgiUrlLabel</code></TD><TD>bed</TD>
+        <TD>Special case variant of url used by no current tracks (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="minMax"><A name="minMax"><code>minMax</code></TD><TD>chromGraph</TD>
+        <TD>Unused track type (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="minScore"><A name="minScore"><code>minScore</code></TD>
+        <TD>bed, narrowPeak, broadPeak</TD>
+        <TD>Obsolete, replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="msaTable"><A name="msaTable"><code>msaTable</code></TD>
+        <TD>wig, wigMafProt, wigMaf</TD>
+        <TD>Only hiv tracks use this.  Code in wigMaf
+            display and is used to look up species order.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ncbiAccXref"><A name="ncbiAccXref"><code>ncbiAccXref</code></TD><TD>bed</TD>
+        <TD>Special case used by hg17/hg18 kiddEichler
+            tracks.  Names a table to convert kiddEichler IDs to NCBI IDs and
+            print links.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="nextItemButton"><A name="nextItemButton"><code>nextItemButton</code></TD>
+        <TD>all</TD>
+        <TD><I>(Jim says LOSE)</I>  This setting lets you override
+            the Browser wide setting to disable nextItem arrows (which is off
+            by default).  When this is on, the nextItem arrows will show up
+            for your track.  The opposite does not seem to be the case, where
+            nextItems are enabled, but you want to exclude them from your
+            track.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="noInherit"><A name="noInherit"><code>noInherit</code></TD><TD>all</TD>
+        <TD>This one should be
+            OBSOLETE but there continue to be edge cases where this setting
+            has some affect.  Currently only 2 places this is read this:</P>
+            <OL>
+            <LI>in hdb to makesuperChildren inherit settings from their superTrack.  This done
+            by putting the super settings into the child's settings hash.</LI>
+            <LI>tdbQuery where it appears to have no affect.</LI>
+            </OL>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="nonBedFieldsLabel"><A name="nonBedFieldsLabel">
+            <code>nonBedFieldsLabel</code></TD>
+        <TD>bigBed</TD>
+        <TD>OBSOLETE when bigBed has "as"
+            definitions.  Instead, the extraFieldsPrint should pick up the
+            non-standard bed fields straight from the as definition.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="notNCBI"><A name="notNCBI"><code>notNCBI</code></TD><TD>bed</TD>
+        <TD>Only used in drosophila dm2/dm3.  Referenced in hgc.c code.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="ococci"><A name="ococci"><code>ococci</code></TD><TD>bed</TD>
+        <TD>Not referenced in any of our trackDb.ra files or in code.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="otherOrg"><A name="otherOrg"><code>otherOrg</code></TD><TD>chain, netAlign</TD>
+        <TD>Typo: should be <A onclick="return jumpTo(this);" HREF="#">otherDb</A>.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="onlyVisibility"><A name="onlyVisibility"><code>onlyVisibility</code></TD>
+        <TD>all</TD>
+        <TD>Not universally supported (rightClick/subtrack
+            cfg, etc.) so deprecate or else expand.  This setting restricts
+            the visibility options of a track to only one setting such as
+            "<code>full</code>".  (rare hg19.lincRNAsAllCellTypeTopView)
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="otherDbTable"><A name="otherDbTable"><code>otherDbTable</code></TD><TD>bed</TD>
+        <TD>Special case for Jackson lab's QTL (Quantitative Trait Locus) tracks.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pairedEndUrlFormat"><A name="pairedEndUrlFormat">
+            <code>pairedEndUrlFormat</code></TD><TD>bed</TD>
+        <TD>Special case only used on kiddEichler track. This is another external URL variant.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pairwise"><A name="pairwise"><code>pairwise</code></TD><TD>wigMaf</TD>
+        <TD>Deprecate, replaced by <A onclick="return jumpTo(this);" HREF="#">summary</A>.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="patDb"><A name="patDb"><code>patDb</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="patKey"><A name="patKey"><code>patKey</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="patTable"><A name="patTable"><code>patTable</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pgDbLink"><A name="pgDbLink"><code>pgDbLink</code></TD><TD>bed</TD>
+        <TD><I>Special only used
+            in hg18/hg19 Genome Variants so far.</I></P>
+            <P>This setting is used
+            to name one or more tables that hold links to phenotype and other
+            databases for pgSnps.  Each table must have chrom, chromStart,
+            chromStop, name and srcUrl as fields.  The links will be seen in
+            the bed item details page and will be looked up in each listed
+            table by item location.</P>
+            <P><B>Example:</B></P>
+            <pre>   pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd</pre>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="private"><A name="private"><code>private</code></TD><TD>bed</TD>
+        <TD>Only used in human/hg7/trackDb.ra, and not even
+            there using tdbQuery -strict.   Prevents access to data by
+            removing from trackList when doing "pruneEmpties".
+            Gotta wonder when the track is ever seen in the browser or why it
+            is a track at all.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pslTable"><A name="pslTable"><code>pslTable</code></TD><TD>bed</TD>
+        <TD>Special for hg18/hg19 illuminaProbes "Illumina
+            WG-6".  Used in hgc. (Hardwired to be the same
+            <code>illuminaProbesAlign</code> when track is
+            "illuminaProbesAlign".) Used for making an hgcAnchor
+            <code>htcIlluminaProbesAlign</code>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pubsArticleTable"><A name="pubsArticleTable"><code>pubsArticleTable</code></TD>
+        <TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pubsMarkerTable"><A name="pubsMarkerTable">
+            <code>pubsMarkerTable</code></TD><TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pubsPslTrack"><A name="pubsPslTrack"><code>pubsPslTrack</code></TD>
+        <TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="pubsSequenceTable"><A name="pubsSequenceTable">
+            <code>pubsSequenceTable</code></TD><TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="refSeqAnnoVersion"><A name="refSeqAnnoVersion">
+            <code>refSeqAnnoVersion</code></TD><TD>genePred</TD>
+        <TD>Special for rheMac2.refSeqAnno track.  Not found in code.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="scoreFilterMax"><A name="scoreFilterMax"><code>scoreFilterMax</code></TD>
+        <TD>bed, bedLogR, peptideMapping, bigBed</TD>
+        <TD>OBSOLETE: replaced by
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="searchMethod"><A name="searchMethod"><code>searchMethod</code></TD>
+        <TD>bed</TD>
+        <TD>Error.  Should be part of searchTable stanza, not track stanza.
+            <P><I>TODO: Document searchTable stanza.</I></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="searchType"><A name="searchType"><code>searchType</code></TD><TD>bed</TD>
+        <TD>Error.  Should be part of searchTable stanza, not track stanza.
+            <P><I>TODO: Document searchTable stanza.</I></P>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="selectSubject"><A name="selectSubject"><code>selectSubject</code></TD>
+        <TD>psl</TD>
+        <TD>Special only used in hiv(only used by hiv and
+            h1n1. (Just h1n1 according to tdbQuery -strict).
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="seqTable"><A name="seqTable"><code>seqTable</code></TD><TD>bed</TD>
+        <TD>Special for hg18/hg19 illuminaProbes "Illumina
+            WG-6".  Used in hgc. (Hardwired to be the same
+            <code>illuminaProbesSeq</code> when track is
+            "illuminaProbesAlign".) Used for making an hgcAnchor
+            <code>htcIlluminaProbesAlign</code>.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="settingsByView"><A name="settingsByView"><code>settingsByView</code></TD>
+        <TD>all</TD>
+        <TD>OBSOLETE: replaced with "view in the
+            middle" <A onclick="return jumpTo(this);" HREF="#">view</A>
+            as separate track.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="speciesTarget"><A name="speciesTarget"><code>speciesTarget</code></TD>
+        <TD>wigMaf</TD>
+        <TD>OBSOLETE.  Not in our trackDbs (tdbQuery -strict).
+            Specifically ifdef'd out of code with
+            <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="speciesTree"><A name="speciesTree"><code>speciesTree</code></TD><TD>wigMaf</TD>
+        <TD>OBSOLETE. Replaced by <A onclick="return jumpTo(this);" HREF="#">treeImage</A>.
+            Not in our trackDbs (tdbQuery -strict).
+            Specifically ifdef'd out of code with
+            <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="stripPrefix"><A name="stripPrefix"><code>stripPrefix</code></TD><TD>bam</TD>
+        <TD><I>Not yet implemented?  Only on hg18.oneKGHighCovSeq experimental track.</I></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="subgroups"><A name="subgroups"><code>subgroups</code></TD><TD>bed</TD>
+        <TD>Typo: should be <A onclick="return jumpTo(this);" HREF="#">subGroups</R>.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="subTrack"><A name="subTrack"><code>subTrack</code></TD><TD>all</TD>
+        <TD>OBSOLETE: replaced with <A HREF="#parent">parent</A>.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="symbolTable"><A name="symbolTable"><code>symbolTable</code></TD>
+        <TD>bed, genePred</TD>
+        <TD>In hgTracks, flyBaseGeneName() methods, if an
+            item name is found in this symbol table, the symbol name will be
+            shown instead.  Found in drosophila and strangely rn4 RGD Genes
+            (but table named in rn4 does not have a symbol column.  Instead,
+            symbol lookup is hard-coded to rgdGene2ToSymbol).
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="txInfo"><A name="txInfo"><code>txInfo</code></TD><TD>genePred</TD>
+        <TD>Only seems to be used in Jim's experimental tracks in hg18 and mm8.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="urlName"><A name="urlName"><code>urlName</code></TD><TD>genePred</TD>
+        <TD>Not referenced in code and rarely used.  (e.g.
+            hg18: encodePseudogeneConsensus, encodePseudogeneYale).
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="useScore"><A name="useScore">
+            <code>useScore</code></TD><TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
+        <TD>Deprecate: replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+            as a slighly less obscurely named setting.
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="visibilityViewDefaults"><A name="visibilityViewDefaults">
+            <code>visibilityViewDefaults</code></TD><TD>all</TD>
+        <TD>OBSOLETE since view in the middle change. LOSE</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="yLinOnOff"><A name="yLinOnOff"><code>yLinOnOff</code></TD><TD>wigMaf</TD>
+        <TD>
+            <P>Typo: should be <A onclick="return jumpTo(this);" HREF="#">yLineOnOff</A>.</P>
+        </TD>
+    </TR>
+</TABLE>
+</div></div>
+
+<!-- Next section -->
+<div style='height:1em;'></div> <!-- vertical spacing -->
+<div class="contentBorder"><!-- Content Border -->
+<div style="padding:10px;">  <!-- border partol -->
+<TABLE class="settingsTable" id="toc"></TABLE>
+</div></div>
+
+
+<!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
+<div id="library" style="display:none;">
+<!--#include virtual="trackDbLibrary.shtml" -->
+</div>
+
+<div style="height:100%;">&nbsp;<!-- This tricl helps jumpTo hit the right spot --></div>
+</BODY></HTML>

@@ -1,15 +1,4 @@
-/* jsHelper - some little helper routines  to manage our javascript.
- * We don't do much javascript - just occassionally use it so that
- * when they select something from a pull-down, it will go hit the server to
- * figure out how to reload other control options based on the choice.
- * (For instance if they change the group, which items in the track
- * drop-down need to change).
- *
- * We accomplish this by maintaining two forms - a mainForm and a
- * hiddenForm.  The hiddenForm maintains echo's of all the variables
- * in the main form, which get updated onChange of controls that need
- * to 'ripple' to other controls.  The onChange also submits the
- * control. */
+// jsHelper.c - helper routines for interface between CGIs and client-side javascript
 
 #ifndef JSHELPER_H
 #define JSHELPER_H
@@ -207,5 +196,10 @@ void jsonErrPrintf(struct dyString *ds, char *format, ...);
 
 struct jsonElement *jsonParse(char *str);
 // parse string into an in-memory json representation
+
+char *jsonStringEscape(char *inString);
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or ' */
 
 #endif /* JSHELPER_H */
