@@ -32,6 +32,7 @@ struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
+char signature[256]="\nUCSC Genome Browser\nhttp://www.genome.ucsc.edu ";
 
 /* -------- password functions depend on optionally installed openssl lib ---- */
 #ifdef USE_SSL
@@ -315,9 +316,12 @@ void mailUsername(char *email, char *users)
 {
 char subject[256];
 char msg[256];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
-safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
-safef(msg, sizeof(msg), "User name(s) associated with this email address at UCSC Genome Browser: \n\n  %s \n", users);
+char *remoteAddr=getenv("REMOTE_ADDR");
+
+safef(subject, sizeof(subject),"Your user name at the UCSC Genome Browser");
+safef(msg, sizeof(msg), 
+    "Someone (probably you, from IP address %s) has requested user name associated with this email address at UCSC Genome Browser. Your user name is: \n\n  %s\n\n", 
+   remoteAddr, users);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
@@ -348,7 +352,6 @@ void sendNewPwdMail(char *username, char *email, char *password)
 {
 char subject[256];
 char msg[4096];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 char *remoteAddr=getenv("REMOTE_ADDR");
 safef(subject, sizeof(subject),"New temporary password for UCSC Genome Browse");
 safef(msg, sizeof(msg),
@@ -469,7 +472,6 @@ void sendActivateMail(char *email, char *username, char *encToken)
 char subject[256];
 char msg[4096];
 char activateURL[256];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
 safef(activateURL, sizeof(activateURL),
@@ -479,7 +481,7 @@ safef(activateURL, sizeof(activateURL),
     sqlEscapeString(encToken));
 safef(subject, sizeof(subject),"UCSC Genome Browser account e-mail address confirmation");
 safef(msg, sizeof(msg),
-    "Someone, probably you, from IP address %s, has requested an account %s with this e-mail address on the UCSC Genome Browser.\n\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n", 
+    "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the UCSC Genome Browser.\n\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n", 
      remoteAddr, username, activateURL);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
