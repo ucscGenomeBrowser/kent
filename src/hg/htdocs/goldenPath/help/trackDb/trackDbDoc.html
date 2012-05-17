@@ -16,8 +16,8 @@
         {
             //tdbDoc.checkLibrary(); // Run this test during development only
             // TOC Self assembly EXPERIMENTAL
-            tdbDoc.tocAssemble( 400, ["bed_flavors","parent_supertrack",
-                                        "parent_view","parent_container"] );
+            tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
+                                    "parent_view","parent_container"] );
             tdbDoc.documentLoad();
         });
     </script>
@@ -76,8 +76,8 @@ used as a ready reference.</P>
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
     <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
     <UL>
-        <LI><A HREF="#Item_or_Region_Track_Settings">bed/bigBed</A>: Item or region tracks</LI>
-        <LI><A HREF="#Signal_Graphing_Track_Settings">wig/bigwig/bedGraph/bamWig</A>:
+        <LI><A HREF="#bed_-_Item_or_Region_Track_Settings">bed/bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#wig_-_Signal_Graphing_Track_Settings">wig/bigwig/bedGraph/bamWig</A>:
                                                                 signal graphing tracks</LI>
         <LI><A HREF="#genePred">genePred</A>: Gene models and predictions</LI>
         <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
@@ -148,7 +148,7 @@ used as a ready reference.</P>
     </TD></TR>
 </TABLE>
 
-<TABLE class="settingsTable" id="Common_Settings_less_frequent">
+<TABLE class="settingsTable" id="Common_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="commonLessFrequent">
             <IMG class='toggle oneSection' />&nbsp;Common, though less frequently used settings
     </TH> </TR>
@@ -247,7 +247,7 @@ valid for certain types of tracks.  Below many of these track types
 are described along with their type specific settings.</P>
 
 <A name="bed"><A name="bigBed">
-<TABLE class="settingsTable" id="Item_or_Region_Track_Settings">
+<TABLE class="settingsTable" id="bed_-_Item_or_Region_Track_Settings">
 <THEAD><TR><TD><DIV ID="bed_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bed/bigBed - Item or region track settings
@@ -349,7 +349,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
 </TABLE>
 
-<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_less_frequent">
+<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="item_lessFrequent">
             <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings:
     </TH></TR>
@@ -434,7 +434,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="wig"><A name="bigWig"><A name="bedGraph"><A name="bamWig">
-<TABLE class="settingsTable" id="Signal_Graphing_Track_Settings">
+<TABLE class="settingsTable" id="wig_-_Signal_Graphing_Track_Settings">
 <THEAD><TR><TD><DIV ID="wig_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;wig/bigWig - Signal graphing track settings
@@ -511,7 +511,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="genePred">
-<TABLE class="settingsTable" id="genePred_Gene_Model_Track_Settings">
+<TABLE class="settingsTable" id="genePred_-_Gene_Model_Track_Settings">
 <THEAD><TR><TD><DIV ID="genePred_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;genePred - Gene model track settings
@@ -579,7 +579,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="bam">
-<TABLE class="settingsTable" id="bam_Compressed_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bam - Compressed Sequence Alignment track settings</TH></TR>
@@ -654,7 +654,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="psl">
-<TABLE class="settingsTable" id="psl_Sequence_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="psl_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;psl - sequence alignment tracks settings
@@ -716,7 +716,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="chain"><A name="netAlign">
-<TABLE class="settingsTable" id="chain_netAlign_Paired_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="chain_netAlign_-_Paired_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="chain_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;chain and netAlign - paired species alignment track settings
@@ -769,7 +769,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="wigMaf">
-<TABLE class="settingsTable" id="wigMaf_Multiple_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="wigMaf_-_Multiple_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="wigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;wigMaf - Multiple alignment track settings
@@ -832,7 +832,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="expRatio">
-<TABLE class="settingsTable" id="expRatio_Microarray_Expression_Track_Settings">
+<TABLE class="settingsTable" id="expRatio_-_Microarray_Expression_Track_Settings">
 <THEAD><TR><TD><DIV ID="expRatio_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;expRatio - Microarray expression track settings
@@ -862,7 +862,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="vcfTabix">
-<TABLE class="settingsTable" id="vcfTabix_Variable_Call_Format_Track_Settings">
+<TABLE class="settingsTable" id="vcfTabix_-_Variable_Call_Format_Track_Settings">
 <THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
         &nbsp;vcfTabix - Variable Call Format track settings
@@ -887,7 +887,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="pgSnp">
-<TABLE class="settingsTable" id="pgSnp_Personal_Genome_SNP_Track_Settings">
+<TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
 <THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;pgSnp - Personal Genome SNP track settings
@@ -905,7 +905,7 @@ are described along with their type specific settings.</P>
 <H2>Specialized or rarely used types:</H2>
 
 <A name="altGraphX">
-<TABLE class="settingsTable" id="altGraphX_Alternate_Splicing_Track_Settings">
+<TABLE class="settingsTable" id="altGraphX_-_Alternate_Splicing_Track_Settings">
 <THEAD><TR><TD><DIV ID="altGraphX_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;altGraphX - Alternate splicing gene model track settings
@@ -920,7 +920,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="bedDetail">
-<TABLE class="settingsTable" id="bedDetail_Text_Extended_BED_Track_Settings">
+<TABLE class="settingsTable" id="bedDetail_-_Text_Extended_BED_Track_Settings">
 <THEAD><TR><TD><DIV ID="bedDetail_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bedDetail - Text extended bed track settings
@@ -947,7 +947,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="clonePos">
-<TABLE class="settingsTable" id="clonePos_Genome_Coverage_Track_Settings">
+<TABLE class="settingsTable" id="clonePos_-_Genome_Coverage_Track_Settings">
 <THEAD><TR><TD><DIV ID="clonePos_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;clonePos - Genome coverage track settings
@@ -962,7 +962,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="ctgPos">
-<TABLE class="settingsTable" id="ctgPos__Physical_Map_Contig_Track_Settings">
+<TABLE class="settingsTable" id="ctgPos_-_Physical_Map_Contig_Track_Settings">
 <THEAD><TR><TD><DIV ID="ctgPos_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;ctgPos - Physical map contigs track settings
@@ -996,7 +996,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="encodeFiveC">
-<TABLE class="settingsTable" id="encodeFiveC_Five_C_Chromatin_Interaction_Track_Settings">
+<TABLE class="settingsTable" id="encodeFiveC_-_Five_C_Chromatin_Interaction_Track_Settings">
 <THEAD><TR><TD><DIV ID="encodeFiveC_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;encodeFiveC - Five C Chromatin interaction track settings
@@ -1017,7 +1017,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="factorSource">
-<TABLE class="settingsTable" id="factorSource_Combined_Item_Track_Settings">
+<TABLE class="settingsTable" id="factorSource_-_Combined_Item_Track_Settings">
 <THEAD><TR><TD><DIV ID="factorSource_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;factorSource - Combined items track settings
@@ -1043,7 +1043,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="rmsk">
-<TABLE class="settingsTable" id="rmsk_Repeat_Masking_Track_Settings">
+<TABLE class="settingsTable" id="rmsk_-_Repeat_Masking_Track_Settings">
 <THEAD><TR><TD><DIV ID="rmsk_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;rmsk - Repeat masking track settings
@@ -1064,7 +1064,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="snake">
-<TABLE class="settingsTable" id="snake_Self_Referencing_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="snake_-_Self_Referencing_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="snake_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;snake - Self referencing alignment track settings
@@ -1120,7 +1120,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="superTrack">
-<TABLE class="settingsTable" id="superTrack_Folder_Track_Settings">
+<TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Supertrack (aka Folders or Containers) track settings
@@ -1139,7 +1139,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="compositeTrack">
-<TABLE class="settingsTable" id="compositeTrack_Settings">
+<TABLE class="settingsTable" id="Composite_Track_Settings">
 <THEAD><TR><TD><DIV ID="compositeTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
     <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
@@ -1165,7 +1165,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="subGroups">
-<TABLE class="settingsTable" id="Composite_Subgroups_Settings">
+<TABLE class="settingsTable" id="Composite_-_Subgroups_Settings">
 <THEAD><TR><TD><DIV ID="subGroups_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Composite track subgroup settings</TH></TR>
@@ -1213,7 +1213,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="view">
-<TABLE class="settingsTable" id="Composite_Views_Settings">
+<TABLE class="settingsTable" id="Composite_-_Views_Settings">
 <THEAD><TR><TD><DIV ID="view_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Composite track View settings
@@ -1280,7 +1280,7 @@ into a single image.</P>
 </div>
 <div style="padding:10px;">  <!-- border partol -->
 
-<TABLE class="settingsTable" id="customTracks_Settings">
+<TABLE class="settingsTable" id="Custom_Tracks_Special_Settings">
 <THEAD><TR><TD><DIV ID="customTracks_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Custom track specific settings
@@ -1361,7 +1361,7 @@ into a single image.</P>
 </div>
 <div style="padding:10px;">  <!-- border partol -->
 
-<TABLE class="settingsTable" id="alphabetical">
+<TABLE class="settingsTable" id="Alphabetical_Settings_List">
     <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH="25%">For Types</TH><TH>Documented</TH></TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">accession</A></TD>
@@ -3200,47 +3200,34 @@ bigWig</P>
 <A name="encodeOnly">
 <H3>Special settings for ENCODE only</H3>
 <TABLE class="settingsTable" id="Encode_Only_Settings">
-    <TR VALIGN=TOP>
-        <TH WIDTH=100>Rejected settings</TH>
-        <TH>Reason</TH>
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="accession"><A name="accession"><code>accession</code> *</TD>
-        <TD>
-            <P>ENCODE only; DEPRCATED (replaced with mdb )</P>
-        </TD>
+        <TD class="accession"><A name="accession"><code>accession</code></TD><TD>all</TD>
+        <TD>ENCODE only; DEPRCATED (replaced with mdb )</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="cell"><A name="cell"><code>cell</code> bed bedGraph</TD>
-        <TD>
-            <P>Obsolete: replaced with metaDb.</P>
-        </TD>
+        <TD class="cell"><A name="cell"><code>cell</code></TD><TD>bed, bedGraph</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="chip"><A name="chip"><code>chip</code> expRatio bed</TD>
-        <TD>
-            <P>DROP (no takers in any of our trackDb.ra files)</P>
-        </TD>
+        <TD class="chip"><A name="chip"><code>chip</code></TD><TD>expRatio, bed</TD>
+        <TD>DROP (no takers in any of our trackDb.ra files)</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="dateSubmitted"><A name="dateSubmitted">
-            <code>dateSubmitted</code> bedGraph bed</TD>
-        <TD>
-            <P>Obsolete: replaced with metaDb.</P>
-        </TD>
+            <code>dateSubmitted</code></TD><TD>bedGraph, bed</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="dateUnrestricted"><A name="dateUnrestricted">
-            <code>dateUnrestricted</code> bed</TD>
-        <TD>
-            <P>Obsolete: replaced with metaDb.</P>
-        </TD>
+            <code>dateUnrestricted</code></TD><TD>bed</TD>
+        <TD>Obsolete: replaced with metaDb.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="filterTopScorers"><A name="filterTopScorers">
-            <code>filterTopScorers</code> bed5FloatScoreWithFdr bed5FloatScore</TD>
-        <TD>
-            <P>Currently only used by pilot encode 1%.</P>
+            <code>filterTopScorers</code></TD><TD>bed5FloatScoreWithFdr, bed5FloatScore</TD>
+        <TD>Currently only used by pilot encode 1%.
             <P>Presents user option to limit to the top
             scoring N items.  Might be useful in other MySQL table based
             tracks but how valuable is it?</P>
@@ -3250,27 +3237,23 @@ bigWig</P>
         <TD>
             <A name="gainColor">
             <A name="lossColor">
-            <code>gainColor</code> bed<BR>
-            <code>lossColor</code> bed
+            <code>gainColor</code><BR>
+            <code>lossColor</code></TD><TD>bed
         </TD>
-        <TD>
-            <P>Currently only used by pilot encode 1% in hg17.encodeDless.</P>
+        <TD>Currently only used by pilot encode 1% in hg17.encodeDless.
             <P>Provides special color for "gain"
             and "loss" items.</P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="inputTracksSubgroupDisplay"><A name="inputTracksSubgroupDisplay">
-            <code>inputTracksSubgroupDisplay</code> bed factorSource</TD>
-        <TD>
-            <P>Only in hg18/hg19 wgEncodeReg*Clustered tracks. In code #ifdef TO_BE_REMOVED.</P>
-        </TD>
+            <code>inputTracksSubgroupDisplay</code></TD><TD>bed, factorSource</TD>
+        <TD>Only in hg18/hg19 wgEncodeReg*Clustered tracks. In code #ifdef TO_BE_REMOVED.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="metadata"><A name="metadata"><code>metadata</code> *</TD>
-        <TD>
-                <P>OBSOLETE: replaced by metaDb. <I>Currently only way for datHubs to have
-            metadata dropdowns.  Used by WashU hubs.</I></P>
+        <TD class="metadata"><A name="metadata"><code>metadata</code></TD><TD>all</TD>
+        <TD>OBSOLETE: replaced by metaDb. <I>Currently only way for datHubs to have
+            metadata dropdowns.  Used by WashU hubs.</I>
         </TD>
     </TR>
 </TABLE>
@@ -3278,146 +3261,103 @@ bigWig</P>
 <A name="encodeGencode">
 <H3>Special settings for ENCODE Gencode</H3>
 <TABLE class="settingsTable" id="Encode_Gencode_Settings">
-    <TR VALIGN=TOP>
-        <TH WIDTH=100>Rejected settings</TH>
-        <TH>Reason</TH>
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
     </TR>
     <TR VALIGN=TOP>
         <TD class="ensemblTranscriptIdUrl"><A name="ensemblTranscriptIdUrl">
-            <code>ensemblTranscriptIdUrl</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+            <code>ensemblTranscriptIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="ensemblGeneIdUrl"><A name="ensemblGeneIdUrl">
-            <code>ensemblGeneIdUrl</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+            <code>ensemblGeneIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="ensemblIdUrl"><A name="ensemblIdUrl"><code>ensemblIdUrl</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+        <TD class="ensemblIdUrl"><A name="ensemblIdUrl"><code>ensemblIdUrl</code></TD>
+        <TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="vegaGeneIdUrl"><A name="vegaGeneIdUrl"><code>vegaGeneIdUrl</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+        <TD class="vegaGeneIdUrl"><A name="vegaGeneIdUrl"><code>vegaGeneIdUrl</code></TD>
+        <TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="vegaTranscriptIdUrl"><A name="vegaTranscriptIdUrl">
-            <code>vegaTranscriptIdUrl</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+            <code>vegaTranscriptIdUrl</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="wgEncodeGencode"><A name="wgEncodeGencode">
-            <code>wgEncodeGencodeVersion</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+            <code>wgEncodeGencodeVersion</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeAttrs</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeAttrs</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeExonSupport</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeExonSupport</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeGeneSource</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeGeneSource</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeTranscriptSource</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeTranscriptSource</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodePdb</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodePdb</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodePubMed</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodePubMed</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeRefSeq</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeRefSeq</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeTag</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeTag</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeTranscriptSupport</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeTranscriptSupport</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeUniProt</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeUniProt</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodePolyAFeature</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodePolyAFeature</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeAnnotationRemark</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeAnnotationRemark</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD><code>wgEncodeGencodeTranscriptionSupportLevel</code> genePred</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD><code>wgEncodeGencodeTranscriptionSupportLevel</code></TD><TD>genePred</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="yalePseudoAssoc"><A name="yalePseudoAssoc"><code>yalePseudoAssoc</code> *</TD>
-        <TD>
-            <P>Special for ENCODE Genecode.</P>
-        </TD>
+        <TD class="yalePseudoAssoc"><A name="yalePseudoAssoc"><code>yalePseudoAssoc</code></TD>
+        <TD>all</TD>
+        <TD>Special for ENCODE Genecode.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="yalePseudoUrl"><A name="yalePseudoUrl"><code>yalePseudoUrl</code> *</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate
-            external URL.</P>
-        </TD>
+        <TD class="yalePseudoUrl"><A name="yalePseudoUrl"><code>yalePseudoUrl</code></TD>
+        <TD>all</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="yaleUrl"><A name="yaleUrl"><code>yaleUrl</code> *</TD>
-        <TD>
-            <P>Special for ENCODE Genecode to generate external URL.</P>
-        </TD>
+        <TD class="yaleUrl"><A name="yaleUrl"><code>yaleUrl</code></TD><TD>all</TD>
+        <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
 </TABLE>
 
@@ -3425,200 +3365,153 @@ bigWig</P>
 <H3>Special settings for SNP tracks</H3>
 <P>    </P>
 <TABLE class="settingsTable" id="SNP_Specialized_Settings">
-    <TR VALIGN=TOP>
-        <TH WIDTH=100>Rejected settings</TH>
-        <TH>Reason</TH>
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
+    </TR>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="chimpDb"><A name="chimpDb"><code>chimpDb</code> bed</TD>
-        <TD>
-            <P>special case: snp135Common</P>
-        </TD>
+        <TD class="chimpDb"><A name="chimpDb"><code>chimpDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="chimpMacaqueOrthoTable"><A name="chimpMacaqueOrthoTable">
-            <code>chimpMacaqueOrthoTable</code> bed</TD>
-        <TD>
-            <P>Special case: snp125Ui (rare hg18.snp128, hg18.snp126)</P>
-        </TD>
+            <code>chimpMacaqueOrthoTable</code></TD><TD>bed</TD>
+        <TD>Special case: snp125Ui (rare hg18.snp128, hg18.snp126)</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="chimpOrangMacOrthoTable"><A name="chimpOrangMacOrthoTable">
-            <code>chimpOrangMacOrthoTable</code> bed 6 +</TD>
-        <TD>
-             <P>Special case: snp125Ui (only snp###)</P>
-        </TD>
+            <code>chimpOrangMacOrthoTable</code></TD><TD>bed 6 +</TD>
+        <TD>Special case: snp125Ui (only snp###)</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="codingAnnoLabel_snp"><A name="codingAnnoLabel_snp">
-            <code>codingAnnoLabel_snp130CodingDbSnp</code> bed</TD>
-        <TD>
-            <P>Special case: snp125 hgc only</P>
-        </TD>
+            <code>codingAnnoLabel_snp130CodingDbSnp</code></TD><TD>bed</TD>
+        <TD>Special case: snp125 hgc only</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="codingAnnotations"><A name="codingAnnotations">
-            <code>codingAnnotations</code> bed</TD>
-        <TD>
-            <P>Special case: snp125 hgc only</P>
-        </TD>
+            <code>codingAnnotations</code></TD><TD>bed</TD>
+        <TD>Special case: snp125 hgc only</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="defaultMaxWeight"><A name="defaultMaxWeight">
-            <code>defaultMaxWeight</code> bed</TD>
-        <TD>
-            <P>Special for "snp" tracks.</P>
-        </TD>
+            <code>defaultMaxWeight</code></TD><TD>bed</TD>
+        <TD>Special for "snp" tracks.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="hapmapPhase"><A name="hapmapPhase"><code>hapmapPhase</code> bed</TD>
-        <TD>
-            <P>Special case HapMap SNPs</P>
-        </TD>
+        <TD class="hapmapPhase"><A name="hapmapPhase"><code>hapmapPhase</code></TD><TD>bed</TD>
+        <TD>Special case HapMap SNPs</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="macaqueDb"><A name="macaqueDb"><code>macaqueDb</code> bed</TD>
-        <TD>
-            <P>special case: snp135Common</P>
-        </TD>
+        <TD class="macaqueDb"><A name="macaqueDb"><code>macaqueDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="orangDb"><A name="orangDb"><code>orangDb</code> bed</TD>
-        <TD>
-            <P>special case: snp135Common</P>
-        </TD>
+        <TD class="orangDb"><A name="orangDb"><code>orangDb</code></TD><TD>bed</TD>
+        <TD>special case: snp135Common</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="pgPolyphenPredTab"><A name="pgPolyphenPredTab">
-            <code>pgPolyphenPredTab</code> bed</TD>
-        <TD>
-            <P>Special for pgSnp track.</P>
-        </TD>
+            <code>pgPolyphenPredTab</code></TD><TD>bed</TD>
+        <TD>Special for pgSnp track.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pgSiftPredTab"><A name="pgSiftPredTab"><code>pgSiftPredTab</code> bed</TD>
-        <TD>
-            <P>Special for pgSnp track.</P>
-        </TD>
+        <TD class="pgSiftPredTab"><A name="pgSiftPredTab"><code>pgSiftPredTab</code></TD>
+        <TD>bed</TD>
+        <TD>Special for pgSnp track.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="snpExceptions"><A name="snpExceptions"><code>snpExceptions</code> bed</TD>
-        <TD>
-            <P>Special for snp tracks</P>
-        </TD>
+        <TD class="snpExceptions"><A name="snpExceptions"><code>snpExceptions</code></TD>
+        <TD>bed</TD>
+        <TD>Special for snp tracks</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="snpExceptionDesc"><A name="snpExceptionDesc">
-            <code>snpExceptionDesc</code> bed</TD>
-        <TD>
-            <P>Special for snp tracks</P>
-        </TD>
+            <code>snpExceptionDesc</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="snpSeq"><A name="snpSeq"><code>snpSeq</code> bed</TD>
-        <TD>
-            <P>Special for snp tracks</P>
-        </TD>
+        <TD class="snpSeq"><A name="snpSeq"><code>snpSeq</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="snpSeqFile"><A name="snpSeqFile"><code>snpSeqFile</code> bed</TD>
-        <TD>
-            <P>Special for snp tracks</P>
-        </TD>
+        <TD class="snpSeqFile"><A name="snpSeqFile"><code>snpSeqFile</code></TD><TD>bed</TD>
+        <TD>Special for snp tracks</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="snpTable"><A name="snpTable"><code>snpTable</code> bed</TD>
-        <TD>
-            <P>Special for gwasCatelog and shown in hgc</P>
-        </TD>
+        <TD class="snpTable"><A name="snpTable"><code>snpTable</code></TD><TD>bed</TD>
+        <TD>Special for gwasCatelog and shown in hgc</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="snpVersion"><A name="snpVersion"><code>snpVersion</code> bed</TD>
-        <TD>
-                <P>Special for gwasCatelog and shown in hgc</P>
-        </TD>
+        <TD class="snpVersion"><A name="snpVersion"><code>snpVersion</code></TD><TD>bed</TD>
+        <TD>Special for gwasCatelog and shown in hgc</TD>
     </TR>
 </TABLE>
 
 <A name="miscLosers">
 <H3>List of Miscellaneous Losers or SPECIAL CASE</H3>
 <TABLE class="settingsTable" id="Miscellaneous_Rejected_Settings">
-    <TR VALIGN=TOP>
-        <TH WIDTH=100>Rejected settings</TH>
-        <TH>Reason</TH>
+    <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
     </TR>
     <TR VALIGN=TOP>
         <TD class="cdsDrawDefault"><A name="cdsDrawDefault">
-            <code>cdsDrawDefault</code> genePred</TD>
-        <TD>
-            <P>There are a number of occurrences of
+            <code>cdsDrawDefault</code></TD><TD>genePred</TD>
+        <TD>There are a number of occurrences of
             cdsDrawDefault in our trackDbs, always set to &lsquo;genomic\
             codons &lsquo;.  However, I have found no documentation and no
-            code that references this setting.</P>
+            code that references this setting.
         </TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="cdsDrawOptions"><A name="cdsDrawOptions">
-            <code>cdsDrawOptions</code> psl</TD>
-        <TD>
-            <P>I have found no documentation and no code that
-            references this setting.  Also, I do not see it in our trackDbs.</P>
+            <code>cdsDrawOptions</code></TD><TD>psl</TD>
+        <TD>I have found no documentation and no code that
+            references this setting.  Also, I do not see it in our trackDbs.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="cdsEvidence"><A name="cdsEvidence"><code>cdsEvidence</code> genePred</TD>
-        <TD>
-            <P>Used by JK experimental tracks only as either
+        <TD class="cdsEvidence"><A name="cdsEvidence"><code>cdsEvidence</code></TD>
+        <TD>genePred</TD>
+        <TD>Used by JK experimental tracks only as either
             <code>jkgTxCdsEvidence</code> or <code>jkgTxCdsEvidence2</code>.
-             This will show an evidence table named in the setting.</P>
+             This will show an evidence table named in the setting.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="db"><A name="db"><code>db</code> chain,netAlign,genePred,bed 3</TD>
-        <TD>
-            <P>Not found in any of our trackDb.ras.  Further,
-            this is the same as assembly so implicit.</P>
+        <TD class="db"><A name="db"><code>db</code></TD>
+        <TD>chain, netAlign, genePred, bed 3</TD>
+        <TD>Not found in any of our trackDb.ras.  Further,
+            this is the same as assembly so implicit.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="dbProfile"><A name="dbProfile"><code>dbProfile</code></TD>
-        <TD>
-            <P>In hg18 experimental and cancerGenomics only.</P>
+        <TD class="dbProfile"><A name="dbProfile"><code>dbProfile</code></TD><TD>all</TD>
+        <TD>In hg18 experimental and cancerGenomics only.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="dividers"><A name="dividers"><code>dividers</code></TD>
+        <TD>all</TD>
+        <TD><I>(Jim says KEEP_UGLY)</I>
+            OBSOLETE: use <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> instead.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="endFudge"><A name="endFudge"><code>endFudge</code></TD><TD>bed</TD>
+        <TD>Special case for hg17 HGSV Discordant
+            (variation) tracks.  Used in hgc to fudge chromEnd, I think.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="dividers"><A name="dividers"><code>dividers</code> * KEEP_UGLY</TD>
-        <TD>
-            <P>OBSOLETE: use <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> instead.</P>
+        <TD class="ensArchive"><A name="ensArchive"><code>ensArchive</code></TD><TD>genePred</TD>
+        <TD>Only in danRer4 Ensembl NonCoding to generate an Ensembl URL.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="expProbeTable"><A name="expProbeTable"><code>expProbeTable</code></TD>
+        <TD>expRatio</TD>
+        <TD>Can't find code that supports this.Rare: only in human. affyHumanExon "Affy All Exon"
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="endFudge"><A name="endFudge"><code>endFudge</code> bed</TD>
-        <TD>
-            <P>Special case for hg17 HGSV Discordant
-            (variation) tracks.  Used in hgc to fudge chromEnd, I think.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="ensArchive"><A name="ensArchive"><code>ensArchive</code> genePred</TD>
-        <TD>
-            <P>Only in danRer4 Ensembl NonCoding to generate
-            an Ensembl URL.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="expProbeTable"><A name="expProbeTable"><code>expProbeTable</code> expRatio</TD>
-        <TD>
-            <P>Can't find code that supports this.
-            Rare: only in human. affyHumanExon "Affy All Exon"
-            </P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="extTable"><A name="extTable"><code>extTable</code></TD>
-        <TD>
-            <P>This setting points
-            to a one record table that holds the external filename.  This
+        <TD class="extTable"><A name="extTable"><code>extTable</code></TD><TD>all</TD>
+        <TD>This setting points to a one record table that holds the external filename.  This
             should be replaced by:
             <A onclick="return jumpTo(this);" HREF="#">track</A>,
             <A onclick="return jumpTo(this);" HREF="#">table</A> or
@@ -3627,250 +3520,186 @@ bigWig</P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="extraFields"><A name="extraFields"><code>extraFields</code> bed LOSE</TD>
-        <TD>
-            <P>OBSOLETE:  (Jim
-            hates it) replaced by looking up "as" table
-            description.  However, that method does not allow for:</P>
-            <P>- selec tive
-            inclusion/exclusion of fields</P>
-            <P>- reordering fields</P>
-            <P>- formatting titles</P>
+        <TD class="extraFields"><A name="extraFields"><code>extraFields</code></TD><TD>bed</TD>
+        <TD>OBSOLETE:  (Jim hates it) replaced by looking up "as" table
+            description.  However, that method does not allow for:
+            <UL>
+            <LI> selective inclusion/exclusion of fields</LI>
+            <LI> reordering fields</LI>
+            <LI> formatting titles</LI>
+            </UL>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="filePos"><A name="filePos"><code>filePos</code></TD>
-        <TD>
-            <P>Can't find this in any of our trackDb.ra
-            files.</P>
+        <TD class="filePos"><A name="filePos"><code>filePos</code></TD><TD>all</TD>
+        <TD>Can't find this in any of our trackDb.ra files.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="graphType"><A name="graphType"><code>graphType</code></TD>
+        <TD>bedGraph</TD>
+        <TD><I>(Jim says KEEP)</I> Not found in code.  Probably typo of graphTypeDefault.
+            (rare hg18.encodeRegulomeDnaseArray)
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="graphType"><A name="graphType"><code>graphType</code> bedGraph KEEP</TD>
-        <TD>
-            <P>Not found in code.  Probably typo of
-            graphTypeDefault.  (rare hg18.encodeRegulomeDnaseArray)</P>
-        </TD>
+        <TD class="hgGene"><A name="hgGene"><code>hgGene</code></TD><TD>genePred</TD>
+        <TD>Cannot find code for this.  No effect. ???</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="hgGene"><A name="hgGene"><code>hgGene</code> genePred</TD>
-        <TD>
-            <P>Cannot find code for this.  No effect. ???</P>
-        </TD>
+        <TD class="informant"><A name="informant"><code>informant</code></TD><TD>genePred</TD>
+        <TD>Special setting for N-SCAN genes.  Swapped into html description page.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="informant"><A name="informant"><code>informant</code> genePred</TD>
-        <TD>
-            <P>Special setting for N-SCAN genes.  Swapped into
-            html description page.
-            </P>
-        </TD>
+        <TD class="itemAttrTbl"><A name="itemAttrTbl"><code>itemAttrTbl</code></TD><TD>genePred</TD>
+        <TD>Only used in borEut13. transMapRefGene.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="itemAttrTbl"><A name="itemAttrTbl"><code>itemAttrTbl</code> genePred</TD>
-        <TD>
-            <P>Only used in borEut13. transMapRefGene.
-            </P>
-        </TD>
+        <TD class="linesAt"><A name="linesAt"><code>linesAt</code></TD><TD>chromGraph</TD>
+        <TD>Unused track type (tdbQuery -strict).</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="linesAt"><A name="linesAt"><code>linesAt</code> chromGraph</TD>
-        <TD>
-            <P>Unused track type (tdbQuery -strict).</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="longlabel"><A name="longlabel"><code>longlabel</code> genePred</TD>
-        <TD>
-            <P>Typo, should be <A onclick="return jumpTo(this);" HREF="#">longLabel</A>.</P>
-        </TD>
+        <TD class="longlabel"><A name="longlabel"><code>longlabel</code></TD><TD>genePred</TD>
+        <TD>Typo, should be <A onclick="return jumpTo(this);" HREF="#">longLabel</A>.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="longLabelClip"><A name="longLabelClip"><code>longLabelClip</code></TD>
-        <TD>
-            <P>Only used in sacCer3 (tdbQuery -strict).</P>
+        <TD>all</TD>
+        <TD>Only used in sacCer3 (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mafDot"><A name="mafDot"><code>mafDot</code></TD><TD>wigMaf</TD>
+        <TD>Can't find this in any of our trackDb.ra files and only supported as cart var.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mafDotDefault"><A name="mafDotDefault"><code>mafDotDefault</code></TD>
+        <TD>wigMaf</TD>
+        <TD>Can't find this in any of our trackDb.ra files.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mapDispatcher"><A name="mapDispatcher"><code>mapDispatcher</code></TD>
+        <TD>expRatio</TD>
+        <TD>Only hg17 group "x" [tingwang 2007] and not in C.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="maxScore"><A name="maxScore"><code>maxScore</code></TD><TD>broadPeak</TD>
+        <TD>Obsolete, replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="mafDot"><A name="mafDot"><code>mafDot</code> wigMaf</TD>
-        <TD>
-            <P>Can't find this in any of our trackDb.ra
-            files and only supported as cart var.</P>
+        <TD class="mgiUrl"><A name="mgiUrl"><code>mgiUrl</code></TD><TD>bed</TD>
+        <TD>Special case variant of url used by no current tracks (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="mgiUrlLabel"><A name="mgiUrlLabel"><code>mgiUrlLabel</code></TD><TD>bed</TD>
+        <TD>Special case variant of url used by no current tracks (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="minMax"><A name="minMax"><code>minMax</code></TD><TD>chromGraph</TD>
+        <TD>Unused track type (tdbQuery -strict).</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="minScore"><A name="minScore"><code>minScore</code></TD>
+        <TD>bed, narrowPeak, broadPeak</TD>
+        <TD>Obsolete, replaced with
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="mafDotDefault"><A name="mafDotDefault"><code>mafDotDefault</code> wigMaf</TD>
-        <TD>
-            <P>Can't find this in any of our trackDb.ra
-            files.</P>
+        <TD class="msaTable"><A name="msaTable"><code>msaTable</code></TD>
+        <TD>wig, wigMafProt, wigMaf</TD>
+        <TD>Only hiv tracks use this.  Code in wigMaf
+            display and is used to look up species order.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="mapDispatcher"><A name="mapDispatcher"><code>mapDispatcher</code> expRatio</TD>
-        <TD>
-            <P>Only hg17 group "x" [tingwang 2007] and not in
-            C.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="maxScore"><A name="maxScore"><code>maxScore</code> broadPeak</TD>
-        <TD>
-            <P>Obsolete, replaced with
-            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="mgiUrl"><A name="mgiUrl"><code>mgiUrl</code> bed</TD>
-        <TD>
-            <P>Special case variant of url used by no current
-            tracks (tdbQuery -strict).</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="mgiUrlLabel"><A name="mgiUrlLabel"><code>mgiUrlLabel</code> bed</TD>
-        <TD>
-            <P>Special case variant of url used by no current
-            tracks (tdbQuery -strict).</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="minMax"><A name="minMax"><code>minMax</code> chromGraph</TD>
-        <TD>
-            <P>Unused track type (tdbQuery -strict).</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="minScore"><A name="minScore"><code>minScore</code> bed,narrowPeak,broadPeak</TD>
-        <TD>
-            <P>Obsolete, replaced with
-            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="msaTable"><A name="msaTable"><code>msaTable</code> wig wigMafProt wigMaf</TD>
-        <TD>
-            <P>Only hiv tracks use this.  Code in wigMaf
-            display and is used to look up species order.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="ncbiAccXref"><A name="ncbiAccXref"><code>ncbiAccXref</code> bed</TD>
-        <TD>
-            <P>Special case used by hg17/hg18 kiddEichler
+        <TD class="ncbiAccXref"><A name="ncbiAccXref"><code>ncbiAccXref</code></TD><TD>bed</TD>
+        <TD>Special case used by hg17/hg18 kiddEichler
             tracks.  Names a table to convert kiddEichler IDs to NCBI IDs and
-            print links.</P>
+            print links.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="nextItemButton"><A name="nextItemButton"><code>nextItemButton</code> *LOSE</TD>
-        <TD>
-            <P>Jim says LOSE.  This setting lets you override
+        <TD class="nextItemButton"><A name="nextItemButton"><code>nextItemButton</code></TD>
+        <TD>all</TD>
+        <TD><I>(Jim says LOSE)</I>  This setting lets you override
             the Browser wide setting to disable nextItem arrows (which is off
             by default).  When this is on, the nextItem arrows will show up
             for your track.  The opposite does not seem to be the case, where
             nextItems are enabled, but you want to exclude them from your
-            track.</P>
+            track.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="noInherit"><A name="noInherit"><code>noInherit</code> *LOSE</TD>
-        <TD>
-            <P>This one should be
+        <TD class="noInherit"><A name="noInherit"><code>noInherit</code></TD><TD>all</TD>
+        <TD>This one should be
             OBSOLETE but there continue to be edge cases where this setting
             has some affect.  Currently only 2 places this is read this:</P>
-            <P>- in hdb to make
-            superChildren inherit settings from their superTrack.  This done
-            by putting the super settings into the child's settings
-            hash.</P>
-            <P>- tdbQuery where it appears to have no affect.</P>
+            <OL>
+            <LI>in hdb to makesuperChildren inherit settings from their superTrack.  This done
+            by putting the super settings into the child's settings hash.</LI>
+            <LI>tdbQuery where it appears to have no affect.</LI>
+            </OL>
         </TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="nonBedFieldsLabel"><A name="nonBedFieldsLabel">
-            <code>nonBedFieldsLabel</code> bigBed DEPRECATE</TD>
-        <TD>
-            <P>OBSOLETE when bigBed has "as"
+            <code>nonBedFieldsLabel</code></TD>
+        <TD>bigBed</TD>
+        <TD>OBSOLETE when bigBed has "as"
             definitions.  Instead, the extraFieldsPrint should pick up the
-            non-standard bed fields straight from the as definition.</P>
+            non-standard bed fields straight from the as definition.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="notNCBI"><A name="notNCBI"><code>notNCBI</code> bed</TD>
-        <TD>
-            <P>Only used in drosophila dm2/dm3.  Referenced in
-            hgc.c code.</P>
-        </TD>
+        <TD class="notNCBI"><A name="notNCBI"><code>notNCBI</code></TD><TD>bed</TD>
+        <TD>Only used in drosophila dm2/dm3.  Referenced in hgc.c code.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="ococci"><A name="ococci"><code>ococci</code> bed</TD>
-        <TD>
-            <P>Not referenced in any of our trackDb.ra files
-            or in code.</P>
-        </TD>
+        <TD class="ococci"><A name="ococci"><code>ococci</code></TD><TD>bed</TD>
+        <TD>Not referenced in any of our trackDb.ra files or in code.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="otherOrg"><A name="otherOrg"><code>otherOrg</code> chain netAlign</TD>
-        <TD>
-            <P>Typo: should be <A onclick="return jumpTo(this);" HREF="#">otherDb</A>.</P>
-        </TD>
+        <TD class="otherOrg"><A name="otherOrg"><code>otherOrg</code></TD><TD>chain, netAlign</TD>
+        <TD>Typo: should be <A onclick="return jumpTo(this);" HREF="#">otherDb</A>.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="onlyVisibility"><A name="onlyVisibility"><code>onlyVisibility</code> *</TD>
-        <TD>
-            <P>Not universally supported (rightClick/subtrack
+        <TD class="onlyVisibility"><A name="onlyVisibility"><code>onlyVisibility</code></TD>
+        <TD>all</TD>
+        <TD>Not universally supported (rightClick/subtrack
             cfg, etc.) so deprecate or else expand.  This setting restricts
             the visibility options of a track to only one setting such as
-            "<code>full</code>".  (rare hg19.lincRNAsAllCellTypeTopView)</P>
+            "<code>full</code>".  (rare hg19.lincRNAsAllCellTypeTopView)
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="otherDbTable"><A name="otherDbTable"><code>otherDbTable</code> bed</TD>
-        <TD>
-            <P>Special case for Jackson lab's QTL
-            (Quantitative Trait Locus) tracks.</P>
-        </TD>
+        <TD class="otherDbTable"><A name="otherDbTable"><code>otherDbTable</code></TD><TD>bed</TD>
+        <TD>Special case for Jackson lab's QTL (Quantitative Trait Locus) tracks.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="pairedEndUrlFormat"><A name="pairedEndUrlFormat">
-            <code>pairedEndUrlFormat</code> bed</TD>
-        <TD>
-            <P>Special case only used on kiddEichler track.
-            This is another external URL variant.
-            </P>
-        </TD>
+            <code>pairedEndUrlFormat</code></TD><TD>bed</TD>
+        <TD>Special case only used on kiddEichler track. This is another external URL variant.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pairwise"><A name="pairwise"><code>pairwise</code> wigMaf</TD>
-        <TD>
-            <P>Deprecate, replaced by
-            <A onclick="return jumpTo(this);" HREF="#">summary</A>.</P>
-        </TD>
+        <TD class="pairwise"><A name="pairwise"><code>pairwise</code></TD><TD>wigMaf</TD>
+        <TD>Deprecate, replaced by <A onclick="return jumpTo(this);" HREF="#">summary</A>.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="patDb"><A name="patDb"><code>patDb</code> expRatio</TD>
-        <TD>
-            <P>Only hg17 group "x" [jzhu 2007] and not
-            referenced in C.</P>
-        </TD>
+        <TD class="patDb"><A name="patDb"><code>patDb</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="patKey"><A name="patKey"><code>patKey</code> expRatio</TD>
-        <TD>
-            <P>Only hg17 group "x" [jzhu 2007] and not
-            referenced in C.</P>
-        </TD>
+        <TD class="patKey"><A name="patKey"><code>patKey</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="patTable"><A name="patTable"><code>patTable</code> expRatio</TD>
-        <TD>
-            <P>Only hg17 group "x" [jzhu 2007] and not
-            referenced in C.</P>
-        </TD>
+        <TD class="patTable"><A name="patTable"><code>patTable</code></TD><TD>expRatio</TD>
+        <TD>Only hg17 group "x" [jzhu 2007] and not referenced in C.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pgDbLink"><A name="pgDbLink"><code>pgDbLink</code> bed</TD>
-        <TD>
-            <P><I>Special only used
+        <TD class="pgDbLink"><A name="pgDbLink"><code>pgDbLink</code></TD><TD>bed</TD>
+        <TD><I>Special only used
             in hg18/hg19 Genome Variants so far.</I></P>
             <P>This setting is used
             to name one or more tables that hold links to phenotype and other
@@ -3883,188 +3712,154 @@ bigWig</P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="private"><A name="private"><code>private</code> bed</TD>
-        <TD>
-            <P>Only used in human/hg7/trackDb.ra, and not even
+        <TD class="private"><A name="private"><code>private</code></TD><TD>bed</TD>
+        <TD>Only used in human/hg7/trackDb.ra, and not even
             there using tdbQuery -strict.   Prevents access to data by
             removing from trackList when doing "pruneEmpties".
             Gotta wonder when the track is ever seen in the browser or why it
-            is a track at all.</P>
+            is a track at all.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pslTable"><A name="pslTable"><code>pslTable</code> bed</TD>
-        <TD>
-            <P>Special for hg18/hg19 illuminaProbes "Illumina
+        <TD class="pslTable"><A name="pslTable"><code>pslTable</code></TD><TD>bed</TD>
+        <TD>Special for hg18/hg19 illuminaProbes "Illumina
             WG-6".  Used in hgc. (Hardwired to be the same
             <code>illuminaProbesAlign</code> when track is
             "illuminaProbesAlign".) Used for making an hgcAnchor
-            <code>htcIlluminaProbesAlign</code>.</P>
+            <code>htcIlluminaProbesAlign</code>.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pubsArticleTable"><A name="pubsArticleTable">
-            <code>pubsArticleTable</code> bed psl</TD>
-        <TD>
-            <P>Special for publications track.</P>
-        </TD>
+        <TD class="pubsArticleTable"><A name="pubsArticleTable"><code>pubsArticleTable</code></TD>
+        <TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="pubsMarkerTable"><A name="pubsMarkerTable">
-            <code>pubsMarkerTable</code> bed psl</TD>
-        <TD>
-            <P>Special for publications track.</P>
-        </TD>
+            <code>pubsMarkerTable</code></TD><TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="pubsPslTrack"><A name="pubsPslTrack"><code>pubsPslTrack</code> bed psl</TD>
-        <TD>
-            <P>Special for publications track.</P>
-        </TD>
+        <TD class="pubsPslTrack"><A name="pubsPslTrack"><code>pubsPslTrack</code></TD>
+        <TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="pubsSequenceTable"><A name="pubsSequenceTable">
-            <code>pubsSequenceTable</code> bed psl</TD>
-        <TD>
-            <P>Special for publications track.</P>
-        </TD>
+            <code>pubsSequenceTable</code></TD><TD>bed, psl</TD>
+        <TD>Special for publications track.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="refSeqAnnoVersion"><A name="refSeqAnnoVersion">
-            <code>refSeqAnnoVersion</code> genePred</TD>
-        <TD>
-            <P>Special for rheMac2.refSeqAnno track.  Not
-            found in code.</P>
+            <code>refSeqAnnoVersion</code></TD><TD>genePred</TD>
+        <TD>Special for rheMac2.refSeqAnno track.  Not found in code.</TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="scoreFilterMax"><A name="scoreFilterMax"><code>scoreFilterMax</code></TD>
+        <TD>bed, bedLogR, peptideMapping, bigBed</TD>
+        <TD>OBSOLETE: replaced by
+            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="scoreFilterMax"><A name="scoreFilterMax">
-            <code>scoreFilterMax</code> bed bedLogR peptideMapping> bigBed</TD>
-        <TD>
-            <P>OBSOLETE: replaced by
-            <A onclick="return jumpTo(this);" HREF="#">scoreFilterLimits</A></P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="searchMethod"><A name="searchMethod"><code>searchMethod</code> bed</TD>
-        <TD>
-            <P>Error.  Should be part of searchTable stanza,
-            not track stanza.</P>
-        </TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="searchType"><A name="searchType"><code>searchType</code> bed</TD>
-        <TD>
-            <P>Error.  Should be
-            part of searchTable stanza, not track stanza.</P>
+        <TD class="searchMethod"><A name="searchMethod"><code>searchMethod</code></TD>
+        <TD>bed</TD>
+        <TD>Error.  Should be part of searchTable stanza, not track stanza.
             <P><I>TODO: Document searchTable stanza.</I></P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="selectSubject"><A name="selectSubject"><code>selectSubject</code> psl</TD>
-        <TD>
-            <P>Special only used in hiv(only used by hiv and
-            h1n1. (Just h1n1 according to tdbQuery -strict).</P>
+        <TD class="searchType"><A name="searchType"><code>searchType</code></TD><TD>bed</TD>
+        <TD>Error.  Should be part of searchTable stanza, not track stanza.
+            <P><I>TODO: Document searchTable stanza.</I></P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="seqTable"><A name="seqTable"><code>seqTable</code> bed</TD>
-        <TD>
-            <P>Special for hg18/hg19 illuminaProbes "Illumina
+        <TD class="selectSubject"><A name="selectSubject"><code>selectSubject</code></TD>
+        <TD>psl</TD>
+        <TD>Special only used in hiv(only used by hiv and
+            h1n1. (Just h1n1 according to tdbQuery -strict).
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="seqTable"><A name="seqTable"><code>seqTable</code></TD><TD>bed</TD>
+        <TD>Special for hg18/hg19 illuminaProbes "Illumina
             WG-6".  Used in hgc. (Hardwired to be the same
             <code>illuminaProbesSeq</code> when track is
             "illuminaProbesAlign".) Used for making an hgcAnchor
-            <code>htcIlluminaProbesAlign</code>.</P>
+            <code>htcIlluminaProbesAlign</code>.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="settingsByView"><A name="settingsByView"><code>settingsByView</code> *</TD>
-        <TD>
-            <P>OBSOLETE: replaced with "view in the
+        <TD class="settingsByView"><A name="settingsByView"><code>settingsByView</code></TD>
+        <TD>all</TD>
+        <TD>OBSOLETE: replaced with "view in the
             middle" <A onclick="return jumpTo(this);" HREF="#">view</A>
-            as separate track.</P>
+            as separate track.
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="speciesTarget"><A name="speciesTarget"><code>speciesTarget</code> wigMaf</TD>
-        <TD>
-            <P>OBSOLETE.  Not in our trackDbs (tdbQuery -strict).
+        <TD class="speciesTarget"><A name="speciesTarget"><code>speciesTarget</code></TD>
+        <TD>wigMaf</TD>
+        <TD>OBSOLETE.  Not in our trackDbs (tdbQuery -strict).
             Specifically ifdef'd out of code with
-            </P>
-            <code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+            <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="speciesTree"><A name="speciesTree"><code>speciesTree</code> wigMaf</TD>
-        <TD>
-            <P>OBSOLETE. Replaced by <A onclick="return jumpTo(this);" HREF="#">treeImage</A>.
+        <TD class="speciesTree"><A name="speciesTree"><code>speciesTree</code></TD><TD>wigMaf</TD>
+        <TD>OBSOLETE. Replaced by <A onclick="return jumpTo(this);" HREF="#">treeImage</A>.
             Not in our trackDbs (tdbQuery -strict).
             Specifically ifdef'd out of code with
-            </P>
-            <code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+            <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="stripPrefix"><A name="stripPrefix"><code>stripPrefix</code> bam</TD>
-        <TD>
-            <P>I<>Not yet implemented?  Only on
-            hg18.oneKGHighCovSeq experimental track.</I></P>
-        </TD>
+        <TD class="stripPrefix"><A name="stripPrefix"><code>stripPrefix</code></TD><TD>bam</TD>
+        <TD><I>Not yet implemented?  Only on hg18.oneKGHighCovSeq experimental track.</I></TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="subgroups"><A name="subgroups"><code>subgroups</code> bed</TD>
-        <TD>
-            <P>Typo: should be <A onclick="return jumpTo(this);" HREF="#">subGroups</R>.</P>
-        </TD>
+        <TD class="subgroups"><A name="subgroups"><code>subgroups</code></TD><TD>bed</TD>
+        <TD>Typo: should be <A onclick="return jumpTo(this);" HREF="#">subGroups</R>.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="subTrack"><A name="subTrack"><code>subTrack</code> *</TD>
-        <TD>
-            <P>OBSOLETE: replaced with <A HREF="#parent">parent</A>.</P>
-        </TD>
+        <TD class="subTrack"><A name="subTrack"><code>subTrack</code></TD><TD>all</TD>
+        <TD>OBSOLETE: replaced with <A HREF="#parent">parent</A>.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="symbolTable"><A name="symbolTable"><code>symbolTable</code> bed genePred</TD>
-        <TD>
-            <P>In hgTracks, flyBaseGeneName() methods, if an
+        <TD class="symbolTable"><A name="symbolTable"><code>symbolTable</code></TD>
+        <TD>bed, genePred</TD>
+        <TD>In hgTracks, flyBaseGeneName() methods, if an
             item name is found in this symbol table, the symbol name will be
             shown instead.  Found in drosophila and strangely rn4 RGD Genes
             (but table named in rn4 does not have a symbol column.  Instead,
             symbol lookup is hard-coded to rgdGene2ToSymbol).
-            </P>
         </TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="txInfo"><A name="txInfo"><code>txInfo</code> genePred</TD>
-        <TD>
-            <P>Only seems to be used in Jim's
-            experimental tracks in hg18 and mm8.</P>
-        </TD>
+        <TD class="txInfo"><A name="txInfo"><code>txInfo</code></TD><TD>genePred</TD>
+        <TD>Only seems to be used in Jim's experimental tracks in hg18 and mm8.</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="urlName"><A name="urlName"><code>urlName</code> genePred</TD>
-        <TD>
-            <P>Not referenced in code and rarely used.  (e.g.
-            hg18: encodePseudogeneConsensus, encodePseudogeneYale).</P>
+        <TD class="urlName"><A name="urlName"><code>urlName</code></TD><TD>genePred</TD>
+        <TD>Not referenced in code and rarely used.  (e.g.
+            hg18: encodePseudogeneConsensus, encodePseudogeneYale).
         </TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="useScore"><A name="useScore">
-            <code>useScore</code> bed,factorSource,bed5FloatScore,broadPeak</TD>
-        <TD>
-            <P>Deprecate: replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
-            as a slighly less obscurely named setting.</P>
+            <code>useScore</code></TD><TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
+        <TD>Deprecate: replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+            as a slighly less obscurely named setting.
         </TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="visibilityViewDefaults"><A name="visibilityViewDefaults">
-            <code>visibilityViewDefaults</code> *</TD>
-        <TD>
-            <P>OBSOLETE since view in the middle change. LOSE</P>
-        </TD>
+            <code>visibilityViewDefaults</code></TD><TD>all</TD>
+        <TD>OBSOLETE since view in the middle change. LOSE</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="yLinOnOff"><A name="yLinOnOff"><code>yLinOnOff</code> wigMaf</TD>
+        <TD class="yLinOnOff"><A name="yLinOnOff"><code>yLinOnOff</code></TD><TD>wigMaf</TD>
         <TD>
             <P>Typo: should be <A onclick="return jumpTo(this);" HREF="#">yLineOnOff</A>.</P>
         </TD>
@@ -4075,9 +3870,8 @@ bigWig</P>
 <!-- Next section -->
 <div style='height:1em;'></div> <!-- vertical spacing -->
 <div class="contentBorder"><!-- Content Border -->
-<TABLE class="settingsTable" id="toc">
-<THEAD><TR><TD><H3>Table of Contents (self-assembled) <I>EXPERIMENTAL</I></H3></TD></TR></THEAD>
-</TABLE>
+<div style="padding:10px;">  <!-- border partol -->
+<TABLE class="settingsTable" id="toc"></TABLE>
 </div></div>
 
 
