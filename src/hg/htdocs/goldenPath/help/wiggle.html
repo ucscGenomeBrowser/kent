@@ -152,22 +152,35 @@ The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I
 <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
 The remaining values are OPTIONAL:
 <FONT color="#0000FF"><PRE>
-  <B>name              </B><I>trackLabel          </I> # default is "User Track"
-  <B>description       </B><I>centerlabel         </I> # default is "User Supplied Track"
-  <B>visibility        </B><I>full|dense|hide     </I> # default is hide (will also take numeric values 2|1|0)
-  <B>color             </B><I>RRR,GGG,BBB         </I> # default is 255,255,255
-  <B>altColor          </B><I>RRR,GGG,BBB         </I> # default is 128,128,128
-  <B>priority          </B><I>N                   </I> # default is 100
-  <B>autoScale         </B><I>on|off              </I> # default is on
-  <B>alwaysZero        </B><I>on|off              </I> # default is off
-  <B>gridDefault       </B><I>on|off              </I> # default is off
-  <B>maxHeightPixels   </B><I>max:default:min     </I> # default is 128:128:11
-  <B>graphType         </B><I>bar|points          </I> # default is bar
-  <B>viewLimits        </B><I>lower:upper         </I> # default is range found in data
-  <B>yLineMark         </B><I>real-value          </I> # default is 0.0
-  <B>yLineOnOff        </B><I>on|off              </I> # default is off
-  <B>windowingFunction </B><I>maximum|mean|minimum</I> # default is maximum
-  <B>smoothingWindow   </B><I>off|[2-16]          </I> # default is off</PRE></FONT>
+  <B>name              </B><I>&lt;trackLabel&gt;                        </I> # default is "User Track"
+  <B>description       </B><I>&lt;centerLabel&gt;                       </I> # default is "User Supplied Track"
+  <B>visibility        </B><I>&lt;full|dense|hide&gt;                   </I> # default is hide (will also take numeric values 2|1|0)
+  <B>color             </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 255,255,255
+  <B>altColor          </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 128,128,128
+  <B>priority          </B><I>&lt;N&gt;                                 </I> # default is 100
+  <B>autoScale         </B><I>&lt;on|off&gt;                            </I> # default is on
+  <B>alwaysZero        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>gridDefault       </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>maxHeightPixels   </B><I>&lt;max:default:min&gt;                   </I> # default is 128:128:11
+  <B>graphType         </B><I>&lt;bar|points&gt;                        </I> # default is bar
+  <B>viewLimits        </B><I>&lt;lower:upper&gt;                       </I> # default is range found in data
+  <B>viewLimitsMax     </B><I>&lt;lower:upper&gt;                       </I> # UNENFORCED: suggested bounds of viewLimits
+  <B>yLineMark         </B><I>&lt;real-value&gt;                        </I> # default is 0.0
+  <B>yLineOnOff        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>windowingFunction </B><I>&lt;mean+whiskers|maximum|mean|minimum&gt;</I> # default is maximum
+  <B>smoothingWindow   </B><I>&lt;off|[2-16]&gt;                        </I> # default is off
+  <B>transformFunc     </B><I>&lt;NONE|LOG&gt;                          </I> # default is NONE
+  <B>wigColorBy        </B><I>&lt;bed table&gt;                         </I> # use colors in bed table for wiggle in overlapping regions
+  <B>spanList          </B><I>&lt;first&gt;                             </I> # sets spans to be first span in table
+                    <I>&lt;s1,s2,s3...&gt;                       </I> # list of spans in the loaded table
+                                                         # you can find the spans with the following SQL query:
+                                                         # "SELECT span FROM &lt;table&gt; GROUP BY span"
+                                                         # typically spanList is only 1:
+                                                         # spanList 1
+                                                         # rarely, it may be more:
+                                                         # spanList 1,1000
+                                                         # special efforts must be made to load extra spans
+                                                         # into the table for special purposes</PRE></FONT>
 
 A functional description of these options can be seen in the <A target=_blank
 HREF="hgWiggleTrackHelp.html">Wiggle track configuration</A> description.
