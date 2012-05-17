@@ -16,8 +16,8 @@
         {
             //tdbDoc.checkLibrary(); // Run this test during development only
             // TOC Self assembly EXPERIMENTAL
-            tdbDoc.tocAssemble( 400, ["bed_flavors","parent_supertrack",
-                                        "parent_view","parent_container"] );
+            tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
+                                    "parent_view","parent_container"] );
             tdbDoc.documentLoad();
         });
     </script>
@@ -76,8 +76,8 @@ used as a ready reference.</P>
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
     <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
     <UL>
-        <LI><A HREF="#Item_or_Region_Track_Settings">bed/bigBed</A>: Item or region tracks</LI>
-        <LI><A HREF="#Signal_Graphing_Track_Settings">wig/bigwig/bedGraph/bamWig</A>:
+        <LI><A HREF="#bed_-_Item_or_Region_Track_Settings">bed/bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#wig_-_Signal_Graphing_Track_Settings">wig/bigwig/bedGraph/bamWig</A>:
                                                                 signal graphing tracks</LI>
         <LI><A HREF="#genePred">genePred</A>: Gene models and predictions</LI>
         <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
@@ -148,7 +148,7 @@ used as a ready reference.</P>
     </TD></TR>
 </TABLE>
 
-<TABLE class="settingsTable" id="Common_Settings_less_frequent">
+<TABLE class="settingsTable" id="Common_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="commonLessFrequent">
             <IMG class='toggle oneSection' />&nbsp;Common, though less frequently used settings
     </TH> </TR>
@@ -247,7 +247,7 @@ valid for certain types of tracks.  Below many of these track types
 are described along with their type specific settings.</P>
 
 <A name="bed"><A name="bigBed">
-<TABLE class="settingsTable" id="Item_or_Region_Track_Settings">
+<TABLE class="settingsTable" id="bed_-_Item_or_Region_Track_Settings">
 <THEAD><TR><TD><DIV ID="bed_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bed/bigBed - Item or region track settings
@@ -349,7 +349,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
 </TABLE>
 
-<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_less_frequent">
+<TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="item_lessFrequent">
             <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings:
     </TH></TR>
@@ -434,7 +434,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="wig"><A name="bigWig"><A name="bedGraph"><A name="bamWig">
-<TABLE class="settingsTable" id="Signal_Graphing_Track_Settings">
+<TABLE class="settingsTable" id="wig_-_Signal_Graphing_Track_Settings">
 <THEAD><TR><TD><DIV ID="wig_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;wig/bigWig - Signal graphing track settings
@@ -511,7 +511,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="genePred">
-<TABLE class="settingsTable" id="genePred_Gene_Model_Track_Settings">
+<TABLE class="settingsTable" id="genePred_-_Gene_Model_Track_Settings">
 <THEAD><TR><TD><DIV ID="genePred_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;genePred - Gene model track settings
@@ -579,7 +579,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="bam">
-<TABLE class="settingsTable" id="bam_Compressed_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bam - Compressed Sequence Alignment track settings</TH></TR>
@@ -654,7 +654,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="psl">
-<TABLE class="settingsTable" id="psl_Sequence_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="psl_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;psl - sequence alignment tracks settings
@@ -716,7 +716,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="chain"><A name="netAlign">
-<TABLE class="settingsTable" id="chain_netAlign_Paired_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="chain_netAlign_-_Paired_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="chain_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;chain and netAlign - paired species alignment track settings
@@ -769,7 +769,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="wigMaf">
-<TABLE class="settingsTable" id="wigMaf_Multiple_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="wigMaf_-_Multiple_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="wigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;wigMaf - Multiple alignment track settings
@@ -832,7 +832,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="expRatio">
-<TABLE class="settingsTable" id="expRatio_Microarray_Expression_Track_Settings">
+<TABLE class="settingsTable" id="expRatio_-_Microarray_Expression_Track_Settings">
 <THEAD><TR><TD><DIV ID="expRatio_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;expRatio - Microarray expression track settings
@@ -862,7 +862,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="vcfTabix">
-<TABLE class="settingsTable" id="vcfTabix_Variable_Call_Format_Track_Settings">
+<TABLE class="settingsTable" id="vcfTabix_-_Variable_Call_Format_Track_Settings">
 <THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
         &nbsp;vcfTabix - Variable Call Format track settings
@@ -887,7 +887,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="pgSnp">
-<TABLE class="settingsTable" id="pgSnp_Personal_Genome_SNP_Track_Settings">
+<TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
 <THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;pgSnp - Personal Genome SNP track settings
@@ -905,7 +905,7 @@ are described along with their type specific settings.</P>
 <H2>Specialized or rarely used types:</H2>
 
 <A name="altGraphX">
-<TABLE class="settingsTable" id="altGraphX_Alternate_Splicing_Track_Settings">
+<TABLE class="settingsTable" id="altGraphX_-_Alternate_Splicing_Track_Settings">
 <THEAD><TR><TD><DIV ID="altGraphX_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;altGraphX - Alternate splicing gene model track settings
@@ -920,7 +920,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="bedDetail">
-<TABLE class="settingsTable" id="bedDetail_Text_Extended_BED_Track_Settings">
+<TABLE class="settingsTable" id="bedDetail_-_Text_Extended_BED_Track_Settings">
 <THEAD><TR><TD><DIV ID="bedDetail_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;bedDetail - Text extended bed track settings
@@ -947,7 +947,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="clonePos">
-<TABLE class="settingsTable" id="clonePos_Genome_Coverage_Track_Settings">
+<TABLE class="settingsTable" id="clonePos_-_Genome_Coverage_Track_Settings">
 <THEAD><TR><TD><DIV ID="clonePos_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;clonePos - Genome coverage track settings
@@ -962,7 +962,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="ctgPos">
-<TABLE class="settingsTable" id="ctgPos__Physical_Map_Contig_Track_Settings">
+<TABLE class="settingsTable" id="ctgPos_-_Physical_Map_Contig_Track_Settings">
 <THEAD><TR><TD><DIV ID="ctgPos_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;ctgPos - Physical map contigs track settings
@@ -996,7 +996,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="encodeFiveC">
-<TABLE class="settingsTable" id="encodeFiveC_Five_C_Chromatin_Interaction_Track_Settings">
+<TABLE class="settingsTable" id="encodeFiveC_-_Five_C_Chromatin_Interaction_Track_Settings">
 <THEAD><TR><TD><DIV ID="encodeFiveC_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;encodeFiveC - Five C Chromatin interaction track settings
@@ -1017,7 +1017,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="factorSource">
-<TABLE class="settingsTable" id="factorSource_Combined_Item_Track_Settings">
+<TABLE class="settingsTable" id="factorSource_-_Combined_Item_Track_Settings">
 <THEAD><TR><TD><DIV ID="factorSource_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;factorSource - Combined items track settings
@@ -1043,7 +1043,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="rmsk">
-<TABLE class="settingsTable" id="rmsk_Repeat_Masking_Track_Settings">
+<TABLE class="settingsTable" id="rmsk_-_Repeat_Masking_Track_Settings">
 <THEAD><TR><TD><DIV ID="rmsk_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;rmsk - Repeat masking track settings
@@ -1064,7 +1064,7 @@ are described along with their type specific settings.</P>
 </TABLE>
 
 <A name="snake">
-<TABLE class="settingsTable" id="snake_Self_Referencing_Alignment_Track_Settings">
+<TABLE class="settingsTable" id="snake_-_Self_Referencing_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="snake_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;snake - Self referencing alignment track settings
@@ -1120,7 +1120,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="superTrack">
-<TABLE class="settingsTable" id="superTrack_Folder_Track_Settings">
+<TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Supertrack (aka Folders or Containers) track settings
@@ -1139,7 +1139,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="compositeTrack">
-<TABLE class="settingsTable" id="compositeTrack_Settings">
+<TABLE class="settingsTable" id="Composite_Track_Settings">
 <THEAD><TR><TD><DIV ID="compositeTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
     <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
@@ -1165,7 +1165,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="subGroups">
-<TABLE class="settingsTable" id="Composite_Subgroups_Settings">
+<TABLE class="settingsTable" id="Composite_-_Subgroups_Settings">
 <THEAD><TR><TD><DIV ID="subGroups_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Composite track subgroup settings</TH></TR>
@@ -1213,7 +1213,7 @@ into a single image.</P>
 </TABLE>
 
 <A name="view">
-<TABLE class="settingsTable" id="Composite_Views_Settings">
+<TABLE class="settingsTable" id="Composite_-_Views_Settings">
 <THEAD><TR><TD><DIV ID="view_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Composite track View settings
@@ -1280,7 +1280,7 @@ into a single image.</P>
 </div>
 <div style="padding:10px;">  <!-- border partol -->
 
-<TABLE class="settingsTable" id="customTracks_Settings">
+<TABLE class="settingsTable" id="Custom_Tracks_Special_Settings">
 <THEAD><TR><TD><DIV ID="customTracks_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
         &nbsp;Custom track specific settings
@@ -1361,7 +1361,7 @@ into a single image.</P>
 </div>
 <div style="padding:10px;">  <!-- border partol -->
 
-<TABLE class="settingsTable" id="alphabetical">
+<TABLE class="settingsTable" id="Alphabetical_Settings_List">
     <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH="25%">For Types</TH><TH>Documented</TH></TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">accession</A></TD>
@@ -4075,9 +4075,8 @@ bigWig</P>
 <!-- Next section -->
 <div style='height:1em;'></div> <!-- vertical spacing -->
 <div class="contentBorder"><!-- Content Border -->
-<TABLE class="settingsTable" id="toc">
-<THEAD><TR><TD><H3>Table of Contents (self-assembled) <I>EXPERIMENTAL</I></H3></TD></TR></THEAD>
-</TABLE>
+<div style="padding:10px;">  <!-- border partol -->
+<TABLE class="settingsTable" id="toc"></TABLE>
 </div></div>
 
 
