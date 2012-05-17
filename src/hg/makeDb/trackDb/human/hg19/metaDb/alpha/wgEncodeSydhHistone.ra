@@ -10,11 +10,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep1.bam,wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -32,11 +34,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep2.bam,wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
@@ -54,11 +58,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -77,11 +83,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -99,11 +107,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -121,11 +131,13 @@ antibody H3K4me1
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002874
+expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdSig.bigWig
 grant Snyder
 lab USC
@@ -144,11 +156,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdAlnRep1.bam,wgEncodeSydhHistoneHct116H3k27acUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -166,11 +180,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdAlnRep2.bam,wgEncodeSydhHistoneHct116H3k27acUcdAlnRep2.bam.bai
 grant Snyder
 lab USC
@@ -188,11 +204,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -211,11 +229,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -233,11 +253,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -255,11 +277,13 @@ antibody H3K27ac
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002873
+expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdSig.bigWig
 grant Snyder
 lab USC
@@ -278,11 +302,13 @@ antibody Input
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhHistoneHct116InputUcdAlnRep1.bam,wgEncodeSydhHistoneHct116InputUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -300,11 +326,13 @@ antibody Input
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhHistoneHct116InputUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -322,11 +350,13 @@ antibody Input
 cell HCT-116
 composite wgEncodeSydhHistone
 control UCDavis
-controlId HCT-116/None/Input/UCDavis
+controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH000627
+expId 627
 fileName wgEncodeSydhHistoneHct116InputUcdSig.bigWig
 grant Snyder
 lab USC
@@ -1768,11 +1798,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdAlnRep1.bam,wgEncodeSydhHistoneMcf7H3k09me3UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -1790,11 +1822,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdAlnRep2.bam,wgEncodeSydhHistoneMcf7H3k09me3UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
@@ -1812,11 +1846,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -1835,11 +1871,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -1857,11 +1895,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -1879,11 +1919,13 @@ antibody H3K9me3
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002875
+expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdSig.bigWig
 grant Snyder
 lab USC
@@ -1902,14 +1944,17 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep1.bam,wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
+md5sum fb75ae5122952c65a1e2db4abf96b17a,44413cda0e057153f24316f9944851fe
 project wgEncode
 replicate 1
 setType exp
@@ -1923,14 +1968,17 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep2.bam,wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep2.bam.bai
 grant Snyder
 lab USC
+md5sum fb75ae5122952c65a1e2db4abf96b17a,44413cda0e057153f24316f9944851fe
 project wgEncode
 replicate 2
 setType exp
@@ -1944,15 +1992,18 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum cf4e957f548ee6fb88b332d95d3f69cb
 project wgEncode
 setType exp
 subId 5474
@@ -1966,14 +2017,17 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
+md5sum 61e86c6e69c63de33db167d0a3d76e91
 project wgEncode
 replicate 1
 setType exp
@@ -1987,14 +2041,17 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
+md5sum 856720e867010a62a20d8ce568980cd8
 project wgEncode
 replicate 2
 setType exp
@@ -2008,15 +2065,18 @@ antibody H3K27ac
 cell MCF-7
 composite wgEncodeSydhHistone
 control UCDavis
-controlId MCF-7/None/Input/UCDavis
+controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-01-22
 dateUnrestricted 2012-10-21
+dccAccession wgEncodeEH002872
+expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 3929b627582b07b3f8d15ceba054a15a
 project wgEncode
 setType exp
 subId 5474
@@ -2095,7 +2155,7 @@ fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep1.fastq.gz
 grant Snyder
 lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
-md5sum 65a69cbb3037a2b509a822545a21e99b
+md5sum 6c8e3473748ba112edb5e9feb4f8ea12
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2122,7 +2182,7 @@ fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep2.fastq.gz
 grant Snyder
 lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
-md5sum 524cbaafae9373f2be82e5d6e2b64ed0
+md5sum 5b2dc415c27309b92ab4eeae951e07c4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3317,11 +3377,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdAlnRep1.bam,wgEncodeSydhHistonePanc1H3k04me3bUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -3339,11 +3401,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdAlnRep2.bam,wgEncodeSydhHistonePanc1H3k04me3bUcdAlnRep2.bam.bai
 grant Snyder
 lab USC
@@ -3361,11 +3425,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -3384,11 +3450,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -3406,11 +3474,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -3428,11 +3498,13 @@ antibody H3K4me3B
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-29
 dateUnrestricted 2012-12-29
+dccAccession wgEncodeEH002876
+expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdSig.bigWig
 grant Snyder
 lab USC
@@ -4740,4 +4812,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 191080547
+# MAGIC: 269134192
