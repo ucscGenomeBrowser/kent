@@ -5419,7 +5419,7 @@ subId 6380
 view GeneGencV10
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalJunctions
-objType file
+objType table
 bioRep 043WC
 cell CD34+_Mobilized
 composite wgEncodeCshlLongRnaSeq
@@ -5442,6 +5442,7 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 6399
+tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRep1
@@ -21651,7 +21652,7 @@ subId 6393
 view GeneGencV10
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalJunctions
-objType file
+objType table
 bioRep 063WC
 cell HMEpC
 composite wgEncodeCshlLongRnaSeq
@@ -21675,6 +21676,7 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6400
+tableName wgEncodeCshlLongRnaSeqHmepcCellTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1
@@ -21825,7 +21827,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalAlnRep2.bam,wgEncodeCshlLongRnaSeqHmnccbCellTotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -21851,7 +21855,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21877,7 +21883,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -21902,7 +21910,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -21919,7 +21929,7 @@ subId 6786
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalJunctions
-objType file
+objType table
 bioRep 076WC
 cell hMNC-CB
 composite wgEncodeCshlLongRnaSeq
@@ -21927,7 +21937,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -21941,6 +21953,7 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6784
+tableName wgEncodeCshlLongRnaSeqHmnccbCellTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2
@@ -21952,7 +21965,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -21979,7 +21994,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -22006,7 +22023,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
@@ -22033,7 +22052,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002877
 donorId 9111701.6
+expId 2877
 fileName wgEncodeCshlLongRnaSeqHmnccbCellTotalSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -22058,7 +22079,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -22084,7 +22107,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22110,7 +22135,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -22135,7 +22162,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -22152,7 +22181,7 @@ subId 6785
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
-objType file
+objType table
 bioRep 077WC
 cell hMNC-PB
 composite wgEncodeCshlLongRnaSeq
@@ -22160,7 +22189,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -22174,6 +22205,7 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6783
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
@@ -22185,7 +22217,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -22212,7 +22246,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -22239,7 +22275,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-27
 dateUnrestricted 2013-01-27
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
@@ -22266,7 +22304,9 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -51328,4 +51368,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1196608245
+# MAGIC: -2095046386
