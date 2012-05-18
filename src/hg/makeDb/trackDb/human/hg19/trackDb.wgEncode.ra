@@ -180,7 +180,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.release3.ra alpha
 include wgEncodeHaibTfbs.release2.ra beta,public
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.release2.ra
+include wgEncodeSydhTfbs.release2.ra beta,public
+include wgEncodeSydhTfbs.release3.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public
