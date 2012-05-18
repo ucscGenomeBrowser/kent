@@ -1,7 +1,7 @@
 
 track wgEncodeGencodeV9
 compositeTrack on
-superTrack wgEncodeGencodeSuper dense
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V9
 longLabel Gene Annotations from ENCODE/GENCODE Version 9
 group genes

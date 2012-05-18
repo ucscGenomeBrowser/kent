@@ -10654,6 +10654,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111AlnRep1.bam,wgEncodeHaibTfbsGm
 grant Myers
 lab HudsonAlpha
 labExpId SL8084
+md5sum 14c6391eee1a6e62bc4831156d266942,17141716bbf9ab9c1b629694ca3c8b83
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10676,6 +10677,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111AlnRep2.bam,wgEncodeHaibTfbsGm
 grant Myers
 lab HudsonAlpha
 labExpId SL9542
+md5sum a140a7ae855ff6cff89de2f9612ead90,cba0e608099552ebc98bcfdff04ead40
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10698,6 +10700,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL8084
+md5sum 44ea65b58f0a2a3323da5ac9b13418c1
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10722,6 +10725,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL9542
+md5sum 1d9324753fc1e855a2b861dcc215ca48
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10746,6 +10750,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL8084
+md5sum d40c55de2079b14a48534fc12b88a811
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10768,6 +10773,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL9542
+md5sum 1d6b1da28949f51e5913b161dc35be9b
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10790,6 +10796,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL8084
+md5sum 68cbeaa244ed5212dc0a0e751830edd6
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10813,6 +10820,7 @@ fileName wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL9542
+md5sum 0ded5dc93a5984dbc86c252f0fad1646
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10836,6 +10844,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111AlnRep1.bam,wgEncodeHaibTfbsGm128
 grant Myers
 lab HudsonAlpha
 labExpId SL6022
+md5sum 26278e4fc2c151756d327e93e2d9733a,0858e560374b45feebd83a3696a903ae
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10858,6 +10867,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111AlnRep2.bam,wgEncodeHaibTfbsGm128
 grant Myers
 lab HudsonAlpha
 labExpId SL9102
+md5sum 6f665207a6179559eb7a04260767b273,493635226196d22ac3f6933213124fd9
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10880,6 +10890,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL6022
+md5sum b3f1146b08b6ee96248dd3dd542efa3c
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10902,6 +10913,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL9102
+md5sum aa75de553f9c34f3aedae8032aecead0
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -10924,6 +10936,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL6022
+md5sum e0015a88c476d0b81d451259d601f5e4
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -10947,6 +10960,7 @@ fileName wgEncodeHaibTfbsGm12878ControlV0422111RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL9102
+md5sum ad4e47585a67c0f2f2638d19dccedb5a
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -24103,6 +24117,7 @@ fileName wgEncodeHaibTfbsH1hescControlV0422111AlnRep1.bam,wgEncodeHaibTfbsH1hesc
 grant Myers
 lab HudsonAlpha
 labExpId SL6018
+md5sum e86ea708279608579ea62fb74746e9e1,6d8251e745a135965e684e6128e5e1fb
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -24125,6 +24140,7 @@ fileName wgEncodeHaibTfbsH1hescControlV0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL6018
+md5sum 9add78077b949e200ac59e33c69debbc
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -24147,6 +24163,7 @@ fileName wgEncodeHaibTfbsH1hescControlV0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL6018
+md5sum 7b6e6e86f354857bb31be99a0229e3e3
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -29358,6 +29375,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111AlnRep1.bam,wgEncodeHaibTfbs
 grant Myers
 lab HudsonAlpha
 labExpId SL10882
+md5sum 55e5861ac006191ddf0c597985c35f7c,57e119a688ce6d8af29ce1dcee0f8c7c
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -29380,6 +29398,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111AlnRep2.bam,wgEncodeHaibTfbs
 grant Myers
 lab HudsonAlpha
 labExpId SL12417
+md5sum 26aca4e492a542e86f7f910a87c35a56,3d17e0b871b3640cb82e3c2b2217d121
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -29402,6 +29421,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL10882
+md5sum ea3098c01118d20bf8265c94659efc4d
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -29426,6 +29446,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL12417
+md5sum f62daa61812d20573f7721d00a1adabd
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -29450,6 +29471,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL10882
+md5sum 269a89f7e4bf411ef5b62e7b98681f73
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -29472,6 +29494,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL12417
+md5sum 21f378a67ed9aac71dffbe88c78c9853
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -29494,6 +29517,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL10882
+md5sum b4bdd3053bd5575a27abaa5901fcb560
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -29517,6 +29541,7 @@ fileName wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL12417
+md5sum b3e15e4f519cb39c1f5d33efd258ce83
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -42126,6 +42151,7 @@ fileName wgEncodeHaibTfbsK562ControlV0422111AlnRep1.bam,wgEncodeHaibTfbsK562Cont
 grant Myers
 lab HudsonAlpha
 labExpId SL6023
+md5sum 48e660fb2ab451404b222fd629fad98b,bfd2f1357d6e621dc351346d35329973
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -42148,6 +42174,7 @@ fileName wgEncodeHaibTfbsK562ControlV0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL6023
+md5sum 21836fef895893fa93d71704d4451f04
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -42170,6 +42197,7 @@ fileName wgEncodeHaibTfbsK562ControlV0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL6023
+md5sum 45fe6cb3d4409698c1757cbaab82b8d3
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -42219,6 +42247,7 @@ fileName wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep1V2.bam,wgEncodeHaibTfbsK562CtcfcPc
 grant Myers
 lab HudsonAlpha
 labExpId SL3075
+md5sum 2a9f709c235dcc838c035503e2c742bd,ff39169e51fc68b00b21250c7c6c5096
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -42297,6 +42326,7 @@ fileName wgEncodeHaibTfbsK562CtcfcPcr1xPkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3075
+md5sum d48bb62e6f61c79a64d8a4a277d0873a
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -42429,6 +42459,7 @@ fileName wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3075
+md5sum 64972e0aa9b844e1fe02ee6bf01e5841
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -49785,6 +49816,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111AlnRep1.bam,wgEncodeHaibTfbsK5
 grant Myers
 lab HudsonAlpha
 labExpId SL8672
+md5sum ea8f0a0159db423e13d79ada32d41d44,dc25fd5e7f8aad4d90f81ae37df75864
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -49807,6 +49839,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111AlnRep2.bam,wgEncodeHaibTfbsK5
 grant Myers
 lab HudsonAlpha
 labExpId SL9830
+md5sum f1a953d67a080ad4042eb446aab5c1c7,dfca8ad31307216a0726ad735be69ccc
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -49829,6 +49862,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL8672
+md5sum 0a69b06cf10e71e76523e2eb49d10009
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -49853,6 +49887,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL9830
+md5sum 93e116c0c7bd0deacafd7d88bfcd5f9a
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -49877,6 +49912,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL8672
+md5sum 3b6f19d4bda8b74d005ba11575d306ea
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -49899,6 +49935,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL9830
+md5sum fc790de64236167c774a1e5a918bfaf7
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -49921,6 +49958,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL8672
+md5sum 09b19ccbfbbddcaead62be5e0e390904
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -49944,6 +49982,7 @@ fileName wgEncodeHaibTfbsK562Trim28sc81411V0422111RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL9830
+md5sum 29746fb0e97345f44f73ee46ad82f884
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -60706,4 +60745,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -1842381571
+# MAGIC: 3757310
