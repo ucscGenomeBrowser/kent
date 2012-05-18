@@ -188,19 +188,19 @@ for(i=0;i<8;++i)
     {
     r = randInt(4);
     switch (r)
-    {
-    case 0 :
+        {
+        case 0 :
             c = 'A' + randInt(26);
-        break;
-    case 1 :
+            break;
+        case 1 :
             c = 'a' + randInt(26);
-        break;
-    case 2 :
+            break;
+        case 2 :
             c = '0' + randInt(10);
-        break;
-    default:
+            break;
+        default:
             c = punc[randInt(8)];
-        break;
+            break;
         }
     boundary[i] = c;
     }
@@ -288,25 +288,26 @@ char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[4096];
 safef(cmd,sizeof(cmd),
-"echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
+    "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
 int result = system(cmd);
 if (result == -1)
     {
     hPrintf( 
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Error emailing %s to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", obj, email );
+        "<h2>UCSC Genome Browser</h2>"
+        "<p align=\"left\">"
+        "</p>"
+        "<h3>Error emailing %s to: %s</h3>"
+        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
+        obj, email );
     }
 else
     {
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
-    "//-->"
-    "\n"
-    "</script>", hgLoginHost);
+    hPrintf("<script  language=\"JavaScript\">\n"
+        "<!-- \n"
+        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
+        "//-->"
+        "\n"
+        "</script>", hgLoginHost);
     }
 }
 
@@ -363,8 +364,6 @@ void displayAccHelpPage(struct sqlConnection *conn)
 {
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
-//cartRemove(cart, "hgLogin_helpWith");
-//cartRemove(cart, "hgLogin_email");
 hPrintf("<script  language=\"JavaScript\">\n"
     "<!-- "
     "\n"
@@ -424,7 +423,7 @@ void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
 {
 struct sqlResult *sr;
 char query[256];
-/* find email address  assocaited with this username */
+/* find email address associated with this username */
 safef(query,sizeof(query),"select email from gbMembers where userName='%s'", username);
 char *email = sqlQuickString(conn, query);
 if (!email || sameString(email,""))
@@ -862,8 +861,6 @@ backToHgSession(1);
 void accountHelp(struct sqlConnection *conn)
 /* email user username(s) or new password */
 {
-// struct sqlResult *sr;
-// char **row;
 char query[256];
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
@@ -871,47 +868,47 @@ char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 
 /* Forgot username */
 if (sameString(helpWith,"username"))
-{
+    {
     if (sameString(email,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Email address cannot be blank.");
-    displayAccHelpPage(conn);
-    return;
-    } 
-    else 
-    {
-    sendUsername(conn, email);
-    return;
-    }
-}
-/* Forgot password */
-if (sameString(helpWith,"password"))
-{
-    /* validate username first */
-    if (sameString(username,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Username cannot be blank.");
-    displayAccHelpPage(conn);
-    return;
-    } 
-    else 
-    { 
-    safef(query,sizeof(query), 
-        "select password from gbMembers where userName='%s'", username);
-    char *password = sqlQuickString(conn, query);
-    if (!password)
         {
         freez(&errMsg);
-        errMsg = cloneString("Username not found.");
+        errMsg = cloneString("Email address cannot be blank.");
         displayAccHelpPage(conn);
+        return;
+        } 
+    else 
+        {
+        sendUsername(conn, email);
         return;
         }
     }
+/* Forgot password */
+if (sameString(helpWith,"password"))
+    {
+    /* validate username first */
+    if (sameString(username,""))
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Username cannot be blank.");
+        displayAccHelpPage(conn);
+        return;
+        } 
+    else 
+        { 
+        safef(query,sizeof(query), 
+            "select password from gbMembers where userName='%s'", username);
+        char *password = sqlQuickString(conn, query);
+        if (!password)
+            {
+            freez(&errMsg);
+            errMsg = cloneString("Username not found.");
+            displayAccHelpPage(conn);
+            return;
+            }
+        }
     lostPassword(conn, username);
     return;
-}
+    }
 displayAccHelpPage(conn);
 return;
 }
@@ -999,15 +996,15 @@ if (checkPwd(password,m->password))
     {
     unsigned int userID=m->idx;  
     hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
-            ,userName,userID);
+        ,userName,userID);
     clearNewPasswordFields(conn, userName);
     displayLoginSuccess(userName,userID);
     return;
     } 
 else if (usingNewPassword(conn, userName))
     {
-       cartSetString(cart, "hgLogin_changeRequired", "YES");
-       changePasswordPage(conn);
+    cartSetString(cart, "hgLogin_changeRequired", "YES");
+    changePasswordPage(conn);
     } 
 else
     {
