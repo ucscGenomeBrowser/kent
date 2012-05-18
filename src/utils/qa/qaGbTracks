@@ -54,29 +54,29 @@ def getTableList():
             raw = f.readlines()
         return [name.strip() for name in raw]
 
-delimiterLine = "==============================================="
-def runTests():
+def runTests(db, reporter, sumTable):
     """Runs validate() and statistics() methods on each table. Writes log output."""
+    delimiterLine = "==============================================="
     reporter.writeTimestamp()
     reporter.writeBlankLine()
     for table in tableList:
         reporter.writeLine(delimiterLine)
-        reporter.writeLine(args.db + "." + table +":\n")
-        table = factory.tableQaFactory(args.db, table, reporter, sumTable)
+        reporter.writeLine(db + "." + table +":\n")
+        table = factory.tableQaFactory(db, table, reporter, sumTable)
         table.validate()
         table.statistics()
     reporter.writeLine(delimiterLine)
     reporter.writeLine("Tests complete:")
     reporter.writeTimestamp()
 
-def writeSummaryFile():
+def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
 
-def runChromCounts():
+def runChromCounts(db, chromFile):
     chromFile.write(time.asctime() + "\n")
-    chromFile.write("Database: " + args.db + "\n\n")
+    chromFile.write("Database: " + db + "\n\n")
     tableSet = set(tableList)
-    output, tablecounts = tableCheck.countPerChrom(args.db, tableSet)
+    output, tablecounts = tableCheck.countPerChrom(db, tableSet)
     for line in output:
         chromFile.write(line + "\n")
 
@@ -90,9 +90,9 @@ sumFile = open(args.outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
 
-runTests()
-runChromCounts()
-writeSummaryFile()
+runTests(args.db, reporter, sumTable)
+runChromCounts(args.db, chromFile)
+writeSummaryFile(sumTable, sumFile)
 
 logFile.close()
 sumFile.close()
