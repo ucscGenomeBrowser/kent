@@ -122,7 +122,7 @@ var tdbDoc = {
         var allNames = [];
         $(cells).each(function (ix) {
             var cell = this;
-            var anchors = $(obj).find("A[name!='']");
+            var anchors = $(cell).children("A[name!='']");
             if (anchors.length > 1) { // one is expected and not interesting
                 var aClass = String( $(cell).attr('class') );   // NEVER name var 'class' !!!!!
                 $(anchors).each(function (ix) {
@@ -177,21 +177,23 @@ var tdbDoc = {
                 });
             }
         }
-        // else {} // TODO: Need to figure out what to do about settings without blurbs of their own
 
         // Where documented (what table)?
         // TODO: Should rewrite classes array to also carry the table.
         var best = '';
         var td = $('td.'+aClass);
-        if (td.length > 0) { // Always chooses first
-            var tbl = $(td[0]).parents('table.settingsTable');
-            if (tbl.length == 1) {
-                var id = $(tbl[0]).attr('id');
-                if (id.length > 0) {
-                    best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
-                    //if (td.length > 1)
-                    //    best += " found "+td.length;
-                }
+        var tbl;
+        if (td.length > 0) // Always chooses first
+            tbl = $(td[0]).parents('table.settingsTable');
+        else
+            tbl = $('table.settingsTable').has("a[name='"+aClass+"']");
+
+        if (tbl != undefined && tbl.length == 1) {
+            var id = $(tbl[0]).attr('id');
+            if (id.length > 0) {
+                best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
+                //if (td.length > 1)
+                //    best += " found "+td.length;
             }
         }
 
@@ -205,13 +207,11 @@ var tdbDoc = {
         // assembles (or extends) a table of contents if on is found (Launched by timer)
         var toc = $('table#toc');
         if (toc.length == 1) {
-            var cells = tdbDoc.blurbCells();
-            // EXPERIMENTAL: try to find hidden settings
-            // var names = tdbDoc.namesFromContainedAnchors( cells ); // gets some hidden settings
-            cells = $(cells).add( tdbDoc.blurblessCells() );
-            var classes = tdbDoc.classesFromObjects(cells,true);
-            // EXPERIMENTAL: try to find hidden settings
-            // classes = classes.concat( names );
+            var cells = tdbDoc.blurbCells(); // Most documented settings are found here
+            var names = tdbDoc.namesFromContainedAnchors( cells ); // settings only in others cells
+            cells = $(cells).add( tdbDoc.blurblessCells() ); // settings not documented: losers
+            var classes = tdbDoc.classesFromObjects(cells,true);  // classes are setting names
+            classes = classes.concat( names );                    // hidden names wanted to
             if (classes.length == 0)
                 return;
 
