@@ -24,6 +24,7 @@ canPack On
     viewLimits 0:8
     priority 1.1
     dragAndDrop subTracks
+    allButtonPair on
 
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel Gm12878
@@ -112,6 +113,7 @@ canPack On
     showSubtrackColorOnUi on
     priority 1.2
     dragAndDrop subtracks
+    allButtonPair on
 
 	#track wgEncodeRegMarkH3k4me1Gm12878
 	track wgEncodeBroadHistoneGm12878H3k4me1StdSig
@@ -183,6 +185,7 @@ canPack On
     showSubtrackColorOnUi on
     priority 1.3
     dragAndDrop subtracks
+    allButtonPair on
 
 	#track wgEncodeRegMarkH3k4me3Gm12878
 	track wgEncodeBroadHistoneGm12878H3k4me3StdSig
@@ -254,6 +257,7 @@ canPack On
     showSubtrackColorOnUi on
     priority 1.4
     dragAndDrop subtracks
+    allButtonPair on
 
 	track wgEncodeRegMarkH3k27acGm12878
 	table wgEncodeBroadHistoneGm12878H3k27acStdSig
