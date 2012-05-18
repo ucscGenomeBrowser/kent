@@ -9,15 +9,6 @@ function jumpTo(obj) {
 
 var tdbDoc = {
 
-/*
-It would be nice to create a self assembling table of contents, but that may be
-too much to hope for.
-1) make a class list of all td's with classes.  Drop known undesirables
-2) sort list
-3) Walk through list looking for setting DIVs and types spans
-4) Build table, third column coming from named anchor?
-*/
-
     checkClasses: function (classes) {
         // trackDbTestBlurb.html only
         // Walks through the classes and ensures they are unique
@@ -106,53 +97,76 @@ too much to hope for.
         var tbls = $('table.settingsTable').not('#alphabetical,#toc,:has(div.format)');
         if (tbls.length == 0)
             return [];
-        //return $(tbls).find("td[class!='']");
         return $(tbls).find("td:has(A)");
     },
 
-    classesFromObjects: function (objs) {
+    classesFromObjects: function (objs,onlyOne) {
+        // converts objs array to classes array.  Warns if obj does not have exactly 1 class
         var allClasses = [];
         $(objs).each(function (ix) {
             var classes = $(this).attr("class").split(" ");
-            if (classes.length > 1)
+            if (classes.length > 1 && onlyOne)
                 warn('obj with more than one class: '+ classes);
-            else if (classes.length == 0)
+            else if (classes.length == 0 && onlyOne)
                 warn('obj with no classes.');
-            allClasses.push( classes );
+            else
+                allClasses.push( classes );   // classes string array is [ [ str1], [str2] ]
         });
         return allClasses;
     },
 
+    namesFromContainedAnchors: function (cells) {
+        // Special case code for getting hidden settings that are only documented within
+        // another settings blob (example viewLimitsMax)
+        // returns list of named anchors within cells which should detect these hidden settings
+        var allNames = [];
+        $(cells).each(function (ix) {
+            var cell = this;
+            var anchors = $(cell).children("A[name!='']");
+            if (anchors.length > 1) { // one is expected and not interesting
+                var aClass = String( $(cell).attr('class') );   // NEVER name var 'class' !!!!!
+                $(anchors).each(function (ix) {
+                    var name = String( $(this).attr('name') );
+                    if (name != aClass)
+                        allNames.push( [ name ] ); // string array is best as [ [ str1], [str2] ]
+                });
+            }
+        });
+        return allNames;
+    },
+
     classesClenseSuffixes: function (classes, suffixes) {
+        // Since class list will include "_example" classes...
+        // returns classes after those with unwanted suffixes are removed
         var cleanClasses = [];
-        while (classes.length > 0) {
-            var class = classes.shift();
+        while (classes.length > 0) {      // unless string array is [ [ str1], [str2] ]
+            var aClass = classes.shift(); //        shift/pop gets lost!
             for(var ix=0;ix<suffixes.length;ix++) {
-                if (class[0].indexOf( suffixes[ix] ) != -1)
+                if (aClass[0].indexOf( suffixes[ix] ) != -1)
                     break;
             }
             if (ix == suffixes.length)
-                cleanClasses.push(class);
+                cleanClasses.push(aClass);
         }
         return cleanClasses;
     },
 
-    sortNoCase: function (x,y){
+    sortNoCase: function (x,y) {
+      // case insensitive sort routine
+      // perhaps move this to utils.js
       var a = String(x).toUpperCase();
       var b = String(y).toUpperCase();
-      if (a > b)
-         return 1
-      if (a < b)
-         return -1
-      return 0;
+      if (a > b) return  1
+      if (a < b) return -1
+                 return  0;
     },
 
-    tocMakeRow: function (class) {
+    tocMakeRow: function (aClass) {
         // Puts together a single row into a self assembling table of contents
 
         // Find types
         var types = "";
-        var div = tdbDoc.libraryLookup(class,false);
+        var div = tdbDoc.libraryLookup(aClass,false);
         if (div.length == 1) {
             var spanner = $(div).find('span.types');
             if (spanner.length == 1) {
@@ -165,21 +179,25 @@ too much to hope for.
         }
 
         // Where documented (what table)?
+        // TODO: Should rewrite classes array to also carry the table.
         var best = '';
-        var td = $('td.'+class);
-        if (td.length > 0) { // Always chooses first
-            var tbl = $(td[0]).parents('table.settingsTable');
-            if (tbl.length == 1) {
-                var id = $(tbl[0]).attr('id');
-                if (id.length > 0) {
-                    best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
-                    //if (td.length > 1)
-                    //    best += " found "+td.length;
-                }
+        var td = $('td.'+aClass);
+        var tbl;
+        if (td.length > 0) // Always chooses first
+            tbl = $(td[0]).parents('table.settingsTable');
+        else
+            tbl = $('table.settingsTable').has("a[name='"+aClass+"']");
+
+        if (tbl != undefined && tbl.length == 1) {
+            var id = $(tbl[0]).attr('id');
+            if (id.length > 0) {
+                best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
+                //if (td.length > 1)
+                //    best += " found "+td.length;
             }
         }
 
-        return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+class+"</a></td><td>"+
+        return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+aClass+"</a></td><td>"+
                     types+"</td><td>"+best+"</td></tr>";
     },
 
@@ -189,18 +207,27 @@ too much to hope for.
         // assembles (or extends) a table of contents if on is found (Launched by timer)
         var toc = $('table#toc');
         if (toc.length == 1) {
-            var cells = tdbDoc.blurbCells();
-            cells = $(cells).add( tdbDoc.blurblessCells() );
-            var classes = tdbDoc.classesFromObjects(cells);
-            //warn('Found '+tds.length+' cells with '+classes.length+' classes.');
+            var cells = tdbDoc.blurbCells(); // Most documented settings are found here
+            var names = tdbDoc.namesFromContainedAnchors( cells ); // settings only in others cells
+            cells = $(cells).add( tdbDoc.blurblessCells() ); // settings not documented: losers
+            var classes = tdbDoc.classesFromObjects(cells,true);  // classes are setting names
+            classes = classes.concat( names );                    // hidden names wanted to
+            if (classes.length == 0)
+                return;
+
+            // clean up and sort
             classes = tdbDoc.classesClenseSuffixes(classes,['_intro','_example']);
+            if (classes.length == 0)
+                return;
             if (tdbDoc._tocExcludeClasses.length > 0) {
                 aryRemove( classes, tdbDoc._tocExcludeClasses );
                 tdbDoc._tocExcludeClasses = [];
             }
             classes.sort( tdbDoc.sortNoCase );
-            //tdbDoc.checkClasses(classes);
-            //warn('Clean, unique classes: '+classes.length);
+
+            // Should now have a full set of settings to add to TOC
+            if ($(toc).find('thead').length == 0)
+                $(toc).prepend( "<THEAD><TR><TD colspan='3'><H3>Table of Contents (self-assembled) <I>EXPERIMENTAL</I></H3></TD></TR></THEAD>" );
             if ($(toc).find('th').length == 0)
                 $(toc).append( "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>" );
             var lastClass = '';
@@ -208,8 +235,10 @@ too much to hope for.
                 if (lastClass != String(this)) {// skip duplicates
                     lastClass = String(this);
                     $(toc).append( tdbDoc.tocMakeRow(this) );
-            }
+                }
             });
+            // TODO: Nice to do: allow for seeding toc with user defined rows.
+            // Currently they would be before the rows assembled, but we would want to sort!
         }
     },
 
