@@ -4,7 +4,7 @@
 ##
 track wgEncodeGencodeV10
 compositeTrack on
-superTrack wgEncodeGencodeSuper dense
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V10
 longLabel Gene Annotations from ENCODE/GENCODE Version 10
 group genes

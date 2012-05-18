@@ -23,7 +23,7 @@ ImmunoPrecipitation (ChIP) against a transcription
 factor, which indicates that the transcription
 factor binds specifically to this region. 
 The protein factors displayed in the track
-include estrogen receptor alpha (ERα), RNA polymerase II (RNAPII),
+include estrogen receptor alpha (ER&#945;), RNA polymerase II (RNAPII),
 and CCCTC binding factor (CTCF).
 <!- Generally, a chromatin interaction is more likely to
 connect two transcription factor binding sites together.
@@ -35,13 +35,15 @@ In the graphical display, the PETs are
 represented by two blocks one for each end.  
 These blocks are  connected by a horizontal
 line if both ends are in the same chromosome. 
+If the two ends are on different chromosomes, only
+one block will display.
 PET sequences that overlap at both ends form 
 PET clusters. The number of PETs in a cluster reflects
 the strength of a chromatin interaction. 
-Singleton PETs (PET count = 1) are
+Singleton PETs (PETs without a cluster) are
 potentially false positives, whereas PET clusters of 
 more than 3 PETs could indicate genuine
-chromatin interactions. A density track of the 
+chromatin interactions. The density graph of the 
 tags shows the ChIP enrichment at different points
 of genome, and high peaks indicate transcription
 factor binding sites.
@@ -74,12 +76,12 @@ Chromatin interaction analysis with paired-end tag
 sequencing (ChIA-PET) is a global de novo
  high-throughput method for characterizing the 3-dimensional
 structure of chromatin in the nucleus. In the 
-ChIA-PET protocol, cells were cross-linked and
-fragmented followed by chromatin immunoprecipitation. 
+ChIA-PET protocol, samples were cross-linked and
+fragmented, then subjected to chromatin immunoprecipitation. 
 The DNA fragments that were brought together 
 by the chromatin interactions were then 
-proximity-ligated. During this proximity
-ligation step, the half-linkers (created be the 
+proximity-ligated. During this proximity-ligation 
+step, the half-linkers (created by the 
 fragmentation) containing flanking 
 MmeI sites (type IIS restriction enzymes) were
 first ligated to the DNA fragments and then
