@@ -1954,7 +1954,7 @@ expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep1.bam,wgEncodeSydhHistoneMcf7H3k27acUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
-md5sum fb75ae5122952c65a1e2db4abf96b17a,44413cda0e057153f24316f9944851fe
+md5sum d23ef7c005a4e01dd89025c69af6e7ce,acf6e690bd2ed9af4e37977651b5088e
 project wgEncode
 replicate 1
 setType exp
@@ -2003,7 +2003,7 @@ fileName wgEncodeSydhHistoneMcf7H3k27acUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
-md5sum cf4e957f548ee6fb88b332d95d3f69cb
+md5sum 0b98f1c67243d6a195d443e65a20157b
 project wgEncode
 setType exp
 subId 5474
@@ -2076,7 +2076,7 @@ fileName wgEncodeSydhHistoneMcf7H3k27acUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
-md5sum 3929b627582b07b3f8d15ceba054a15a
+md5sum 444b5ef809409789672d819539bc2788
 project wgEncode
 setType exp
 subId 5474
@@ -4812,4 +4812,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 269134192
+# MAGIC: 845457268

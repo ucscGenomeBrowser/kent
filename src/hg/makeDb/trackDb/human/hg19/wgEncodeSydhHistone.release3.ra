@@ -606,5 +606,5 @@ html wgEncodeSydhHistone.release3
         shortLabel MCF-7 H3K27ac
         longLabel MCF-7 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=H3K27AC cellType=2MCF7 control=UCD treatment=NONE
-        type bigWig 1.000000 20208.000000
-        # subId=5474 dateSubmitted=2012-01-22
+        type bigWig 1.000000 9587.000000
+		# subId=5474 dateSubmitted=2012-01-22
