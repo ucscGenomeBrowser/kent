@@ -307,7 +307,7 @@ ul.nice-menu li.menuparent span {
 	cursor: pointer;
 	/*padding:0px 5px 0px 15px;*/
 	padding:0px 10px 0px 18px;
-	background:url('plusesign-main-menu.png') no-repeat 5px center;
+	background:url('../images/plusesign-main-menu.png') no-repeat 5px center;
 }
 ul.nice-menu a:hover, ul.nice-menu a.active {
 	color:#f0f1f9;
@@ -351,7 +351,7 @@ span#home-link {
 	width: 23px;
 	/* margin-right: 1px; */
 	display: inline-block;
-	background-image: url("home_icon_sprite_white.png");
+	background-image: url("../images/home_icon_sprite_white.png");
 	background-position: 0 -18px;
 	background-color: #00457c;
 }
