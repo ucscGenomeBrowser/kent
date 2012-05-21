@@ -51,6 +51,7 @@ ul.nice-menu li {
   border-top: 0;
   float: left; /* LTR */
   background-color: #eee;
+  line-height: normal;
 }
 
 ul.nice-menu a {
