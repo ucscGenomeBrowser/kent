@@ -311,15 +311,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF7 cell sm A 1
-        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bam
-        origAssembly hg19
-        # subId=3353 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1 cricket Tue Feb  7 15:38:30 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1
+#        parent wgEncodeCshlShortRnaSeqViewAlignments off
+#        shortLabel MCF7 cell sm A 1
+#        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+#        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bam
+#        origAssembly hg19
+#        # subId=3353 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1 cricket Tue Feb  7 15:38:30 2012
 
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -396,15 +396,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF7 cell sm A 2
-        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bam
-        origAssembly hg19
-        # subId=3370 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2 cricket Tue Feb  7 15:38:30 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2
+#        parent wgEncodeCshlShortRnaSeqViewAlignments off
+#        shortLabel MCF7 cell sm A 2
+#        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+#        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bam
+#        origAssembly hg19
+#        # subId=3370 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2 cricket Tue Feb  7 15:38:30 2012
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -624,23 +624,23 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4 cricket Tue Feb  7 15:38:24 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm A 2
-        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bam
-        # subId=4059 dateSubmitted=2011-05-11
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:34 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
+#        parent wgEncodeCshlShortRnaSeqViewAlignments off
+#        shortLabel A549 cell sm A 2
+#        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+#        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bam
+#        # subId=4059 dateSubmitted=2011-05-11
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:34 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm A 1
-        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bam
-        # subId=4058 dateSubmitted=2011-05-09
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:34 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
+#        parent wgEncodeCshlShortRnaSeqViewAlignments off
+#        shortLabel A549 cell sm A 1
+#        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+#        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bam
+#        # subId=4058 dateSubmitted=2011-05-09
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -725,21 +725,23 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         # subId=5823 dateSubmitted=2012-02-18
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel Monocytes-CD14+_RO01746 Aln 2
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
         # subId=5826 dateSubmitted=2012-02-18
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2 wong Mon May 21 11:22:49 2012
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel Monocytes-CD14+_RO01746 Aln 1
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5832 dateSubmitted=2012-02-19
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1 wong Mon May 21 11:22:49 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -1840,15 +1842,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF7 cell sm - 1
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 1 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bigWig 1.000000 620692.000000
-        origAssembly hg19
-        # subId=3353 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1 cricket Tue Feb  7 15:38:30 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1
+#        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+#        shortLabel MCF7 cell sm - 1
+#        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 1 from ENCODE/CSHL
+#        subGroups view=MinusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bigWig 1.000000 620692.000000
+#        origAssembly hg19
+#        # subId=3353 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1 cricket Tue Feb  7 15:38:30 2012
 
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1925,15 +1927,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF7 cell sm - 2
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 2 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bigWig 1.000000 1184608.000000
-        origAssembly hg19
-        # subId=3370 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2 cricket Tue Feb  7 15:38:30 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
+#        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+#        shortLabel MCF7 cell sm - 2
+#        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 2 from ENCODE/CSHL
+#        subGroups view=MinusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bigWig 1.000000 1184608.000000
+#        origAssembly hg19
+#        # subId=3370 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2 cricket Tue Feb  7 15:38:30 2012
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2153,23 +2155,23 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4 cricket Tue Feb  7 15:38:24 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm - 2
-        longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 2 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bigWig 1.000000 1785277.000000
-        # subId=4059 dateSubmitted=2011-05-11
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:35 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
+#        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+#        shortLabel A549 cell sm - 2
+#        longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 2 from ENCODE/CSHL
+#        subGroups view=MinusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bigWig 1.000000 1785277.000000
+#        # subId=4059 dateSubmitted=2011-05-11
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:35 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm - 1
-        longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 1 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bigWig 1.000000 2036805.000000
-        # subId=4058 dateSubmitted=2011-05-09
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:34 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
+#        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+#        shortLabel A549 cell sm - 1
+#        longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 1 from ENCODE/CSHL
+#        subGroups view=MinusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bigWig 1.000000 2036805.000000
+#        # subId=4058 dateSubmitted=2011-05-09
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2256,21 +2258,23 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 6581650.000000
         # subId=5823 dateSubmitted=2012-02-18
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel Monocytes-CD14+_RO01746 MinusRaw 2
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Minus Raw signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 6453896.000000
         # subId=5826 dateSubmitted=2012-02-18
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2 wong Mon May 21 11:22:50 2012
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel Monocytes-CD14+_RO01746 MinusRaw 1
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Minus Raw signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2294792.000000
         # subId=5832 dateSubmitted=2012-02-19
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1 wong Mon May 21 11:22:49 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -3371,15 +3375,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF7 cell sm + 1
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 1 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bigWig 1.000000 9000205.000000
-        origAssembly hg19
-        # subId=3353 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1 cricket Tue Feb  7 15:38:30 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
+#        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+#        shortLabel MCF7 cell sm + 1
+#        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 1 from ENCODE/CSHL
+#        subGroups view=PlusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bigWig 1.000000 9000205.000000
+#        origAssembly hg19
+#        # subId=3353 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1 cricket Tue Feb  7 15:38:30 2012
 
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -3456,15 +3460,15 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF7 cell sm + 2
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 2 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bigWig 1.000000 13069436.000000
-        origAssembly hg19
-        # subId=3370 dateSubmitted=2011-01-19
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2 cricket Tue Feb  7 15:38:31 2012
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
+#        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+#        shortLabel MCF7 cell sm + 2
+#        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 2 from ENCODE/CSHL
+#        subGroups view=PlusRawSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bigWig 1.000000 13069436.000000
+#        origAssembly hg19
+#        # subId=3370 dateSubmitted=2011-01-19
+#        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2 cricket Tue Feb  7 15:38:31 2012
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -3684,23 +3688,23 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4 cricket Tue Feb  7 15:38:24 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cell sm + 2
-        longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 2 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        type bigWig 1.000000 10013224.000000
-        # subId=4059 dateSubmitted=2011-05-11
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:35 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
+#        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+#        shortLabel A549 cell sm + 2
+#        longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 2 from ENCODE/CSHL
+#        subGroups view=PlusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+#        type bigWig 1.000000 10013224.000000
+#        # subId=4059 dateSubmitted=2011-05-11
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:35 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cell sm + 1
-        longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 1 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        type bigWig 1.000000 7091328.000000
-        # subId=4058 dateSubmitted=2011-05-09
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:35 2012
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
+#        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+#        shortLabel A549 cell sm + 1
+#        longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 1 from ENCODE/CSHL
+#        subGroups view=PlusRawSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+#        type bigWig 1.000000 7091328.000000
+#        # subId=4058 dateSubmitted=2011-05-09
+#        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:35 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -3785,21 +3789,23 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 1459351.000000
         # subId=5823 dateSubmitted=2012-02-18
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel Monocytes-CD14+_RO01746 + 2
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Plus Raw signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 1850105.000000
         # subId=5826 dateSubmitted=2012-02-18
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2 wong Mon May 21 11:22:50 2012
 
-        track wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1
+        track wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel Monocytes-CD14+_RO01746 + 1
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell RNA-seq Plus Raw signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=b2MONOCD14RO1746 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2291643.000000
         # subId=5832 dateSubmitted=2012-02-19
+        # was wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1 wong Mon May 21 11:22:50 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -4671,13 +4677,13 @@ html wgEncodeCshlShortRnaSeq.release2
         color 179,0,134
         # subId=4492 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
-        parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel MCF7 cell sm C 
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
-        subGroups view=Contigs cellType=b2MCF7 localization=CELL protocol=TAP rep=Pooled rank=none
-        type bed 6
-        # subId=4491 dateSubmitted=2011-07-12
+#        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
+#        parent wgEncodeCshlShortRnaSeqViewContigs off
+#        shortLabel MCF7 cell sm C 
+#        longLabel MCF-7 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
+#        subGroups view=Contigs cellType=b2MCF7 localization=CELL protocol=TAP rep=Pooled rank=none
+#        type bed 6
+#        # subId=4491 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
@@ -4777,13 +4783,13 @@ html wgEncodeCshlShortRnaSeq.release2
         color 189,0,157
         # subId=4479 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
-        parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel A549 cell sm C 
-        longLabel A549 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
-        subGroups view=Contigs cellType=b2A549 localization=CELL protocol=TAP rep=Pooled rank=none
-        type bed 6
-        # subId=4478 dateSubmitted=2011-07-12
+#        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
+#        parent wgEncodeCshlShortRnaSeqViewContigs off
+#        shortLabel A549 cell sm C 
+#        longLabel A549 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
+#        subGroups view=Contigs cellType=b2A549 localization=CELL protocol=TAP rep=Pooled rank=none
+#        type bed 6
+#        # subId=4478 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
