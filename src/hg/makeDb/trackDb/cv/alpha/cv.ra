@@ -2927,6 +2927,8 @@ description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
 karyotype normal
+termId BTO:0001578
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001578
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3120,6 +3122,8 @@ tissue liver
 description fetal liver 11 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 tier 3
 lineage endoderm
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL11W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3134,6 +3138,8 @@ organism human
 tissue liver
 description fetal liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL24W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3165,6 +3171,8 @@ organism human
 description hepatic sinusoidal endothelial cells
 tissue liver
 lineage endoderm
+termId BTO:0001251
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001251
 vendorName ScienCell
 vendorId 5000
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
@@ -3180,6 +3188,8 @@ description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
 karyotype normal
+termId BTO:0000653
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000653
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3576,6 +3586,8 @@ description lymphatic microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0003599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003599
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -3591,6 +3603,8 @@ description adult blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -3606,6 +3620,8 @@ description neonatal blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -3621,6 +3637,8 @@ description adult lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
