@@ -18190,15 +18190,16 @@ EOF
 
 
 ############################################################################
-# HGNC: Hugo Gene Nomenclature Committee (DONE 2012-01-17 cline)
+# HGNC: Hugo Gene Nomenclature Committee (DONE 2012-05-20 cline)
 
 mkdir /hive/data/outside/hgnc
 cd /hive/data/outside/hgnc
-mkdir 011712
-cd 011712
-wet -O hgnc.txt "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&hgnc_dbtag=on&preset=all&status=Approved&status=Entry+Withdrawn&status_opt=2&level=pri&=on&where=&order_by=gd_app_sym_sort&limit=&format=text&submit=submit&.cgifields=&.cgifields=level&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
+mkdir 052012
+cd 052012
+wget -O hgnc.txt "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&hgnc_dbtag=on&preset=all&status=Approved&status=Entry+Withdrawn&status_opt=2&level=pri&=on&where=&order_by=gd_app_sym_sort&limit=&format=text&submit=submit&.cgifields=&.cgifields=level&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
 
-tail -n +2 hgnc.txt | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin       
+tail -n +2 hgnc.txt |grep -v withdrawn \
+ | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin       
 #########################################################################
 # LASTZ Cow BosTau7 (DONE - 2012-01-23 - Chin)
     mkdir /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
