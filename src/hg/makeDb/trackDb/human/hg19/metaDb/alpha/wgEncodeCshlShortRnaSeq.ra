@@ -20232,6 +20232,64 @@ seqPlatform Illumina_HiSeq_2000
 subId 6839
 view ExonsGencV10
 
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
+objType table
+bioRep 039WC
+cell Monocytes-CD14+
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-19
+dateUnrestricted 2012-11-18
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44360
+labProtocolId 039WCs
+localization cell
+md5sum ff0021672bcb17530918aa34429fe96a,6213817ccacd1bfd3ba01f334e8e0b06
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5832
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
+objType table
+bioRep 040WC
+cell Monocytes-CD14+
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-18
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44361
+labProtocolId 040WCs
+localization cell
+md5sum ffe71e0b0ab379d3c9cc349d7bd34002,31586e12c2bac7ab89b25336160d035a
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5826
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
+view Alignments
+
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapContigs
 objType table
 bioRep 039WC,040WC
@@ -20289,74 +20347,19 @@ seqPlatform Illumina_GA2x
 subId 6752
 view ExonsGencV10
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1
 objType table
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1.bam.bai
-grant Gingeras
-lab CSHL
-labExpId LID44360
-labProtocolId 039WCs
-localization cell
-md5sum ff0021672bcb17530918aa34429fe96a,6213817ccacd1bfd3ba01f334e8e0b06
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 1
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2
-objType table
-bioRep 040WC
-cell Monocytes-CD14+_RO01746
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2.bam.bai
-grant Gingeras
-lab CSHL
-labExpId LID44361
-labProtocolId 040WCs
-localization cell
-md5sum ffe71e0b0ab379d3c9cc349d7bd34002,31586e12c2bac7ab89b25336160d035a
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1
-objType table
-bioRep 039WC
-cell Monocytes-CD14+_RO01746
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-19
-dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20370,21 +20373,22 @@ replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1
 view MinusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2
 objType table
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -20398,21 +20402,22 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2
 view MinusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1
 objType table
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20426,21 +20431,22 @@ replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1
 view PlusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2
 objType table
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -20454,21 +20460,22 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2
 view PlusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1
 objType file
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep1.fastq.gz
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20484,18 +20491,19 @@ seqPlatform Illumina_GA2x
 subId 5832
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2
 objType file
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep2.fastq.gz
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -25749,4 +25757,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: -1745292843
+# MAGIC: 712193445

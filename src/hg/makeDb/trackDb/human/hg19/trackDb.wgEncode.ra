@@ -7,6 +7,7 @@ include wgEncodeSuper.release2.ra alpha
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
+include wgEncodeGencodeV12.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
 include wgEncodeGencodeV7.ra beta,public

@@ -173,6 +173,11 @@ sub dbLoad($) {
         ccdsUpdate($db, $ccdsNcbiBuild);
     }
     dumpExtFileTbl($db);
+
+    # remove our data from workDir
+    if (!$keep) {
+	runProg("rm -rf $workDir/$db");
+    }
 }
 
 
