@@ -6,7 +6,7 @@ JQUERY_FILES=jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     ui.dropdownchecklist.js \
     jquery.cookie.js jquery.watermarkinput.js \
-    jquery.floatheader.js jquery.rotateTableCellContent.js 
+    jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js
 
 JS_FILES=ajax.js autocomplete.js hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
     hgVarAnnogrator.js hui.js utils.js ddcl.js subCfg.js \
