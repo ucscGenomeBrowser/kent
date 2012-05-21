@@ -5,30 +5,62 @@
 use warnings;
 use strict;
 
-use File::stat;
+#use File::stat;
 use lib "/cluster/bin/scripts";
 use Encode;
 
-# extendedTypes types need .sql files
-for my $type (@Encode::extendedTypes) {
-    my $file = "$ENV{HOME}/kent/src/hg/lib/encode/${type}.sql";
-    if(!(-e $file)) {
-        $file = "$ENV{HOME}/kent/src/hg/lib/${type}.sql";
+my @types = ("bedLogR", "bedRrbs", "bedRnaElements", "narrowPeak", "gappedPeak", "broadPeak");
+
+sub installFile {
+    my ($sourceFile, $targetFile) = @_;
+    my $replace = 1;
+    if(-e $targetFile) {
+        my $fileStat = (stat($sourceFile))[9];
+        my $targetStat = (stat($targetFile))[9];
+        $replace = ($fileStat > $targetStat);
     }
-    if(-e $file) {
-        my $replace = 1;
-        my $target = "$Encode::sqlCreate/$type.sql";
-        if(-e $target) {
-            my $fileStat = stat($file);
-            my $targetStat = stat($target);
-            $replace = $fileStat->mtime > $targetStat->mtime;
-        }
-        my $cmd = "cp $file $target.tmp";
+    if ($replace) {
+        my $cmd = "cp $sourceFile $targetFile.tmp";
         !system($cmd) || die  "system '$cmd' failed: $?";
-        $cmd = "mv -f $target.tmp $target";
+        $cmd = "mv -f $targetFile.tmp $targetFile";
         !system($cmd) || die  "system '$cmd' failed: $?";
+
+    }
+}
+
+my $targetDir = $ARGV[0];
+my $sourceDir = "$ENV{HOME}/kent/src/hg/lib/encode";
+unless ($targetDir) {
+    die "please specify a target directory\n";
+
+}
+
+my @localerrors;
+# extendedTypes types need .sql files
+for my $type (@types) {
+    my $sql = "$sourceDir/${type}.sql";
+    my $as = "$sourceDir/${type}.as";
+    my $error = 0;
+    unless (-e $as) {
+        $error = 1;
+        push @localerrors, "Missing .as file for type '$type'";
+    }
+    unless (-e $sql) {
+        $error = 1;
+        push @localerrors, "Missing .sql file for type '$type'";
+    }
+    if ($error) {
+        next;
     } else {
-        die "can't find sql file for type '$type'";
+        &installFile($as, "$targetDir/$type.as");
+        &installFile($sql, "$targetDir/$type.sql");
+    }
+}
+
+if (@localerrors) {
+    print "Errors:\n";
+    foreach my $error (@localerrors) {
+        print "$error\n";
     }
 }
 

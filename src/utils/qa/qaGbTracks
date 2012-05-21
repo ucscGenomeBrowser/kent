@@ -1,82 +1,99 @@
 #!/usr/bin/env python2.7
 import sys
-import os
-import re
 import argparse
-import subprocess
+import time
 
-from ucscgenomics import qa
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import factory
+from ucscGb.qa.tables import reporter
+from ucscGb.qa.tables import summary
+from ucscGb.qa.encode import tableCheck
 
-def main():
-
-    """ Run all the checks, print output"""
-
+def parseCommandLine():
     parser = argparse.ArgumentParser(
-        prog='qaEncodeTracks2',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='A series of checks for QA',
-        epilog=
-    """Examples:
+        description='Validates tables and records table statistics',
+        epilog="""
+The following tests are run:
+  checks for underscores in table names
+  checks for the existence of table descriptions
+  checks shortLabel and longLabel length
+  positionalTblCheck
+  checkTblCoords
+  genePredCheck
+  pslCheck
+  featureBits
+  (a version of) countPerChrom
 
-qaEncodeTracks2 hg19 tableList
-qaEncodeTracks2 hg19 tableList /path/to/trackDb.ra
-qaEncodeTracks2 hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs.new.ra
+  creates 3 files:  outFile.summary, outFile.log, outFile.chrom
+        """)
+    parser.add_argument('db', help='the database to check')
+    parser.add_argument('-s, --single', help ='tableList is the name of a single table',
+                        action="store_true", dest="single")
+    parser.add_argument('tableList', help=
+                        'a file listing the tables to check, or the name of a single table')
+    parser.add_argument('outFile', help='base name to give results files')
+    return parser.parse_args()
 
-    """
-        )
-    parser.add_argument('database', help='The database, typically hg19 or mm9')
-    parser.add_argument('tableList', help='The file containing a list of tables')
-    parser.add_argument('trackDb', nargs='?', default=0, help='The trackDb file to check')
+def tableExists(db, table):
+    """True if the table exists in the given database."""
+    sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
+    return sqlResult.strip() == table
 
-    if len(sys.argv) == 1:
-        parser.print_help()
-        return
+def checkTablesExist(db, tables):
+    """Raises an exception if any table in the tables list does not exist in the database."""
+    for name in tables:
+        if not tableExists(db, name):
+            raise Exception("Table " + name + " in " + db + " does not exist")
 
-    args = parser.parse_args(sys.argv[1:])
-
-    f = open(args.tableList, "r")
-    lines = f.readlines()
-    tables = set()
-    for i in lines:
-        tables.add(i.rstrip())
-
-    output = []
-
-    output.append("Checking tables for existence of description in tableDescription")
-    (tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
-    output.extend(tableDescOutput)
-
-    output.append("Checking tables for missing indices")
-    (tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
-    output.extend(tableIndexOut)
-
-    output.append("Checking tables for underscores in the name")
-    (tableNameOut, badTableNames) = qa.checkTableName(tables)
-    output.extend(tableNameOut)
-
-    output.append("Checking TrackDb.ra file for short and long label length")
-    if args.trackDb:
-        (labelOut, badLabels) = qa.checkLabels(args.trackDb)
-        output.extend(labelOut)
+def getTableList():
+    if args.single:
+        return [args.tableList]
     else:
-        output.append("Skipped, no trackDb file given")
-        output.append("")
+        with open(args.tableList, "r") as f:
+            raw = f.readlines()
+        return [name.strip() for name in raw]
 
-    output.append("Checking tables for coordinate errors")
-    (coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
-    output.extend(coordsOut)
+def runTests(db, reporter, sumTable):
+    """Runs validate() and statistics() methods on each table. Writes log output."""
+    delimiterLine = "==============================================="
+    reporter.writeTimestamp()
+    reporter.writeBlankLine()
+    for table in tableList:
+        reporter.writeLine(delimiterLine)
+        reporter.writeLine(db + "." + table +":\n")
+        table = factory.tableQaFactory(db, table, reporter, sumTable)
+        table.validate()
+        table.statistics()
+    reporter.writeLine(delimiterLine)
+    reporter.writeLine("Tests complete:")
+    reporter.writeTimestamp()
 
-    output.append("Checking tables for positional errors (sort)")
-    (posOut, badPos) = qa.positionalTblCheck(args.database, tables)
-    output.extend(posOut)
+def writeSummaryFile(sumTable, sumFile):
+    sumFile.write(sumTable.tabSeparated())
 
-    output.append("Counting row per chromosomes per table")
-    (countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
-    output.extend(countChromOut)
+def runChromCounts(db, chromFile):
+    chromFile.write(time.asctime() + "\n")
+    chromFile.write("Database: " + db + "\n\n")
+    tableSet = set(tableList)
+    output, tablecounts = tableCheck.countPerChrom(db, tableSet)
+    for line in output:
+        chromFile.write(line + "\n")
 
-    for i in output:
-        print i
+args = parseCommandLine()
+tableList = getTableList()
+checkTablesExist(args.db, tableList)
 
+logFile = open(args.outFile + ".log", "w")
+chromFile = open(args.outFile + ".chroms", "w")
+sumFile = open(args.outFile + ".summary", "w")
+reporter = reporter.Reporter(logFile)
+sumTable = summary.SumTable()
 
-if __name__ == "__main__":
-    main()
+runTests(args.db, reporter, sumTable)
+runChromCounts(args.db, chromFile)
+writeSummaryFile(sumTable, sumFile)
+
+logFile.close()
+sumFile.close()
+chromFile.close()

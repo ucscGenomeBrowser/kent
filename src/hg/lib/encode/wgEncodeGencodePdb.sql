@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#GENCODE tracnscript to Protein Data Bank (PDB) protein structure mapping
+#GENCODE transcript to Protein Data Bank (PDB) protein structure mapping
 CREATE TABLE wgEncodeGencodePdb (
     transcriptId varchar(255) not null,	# GENCODE transcript identifier
     pdbId varchar(255) not null,	# Protein Data Bank (PDB) identifier

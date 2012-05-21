@@ -18472,4 +18472,75 @@ echo "select * from encodeRegions" | hgsql hg18 | tail -n +2 \
     #   1465724774 bases of 3137161264 (46.721%) in intersection
     #   real    0m33.408s
 
+##########################################################################pubStart
+# Publications track (DONE - 04-27-12 - Max)
+
+# article download and conversion is run every night on hgwdev:
+# 22 22 * * * /hive/data/inside/literature/pubtools/pubCronDailyUpdate.sh
+# the script downloads files into /hive/data/outside/literature/{PubMedCentral,ElsevierConsyn}/
+# then converts them to text into /hive/data/outside/literature/{pmc,elsevier}
+
+# all configuration of the pipeline is in /hive/data/inside/literature/pubtools/lib/pubConf.py
+
+# data processing was run manually like this
+export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/software/bin/:/cluster/software/bin:/cluster/home/max/projects/pubtools:/cluster/home/max/bin/x86_64:/hive/groups/recon/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/cluster/home/max/usr/src/scripts:/cluster/home/max/usr/src/oneshot:/cluster/home/max/bin:/cluster/bin/scripts:.:/cluster/home/max/usr/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/lpp/mmfs/bin/:/opt/dell/srvadmin/bin:/cluster/bin/scripts:/hive/users/hiram/cloud/ec2-api-tools-1.3-51254/bin:/cluster/home/max/bin:/usr/bin/X11:/usr/java/jdk1.6.0_20/bin:/cluster/home/max/bin:/hive/data/inside/literature/pubtools/
+# pmc
+cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
+pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
+ssh swarm 
+cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
+pubBlat steps:annot-tables
+exit
+pubBlat load
+
+# elsevier
+cd /hive/data/inside/literature/pubtools/runs/elsBlat/
+pubBlat init /hive/data/inside/literature/blat/elsevier/ /hive/data/inside/literature/text/elsevier
+ssh swarm 
+cd /hive/data/inside/literature/pubtools/runs/elsBlat/
+pubBlat steps:annot-tables
+exit
+pubBlat load
+#--pubEnd
+
+#############################################################################
+# lifting HapMap recombination maps from hg18 (DONE - 2012-05-09 - Hiram)
+    mkdir -p /hive/data/genomes/hg19/bed/hapmap/release24FromHg18
+    cd /hive/data/genomes/hg19/bed/hapmap/release24FromHg18
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24CEURecombMap.bedGraph hg18.hapMapRelease24CEURecombMap.bedGraph
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24YRIRecombMap.bedGraph hg18.hapMapRelease24YRIRecombMap.bedGraph
+    ln -s /hive/data/genomes/hg18/bed/hapmap/release24/hapMapRelease24CombinedRecombMap.bedGraph hg18.hapMapRelease24CombinedRecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24CEURecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24CEURecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24CEURecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24YRIRecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24YRIRecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24YRIRecombMap.bedGraph
+
+    liftOver hg18.hapMapRelease24CombinedRecombMap.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        stdout hapMapRelease24CombinedRecombMap.unmapped | sort -k1,1 -k2,2n \
+        > hapMapRelease24CombinedRecombMap.bedGraph
+
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg19/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg19/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg19/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg19
+    hgBbiDbLink hg19 ${T} /gbdb/hg19/decode/${T}.bw
+done
+
 #############################################################################

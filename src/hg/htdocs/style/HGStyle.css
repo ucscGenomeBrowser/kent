@@ -1,35 +1,35 @@
-.topBlueBar {   font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold;
+.topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
                 color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
 
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
-.topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
-.leftbar { text-decoration: none; font-family: arial, san-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
+.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
+.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
 .hiddenText {background-color: silver}
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
 .topbar { white-space: nowrap; padding: 0px 10px;}
-A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
-A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #EAE360; font-size: 15px; }
+A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
+A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #EAE360; font-size: 15px; }
 
-A:link.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:visited.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:active.leftbar { text-decoration: none; font-family: arial, san-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
-A:hover.leftbar { text-decoration: none; font-family: arial, san-serif; color: #FFFF99; font-size: 10pt; font-weight: 600; }
+A:link.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:visited.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:active.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #E0F0F0; font-size: 10pt; font-weight: 600; }
+A:hover.leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FFFF99; font-size: 10pt; font-weight: 600; }
 /*--  #FFFF00;  --*/
 
-A:link.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:visited.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:active.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
-A:hover.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:link.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:visited.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:active.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
+A:hover.ug { text-decoration: none; font-family: arial, sans-serif; color: #888888; font-size: 11pt; font-weight: 600; }
 
-A:link.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
-A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
-A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
-A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
+A:link.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
+A:visited.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:active.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:hover.bigBlue { text-decoration: none; font-family: arial, sans-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 IMG.bigBlue {vertical-align: middle;}
 TD.bigBlue {vertical-align: middle;}
 
@@ -390,8 +390,44 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 .tabFooter .small {margin: 2px 40px; font-size: 0.8em;}
 
 .hubError {color: #F00000;}
-
 /* END - hgHubConnect Styles */
+
+/* User account login/signup styles */
+.formBox a {text-decoration: none}
+.formBox a:hover {text-decoration: underline;}
+.centeredContainer {margin: 0 auto;}
+.formBox {
+    width: 400px;
+    border: 2px solid #eed5b7;
+    margin-top: 2.5em;
+    padding: 0 30px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #fff9d2;}
+.formBox input {font-size: 1.04em;}
+.formBox label {display: block; margin-top: 10px;}
+.formBox label.radioLabel {display: inline; margin: 0;}
+#helpBox {
+    margin-top: 20px;
+    padding: 20px 0 10px 0; 
+    border-top: 1px solid #eed5b7;}
+label small {
+    font-style: italic;
+    font-size: 0.9em;}
+.topBarContainer { /* only needed for login screens */
+    padding: 6px 0;}
+.highlightBox { /* combine with classes error, alert, or highlight */
+	border: 2px solid;
+    padding: 10px;}
+.error { /* for use with highlightBox, when used for error msgs */
+    border-color: #f00;
+    background-color: #ffeded;
+    color: #f00;}
+.confirmationTxt {
+    font-size: 1.2em;
+    font-weight: normal;}
+/* END - User account login/signup styles */
 
 /* [+][-] buttons are no longer images but divs */
 .pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;

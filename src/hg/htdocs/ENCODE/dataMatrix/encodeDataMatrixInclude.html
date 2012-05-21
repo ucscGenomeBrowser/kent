@@ -12,6 +12,14 @@
     <script src="/js/utils.js" type="text/javascript"></script>
     <script src="/js/encodeProject.js" type="text/javascript"></script>
     <script src="/js/encodeMatrix.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    function pageForDataSummary (organism) {
+        // TODO:  move to encodeMatrix.js
+       return 'encodeDataSummary' + organism.charAt(0).toUpperCase() + organism.substring(1) + '.html';
+
+    }
+    </script>
 </head>
 
 <body>
@@ -24,20 +32,44 @@
         <span id="pageHeader" class="txt">Data Matrix</span>
         <span id="assemblyLabel"></span>
         <span id="spinner"></span>
-        <span id="expMatrixHelpIcon" title="Click for help" class="helpLauncher">Tell me about it...</span>
+        <span id="expMatrixHelpIcon" title="Click for help" class="helpLauncher">Overview...</span>
     </div>
     <div id="expMatrixHelpText" class="helpText wrapper">
     <div class="bar"><h4 class="title">About the ENCODE Experiment Matrix</h4></div>
     <div class="content">
 <p>
-    The ENCODE Experiment Matrix is a set of web pages that visually summarize the types of data produced by the ENCODE project.  This page shows the number of experiments by cell type and assay.  The companion <a target=_blank href='encodeDataSummaryHuman.html'><strong>Experiment Summary</strong></a> page shows the number of experiments by assay type alone, and includes annotations that are cell-type independent (annotations on the reference genome).  The <a target=_blank href='encodeChipMatrixHuman.html'><strong>ChIP-seq Experiment Matrix</strong></a> page provides a more detailed view of the chromatin immunoprecipitation experiments, showing experiments by cell type and antibody target.
+The ENCODE Experiment Matrix is a set of web pages that visually summarize the types of data
+produced by the ENCODE project. 
+The grid on the main Experiment Matrix page shows the number of experiments for each cell type/assay pairing.
+The 
+<a href='javascript:window.open(encodeMatrix.pageForChipMatrix(encodeMatrix_organism));'><strong>ChIP-seq Experiment Matrix</strong></a>
+page provides a more detailed view of the chromatin immunoprecipitation experiment subset, showing
+experiments by cell type and antibody target.
+Cell types annotated as normal vs. cancer are marked with a colored dot.
+The companion
+<a href='javascript:window.open(pageForDataSummary(encodeMatrix_organism));'><strong>Experiment Summary</strong></a>
+page lists the number of experiments by assay type alone and includes annotations that are
+cell-type independent (annotations on the reference genome). 
+</p>
+
 <p>
-    An ENCODE experiment is defined as a biochemical assay and follow-on data analyses performed on a single cell type by a single lab.  An experiment will usually have multiple browser tracks to display differing views of the data (e.g. enrichment signal graph, peak calls), and multiple files to support analysis (e.g. sequence alignments in BAM format, signal graph in bigWig format), for multiple replicates.  Each ENCODE experiment has a unique accession assigned by the ENCODE Data Coordination Center (e.g. wgEncodeH00001).
+An ENCODE experiment is defined as a biochemical assay and follow-on data analyses performed on a
+single cell type by a single lab.  Data from an experiment is typically displayed in multiple browser tracks that
+offer different views of the data (e.g. enrichment signal graph, peak calls) and is available for download in multiple file
+formats (e.g. sequence alignments in BAM format, signal graph in bigWig format) that support different analysis methods. 
+Data for multiple replicates are included in a single experiment.
+Each ENCODE experiment has a unique accession assigned by the ENCODE Data
+Coordination Center (e.g. wgEncodeH00001).</p>
 <p>
-    To display or download ENCODE data from this page, select <em>tracks</em> or <em>files</em> in the <img style='border: 1px solid gray;' height='17' width='164' src='/images/encode/dataMatrixSearchPanel.png'> panel.  Then click the desired <img style='boredr: 1px solid gray;' height='17' width='20' src='/images/encode/greenBox.png'> box in the matrix.  This will open a search window with the  <em>Track Search</em> or <em>File search</em> tool showing the full set of browser tracks or downloadable files for the experiments selected so you can configure viewing in the browser or refine the list of download files.
+To display or download ENCODE data, select either the <em>tracks</em> or <em>files</em> option in the
+<img style='border: 1px solid gray;' height='17' width='164' src='/images/encode/dataMatrixSearchPanel.png'>
+panel, then click the appropriate box in the matrix grid (or row in the summary tables). 
+This will display a search window (via the UCSC <em>Track Search</em> or <em>File Search</em> tool) that lists the full set of browser tracks or downloadable files for the
+selected experiments.
+This window also provides options to configure the browser view or refine the list of downloadable files.</p>
 <p>
-These pages are best viewed in Firefox, Chrome, or Safari browsers.
-    <br>
+These pages are best viewed in Firefox, Chrome, or Safari browsers.</p>
+
     <span id='dataMatrixXIcon' title='Click to hide help' class="xIcon">&times;</span>
     </div><!-- end content -->
     </div><!-- end helpText -->

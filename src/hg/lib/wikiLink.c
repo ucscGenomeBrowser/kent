@@ -10,6 +10,21 @@
 #include "web.h"
 #include "wikiLink.h"
 
+char *loginSystemName()
+/* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
+{
+return cloneString(cfgOption(CFG_LOGIN_SYSTEM_NAME));
+}
+
+boolean loginSystemEnabled()
+/* Return TRUE if login.systemName  parameter is defined in hg.conf . */
+{
+#ifdef USE_SSL
+return (cfgOption(CFG_LOGIN_SYSTEM_NAME) != NULL);
+#else
+return FALSE;
+#endif
+}
 
 char *wikiLinkHost()
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
@@ -71,12 +86,23 @@ char *wikiLinkUserLoginUrl(int hgsid)
 {
 char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
+if (loginSystemEnabled())
+{
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
+           "(specified in hg.conf).");
+        safef(buf, sizeof(buf),
+      "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
+      wikiLinkHost(), retEnc);
+
+} else {
 if (! wikiLinkEnabled())
     errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
 	     "in hg.conf).");
 safef(buf, sizeof(buf),
       "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
       wikiLinkHost(), retEnc);
+}
 freez(&retEnc);
 return(cloneString(buf));
 }
@@ -86,12 +112,23 @@ char *wikiLinkUserLogoutUrl(int hgsid)
 {
 char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
-if (! wikiLinkEnabled())
-    errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
-	     "in hg.conf).");
-safef(buf, sizeof(buf),
-      "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
-      wikiLinkHost(), retEnc);
+
+if (loginSystemEnabled())
+{
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
+                 "(specified in hg.conf).");
+    safef(buf, sizeof(buf),
+          "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
+          wikiLinkHost(), retEnc);
+} else {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
+	         "in hg.conf).");
+    safef(buf, sizeof(buf),
+          "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+          wikiLinkHost(), retEnc);
+}
 freez(&retEnc);
 return(cloneString(buf));
 }

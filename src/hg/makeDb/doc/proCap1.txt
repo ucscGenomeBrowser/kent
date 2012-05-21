@@ -171,3 +171,60 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/proCap1/bed/ensGene.51
 
 ###########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/proCap1/bed/cpgIslands
+    cd /hive/data/genomes/proCap1/bed/cpgIslands
+    time doCpgIslands.pl proCap1 > do.log 2>&1
+    #   real    884m46.543s
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    3m6.649s
+    time doCpgIslands.pl -continue=cleanup proCap1 > cleanup.log 2>&1
+    #   real    105m41.557s
+
+    cat fb.proCap1.cpgIslandExt.txt
+    #   13143269 bases of 2407847681 (0.546%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/proCap1/bed/genscan
+    cd /hive/data/genomes/proCap1/bed/genscan
+    time doGenscan.pl proCap1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    483m14.978s
+    time doGenscan.pl -continue=load proCap1 > load.log 2>&1
+    #   real    39m19.361s
+
+    cat fb.proCap1.genscan.txt
+    #   66421419 bases of 2407847681 (2.759%) in intersection
+    cat fb.proCap1.genscanSubopt.txt
+    #   74279950 bases of 2407847681 (3.085%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S proCap1
+    mkdir /hive/data/genomes/proCap1/bed/windowMasker
+    cd /hive/data/genomes/proCap1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev proCap1 > do.log 2>&1
+    #   real    1091m9.829s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    11m17.751s
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev proCap1 > cleanup.log 2>&1
+    #   real    2m21.973s
+
+    sed -e 's/^/    #\t/' fb.proCap1.windowmaskerSdust.beforeClean.txt
+    #   1550951798 bases of 2985258999 (51.954%) in intersection
+    sed -e 's/^/    #\t/' fb.proCap1.windowmaskerSdust.clean.txt
+    #   973540480 bases of 2985258999 (32.612%) in intersection
+    sed -e 's/^/    #\t/' fb.proCap1.rmsk.windowmaskerSdust.txt
+    #   389997236 bases of 2985258999 (13.064%) in intersection
+
+#########################################################################

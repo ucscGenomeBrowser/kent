@@ -41,10 +41,12 @@ struct soCall  // a single variant effect call
     uint    soNumber;           // Sequence Ontology Number
     union
 	{
-	struct     // (non)synonymous variant
+	struct codingChange     // (non)synonymous variant, deletions in CDS
 	    {
 	    char *transcript;
 	    uint exonNumber;
+
+	    // the next three should have a length specified too
 	    uint cDnaPosition;
 	    uint cdsPosition;
 	    uint pepPosition;

@@ -3,21 +3,22 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#BED9 +  number of reads + percent methylation
+#BED9+2  Number of reads + percent methylation
 CREATE TABLE bedRrbs (
     bin smallint unsigned not null,     # used for efficient position indexing
-    chrom varchar(255) not null,	# Chromosome (or contig, scaffold, etc.)
+    chrom varchar(255) not null,	# Reference chromosome or scaffold 
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	        # Name of item
-    score int unsigned not null,	# num reads capped at 1000
-    strand char(1) not null,	        # + or -
+    score int unsigned not null,	# Number of reads capped at 1000
+    strand char(1) not null,	        # + or - or . for unknown
     thickStart int unsigned not null,	# Start of where display should be thick
     thickEnd int unsigned not null,	# End of where display should be thick 
-    itemRgb int unsigned not null,	# Color value
-    readCount int unsigned not null,	# number of reads or coverage
-    percentMeth int unsigned not null,	# percentage of reads that show methylation at this position in the genome
-              #Indices
+    reserved int unsigned not null,	# Color value R,G,B
+    readCount int unsigned not null,	# Number of reads or coverage
+    percentMeth int unsigned not null,	# Percentage of reads that show methylation at this position in the genome
+              
+#Indices
     INDEX(bin),
     INDEX(chrom(16),chromStart)
 );

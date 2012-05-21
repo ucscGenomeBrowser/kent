@@ -16,14 +16,14 @@ di-TAG-RNA (PET-RNA, see the
 <A TARGET=_BLANK
 HREF="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaPet">GIS RNA PET</A> track) datasets available from the same biological replicates.   
 
-
 <h2>Display Conventions and Configuration</h2>
+
 <P>
 This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are
-<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.</P>
+<A HREF="/goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.</P>
 
 <p>To show only selected subtracks, uncheck the boxes next to the tracks that
 you wish to hide.</p>
@@ -34,23 +34,23 @@ distinguishing between the different cell types and compartments.</p>
 
 <dl>
 <dt><i>Contigs</i>
-</dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates.
-</dd><dt><i>Raw Signals</i>
-</dt><dd>The Plus Raw Signal and Minus Raw Signal views show the density of mapped reads on the plus and minus strands (wiggle format), respectively.
+</dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates. Specific column specifications can be found in the <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
+</dd><dt><i>Signals</i>
+</dt><dd>The Plus Signal and Minus Signal views show the density of mapped reads on the plus and minus strands (wiggle format), respectively.
 </dd>
 <dt><i>Alignments</i>
 </dt><dd>The Alignments view shows individual reads mapped from biological replicates to the genome and indicates where
-bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The alignment file follows the standard SAM format of Bowtie output. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The alignment file follows the standard SAM format. See the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
 </dd>
 <dt><i>Splice Junctions</i>
-</dt><dd>Subset of aligned reads that cross splice junctions.
+</dt><dd>Subset of aligned reads that cross splice junctions. Specific column specifications can be found in the <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
 </dd>
 </dl>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
 <P>
 <!--echo var="BROWSER_HOST" -->
-Additional <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,PRTCL,RAW,SPKNS,TRANSGENCV7,TRANSDENOVO">views</A> are available on the Downloads page. 
+Additional <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,GENEGENCV10,EXONGENCV10,PRTCL,SPKNS,TRANSGENCV7,TRANSDENOVO">views</A> are available on the Downloads page. 
 </P>
 
 <H2>Methods</H2>
@@ -58,7 +58,7 @@ Additional <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQR
 <H3>Cell Culture</H3>
 <P>Cells were grown according to the approved 
 <A TARGET=_BLANK
-HREF="../ENCODE/protocols/cell/"> ENCODE
+HREF="/ENCODE/protocols/cell/"> ENCODE
 cell culture protocols</A>.  
 </P>
 
@@ -67,8 +67,6 @@ cell culture protocols</A>.
 <A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/pubmed/19620212">
 cDNA sequencing protocol</A> was used.  This protocol generates directional libraries
 and reports the transcripts' strand of origin.  Exogenous RNA spike-ins
-<a target="_blank" href="http://sites.google.com/site/rnajunkies/long-rna-seq/nist-spike-in-information">
-(Round 5, pool 14)</a>,
 were added to each endogenous RNA isolate and carried
 through library construction and sequencing.  The Illumina PhiX
 control library was also spiked-in at 1&#37; to each completed human
@@ -96,7 +94,7 @@ HREF="http://gingeraslab.cshl.edu/STAR/">Gingeras lab</A>.
 
 <P>
 The following processed
-&ldquo;<a target="_BLANK" href="../cgi-bin/hgEncodeVocab?tag=Contigs,Junctions,ExonsGencV7,GeneDeNovo,GeneGencV7,TranscriptDeNovo,TranscriptGencV7">elements</a>&rdquo;
+&ldquo;<a target="_BLANK" href="../cgi-bin/hgEncodeVocab?tag=EXONGENCV7,GENEDENO,GENEGENCV7,GENEGENCV10,EXONGENCV10,TRANSGENCV7,TRANSDENOVO">elements</a>&rdquo;
 data files are available for download.
 These elements were assessed for reproducibility using a nonparametric 
 irreproducible detection (IDR) rate script.  The IDR values for each element
@@ -108,8 +106,8 @@ files is available for download in the
  <A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/supplemental/">supplemental directory</A>.
 </P>
 
-
 <H2>Verification</H2>
+
 <P>
 FPKM (fragments per kilobase of exon per million fragments mapped) values were calculated 
 for annotated Gencode exons and Spearman values were compared.  
@@ -122,20 +120,42 @@ HREF="http://genome.crg.es/~jlagarde/encode_RNA_dashboard/">Transcriptome Data P
 <H2>Release Notes</H2>
 
 <P> 
-This is release 2 (Mar 2012) of this track for hg19. It includes XX new cell lines.
+This is release 2 (May 2012) of this track for hg19. It includes 25 new cell lines:
+<ul>
+<li>CD20+</li>
+<li>CD34+_Mobilized</li>
+<li>HAoAF</li>
+<li>HAoEC</li>
+<li>HCH</li>
+<li>HFDPC</li>
+<li>HMEpC</li>
+<li>hMNC-CB</li>
+<li>hMNC-PB</li>
+<li>hMSC-AT</li>
+<li>hMSC-BM</li>
+<li>hMSC-UC</li>
+<li>HOB</li>
+<li>HPC-PL</li>
+<li>HPIEpC</li>
+<li>HSaVEC</li>
+<li>HVMF</li>
+<li>HWP</li>
+<li>IMR90</li>
+<li>Monocytes-CD14+</li>
+<li>NHDF</li>
+<li>NHEM.f_M2</li>
+<li>NHEM_M2</li>
+<li>SkMC</li>
+<li>SK-N-SH</li>
+</ul>
 </P>
 
-<P>
-Release 1 (Oct 2011) of this track for hg19 included data from the
-hg18 releases that had been remapped to hg19 (GM12878 and K562 Total RNA whole 
-cell and K562 PolyA+ RNA cytosol) as well as novel data from 13 additional cell
-lines and 4 additional cell localizations, as well as some PolyA- samples. 
-The newer data all have Bio Replicate numbers and Protocol ID numbers that can be used to
-link the samples with other experiments. Every experiment has extensive analysis 
-and a protocol document available for download only.
-</P>
+SOMETHING ABOUT " discuss new data being compared to GencV10". ALPHA
+
+
 
 <H2>Credits</H2>
+
 <P>These data were generated and analyzed by the transcriptome group at
 Cold Spring Harbor Laboratories and the Center for Genomic
 Regulation (CRG in Barcelona), who are participants in the ENCODE Transcriptome Group.
@@ -170,17 +190,30 @@ HREF="http://pasteur.crg.es/portal/page/portal/Internet/">CRG</A>.
 
 <H2>References</H2>
 
-<P>Jiang L, Schlesinger F, Davis CA, Zhang Y, Li R, Salit M, Gingeras TR, Oliver B. 
-<A target="_BLANK" href= "http://www.ncbi.nlm.nih.gov/pubmed/21816910"> Synthetic spike-in standards for RNA-seq experiments</A>.
-<EM>Genome Res.</EM> 2011 Aug 4.
-</P>
+<p>
+Parkhomchuk D, Borodina T, Amstislavskiy V, Banaru M, Hallen L, Krobitsch S, Lehrach H, Soldatov A.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19620212" target="_blank">
+Transcriptome analysis by strand-specific sequencing of complementary DNA</a>.
+<em>Nucleic Acids Res</em>. 2009 Oct;37(18):e123.
+</p>
 
-<P>Parkhomchuk D, Borodina T, Amstislavskiy V, Banaru M, Hallen L, Krobitsch S, Lehrach H, Soldatov A. 
-<A target="_BLANK" href= "http://www.ncbi.nlm.nih.gov/pubmed?term=19620212">Transcriptome analysis by strand-specific sequencing of complementary DNA</A>. 
-<EM>Nucleic Acids Res</EM>. 2009 Oct; 37(18):e123.
-</P>
+<h2>Publications</h2>
 
-<H2> Data Release Policy </H2>
+<p>
+Deng X, Hiatt JB, Nguyen DK, Ercan S, Sturgill D, Hillier LW, Schlesinger F, Davis CA, Reinke VJ, Gingeras TR <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22019781" target="_blank">
+Evidence for compensatory upregulation of expressed X-linked genes in mammals, Caenorhabditis elegans and Drosophila melanogaster</a>.
+<em>Nat Genet</em>. 2011 Oct 23;43(12):1179-85.
+</p>
+
+<p>
+Jiang L, Schlesinger F, Davis CA, Zhang Y, Li R, Salit M, Gingeras TR, Oliver B.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21816910" target="_blank">
+Synthetic spike-in standards for RNA-seq experiments</a>.
+<em>Genome Res</em>. 2011 Sep;21(9):1543-51.
+</p>
+
+<H2>Data Release Policy</H2>
 
 <P>Data users may freely use ENCODE data, but may not, without prior
 consent, submit publications that use an unpublished ENCODE dataset until

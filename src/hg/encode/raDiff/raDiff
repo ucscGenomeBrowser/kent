@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 import sys, re, argparse
-from ucscgenomics import ra
+from ucscGb.gbData.ra.raFile import RaFile
 
 
 def addChange(changelist, obj, change):
@@ -13,9 +13,9 @@ def addChange(changelist, obj, change):
 def main():
 
     parser = argparse.ArgumentParser(
-        prog='qaRaDiff',
+        prog='raDiff',
         description='Describes the differences between the two .ra files',
-        epilog='example: qaRaDiff alpha/wgEncodeUwTfbs.ra beta/wgEncodeUwTfbs.ra'
+        epilog='example: raDiff alpha/wgEncodeUwTfbs.ra beta/wgEncodeUwTfbs.ra'
         )
     parser.add_argument('RaFileOne', help='The .ra file')
     parser.add_argument('RaFileTwo', help='The .ra file to compare to')
@@ -26,8 +26,8 @@ def main():
         return
 
     args = parser.parse_args(sys.argv[1:])
-    ra1 = ra.RaFile(args.RaFileOne)
-    ra2 = ra.RaFile(args.RaFileTwo)
+    ra1 = RaFile(args.RaFileOne)
+    ra2 = RaFile(args.RaFileTwo)
 
     changelist, newStanzas, droppedStanzas = ra2.changeSummary(ra1)
 

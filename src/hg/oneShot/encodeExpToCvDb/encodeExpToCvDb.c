@@ -51,7 +51,7 @@ struct field expRequiredFields[] =
     {"organism",    "ForeignKey(Organism, db_column='organism')"},
     {"lab",	    "ForeignKey(Lab, db_column='lab')"},
     {"dataType",    "ForeignKey(DataType, db_column='dataType')"},
-    {"cellType",    "ForeignKey(CellType, db_column='cellType')"},
+    {"cellType",    "ForeignKey(CellType, db_column='cellType', blank=True, null=True)"},
     };
 
 char *expOptionalFields[] = 
@@ -83,7 +83,6 @@ char *expOptionalFields[] =
     "tissueSourceType",
     "treatment",
     "version",
-    "view",
     };
 
 struct hash *optionalFieldsHash()
@@ -198,6 +197,7 @@ void writeMdbListAsResults(struct mdbObj *mdbList, char *fileName)
 {
 FILE *f = mustOpen(fileName, "w");
 struct mdbObj *mdb;
+int id = 0;
 for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     {
     char *experiment = NULL;
@@ -237,6 +237,7 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	}
     if (experiment != NULL)
 	{
+	fprintf(f, "%d\t", ++id);
 	fprintf(f, "%s\t", emptyForNull(experiment));
 	fprintf(f, "%s\t", emptyForNull(replicate));
 	fprintf(f, "%s\t", emptyForNull(view));
@@ -359,23 +360,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
-    /* Write out required fields.  Order of required fields
-     * here needs to follow order in expRequiredFields. */
-    fprintf(f, "%u", ee->ix);
-    fprintf(f, "\t%s", ee->updateTime);
-    fprintf(f, "\t%s", composite);
-    fprintf(f, "\t%s", emptyForNull(ee->accession));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "organism", ee->organism));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "lab", ee->lab));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "dataType", ee->dataType));
-    fprintf(f, "\t%d", lookupId(cvDbConn, "cellType", ee->cellType));
+    if (ee->accession != NULL)
+	{
+	/* Write out required fields.  Order of required fields
+	 * here needs to follow order in expRequiredFields. */
+	fprintf(f, "%u", ee->ix);
+	fprintf(f, "\t%s", ee->updateTime);
+	fprintf(f, "\t%s", composite);
+	fprintf(f, "\t%s", ee->accession);
+	fprintf(f, "\t%d", lookupId(cvDbConn, "organism", ee->organism));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "lab", ee->lab));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "dataType", ee->dataType));
+	fprintf(f, "\t%d", lookupId(cvDbConn, "cellType", ee->cellType));
 
-    /* Now write out optional fields. */
-    for (i=0; i<optColCount; ++i)
-	fprintf(f, "\t%d", optCol[i]);
+	/* Now write out optional fields. */
+	for (i=0; i<optColCount; ++i)
+	    fprintf(f, "\t%d", optCol[i]);
 
-    /* End output record. */
-    fprintf(f, "\n");
+	/* End output record. */
+	fprintf(f, "\n");
+	}
     }
 
 /* Write out series list to a separate file. */
@@ -434,7 +438,7 @@ for (i=1; i<ArraySize(expRequiredFields); ++i)  // Start at one so django makes 
 for (i=0; i<ArraySize(expOptionalFields); ++i)
     {
     char *name = expOptionalFields[i];
-    fprintf(f, "    %s = models.ForeignKey(%c%s, db_column='%s', blank=True)\n", 
+    fprintf(f, "    %s = models.ForeignKey(%c%s, db_column='%s', blank=True, null=True)\n", 
 	    name, toupper(name[0]), name+1, name);
     }
 fprintf(f, "\n");
@@ -455,14 +459,14 @@ fprintf(f, "    database table. Intermediate as well as final results may be fou
 fprintf(f, "    here.  Some results may be replicated a number of times\n");
 fprintf(f, "    \"\"\"\n");
 fprintf(f, "    experiment = models.ForeignKey(Experiment, db_column='experiment')\n");
-fprintf(f, "    replicate = models.CharField(max_length=50)\n");
+fprintf(f, "    replicate = models.CharField(max_length=50, blank=True)\n");
 fprintf(f, "    view = models.CharField(max_length=50)\n");
 fprintf(f, "    objType = models.CharField(max_length=50)\n");
 fprintf(f, "    fileName = models.CharField(max_length=255)\n");
-fprintf(f, "    md5sum = models.CharField(max_length=33)\n");
-fprintf(f, "    tableName = models.CharField(max_length=100)\n");
+fprintf(f, "    md5sum = models.CharField(max_length=255)\n");
+fprintf(f, "    tableName = models.CharField(max_length=100, blank=True)\n");
 fprintf(f, "    dateSubmitted = models.CharField(max_length=40)\n");
-fprintf(f, "    dateResubmitted = models.CharField(max_length=40)\n");
+fprintf(f, "    dateResubmitted = models.CharField(max_length=40, blank=True)\n");
 fprintf(f, "    dateUnrestricted = models.CharField(max_length=40)\n");
 fprintf(f, "\n");
 fprintf(f, "    class Meta:\n");

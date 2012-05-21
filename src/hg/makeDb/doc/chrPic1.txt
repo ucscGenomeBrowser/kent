@@ -390,4 +390,122 @@ close (FH);
     ln -s `pwd`/chrPic1.2bit /gbdb/chrPic1/chrPic1.2bit
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/chrPic1/bed/cpgIslands
+    cd /hive/data/genomes/chrPic1/bed/cpgIslands
+    time doCpgIslands.pl chrPic1 > do.log 2>&1
+    #   real    187m22.286s
 
+    cat fb.chrPic1.cpgIslandExt.txt
+    #   15937502 bases of 2158289746 (0.738%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/chrPic1/bed/genscan
+    cd /hive/data/genomes/chrPic1/bed/genscan
+    time doGenscan.pl chrPic1 > do.log 2>&1
+    # one failed job:
+./runGsBig.csh JH584641 000 gtf/000/JH584641.gtf pep/000/JH584641.pep subopt/000/JH584641.bed
+    # rerunning with window size of 200000
+    #   real    0m45.659s
+    #   continuing:
+    time doGenscan.pl -continue=makeBed chrPic1 > makeBed.log 2>&1
+    #   real    73m21.769s
+
+    cat fb.chrPic1.genscan.txt
+    #   41301989 bases of 2158289746 (1.914%) in intersection
+    cat fb.chrPic1.genscanSubopt.txt
+    #   50395023 bases of 2158289746 (2.335%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2158272880 / 2897316137 \) \* 1024
+    #	( 2158272880 / 2897316137 ) * 1024 = 762.799544
+
+    # round up to 800
+
+    cd /hive/data/genomes/chrPic1
+    time blat chrPic1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/chrPic1.11.ooc -repMatch=800
+    #   Wrote 13782 overused 11-mers to jkStuff/chrPic1.11.ooc
+    #	real     0m58.297s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" chrPic1 | sort | uniq -c
+    #   474318 yes
+#    cd /hive/data/genomes/chrPic1/jkStuff
+#    gapToLift chrPic1 chrPic1.nonBridged.lift -bedFile=chrPic1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' chrPic1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Choloepus hoffmanni	7	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add chrPic1 just after ce2
+# chrPic1 (painted turtle)
+chrPic1.serverGenome = /hive/data/genomes/chrPic1/chrPic1.2bit
+chrPic1.clusterGenome = /hive/data/genomes/chrPic1/chrPic1.2bit
+chrPic1.ooc = /hive/data/genomes/chrPic1/jkStuff/chrPic1.11.ooc
+chrPic1.lift = no
+chrPic1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+chrPic1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+chrPic1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+chrPic1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+chrPic1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+chrPic1.refseq.mrna.native.load = no
+chrPic1.refseq.mrna.xeno.load = yes
+chrPic1.genbank.mrna.xeno.load = yes
+chrPic1.genbank.est.native.load = no
+chrPic1.downloadDir = chrPic1
+chrPic1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding chrPic1 painted turtle" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for chrPicNames Chrysemys picta bellii" \
+        src/lib/gbGenome.c
+#	Western Painted Turtle - Chrysemys picta bellii - Dec 2011
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S chrPic1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial chrPic1 &
+    #	var/build/logs/2012.05.03-15:12:04.chrPic1.initalign.log
+    #   real    2418m11.414s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad chrPic1 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.05.08-13:23:32.dbload.log
+    #	real    42m38.307s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add chrPic1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added chrPic1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

@@ -5651,4 +5651,37 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/nomLeu2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+#####################################################################
+# tRNAs track (DONE 2012-04-02 Chin)
+#
+    # Please refer to the generic tRNS track build documentation 
+    #   ~/kent/src/hg/makeDb/doc/tRNAsTrack.txt 
+    # for details about how the track was build.
+
 ##############################################################################
+# orfeome 2012-03-16  (markd)
+
+enabled ORFeome tracks in etc/genbank.conf and reload genbank
+
+############################################################################
+# construct liftOver to mm9 (DONE - 2012-04-30 - Hiram)
+    screen -S 10        # manage this longish running job in a screen
+    mkdir /hive/data/genomes/mm10/bed/blat.mm9.2012-04-30
+    cd /hive/data/genomes/mm10/bed/blat.mm9.2012-04-30
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+        -ooc=/scratch/data/mm10/mm10.11.ooc \
+        -debug -dbHost=hgwdev -workhorse=hgwdev mm10 mm9 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+        -ooc=/scratch/data/mm10/mm10.11.ooc \
+        -dbHost=hgwdev -workhorse=hgwdev mm10 mm9 > do.log 2>&1
+    #   real    95m21.635s
+
+    # verify this file exists:
+    og -L /gbdb/mm10/liftOver/mm10ToMm9.over.chain.gz
+# -rw-rw-r-- 1 535855 Feb  9 12:07 /gbdb/mm9/liftOver/mm9ToMm10.over.chain.gz
+
+    # and try out the conversion on genome-test from mm9 to mm10
+############################################################################
+

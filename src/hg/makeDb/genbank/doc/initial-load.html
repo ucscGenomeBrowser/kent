@@ -12,7 +12,7 @@
     <H1>GenBank/RefSeq Genome Setup</H1>
     The page describes that process of setting up the GenBank/RefSeq update
     process for a new genome or new assembly. It's assumed that the
-    automated download and build already in place and in <CODE>/cluster/data/genbank/</CODE>.
+    automated download and build already in place and in <CODE>/hive/data/outside/genbank/</CODE>.
 
     <H3>Recent changes</H3>
     <OL>
@@ -48,11 +48,11 @@
            necessary to define multiple organism name mappings.  A list of 
            organism in GenBank/RefSeq, along with the count of cDNAs is in:<BR>
            <PRE>
-           /cluster/data/genbank/data/organism.lst
+           /hive/data/outside/genbank/data/organism.lst
            </PRE>
       <LI> <CODE>cd</CODE> to the top of the genbank source (<CODE>kent/src/hg/makeDb/genbank/</CODE>)
       <LI> <CODE>make</CODE> to test if the source builds
-      <LI> <CODE>make install-server</CODE> to update <CODE>/cluster/data/genbank/</CODE>.
+      <LI> <CODE>make install-server</CODE> to update <CODE>/hive/data/outside/genbank/</CODE>.
       <LI> Once these changes are debugged and committed, ask <A HREF="mailto:markd@cse.ucsc.edu"><CODE>markd</CODE></A>
            to update the round-robin code.
 
@@ -76,9 +76,9 @@
            
       <LI><CODE>ssh <em>fileServer</em></CODE><BR>
           Where <CODE><em>fileServer</em></CODE> is the NFS server with
-          <CODE>/cluster/data/genbank/</CODE>.
+          <CODE>/hive/data/outside/genbank/</CODE>.
 
-      <LI><CODE>cd /cluster/data/genbank</CODE><BR>
+      <LI><CODE>cd /hive/data/outside/genbank</CODE><BR>
           This directory is <CODE>$gbRoot</CODE>.
 
       <LI> <CODE>nice bin/gbAlignStep -initial <EM>$db</EM>&amp;</CODE><BR>
@@ -191,7 +191,7 @@
       </OL>
 <!--
 FIXME: 
-  -  mention cd-ing to /cluster/data/genbank and then doing a du to find machine.
+  -  mention cd-ing to /hive/data/outside/genbank and then doing a du to find machine.
   - mention that build takes place on kk.
   - alignment directory, monitor with list batches
 -->

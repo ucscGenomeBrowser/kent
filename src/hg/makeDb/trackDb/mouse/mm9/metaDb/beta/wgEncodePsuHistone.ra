@@ -2934,7 +2934,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep1.bam.bai
@@ -2961,7 +2960,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep2.bam.bai
@@ -2988,7 +2986,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
@@ -3015,7 +3012,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
@@ -3042,7 +3038,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
@@ -3069,7 +3064,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
@@ -3096,7 +3090,6 @@ controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-14
-dateUnrestricted 2012-09-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputSig.bigWig
@@ -3124,7 +3117,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam.bai
@@ -3152,7 +3144,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam.bai
@@ -3178,9 +3169,8 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-04-16
+dateResubmitted 2012-04-25
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
@@ -3192,7 +3182,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5997
+subId 6862
 tableName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
 view Peaks
 
@@ -3208,7 +3198,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep1.fastq.gz
@@ -3236,7 +3225,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep2.fastq.gz
@@ -3264,7 +3252,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -3292,7 +3279,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -3320,7 +3306,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep1.bigWig
@@ -3348,7 +3333,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep2.bigWig
@@ -3376,7 +3360,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig.bigWig
@@ -3404,7 +3387,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam.bai
@@ -3432,7 +3414,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam.bai
@@ -3460,7 +3441,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk.broadPeak.gz
@@ -3488,7 +3468,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep1.fastq.gz
@@ -3516,7 +3495,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep2.fastq.gz
@@ -3544,7 +3522,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -3572,7 +3549,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -3600,7 +3576,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep1.bigWig
@@ -3628,7 +3603,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep2.bigWig
@@ -3656,7 +3630,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig.bigWig
@@ -3683,7 +3656,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep1.bam.bai
@@ -3710,7 +3682,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep2.bam.bai
@@ -3738,7 +3709,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk.broadPeak.gz
@@ -3766,7 +3736,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -3794,7 +3763,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -3821,7 +3789,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep1.bigWig
@@ -3848,7 +3815,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep2.bigWig
@@ -3875,7 +3841,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputSig.bigWig
@@ -3902,7 +3867,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep1.fastq.gz
@@ -3929,7 +3893,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep2.fastq.gz
@@ -3956,7 +3919,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam.bai
@@ -3983,7 +3945,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam.bai
@@ -4011,7 +3972,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk.broadPeak.gz
@@ -4038,7 +3998,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep1.fastq.gz
@@ -4065,7 +4024,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep2.fastq.gz
@@ -4093,7 +4051,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -4121,7 +4078,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -4148,7 +4104,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep1.bigWig
@@ -4175,7 +4130,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep2.bigWig
@@ -4202,7 +4156,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig.bigWig
@@ -4502,7 +4455,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eInputME0S129InputAlnRep1.bam.bai
@@ -4529,7 +4481,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eInputME0S129InputAlnRep2.bam.bai
@@ -4556,7 +4507,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep1.fastq.gz
@@ -4583,7 +4533,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep2.fastq.gz
@@ -4610,7 +4559,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep1.bigWig
@@ -4637,7 +4585,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep2.bigWig
@@ -4664,7 +4611,6 @@ controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputSig.bigWig
@@ -4691,7 +4637,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1.bam.bai
@@ -4719,7 +4664,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2.bam.bai
@@ -4748,7 +4692,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk.broadPeak.gz
@@ -4777,7 +4720,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -4806,7 +4748,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -4834,7 +4775,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep1.bigWig
@@ -4862,7 +4802,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep2.bigWig
@@ -4890,7 +4829,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig.bigWig
@@ -4918,7 +4856,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep1.fastq.gz
@@ -4946,7 +4883,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
-dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep2.fastq.gz
@@ -4975,7 +4911,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam.bai
@@ -5004,7 +4939,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam.bai
@@ -5033,7 +4967,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk.broadPeak.gz
@@ -5062,7 +4995,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1.fastq.gz
@@ -5091,7 +5023,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2.fastq.gz
@@ -5120,7 +5051,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -5149,7 +5079,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -5178,7 +5107,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep1.bigWig
@@ -5207,7 +5135,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep2.bigWig
@@ -5236,7 +5163,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig.bigWig
@@ -5264,7 +5190,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1.bam.bai
@@ -5292,7 +5217,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2.bam.bai
@@ -5321,7 +5245,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk.broadPeak.gz
@@ -5350,7 +5273,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -5379,7 +5301,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -5407,7 +5328,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep1.bigWig
@@ -5435,7 +5355,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep2.bigWig
@@ -5463,7 +5382,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig.bigWig
@@ -5491,7 +5409,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep1.fastq.gz
@@ -5519,7 +5436,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
-dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep2.fastq.gz
@@ -5547,7 +5463,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam.bai
@@ -5575,7 +5490,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam.bai
@@ -5604,7 +5518,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
@@ -5632,7 +5545,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
@@ -5660,7 +5572,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2.fastq.gz
@@ -5689,7 +5600,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
@@ -5718,7 +5628,6 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
@@ -5746,7 +5655,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1.bigWig
@@ -5774,7 +5682,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2.bigWig
@@ -5802,7 +5709,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig.bigWig
@@ -6113,7 +6019,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1.bam.bai
@@ -6141,7 +6046,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2.bam.bai
@@ -6169,7 +6073,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
@@ -6197,7 +6100,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
@@ -6225,7 +6127,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1.bigWig
@@ -6253,7 +6154,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2.bigWig
@@ -6281,7 +6181,6 @@ controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-16
-dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig.bigWig
@@ -8041,4 +7940,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -101941776
+# MAGIC: 1428255089

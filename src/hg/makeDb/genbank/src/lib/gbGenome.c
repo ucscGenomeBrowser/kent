@@ -23,6 +23,8 @@ static char *mmNames[] = {"Mus musculus", "Mus sp.",
                           "Mus musculus brevirostris",
                           NULL};
 static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
+static char *choHofNames[] = {"Choloepus hoffmanni", NULL};
+static char *chrPicNames[] = {"Chrysemys picta", "Chrysemys picta marginata", "Chrysemys picta bellii", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
 static char *cioSavNames[] = {"Ciona savignyi", NULL};
 static char *strPurNames[] = {"Strongylocentrotus purpuratus", NULL};
@@ -101,6 +103,24 @@ static char *melGalNames[] = {"Meleagris gallopavo", NULL};
 char *allMisNames[] = {"Alligator mississippiensis", NULL};
 static char *hetGlaNames[] = {"Heterocephalus glaber", NULL};
 static char *sarHarNames[] = {"Sarcophilus harrisii", NULL};
+static char *dipOrdNames[] = {"Dipodomys ordii", "Dipodomys merriami", "Dipodomys spectabilis", NULL};
+static char *otoGarNames[] = {"Otolemur garnettii", NULL};
+static char *turTruNames[] = {"Tursiops truncatus", NULL};
+static char *eriEurNames[] = {"Erinaceus europaeus", NULL};
+static char *gadMorNames[] = {"Gadus morhua", NULL};
+static char *latChaNames[] = {"Latimeria chalumnae", NULL};
+static char *melUndNames[] = {"Melopsittacus undulatus", NULL};
+static char *micMurNames[] = {"Microcebus murinus", NULL};
+static char *ochPriNames[] = {"Ochotona princeps", NULL};
+static char *oreNilNames[] = {"Oreochromis niloticus", NULL};
+static char *proCapNames[] = {"Procavia capensis", NULL};
+static char *pteVamNames[] = {"Pteropus vampyrus", NULL};
+static char *saiBolNames[] = {"Saimiri boliviensis", "Saimiri boliviensis boliviensis", NULL};
+static char *sorAraNames[] = {"Sorex unguiculatus", NULL};
+static char *speTriNames[] = {"Spermophilus tridecemlineatus", "Ictidomys tridecemlineatus", NULL};
+static char *tarSyrNames[] = {"Tarsius syrichta", NULL};
+static char *tupBelNames[] = {"Tupaia belangeri", NULL};
+static char *vicPacNames[] = {"Vicugna pacos", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -108,6 +128,8 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"hg", hgNames},
     {"mm", mmNames},
     {"rn", rnNames},
+    {"choHof", choHofNames},
+    {"chrPic", chrPicNames},
     {"ci", ciNames},
     {"cioSav", cioSavNames},
     {"fr", frNames},
@@ -179,6 +201,24 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"allMis", allMisNames},
     {"hetGla", hetGlaNames},
     {"sarHar", sarHarNames},
+    {"dipOrd", dipOrdNames},
+    {"otoGar", otoGarNames},
+    {"turTru", turTruNames},
+    {"eriEur", eriEurNames},
+    {"gadMor", gadMorNames},
+    {"latCha", latChaNames},
+    {"melUnd", melUndNames},
+    {"micMur", micMurNames},
+    {"ochPri", ochPriNames},
+    {"oreNil", oreNilNames},
+    {"proCap", proCapNames},
+    {"pteVam", pteVamNames},
+    {"saiBol", saiBolNames},
+    {"sorAra", sorAraNames},
+    {"speTri", speTriNames},
+    {"tarSyr", tarSyrNames},
+    {"tupBel", tupBelNames},
+    {"vicPac", vicPacNames},
     {NULL, endNames}
 };
 

@@ -404,6 +404,7 @@ return cfgOptionDefault("browser.cgiRoot", defaultDir);
 char *hBackgroundImage()
 /* get the path to the configured background image to use, or the default */
 {
+
 return cfgOptionDefault("browser.background", DEFAULT_BACKGROUND);
 }
 
@@ -6093,29 +6094,27 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
-char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
+char *tdbShowNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "off");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
-cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
+cgiMakeCheckBox(cartVarName, !sameOk(tdbShowNames, "off"));
 printf("</TD><TD>Display read names</TD>");
 if (boxed && fileExists(hHelpFile("hgBamTrackHelp")))
     printf("<TD style='text-align:right'><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
            "configuration help</A></TD>");
 printf("</TR>\n");
-boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
+boolean canPair = (cartOrTdbString(cart, tdb, BAM_PAIR_ENDS_BY_NAME, NULL) != NULL);
 if (canPair)
     {
     printf("<TR><TD>");
     safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
-    cartMakeCheckBox(cart, cartVarName, TRUE);
-    printf("</TD><TD>Attempt to join paired end reads by name\n");
-    //puts("<BR>");
+    cgiMakeCheckBox(cartVarName, TRUE);
+    printf("</TD><TD>Attempt to join paired end reads by name</TD></TR>\n");
     }
 printf("<TR><TD colspan=2>Minimum alignment quality:\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
-cartMakeIntVar(cart, cartVarName,
-               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
+cgiMakeIntVar(cartVarName,
+	      atoi(cartOrTdbString(cart, tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 printf("</TD></TR></TABLE>");
-
 
 if (isCustomTrack(name))
     {
@@ -6131,8 +6130,7 @@ indelShowOptionsWithName(cart, tdb, name);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_COLOR_MODE, name);
-char *selected = cartUsualString(cart, cartVarName,
-				 trackDbSettingOrDefault(tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT));
+char *selected = cartOrTdbString(cart, tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_STRAND, sameString(selected, BAM_COLOR_MODE_STRAND));
 printf("Color by strand (blue for +, red for -)<BR>\n");
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_GRAY, sameString(selected, BAM_COLOR_MODE_GRAY));
@@ -6140,20 +6138,18 @@ printf("Use gray for\n");
 char cartVarName2[1024];
 safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_GRAY_MODE, name);
 int grayMenuSize = canPair ? ArraySize(grayLabels) : ArraySize(grayLabels)-1;
-char *sel2 = cartUsualString(cart, cartVarName2,
-			     trackDbSettingOrDefault(tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT));
+char *sel2 = cartOrTdbString(cart, tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 char onChange[2048];
 safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
       "onChange", cartVarName, BAM_COLOR_MODE_GRAY);
 cgiMakeDropListFull(cartVarName2, grayLabels, grayValues, grayMenuSize, sel2, onChange);
 printf("<BR>\n");
-if (trackDbSetting(tdb, "noColorTag") == NULL)
+if (trackDbSettingClosestToHome(tdb, "noColorTag") == NULL)
     {
     cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_TAG, sameString(selected, BAM_COLOR_MODE_TAG));
     printf("Use R,G,B colors specified in user-defined tag ");
     safef(cartVarName2, sizeof(cartVarName2), "%s." BAM_COLOR_TAG, name);
-    sel2 = cartUsualString(cart, cartVarName2,
-			   trackDbSettingOrDefault(tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT));
+    sel2 = cartOrTdbString(cart, tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
     safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT,
 	  "onkeypress", cartVarName, BAM_COLOR_MODE_TAG);
     cgiMakeTextVarWithExtraHtml(cartVarName2, sel2, 30, onChange);

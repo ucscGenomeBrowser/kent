@@ -744,8 +744,8 @@ if (x < xEnd)
             }
         else
             {
-            safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
+            safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -770,8 +770,8 @@ if (x < xEnd)
             }
         else
             {
-            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
-                hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
+            hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
                 chromName, winStart, winEnd,
                 database, tl.picWidth);
             }
@@ -3029,7 +3029,6 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
-char *name = tg->itemName(tg, item);
 
 if(tg->itemNameColor != NULL)
     {
@@ -3044,6 +3043,7 @@ tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
+    char *name = tg->itemName(tg, item);
     int nameWidth = mgFontStringWidth(font, name);
     int dotWidth = tl.nWidth/2;
     boolean snapLeft = FALSE;
@@ -12357,28 +12357,12 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 }
 }
 
-static void pubsLoadMarkerItem (struct track *tg)
-/* copy item names into extra field */
-{
-//loadSimpleBed(tg);
-loadSimpleBedAsLinkedFeaturesPerBase(tg);
-//tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
-//if (! (hashFindVal(tdb->settingsHash, "pubsMarkerTable")))
-enum trackVisibility vis = tg->visibility;
-if (vis == tvDense || vis == tvSquish) 
-    return;
-
-struct linkedFeatures *lf = NULL;
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->extra = lf->name;
-}
-
 char *pubsMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from score field and return.*/
 {
-struct linkedFeatures *lf = item;
+struct bed *bed = item;
 char newName[64];
-safef(newName, sizeof(newName), "%d articles", (int) lf->score);
+safef(newName, sizeof(newName), "%d articles", (int) bed->score);
 return cloneString(newName);
 }
 
@@ -12386,9 +12370,9 @@ static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 {
-struct linkedFeatures *lf = item;
+struct bed *bed = item;
 genericMapItem(tg, hvg, item,
-		    lf->extra, lf->extra, start, end,
+		    bed->name, bed->name, start, end,
 		    x, y, width, height);
 }
 
@@ -12501,9 +12485,6 @@ tg->mapItem   = pubsMapItem;
 static void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-//bedMethods(tg);
-tg->bedSize   = 5;
-tg->loadItems = pubsLoadMarkerItem;
 tg->mapItem   = pubsMarkerMapItem;
 tg->itemName  = pubsMarkerItemName;
 }

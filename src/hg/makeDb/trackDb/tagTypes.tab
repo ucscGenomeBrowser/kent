@@ -96,7 +96,6 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
-extraFields bed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -191,6 +190,7 @@ itemClassTbl bed genePred
 itemClassNameColumn genePred
 itemClassClassColumn genePred
 itemCount customTracks
+itemDetailsHtmlTable genePred psl bed
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed

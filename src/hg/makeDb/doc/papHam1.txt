@@ -215,3 +215,116 @@ taxId   9562
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# cpgIsland - (DONE - 2012-04-23 - Hiram)
+    mkdir /hive/data/genomes/papHam1/bed/cpgIslands
+    cd /hive/data/genomes/papHam1/bed/cpgIslands
+    time doCpgIslands.pl papHam1 > do.log 2>&1
+    #   real    940m44.062s
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    3m56.264s
+    time doCpgIslands.pl -continue=cleanup papHam1 > cleanup.log 2>&1
+    #   real    121m47.995s
+
+    cat fb.papHam1.cpgIslandExt.txt
+    #   19960131 bases of 2741867288 (0.728%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/papHam1/bed/genscan
+    cd /hive/data/genomes/papHam1/bed/genscan
+    time doGenscan.pl papHam1 > do.log 2>&1
+    #   real    810m7.177s
+
+    cat fb.papHam1.genscan.txt
+    #   51391265 bases of 2741867288 (1.874%) in intersection
+    cat fb.papHam1.genscanSubopt.txt
+    #   52066592 bases of 2741867288 (1.899%) in intersection
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-05-02 - Hiram)
+    mkdir /hive/data/genomes/papHam1/bed/gap
+    cd /hive/data/genomes/papHam1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../papHam1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m15.269s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits papHam1 -not gap -bed=notGap.bed
+    #	1358346944 bases of 1358346944 (100.000%) in intersection
+    featureBits papHam1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	18237 bases of 2741867288 (0.001%) in intersection
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" papHam1 | sort -n | tail -1
+    #	270
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" papHam1 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps papHam1 other.bed
+    #	18237 bases of 2741867288 (0.001%) in intersection
+    wc -l other.bed
+    #	5743
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad papHam1 otherGap other.bed
+    #   Read 5743 elements of size 8 from other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" papHam1
+    #	366334
+    hgsql papHam1 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" papHam1
+    #	372077
+    # == 366334 + 5743
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 papHam1 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" papHam1 | sort | uniq -c
+    #	372077 yes
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S papHam1
+    mkdir /hive/data/genomes/papHam1/bed/windowMasker
+    cd /hive/data/genomes/papHam1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev papHam1 > do.log 2>&1
+    #   real    1037m3.817s
+    # fixing broken commands in doLoad step:
+    time ./lastLoad.csh
+    #   real    17m15.223s
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev papHam1 > cleanup.log 2>&1
+    #   real    2m19.164s
+
+    sed -e 's/^/    #\t/' fb.papHam1.windowmaskerSdust.beforeClean.txt
+    #   1107561332 bases of 2867564654 (38.624%) in intersection
+    sed -e 's/^/    #\t/' fb.papHam1.windowmaskerSdust.clean.txt
+    #   981847549 bases of 2867564654 (34.240%) in intersection
+    sed -e 's/^/    #\t/' fb.papHam1.rmsk.windowmaskerSdust.txt
+    #   743599327 bases of 2867564654 (25.931%) in intersection
+
+#########################################################################

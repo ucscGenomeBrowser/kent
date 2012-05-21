@@ -1,15 +1,4 @@
-/* jsHelper - some little helper routines  to manage our javascript.
- * We don't do much javascript - just occassionally use it so that
- * when they select something from a pull-down, it will go hit the server to
- * figure out how to reload other control options based on the choice.
- * (For instance if they change the group, which items in the track
- * drop-down need to change).
- *
- * We accomplish this by maintaining two forms - a mainForm and a
- * hiddenForm.  The hiddenForm maintains echo's of all the variables
- * in the main form, which get updated onChange of controls that need
- * to 'ripple' to other controls.  The onChange also submits the
- * control. */
+// jsHelper.c - helper routines for interface between CGIs and client-side javascript
 
 #ifndef JSHELPER_H
 #define JSHELPER_H
@@ -153,91 +142,49 @@ void jsEndCollapsibleSection();
 typedef enum _jsonElementType
 {
     jsonList     = 0,
-    jsonHash     = 1,
+    jsonObject   = 1,
     jsonNumber   = 2,
-    jsonDouble    = 3,
+    jsonDouble   = 3,
     jsonBoolean  = 4,
     jsonString   = 5
 } jsonElementType;
 
-// May turn the following into a union to avoid casts (still debating that with angie).
+union jsonElementVal
+{
+    struct slRef *jeList;
+    struct hash *jeHash;
+    long jeNumber;
+    double jeDouble;
+    boolean jeBoolean;
+    char *jeString;
+};
 
 struct jsonElement
 {
     jsonElementType type;
-    // rest of data is here.
+    union jsonElementVal val;
 };
 
-struct jsonListElement
-{
-    jsonElementType type;
-    struct slRef *list;
-};
+// constructors for each jsonElementType
 
-struct jsonHashElement
-{
-    jsonElementType type;
-    struct hash *hash;
-};
+struct jsonElement *newJsonString(char *str);
+struct jsonElement *newJsonBoolean(boolean val);
+struct jsonElement *newJsonNumber(long val);
+struct jsonElement *newJsonDouble(double val);
+struct jsonElement *newJsonObject(struct hash *h);
+struct jsonElement *newJsonList(struct slRef *list);
 
-struct jsonStringElement
-{
-    jsonElementType type;
-    char *str;
-};
+void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
+// Add a new element to a jsonObject; existing values are replaced.
+// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals();
 
-struct jsonBooleanElement
-{
-    jsonElementType type;
-    boolean val;
-};
-
-struct jsonNumberElement
-{
-    jsonElementType type;
-    long val;
-};
-
-struct jsonDoubleElement
-{
-    jsonElementType type;
-    double val;
-};
-
-struct jsonStringElement *newJsonString(char *str);
-struct jsonBooleanElement *newJsonBoolean(boolean val);
-struct jsonNumberElement *newJsonNumber(long val);
-struct jsonDoubleElement *newJsonDouble(double val);
-struct jsonHashElement *newJsonHash(struct hash *h);
-struct jsonListElement *newJsonList(struct slRef *list);
-
-// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals()
-void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele);
-
-void jsonHashAddString(struct jsonHashElement *h, char *name, char *val);
-// Add a string to a hash which will be used to print a javascript object;
-// existing values are replaced.
-
-void jsonHashAddNumber(struct jsonHashElement *h, char *name, long val);
-// Add a number to a hash which will be used to print a javascript object;
-// existing values are replaced.
-
-void jsonHashAddDouble(struct jsonHashElement *h, char *name, double val);
-
-void jsonHashAddBoolean(struct jsonHashElement *h, char *name, boolean val);
-// Add a boolean to a hash which will be used to print a javascript object;
-// existing values are replaced.
-
-void jsonListAdd(struct slRef **list, struct jsonElement *ele);
-void jsonListAddString(struct slRef **list, char *val);
-void jsonListAddNumber(struct slRef **list, long val);
-void jsonListAddDouble(struct slRef **list, double val);
-void jsonListAddBoolean(struct slRef **list, boolean val);
+void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
+// Add a new element to a jsonList
 
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
 // print out a jsonElement
 
-extern struct jsonHashElement *jsonGlobalsHash; // The "all" globals json hash
+extern struct jsonElement *jsonGlobalsHash; // The "all" globals json hash
 
 void jsonPrintGlobals(boolean wrapWithScriptTags);
 // prints out the "common" globals json hash
@@ -249,5 +196,10 @@ void jsonErrPrintf(struct dyString *ds, char *format, ...);
 
 struct jsonElement *jsonParse(char *str);
 // parse string into an in-memory json representation
+
+char *jsonStringEscape(char *inString);
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or ' */
 
 #endif /* JSHELPER_H */

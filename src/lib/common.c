@@ -1500,7 +1500,7 @@ for (i=0; i<n; ++i)
 }
 
 void toLowerN(char *s, int n)
-/* Convert a section of memory to upper case. */
+/* Convert a section of memory to lower case. */
 {
 int i;
 for (i=0; i<n; ++i)
@@ -1754,6 +1754,23 @@ while ((c = *s++) != 0)
        break;
    ++count;
    }
+return count;
+}
+
+int countSeparatedItems(char *string, char separator)
+/* Count number of items in string you would parse out with given
+ * separator,  assuming final separator is optional. */
+{
+int count = 0;
+char c, lastC = 0;
+while ((c = *string++) != 0)
+    {   
+    if (c == separator)
+       ++count;
+    lastC = c;
+    }
+if (lastC != separator && lastC != 0)
+    ++count;
 return count;
 }
 

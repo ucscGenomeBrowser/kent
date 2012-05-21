@@ -20,6 +20,7 @@ scoreFilter 0
 noInherit on
 wgEncode 1
 
+
         track wgEncodeUmassDekker5CGm12878Pk
         parent wgEncodeUmassDekker5C
         shortLabel GM12878 Pk

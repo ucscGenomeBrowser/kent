@@ -52,6 +52,7 @@ view             Clusters
 type             bedRnaElements
 hasReplicates    no 
 required         no
+sql              bedRnaElements
 
 view             FastqRd1
 type             fastq  

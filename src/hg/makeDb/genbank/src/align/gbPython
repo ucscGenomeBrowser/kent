@@ -7,7 +7,7 @@ arch=`uname -m`
 # try both RR and other server locations
 rtdir="/genbank/runtime/$arch"
 if [ ! -e $rtdir ] ; then
-    rtdir="/cluster/data/genbank/runtime/$arch"
+    rtdir="/hive/data/outside/genbank/runtime/$arch"
 fi
 LD_LIBRARY_PATH="$rtdir/lib:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH

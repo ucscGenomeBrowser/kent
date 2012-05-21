@@ -467,3 +467,120 @@ close (FH);
     # rmsk covers another 40 million bases 251092658-210793620 = 40299038
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/cpgIslands
+    cd /hive/data/genomes/galGal4/bed/cpgIslands
+    time doCpgIslands.pl galGal4 > do.log 2>&1
+    #   Elapsed time: 58m41s
+
+    cat fb.galGal4.cpgIslandExt.txt
+    #   14619450 bases of 1032854810 (1.415%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/genscan
+    cd /hive/data/genomes/galGal4/bed/genscan
+    time doGenscan.pl galGal4 > do.log 2>&1
+    #   real    29m37.528s
+    # one broken job:
+./runGsBig.csh chr8 000 gtf/000/chr8.gtf pep/000/chr8.pep subopt/000/chr8.bed
+    # rerunning with window size of 2000000
+    #   about 10 minutes
+    #   continuing:
+    time doGenscan.pl -continue=makeBed galGal4 > makeBed.log 2>&1
+    #   real    12m15.506s
+
+    cat fb.galGal4.genscan.txt
+    #   22904400 bases of 1032854810 (2.218%) in intersection
+    cat fb.galGal4.genscanSubopt.txt
+    #   24186038 bases of 1032854810 (2.342%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1032838035 / 2897316137 \) \* 1024
+    #	( 1032838035 / 2897316137 ) * 1024 = 365.036502
+
+    # round up to 380  (galGal3 was 380)
+
+    cd /hive/data/genomes/galGal4
+    time blat galGal4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/galGal4.11.ooc -repMatch=380
+    #   Wrote 12593 overused 11-mers to jkStuff/galGal4.11.ooc
+    #   galGal3 had: Wrote 13061 overused 11-mers to /cluster/bluearc/galGal3/11.ooc
+    #	real     0m25.395s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" galGal4 | sort | uniq -c
+    #   915 no
+    #   12983 yes
+
+    cd /hive/data/genomes/galGal4/jkStuff
+    gapToLift galGal4 galGal4.nonBridged.lift -bedFile=galGal4.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' galGal4.nonBridged.bed | sort -nr | head
+    #   44546952 chr3   11581655        56128607        chr3.03
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Felis catus	1081	919	354
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# galGal4 (chicken)
+galGal4.serverGenome = /hive/data/genomes/galGal4/galGal4.2bit
+galGal4.clusterGenome = /hive/data/genomes/galGal4/galGal4.2bit
+galGal4.ooc = /hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc
+galGal4.lift = /hive/data/genomes/galGal4/jkStuff/galGal4.nonBridged.lift
+galGal4.perChromTables = no
+galGal4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+galGal4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+galGal4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+galGal4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+galGal4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+galGal4.refseq.mrna.native.load = yes
+galGal4.refseq.mrna.xeno.load = yes
+galGal4.genbank.mrna.xeno.load = yes
+galGal4.downloadDir = galGal4
+# galGal4.upstreamGeneTbl = refGene
+# galGal4.upstreamMaf = multiz7way
+# /hive/data/genomes/galGal3/bed/multiz7way/species.lst
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding galGal4 chicken" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S galGal4           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial galGal4 &
+    #	  var/build/logs/2012.05.04-15:58:41.galGal4.initalign.log
+    #   real    1604m15.676s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad galGal4 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-08:48:35.dbload.log
+    #   real    48m18.467s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add galGal4 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added galGal4." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

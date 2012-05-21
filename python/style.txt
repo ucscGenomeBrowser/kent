@@ -59,10 +59,12 @@ A module may in turn contain any number of related classes and methods. This dif
 where one file correlates to one class: in Python it is correct to treat one module similar to
 a whole namespace in Java.
 
-Internal packages and modules should have short names in mixedCase, with no spaces or underscores.
-A good example of this style is the ucscGenomics package:
+In general try to keep modules on the order of 100's of lines.
 
-    ucscGenomics/
+Internal packages and modules should have short names in mixedCase, with no spaces or underscores.
+A good example of this style is the ucscGb package:
+
+    ucscGb/
         __init__.py
         ra.py
         cv.py
@@ -75,14 +77,14 @@ Imports
 
 The most correct way to import something in Python is by specifying its containing module:
     import os
-    from ucscGenomics import ra
+    from ucscGb import ra
  
     Then, the qualified name can be used:
         someRa = ra.RaFile()
    
     Do not import as below, as this may cause local naming conflicts:
-        from ucscGenomics.ra import RaFile
-        from ucscGenomics.track import *
+        from ucscGb.ra import RaFile
+        from ucscGb.track import *
 
 Imports should follow the structure:
         
@@ -90,7 +92,7 @@ Imports should follow the structure:
         import os
         import sys
 
-        from ucscGenomics import ra, track, qa
+        from ucscGb import ra, track, qa
        
     2. Imports should be at the top of the file. Each section should be separated by a blank line:
 
@@ -115,10 +117,14 @@ mixedCase names. The leading character is not capitalized, but all successive wo
 capitalized. Underscores are not used, except for private internal methods, 
 where the name is preceded by double underscores which Python recognizes as private.
 
+In general try to keep methods around 20 lines.
+
 Functions
 
 mixedCase names. The leading character is not capitalized, but all 
 successive words are capitalized.
+
+In general try to keep methods around 20 lines.
 
 Variables
 

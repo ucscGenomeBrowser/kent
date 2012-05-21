@@ -1485,7 +1485,13 @@ va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
-cgiMakeHiddenVar("db", db);
+// WTF - variable outside of a form on almost every page we make below?
+// Tim put this in.  Talking with him it sounds like some pages might actually
+// depend on it.  Not removing it until we have a chance to test.  Best fix
+// might be to add it to cartSaveSession, though this would then no longer be
+// well named, and not all things have 'db.'  Arrr.  Probably best to remove
+// and test a bunch.
+cgiMakeHiddenVar("db", db);  
 }
 
 void cartWebEnd()
@@ -1514,6 +1520,93 @@ else
 popWarnHandler();
 }
 
+void setThemeFromCart(struct cart *cart) 
+/* If 'theme' variable is set in cart: overwrite background with the one from
+ * defined for this theme Also set the "styleTheme", with additional styles
+ * that can overwrite the main style settings */
+{
+// Get theme from cart and use it to get background file from config;
+// format is browser.theme.<name>=<stylesheet>[,<background>]
+
+char **options;
+int optionCount;
+char *cartTheme = cartOptionalString(cart, "theme");
+if (cartTheme==NULL)
+    return;
+
+char *themeKey = catTwoStrings("browser.theme.", cartTheme);
+char *themeDefLine = cfgOption(themeKey);
+freez(&themeKey);
+if (themeDefLine == NULL)
+    return;
+
+sqlStringDynamicArray(themeDefLine, &options, &optionCount);
+if(options == NULL)
+    return;
+
+char *styleFile = options[0];
+if(isNotEmpty(styleFile))
+    {
+    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
+    if (link)
+        {
+        htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
+        webSetStyle(link);       // for web.c, used by hgc
+        }
+    }
+
+if(optionCount >= 2)
+    {
+    char *background = options[1];
+    if(isNotEmpty(background))
+        htmlSetBackground(cloneString(background));
+    }
+
+freeMem(options[0]);
+freez(&options);
+}
+
+void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
+	char *cookieName, char **exclude, struct hash *oldVars)
+/* Load cart from cookie and session cgi variable.  Write web-page
+ * preamble including head and title, call doMiddle with cart, and write end of web-page.
+ * Exclude may be NULL.  If it exists it's a comma-separated list of
+ * variables that you don't want to save in the cart between
+ * invocations of the cgi-script. */
+{
+struct cart *cart;
+char *db, *org, *pos, *clade=NULL;
+char titlePlus[128];
+char extra[128];
+pushWarnHandler(cartEarlyWarningHandler);
+cart = cartAndCookie(cookieName, exclude, oldVars);
+getDbAndGenome(cart, &db, &org, oldVars);
+clade = hClade(org);
+pos = cartOptionalString(cart, positionCgiName);
+pos = addCommasToPos(db, stripCommas(pos));
+if(pos != NULL && oldVars != NULL)
+    {
+    struct hashEl *oldpos = hashLookup(oldVars, positionCgiName);
+    if(oldpos != NULL && differentString(pos,oldpos->val))
+        cartSetString(cart,"lastPosition",oldpos->val);
+    }
+*extra = 0;
+if (pos == NULL && org != NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
+else if (pos != NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
+else if (pos == NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s", title );
+else
+    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
+popWarnHandler();
+setThemeFromCart(cart);
+htmStartWithHead(stdout, head, titlePlus);
+cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+cartCheckout(&cart);
+cartFooter();
+}
+
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
 	char **exclude, struct hash *oldVars)
 /* Get cart and cookies and set up error handling, but don't start writing any
@@ -1523,6 +1616,7 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * put in optional hash oldVars. */
 {
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
+setThemeFromCart(cart);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
@@ -1569,46 +1663,6 @@ proteinID = cartOptionalString(cart, "proteinID");
 safef(titlePlus, sizeof(titlePlus), "Protein %s - %s", proteinID, title);
 popWarnHandler();
 htmStart(stdout, titlePlus);
-cartWarnCatcher(doMiddle, cart, htmlVaWarn);
-cartCheckout(&cart);
-cartFooter();
-}
-
-void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
-	char *cookieName, char **exclude, struct hash *oldVars)
-/* Load cart from cookie and session cgi variable.  Write web-page
- * preamble including head and title, call doMiddle with cart, and write end of web-page.
- * Exclude may be NULL.  If it exists it's a comma-separated list of
- * variables that you don't want to save in the cart between
- * invocations of the cgi-script. */
-{
-struct cart *cart;
-char *db, *org, *pos, *clade=NULL;
-char titlePlus[128];
-char extra[128];
-pushWarnHandler(cartEarlyWarningHandler);
-cart = cartAndCookie(cookieName, exclude, oldVars);
-getDbAndGenome(cart, &db, &org, oldVars);
-clade = hClade(org);
-pos = cartOptionalString(cart, positionCgiName);
-pos = addCommasToPos(db, stripCommas(pos));
-if(pos != NULL && oldVars != NULL)
-    {
-    struct hashEl *oldpos = hashLookup(oldVars, positionCgiName);
-    if(oldpos != NULL && differentString(pos,oldpos->val))
-        cartSetString(cart,"lastPosition",oldpos->val);
-    }
-*extra = 0;
-if (pos == NULL && org != NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
-else if (pos != NULL && org == NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
-else if (pos == NULL && org == NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s", title );
-else
-    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
-popWarnHandler();
-htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
 cartFooter();

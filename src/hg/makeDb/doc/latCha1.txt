@@ -284,3 +284,115 @@ taxId   7897
     ln -s `pwd`/latCha1.2bit /gbdb/latCha1/latCha1.2bit
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/latCha1/bed/cpgIslands
+    cd /hive/data/genomes/latCha1/bed/cpgIslands
+    time doCpgIslands.pl latCha1 > do.log 2>&1
+    #   Elapsed time: 75m3s
+
+    cat fb.latCha1.cpgIslandExt.txt
+    #   3128859 bases of 2183592768 (0.143%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/latCha1/bed/genscan
+    cd /hive/data/genomes/latCha1/bed/genscan
+    time doGenscan.pl latCha1 > do.log 2>&1
+    #   Elapsed time: 107m4s
+
+    cat fb.latCha1.genscan.txt
+    #   34776149 bases of 2183592768 (1.593%) in intersection
+    cat fb.latCha1.genscanSubopt.txt
+    #   39383851 bases of 2183592768 (1.804%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2183592768 / 2897316137 \) \* 1024
+    #	( 2183592768 / 2897316137 ) * 1024 = 771.748366
+
+    # round up to 800
+
+    cd /hive/data/genomes/latCha1
+    time blat latCha1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/latCha1.11.ooc -repMatch=800
+    #   Wrote 28363 overused 11-mers to jkStuff/latCha1.11.ooc
+    #   real    0m39.722s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" latCha1 | sort | uniq -c
+    #   269010 yes
+#    cd /hive/data/genomes/latCha1/jkStuff
+#    gapToLift latCha1 latCha1.nonBridged.lift -bedFile=latCha1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' latCha1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism    mrnaCnt estCnt  refSeqCnt
+# Latimeria chalumnae	47	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf
+# latCha1 (Coelacanth)
+latCha1.serverGenome = /hive/data/genomes/latCha1/latCha1.2bit
+latCha1.clusterGenome = /hive/data/genomes/latCha1/latCha1.2bit
+latCha1.ooc = /hive/data/genomes/latCha1/jkStuff/latCha1.11.ooc
+latCha1.lift = no
+latCha1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+latCha1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+latCha1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+latCha1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+latCha1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+latCha1.refseq.mrna.native.load = no
+latCha1.refseq.mrna.xeno.load = yes
+latCha1.genbank.mrna.xeno.load = yes
+latCha1.genbank.est.native.load = no
+latCha1.downloadDir = latCha1
+latCha1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding latCha1 Coelacanth" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for latChaNames" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S latCha1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial latCha1 &
+    #	var/build/logs/2012.05.08-11:55:55.latCha1.initalign.log
+    #   real    2310m21.398s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad latCha1 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.09-16:06:10.dbload.log
+    #   real    85m52.881s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add latCha1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added latCha1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

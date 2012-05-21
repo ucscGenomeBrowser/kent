@@ -40,15 +40,15 @@ $(function () {
         dataGroups = encodeProject.getDataGroups(dataTypes);
 
         // set up structures for cell types and their tiers
-        cellTiers = encodeProject.getCellTiers(cellTypes);
+        cellTiers = encodeProject.getCellTiers(cellTypes, encodeMatrix_organism);
 
         // gather experiments into matrix
         // NOTE: dataTypeExps is populated here
         matrix = makeExperimentMatrix(experiments, dataTypeExps);
 
         // fill in table using matrix
-        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
-                    dataGroups, dataTypeExps, tableHeaderOut, rowAddCells);
+        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, dataGroups, dataTypeExps, 
+                        encodeProject.pruneDataGroupsToExps, tableHeaderOut, rowAddCells);
     }
 
     function makeExperimentMatrix(experiments, dataTypeExps) {
@@ -84,7 +84,7 @@ $(function () {
     return matrix;
     }
 
-    function tableHeaderOut($table, dataGroups, dataTypeExps) {
+    function tableHeaderOut($table, dataGroups) {
         // Generate table header and add to document
         // NOTE: relies on hard-coded classes and ids
 
@@ -106,31 +106,26 @@ $(function () {
             $thead.before('<colgroup></colgroup>');
             $.each(group.dataTypes, function (i, label) {
                 dataType = encodeProject.getDataTypeByLabel(label);
-
-                // prune out datatypes with no experiments
-                if (dataTypeExps[dataType.term] !== undefined) {
-                    $th = $('<th class="elementType"><div class="verticalText">' + 
-                                dataType.label + 
-                                // add button to launch ChIP-seq (but suppress on IE)
-                                (dataType.term === 'ChipSeq' && !$.browser.msie ? 
-                                '&nbsp;&nbsp; <span title="Click to view ChIP-seq experiment matrix by antibody target" id="chipButton">view matrix</span>': '') + 
-                                '</div></th>');
-                    if (!encodeProject.isIE8()) {
-                        // Suppress mouseOver under IE8 as QA noted flashing effect
-                        $th.attr('title', dataType.description);
-                    }
-                    $tableHeaders.append($th);
-
-                    // add colgroup element to support cross-hair hover effect
-                    $thead.before('<colgroup class="experimentCol"></colgroup>');
-                    maxLen = Math.max(maxLen, dataType.label.length);
+                $th = $('<th class="elementType"><div class="verticalText">' + 
+                            dataType.label + 
+                            // add button to launch ChIP-seq (but suppress on IE)
+                            (dataType.term === 'ChipSeq' && !$.browser.msie ? 
+                            '&nbsp;&nbsp; <span title="Click to view ChIP-seq experiment matrix by antibody target" id="chipButton">view matrix</span>': '') + 
+                            '</div></th>');
+                if (!encodeProject.isIE8()) {
+                    // Suppress mouseOver under IE8 as QA noted flashing effect
+                    $th.attr('title', dataType.description);
                 }
+                $tableHeaders.append($th);
+                // add colgroup element to support cross-hair hover effect
+                $thead.before('<colgroup class="experimentCol"></colgroup>');
+                maxLen = Math.max(maxLen, dataType.label.length);
             });
         });
 
         // add click handler to navigate to Chip-seq matrix
         $('#chipButton').click(function() {
-            window.open('encodeChipMatrixHuman.html', 'matrixWindow');
+            window.open(encodeMatrix.pageForChipMatrix(encodeMatrix_organism), 'matrixWindow');
         });
 
         // adjust size of headers based on longest label length
@@ -144,7 +139,7 @@ $(function () {
         }
     }
 
-    function rowAddCells($row, dataGroups, dataTypeExps, matrix, cellType) {
+    function rowAddCells($row, dataGroups, matrix, cellType) {
         // populate a row in the matrix with cells for data groups and data types
         // null cellType indicates this is a row for a cell group (tier)
 
@@ -155,13 +150,12 @@ $(function () {
             $td = $('<td></td>');
             $td.addClass('matrixCell');
             $row.append($td);
-
+            if (!group.dataTypes.length) {
+                // no data types in this organism for this group
+                return true;
+            }
             $.each(group.dataTypes, function (i, dataTypeLabel) {
                 dataType = encodeProject.getDataTypeByLabel(dataTypeLabel).term;
-                // prune out datatypes with no experiments
-                if (dataTypeExps[dataType] === undefined) {
-                    return true;
-                }
                 $td = $('<td></td>');
                 $td.addClass('matrixCell');
                 $row.append($td);

@@ -263,4 +263,127 @@ ncbiAssemblyName OtoGar3
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
     # Do not need to do this since Repeat Masker was used
+
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/cpgIslands
+    cd /hive/data/genomes/otoGar3/bed/cpgIslands
+    time doCpgIslands.pl otoGar3 > do.log 2>&1
+    #   real    29m34.875s
+
+    cat fb.otoGar3.cpgIslandExt.txt
+    #   14292453 bases of 2359530453 (0.606%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/genscan
+    cd /hive/data/genomes/otoGar3/bed/genscan
+    time doGenscan.pl otoGar3 > do.log 2>&1
+    #   real    25m26.159s
+    # one broken job:
+./runGsBig.csh GL873659 000 gtf/000/GL873659.gtf pep/000/GL873659.pep subopt/000/GL873659.bed
+    # rerunning with 2000000 window size
+    #   about 2 minutes
+    #   continuing:
+    time doGenscan.pl -continue=makeBed otoGar3 > makeBed.log 2>&1
+    #   real    4m12.143s
+    cat fb.otoGar3.genscan.txt
+    #   55174547 bases of 2359530453 (2.338%) in intersection
+    cat fb.otoGar3.genscanSubopt.txt
+    #   58681737 bases of 2359530453 (2.487%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-05 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2359530453 / 2897316137 \) \* 1024
+    #	( 2359530453 / 2897316137 ) * 1024 = 833.930117
+
+    # round up to 850
+
+    cd /hive/data/genomes/otoGar3
+    time blat otoGar3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/otoGar3.11.ooc -repMatch=850
+    #   Wrote 23673 overused 11-mers to jkStuff/otoGar3.11.ooc
+    #	real     0m44.369s
+
+    # there are no non-bridged gaps, do not create lift file for genbank
+    hgsql -N -e "select bridge from gap;" otoGar3 | sort | uniq -c
+    #   192447 yes
+
+#    cd /hive/data/genomes/otoGar3/jkStuff
+#    gapToLift otoGar3 otoGar3.nonBridged.lift -bedFile=otoGar3.nonBridged.bed
+    # this assembly has gaps abutting each other which produces warnings
+    #   from this gapToLift program.
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' otoGar3.nonBridged.bed | sort -nr | head
+    #   3862550 chr13   35251702        39114252        chr13.72
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-05 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Otolemur garnettii	3	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# otoGar3 (bushbaby)
+otoGar3.serverGenome = /hive/data/genomes/otoGar3/otoGar3.2bit
+otoGar3.clusterGenome = /hive/data/genomes/otoGar3/otoGar3.2bit
+otoGar3.ooc = /hive/data/genomes/otoGar3/jkStuff/otoGar3.11.ooc
+otoGar3.perChromTables = no
+otoGar3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+otoGar3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+otoGar3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+otoGar3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+otoGar3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+otoGar3.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+otoGar3.downloadDir = otoGar3
+otoGar3.refseq.mrna.native.load  = no
+otoGar3.refseq.mrna.xeno.load  = yes
+otoGar3.genbank.mrna.xeno.load = yes
+otoGar3.genbank.mrna.xeno.loadDesc = no
+otoGar3.genbank.est.native.load = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding otoGar3 bushbaby" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for otoGarNames Otolemur garnettii" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S otoGar3           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial otoGar3 &
+    #	  var/build/logs/2012.05.07-09:43:51.otoGar3.initalign.log
+    #   real    1551m45.359s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad otoGar3 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.09-09:49:13.dbload.log
+    #   real    74m22.846s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add otoGar3 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added otoGar3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

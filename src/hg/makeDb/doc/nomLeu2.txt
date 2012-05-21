@@ -419,4 +419,110 @@ taxId 61853
 #    ln -s `pwd`/nomLeu2.2bit /gbdb/nomLeu2/nomLeu2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/nomLeu2/bed/cpgIslands
+    cd /hive/data/genomes/nomLeu2/bed/cpgIslands
+    time doCpgIslands.pl nomLeu2 > do.log 2>&1
+    #   Elapsed time: 61m44s
 
+    cat fb.nomLeu2.cpgIslandExt.txt
+    #   17731794 bases of 2756609047 (0.643%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/nomLeu2/bed/genscan
+    cd /hive/data/genomes/nomLeu2/bed/genscan
+    time doGenscan.pl nomLeu2 > do.log 2>&1
+    #   Elapsed time: 66m40s
+
+    cat fb.nomLeu2.genscan.txt
+    #   49800461 bases of 2756609047 (1.807%) in intersection
+    cat fb.nomLeu2.genscanSubopt.txt
+    #   52057790 bases of 2756609047 (1.888%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-07 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2756609047 / 2897316137 \) \* 1024
+    #	( 2756609047 / 2897316137 ) * 1024 = 974.269818
+
+    # round up to 1000 (nomLeu1 was 900)
+
+    cd /hive/data/genomes/nomLeu2
+    time blat nomLeu2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/nomLeu2.11.ooc -repMatch=1000
+    #   Wrote 30203 overused 11-mers to jkStuff/nomLeu2.11.ooc
+    #   real    1m47.770s
+    #	nomLeu1 was: # Wrote 36558 overused 11-mers to jkStuff/nomLeu1.11.ooc
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" nomLeu2 | sort | uniq -c
+    #   179932 yes
+#    cd /hive/data/genomes/nomLeu2/jkStuff
+#    gapToLift nomLeu2 nomLeu2.nonBridged.lift -bedFile=nomLeu2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' nomLeu2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-07 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Heterocephalus glaber	45	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add nomLeu2 just after ce2
+# nomLeu2 (Gibbon)
+nomLeu2.serverGenome = /hive/data/genomes/nomLeu2/nomLeu2.2bit
+nomLeu2.clusterGenome = /hive/data/genomes/nomLeu2/nomLeu2.2bit
+nomLeu2.ooc = /hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc
+nomLeu2.lift = no
+nomLeu2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+nomLeu2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+nomLeu2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+nomLeu2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+nomLeu2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+nomLeu2.refseq.mrna.native.load = no
+nomLeu2.refseq.mrna.xeno.load = yes
+nomLeu2.genbank.mrna.native.load = no
+nomLeu2.genbank.mrna.xeno.load = yes
+nomLeu2.genbank.est.native.load = no
+nomLeu2.downloadDir = nomLeu2
+nomLeu2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding nomLeu2 Gibbon" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S nomLeu2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial nomLeu2 &
+    #	 var/build/logs/2012.05.07-10:21:12.nomLeu2.initalign.log
+    #   real    2135m50.446s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nomLeu2 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #   real    80m50.729s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add nomLeu2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added nomLeu2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

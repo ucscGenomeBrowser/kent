@@ -154,6 +154,7 @@ void htmlOpen(char *format, ...)
 va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
+va_end(args);
 }
 
 void htmlClose()

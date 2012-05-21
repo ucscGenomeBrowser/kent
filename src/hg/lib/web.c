@@ -437,6 +437,7 @@ if(!skipSectionHeader)
     puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
+	 "<div id=firstSection>"
          "      <!--outer table is for border purposes-->\n"
          "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
          "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
@@ -537,6 +538,7 @@ puts(
     "	</TD></TR></TABLE>" "\n"
     "	</TD></TR></TABLE>" "\n"
     "	" );
+puts("</div>");
 }
 
 void webNewSection(char* format, ...)
@@ -546,6 +548,7 @@ va_list args;
 va_start(args, format);
 
 webEndSection();
+puts("<div>");
 puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
 puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
     "<BR>\n\n"
@@ -588,10 +591,13 @@ if(!webInTextMode)
     }
 }
 
+static boolean gotWarnings = FALSE;
+
 void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
+gotWarnings = TRUE;
 boolean needStart = !webHeadAlreadyOutputed;
 if (needStart)
     webStart(errCart, NULL, "Error");
@@ -602,6 +608,12 @@ if (needStart)
     webEnd();
 }
 
+
+boolean webGotWarnings()
+/* Return TRUE if webVaWarn has been called. */
+{
+return gotWarnings;
+}
 
 void webAbort(char* title, char* format, ...)
 /* an abort function that outputs a error page */
@@ -931,10 +943,24 @@ return retDb;
 }
 
 static unsigned long expireSeconds = 0;
+static boolean lazarus = FALSE;
+void lazarusLives(unsigned long newExpireSeconds)
+/* Long running process requests more time */
+{
+lazarus = TRUE;
+expireSeconds = newExpireSeconds;
+}
+
 /* phoneHome business */
 static void cgiApoptosis(int status)
 /* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
+if (lazarus)
+    {
+    (void) alarm(expireSeconds);    /* CGI timeout */
+    lazarus = FALSE;
+    return;
+    }
 if (expireSeconds > 0)
     {
     /* want to see this error message in the apache error_log also */
@@ -1367,8 +1393,10 @@ dyStringFree(&fullDirName);
 char *linkFull = dyStringCannibalize(&linkWithTimestamp);
 char *link = linkFull;
 if (docRoot != NULL)
+    {
     link = cloneString(linkFull + strlen(docRoot) + 1);
-freeMem(linkFull);
+    freeMem(linkFull);
+    }
 
 if (wrapInHtml) // wrapped for christmas
     {

@@ -378,4 +378,30 @@ close (FH);
     ln -s `pwd`/melUnd1.2bit /gbdb/melUnd1/melUnd1.2bit
 
 #########################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/cpgIslands
+    cd /hive/data/genomes/melUnd1/bed/cpgIslands
+    time doCpgIslands.pl melUnd1 > do.log 2>&1
+    #   real    58m33.619s
 
+    cat fb.melUnd1.cpgIslandExt.txt
+    #   8424594 bases of 1086614815 (0.775%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/genscan
+    cd /hive/data/genomes/melUnd1/bed/genscan
+    time doGenscan.pl melUnd1 > do.log 2>&1
+    # one job failed
+./runGsBig.csh JH556617 006 gtf/006/JH556617.gtf pep/006/JH556617.pep subopt/006/JH556617.bed
+    # re-running with a window size of 2000000 OK
+    # continuing:
+    time doGenscan.pl -continue=makeBed melUnd1 > makeBed.log 2>&1
+    #   real    56m49.050s
+
+    cat fb.melUnd1.genscan.txt
+    #   21738187 bases of 1086614815 (2.001%) in intersection
+    cat fb.melUnd1.genscanSubopt.txt
+    #   26863973 bases of 1086614815 (2.472%) in intersection
+
+#########################################################################

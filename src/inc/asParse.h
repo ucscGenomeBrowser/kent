@@ -85,6 +85,10 @@ struct asObject
 struct dyString *asColumnToSqlType(struct asColumn *col);
 /* Convert column to a sql type spec in returned dyString */
 
+char *asTypeNameFromSqlType(char *sqlType);
+/* Return the autoSql type name (not enum) for the given SQL type, or NULL.
+ * Don't attempt to free result. */
+
 struct asObject *asParseFile(char *fileName);
 /* Parse autoSql .as file. */
 

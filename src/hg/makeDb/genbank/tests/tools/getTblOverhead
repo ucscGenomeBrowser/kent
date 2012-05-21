@@ -5,9 +5,9 @@ sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
 from pycbio.tsv.TSVReader import TSVReader
 from pycbio.sys import fileOps,procOps
 
-tblStatsDir="/cluster/data/genbank/var/tblstats/hgwbeta/2008.01.30"
-tblReFile="/cluster/data/genbank/etc/genbank.tbls"
-uniqStrReFile="/cluster/data/genbank/etc/uniqstr.tbls"
+tblStatsDir="/hive/data/outside/genbank/var/tblstats/hgwbeta/2008.01.30"
+tblReFile="/hive/data/outside/genbank/etc/genbank.tbls"
+uniqStrReFile="/hive/data/outside/genbank/etc/uniqstr.tbls"
 
 # doens't unclude uniqStr
 metaDataTbls = ("^gbCdnaInfo$", "^imageClone$", "^refSeqStatus$", "^refLink$",

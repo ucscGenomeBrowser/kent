@@ -70,12 +70,17 @@ switch(effect->so.soNumber)
 	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
 	break;
 
+    case inframe_deletion:
+    case frameshift_variant:
+    case synonymous_variant:
     case non_synonymous_variant:
 	words[count++] = cloneString(effect->so.sub.codingChange.transcript);
 	words[count++] = uintToString(effect->so.sub.codingChange.exonNumber);
 	words[count++] = uintToString(effect->so.sub.codingChange.cDnaPosition);
 	words[count++] = uintToString(effect->so.sub.codingChange.cdsPosition);
 	words[count++] = uintToString(effect->so.sub.codingChange.pepPosition);
+	words[count++] = cloneString(effect->so.sub.codingChange.aaChanges);
+	words[count++] = cloneString(effect->so.sub.codingChange.codonChanges);
 	break;
 
     default:
@@ -201,7 +206,14 @@ struct annoRow *outRows = NULL;
 for(; rows; rows = rows->next)
     {
     char **inWords = rows->data;
+
+    // work around genePredLoad's trashing its input
+    char *saveExonStarts = cloneString(inWords[8]);
+    char *saveExonEnds = cloneString(inWords[9]);
     struct genePred *gp = genePredLoad(inWords);
+    inWords[8] = saveExonStarts;
+    inWords[9] = saveExonEnds;
+
     struct annoRow *outRow = aggvGenRows(self, variant, gp, rows);
     slAddHead(&outRows, outRow);
     }

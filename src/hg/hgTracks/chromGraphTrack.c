@@ -183,8 +183,8 @@ char *encodedTrack = cgiEncode(tg->track);
 if(theImgBox && curImgTrack)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
-    safef(link,sizeof(link),"%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
-        winStart, winEnd, encodedTrack);
+    safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
+        chromName, winStart, winEnd, encodedTrack);
     #ifdef IMAGEv2_SHORT_MAPITEMS
         if(xOff < insideX && xOff+width > insideX)
             warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",encodedTrack,xOff, yOff, xOff+width, yOff+height, link);

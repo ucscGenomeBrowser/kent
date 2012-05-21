@@ -38,7 +38,12 @@
 				TARGET=_blank>Minimal Browser Installation</A>
 			    instructions on
 			    <A HREF="http://genomewiki.ucsc.edu"
-				TARGET=_blank>genomewiki.</A>
+				TARGET=_blank>genomewiki</A>.
+			    Additionally, these blog posts may be helpful with setting up a mirror
+			    site on <A HREF="http://bergmanlab.smith.man.ac.uk/?p=1111" TARGET=_blank>CentOS</A>
+			    and <A HREF="http://enotacoes.wordpress.com/2009/09/03/installing-a-minimal-ucsc-mirror-in-ubuntu-jaunty-64-bits/" TARGET=_blank>Ubuntu</A>.
+                            Note that the most complete and up-to-date instructions for setting up a mirror can be found in our
+                            <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product" target="_blank">source tree</a>.
 			    <P>
                             <p>
                             A <B>license</B> is required for commercial download 
@@ -130,6 +135,16 @@ databases </A>&nbsp;
 <P>
 <A NAME="step1"></A>
 <B>1. Install Apache server and MySQL server</B>
+<p>
+<b>IMPORTANT NOTE!!!</b> Our code uses &quot;LOAD DATA LOCAL INFILE&quot;
+extensively. Some versions of MySQL have disabled the use of &quot;LOAD DATA
+LOCAL INFILE&quot; by default. For new installations of MySQL, this option
+must be enabled in order for the Browser to function properly. For affected
+versions, existing MySQL installations and libraries will need to be reinstalled
+with this option enabled. Please see the following
+<a href="http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html" target="_blank">
+MySQL page</a> for more information regarding this issue.
+</p>
 <OL type="a">
 <LI>
 We will not provide consulting on the operation or configuration
@@ -381,8 +396,8 @@ setenv HGCGI $CGI_BIN
 <LI>Download the released zipped version of the source files from 
 <A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">here</A>.
 <BR>
-Follow the <A HREF="jk-install.html">instructions</A> for how to compile
-the files. <BR>
+Follow the <A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/README.building.source" target="_blank">
+instructions</A> for how to compile the files.<BR>
 The source tree can also be obtained via <A HREF="git.html">Git</A>.
 </OL>
 

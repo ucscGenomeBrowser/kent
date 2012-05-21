@@ -9,7 +9,7 @@
 #       ASSEMBLY TYPE:	Haploid
 #       NUMBER OF ASSEMBLY-UNITS:	1
 #       ASSEMBLY ACCESSION:	GCA_000247695.1
-      
+
 #       FTP-RELEASE DATE: 10-Mar-2012
 
 #       http://www.ncbi.nlm.nih.gov/genome/6995
@@ -72,7 +72,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "%s", $line;
     }
 }
@@ -86,7 +86,7 @@ while (my $line = <FH>) {
         chomp $line;
         $line =~ s/.*gb\|//;
         $line =~ s/\|.*//;
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC ">$line\n";
     } else {
         print UC $line;
@@ -174,7 +174,7 @@ taxId 10181
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
-# CC   RELEASE 20110920; 
+# CC   RELEASE 20110920;
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps hetGla2 rmsk
@@ -193,7 +193,7 @@ taxId 10181
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	hetGla2 > do.log 2>&1 &
     #   real    14m26.766s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   23745957 bases of 2314771103 (1.026%) in intersection
 
     # add to rmsk after it is done:
@@ -319,4 +319,126 @@ taxId 10181
 #    ln -s `pwd`/hetGla2.2bit /gbdb/hetGla2/hetGla2.2bit
 
 ########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/hetGla2/bed/cpgIslands
+    cd /hive/data/genomes/hetGla2/bed/cpgIslands
+    time doCpgIslands.pl hetGla2 > do.log 2>&1
+    #   real    7m57.656s
 
+    cat fb.hetGla2.cpgIslandExt.txt
+    #   21205888 bases of 2314771103 (0.916%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/hetGla2/bed/genscan
+    cd /hive/data/genomes/hetGla2/bed/genscan
+    time doGenscan.pl hetGla2 > do.log 2>&1
+    #   real    32m10.608s
+# Completed: 4227 of 4229 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      52691s     878.18m    14.64h    0.61d  0.002 y
+# IO & Wait Time:                 15228s     253.80m     4.23h    0.18d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:            1770s      29.50m     0.49h    0.02d
+# Submission to last job:          1993s      33.22m     0.55h    0.02d
+
+    # two broken jobs, reducing the window size to 2000000 seems to work:
+./runGsBig.csh JH602052 000 gtf/000/JH602052.gtf pep/000/JH602052.pep subopt/000/JH602052.bed &
+./runGsBig.csh JH602053 000 gtf/000/JH602053.gtf pep/000/JH602053.pep subopt/000/JH602053.bed
+    #   real    real    12m3.901s
+
+    # continuing:
+    time doGenscan.pl -continue=makeBed hetGla2 > makeBed.log 2>&1
+    #   real    9m49.111s
+
+    cat fb.hetGla2.genscan.txt
+    #   65077826 bases of 2314771103 (2.811%) in intersection
+    cat fb.hetGla2.genscanSubopt.txt
+    #   60777320 bases of 2314771103 (2.626%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-07 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2314771103 / 2897316137 \) \* 1024
+    #	( 2314771103 / 2897316137 ) * 1024 = 818.110795
+
+    # round up to 850 (hetGla1 was 850)
+
+    cd /hive/data/genomes/hetGla2
+    time blat hetGla2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/hetGla2.11.ooc -repMatch=850
+    #   Wrote 26730 overused 11-mers to jkStuff/hetGla2.11.ooc
+    #   real    0m55.389s
+    #	hetGla1 was: Wrote 33104 overused 11-mers to jkStuff/hetGla1.11.ooc
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" hetGla2 | sort | uniq -c
+    #   110424 yes
+#    cd /hive/data/genomes/hetGla2/jkStuff
+#    gapToLift hetGla2 hetGla2.nonBridged.lift -bedFile=hetGla2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' hetGla2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-07 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Heterocephalus glaber	45	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add hetGla2 just after ce2
+# hetGla2 (naked mole rat)
+hetGla2.serverGenome = /hive/data/genomes/hetGla2/hetGla2.2bit
+hetGla2.clusterGenome = /hive/data/genomes/hetGla2/hetGla2.2bit
+hetGla2.ooc = /hive/data/genomes/hetGla2/jkStuff/hetGla2.11.ooc
+hetGla2.lift = no
+hetGla2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+hetGla2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+hetGla2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+hetGla2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+hetGla2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+hetGla2.refseq.mrna.native.load = no
+hetGla2.refseq.mrna.xeno.load = yes
+hetGla2.genbank.mrna.native.load = no
+hetGla2.genbank.mrna.xeno.load = yes
+hetGla2.genbank.est.native.load = no
+hetGla2.downloadDir = hetGla2
+hetGla2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding hetGla2 naked mole rat" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S hetGla2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial hetGla2 &
+    #	 var/build/logs/2012.05.07-10:10:42.hetGla2.initalign.log
+    #   real    1716m59.594s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad hetGla2 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-16:05:34.dbload.log
+    #   real    64m32.488s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add hetGla2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added hetGla2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
