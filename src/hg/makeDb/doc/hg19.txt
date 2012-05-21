@@ -18544,3 +18544,41 @@ do
 done
 
 #############################################################################
+# 1000 GENOMES PHASE 1 VARIANT CALLS (DONE 5/21/12 angie)
+    # This is a lot of data.  Use aspera (ascp) instead of ftp, run in a screen.
+    screen -S phase1
+    mkdir -p /hive/data/genomes/hg19/bed/1000Genomes/phase1
+    cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
+    set ascpCmd = /opt/aspera/connect/bin/ascp
+    set ascpArgs = '-i /opt/aspera/connect/etc/asperaweb_id_dsa.putty -QTr -l150M'
+    set phase1Path = anonftp@ftp-private.ncbi.nlm.nih.gov:/1000genomes/ftp/release/20110521
+    $ascpCmd $ascpArgs \
+      $phase1Path/README.indel_filtering_20120316 \
+      $phase1Path/README.phase1_integrated_release_version3_20120430 \
+      $phase1Path/phase1_integrated_calls.20101123.ALL.panel \
+      .
+    # BTW if you see "Error 51 [Destination: Permission denied]" when reloading,
+    # it's because the files are read-only -- move aside or rm, then try again.
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
+      set file = $phase1Path/ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      set cmd = "$ascpCmd $ascpArgs $file $file.tbi ."
+      echo $cmd
+      $cmd
+      if ($status != 0) then
+        echo ================ ERROR chrom $c ======================
+      endif
+    end
+    du -sh --apparent .
+#142G    .
+    # Hmmmm, how much space do we have on /gbdb?  Well, link it on hgwdev anyway:
+    mkdir /gbdb/hg19/1000Genomes
+    ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/
+    cp /dev/null tgpPhase1.txt
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
+      set file = ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      echo "/gbdb/hg19/1000Genomes/$file\tchr$c" >> tgpPhase1.txt
+    end
+    hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
+
+
+#############################################################################
