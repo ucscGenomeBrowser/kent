@@ -14007,13 +14007,6 @@ description Validation of Transcription Factor Binding
 dataGroup Other
 #This is not in the metaDB currently
 
-### version
-
-term V2
-tag V2
-type version
-description version
-
 ### Strain
 # Used in conjunction with mouse submissions
 # Expected fields:

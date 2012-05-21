@@ -23,18 +23,98 @@ errAbort(
   "   hgFindSpec [options] orgDir database hgFindSpec hgFindSpec.sql hgRoot\n"
   "\n"
   "Options:\n"
-  "   -strict		Add spec to hgFindSpec only if its table(s) exist.\n"
-  "   -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
+  "  -strict		Add spec to hgFindSpec only if its table(s) exist.\n"
+  "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
+  "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   );
 }
 
 static struct optionSpec optionSpecs[] = {
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
+    {"release", OPTION_STRING},
+    {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
+
+static char *release = "alpha";
+
+// release tags
+#define RELEASE_ALPHA  (1 << 0)
+#define RELEASE_BETA   (1 << 1)
+#define RELEASE_PUBLIC (1 << 2)
+
+unsigned releaseBit = RELEASE_ALPHA;
+
+unsigned buildReleaseBits(char *rel)
+/* unpack the comma separated list of possible release tags */
+{
+if (rel == NULL)
+    return RELEASE_ALPHA |  RELEASE_BETA |  RELEASE_PUBLIC;
+
+char *oldString = cloneString(rel);
+unsigned bits = 0;
+while(rel)
+    {
+    char *end = strchr(rel, ',');
+
+    if (end)
+	*end++ = 0;
+    rel = trimSpaces(rel);
+
+    if (sameString(rel, "alpha"))
+	bits |= RELEASE_ALPHA;
+    else if (sameString(rel, "beta"))
+	bits |= RELEASE_BETA;
+    else if (sameString(rel, "public"))
+	bits |= RELEASE_PUBLIC;
+    else
+	errAbort("track with release %s must have a release combination of alpha, beta, and public", oldString);
+
+    rel = end;
+    }
+
+return bits;
+}
+
+
+static struct hgFindSpec * pruneRelease(struct hgFindSpec *hfsList)
+/* Prune out alternate track entries for another release */
+{
+/* Build up list that only includes things in this release.  Release
+ * can be inherited from parents. */
+struct hgFindSpec *hfs;
+struct hgFindSpec *relList = NULL;
+struct hash *haveHash = hashNew(3);
+
+while ((hfs = slPopHead(&hfsList)) != NULL)
+    {
+    char *rel = hgFindSpecSetting(hfs, "release");
+    unsigned hfsRelBits = buildReleaseBits(rel);
+
+    if (hfsRelBits & releaseBit)
+	{
+	/* we want to include this track, check to see if we already have it */
+	struct hashEl *hel;
+	if ((hel = hashLookup(haveHash, hfs->searchName)) != NULL)
+	    errAbort("found two copies of %s: one with release %s, the other %s\n",
+		hfs->searchName, (char *)hel->val, release);
+	hashAdd(haveHash, hfs->searchName, rel);
+	hashRemove(hfs->settingsHash, "release");
+	slAddHead(&relList, hfs);
+	}
+    else
+	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
+	    hfs->searchName, rel, release);
+    }
+
+freeHash(&haveHash);
+return relList;
+}
+
+
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -45,7 +125,11 @@ void addVersion(boolean strict, char *database, char *dirName, char *raName,
 struct hgFindSpec *hfsList = NULL, *hfs = NULL;
 struct hgFindSpec *hfsNext = NULL;
 
-hfsList = hgFindSpecFromRa(database, raName);
+hfsList = hgFindSpecFromRa(database, raName, NULL);
+
+/* prune records of the incorrect release */
+hfsList = pruneRelease(hfsList);
+
 if (strict) 
     {
     for (hfs = hfsList; hfs != NULL; hfs = hfsNext)
@@ -257,6 +341,23 @@ else if (startsWith(hgFindSpecName, "hgFindSpec_"))
     }
 }
 
+unsigned getReleaseBit(char *release)
+/* make sure that the tag is a legal release */
+{
+if (sameString(release, "alpha"))
+    return RELEASE_ALPHA;
+
+if (sameString(release, "beta"))
+    return RELEASE_BETA;
+
+if (sameString(release, "public"))
+    return RELEASE_PUBLIC;
+
+errAbort("release must be alpha, beta, or public");
+
+return 0;  /* make compiler happy */
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -264,6 +365,8 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+release = optionVal("release", release);
+releaseBit = getReleaseBit(release);
 adjustTrackDbName(argv[3]);
 hgFindSpec(argv[1], argv[2], argv[3], argv[4], argv[5],
            optionExists("strict"));
