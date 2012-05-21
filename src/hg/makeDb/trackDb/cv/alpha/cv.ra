@@ -4103,9 +4103,10 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients
+description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies 
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMM_FSHD
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4149,10 +4150,11 @@ tag HSMMTUBEFSHD
 type Cell Line
 tier 3
 organism human
-description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient
+description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies 
 childOf HSMM_FSHD
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMMtube_FSHD 
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4851,6 +4853,7 @@ lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 vendorId NB4
+orderUrl http://www.dsmz.de/
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -5974,6 +5977,7 @@ age ageUnknown
 strain Unknown
 description Brown adipocytes tissue
 vendorName Jerrold M. Olefsky Lab, UCSD
+orderUrl http://endocrinology.ucsd.edu/Faculty/olefsky.html
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
 color 189,0,157
@@ -6045,6 +6049,8 @@ description Bone marrow derived macrophage
 age ageUnknown
 strain Unknown
 vendorName Genhong Cheng Lab, UCLA
+vendorId BMDM
+orderUrl http://www.mimg.ucla.edu/faculty/cheng/genhong.html
 termId 7058
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
@@ -11511,6 +11517,7 @@ target COREST
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Abcam
 vendorId ab24166
+orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
 lab Snyder
 lots 834865
 targetId RCOR1
