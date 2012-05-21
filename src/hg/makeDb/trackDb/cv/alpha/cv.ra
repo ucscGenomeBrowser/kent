@@ -2927,6 +2927,8 @@ description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
 karyotype normal
+termId BTO:0001578
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001578
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3120,6 +3122,8 @@ tissue liver
 description fetal liver 11 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 tier 3
 lineage endoderm
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL11W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3134,6 +3138,8 @@ organism human
 tissue liver
 description fetal liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL24W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3165,6 +3171,8 @@ organism human
 description hepatic sinusoidal endothelial cells
 tissue liver
 lineage endoderm
+termId BTO:0001251
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001251
 vendorName ScienCell
 vendorId 5000
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
@@ -3180,6 +3188,8 @@ description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
 karyotype normal
+termId BTO:0000653
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000653
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3576,6 +3586,8 @@ description lymphatic microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0003599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003599
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -3591,6 +3603,8 @@ description adult blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -3606,6 +3620,8 @@ description neonatal blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -3621,6 +3637,8 @@ description adult lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
@@ -4103,9 +4121,10 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients
+description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies 
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMM_FSHD
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4149,10 +4168,11 @@ tag HSMMTUBEFSHD
 type Cell Line
 tier 3
 organism human
-description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient
+description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies 
 childOf HSMM_FSHD
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMMtube_FSHD 
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4257,7 +4277,7 @@ vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
-protocol Stam:HVMF_Stam_protocol.pd Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pd
+protocol Stam:HVMF_Stam_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
 
 #Cricket - duplicate term, need plan to resolve error
 #term HVMF
@@ -4851,6 +4871,7 @@ lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 vendorId NB4
+orderUrl http://www.dsmz.de/
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -5974,6 +5995,7 @@ age ageUnknown
 strain Unknown
 description Brown adipocytes tissue
 vendorName Jerrold M. Olefsky Lab, UCSD
+orderUrl http://endocrinology.ucsd.edu/Faculty/olefsky.html
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
 color 189,0,157
@@ -6045,6 +6067,8 @@ description Bone marrow derived macrophage
 age ageUnknown
 strain Unknown
 vendorName Genhong Cheng Lab, UCLA
+vendorId BMDM
+orderUrl http://www.mimg.ucla.edu/faculty/cheng/genhong.html
 termId 7058
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
@@ -11511,6 +11535,7 @@ target COREST
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Abcam
 vendorId ab24166
+orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
 lab Snyder
 lots 834865
 targetId RCOR1
@@ -12522,32 +12547,32 @@ term 4OHTAM_1uM_4hr
 tag TAM14H
 description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
-label 4-OHTAM_1uM_4hr
+label 4-OHTAM 1uM 4hr
 
 term 4OHTAM_1uM_12hr
 tag TAM112H
 description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
-label 4-OHTAM_1uM_12hr
+label 4-OHTAM 1uM 12hr
 
 term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
-label 4-OHTAM_1uM_36hr
+label 4-OHTAM 1uM 36hr
 # Changed tag from OHTAM1: 6/9/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
 description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
-label 4-OHTAM_20nM_72hr
+label 4-OHTAM 20nM 72hr
 
 term 4OHTAM_100nM_30m
 tag TAM10030
 description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
 type treatment
-label 4-OHTAM_100nM_30m
+label 4-OHTAM 100nM 30m
 
 term androgen
 tag ANDRO
