@@ -1,6 +1,6 @@
 track wgEncodeGencodeV3
 compositeTrack on
-superTrack wgEncodeGencodeSuper dense
+superTrack wgEncodeGencodeSuper hide 
 shortLabel GENCODE Genes V3
 longLabel Gene Annotations from ENCODE/GENCODE Version 3
 group genes

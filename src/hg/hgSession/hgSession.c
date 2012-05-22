@@ -601,7 +601,6 @@ struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
-/* char *userName = wikiLinkUserName(); */
 char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
@@ -785,7 +784,6 @@ char *doUpdateSessions()
 struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
-/* char *userName = wikiLinkUserName(); */
 char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
@@ -993,7 +991,6 @@ char *doSessionDetail(char *sessionName)
 {
 struct dyString *dyMessage = dyStringNew(4096);
 char *encSessionName = cgiEncodeFull(sessionName);
-/* char *userName = wikiLinkUserName(); */
 char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
@@ -1099,7 +1096,6 @@ webPushErrHandlersCart(cart);
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;
-/* char *userName = wikiLinkUserName(); */
 char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();

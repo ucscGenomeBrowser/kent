@@ -1,8 +1,8 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime, time
 from ucscGb.encode import track
-from ucscGb.gbData import ucscUtils
-from ucscGb.gbData.ra import raFile
+from ucscGb.gbData import ra,ucscUtils
+from ucscGb.gbData.ra.raFile import RaFile
 from ucscGb.qa.encode import tableCheck as qa
 
 class makeNotes(object):

@@ -57,7 +57,7 @@ if {$host == "bugle.cse.ucsc.edu"} {
     cd ~/compbio/genbank/genbank.fake
     set workDir "/scratch/tmp/gbopt"
 } elseif {$host == "hgwdev"} {
-    cd /cluster/data/genbank
+    cd /hive/data/outside/genbank
 } else {
     cd /genbank
 }

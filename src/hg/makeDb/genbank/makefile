@@ -14,10 +14,10 @@ clean: ${SUBDIRS:%=%.subclean}
 	${MAKE} -C $* clean
 
 install-server: all
-	${MAKE} install PREFIX=/cluster/data/genbank
+	${MAKE} install PREFIX=/hive/data/outside/genbank
 
 etc-update-server:
-	${MAKE} install-etc PREFIX=/cluster/data/genbank
+	${MAKE} install-etc PREFIX=/hive/data/outside/genbank
 etc-update: etc-update-server # alternative name
 
 install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred all

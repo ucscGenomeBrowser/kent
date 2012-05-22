@@ -1,0 +1,44 @@
+/* CSS definitions used by trackDbDoc.html and friends */
+
+/* @page { size: 8.5in 11in; margin: 1in } */
+P { margin-bottom: 0.08in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+H1 { margin-top: 0.33in; margin-bottom: 0in; direction: ltr; color: #365f91;
+        page-break-inside: avoid; widows: 2; orphans: 2 }
+H2 { margin-top: 0.14in; margin-bottom: 0in; direction: ltr; color: #365f91;
+        page-break-inside: avoid; widows: 2; orphans: 2 }
+H3 { margin-top: 0.14in; margin-bottom: 0in; direction: ltr; color: #365f91;
+        page-break-inside: avoid; widows: 2; orphans: 2 }
+TD P { margin-bottom: 0in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+
+/* From our standard BODY tag */
+BODY { background-color:#FFF9D2; }
+Alink { color:#0000CC; }
+A:visited { color:#330066; }
+A:active.topbar { color:#330066; }
+
+CODE { color:#000088; }  /* Blue to stand out */
+PRE { color:#000088; }   /* Blue to stand out */
+I { color:#006600; }     /* Green until issues are dealt with */
+.contentBorder { border: 1px solid black; background-color:#FFFEE8; }
+.lightBlueBar { background-color:#D9E4F8; height:26px; }
+.hintBox { border: 1px inset #000088; color:#000088; padding:.3em .5em; }
+/* TABLE.settingsTable { width:98%; border: 1px inset gray; border-collapse:separate;
+                        border-spacing:0px; empty-cells:show; } */
+TABLE.settingsTable { width:98%; border-style:none; border-collapse:separate;
+                        border-spacing:0px; empty-cells:show; }
+TABLE.settingsTable TD, TABLE.settingsTable TH { border:0.1em inset gray; padding:7px; }
+TABLE.settingsTable TH { font-size:1em; color:#FFFFFF; background-color:#536ED3;
+                            text-align:left; max-height:20px; }
+TABLE.settingsTable THEAD TD { border-style:none; }
+TR.related TD { border-top-style:none; }
+.red { color: #AA0000; }
+DIV.details { margin-left:5em; }
+DIV.format { margin-left:0.4em; display:-moz-inline-stack; display:inline-block;
+                zoom:1; *display:inline; } /* obscure trick for IE to make inline-block work */
+TR.examples { background-color:#F8F8F8; }
+TR.examples DIV.details { margin-left:0em; }
+.toggle  { height:16px; width:16px; vertical-align:top; cursor: pointer; }
+HR.example { border:1px inset #FFFFFF; color:#FFFFFF; }
+/* DIV.typeExamples { display:none; }  toggling */
+
+/* .fixed2 { color:#000088; font-family: "Courier New, monospace"; font-size: 1.1em; }   */

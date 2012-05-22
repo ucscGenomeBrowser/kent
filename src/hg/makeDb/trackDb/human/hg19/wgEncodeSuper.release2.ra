@@ -1,7 +1,7 @@
 track wgEncodeGencodeSuper
 superTrack on
 group genes
-shortLabel GENCODE Genes
+shortLabel GENCODE
 longLabel GENCODE Gene Annotation 
 wgEncode 1
 
