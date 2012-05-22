@@ -99,11 +99,18 @@ while ((hfs = slPopHead(&hfsList)) != NULL)
 	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
 	if ((hel = hashLookup(haveHash, hfs->searchName)) != NULL)
-	    errAbort("found two copies of %s: one with release %s, the other %s\n",
+	    {
+	    // TODO restore this warning to errAbort
+	    // this has been temporarily changed to a warning to avoid people dying of shock.
+	    warn("ERROR: found two copies of %s: one with release %s, the other %s\n",
 		hfs->searchName, (char *)hel->val, release);
-	hashAdd(haveHash, hfs->searchName, rel);
-	hashRemove(hfs->settingsHash, "release");
-	slAddHead(&relList, hfs);
+	    }
+	else
+	    {
+	    hashAdd(haveHash, hfs->searchName, rel);
+	    hashRemove(hfs->settingsHash, "release");
+	    slAddHead(&relList, hfs);
+	    }
 	}
     else
 	verbose(3,"pruneRelease: removing '%s', release: '%s' != '%s'\n",
