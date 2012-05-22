@@ -7,11 +7,15 @@ use Cwd;
 
 my $db = shift(@ARGV) || die "Missing assembly argument";
 my $srcUrl = shift(@ARGV) || die "Missing source URL argument";
-my ($fileName, $ver, $cmd);
+my ($fileName, $ver, $cmd, $gzipped);
 
 if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
     $fileName = $1;
     $ver = $2;
+} elsif ($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv\.gz)$,) {
+    $fileName = $1;
+    $ver = $2;
+    $gzipped = 1;
 } else {
     die "Missing version number in file argument";
 }
@@ -30,7 +34,12 @@ my $loadDir = "/hive/data/genomes/$db/bed/cosmic/v$ver";
 if(!(-d $loadDir)) {
     mkdir($loadDir) || die "mkdir($loadDir) failed; err: $!";
 }
-$cmd = "cp $outsideDir/$fileName $loadDir/$fileName";
+if($gzipped) {
+    $fileName =~ s/.gz$//;
+    $cmd = "zcat $outsideDir/$fileName.gz > $loadDir/$fileName";
+} else {
+    $cmd = "cp $outsideDir/$fileName $loadDir/$fileName";
+}
 !system($cmd) || die "cmd '$cmd' failed: err: $!";
 
 my $cwd = getcwd();
