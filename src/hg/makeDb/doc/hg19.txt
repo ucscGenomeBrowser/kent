@@ -17421,41 +17421,17 @@ TMPDIR=/scratch/tmp
     # Get variants submitted on this assembly, and variants remapped from other assemblies.
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA/gvf/nstd37_ISCA.GRCh37.submitted.all.germline.ucsc.gvf.gz
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA/gvf/nstd37_ISCA.GRCh37.remap.all.germline.ucsc.gvf.gz
+    # New 5/21/12: ISCA Curated
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd45_ISCA_curated_dataset/gvf/nstd45_ISCA_curated_dataset.GRCh37.remap.all.germline.ucsc.gvf.gz
     zcat nstd37_ISCA*.gvf.gz \
-    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
-        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
-        ($thickS, $thickE) = ($s, $e); \
-        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
-        foreach my $tagVal (split(";", $attrs)) { \
-          ($tag, $val) = split("=", $tagVal); \
-          if ($tag eq "ID") {$name = $val;} \
-          elsif ($tag eq "Start_range") { \
-            ($outerStart, $innerStart) = split(",", $val); \
-            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
-            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
-          } elsif ($tag eq "End_range") { \
-            ($innerEnd, $outerEnd) = split(",", $val); \
-            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
-            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
-          } elsif ($tag eq "var_type") { \
-            $gotVarTypeAttr = 1; \
-          } \
-          # Escape commas so the val list parses correctly in autoSql: \
-          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
-          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
-        } \
-        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
-        if (! $gotVarTypeAttr) { \
-          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
-          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
-        } \
-        $score = 0 if ($score eq "."); \
-        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
-                      $attrCount, $attrTags, $attrVals); \
-        print join("\t", @bed8Attrs) . "\n";' \
+    | ~/kent/src/hg/utils/automation/gvfToBed8Attrs.pl \
       > isca.bed
-    wc -l isca.bed
-#12943 isca.bed
+    zcat nstd45_ISCA*.gvf.gz \
+    | ~/kent/src/hg/utils/automation/gvfToBed8Attrs.pl \
+      > iscaCurated.bed
+    wc -l isca*.bed
+#   12943 isca.bed
+#      84 iscaCurated.bed
     # Split into subtracks by clinical_int value.
     zcat nstd37_ISCA*.gvf.gz \
     | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
@@ -17464,13 +17440,22 @@ TMPDIR=/scratch/tmp
 #   3406 Uncertain significance
 #    466 Uncertain significance: likely benign
 #    164 Uncertain significance: likely pathogenic
+    zcat nstd45_ISCA*.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#     29 Benign
+#     55 Pathogenic
     foreach subtrack (Benign Pathogenic)
       grep -w  $subtrack isca.bed > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
+      grep -w  $subtrack iscaCurated.bed > iscaCurated$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 iscaCurated$subtrack iscaCurated$subtrack.bed
     end
 #Read 4307 elements of size 11 from iscaBenign.bed
+#Read 29 elements of size 11 from iscaCuratedBenign.bed
 #Read 4600 elements of size 11 from iscaPathogenic.bed
+#Read 55 elements of size 11 from iscaCuratedPathogenic.bed
 
     # The subcategories of Uncertain need a bit more sophisticated treatment:
     set subtrack = Uncertain

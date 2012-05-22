@@ -31232,7 +31232,8 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA (FORMERLY ISCA RETROSPECTIVE) FROM DBVAR (DONE 3/2/12 angie)
+# ISCA (FORMERLY ISCA RETROSPECTIVE) FROM DBVAR (DONE 5/21/12 angie)
+# Updated 3/2/12.  Updated 5/21/12 to include nstd45 (Curated) and b0b's aggregate/depth subtracks.
 # Combined submitted+remapped, w/new subcategories likely benign, likely pathogenic,
 # and removed Retrospective from names 10/18/11.
 # Split into benign/pathogenic/uncertain subtracks 9/14/11.
@@ -31243,60 +31244,46 @@ TMPDIR=/scratch/tmp
     mkdir /hive/data/genomes/hg18/bed/isca/$today
     cd /hive/data/genomes/hg18/bed/isca/$today
     # Get variants submitted on this assembly, and variants remapped from other assemblies.
-    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.submitted.all.germline.ucsc.gvf.gz
-    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.remap.all.germline.ucsc.gvf.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA/gvf/nstd37_ISCA.NCBI36.submitted.all.germline.ucsc.gvf.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA/gvf/nstd37_ISCA.NCBI36.remap.all.germline.ucsc.gvf.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd45_ISCA_curated_dataset/gvf/nstd45_ISCA_curated_dataset.NCBI36.submitted.all.germline.ucsc.gvf.gz
     # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
     # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
-    zcat nstd37_ISCA*.ucsc.gvf.gz \
-    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
-        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
-        ($thickS, $thickE) = ($s, $e); \
-        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
-        foreach my $tagVal (split(";", $attrs)) { \
-          ($tag, $val) = split("=", $tagVal); \
-          if ($tag eq "ID") {$name = $val;} \
-          elsif ($tag eq "Start_range") { \
-            ($outerStart, $innerStart) = split(",", $val); \
-            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
-            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
-          } elsif ($tag eq "End_range") { \
-            ($innerEnd, $outerEnd) = split(",", $val); \
-            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
-            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
-          } elsif ($tag eq "var_type") { \
-            $gotVarTypeAttr = 1; \
-          } \
-          # Escape commas so the val list parses correctly in autoSql: \
-          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
-          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
-        } \
-        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
-        if (! $gotVarTypeAttr) { \
-          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
-          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
-        } \
-        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
-                      $attrCount, $attrTags, $attrVals); \
-        print join("\t", @bed8Attrs) . "\n";' \
+    zcat nstd37_ISCA*.gvf.gz \
+    | ~/kent/src/hg/utils/automation/gvfToBed8Attrs.pl \
       > isca.bed
-    wc -l isca.bed
-#11969 isca.bed
+    zcat nstd45_ISCA*.gvf.gz \
+    | ~/kent/src/hg/utils/automation/gvfToBed8Attrs.pl \
+      > iscaCurated.bed
+    wc -l isca*.bed
+#  12923 isca.bed
+#     84 iscaCurated.bed
 
     # Split into subtracks by clinical_int value.
     zcat nstd37_ISCA*.gvf.gz \
     | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
-#   4301 Benign
-#   4250 Pathogenic
-#   2910 Uncertain significance
-#    394 Uncertain significance: likely benign
-#    114 Uncertain significance: likely pathogenic
+#   4304 Benign
+#   4583 Pathogenic
+#   3408 Uncertain significance
+#    464 Uncertain significance: likely benign
+#    164 Uncertain significance: likely pathogenic
+    zcat nstd45_ISCA*.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#     29 Benign
+#     55 Pathogenic
+
     foreach subtrack (Benign Pathogenic)
       grep -w  $subtrack isca.bed > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
+      grep -w  $subtrack iscaCurated.bed > iscaCurated$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg18 iscaCurated$subtrack iscaCurated$subtrack.bed
     end
-#Read 4301 elements of size 11 from iscaBenign.bed
-#Read 4250 elements of size 11 from iscaPathogenic.bed
+#Read 4304 elements of size 11 from iscaBenign.bed
+#Read 29 elements of size 11 from iscaCuratedBenign.bed
+#Read 4583 elements of size 11 from iscaPathogenic.bed
+#Read 55 elements of size 11 from iscaCuratedPathogenic.bed
 
     # The subcategories of Uncertain need a bit more sophisticated treatment:
     set subtrack = Uncertain
@@ -31305,7 +31292,8 @@ TMPDIR=/scratch/tmp
       > isca$subtrack.bed
     hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
       -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
-#Read 2910 elements of size 11 from iscaUncertain.bed
+#Read 3408 elements of size 11 from iscaUncertain.bed
+
     foreach unc (benign pathogenic)
       set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
       grep -wi "Uncertain Significance: likely $unc" isca.bed \
@@ -31313,8 +31301,24 @@ TMPDIR=/scratch/tmp
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
     end
-#Read 394 elements of size 11 from iscaLikelyBenign.bed
-#Read 114 elements of size 11 from iscaLikelyPathogenic.bed
+#Read 464 elements of size 11 from iscaLikelyBenign.bed
+#Read 164 elements of size 11 from iscaLikelyPathogenic.bed
+
+    # Add b0b's aggregate/depth subtracks.
+    # make bedGraphs
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_gain%'" hg18 | sort \
+    | bedItemOverlapCount hg18 stdin > iscaPathGain.bedGraph
+
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_loss%'" hg18 | sort \
+    | bedItemOverlapCount hg18 stdin > iscaPathLoss.bedGraph
+
+    # load tables
+    hgLoadBed -bedGraph=4 hg18 iscaPathGainCum iscaPathGain.bedGraph
+#Read 1997 elements of size 4 from iscaPathGain.bedGraph
+    hgLoadBed -bedGraph=4 hg18 iscaPathLossCum iscaPathLoss.bedGraph
+#Read 3570 elements of size 4 from iscaPathLoss.bedGraph
 
 
 #############################################################################

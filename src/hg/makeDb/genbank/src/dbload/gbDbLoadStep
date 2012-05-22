@@ -147,8 +147,8 @@ sub ccdsUpdate($$) {
 }
 
 # load a specific database
-sub dbLoad($) {
-    my($db) = @_;
+sub dbLoad($$) {
+    my($db, $keep) = @_;
     my $dbVarReloadFile = getVarReloadFile($db);
     if ($drop) {
         dropTables($db);
@@ -293,7 +293,7 @@ setupHgConf();
 
 # load the database
 foreach my $db (@databases) {
-    dbLoad($db);
+    dbLoad($db, $keep);
 }
 
 # rename reload file if it was used
