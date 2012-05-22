@@ -32,6 +32,7 @@ struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
 char *errMsg;           /* Error message to show user when form data rejected */
+char signature[256]="\nUCSC Genome Browser\nhttp://www.genome.ucsc.edu ";
 
 /* -------- password functions depend on optionally installed openssl lib ---- */
 #ifdef USE_SSL
@@ -188,19 +189,19 @@ for(i=0;i<8;++i)
     {
     r = randInt(4);
     switch (r)
-    {
-    case 0 :
+        {
+        case 0 :
             c = 'A' + randInt(26);
-        break;
-    case 1 :
+            break;
+        case 1 :
             c = 'a' + randInt(26);
-        break;
-    case 2 :
+            break;
+        case 2 :
             c = '0' + randInt(10);
-        break;
-    default:
+            break;
+        default:
             c = punc[randInt(8)];
-        break;
+            break;
         }
     boundary[i] = c;
     }
@@ -288,25 +289,26 @@ char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[4096];
 safef(cmd,sizeof(cmd),
-"echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
+    "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
 int result = system(cmd);
 if (result == -1)
     {
     hPrintf( 
-    "<h2>UCSC Genome Browser</h2>"
-    "<p align=\"left\">"
-    "</p>"
-    "<h3>Error emailing %s to: %s</h3>"
-    "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", obj, email );
+        "<h2>UCSC Genome Browser</h2>"
+        "<p align=\"left\">"
+        "</p>"
+        "<h3>Error emailing %s to: %s</h3>"
+        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
+        obj, email );
     }
 else
     {
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
-    "//-->"
-    "\n"
-    "</script>", hgLoginHost);
+    hPrintf("<script  language=\"JavaScript\">\n"
+        "<!-- \n"
+        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
+        "//-->"
+        "\n"
+        "</script>", hgLoginHost);
     }
 }
 
@@ -315,9 +317,12 @@ void mailUsername(char *email, char *users)
 {
 char subject[256];
 char msg[256];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
-safef(subject, sizeof(subject),"Greeting form UCSC Genome Browser");
-safef(msg, sizeof(msg), "User name(s) associated with this email address at UCSC Genome Browser: \n\n  %s \n", users);
+char *remoteAddr=getenv("REMOTE_ADDR");
+
+safef(subject, sizeof(subject),"Your user name at the UCSC Genome Browser");
+safef(msg, sizeof(msg), 
+    "Someone (probably you, from IP address %s) has requested user name associated with this email address at UCSC Genome Browser. Your user name is: \n\n  %s\n\n", 
+   remoteAddr, users);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
@@ -348,7 +353,6 @@ void sendNewPwdMail(char *username, char *email, char *password)
 {
 char subject[256];
 char msg[4096];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 char *remoteAddr=getenv("REMOTE_ADDR");
 safef(subject, sizeof(subject),"New temporary password for UCSC Genome Browse");
 safef(msg, sizeof(msg),
@@ -363,8 +367,6 @@ void displayAccHelpPage(struct sqlConnection *conn)
 {
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
-//cartRemove(cart, "hgLogin_helpWith");
-//cartRemove(cart, "hgLogin_email");
 hPrintf("<script  language=\"JavaScript\">\n"
     "<!-- "
     "\n"
@@ -424,7 +426,7 @@ void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
 {
 struct sqlResult *sr;
 char query[256];
-/* find email address  assocaited with this username */
+/* find email address associated with this username */
 safef(query,sizeof(query),"select email from gbMembers where userName='%s'", username);
 char *email = sqlQuickString(conn, query);
 if (!email || sameString(email,""))
@@ -463,13 +465,12 @@ cartRemove(cart, "hgLogin_changeRequired");
 return;
 }
 
-void sendActivateMail(char *email, char *username, char *encToken, char *expireTime, char *expireDate)
+void sendActivateMail(char *email, char *username, char *encToken)
 /* Send activation mail with token to user*/
 {
 char subject[256];
 char msg[4096];
 char activateURL[256];
-char signature[256]="\nUCSC Genome Browser \nhttp://www.genome.ucsc.edu ";
 char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
 safef(activateURL, sizeof(activateURL),
@@ -479,8 +480,8 @@ safef(activateURL, sizeof(activateURL),
     sqlEscapeString(encToken));
 safef(subject, sizeof(subject),"UCSC Genome Browser account e-mail address confirmation");
 safef(msg, sizeof(msg),
-    "Someone, probably you from IP address  %s, has requested an account %s with this e-mail address on the UCSC Genome Browser.\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\ni\n%s\nIf the account is created, only you will be e-mailed this confirmation.\nIf this is *not* you, do not follow the link. This confirmation code will expire at %s, %s.\n", 
-     remoteAddr, username, activateURL, expireTime, expireDate);
+    "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the UCSC Genome Browser.\n\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n", 
+     remoteAddr, username, activateURL);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
@@ -496,13 +497,7 @@ safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', 
     sqlEscapeString(username)
     );
 sqlUpdate(conn, query);
-safef(query,sizeof(query),
-    "select TIME(emailTokenExpires) from gbMembers where userName='%s'", username);
-char *expireTime = sqlQuickString(conn, query);
-safef(query,sizeof(query),
-    "select DATE(emailTokenExpires) from gbMembers where userName='%s'", username);
-char *expireDate = sqlQuickString(conn, query);
-sendActivateMail(email, username, tokenMD5, expireTime, expireDate);
+sendActivateMail(email, username, tokenMD5);
 return;
 }
 
@@ -862,8 +857,6 @@ backToHgSession(1);
 void accountHelp(struct sqlConnection *conn)
 /* email user username(s) or new password */
 {
-// struct sqlResult *sr;
-// char **row;
 char query[256];
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
@@ -871,47 +864,47 @@ char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 
 /* Forgot username */
 if (sameString(helpWith,"username"))
-{
+    {
     if (sameString(email,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Email address cannot be blank.");
-    displayAccHelpPage(conn);
-    return;
-    } 
-    else 
-    {
-    sendUsername(conn, email);
-    return;
-    }
-}
-/* Forgot password */
-if (sameString(helpWith,"password"))
-{
-    /* validate username first */
-    if (sameString(username,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Username cannot be blank.");
-    displayAccHelpPage(conn);
-    return;
-    } 
-    else 
-    { 
-    safef(query,sizeof(query), 
-        "select password from gbMembers where userName='%s'", username);
-    char *password = sqlQuickString(conn, query);
-    if (!password)
         {
         freez(&errMsg);
-        errMsg = cloneString("Username not found.");
+        errMsg = cloneString("Email address cannot be blank.");
         displayAccHelpPage(conn);
+        return;
+        } 
+    else 
+        {
+        sendUsername(conn, email);
         return;
         }
     }
+/* Forgot password */
+if (sameString(helpWith,"password"))
+    {
+    /* validate username first */
+    if (sameString(username,""))
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Username cannot be blank.");
+        displayAccHelpPage(conn);
+        return;
+        } 
+    else 
+        { 
+        safef(query,sizeof(query), 
+            "select password from gbMembers where userName='%s'", username);
+        char *password = sqlQuickString(conn, query);
+        if (!password)
+            {
+            freez(&errMsg);
+            errMsg = cloneString("Username not found.");
+            displayAccHelpPage(conn);
+            return;
+            }
+        }
     lostPassword(conn, username);
     return;
-}
+    }
 displayAccHelpPage(conn);
 return;
 }
@@ -928,7 +921,7 @@ else
     return FALSE;
 }
 
-void  displayLoginSuccess(char *userName, int userID)
+void displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
 hPrintf("<h2>UCSC Genome Browser</h2>"
@@ -946,6 +939,7 @@ hPrintf("<script language=\"JavaScript\">"
     "document.cookie =  \"wikidb_mw1_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
     " </script>"
     "\n", userName,userID);
+cartRemove(cart,"hgLogin_userName");
 returnToURL(1);
 }
 
@@ -999,15 +993,15 @@ if (checkPwd(password,m->password))
     {
     unsigned int userID=m->idx;  
     hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
-            ,userName,userID);
+        ,userName,userID);
     clearNewPasswordFields(conn, userName);
     displayLoginSuccess(userName,userID);
     return;
     } 
 else if (usingNewPassword(conn, userName))
     {
-       cartSetString(cart, "hgLogin_changeRequired", "YES");
-       changePasswordPage(conn);
+    cartSetString(cart, "hgLogin_changeRequired", "YES");
+    changePasswordPage(conn);
     } 
 else
     {

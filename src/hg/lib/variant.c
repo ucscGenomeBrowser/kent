@@ -50,11 +50,16 @@ newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 return newAllele;
 }
 
-static char *makeDashes(int count)
+static char *addDashes(char *input, int count)
+/* add dashes at the end of a sequence to pad it out so it's length is count */
 {
 char *ret = needMem(count + 1);
-char *ptr = ret;
+int inLen = strlen(input);
 
+safecpy(ret, count + 1, input);
+count -= inLen;
+
+char *ptr = &ret[inLen];
 while(count--)
     *ptr++ = '-';
 
@@ -78,7 +83,7 @@ variant->chromEnd = pgSnp->chromEnd;
 variant->numAlleles = pgSnp->alleleCount;
 
 // get the alleles.
-char *nextAlleleString = pgSnp->name;
+char *nextAlleleString = cloneString(pgSnp->name);
 int alleleNumber = 0;
 for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     {
@@ -100,15 +105,11 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     int alleleStringLength = strlen(thisAlleleString);
     if (alleleStringLength != alleleLength)
 	{
-	// check for special case of single '-'
-	if (sameString("-", thisAlleleString))
+	if ( alleleStringLength < alleleLength)
 	    {
-	    thisAlleleString = makeDashes(alleleLength);
+	    thisAlleleString = addDashes(thisAlleleString, alleleLength);
 	    alleleStringLength = alleleLength;
 	    }
-	else
-	    errAbort("length of allele number %d is %d, should be %d", 
-		alleleNumber, alleleStringLength, alleleLength);
 	}
 
     // we have a new allele!

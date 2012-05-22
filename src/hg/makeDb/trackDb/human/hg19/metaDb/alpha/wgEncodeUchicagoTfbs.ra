@@ -18,6 +18,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1AlnRep1.bam,wgEncodeUchicagoTfbsK562Bach1Controlbach1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 88067b5bdf35df88ffe3eb19f8f1eaa0,9a21baf3889db7d894ff1693ce624930
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -39,6 +40,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1AlnRep2.bam,wgEncodeUchicagoTfbsK562Bach1Controlbach1AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum f67ecb57e406e18186cc09870f54def9,c38b69110062fccd2aaa584a5eb96863
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -60,6 +62,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 49560a346a788eb92fa9e5a2efcd1221
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -82,6 +85,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum e25bb083cbf96c24afaa1eeca33b09bc
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -104,6 +108,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 702f5843e0e682824a447f001559c7c6
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -125,6 +130,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 15f47efaeb31a0c947da5645c7a7ff6f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -146,6 +152,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 870317f97b7c387a8d9c2047a746a8f2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -168,6 +175,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep2.bigWig
 grant White
 lab UChicago
+md5sum 2fc3ef15a6ab73fbc0ba5fff5b84c292
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -190,6 +198,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1AlnRep1.bam,wgEncodeUchicagoTfbsK562Ccne1Controlccne1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 9ccdbd1d17960892b01d3f10073a9d18,d45f2de8de3f715a4f7dc8230a659689
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -211,6 +220,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1AlnRep2.bam,wgEncodeUchicagoTfbsK562Ccne1Controlccne1AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum 8780cccb2e9c28e1bb06a111e3212935,1fe98c988e2e56778cc715205e4e0e9a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -232,6 +242,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum ae911e8118a91dd0ac86a9937546d9c5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -254,6 +265,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum c036b57b0551c6178dc4603f8a73cc90
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -276,6 +288,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 0cabc4d83ce674950d61f518d0edb66b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -297,6 +310,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum e69bfcf3e259b0b064305a106d69d1a0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -318,6 +332,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 30fcd3dede6e5f8f19781d20971e3ee3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -340,6 +355,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep2.bigWig
 grant White
 lab UChicago
+md5sum 6dc24922568ead49af04a040b9ecc8fa
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -362,6 +378,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bAlnRep1.bam,wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bAlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 3bb829b8f95a6589b7c1c72d4d3d0057,2a6cb0aece4f71b57f66260ab3339a4b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -383,6 +400,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bAlnRep2.bam,wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bAlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum 1ec130105c81c959bb69fc608f799aed,6c90cb9e43b71055e916a0be3c84cf54
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -404,6 +422,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 0dcff7fc2ed4105af937d964eec17699
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -426,6 +445,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 48ad9d19ecc7d8300c778d8c1379b4e7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -448,6 +468,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bRawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 6d75f6b90c8e02fdf09b3030e20f5078
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -469,6 +490,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bRawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 8b38b753e11cfcf12cfac0fb448cbc64
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -490,6 +512,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep1.bigWig
 grant White
 lab UChicago
+md5sum bf3282a44c088f703989cc4a8e6615a7
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -512,6 +535,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep2.bigWig
 grant White
 lab UChicago
+md5sum 489f256c27e3e66e69438c21b764e65f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1384,6 +1408,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1AlnRep1.bam,wgEncodeUchicagoTfbsK562Elf1Controlelf1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 289f3067edcb5afeda38dd4351cffb4b,e322d8af9fa336866c6feb2508e97615
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1405,6 +1430,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1AlnRep2.bam,wgEncodeUchicagoTfbsK562Elf1Controlelf1AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum b9ffa9cc74ea399caf01554a44ec7ba6,331f12dce300aa20f1ea7a43016dee45
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1426,6 +1452,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum e5ccab50c11497727c987eb159192bf4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1448,6 +1475,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 536ec4c2485817a9ecf2c11dd5438051
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1470,6 +1498,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a857ca6a31c5ddaa32f2454a46ce3e6b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1491,6 +1520,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 1f65e6b120926e318aaf0f864d2ee69e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1512,6 +1542,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum be8bbb7bb2e420473aa3b3f3a5a431dc
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1534,6 +1565,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep2.bigWig
 grant White
 lab UChicago
+md5sum 522aeb8ee5481d7df0345bc89a494214
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1706,6 +1738,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrAlnRep1.bam,wgEncodeUchicagoTfbsK562EsrControlesrAlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 6dae7e79075d9ac0a4b063d7e003a03c,b32bcc157ed3f409f865b73a58854c19
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1727,6 +1760,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrAlnRep2.bam,wgEncodeUchicagoTfbsK562EsrControlesrAlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum 0ffb4f73480b61d7a7f94c3702365e43,d7d3c0bc705fb443528046422974ea4a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1748,6 +1782,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrPkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum bfa25a8573158a61d26f4241e5dd5799
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1770,6 +1805,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrPkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum ac3f213741af321d1cb9b9f273f9663b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1792,6 +1828,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrRawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 5523ec2be4b538d6bd4e7090aa0bac72
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1813,6 +1850,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrRawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 49c8dff3fd0ba3a3bf194a19cc1bc9a1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1834,6 +1872,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrSigRep1.bigWig
 grant White
 lab UChicago
+md5sum 095a42305f07fceffeed63b54daee48d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1856,6 +1895,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562EsrControlesrSigRep2.bigWig
 grant White
 lab UChicago
+md5sum 9e7d94716e345a452915e1d48c93ec1c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1878,6 +1918,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2AlnRep1.bam,wgEncodeUchicagoTfbsK562Ilf2Controlilf2AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum fa634aef5289e502bcb9dee2833224fc,ee69a5fd7b0db3ef46f2d0235fa58449
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1899,6 +1940,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2AlnRep2.bam,wgEncodeUchicagoTfbsK562Ilf2Controlilf2AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum a3476d5ae4b2e02f5cff9cea8b0cefa3,0cee26b4e990364dcc805c450d97ba2f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1920,6 +1962,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum ee14ebf31e8f1dcaaeeb49122b9b4123
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1942,6 +1985,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum d73502ae08982a94f70c8c3c015b82eb
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1964,6 +2008,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum de9c5c9be96b5659767bb645760e9216
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1985,6 +2030,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 5d44f00003a936256629a853ca682dad
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2006,6 +2052,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 00bf46c861ff0badd506e45d842c7943
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2028,6 +2075,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep2.bigWig
 grant White
 lab UChicago
+md5sum c863e9482112043d4a87b6ffc5f0142b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2050,6 +2098,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562InputControlbach1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlbach1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 9602683879564be2d7887b03f76f0f58,faa5bae18ba46791a3efd3d41b900f86
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2071,6 +2120,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562InputControlbach1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum d76840d587cc22edc96d90f4b6d44c79
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2092,6 +2142,7 @@ dateUnrestricted 2012-11-16
 fileName wgEncodeUchicagoTfbsK562InputControlbach1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 9a90698de4c25073a30932110a8016e7
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2114,6 +2165,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlccne1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlccne1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 11f6f4c27351f25f1013147b0ff44af8,a0acc7d26aa7447d538d9c3b1cedd713
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2135,6 +2187,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlccne1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum f83f71a12f3b0459911f69e41134e8ad
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2156,6 +2209,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlccne1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum beacb78a40ff33a9dceb78152e175a51
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2178,6 +2232,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlcdkn1bAlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlcdkn1bAlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum b03829c6d43de67cc92fe1d8e4ae0358,6ce64803f64a47abbdf24a9d68cfa5ad
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2199,6 +2254,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlcdkn1bRawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a2ad3bdc69996e10d06f5fc1a55d25a0
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2220,6 +2276,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlcdkn1bSigRep1.bigWig
 grant White
 lab UChicago
+md5sum 3e3de79b6d27efa47a3196bf8c377d8d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2242,6 +2299,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlelf1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlelf1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum ee787d216a7d4ad8c1c3693883e31ed2,73d6cd4965911584b7184127ae582a5c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2263,6 +2321,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlelf1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 5be10c4e30d7c8b6f43db727d0e4da54
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2284,6 +2343,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlelf1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 76aa0fa438ade8d758bff7995bd6f549
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2306,6 +2366,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlesrAlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlesrAlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 90b7584f8d1f16e1b39497514eb3a6a5,f8f2c00d6c89325fd297b2dbf2859d70
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2327,6 +2388,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlesrRawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a0dc373aa633d937f5c8312a9fbc5277
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2348,6 +2410,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlesrSigRep1.bigWig
 grant White
 lab UChicago
+md5sum 80fc042f597730d993b8cfdcd820c765
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2720,6 +2783,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlilf2AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlilf2AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 90b7584f8d1f16e1b39497514eb3a6a5,f8f2c00d6c89325fd297b2dbf2859d70
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2741,6 +2805,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlilf2RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a0dc373aa633d937f5c8312a9fbc5277
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2762,6 +2827,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlilf2SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 80fc042f597730d993b8cfdcd820c765
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3034,6 +3100,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlmll5AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlmll5AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 90b7584f8d1f16e1b39497514eb3a6a5,f8f2c00d6c89325fd297b2dbf2859d70
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3055,6 +3122,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlmll5RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a0dc373aa633d937f5c8312a9fbc5277
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3076,6 +3144,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlmll5SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 80fc042f597730d993b8cfdcd820c765
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3098,6 +3167,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlncor1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlncor1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 8574fb1a2aa69d2347f083f9fba267ac,039aadc1c8b407a0f52f012586b39c48
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3119,6 +3189,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlncor1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum edb341e7d6246da8043dea11a3790ce0
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3140,6 +3211,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlncor1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum fe799f1caaa987a0a395265479a5303b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3162,6 +3234,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlnf90AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlnf90AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 90b7584f8d1f16e1b39497514eb3a6a5,f8f2c00d6c89325fd297b2dbf2859d70
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3183,6 +3256,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlnf90RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum a0dc373aa633d937f5c8312a9fbc5277
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3204,6 +3278,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlnf90SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 80fc042f597730d993b8cfdcd820c765
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3326,6 +3401,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlstat1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlstat1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 88186657c723eb1289242e5bd23d9518,4178fbecaf129307e518ef75f762dd31
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3347,6 +3423,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlstat1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum f85dd4914906ea68ff3b816ca0ea6c9a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3368,6 +3445,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562InputControlstat1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 1f893803e384bf55c7d358707c0290a2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3390,6 +3468,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5AlnRep1.bam,wgEncodeUchicagoTfbsK562Mll5Controlmll5AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum b9020bfd0c31f4d7e1fcafdc6357c0bd,d69f23cb718eb45f6f2b9510a55ff75c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3411,6 +3490,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5AlnRep2.bam,wgEncodeUchicagoTfbsK562Mll5Controlmll5AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum c5be7f131faca3852a2caa1942ccb886,d9c202de921ef262db25dd083453e40d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3432,6 +3512,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum aafe34271a634a6244fc8a4f820b6301
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3454,6 +3535,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 7f2aac7b0eb15985aa88dee9482b97c6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3476,6 +3558,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 753ffedea0d2874758559c5211d8677a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3497,6 +3580,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum a03124d065ee3c9965642407126b3ff0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3518,6 +3602,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 20f8b054db4d8e560c9451037d1d9429
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3540,6 +3625,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep2.bigWig
 grant White
 lab UChicago
+md5sum e492ea1a58206d9d6c275fd00bc64f3e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3562,6 +3648,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1AlnRep1.bam,wgEncodeUchicagoTfbsK562Ncor1Controlncor1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum ce03eca741a90554a17a057e7e4a717b,fb10d2bc508b1de4d33a79af36017950
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3583,6 +3670,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1AlnRep2.bam,wgEncodeUchicagoTfbsK562Ncor1Controlncor1AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum bb8879aaae707b9271d5567937d64f34,85c7c0242c27ea03b68848f611eb7261
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3604,6 +3692,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 57c7c89794ec450d4014ef59a7508da2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3626,6 +3715,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 7bc17d59f1ac7d50efa106c877c0fe7f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3648,6 +3738,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 6cf602ea9a0e270c75bc5293fa24bac7
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3669,6 +3760,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 2a9e9e2692df680d9bffd7caca681ffb
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3690,6 +3782,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum a1c20ab7c1be49e50afad1aa871a4080
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3712,6 +3805,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep2.bigWig
 grant White
 lab UChicago
+md5sum a515375c693a17e3b9fc5b508476a791
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3734,6 +3828,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90AlnRep1.bam,wgEncodeUchicagoTfbsK562Nf90Controlnf90AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum a933d5b52e839738ba63ceba3eddb5c5,399f07f2f8546b141c85d6d34a36e5ae
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3755,6 +3850,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90AlnRep2.bam,wgEncodeUchicagoTfbsK562Nf90Controlnf90AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum 8532aff79eb8ab7e9067fbf9ce70e808,8110e2f5e11a25ed8203ce444d4def68
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3776,6 +3872,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 5ca720437da562c8dc98489b125a4b6a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3798,6 +3895,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 7c42a87e43da53dddbf43a21aab88cca
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3820,6 +3918,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 3cfc0a9ae7cff08d42245b08a2b1a3fc
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3841,6 +3940,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum 896b7282d884648340caea8418c90c1c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3862,6 +3962,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep1.bigWig
 grant White
 lab UChicago
+md5sum 9ec887d63f8f7ab40425385389569214
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3884,6 +3985,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep2.bigWig
 grant White
 lab UChicago
+md5sum dc277413467bac16b7e36a45550f8544
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3906,6 +4008,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1AlnRep1.bam,wgEncodeUchicagoTfbsK562Stat1Controlstat1AlnRep1.bam.bai
 grant White
 lab UChicago
+md5sum 768e28dfd0c2861533195e699440b6ac,f1aa084e0921ec512fffeaf1c1e4cb97
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3927,6 +4030,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1AlnRep2.bam,wgEncodeUchicagoTfbsK562Stat1Controlstat1AlnRep2.bam.bai
 grant White
 lab UChicago
+md5sum f23a9dd58ed0f62596edb9d1d509e219,d303999f015629544cbb9b965c019ebc
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3948,6 +4052,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep1.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 475c385062a39becdf8359e127b5c7fd
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3970,6 +4075,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep2.narrowPeak.gz
 grant White
 lab UChicago
+md5sum 7b262814f0a0df00d0aec48dcb75c240
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3992,6 +4098,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1RawDataRep1.fastq.gz
 grant White
 lab UChicago
+md5sum 02feb5f3e242c3b7fae696df488baef6
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4013,6 +4120,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1RawDataRep2.fastq.gz
 grant White
 lab UChicago
+md5sum f2c01cac61f5fd9e3a4b016ec3abff86
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4034,6 +4142,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep1.bigWig
 grant White
 lab UChicago
+md5sum c6bf1f1aa4de663b6f141ed3850736b5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4056,6 +4165,7 @@ dateUnrestricted 2012-11-20
 fileName wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep2.bigWig
 grant White
 lab UChicago
+md5sum 6c4c04714a75880608d3f5567aead033
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4064,4 +4174,4 @@ subId 5854
 tableName wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep2
 view Signal
 
-# MAGIC: -669003565
+# MAGIC: 1748983090

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 import sys, os, re, argparse, subprocess, math, datetime, time
-from ucscgenomics import ra 
+from ucscGb.gbData.ra.raFile import RaFile
 
 
 def main():
@@ -19,8 +19,8 @@ def main():
         return
 
     args = parser.parse_args(sys.argv[1:])
-    ra1 = ra.RaFile(args.RaFileOne)
-    ra2 = ra.RaFile(args.RaFileTwo)
+    ra1 = RaFile(args.RaFileOne)
+    ra2 = RaFile(args.RaFileTwo)
 
 
     merged = ra1.mergeRa(ra2)
