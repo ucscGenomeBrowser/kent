@@ -639,7 +639,11 @@ while ((hEl = hashNext(&hc)) != NULL)
     ix = stringArrayIx(hashMustFindVal(ra, CV_TERM),requested,requestCount);
     if (ix != -1 && targets[ix] == NULL) // but not yet converted to antibody
         {
-        targets[ix] = cloneString(hashMustFindVal(ra, CV_TARGET)); // Must have a target
+        // Special case for Inputs that do not have targets but are listed as Antibody
+        // It is generalized to cover all cases for missing target
+        targets[ix] = cloneString(hashFindVal(ra, CV_TARGET)); // May have a target
+        if (targets[ix] == NULL)
+            targets[ix] = cloneString(hashMustFindVal(ra, CV_TERM)); // Must have a term
         }
     }
 
@@ -816,7 +820,13 @@ if (differentWord(type,CV_TOT) || typeOpt != NULL )  // If type resolves to type
             {
             char *val = hashFindVal(ra, queryBy);
             if (val == NULL)
-                continue;
+                {
+                // Special case for input that has no target
+                if (queryBy == CV_TARGET)
+                    val = hashMustFindVal(ra, CV_TERM);
+                else
+                    continue;
+                }
             if (-1 == stringArrayIx(val,requested,requestCount))
                 continue;
             }
