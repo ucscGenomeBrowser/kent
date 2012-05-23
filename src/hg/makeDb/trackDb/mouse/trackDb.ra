@@ -39,7 +39,7 @@ visibility hide
 color 200,100,0
 type bed 6 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail: 
 
 track jaxQTL2
@@ -50,7 +50,7 @@ priority 21.1
 visibility hide
 color 200,100,0
 type bed 8 +
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail: 
 
 track jaxQTL3
@@ -62,7 +62,7 @@ visibility hide
 color 200,100,0
 type bed 8 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail: 
 
 track igtc
@@ -87,7 +87,7 @@ itemRgb on
 urlLabel KOMP Data Coordination Center: 
 url http://www.knockoutmouse.org/search?criteria=$$
 mgiUrlLabel MGI Report: 
-mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+mgiUrl http://www.informatics.jax.org/marker/$$
 
 track ikmc
 shortLabel IKMC Genes
@@ -101,7 +101,7 @@ itemRgb on
 urlLabel KOMP Data Coordination Center: 
 url http://www.knockoutmouse.org/search?criteria=$$
 mgiUrlLabel MGI Report: 
-mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+mgiUrl http://www.informatics.jax.org/marker/$$
 
 track acembly
 shortLabel AceView Genes
