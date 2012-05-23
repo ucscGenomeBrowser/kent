@@ -18568,4 +18568,13 @@ done
     hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
 
 
-#############################################################################
+############################################################################
+# UPDATE COSMIC TRACK - v59 (DONE 2012-05-23 larrym)
+
+~/kent/src/hg/utils/automation/loadCosmic.pl -oldVer=55 hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v59_230512.csv
+Loading COSMIC v59
+New length: 136638
+Old length: 49087
+Percent bed overlap with previous version: 99.95%
+Number of deleted IDs: 20
+Number of added IDs: 87571
