@@ -59,7 +59,7 @@ include wgEncodeAffyRnaChip.ra
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha,beta
+include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
 include wgEncodeUmassDekker5C.ra 
@@ -170,7 +170,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra
+include wgEncodeUwTfbs.release3.ra beta,public
+include wgEncodeUwTfbs.release4.ra alpha
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha

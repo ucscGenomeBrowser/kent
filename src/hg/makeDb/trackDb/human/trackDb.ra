@@ -3928,7 +3928,7 @@ urlLabel ISCA details:
     track iscaPathGainCum
     parent iscaComposite
     shortLabel ISCA Path Gain
-    longLabel ISCA CNVs: Pathogenic Gain Cumulative
+    longLabel ISCA CNVs: Pathogenic Gain Total
     type bedGraph 4
     maxHeightPixels 128:57:16
     viewLimits 0:100
@@ -3940,7 +3940,7 @@ urlLabel ISCA details:
     track iscaPathLossCum
     parent iscaComposite
     shortLabel ISCA Path Loss
-    longLabel ISCA CNVs: Pathogenic Loss Cumulative
+    longLabel ISCA CNVs: Pathogenic Loss Total
     type bedGraph 4
     maxHeightPixels 128:57:16
     viewLimits 0:100
