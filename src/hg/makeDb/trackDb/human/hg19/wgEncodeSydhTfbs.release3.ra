@@ -685,12 +685,12 @@ html wgEncodeSydhTfbs.release3
         type narrowPeak
         # subId=3252 dateSubmitted=2011-01-13
 
-        track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MCF1 Et12 STA3 Sd
-        longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
-        type narrowPeak
+        #track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdPk
+        #parent wgEncodeSydhTfbsViewPeaks off
+        #shortLabel MCF1 Et12 STA3 Sd
+        #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #type narrowPeak
         # subId=3253 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdPk
@@ -5557,12 +5557,12 @@ html wgEncodeSydhTfbs.release3
         type bigWig 1.000000 22948.000000
         # subId=3252 dateSubmitted=2011-01-13
 
-        track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel MCF1 Et12 STA3 Sd
-        longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
-        type bigWig 1.000000 12103.000000
+        #track wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig
+        #parent wgEncodeSydhTfbsViewSignal off
+        #shortLabel MCF1 Et12 STA3 Sd
+        #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #type bigWig 1.000000 12103.000000
         # subId=3253 dateSubmitted=2011-01-14
 
         track wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig
