@@ -55608,6 +55608,7 @@ fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1.bam,wgEncodeSydhTfbsMcf1
 grant Snyder
 lab Harvard
 md5sum 5291c8d1e324b0f0f2f3803964f043f9,29f74b67d85128cfee935f9240f9fe64
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -55633,6 +55634,7 @@ fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2.bam,wgEncodeSydhTfbsMcf1
 grant Snyder
 lab Harvard
 md5sum 273eecbae73cdeb41423cc2626794ac5,b746d812e67ac72e64ffba7be3a41944
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -55659,6 +55661,7 @@ grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
 md5sum 8b6f19921e9425168a5a60a70c8c3dd9
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 setType exp
@@ -55684,6 +55687,7 @@ fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
 md5sum 6db79867f50a0506ed88f2119047edc3
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -55709,6 +55713,7 @@ fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
 md5sum 0779f7834b69a4ddb4a6d8442dd6fa78
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -55735,6 +55740,7 @@ grant Snyder
 lab Harvard
 labVersion PeakSeq1.0
 md5sum 12ab770dad691d2062fc6f0af078d54e
+objStatus replaced - Replaced by wgEncodeEH002836
 origAssembly hg19
 project wgEncode
 setType exp
@@ -59902,4 +59908,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 65969985
+# MAGIC: -38431895
