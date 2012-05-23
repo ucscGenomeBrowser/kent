@@ -26,7 +26,12 @@ if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
 } else {
     die "Missing version number in srcUrl";
 }
-print STDERR "Loading COSMIC v$ver\n";
+
+if($dryRun) {
+    print STDERR "Loading COSMIC v$ver (dryRun)\n";
+} else {
+    print STDERR "Loading COSMIC v$ver\n";
+}
 
 if(!$oldVer) {
     $oldVer = $ver - 1;
@@ -91,6 +96,8 @@ while(<FILE>) {
             $fields[7] = 'chrX';
         } elsif ($fields[7] eq '24') {
             $fields[7] = 'chrY';
+        } elsif ($fields[7] eq '25') {
+            $fields[7] = 'chrM';
         } elsif ($fields[7] >= 1 && $fields[7] <= 22) {
             $fields[7] = 'chr' . $fields[7];
         } else {
