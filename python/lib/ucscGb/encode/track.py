@@ -388,15 +388,24 @@ class CompositeTrack(object):
         trackDb = self._trackDbDir + "trackDb.wgEncode.ra"
         f = open(trackDb, "r")
         lines = f.readlines()
-        p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
+        p = re.compile("include (%s\.\S+)\s?(\S+)?" % self._name)
+        alphaTdbPath = 0
+        tdbPath = 0
         for i in lines:
             if re.match("^\s*#.*", i):
                 continue
             m = p.match(i)
-            if m and re.search('alpha', m.group(2)):
-                tdbpath = "%s%s" % (self._trackDbDir, m.group(1))
-                return tdbpath
-        return None
+            if m:
+                tdbPath = "%s%s" % (self._trackDbDir, m.group(1))
+            if m and m.group(2):
+                  if re.search('alpha', m.group(2)):
+                      alphaTdbPath = "%s%s" % (self._trackDbDir, m.group(1))
+        if alphaTdbPath:
+            return alphaTdbPath
+        elif tdbPath:
+            return tdbPath
+        else:
+            return None
 
 
     def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None):
