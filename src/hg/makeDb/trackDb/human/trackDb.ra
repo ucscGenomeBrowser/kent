@@ -3959,6 +3959,15 @@ urlLabel ISCA details:
     visibility hide
     priority 3
 
+    track iscaCuratedBenign
+    parent iscaComposite
+    shortLabel ISCA Curated Ben
+    longLabel ISCA CNVs: Curated Benign
+    type gvf
+    noScoreFilter .
+    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    priority 4
+
     track iscaPathogenic
     parent iscaComposite
     shortLabel ISCA Pathogenic
@@ -3967,7 +3976,7 @@ urlLabel ISCA details:
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
     visibility pack
-    priority 4
+    priority 5
 
     track iscaLikelyPathogenic
     parent iscaComposite
@@ -3976,39 +3985,30 @@ urlLabel ISCA details:
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 5
+    priority 6
 
     track iscaUncertain
-    parent iscaComposite off
+    parent iscaComposite
     shortLabel ISCA Uncertain
     longLabel ISCA CNVs: Uncertain
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 6
+    priority 7
 
     track iscaLikelyBenign
-    parent iscaComposite off
+    parent iscaComposite
     shortLabel ISCA Uncert Ben
     longLabel ISCA CNVs: Uncertain: Likely Benign
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 7
-
-    track iscaBenign
-    parent iscaComposite off
-    shortLabel ISCA Benign
-    longLabel ISCA CNVs: Benign
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
     priority 8
 
-    track iscaCuratedBenign
-    parent iscaComposite off
-    shortLabel ISCA Curated Ben
-    longLabel ISCA CNVs: Curated Benign
+    track iscaBenign
+    parent iscaComposite
+    shortLabel ISCA Benign
+    longLabel ISCA CNVs: Benign
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
