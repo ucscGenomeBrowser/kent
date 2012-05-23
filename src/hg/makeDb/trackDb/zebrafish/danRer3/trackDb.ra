@@ -141,14 +141,6 @@ xrefTable hg17.blastKGRef02
 xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
-searchTable blastHg17KG
-searchMethod prefix
-searchName blastHg17KGSprot
-searchType psl
-xrefTable hg17.blastKGRef02
-xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
-searchPriority 25
-
 #Overrides from priority.ra
 
 track ensGene override

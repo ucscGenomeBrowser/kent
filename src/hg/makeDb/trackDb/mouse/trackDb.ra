@@ -616,31 +616,6 @@ shortCircuit 1
 termRegex gnf1m[0-9]+.+
 searchPriority 16
 
-searchName affyMOE430
-searchTable affyMOE430
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex (A:|B:)[0-9]+[[:alnum:]_]*_at
-searchPriority 16
-
-searchName affyMOE430ChipPrefix
-searchTable affyMOE430
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex MOE430(A|B):.+ 
-searchPriority 16
-termPrefix MOE430
-
-searchName affyMOE430NoChip
-searchTable affyMOE430
-searchMethod fuzzy
-searchType psl
-shortCircuit 1
-termRegex [0-9]+[[:alnum:]_]*_at
-searchPriority 16
-
 searchName agilentCgh1x1m
 searchTable agilentCgh1x1m
 searchMethod prefix
