@@ -13439,6 +13439,12 @@ type view
 label Excludable
 description Genomic regions for which mapped sequence tags were filtered out before signal generation and peak calling, problematic regions for short sequence tag signal detection (such as satellites and rRNA genes)
 
+term ExonsDeNovo
+tag EXONSDENOVO
+type view
+label ExonsDenovo
+description 'De novo' exons defined by Cufflinks with FPKM.
+
 term ExonsGencV3c
 tag EXONGENCV3C
 type view
