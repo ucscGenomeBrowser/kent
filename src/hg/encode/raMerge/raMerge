@@ -7,7 +7,9 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='raMerge',
-        description='Merges two .ra files in a way that you would expect',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='''Merges two .ra files in a way that you would expect.
+WARNING: This program can't tell if a stanza has been removed from one of the ra files.''',
         epilog='example: raMerge alpha/wgEncodeUwTfbs.ra beta/wgEncodeUwTfbs.ra'
         )
     parser.add_argument('RaFileOne', help='The .ra file')

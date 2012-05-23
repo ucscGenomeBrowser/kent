@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 import sys, os, re, argparse, subprocess, math
-from ucscgenomics import ra, track
+#from ucscGb.gbData.ra.raFile import RaFile
+from ucscGb.encode import track
 
 def main():
     parser = argparse.ArgumentParser(
