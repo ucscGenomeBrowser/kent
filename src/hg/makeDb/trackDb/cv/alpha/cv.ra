@@ -2863,6 +2863,8 @@ tissue eye
 lineage ectoderm
 vendorName ScienCell
 vendorId 6570
+termId BTO:0003415
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003415
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6570
 sex U
 tier 3
@@ -2927,6 +2929,8 @@ description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
 karyotype normal
+termId BTO:0001578
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001578
 vendorName ScienCell
 vendorId 2720
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
@@ -3120,6 +3124,8 @@ tissue liver
 description fetal liver 11 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 11 weeks gestation
 tier 3
 lineage endoderm
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL11W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3134,6 +3140,8 @@ organism human
 tissue liver
 description fetal liver 24 weeks, consented fetal liver samples were isolated from legally aborted fetuses at 24 weeks gestation
 tier 3
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Unknown
 vendorId HFL24W
 orderUrl http://www.hudsonalpha.org/myers-lab
@@ -3165,6 +3173,8 @@ organism human
 description hepatic sinusoidal endothelial cells
 tissue liver
 lineage endoderm
+termId BTO:0001251
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001251
 vendorName ScienCell
 vendorId 5000
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
@@ -3180,6 +3190,8 @@ description iris pigment epithelial cells
 tissue eye
 lineage ectoderm
 karyotype normal
+termId BTO:0000653
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000653
 vendorName ScienCell
 vendorId 6560
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
@@ -3266,6 +3278,8 @@ description mammary fibroblasts
 tissue mammary
 vendorName ScienCell
 vendorId 7630
+termId BTO:0000817
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000817
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
 sex F
 tier 3
@@ -3576,6 +3590,8 @@ description lymphatic microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0003599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003599
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -3591,6 +3607,8 @@ description adult blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -3606,6 +3624,8 @@ description neonatal blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -3621,6 +3641,8 @@ description adult lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
@@ -3636,6 +3658,8 @@ description neonatal lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2812, CC-2812T25
 orderUrl http://www.lonza.com/
@@ -3651,6 +3675,8 @@ description neonatal microvascular endothelial cells (single donor), dermal-deri
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0004574
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004574
 vendorName Lonza
 vendorId CC-2505, CC-2505T225
 orderUrl http://www.lonza.com/
@@ -3666,6 +3692,8 @@ description blood microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0003599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003599
 vendorName Lonza
 vendorId CC-2815, CC-2815T75
 orderUrl http://www.lonza.com/
@@ -3680,6 +3708,8 @@ organism human
 description non-pigment ciliary epithelial cells
 tissue epithelium
 karyotype normal
+termId BTO:0001770
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001770
 vendorName ScienCell
 vendorId 6580
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
@@ -3763,9 +3793,11 @@ term HPAEpiC
 tag HPAE
 type Cell Line
 organism human
-description pulmonary alevolar epithelial cells
+description pulmonary alveolar epithelial cells
 tissue epithelium
 karyotype normal
+termId BTO:0003511
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003511
 vendorName ScienCell
 vendorId 3200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
@@ -3781,6 +3813,8 @@ description pulmonary artery fibroblasts
 tissue blood
 lineage mesoderm
 karyotype normal
+termId BTO:0000778
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000778
 vendorName ScienCell
 vendorId 3120
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
@@ -3868,6 +3902,8 @@ organism human
 description periodontal ligament fibroblasts
 tissue epithelium
 karyotype normal
+termId BTO:0001020
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001020
 vendorName Lonza
 vendorId CC-7049
 orderUrl http://www.lonza.com/
@@ -3884,6 +3920,8 @@ tissue blood
 karyotype normal
 vendorName ScienCell
 vendorId 3300
+termId BTO:0000764
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000764
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
 sex U
 tier 3
@@ -4004,6 +4042,8 @@ description retinal pigment epithelial cells
 tissue epithelium
 lineage ectoderm
 karyotype normal
+termId BTO:0001177
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001177
 vendorName ScienCell
 vendorId 6540
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
@@ -4090,6 +4130,8 @@ type Cell Line
 tier 3
 organism human
 description embryonic myoblast
+termId BTO:0000222
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000222
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 sex U
@@ -4103,9 +4145,12 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients
+description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies 
+termId BTO:0000222
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000222
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMM_FSHD
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4136,6 +4181,8 @@ tier 3
 organism human
 description embryonic myotube
 childOf HSMM_emb
+termId BTO:0001760
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 orderUrl http://depts.washington.edu/biowww/faculty/hauschka-steve/
@@ -4149,10 +4196,13 @@ tag HSMMTUBEFSHD
 type Cell Line
 tier 3
 organism human
-description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient
+description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies 
 childOf HSMM_FSHD
+termId BTO:0001760
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId Muscle needle biopsies
+vendorId HSMMtube_FSHD 
+orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
 lab Crawford
@@ -4252,12 +4302,14 @@ organism human
 description villous mesenchymal fibroblast cells
 tissue connective
 karyotype normal
+termId BTO:0002625
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002625
 vendorName ScienCell
 vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
-protocol Stam:HVMF_Stam_protocol.pd Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pd
+protocol Stam:HVMF_Stam_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
 
 #Cricket - duplicate term, need plan to resolve error
 #term HVMF
@@ -4463,6 +4515,8 @@ organism human
 description endometrial adenocarcinoma
 sex F
 tissue uterus
+termId BTO:0000658
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000658
 vendorName SIGMA-ALDRICH
 vendorId 99040201
 orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=99040201%7CSIGMA&N25=0&QS=ON&F=SPEC
@@ -4493,14 +4547,15 @@ organism human
 description prostate epithelial cells (PrEC), multiple human donors, all of whom are HIV-1, Hepatitis B and Hepatitis C negative, treatment: to create LHSR, cells were infected with amphotropic retroviruses encoding the SV40 large T antigen (L), the telomerase catalytic subunit hTERT (H), the SV40 small T antigen (S) and an oncogenic allele of H-ras (R).
 tissue epithelium
 vendorName William Hahn at the Dana Farber Cancer Institute, Boston, MA
+vendorId LHSR
+termId BTO:0002398
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002398
 orderUrl http://physicians.dana-farber.org/directory/profile.asp?dbase=main&setsize=10&display=Y&nxtfmt=pc&pgt=William+C.+Hahn,+MD,+PhD&gs=r&picture_id=0000378&lookup=Y&pict_id=0000378
 lineage endoderm
 karyotype normal
 sex U
 tier 3
 protocol Crawford:LHSR_Crawford_protocol.pdf
-#termId BTO:0001389 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 
 term LNCaP
 tag LNCAP
@@ -4851,6 +4906,7 @@ lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
 vendorId NB4
+orderUrl http://www.dsmz.de/
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
@@ -4919,6 +4975,8 @@ tissue skin
 lineage mesoderm
 karyotype normal
 description adult dermal fibroblasts
+termId BTO:0004419
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004419
 vendorName Lonza
 vendorId CC-2511, CC-2511T225
 orderUrl http://www.lonza.com/
@@ -4934,6 +4992,8 @@ tissue skin
 lineage mesoderm
 description neonatal dermal fibroblasts
 karyotype normal
+termId BTO:0004419
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004419
 vendorName Lonza
 vendorId CC-2509
 orderUrl http://www.lonza.com/
@@ -5419,6 +5479,8 @@ organism human
 description renal proximal tubule epithelial cells
 karyotype normal
 tissue epithelium
+termId BTO:0001498
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001498
 vendorName Lonza
 vendorId CC-2553, CC-2553T225
 orderUrl http://www.lonza.com/
@@ -5974,6 +6036,7 @@ age ageUnknown
 strain Unknown
 description Brown adipocytes tissue
 vendorName Jerrold M. Olefsky Lab, UCSD
+orderUrl http://endocrinology.ucsd.edu/Faculty/olefsky.html
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
 color 189,0,157
@@ -6045,6 +6108,8 @@ description Bone marrow derived macrophage
 age ageUnknown
 strain Unknown
 vendorName Genhong Cheng Lab, UCLA
+vendorId BMDM
+orderUrl http://www.mimg.ucla.edu/faculty/cheng/genhong.html
 termId 7058
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
@@ -6134,6 +6199,8 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Cerebrum
+termId 7014
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7014
 vendorName Stam lab
 vendorId Cerebrum
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6294,12 +6361,12 @@ age E0
 strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId ES-Bruce4
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
 color 65,105,225
 sex M
 protocol Ren:ES-Bruce4_Ren_protocol.pdf
-#termId
-#termUrl
 
 term ES-CJ7
 tag ESCJ7
@@ -6309,15 +6376,14 @@ category primaryCells
 description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
 strain 129
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 vendorName Stam lab
 vendorId ES-CJ7
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 sex U
 protocol Stam:ES-CJ7_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 term ES-D3
 tag ESD3
@@ -6344,6 +6410,8 @@ category primaryCells
 description mouse embryonic stem cell line E14
 age E0
 strain 129/Ola
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 vendorName Santos lab
 vendorId E14
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
@@ -6610,14 +6678,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Kidney
+termId 6960
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6960
 vendorName 1)Stam lab ; 2)CSHL lab
 vendorId Kidney; Kidney
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 color 204,121,167
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
-#termId
-#termUrl
 
 term L1210
 tag L1210
@@ -6792,13 +6860,14 @@ description Leukemia (K562 analog)
 age immortalized
 strain Unknown
 tissue blood
+termId MP:0002026
+termUrl http://www.informatics.jax.org/searches/Phat.cgi?id=MP:0002026
 vendorName Weissman lab
 vendorId MEL
 orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Weissman:MEL_Weissman_protocol.pdf Stam:MEL_Stam_protocol.pdf
-#Needs protocol, VendorName and Term Id
 
 term Mesoderm
 tag MESODERM
@@ -6827,6 +6896,8 @@ description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL
 age immortalized
 strain Unknown
 tissue blood
+termId GO:0030218
+termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0030218
 vendorName Stam Lab
 vendorId mG/ER
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6843,6 +6914,8 @@ age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
+termId GO:0036194 
+termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
 vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
 color 139,69,19
@@ -7226,6 +7299,8 @@ category primaryCells
 age E0
 strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 vendorName Dr. Levasseur (University of Iowa)
 vendorId ZhBTc4
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
@@ -11511,6 +11586,7 @@ target COREST
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Abcam
 vendorId ab24166
+orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
 lab Snyder
 lots 834865
 targetId RCOR1
@@ -12522,32 +12598,32 @@ term 4OHTAM_1uM_4hr
 tag TAM14H
 description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
-label 4-OHTAM_1uM_4hr
+label 4-OHTAM 1uM 4hr
 
 term 4OHTAM_1uM_12hr
 tag TAM112H
 description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
-label 4-OHTAM_1uM_12hr
+label 4-OHTAM 1uM 12hr
 
 term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
-label 4-OHTAM_1uM_36hr
+label 4-OHTAM 1uM 36hr
 # Changed tag from OHTAM1: 6/9/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
 description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
-label 4-OHTAM_20nM_72hr
+label 4-OHTAM 20nM 72hr
 
 term 4OHTAM_100nM_30m
 tag TAM10030
 description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
 type treatment
-label 4-OHTAM_100nM_30m
+label 4-OHTAM 100nM 30m
 
 term androgen
 tag ANDRO
@@ -13982,13 +14058,6 @@ description Validation of Transcription Factor Binding
 dataGroup Other
 #This is not in the metaDB currently
 
-### version
-
-term V2
-tag V2
-type version
-description version
-
 ### Strain
 # Used in conjunction with mouse submissions
 # Expected fields:
@@ -15314,8 +15383,8 @@ priority 110
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.
 ### (11/18/10)
-requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier #Provisional
-optionalVars label,tissue,vendorId,karyotype,lineage,termId,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
+requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier,termId #Provisional
+optionalVars label,tissue,vendorId,karyotype,lineage,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
 
 term composite
 tag COMPOSITE

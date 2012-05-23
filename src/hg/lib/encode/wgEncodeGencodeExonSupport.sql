@@ -13,5 +13,5 @@ CREATE TABLE wgEncodeGencodeExonSupport (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
               #Indices
-    PRIMARY KEY(transcriptId)
+    INDEX(transcriptId)
 );

@@ -410,6 +410,8 @@ organism human
 description fetal buttock/thigh fibroblast
 tissue skin
 karyotype normal
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04449
 vendorName Coriell
 vendorId AG04449
@@ -425,6 +427,8 @@ description fetal lung fibroblast
 tissue lung
 lineage endoderm
 karyotype normal
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG04450
 vendorName Coriell
 vendorId AG04450
@@ -438,6 +442,8 @@ type Cell Line
 organism human
 description adult toe fibroblast from apparently healthy 21 year old, "7% of the cells examined showing random chromosome loss/gain" -Coriell
 tissue skin
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -452,6 +458,8 @@ organism human
 description gum tissue fibroblasts from apparently heathly 24 year old
 tissue gingival
 karyotype normal
+termId BTO:0004138
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004138
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
 vendorId AG09319
@@ -466,6 +474,8 @@ type Cell Line
 organism human
 description abdominal skin fibroblasts from apparently heathly 22 year old, "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 tissue skin
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -485,7 +495,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -505,7 +515,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -525,7 +535,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -541,6 +551,8 @@ description aortic adventitial fibroblast cells
 tissue heart
 lineage mesoderm
 karyotype normal
+termId BTO:0000562
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000562
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
 orderUrl http://www.lonza.com/
@@ -1352,6 +1364,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 karyotype normal
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1367,6 +1381,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 karyotype normal
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 childOf BG02ES
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
@@ -1599,7 +1615,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -1619,7 +1635,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -1639,7 +1655,7 @@ lineage mesoderm
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
-termId BTO:3A0000782
+termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
 tier 3
@@ -2521,6 +2537,8 @@ type Cell Line
 organism human
 description undifferentiated embryonic stem cells
 lineage inner cell mass
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
@@ -2536,6 +2554,8 @@ description embryonic stem cell (hESC) H9
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2551,6 +2571,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2566,6 +2588,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2581,6 +2605,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2596,6 +2622,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2611,6 +2639,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2626,6 +2656,8 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 childOf H9ES
+termId BTO:0001086
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2656,6 +2688,8 @@ organism human
 description amniotic epithelial cells
 tissue epithelium
 karyotype normal
+termId BTO:0004660
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004660
 vendorName ScienCell
 vendorId 7110
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
@@ -2689,6 +2723,8 @@ tissue liver
 tier 3
 lineage endoderm
 color 189,0,157
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 vendorName Asterand, Inc.
 vendorId HAL
 orderUrl http://www.asterand.com/Asterand/
@@ -2832,6 +2868,8 @@ description brain microvascular endothelial cells
 tissue brain
 tier 3
 lineage ectoderm
+termId BTO:0003636
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003636
 vendorName ScienCell
 vendorId 1000
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1000
@@ -2876,6 +2914,8 @@ description cardiac fibroblasts- adult atrial
 tissue heart
 lineage mesoderm
 karyotype normal
+termId BTO:0003093
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003093
 vendorName ScienCell
 vendorId 6320
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
@@ -2891,6 +2931,8 @@ description cardiac fibroblasts
 tissue heart
 lineage mesoderm
 karyotype normal
+termId BTO:0003093
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003093
 vendorName ScienCell
 vendorId 6300
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
@@ -2976,6 +3018,8 @@ description cardiac myocytes
 tissue heart
 lineage mesoderm
 karyotype normal
+termId BTO:0001539
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001539
 vendorName ScienCell
 vendorId 6200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
@@ -2991,6 +3035,8 @@ description choroid plexus epithelial cells
 tissue epithelium
 lineage ectoderm
 karyotype normal
+termId BTO:0000258
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000258
 vendorName ScienCell
 vendorId 1310
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
@@ -4356,7 +4402,7 @@ vendorId 7130
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
-protocol Stam:HVMF_Stam_protocol.pd Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pd
+protocol Stam:HVMF_Stam_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
 
 #Cricket - duplicate term, need plan to resolve error
 #term HVMF
@@ -6174,7 +6220,6 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System PROVSIONAL
 description Central Nervous System
 vendorName CSHL lab
 vendorId CNS
@@ -6270,7 +6315,7 @@ termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 color 65,105,225
 sex M
-protocol mising
+protocol missing
 
 term ES-Bruce4
 tag ESB4
@@ -7016,14 +7061,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName 1) LICR lab; 2)Stam Lab
-vendorId Spleen; Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
+vendorId Spleen; Spleen; Spleen
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
 sex U
-protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf
+protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
 
 term Stomach
 tag STOM
@@ -13492,6 +13537,7 @@ tag PRIMER
 type view
 label Primer
 description The sequences of the primers used in the experiments and sequences for the control sites.
+deprecated Data linked to view is specific to the composite and not considered an experiment
 #snippet for UW5c's primer view
 
 term Protocol
@@ -13615,7 +13661,7 @@ label Transcripts De novo
 description 'De novo' transcripts with FPKM produced by Cufflinks
 
 term TranscriptGencV10
-tag TRANSGENCV7
+tag TRANSGENCV10
 type view
 label Transcript Gencode V10
 description Expression level estimates at the transcript level for the GENCODE V10 annotation in gtf format
@@ -15944,6 +15990,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 

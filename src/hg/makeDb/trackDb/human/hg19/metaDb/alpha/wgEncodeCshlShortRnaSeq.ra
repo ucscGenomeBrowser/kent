@@ -549,7 +549,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -578,7 +577,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -719,7 +717,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897083
@@ -749,7 +746,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897083
@@ -835,7 +831,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897083
@@ -865,7 +860,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897083
@@ -951,7 +945,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897083
@@ -980,7 +973,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897083
@@ -1009,7 +1001,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep3.pdf.gz
 geoSampleAccession GSM897083
@@ -1038,7 +1029,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep4.pdf.gz
 geoSampleAccession GSM897083
@@ -1067,7 +1057,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
-dccRep 1
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897083
@@ -1096,7 +1085,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
-dccRep 2
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897083
@@ -1928,7 +1916,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002461
-dccRep 1
 expId 2461
 fileName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -1956,7 +1943,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002461
-dccRep 2
 expId 2461
 fileName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -2732,7 +2718,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002462
-dccRep 1
 expId 2462
 fileName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -2760,7 +2745,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002462
-dccRep 2
 expId 2462
 fileName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -2893,7 +2877,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 1
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -2922,7 +2905,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 2
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -3009,7 +2991,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 1
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897074
@@ -3039,7 +3020,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 2
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897074
@@ -3069,7 +3049,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 1
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897074
@@ -3099,7 +3078,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 2
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897074
@@ -3129,7 +3107,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 1
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897074
@@ -3158,7 +3135,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 2
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897074
@@ -3187,7 +3163,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 1
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897074
@@ -3216,7 +3191,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
-dccRep 2
 expId 1081
 fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897074
@@ -3245,7 +3219,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 1
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -3274,7 +3247,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 2
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -3361,7 +3333,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 1
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897077
@@ -3391,7 +3362,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 2
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897077
@@ -3421,7 +3391,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 1
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897077
@@ -3451,7 +3420,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 2
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897077
@@ -3481,7 +3449,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 1
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897077
@@ -3510,7 +3477,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 2
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897077
@@ -3539,7 +3505,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 1
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897077
@@ -3568,7 +3533,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
-dccRep 2
 expId 1079
 fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897077
@@ -4076,7 +4040,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam,wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
 geoSampleAccession GSM605625
@@ -4106,7 +4069,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig
 geoSampleAccession GSM605625
@@ -4136,7 +4098,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig
 geoSampleAccession GSM605625
@@ -4165,7 +4126,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortRawData.fastq.gz
 geoSampleAccession GSM605625
@@ -4192,7 +4152,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -4221,7 +4180,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 2
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -4308,7 +4266,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605625
@@ -4338,7 +4295,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 2
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605625
@@ -4368,7 +4324,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605625
@@ -4398,7 +4353,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 2
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605625
@@ -4428,7 +4382,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605625
@@ -4457,7 +4410,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 2
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605625
@@ -4486,7 +4438,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 1
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605625
@@ -4515,7 +4466,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
-dccRep 2
 expId 212
 fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605625
@@ -4813,7 +4763,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.bai
 geoSampleAccession GSM605627
@@ -4843,7 +4792,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig
 geoSampleAccession GSM605627
@@ -4873,7 +4821,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig
 geoSampleAccession GSM605627
@@ -4902,7 +4849,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData.fastq.gz
 geoSampleAccession GSM605627
@@ -4931,7 +4877,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605627
@@ -4959,7 +4904,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -4988,7 +4932,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 2
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -5075,7 +5018,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605627
@@ -5105,7 +5047,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 2
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605627
@@ -5135,7 +5076,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605627
@@ -5165,7 +5105,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 2
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605627
@@ -5195,7 +5134,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605627
@@ -5224,7 +5162,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 2
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605627
@@ -5253,7 +5190,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 1
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605627
@@ -5282,7 +5218,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
-dccRep 2
 expId 203
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605627
@@ -5313,7 +5248,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.bai
 geoSampleAccession GSM605633
@@ -5343,7 +5277,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig
 geoSampleAccession GSM605633
@@ -5373,7 +5306,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig
 geoSampleAccession GSM605633
@@ -5402,7 +5334,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData.fastq.gz
 geoSampleAccession GSM605633
@@ -5431,7 +5362,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605633
@@ -5459,7 +5389,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -5488,7 +5417,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
-dccRep 2
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -5575,7 +5503,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605633
@@ -5605,7 +5532,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
-dccRep 2
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605633
@@ -5635,7 +5561,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605633
@@ -5665,7 +5590,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
-dccRep 2
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605633
@@ -5695,7 +5619,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605633
@@ -5724,7 +5647,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
-dccRep 2
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605633
@@ -5753,7 +5675,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
-dccRep 1
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605633
@@ -5782,7 +5703,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
-dccRep 2
 expId 204
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605633
@@ -5811,7 +5731,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 1
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -5840,7 +5759,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 2
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -5927,7 +5845,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 1
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897073
@@ -5957,7 +5874,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 2
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897073
@@ -5987,7 +5903,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 1
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897073
@@ -6017,7 +5932,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 2
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897073
@@ -6047,7 +5961,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 1
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897073
@@ -6076,7 +5989,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 2
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897073
@@ -6105,7 +6017,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 1
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897073
@@ -6134,7 +6045,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
-dccRep 2
 expId 1082
 fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897073
@@ -6163,7 +6073,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001083
-dccRep 2
 expId 1083
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -6252,7 +6161,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001083
-dccRep 2
 expId 1083
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897072
@@ -6282,7 +6190,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001083
-dccRep 2
 expId 1083
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897072
@@ -6312,7 +6219,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001083
-dccRep 2
 expId 1083
 fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897072
@@ -6341,7 +6247,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
-dccRep 2
 expId 1084
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -6430,7 +6335,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
-dccRep 2
 expId 1084
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897071
@@ -6460,7 +6364,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
-dccRep 2
 expId 1084
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897071
@@ -6490,7 +6393,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
-dccRep 2
 expId 1084
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897071
@@ -6519,7 +6421,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
-dccRep 2
 expId 1084
 fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897071
@@ -7379,7 +7280,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 1
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -7408,7 +7308,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 2
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -7495,7 +7394,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 1
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897079
@@ -7525,7 +7423,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 2
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897079
@@ -7555,7 +7452,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 1
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897079
@@ -7585,7 +7481,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 2
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897079
@@ -7615,7 +7510,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 1
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897079
@@ -7644,7 +7538,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 2
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897079
@@ -7673,7 +7566,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 1
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897079
@@ -7702,7 +7594,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
-dccRep 2
 expId 1089
 fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897079
@@ -7731,7 +7622,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 1
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -7760,7 +7650,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 2
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -7847,7 +7736,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 1
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897069
@@ -7877,7 +7765,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 2
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897069
@@ -7907,7 +7794,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 1
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897069
@@ -7937,7 +7823,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 2
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897069
@@ -7967,7 +7852,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 1
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897069
@@ -7996,7 +7880,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 2
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897069
@@ -8025,7 +7908,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 1
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897069
@@ -8054,7 +7936,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
-dccRep 2
 expId 1087
 fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897069
@@ -8083,7 +7964,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 1
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -8112,7 +7992,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 2
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -8199,7 +8078,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 1
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897080
@@ -8229,7 +8107,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 2
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897080
@@ -8259,7 +8136,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 1
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897080
@@ -8289,7 +8165,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 2
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897080
@@ -8319,7 +8194,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 1
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897080
@@ -8348,7 +8222,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 2
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897080
@@ -8377,7 +8250,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 1
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897080
@@ -8406,7 +8278,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
-dccRep 2
 expId 1088
 fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897080
@@ -8435,7 +8306,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 1
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -8464,7 +8334,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 2
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -8551,7 +8420,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 1
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897084
@@ -8581,7 +8449,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 2
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897084
@@ -8611,7 +8478,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 1
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897084
@@ -8641,7 +8507,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 2
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897084
@@ -8671,7 +8536,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 1
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897084
@@ -8700,7 +8564,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
-dccRep 2
 expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897084
@@ -8729,7 +8592,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH001743
-dccRep 1
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -8758,7 +8620,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
-dccRep 2
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -8845,7 +8706,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH001743
-dccRep 1
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897082
@@ -8875,7 +8735,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
-dccRep 2
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897082
@@ -8905,7 +8764,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH001743
-dccRep 1
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897082
@@ -8935,7 +8793,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
-dccRep 2
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897082
@@ -8965,7 +8822,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH001743
-dccRep 1
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897082
@@ -8994,7 +8850,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
-dccRep 2
 expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897082
@@ -9023,7 +8878,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 1
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -9052,7 +8906,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 2
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -9139,7 +8992,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 1
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897085
@@ -9169,7 +9021,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 2
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897085
@@ -9199,7 +9050,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 1
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897085
@@ -9229,7 +9079,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 2
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897085
@@ -9259,7 +9108,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 1
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897085
@@ -9288,7 +9136,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
-dccRep 2
 expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897085
@@ -11311,7 +11158,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
-dccRep 1
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -11340,7 +11186,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
-dccRep 2
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -11427,7 +11272,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
-dccRep 1
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM897075
@@ -11457,7 +11301,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
-dccRep 2
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM897075
@@ -11487,7 +11330,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
-dccRep 1
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM897075
@@ -11517,7 +11359,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
-dccRep 2
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM897075
@@ -11547,7 +11388,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
-dccRep 1
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep3.pdf.gz
 geoSampleAccession GSM897075
@@ -11576,7 +11416,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
-dccRep 2
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep4.pdf.gz
 geoSampleAccession GSM897075
@@ -11605,7 +11444,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
-dccRep 1
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM897075
@@ -11634,7 +11472,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
-dccRep 2
 expId 1080
 fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM897075
@@ -12917,7 +12754,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002465
-dccRep 1
 expId 2465
 fileName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapProtocolRep1.pdf.gz
 grant Gingeras
@@ -12945,7 +12781,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002465
-dccRep 2
 expId 2465
 fileName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapProtocolRep2.pdf.gz
 grant Gingeras
@@ -13752,7 +13587,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002463
-dccRep 1
 expId 2463
 fileName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapProtocolRep1.pdf.gz
 grant Gingeras
@@ -13780,7 +13614,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002463
-dccRep 2
 expId 2463
 fileName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapProtocolRep2.pdf.gz
 grant Gingeras
@@ -14615,7 +14448,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002464
-dccRep 1
 expId 2464
 fileName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapProtocolRep1.pdf.gz
 grant Gingeras
@@ -14643,7 +14475,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002464
-dccRep 2
 expId 2464
 fileName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapProtocolRep2.pdf.gz
 grant Gingeras
@@ -14780,7 +14611,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam,wgEncodeCshlShortRnaSeqK562CellShortAln.bam.bai
 geoSampleAccession GSM605630
@@ -14810,7 +14640,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig
 geoSampleAccession GSM605630
@@ -14840,7 +14669,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig
 geoSampleAccession GSM605630
@@ -14869,7 +14697,6 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShortRawData.fastq.gz
 geoSampleAccession GSM605630
@@ -14898,7 +14725,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605630
@@ -14926,7 +14752,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -14955,7 +14780,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
-dccRep 2
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -15042,7 +14866,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605630
@@ -15072,7 +14895,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
-dccRep 2
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605630
@@ -15102,7 +14924,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605630
@@ -15132,7 +14953,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
-dccRep 2
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605630
@@ -15162,7 +14982,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605630
@@ -15191,7 +15010,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
-dccRep 2
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605630
@@ -15220,7 +15038,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
-dccRep 1
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605630
@@ -15249,7 +15066,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
-dccRep 2
 expId 213
 fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605630
@@ -15280,7 +15096,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam,wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.bai
 geoSampleAccession GSM605632
@@ -15310,7 +15125,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig
 geoSampleAccession GSM605632
@@ -15340,7 +15154,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig
 geoSampleAccession GSM605632
@@ -15369,7 +15182,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortRawData.fastq.gz
 geoSampleAccession GSM605632
@@ -15398,7 +15210,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605632
@@ -15426,7 +15237,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -15455,7 +15265,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 2
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -15542,7 +15351,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM605632
@@ -15572,7 +15380,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 2
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM605632
@@ -15602,7 +15409,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM605632
@@ -15632,7 +15438,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 2
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM605632
@@ -15662,7 +15467,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 1
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM605632
@@ -15691,7 +15495,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
-dccRep 2
 expId 205
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM605632
@@ -15722,7 +15525,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam,wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.bai
 geoSampleAccession GSM605629
@@ -15752,7 +15554,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig
 geoSampleAccession GSM605629
@@ -15782,7 +15583,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig
 geoSampleAccession GSM605629
@@ -15811,7 +15611,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortRawData.fastq.gz
 geoSampleAccession GSM605629
@@ -15840,7 +15639,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605629
@@ -15868,7 +15666,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -15897,7 +15694,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 2
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -15984,7 +15780,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605629
@@ -16014,7 +15809,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 2
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605629
@@ -16044,7 +15838,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605629
@@ -16074,7 +15867,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 2
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605629
@@ -16104,7 +15896,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605629
@@ -16133,7 +15924,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 2
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605629
@@ -16162,7 +15952,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 1
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605629
@@ -16191,7 +15980,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
-dccRep 2
 expId 206
 fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605629
@@ -16222,7 +16010,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.bai
 geoSampleAccession GSM605628
@@ -16252,7 +16039,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig
 geoSampleAccession GSM605628
@@ -16282,7 +16068,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig
 geoSampleAccession GSM605628
@@ -16311,7 +16096,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortRawData.fastq.gz
 geoSampleAccession GSM605628
@@ -16340,7 +16124,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605628
@@ -16368,7 +16151,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -16397,7 +16179,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 2
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -16484,7 +16265,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM605628
@@ -16514,7 +16294,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 2
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM605628
@@ -16544,7 +16323,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM605628
@@ -16574,7 +16352,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 2
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM605628
@@ -16604,7 +16381,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 1
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM605628
@@ -16633,7 +16409,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
-dccRep 2
 expId 207
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM605628
@@ -16664,7 +16439,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.bai
 geoSampleAccession GSM605634
@@ -16694,7 +16468,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig
 geoSampleAccession GSM605634
@@ -16724,7 +16497,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig
 geoSampleAccession GSM605634
@@ -16753,7 +16525,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData.fastq.gz
 geoSampleAccession GSM605634
@@ -16782,7 +16553,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605634
@@ -16810,7 +16580,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -16839,7 +16608,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 2
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -16926,7 +16694,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM605634
@@ -16956,7 +16723,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 2
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM605634
@@ -16986,7 +16752,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM605634
@@ -17016,7 +16781,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 2
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM605634
@@ -17046,7 +16810,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 1
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM605634
@@ -17075,7 +16838,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
-dccRep 2
 expId 208
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM605634
@@ -17106,7 +16868,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.bai
 geoSampleAccession GSM605635
@@ -17136,7 +16897,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig
 geoSampleAccession GSM605635
@@ -17166,7 +16926,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig
 geoSampleAccession GSM605635
@@ -17195,7 +16954,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortRawData.fastq.gz
 geoSampleAccession GSM605635
@@ -17224,7 +16982,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605635
@@ -17252,7 +17009,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -17281,7 +17037,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 2
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -17368,7 +17123,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM605635
@@ -17398,7 +17152,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 2
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM605635
@@ -17428,7 +17181,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM605635
@@ -17458,7 +17210,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 2
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM605635
@@ -17488,7 +17239,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM605635
@@ -17517,7 +17267,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 2
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM605635
@@ -17546,7 +17295,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 1
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM605635
@@ -17575,7 +17323,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
-dccRep 2
 expId 209
 fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM605635
@@ -17605,7 +17352,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
-dccRep 1
 expId 210
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam,wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.bai
 geoSampleAccession GSM605631
@@ -17634,7 +17380,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
-dccRep 1
 expId 210
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig
 geoSampleAccession GSM605631
@@ -17663,7 +17408,6 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
-dccRep 1
 expId 210
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig
 geoSampleAccession GSM605631
@@ -17691,7 +17435,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
-dccRep 1
 expId 210
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortRawData.fastq.gz
 geoSampleAccession GSM605631
@@ -17720,7 +17463,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
-dccRep 1
 expId 210
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605631
@@ -18330,7 +18072,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -18359,7 +18100,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -18472,7 +18212,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897081
@@ -18502,7 +18241,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897081
@@ -18588,7 +18326,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897081
@@ -18618,7 +18355,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897081
@@ -18704,7 +18440,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897081
@@ -18733,7 +18468,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897081
@@ -18762,7 +18496,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep3.pdf.gz
 geoSampleAccession GSM897081
@@ -18791,7 +18524,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep4.pdf.gz
 geoSampleAccession GSM897081
@@ -18820,7 +18552,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 1
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897081
@@ -18849,7 +18580,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
-dccRep 2
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897081
@@ -19481,7 +19211,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002466
-dccRep 1
 expId 2466
 fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -19509,7 +19238,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002466
-dccRep 2
 expId 2466
 fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -20081,7 +19809,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002467
-dccRep 1
 expId 2467
 fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -20109,7 +19836,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002467
-dccRep 2
 expId 2467
 fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -20232,6 +19958,64 @@ seqPlatform Illumina_HiSeq_2000
 subId 6839
 view ExonsGencV10
 
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
+objType table
+bioRep 039WC
+cell Monocytes-CD14+
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-19
+dateUnrestricted 2012-11-18
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44360
+labProtocolId 039WCs
+localization cell
+md5sum ff0021672bcb17530918aa34429fe96a,6213817ccacd1bfd3ba01f334e8e0b06
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5832
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
+objType table
+bioRep 040WC
+cell Monocytes-CD14+
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-18
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44361
+labProtocolId 040WCs
+localization cell
+md5sum ffe71e0b0ab379d3c9cc349d7bd34002,31586e12c2bac7ab89b25336160d035a
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5826
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
+view Alignments
+
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapContigs
 objType table
 bioRep 039WC,040WC
@@ -20289,74 +20073,19 @@ seqPlatform Illumina_GA2x
 subId 6752
 view ExonsGencV10
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1
 objType table
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1.bam.bai
-grant Gingeras
-lab CSHL
-labExpId LID44360
-labProtocolId 039WCs
-localization cell
-md5sum ff0021672bcb17530918aa34429fe96a,6213817ccacd1bfd3ba01f334e8e0b06
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 1
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2
-objType table
-bioRep 040WC
-cell Monocytes-CD14+_RO01746
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-18
-dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2.bam.bai
-grant Gingeras
-lab CSHL
-labExpId LID44361
-labProtocolId 040WCs
-localization cell
-md5sum ffe71e0b0ab379d3c9cc349d7bd34002,31586e12c2bac7ab89b25336160d035a
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapAlnRep2
-view Alignments
-
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1
-objType table
-bioRep 039WC
-cell Monocytes-CD14+_RO01746
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-19
-dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20370,21 +20099,22 @@ replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep1
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1
 view MinusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2
 objType table
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -20398,21 +20128,22 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapMinusRawRep2
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2
 view MinusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1
 objType table
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20426,21 +20157,22 @@ replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep1
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1
 view PlusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2
 objType table
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2.bigWig
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -20454,21 +20186,22 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
-tableName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapPlusRawRep2
+tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2
 view PlusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep1
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1
 objType file
 bioRep 039WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-19
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep1.fastq.gz
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44360
@@ -20484,18 +20217,19 @@ seqPlatform Illumina_GA2x
 subId 5832
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep2
+metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2
 objType file
 bioRep 040WC
-cell Monocytes-CD14+_RO01746
+cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
-dccAccession wgEncodeEH002611
-expId 2611
-fileName wgEncodeCshlShortRnaSeqMonocd14ro1746CellTapRawDataRep2.fastq.gz
+dccAccession wgEncodeEH002898
+donorId RO01746
+expId 2898
+fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44361
@@ -20798,7 +20532,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 1
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -20827,7 +20560,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 2
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -20914,7 +20646,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 1
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897086
@@ -20944,7 +20675,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 2
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897086
@@ -20974,7 +20704,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 1
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897086
@@ -21004,7 +20733,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 2
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897086
@@ -21034,7 +20762,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 1
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897086
@@ -21064,7 +20791,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 2
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897086
@@ -21093,7 +20819,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 1
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897086
@@ -21122,7 +20847,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
-dccRep 2
 expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897086
@@ -21151,7 +20875,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 1
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -21180,7 +20903,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 2
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -21267,7 +20989,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 1
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM897078
@@ -21297,7 +21018,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 2
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM897078
@@ -21327,7 +21047,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 1
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM897078
@@ -21357,7 +21076,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 2
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM897078
@@ -21387,7 +21105,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 1
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep3.pdf.gz
 geoSampleAccession GSM897078
@@ -21416,7 +21133,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 2
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep4.pdf.gz
 geoSampleAccession GSM897078
@@ -21445,7 +21161,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 1
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM897078
@@ -21474,7 +21189,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
-dccRep 2
 expId 1092
 fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM897078
@@ -21503,7 +21217,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 1
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep3.bam,wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep3.bam.bai
 grant Gingeras
@@ -21532,7 +21245,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 2
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep4.bam,wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep4.bam.bai
 grant Gingeras
@@ -21619,7 +21331,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 1
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep3.bigWig
 geoSampleAccession GSM897076
@@ -21649,7 +21360,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 2
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep4.bigWig
 geoSampleAccession GSM897076
@@ -21679,7 +21389,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 1
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep3.bigWig
 geoSampleAccession GSM897076
@@ -21709,7 +21418,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 2
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4.bigWig
 geoSampleAccession GSM897076
@@ -21739,7 +21447,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 1
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep3.pdf.gz
 geoSampleAccession GSM897076
@@ -21768,7 +21475,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 2
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep4.pdf.gz
 geoSampleAccession GSM897076
@@ -21797,7 +21503,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 1
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapRawDataRep3.fastq.gz
 geoSampleAccession GSM897076
@@ -21826,7 +21531,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
-dccRep 2
 expId 1093
 fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapRawDataRep4.fastq.gz
 geoSampleAccession GSM897076
@@ -22470,7 +22174,6 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
-dccRep 1
 expId 211
 fileName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags.shortFrags.gz
 geoSampleAccession GSM605626
@@ -22499,7 +22202,6 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
-dccRep 1
 expId 211
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam,wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.bai
 geoSampleAccession GSM605626
@@ -22528,7 +22230,6 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
-dccRep 1
 expId 211
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig
 geoSampleAccession GSM605626
@@ -22557,7 +22258,6 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
-dccRep 1
 expId 211
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig
 geoSampleAccession GSM605626
@@ -22585,7 +22285,6 @@ dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
-dccRep 1
 expId 211
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalRawData.fastq.gz
 geoSampleAccession GSM605626
@@ -23585,7 +23284,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002470
-dccRep 1
 expId 2470
 fileName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -23613,7 +23311,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002470
-dccRep 2
 expId 2470
 fileName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -24442,7 +24139,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002468
-dccRep 1
 expId 2468
 fileName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -24470,7 +24166,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002468
-dccRep 2
 expId 2468
 fileName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -25273,7 +24968,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002469
-dccRep 1
 expId 2469
 fileName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapProtocolRep3.pdf.gz
 grant Gingeras
@@ -25301,7 +24995,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
 dccAccession wgEncodeEH002469
-dccRep 2
 expId 2469
 fileName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapProtocolRep4.pdf.gz
 grant Gingeras
@@ -25407,7 +25100,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 1
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -25436,7 +25128,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 2
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -25523,7 +25214,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 1
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1.bigWig
 geoSampleAccession GSM897070
@@ -25553,7 +25243,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 2
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2.bigWig
 geoSampleAccession GSM897070
@@ -25583,7 +25272,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 1
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1.bigWig
 geoSampleAccession GSM897070
@@ -25613,7 +25301,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 2
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2.bigWig
 geoSampleAccession GSM897070
@@ -25643,7 +25330,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 1
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep1.pdf.gz
 geoSampleAccession GSM897070
@@ -25672,7 +25358,6 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 2
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep2.pdf.gz
 geoSampleAccession GSM897070
@@ -25701,7 +25386,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 1
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep1.fastq.gz
 geoSampleAccession GSM897070
@@ -25730,7 +25414,6 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
-dccRep 2
 expId 1094
 fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep2.fastq.gz
 geoSampleAccession GSM897070
@@ -25749,4 +25432,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: -1745292843
+# MAGIC: 712193445

@@ -74,7 +74,7 @@ void hgFindSpecOutput(struct hgFindSpec *el, FILE *f, char sep, char lastSep);
 int hgFindSpecCmp(const void *va, const void *vb);
 /* Compare to sort based on searchPriority. */
 
-struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile);
+struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile, char *releaseTag);
 /* Load track info from ra file into list. */
 
 char *hgFindSpecSetting(struct hgFindSpec *hfs, char *name);

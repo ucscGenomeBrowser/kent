@@ -140,7 +140,7 @@ loaders, all utilities.  Perform this sequence each time you
 do a 'cvs update' on your source tree.  The 'make clean' step
 is especially important since the makefile hierarchy does not
 have built in dependencies and will not rebuild items that
-depend upon each other.  The traditionally dependency on the
+depend upon each other.  The traditional dependency on the
 source tree libraries is taken care of because a make in any
 directory that produces a binary will always re-link the
 binary every time, thus always picking up any potentially new
