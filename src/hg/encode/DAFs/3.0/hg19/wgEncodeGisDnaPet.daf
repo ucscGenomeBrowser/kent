@@ -18,7 +18,7 @@ variables         cell, fragSize
 assembly          hg19
 noAutoCreate      yes
 
-validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=6,mmPerPair;validateFiles.fastQ:quick=1000
+validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=6,mmPerPair
 
 noAutoCreate     yes
 

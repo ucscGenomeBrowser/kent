@@ -46,6 +46,9 @@ def parseInit(id):
         url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
     sys.stderr.write("Accessing %s\n" % url)
     fetch = urllib2.urlopen(url)
+#    sidefetch = urllib2.urlopen(url)
+#    print "%s" % sidefetch.read()
+
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
         infoDict = parsePubmed(doc, id)
@@ -57,7 +60,7 @@ def parseInit(id):
 def htmlEscape(str):
     return cgi.escape(str).encode('ascii', 'xmlcharrefreplace')
 
-def makeHtml(infoDict):
+def makeHtml(infoDict, original):
     authors = list()
     authcount = 0
     etal = 0
@@ -98,6 +101,15 @@ def makeHtml(infoDict):
         dateStr = dateStr1 + dateStr
     if not re.search("\.$", dateStr):
         dateStr = dateStr + "."
+    origComment = ""
+    if original:
+        fetch = urllib2.urlopen(infoDict['url'])
+        doc = fetch.read()
+        m = re.search('<div class="icons"><a href="(\S+)"', doc)
+        if m.group(1):
+            infoDict['url'] = m.group(1).replace("&amp;", "&")
+        else:
+            origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
     htmlStr = """
 <p>
 %s
@@ -105,7 +117,8 @@ def makeHtml(infoDict):
 %s</a>.
 <em>%s</em>. %s
 </p>
-""" % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr)
+%s
+""" % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr, origComment)
 
     return htmlStr, authStr
 
@@ -116,7 +129,7 @@ def main():
         epilog='example: qaAddTrackReferences PMC3039671 21347206'
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
-
+    parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link. Currently an experimental feature.")
     if len(sys.argv) <= 1:
         parser.print_help()
     args = parser.parse_args(sys.argv[1:])
@@ -125,7 +138,7 @@ def main():
 
     for i in ids:
         infoDict = parseInit(i)
-        html, authStr = makeHtml(infoDict)
+        html, authStr = makeHtml(infoDict, args.original)
         references[authStr] = html
 
     for i in sorted(references.keys()):
