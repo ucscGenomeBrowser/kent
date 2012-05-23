@@ -101,9 +101,15 @@ while ((hfs = slPopHead(&hfsList)) != NULL)
 	if ((hel = hashLookup(haveHash, hfs->searchName)) != NULL)
 	    {
 	    // TODO restore this warning to errAbort
-	    // this has been temporarily changed to a warning to avoid people dying of shock.
-	    warn("ERROR: found two copies of %s: one with release %s, the other %s\n",
-		hfs->searchName, (char *)hel->val, release);
+	    // This has been temporarily changed to a warning to avoid everybody being held up.
+	    char *one = (char *)hel->val;
+	    char *other = release;
+	    if (!one)
+		one = "none";
+	    if (!other)
+		other = "none";
+	    warn("ERROR: found two or more copies of %s: one with release %s, the other %s\n",
+		hfs->searchName, one, other);
 	    }
 	else
 	    {

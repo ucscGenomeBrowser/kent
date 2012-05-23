@@ -1,5 +1,3 @@
-<link type="text/css" rel="stylesheet" media="all" href="http://hgwdev-greg.cse.ucsc.edu/style/nice_menu.css">
-
 <div id="main-menu-whole">
 
 		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
@@ -62,21 +60,9 @@
 <li class="last"><a href="../license/">Licenses</a></li>
 </ul>
 </li>
-<li class="menuparent"><span>View</span><ul style="display: none; visibility: hidden;">
-<li class="first"><a href="#">as PDF/PS Image</a></li>
-<li><a href="#">as DNA</a></li>
-<li><a href="#">in other Genomes (UCSC)</a></li>
-<li><a href="#">in Ensembl</a></li>
-<li><a href="#">in NCBI</a></li>
-<li><a href="#">in WormBase</a></li>
-<li><a href="#">in FlyBase</a></li>
-<li><a href="#">in MGI</a></li>
-<li><a href="#">Configure Browser</a></li>
-<li><a href="#">Default Tracks</a></li>
-<li><a href="#">Default Track Order</a></li>
-<li class="last "><a href="#">Reset all user settings</a></li>
-</ul>
-</li>
+
+<!-- OPTIONAL_VIEW_MENU -->
+
 <li class="menuparent last"><span>Help</span><ul style="display: none; visibility: hidden;">
 <li class="first"><a href="../FAQ/">FAQs</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
@@ -95,9 +81,6 @@
 </div>
 </div><!-- end main-menu -->
 </div><!-- end main-menu-whole -->
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js" type="text/javascript"></script>
-<script type="text/javascript" src="NewNavBar2_files/jquery.plugins.js"></script>
 
 <script type="text/javascript">
 <!--//--><![CDATA[//><!--
