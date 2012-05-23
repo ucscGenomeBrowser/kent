@@ -170,7 +170,7 @@ tag HUVEC
 type Cell Line
 organism human
 description umbilical vein endothelial cells
-tissue endothelium
+tissue blood vessel 
 vendorName Lonza
 vendorId CC-2517
 orderUrl http://www.lonza.com/
@@ -3835,7 +3835,7 @@ tier 3
 organism human
 description pulmonary artery endothelial cells.
 sex F
-tissue heart
+tissue blood vessel
 karyotype normal
 vendorName Lonza
 vendorId CC-2530,CC-3162
@@ -4115,7 +4115,7 @@ description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_910010
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein
+tissue blood vessel
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -4133,7 +4133,7 @@ description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein
+tissue blood vessel 
 childOf HSaVEC
 vendorName PromoCell
 vendorId C-14025
@@ -4152,7 +4152,7 @@ description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein
+tissue blood vessel
 childOf HSaVEC
 vendorName PromoCell
 vendorId C-14025
