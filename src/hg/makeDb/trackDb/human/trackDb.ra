@@ -3051,7 +3051,7 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
-dataVersion v57
+dataVersion v59
 release alpha
 
 searchName cosmicId
