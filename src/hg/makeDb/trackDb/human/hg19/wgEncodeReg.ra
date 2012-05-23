@@ -16,6 +16,7 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription Levels Assayed by RNA-seq on 7 Cell Lines from ENCODE
+    visibility full
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
     aggregate transparentOverlay
@@ -90,6 +91,7 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Layered H3K4Me1
     longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
+    visibility hide
     viewLimits 0:50
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
@@ -161,6 +163,7 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Layered H3K4Me3
     longLabel H3K4Me3 Mark (Often Found Near Promoters) on 7 cell lines from ENCODE
+    visibility hide
     viewLimits 0:150
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
@@ -232,6 +235,7 @@ canPack On
     superTrack wgEncodeReg full
     shortLabel Layered H3K27Ac
     longLabel H3K27Ac Mark (Often Found Near Active Regulatory Elements) on 7 cell lines from ENCODE
+    visibility full
     viewLimits 0:100
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
@@ -306,6 +310,7 @@ canPack On
     #inputTracksSubgroupDisplay cellType treatment rep
     inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
     useScore 1
     scoreFilter 100
     scoreFilterLimits 100:1000
@@ -321,6 +326,7 @@ canPack On
     inputTableFieldDisplay cellType factor treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     # inputTracksSubgroupDisplay cellType factor treatment
+    visibility dense
     useScore 1
     priority 1.7
 

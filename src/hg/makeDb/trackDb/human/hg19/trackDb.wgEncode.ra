@@ -59,7 +59,7 @@ include wgEncodeAffyRnaChip.ra
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha,beta
+include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
 include wgEncodeUmassDekker5C.ra 

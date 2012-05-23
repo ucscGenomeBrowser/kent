@@ -11,11 +11,11 @@
 body {
 	margin:0px;
 	padding:0px;
-	font-size:13px;
+/* 	font-size:13px;
 	color:#6b6b6b;
 	font-family:Arial, Helvetica, sans-serif;
-	line-height:19px;
-	background:#ffffff;
+	line-height:19px; */
+	background:#feeeca; 
 }
 #main-menu-whole {
 	width:100%;
@@ -51,6 +51,7 @@ ul.nice-menu li {
   border-top: 0;
   float: left; /* LTR */
   background-color: #eee;
+  line-height: normal;
 }
 
 ul.nice-menu a {

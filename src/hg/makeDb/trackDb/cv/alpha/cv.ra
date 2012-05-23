@@ -15469,8 +15469,8 @@ priority 110
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.
 ### (11/18/10)
-requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier #Provisional
-optionalVars label,tissue,vendorId,karyotype,lineage,termId,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
+requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier,termId #Provisional
+optionalVars label,tissue,vendorId,karyotype,lineage,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
 
 term composite
 tag COMPOSITE
