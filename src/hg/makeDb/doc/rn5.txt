@@ -834,3 +834,32 @@ rn5.mgc = yes
         > downloads.log 2>&1
     #   real    24m32.649s
     # need to edit the README.txt files to make sure they are correct.
+
+##########################################################################
+# create pushQ entry (DONE - 2012-05-23 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=rn5 -keys all.joiner
+
+    mkdir /hive/data/genomes/rn5/pushQ
+    cd /hive/data/genomes/rn5/pushQ
+    makePushQSql.pl rn5 > rn5.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/rn5/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/rn5/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/rn5/bbi/quality.bw
+# WARNING: rn5 does not have seq
+# WARNING: rn5 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p rn5.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < rn5.sql
+
+#########################################################################
