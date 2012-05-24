@@ -1128,3 +1128,82 @@ see doc/builds.txt for specific details.
     #   139935514 bases of 3823724728 (3.660%) in intersection
 
 #########################################################################
+# update repeat masker (DONE - 2012-05-09 - Hiram)
+    mkdir /hive/data/genomes/echTel1/bed/repeatMasker
+    cd /hive/data/genomes/echTel1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-stop=mask -smallClusterHub=encodek echTel1 > do.log 2>&1 &
+    #   real    3512m26.535s
+    # run debug to see how nestedRepeats are loaded:
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev -debug \
+        -stop=install -continue=install -smallClusterHub=encodek echTel1 \
+        > install.debug.log 2>&1 &
+    # using this command from doLoad.csh
+    hgLoadBed echTel1 nestedRepeats echTel1.nestedRepeats.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql
+    #   RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26
+    #   16:19:44 angie Exp $
+    grep RELEASE /hive/data/staging/data/RepeatMasker110426/Libraries/RepeatMaskerLib.embl
+    # Library version:  CC   RELEASE 20110920; 
+
+    cat faSize.rmsk.txt
+# 3823724728 bases (1712143359 N's 2111581369 real 1541218499 upper 570362870 lower) in 325491 sequences in 1 files
+# Total size: mean 11747.6 sd 25476.7 min 80 (scaffold_153914) max 739734 (scaffold_324606) median 3912
+# %14.92 masked total, %27.01 masked real
+
+    # what is currently loaded:
+    time featureBits echTel1 rmsk
+    #   291821962 bases of 2111581369 (13.820%) in intersection
+    #   real    10m21.908s
+
+    # Is this run different:
+    hgLoadOut -table=rmskTest -nosplit echTel1 echTel1.sorted.fa.out
+    time featureBits echTel1 rmskTest
+    #   573346920 bases of 2111581369 (27.152%) in intersection
+    #   real    6m30.717s
+
+    # the original was run with -species tenrec
+    # this new one is with -species 'Echinops telfairi'
+    # which does have a few more repeat definitions, but not that many
+    grep "^>" /hive/data/staging/data/RepeatMasker110426/Libraries/20110920/tenrec/* | wc
+    #   1295    1295  127870
+    grep "^>" /hive/data/staging/data/RepeatMasker110426/Libraries/20110920/echinops_telfairi/* | wc
+    #   1410    1410  154902
+
+    # since the new one has significant more masking, going to replace
+    # the old one:
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=install -smallClusterHub=encodek echTel1 > install.log 2>&1 &
+
+    # and then, masking the genome with this new rmsk business,
+    # add trfMask to rmsk:
+    cd /hive/data/genomes/echTel1
+    twoBitMask echTel1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed echTel1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa echTel1.2bit stdout | faSize stdin > faSize.echTel1.2bit.txt
+    cat faSize.echTel1.2bit.txt
+    #   3823724728 bases (1712143359 N's 2111581369 real 1540894161 upper
+    #   570687208 lower) in 325491 sequences in 1 files
+    #   Total size: mean 11747.6 sd 25476.7 min 80 (scaffold_153914) max 739734 (scaffold_324606) median 3912
+    #   %14.92 masked total, %27.03 masked real
+
+    # the original masked 2bit file was:
+    #   3823724728 bases (1712143359 N's 2111581369 real 1819400226 upper
+    #   292181143 lower) in 325491 sequences in 1 files
+    #   Total size: mean 11747.6 sd 25476.7 min 80 (scaffold_153914)
+    #   max 739734 (scaffold_324606) median 3912
+    #   %7.64 masked total, %13.84 masked real
+
+    # verify gbdb symlink is correct:
+    ls -ogL /gbdb/echTel1/echTel1.2bit
+# -rw-rw-r-- 1 993224202 May 24 14:04 /gbdb/echTel1/echTel1.2bit
+    # if it is not correct, reset it:
+    rm /gbdb/echTel1/echTel1.2bit
+    ln -s `pwd`/echTel1.2bit /gbdb/echTel1/echTel1.2bit
+
+#########################################################################
