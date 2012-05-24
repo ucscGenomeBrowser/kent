@@ -12,7 +12,7 @@ visibility hide
 color 200,100,0
 type bed 6 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail:
 release alpha
 
@@ -25,7 +25,7 @@ visibility hide
 color 200,100,0
 type bed 6 +
 noScoreFilter .
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail:
 release beta,public
 

@@ -1,7 +1,7 @@
 
 track wgEncodeGencodeV7
 compositeTrack on
-superTrack wgEncodeGencodeSuper dense
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V7
 longLabel Gene Annotations from ENCODE/GENCODE Version 7
 group genes

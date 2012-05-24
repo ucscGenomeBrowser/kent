@@ -39,7 +39,7 @@ set logDir misc/$task.logs
 
 set host [exec hostname]
 if {$host == "hgwdev"} {
-    cd /cluster/data/genbank
+    cd /hive/data/outside/genbank
 } else {
     cd /genbank
 }

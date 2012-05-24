@@ -883,6 +883,13 @@ cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "hgvaExecuteQuery();");
 printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span>\n");
+puts("<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>");
+puts("<p><span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>");
+puts("This tool is for research use only. While this tool is open to the "
+     "public, users seeking information about a personal medical or genetic "
+     "condition are urged to consult with a qualified physician for "
+     "diagnosis and for answers to personal questions.");
+puts("</p></div>");
 }
 
 //#*** --------------------- verbatim from hgTables/wikiTrack.c -------------------------

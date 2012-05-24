@@ -80,7 +80,6 @@ sub holdOpenDir($) {
 }
 sub openNfsDirsHack() {
     holdOpenDir("/cluster/data");
-    holdOpenDir("/cluster/genbank");
     holdOpenDir("/cluster/bin");
 }
 

@@ -16,7 +16,7 @@ fi
 downloadServer="$1"
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

@@ -119,8 +119,13 @@ chromosome 3 at positions 400601-400605, 400701-400705, and 400801-400805,
 respectively.
 <P>
 Note that for both variableStep and fixedStep formats, the same span must be
-used throughout the dataset. If no span is specified, the default span of one
+used throughout the dataset. If no span is specified, the default span of 1
 is used.
+</P
+<P>
+Likewise for the fixedStep format, the same step size must be used throughout
+the dataset. If no step size is specified, the default step size of 1 is used.
+</P>
 </UL>
 
 <P><B>Data Values</B></P>
@@ -147,22 +152,35 @@ The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I
 <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
 The remaining values are OPTIONAL:
 <FONT color="#0000FF"><PRE>
-  <B>name              </B><I>trackLabel          </I> # default is "User Track"
-  <B>description       </B><I>centerlabel         </I> # default is "User Supplied Track"
-  <B>visibility        </B><I>full|dense|hide     </I> # default is hide (will also take numeric values 2|1|0)
-  <B>color             </B><I>RRR,GGG,BBB         </I> # default is 255,255,255
-  <B>altColor          </B><I>RRR,GGG,BBB         </I> # default is 128,128,128
-  <B>priority          </B><I>N                   </I> # default is 100
-  <B>autoScale         </B><I>on|off              </I> # default is on
-  <B>alwaysZero        </B><I>on|off              </I> # default is off
-  <B>gridDefault       </B><I>on|off              </I> # default is off
-  <B>maxHeightPixels   </B><I>max:default:min     </I> # default is 128:128:11
-  <B>graphType         </B><I>bar|points          </I> # default is bar
-  <B>viewLimits        </B><I>lower:upper         </I> # default is range found in data
-  <B>yLineMark         </B><I>real-value          </I> # default is 0.0
-  <B>yLineOnOff        </B><I>on|off              </I> # default is off
-  <B>windowingFunction </B><I>maximum|mean|minimum</I> # default is maximum
-  <B>smoothingWindow   </B><I>off|[2-16]          </I> # default is off</PRE></FONT>
+  <B>name              </B><I>&lt;trackLabel&gt;                        </I> # default is "User Track"
+  <B>description       </B><I>&lt;centerLabel&gt;                       </I> # default is "User Supplied Track"
+  <B>visibility        </B><I>&lt;full|dense|hide&gt;                   </I> # default is hide (will also take numeric values 2|1|0)
+  <B>color             </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 255,255,255
+  <B>altColor          </B><I>&lt;RRR,GGG,BBB&gt;                       </I> # default is 128,128,128
+  <B>priority          </B><I>&lt;N&gt;                                 </I> # default is 100
+  <B>autoScale         </B><I>&lt;on|off&gt;                            </I> # default is on
+  <B>alwaysZero        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>gridDefault       </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>maxHeightPixels   </B><I>&lt;max:default:min&gt;                   </I> # default is 128:128:11
+  <B>graphType         </B><I>&lt;bar|points&gt;                        </I> # default is bar
+  <B>viewLimits        </B><I>&lt;lower:upper&gt;                       </I> # default is range found in data
+  <B>viewLimitsMax     </B><I>&lt;lower:upper&gt;                       </I> # UNENFORCED: suggested bounds of viewLimits
+  <B>yLineMark         </B><I>&lt;real-value&gt;                        </I> # default is 0.0
+  <B>yLineOnOff        </B><I>&lt;on|off&gt;                            </I> # default is off
+  <B>windowingFunction </B><I>&lt;mean+whiskers|maximum|mean|minimum&gt;</I> # default is maximum
+  <B>smoothingWindow   </B><I>&lt;off|[2-16]&gt;                        </I> # default is off
+  <B>transformFunc     </B><I>&lt;NONE|LOG&gt;                          </I> # default is NONE
+  <B>wigColorBy        </B><I>&lt;bed table&gt;                         </I> # use colors in bed table for wiggle in overlapping regions
+  <B>spanList          </B><I>&lt;first&gt;                             </I> # sets spans to be first span in table
+                    <I>&lt;s1,s2,s3...&gt;                       </I> # list of spans in the loaded table
+                                                         # you can find the spans with the following SQL query:
+                                                         # "SELECT span FROM &lt;table&gt; GROUP BY span"
+                                                         # typically spanList is only 1:
+                                                         # spanList 1
+                                                         # rarely, it may be more:
+                                                         # spanList 1,1000
+                                                         # special efforts must be made to load extra spans
+                                                         # into the table for special purposes</PRE></FONT>
 
 A functional description of these options can be seen in the <A target=_blank
 HREF="hgWiggleTrackHelp.html">Wiggle track configuration</A> description.
@@ -170,12 +188,12 @@ HREF="hgWiggleTrackHelp.html">Wiggle track configuration</A> description.
 
 <P><B>Examples</B></P>
 This example specifies 19 separate data points in two tracks in the region
-chr19:59,304,200-59,310,700. To view this example as a custom track in the
+chr19:49,304,200-49,310,700. To view this example as a custom track in the
 Genome Browser, copy the <A HREF="examples/wiggleExample.txt">text</A> and paste it
 into the &quot;Add Custom Tracks&quot; text box.
 <P>
 <FONT color="#0000FF"><PRE>
-browser position chr19:59304200-59310700
+browser position chr19:49304200-49310700
 browser hide all
 #	150 base wide bar graph at arbitrarily spaced positions,
 #	threshold line drawn at y=11.76
@@ -186,15 +204,15 @@ track type=wiggle_0 name="variableStep" description="variableStep format" \
     visibility=full autoScale=off viewLimits=0.0:25.0 color=50,150,255 \
     yLineMark=11.76 yLineOnOff=on priority=10
 variableStep chrom=chr19 span=150
-59304701 10.0
-59304901 12.5
-59305401 15.0
-59305601 17.5
-59305901 20.0
-59306081 17.5
-59306301 15.0
-59306691 12.5
-59307871 10.0
+49304701 10.0
+49304901 12.5
+49305401 15.0
+49305601 17.5
+49305901 20.0
+49306081 17.5
+49306301 15.0
+49306691 12.5
+49307871 10.0
 #	200 base wide points graph at every 300 bases, 50 pixel high graph
 #	autoScale off and viewing range set to [0:1000]
 #	priority = 20 positions this as the second graph
@@ -202,7 +220,7 @@ variableStep chrom=chr19 span=150
 track type=wiggle_0 name="fixedStep" description="fixedStep format" visibility=full \
     autoScale=off viewLimits=0:1000 color=0,200,100 maxHeightPixels=100:50:20 \
     graphType=points priority=20
-fixedStep chrom=chr19 start=59307401 step=300 span=200
+fixedStep chrom=chr19 start=49307401 step=300 span=200
 1000
  900
  800
