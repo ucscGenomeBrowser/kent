@@ -1177,6 +1177,7 @@ see doc/builds.txt for specific details.
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
         -continue=install -smallClusterHub=encodek echTel1 > install.log 2>&1 &
+    #   real    21m23.234s
 
     # and then, masking the genome with this new rmsk business,
     # add trfMask to rmsk:
