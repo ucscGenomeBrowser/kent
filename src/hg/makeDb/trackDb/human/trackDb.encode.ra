@@ -4448,7 +4448,7 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 1.5
 
 searchTable encodeGencodeGeneKnownOct05
-searchName gencodeKnown2
+searchName gencodeKnown05
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 1.5
@@ -4459,7 +4459,7 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 50
 
 searchTable encodeGencodeGenePseudoOct05
-searchName gencodePseudo2
+searchName gencodePseudo05
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
@@ -4470,7 +4470,7 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 50
 
 searchTable encodeGencodeGenePutativeOct05
-searchName gencodePutative2
+searchName gencodePutative05
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
@@ -4503,7 +4503,7 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 50
 
 searchTable encodeGencodeGenePutativeMar07
-searchName gencodePutative2
+searchName gencodePutative07
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
@@ -4514,7 +4514,7 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 50
 
 searchTable encodeGencodeGenePolymorphicMar07
-searchName gencodePutative2
+searchName gencodePolymorphic
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50

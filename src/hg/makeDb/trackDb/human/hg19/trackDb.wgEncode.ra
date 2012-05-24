@@ -7,6 +7,7 @@ include wgEncodeSuper.release2.ra alpha
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
+include wgEncodeGencodeV12.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
 include wgEncodeGencodeV7.ra beta,public
@@ -58,7 +59,7 @@ include wgEncodeAffyRnaChip.ra
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha,beta
+include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
 include wgEncodeUmassDekker5C.ra 
@@ -169,7 +170,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra
+include wgEncodeUwTfbs.release3.ra beta,public
+include wgEncodeUwTfbs.release4.ra alpha
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
