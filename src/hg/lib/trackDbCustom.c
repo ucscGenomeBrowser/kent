@@ -717,23 +717,26 @@ else if(startsWith("bed ", type) || startsWith("bigBed", type))
     if (trackDbSetting(tdb, "bedFilter") != NULL)
            cType = cfgBedFilt;
     else
-        {
-       char *words[3];
-        int wordCount = chopLine(cloneString( type), words);
-        if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
-        && ( wordCount >= 3                                                      // Historically needed 'bed n .'
-            || (!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode")))) // but encode didn't follow bed n .
-            {
-            cType = cfgBedScore;
+	{
+	char *words[3];
+	int wordCount = chopLine(cloneString( type), words);
+	if ((((wordCount > 1) && (atoi(words[1]) >= 5)) || 
+	    trackDbSetting(tdb, "scoreMin") != NULL)
+		&& 
+	   // Historically needed 'bed n .' but encode didn't follow bed n .
+	   ( (wordCount >= 3) || 
+		(!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode")))) 
+	    {
+	    cType = cfgBedScore;
 
-            if (!bedScoreHasCfgUi(tdb))
-                cType = cfgNone;
+	    if (!bedScoreHasCfgUi(tdb))
+		cType = cfgNone;
 
-            // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
-            else if (startsWith("encodeGencodeIntron", tdb->track))
-                cType = cfgNone;
-            }
-        }
+	    // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
+	    else if (startsWith("encodeGencodeIntron", tdb->track))
+		cType = cfgNone;
+	    }
+	}
     }
 else if(startsWith("chain",type))
     cType = cfgChain;
