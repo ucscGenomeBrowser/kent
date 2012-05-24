@@ -1208,3 +1208,60 @@ see doc/builds.txt for specific details.
     ln -s `pwd`/echTel1.2bit /gbdb/echTel1/echTel1.2bit
 
 #########################################################################
+# construct gc5Base track (DONE - 2012-05-24 - Hiram)
+    # from the automation script template:
+export topDir=../..
+export db=echTel1
+
+hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \
+  $topDir/$db.2bit | gzip -c > $db.gc5Base.wigVarStep.gz 
+wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes $db.gc5Base.bw
+    #   real    19m21.718s
+
+    mkdir /gbdb/echTel1/bbi
+    ln -s /cluster/data/echTel1/bed/gc5Base/echTel1.gc5Base.bw \
+        /gbdb/echTel1/bbi/gc5Base.bw
+    hgsql echTel1 -e 'drop table if exists gc5BaseBw;
+            create table gc5BaseBw (fileName varchar(255) not null);
+            insert into gc5BaseBw values ("/gbdb/echTel1/bbi/gc5Base.bw");'
+
+#########################################################################
+# create downloads and pushQ entry (DONE - 2012-05-24 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=echTel1 -keys all.joiner
+
+    cd /hive/data/genomes/echTel1
+    time makeDownloads.pl -workhorse hgwdev echTel1 > download.log 2>&1
+    #   real    26m13.940s
+
+    mkdir /hive/data/genomes/echTel1/pushQ
+    cd /hive/data/genomes/echTel1/pushQ
+    time makePushQSql.pl echTel1 > echTel1.sql 2> stderr.out
+    #   real    4m1.136s
+    # check stderr.out for no significant problems, it is common to see:
+WARNING: hgwdev does not have /gbdb/echTel1/wib/gc5Base.wib
+WARNING: hgwdev does not have /gbdb/echTel1/wib/quality.wib
+WARNING: hgwdev does not have /gbdb/echTel1/bbi/quality.bw
+WARNING: echTel1 does not have seq
+WARNING: echTel1 does not have extFile
+WARNING: echTel1 does not have estOrientInfo
+WARNING: echTel1 does not have gbMiscDiff
+WARNING: echTel1 does not have gbWarn
+WARNING: echTel1 does not have mrnaOrientInfo
+WARNING: hgwdev does not have chain/net download /gbdb/echTel1/liftOver/echTel1ToMm7.over.chain.gz !
+
+WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+supporting and genbank tables) which tracks to assign these tables to:
+  tableList
+
+    # Remove the Mm7 references from echTel1.sql and tableList is not
+    # important, in fact, drop that table
+
+    scp -p echTel1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < echTel1.sql
+
+#########################################################################
