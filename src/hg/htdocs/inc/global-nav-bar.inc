@@ -29,7 +29,7 @@
 <li class="first"><a href="XXXX">US Server</a></li>
 <li><a href="XXXX">Euro Server</a></li>
 <li><a href="../mirror.html">Other Mirrors</a></li>
-<li class="last"><a href="XXXX">Mirroring Instructions</a></li>
+<li class="last"><a href="../admin/mirror.html">Mirroring Instructions</a></li>
 </ul>
 </li>
 <li class="menuparent"><span>Downloads</span><ul style="display: none; visibility: hidden;">
