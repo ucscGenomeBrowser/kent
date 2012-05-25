@@ -270,16 +270,18 @@ hPrintf(
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
-char *email = cartUsualString(cart, "hgLogin_email", "");
+//char *email = cartUsualString(cart, "hgLogin_email", "");
 char *obj=cartUsualString(cart, "hgLogin_helpWith", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to "
-    " <span id=\"emailaddress\">%s</span> containing %s...</p>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to you \n"
+//    " <span id=\"emailaddress\">%s</span>containing %s...</p>"
+   "containing %s...</p>"
+
     "\n"
-    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>", email, obj);
+    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>", obj);
 }
 
 void sendMailOut(char *email, char *subject, char *msg)
@@ -301,6 +303,7 @@ if (result == -1)
         "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
         obj, email );
     }
+//***** TODO replace a modal window
 else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
@@ -310,6 +313,7 @@ else
         "\n"
         "</script>", hgLoginHost);
     }
+/********************************/
 }
 
 void mailUsername(char *email, char *users)
@@ -851,7 +855,8 @@ cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-backToHgSession(1);
+//backToHgSession(1);
+returnToURL(1);
 }
 
 void accountHelp(struct sqlConnection *conn)
