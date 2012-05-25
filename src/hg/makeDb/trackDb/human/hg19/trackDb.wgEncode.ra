@@ -1,7 +1,7 @@
 # Genome-wide ENCODE tracks
 
-include wgEncodeSuper.ra beta,public
-include wgEncodeSuper.release2.ra alpha 
+include wgEncodeSuper.ra public
+include wgEncodeSuper.release2.ra alpha,beta
 
 # GENCODE genes on alpha only (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
@@ -10,12 +10,12 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV12.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.ra beta,public
-include wgEncodeGencodeV7.release2.ra alpha
-include wgEncodeGencodeV10.ra beta,public
-include wgEncodeGencodeV10.release2.ra alpha
-include wgEncodeGencodeV11.ra beta,public
-include wgEncodeGencodeV11.release2.ra alpha
+include wgEncodeGencodeV7.ra public
+include wgEncodeGencodeV7.release2.ra alpha,beta
+include wgEncodeGencodeV10.ra public
+include wgEncodeGencodeV10.release2.ra alpha,beta
+include wgEncodeGencodeV11.ra public
+include wgEncodeGencodeV11.release2.ra alpha,beta
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
