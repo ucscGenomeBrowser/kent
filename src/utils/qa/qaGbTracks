@@ -28,33 +28,29 @@ The following tests are run:
   creates 3 files:  outFile.summary, outFile.log, outFile.chrom
         """)
     parser.add_argument('db', help='the database to check')
-    parser.add_argument('-s, --single', help ='tableList is the name of a single table',
-                        action="store_true", dest="single")
-    parser.add_argument('tableList', help=
-                        'a file listing the tables to check, or the name of a single table')
+    parser.add_argument('-f', dest='tableFile', nargs=1, type=argparse.FileType('r'),
+                        help='a file listing tables to check (separated by spaces or newlines')
+    parser.add_argument('table', help ='the name of a table to check', nargs='*')
     parser.add_argument('outFile', help='base name to give results files')
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.tableFile:
+        # add any additional tables in the table file to the table list
+        args.table.extend((args.tableFile[0].read()).split())
+        args.tableFile[0].close()
+    return args
 
 def tableExists(db, table):
     """True if the table exists in the given database."""
     sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
     return sqlResult.strip() == table
 
-def checkTablesExist(db, tables):
+def checkTablesExist(db, tableList):
     """Raises an exception if any table in the tables list does not exist in the database."""
-    for name in tables:
+    for name in tableList:
         if not tableExists(db, name):
             raise Exception("Table " + name + " in " + db + " does not exist")
 
-def getTableList():
-    if args.single:
-        return [args.tableList]
-    else:
-        with open(args.tableList, "r") as f:
-            raw = f.readlines()
-        return [name.strip() for name in raw]
-
-def runTests(db, reporter, sumTable):
+def runTests(db, tableList, reporter, sumTable):
     """Runs validate() and statistics() methods on each table. Writes log output."""
     delimiterLine = "==============================================="
     reporter.writeTimestamp()
@@ -72,7 +68,7 @@ def runTests(db, reporter, sumTable):
 def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
 
-def runChromCounts(db, chromFile):
+def runChromCounts(db, tableList, chromFile):
     chromFile.write(time.asctime() + "\n")
     chromFile.write("Database: " + db + "\n\n")
     tableSet = set(tableList)
@@ -81,17 +77,19 @@ def runChromCounts(db, chromFile):
         chromFile.write(line + "\n")
 
 args = parseCommandLine()
-tableList = getTableList()
-checkTablesExist(args.db, tableList)
+tableList = args.table
+db = args.db
+outFile = args.outFile
+checkTablesExist(db, tableList)
 
-logFile = open(args.outFile + ".log", "w")
-chromFile = open(args.outFile + ".chroms", "w")
-sumFile = open(args.outFile + ".summary", "w")
+logFile = open(outFile + ".log", "w")
+chromFile = open(outFile + ".chroms", "w")
+sumFile = open(outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
 
-runTests(args.db, reporter, sumTable)
-runChromCounts(args.db, chromFile)
+runTests(db, tableList, reporter, sumTable)
+runChromCounts(db, tableList, chromFile)
 writeSummaryFile(sumTable, sumFile)
 
 logFile.close()
