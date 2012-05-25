@@ -16,16 +16,21 @@ endif
 cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
 
-hgsqldump --all -d -c -h genome-centdb hgcentral \
-sessionDb userDb hubStatus gbMembers namedSessionDb | sed -e "s/genome-centdb/localhost/" > \
-/tmp/hgcentraltemp.sql
+set CREATE_ONLY="sessionDb userDb hubStatus gbMembers namedSessionDb" 
+set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
+set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
+     | egrep -v "${CREATE_OR_LIST}" | xargs echo \
+     | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+hgsqldump --skip-opt --no-data ${IGNORE_TABLES} -h genome-centdb \
+        --no-create-db --databases hgcentral  | grep -v "^USE " \
+         | sed -e "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" > \
+/tmp/hgcentraltemp.sql 
 
 # --skip-extended-insert 
 #   to make it dump rows as separate insert statements
-hgsqldump --all --skip-extended-insert -c -h genome-centdb hgcentral \
+hgsqldump --all --skip-add-drop-table --skip-extended-insert -c -h genome-centdb hgcentral \
 defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb hubPublic | \
-sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
-
+sed -e "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" >> /tmp/hgcentraltemp.sql
 
 # get rid of some mysql5 trash in the output we don't want.
 # also need to break data values at rows so the diff and cvs 
