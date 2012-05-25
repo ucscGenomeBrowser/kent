@@ -2,6 +2,7 @@ metaObject wgEncodeHaibRnaSeq
 objType composite
 composite wgEncodeHaibRnaSeq
 expVars lab,dataType,cell,treatment,rnaExtract
+geoSeriesAccession GSE35584
 
 metaObject wgEncodeHaibRnaSeqA549Dex100nmAlnRep1
 objType table
@@ -68,6 +69,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -94,6 +96,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -120,6 +123,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmRawRep1.bigWig
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -147,6 +151,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmRawRep2.bigWig
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -174,6 +179,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -200,6 +206,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000313
 expId 313
 fileName wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923420
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -280,6 +287,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmRawDataRep1.fastq.gz
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -306,6 +314,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmRawDataRep2.fastq.gz
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -332,6 +341,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmRawRep1.bigWig
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -359,6 +369,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmRawRep2.bigWig
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -386,6 +397,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -412,6 +424,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001237
 expId 1237
 fileName wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923418
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -492,6 +505,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmRawDataRep1.fastq.gz
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -518,6 +532,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmRawDataRep2.fastq.gz
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -544,6 +559,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmRawRep1.bigWig
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -571,6 +587,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmRawRep2.bigWig
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -598,6 +615,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -624,6 +642,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001246
 expId 1246
 fileName wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923433
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -704,6 +723,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmRawDataRep1.fastq.gz
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -730,6 +750,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmRawDataRep2.fastq.gz
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -756,6 +777,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmRawRep1.bigWig
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -783,6 +805,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmRawRep2.bigWig
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -810,6 +833,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -836,6 +860,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001247
 expId 1247
 fileName wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923432
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -916,6 +941,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmRawDataRep1.fastq.gz
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -942,6 +968,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmRawDataRep2.fastq.gz
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -968,6 +995,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmRawRep1.bigWig
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -995,6 +1023,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmRawRep2.bigWig
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -1022,6 +1051,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -1048,6 +1078,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001248
 expId 1248
 fileName wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923435
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -1182,6 +1213,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1208,6 +1240,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1234,6 +1267,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep3.fastq.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1260,6 +1294,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep4.fastq.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1286,6 +1321,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawRep1.bigWig
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1313,6 +1349,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawRep2.bigWig
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1340,6 +1377,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawRep3.bigWig
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1367,6 +1405,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02RawRep4.bigWig
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1394,6 +1433,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1420,6 +1460,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1446,6 +1487,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep3.gtf.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1472,6 +1514,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
 fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep4.gtf.gz
+geoSampleAccession GSM923425
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1552,6 +1595,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cRawDataRep1.fastq.gz
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1578,6 +1622,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cRawDataRep2.fastq.gz
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1604,6 +1649,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cRawRep1.bigWig
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1631,6 +1677,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cRawRep2.bigWig
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1658,6 +1705,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1684,6 +1732,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001249
 expId 1249
 fileName wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923434
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1764,6 +1813,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep1.fastq.gz
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1790,6 +1840,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep2.fastq.gz
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1816,6 +1867,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep1.bigWig
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1843,6 +1895,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep2.bigWig
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1870,6 +1923,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1896,6 +1950,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001238
 expId 1238
 fileName wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923422
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1976,6 +2031,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -2002,6 +2058,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2028,6 +2085,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep1.bigWig
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -2055,6 +2113,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep2.bigWig
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2082,6 +2141,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -2108,6 +2168,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001239
 expId 1239
 fileName wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923423
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2134,6 +2195,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2160,6 +2222,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2240,6 +2303,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2266,6 +2330,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2292,6 +2357,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1.bigWig
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2319,6 +2385,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
 fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2.bigWig
+geoSampleAccession GSM923427
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2400,6 +2467,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2426,6 +2494,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2452,6 +2521,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hRawRep1.bigWig
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2479,6 +2549,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hRawRep2.bigWig
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2506,6 +2577,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2532,6 +2604,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001241
 expId 1241
 fileName wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923426
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2641,6 +2714,7 @@ dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatRawDataRep1.fastq.gz
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2667,6 +2741,7 @@ dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatRawDataRep2.fastq.gz
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2693,6 +2768,7 @@ dateUnrestricted 2012-10-24
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatRawRep1.bigWig
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2720,6 +2796,7 @@ dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatRawRep2.bigWig
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2747,6 +2824,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2773,6 +2851,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000315
 expId 315
 fileName wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923424
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2853,6 +2932,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1RawDataRep1.fastq.gz
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2879,6 +2959,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1RawDataRep2.fastq.gz
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2905,6 +2986,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1RawRep1.bigWig
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2932,6 +3014,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1RawRep2.bigWig
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2959,6 +3042,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2985,6 +3069,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001251
 expId 1251
 fileName wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923421
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -3065,6 +3150,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1RawDataRep1.fastq.gz
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -3091,6 +3177,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1RawDataRep2.fastq.gz
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3117,6 +3204,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1RawRep1.bigWig
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -3144,6 +3232,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1RawRep2.bigWig
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3171,6 +3260,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -3197,6 +3287,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001252
 expId 1252
 fileName wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923430
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3277,6 +3368,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshRawDataRep1.fastq.gz
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3303,6 +3395,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshRawDataRep2.fastq.gz
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3329,6 +3422,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshRawRep1.bigWig
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3356,6 +3450,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshRawRep2.bigWig
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3383,6 +3478,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3409,6 +3505,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001250
 expId 1250
 fileName wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923419
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3489,6 +3586,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hRawDataRep1.fastq.gz
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3515,6 +3613,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hRawDataRep2.fastq.gz
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3541,6 +3640,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hRawRep1.bigWig
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3568,6 +3668,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hRawRep2.bigWig
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3595,6 +3696,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3621,6 +3723,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001242
 expId 1242
 fileName wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923429
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3701,6 +3804,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3727,6 +3831,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3753,6 +3858,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hRawRep1.bigWig
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3780,6 +3886,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hRawRep2.bigWig
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3807,6 +3914,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3833,6 +3941,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001243
 expId 1243
 fileName wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923428
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3859,6 +3968,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3885,6 +3995,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -3965,6 +4076,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3991,6 +4103,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -4017,6 +4130,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEstradia4hRawRep1.bigWig
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -4044,6 +4158,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
 fileName wgEncodeHaibRnaSeqT47dEstradia4hRawRep2.bigWig
+geoSampleAccession GSM923431
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -4125,6 +4240,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hRawDataRep1.fastq.gz
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4151,6 +4267,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hRawDataRep2.fastq.gz
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4177,6 +4294,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hRawRep1.bigWig
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4204,6 +4322,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hRawRep2.bigWig
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4231,6 +4350,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep1.gtf.gz
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4257,6 +4377,7 @@ dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001245
 expId 1245
 fileName wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep2.gtf.gz
+geoSampleAccession GSM923436
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4397,6 +4518,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep1.fastq.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4425,6 +4547,7 @@ dateUnrestricted 2012-10-20
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep1V2.fastq.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4452,6 +4575,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep2.fastq.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4480,6 +4604,7 @@ dateUnrestricted 2012-10-20
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep2V2.fastq.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4536,6 +4661,7 @@ dateUnrestricted 2012-11-09
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawRep1V2.bigWig
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4593,6 +4719,7 @@ dateUnrestricted 2012-11-09
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87RawRep2V2.bigWig
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4649,6 +4776,7 @@ dateUnrestricted 2012-10-20
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1V2.gtf.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4704,6 +4832,7 @@ dateUnrestricted 2012-10-20
 dccAccession wgEncodeEH001253
 expId 1253
 fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2V2.gtf.gz
+geoSampleAccession GSM923437
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4720,4 +4849,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 344177256
+# MAGIC: 961056506
