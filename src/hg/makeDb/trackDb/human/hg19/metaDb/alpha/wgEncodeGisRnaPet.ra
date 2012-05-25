@@ -1,7 +1,7 @@
 metaObject wgEncodeGisRnaPet
 objType composite
 composite wgEncodeGisRnaPet
-expVars lab,dataType,cell,localization,rnaExtract
+expVars lab,dataType,cell,localization
 geoSeriesAccession GSE33600
 
 metaObject wgEncodeGisRnaPetA549CellPapAlnRep3

@@ -1485,13 +1485,6 @@ va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
-// WTF - variable outside of a form on almost every page we make below?
-// Tim put this in.  Talking with him it sounds like some pages might actually
-// depend on it.  Not removing it until we have a chance to test.  Best fix
-// might be to add it to cartSaveSession, though this would then no longer be
-// well named, and not all things have 'db.'  Arrr.  Probably best to remove
-// and test a bunch.
-cgiMakeHiddenVar("db", db);  
 }
 
 void cartWebEnd()

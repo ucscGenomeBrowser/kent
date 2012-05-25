@@ -1,6 +1,7 @@
 track wgEncodeGencodeSuper
 superTrack on
 group genes
+priority 34.1
 shortLabel GENCODE
 longLabel GENCODE Gene Annotation 
 wgEncode 1

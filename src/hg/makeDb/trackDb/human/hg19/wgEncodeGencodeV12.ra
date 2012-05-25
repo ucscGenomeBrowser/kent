@@ -4,6 +4,7 @@
 ##
 track wgEncodeGencodeV12
 compositeTrack on
+superTrack wgEncodeGencodeSuper dense
 shortLabel GENCODE Genes V12
 longLabel Gene Annotations from ENCODE/GENCODE Version 12
 #superTrack wgEncodeGencodeSuper pack
