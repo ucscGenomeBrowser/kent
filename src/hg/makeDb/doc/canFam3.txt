@@ -464,16 +464,19 @@ canFam3.upstreamGeneTbl = ensGene
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S mm10		# long running job managed in screen
     cd /cluster/data/genbank
+    # rerun this with canFam3.perChromTables = no in the genbank.conf
+    #   2012-05-24,25
     time nice -n +19 ./bin/gbAlignStep -initial canFam3 &
-    #	logFile: var/build/logs/2012.05.01-13:24:37.canFam3.initalign.log
-    #   real    381m29.244s
+    #	logFile: var/build/logs/2012.05.24-15:31:48.canFam3.initalign.log
+    #   second time: about 32 minutes
+    #   first time: real    381m29.244s
 
     # load data/genomesbase when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad canFam3 &
-    #   logFile: var/dbload/hgwdev/logs/2012.05.02-13:42:10.dbload.log
-    #   real    61m9.113s
+    #   logFile: var/dbload/hgwdev/logs/2012.05.25-12:52:27.dbload.log
+    #   real    125m30.185s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
