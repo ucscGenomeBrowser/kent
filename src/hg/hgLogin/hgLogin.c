@@ -270,18 +270,17 @@ hPrintf(
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
-//char *email = cartUsualString(cart, "hgLogin_email", "");
-char *obj=cartUsualString(cart, "hgLogin_helpWith", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to you \n"
-//    " <span id=\"emailaddress\">%s</span>containing %s...</p>"
-   "containing %s...</p>"
-
+   "containing information that you requested.</p>"
     "\n"
-    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>", obj);
+    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
+cartRemove(cart, "hgLogin_helpWith");
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_userName");
 }
 
 void sendMailOut(char *email, char *subject, char *msg)
