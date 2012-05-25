@@ -184,6 +184,8 @@ var encodeMatrix = (function () {
                 $('.floatHeader #headerLabelRow').remove();
                 $('.floatHeader #cellHeaderLabel').html('');
                 $('.floatHeader #searchTypePanel').remove();
+                // hide this until we can make it work 
+                $('.floatHeader #chipButton').remove();
 
                 // Note: user-defined callback requires 
                 // default actions from floatHeader plugin
