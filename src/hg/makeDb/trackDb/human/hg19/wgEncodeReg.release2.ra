@@ -331,7 +331,7 @@ canPack On
     scoreFilterLimits 100:1000
     priority 1.6
 
-    track wgEncodeRegTfbsClustered
+    track wgEncodeRegTfbsClusteredV2
     shortLabel Txn Factor ChIP
     longLabel Transcription Factor ChIP-seq from ENCODE
     type factorSource
