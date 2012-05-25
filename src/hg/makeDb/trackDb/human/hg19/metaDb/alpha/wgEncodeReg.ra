@@ -39,7 +39,7 @@ objType table
 composite wgEncodeRegTfbsClustered
 dataType Cluster
 dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsClusteredCells
+fileName wgEncodeRegTfbsClusteredCells.tab.gz
 grant Kent
 lab UCSC
 project wgEncode
@@ -297,4 +297,4 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
 view Signal
 
-# MAGIC: 1727192819
+# MAGIC: -1988687174
