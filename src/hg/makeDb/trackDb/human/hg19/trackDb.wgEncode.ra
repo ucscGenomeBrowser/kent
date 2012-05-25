@@ -1,7 +1,7 @@
 # Genome-wide ENCODE tracks
 
 include wgEncodeSuper.ra beta,public
-include wgEncodeSuper.release2.ra alpha 
+include wgEncodeSuper.release2.ra alpha
 
 # GENCODE genes on alpha only (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
@@ -10,12 +10,12 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV12.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.ra beta,public
-include wgEncodeGencodeV7.release2.ra alpha
-include wgEncodeGencodeV10.ra beta,public
-include wgEncodeGencodeV10.release2.ra alpha
-include wgEncodeGencodeV11.ra beta,public
-include wgEncodeGencodeV11.release2.ra alpha
+#include wgEncodeGencodeV7.ra 
+include wgEncodeGencodeV7.release2.ra 
+#include wgEncodeGencodeV10.ra 
+include wgEncodeGencodeV10.release2.ra 
+#include wgEncodeGencodeV11.ra 
+include wgEncodeGencodeV11.release2.ra 
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -59,7 +59,7 @@ include wgEncodeAffyRnaChip.ra
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
-include wgEncodeGisChiaPet.ra alpha,beta
+include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
 include wgEncodeUmassDekker5C.ra 
@@ -127,8 +127,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha
 include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra beta,public
-include wgEncodeHaibRnaSeq.patch.ra alpha
+include wgEncodeHaibRnaSeq.ra
 
 
 
@@ -170,7 +169,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra
+include wgEncodeUwTfbs.release3.ra beta,public
+include wgEncodeUwTfbs.release4.ra alpha
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha

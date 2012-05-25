@@ -38,15 +38,6 @@ wgEncodeGencodeUniProt wgEncodeGencodeUniProtV11
 wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV11
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV11
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV11
-    cdsDrawDefault genomic\ codons
-    baseColorUseCds given
-    baseColorDefault genomicCodons
-    geneClasses coding nonCoding pseudo problem
-    gClass_coding 12,12,120
-    gClass_nonCoding 0,153,0
-    gClass_pseudo 255,51,255
-    gClass_problem 254,0,0
-#These last terms should move the Genes view after CGI is fixed
 
 
 
@@ -62,6 +53,15 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     itemClassTbl wgEncodeGencodeAttrsV11
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
+    #These 8 lines moved to the Genes view after CGI was fixed
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,153,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
     # filterBy notes:
     #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
     #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code

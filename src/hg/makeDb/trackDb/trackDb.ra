@@ -3041,10 +3041,6 @@ xrefTable dm1.blastFBRef00
 xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
-searchTable ECgene
-searchType genePred
-searchPriority 50
-
 searchTable phastConsTopPaper
 searchType bed
 searchPriority 50

@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "trackVersion.h"
 
 
@@ -246,3 +247,23 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct trackVersion *getTrackVersion(char *database, char *track)
+// Get most recent trackVersion for given track in given database
+{
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+struct trackVersion *trackVersion = NULL;
+if (trackVersionExists)
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn(database);
+
+    safef(query, sizeof(query), "select * from hgFixed.trackVersion where db = '%s' AND name = '%s' order by ix DESC limit 1", database, track);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+        trackVersion = trackVersionLoad(row);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return trackVersion;
+}
