@@ -37,16 +37,15 @@ var encodeMatrix = (function () {
 
     return {
 
-        // Page names for other pages in this application
 
-        pageForChipMatrix: function(organism) {
-            // URL for Chip-seq matrix
-            return 'encodeChipMatrix' + organism.charAt(0).toUpperCase() + organism.substring(1) + '.html';
-        },
-
-        pageForDataMatrix: function(organism) {
-            // URL for Chip-seq matrix
-            return 'encodeDataMatrix' + organism.charAt(0).toUpperCase() + organism.substring(1) + '.html';
+        pageFor: function(pageType, organism) {
+            // Construct page names for other pages in this application per organism
+            // page types are:  dataMatrix, chipMatrix, dataSummary
+            // e.g. dataMatrix, mouse -> encodeDataMatrixMouse.html
+            return 'encode' + 
+                pageType.charAt(0).toUpperCase() + pageType.substring(1) +
+                organism.charAt(0).toUpperCase() + organism.substring(1) + 
+                        '.html';
         },
 
         // UI panel for search: select tracks or files
@@ -185,6 +184,8 @@ var encodeMatrix = (function () {
                 $('.floatHeader #headerLabelRow').remove();
                 $('.floatHeader #cellHeaderLabel').html('');
                 $('.floatHeader #searchTypePanel').remove();
+                // hide this until we can make it work 
+                $('.floatHeader #chipButton').remove();
 
                 // Note: user-defined callback requires 
                 // default actions from floatHeader plugin
