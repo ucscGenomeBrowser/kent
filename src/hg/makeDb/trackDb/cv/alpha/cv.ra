@@ -13389,7 +13389,7 @@ term Alignability
 tag ALIGNABI
 type view
 label Alignability
-description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mapability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project.
+description Displays how uniquely k-mer sequences align to a region of the genome. The GEM mapper (GEnome Multitool, CRG) maps sliding windows of k-mers (where k has been set to 36, 40, 50, 75 or 100 nts) allowing up to 2 mismatches.  Mappability scores were computed as S = 1/(number of matches found in the genome). The CRG Alignability tracks were generated independently of the ENCODE project.
 
 term Alignments
 tag ALN
@@ -14014,8 +14014,8 @@ dataGroup Other
 term Mapability
 tag MAPABILITY
 type dataType
-label Mapability
-description Short Read Mapability
+label Mappability
+description Short Read Mappability
 dataGroup Other
 
 term MethylArray
@@ -16089,13 +16089,13 @@ optionalVars label,deprecated #Provisional
 term size
 tag SIZE
 type typeOfTerm
-label Mapability windowing size
+label Mappability windowing size
 description The windowing size used, typically in a whole genome computational analysis and characterization dataset.
 searchable no
 cvDefined no
 validate regex: ^[0-9]*mer$
 priority 500
-# Used in hg19 mapability only (11/3/10)
+# Used in hg19 mappability only (11/3/10)
 requiredVars term,tag,type,description #Provisional
 optionalVars label,deprecated #Provisional
 
@@ -16238,13 +16238,13 @@ optionalVars label,deprecated #Provisional
 term uniqueness
 tag UNIQUENESS
 type typeOfTerm
-label Mapability Distinctions
-description Degree of region uniqueness or mapability disctinctions
+label Mappability Distinctions
+description Degree of region uniqueness or mappability disctinctions
 searchable no
 cvDefined no
 validate none
 priority 590
-# Used in hg19 mapability only
+# Used in hg19 mappability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 requiredVars term,tag,type,description #Provisional
 optionalVars label,deprecated #Provisional
