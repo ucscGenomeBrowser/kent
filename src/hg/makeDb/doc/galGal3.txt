@@ -2957,3 +2957,22 @@ TMPDIR=/scratch/tmp
     #	64250673 bases of 1358334882 (4.730%) in intersection
 
 #########################################################################
+# construct liftOver to galGal4 (DONE - 2012-05-25 - Hiram) 
+    screen -S galGal3	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/galGal3/bed/blat.galGal4.2012-05-25
+    cd /hive/data/genomes/galGal3/bed/blat.galGal4.2012-05-25
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/galGal3/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev galGal3 galGal4 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/galGal3/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev galGal3 galGal4 > do.log 2>&1
+    #   real    20m44.646s
+
+    # verify this file exists:
+    #	/gbdb/galGal3/liftOver/galGal3ToGalGal4.over.chain.gz
+    # and try out the conversion on genome-test from galGal3 to galGal4 
+############################################################################
+
