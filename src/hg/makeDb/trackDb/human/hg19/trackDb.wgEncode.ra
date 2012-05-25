@@ -10,8 +10,11 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV12.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.release2.ra  
+#include wgEncodeGencodeV7.ra 
+include wgEncodeGencodeV7.release2.ra 
+#include wgEncodeGencodeV10.ra 
 include wgEncodeGencodeV10.release2.ra 
+#include wgEncodeGencodeV11.ra 
 include wgEncodeGencodeV11.release2.ra 
 
 # UNC/BSU Proteogenomics (wrangler: fang)
