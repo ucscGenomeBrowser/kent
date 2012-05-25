@@ -1,7 +1,5 @@
 # Genome-wide ENCODE tracks
-
-include wgEncodeSuper.ra beta,public
-include wgEncodeSuper.release2.ra alpha
+include wgEncodeSuper.release2.ra 
 
 # GENCODE genes on alpha only (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
@@ -127,7 +125,8 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha
 include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra
+include wgEncodeHaibRnaSeq.ra beta,public
+include wgEncodeHaibRnaSeq.patch.ra alpha
 
 
 
