@@ -3,6 +3,7 @@
 #	http://www.ncbi.nlm.nih.gov/genome/82
 #	http://www.ncbi.nlm.nih.gov/bioproject/12555
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAFC01
+#   http://www.ncbi.nlm.nih.gov/genome/assembly/313728/
 
 # file template copied from bosTau6.txt
 # Assembly Info:
@@ -120,7 +121,6 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
    # 0 lower) in 11660 sequences in 1 files
 
-XXXX 2012-05-16 N50
     # N50
     cd /hive/data/genomes/bosTau7/
     n50.pl chrom.sizes
@@ -162,7 +162,7 @@ taxId 9913
     ln -s `pwd`/bosTau7.unmasked.2bit /gbdb/bosTau7/bosTau7.2bit
 
     #  Per instructions in makeGenomeDb.log:
-XXXX TODO - replace *** use actual url for project etc.. in all html files
+# - replace *** use actual url for project etc.. in all html files
 #Search for '***' notes in each file in and make corrections (sometimes the
 #files used for a previous assembly might make a better template):
 #  description.html /cluster/data/bosTau7/html/{trackDb.ra,gap.html,gold.html}
@@ -672,7 +672,6 @@ TMPDIR=/scratch/tmp
         -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
     #   real    1780m16.857s
 
-XXXX # TBD for all chain/net:
  *** All done !  Elapsed time: 1780m17s
  *** Make sure that goldenPath/bosTau7/vsOrnAna1/README.txt is accurate.
  *** Add {chain,net}OrnAna1 tracks to trackDb.ra if necessary.
@@ -699,7 +698,6 @@ XXXX # TBD for all chain/net:
     cat fb.ornAna1.chainBosTau7Link.txt
     # 190094136 bases of 1842236818 (10.319%) in intersection
 
-XXXX # TBD for all chain/net:
  *** All done !  Elapsed time: 58m6s
  *** Make sure that goldenPath/ornAna1/vsBosTau7/README.txt is accurate.
  *** Add {chain,net}BosTau7 tracks to trackDb.ra if necessary.
@@ -1000,12 +998,10 @@ done
     popd
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (working 2012-05-16 - Chin)
+# all.joiner update, downloads and in pushQ - (DONE 2012-05-16 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=bosTau7 -all all.joiner
-XXXX 2012-05-16 3:45 PM
-XXXX stopped here, go back to read all log to see any change needed for html and READMEs
 
     mkdir /hive/data/genomes/bosTau7/goldenPath
     cd /hive/data/genomes/bosTau7/goldenPath
@@ -1033,20 +1029,6 @@ XXXX stopped here, go back to read all log to see any change needed for html and
     hgsql qapushq < bosTau7.pushQ.sql
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
-
-#############################################################################
-# LIFTOVER TO bosTau4 (working - 2011-10-20 - Chin)
-
-    sh hgwdev
-    cd /hive/data/genomes/bosTau7
-    ln -s jkStuff/bosTau7.11.ooc 11.ooc
-    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-         bosTau7 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
-    # real    110m26.710s
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
-    md5sum bosTau7ToBosTau4.over.chain.gz >> md5sum.txt
-    popd
 
 ############################################################################
 

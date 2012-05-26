@@ -30713,6 +30713,7 @@ lab CSHL
 labExpId LID47249,LID47250
 labVersion iIDR
 localization cell
+md5sum e6d126bf198473ab5655b8f6305e75ea
 project wgEncode
 protocol None
 readType 2x101D
@@ -51368,4 +51369,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -2095046386
+# MAGIC: 1241605820
