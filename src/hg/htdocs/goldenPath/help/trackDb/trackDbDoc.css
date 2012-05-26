@@ -39,6 +39,7 @@ TR.examples { background-color:#F8F8F8; }
 TR.examples DIV.details { margin-left:0em; }
 .toggle  { height:16px; width:16px; vertical-align:top; cursor: pointer; }
 HR.example { border:1px inset #FFFFFF; color:#FFFFFF; }
+TD.filterBy { display: table-cell; } /* Override css in HGStyle.css */
 /* DIV.typeExamples { display:none; }  toggling */
 
 /* .fixed2 { color:#000088; font-family: "Courier New, monospace"; font-size: 1.1em; }   */
