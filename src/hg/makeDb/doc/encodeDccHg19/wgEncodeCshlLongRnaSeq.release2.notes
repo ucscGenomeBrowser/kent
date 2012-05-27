@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeCshlLongRnaSeq Release 2 vs Release 1
-2012-05-24
+2012-05-25
 
 QA Count Summaries for Release 2:
 Tables: 732
@@ -3587,16 +3587,14 @@ Revoked/Replaced/Renamed Gbdb Files (0):
 
 SUPPLEMENTAL FILES:
 New: 0
-Untouched: 0
-Removed: 9
-New + Untouched: 0
+Untouched: 9
+Removed: 0
+New + Untouched: 9
 Total: 9
 
 New Supplemental Files (0):
 
-Untouched Supplemental Files (0):
-
-Removed Supplemental Files (9):
+Untouched Supplemental Files (9):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/Contigs_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/ExonGeneV7_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/GeneDeNovo_Info.txt
@@ -3606,6 +3604,8 @@ Removed Supplemental Files (9):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/TranscriptGencV7_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/wgEncodeChslLongSpikeinsConcentrations.tsv
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/wgEncodeCshlLongSpikeins.fasta
+
+Removed Supplemental Files (0):
 
 
 
@@ -3620,18 +3620,6 @@ New Other Files (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release2/md5sum.txt
 
 Revoked Other Files (0):
-
-
-Files that dropped between releases (9):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/Contigs_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/ExonGeneV7_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/GeneDeNovo_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/GeneGencV7_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/Junctions_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/TranscriptDeNovo_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/TranscriptGencV7_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/wgEncodeChslLongSpikeinsConcentrations.tsv
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/supplemental/wgEncodeCshlLongSpikeins.fasta
 
 
 
