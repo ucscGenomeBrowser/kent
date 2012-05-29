@@ -633,7 +633,7 @@ if (tdbIsComposite(tdb))
     {
     printf("<BR>&nbsp;&nbsp;&nbsp;");
     struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
-    slSort(tdbRefList, trackDbRefCmp);
+    slSort(&tdbRefList, trackDbRefCmp);
     struct slRef *tdbRef;
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
@@ -641,7 +641,8 @@ if (tdbIsComposite(tdb))
 	if (hTableExists(database, subTdb->table))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->track);
-	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
+	    cgiMakeCheckBoxJS(var, cartUsualBoolean(cart, var, ldInvDefault),
+			      "class='subtrackInCompositeUi'");
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);
 	    }
