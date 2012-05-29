@@ -344,4 +344,5 @@ canPack On
     visibility dense
     useScore 1
     priority 1.7
+    html wgEncodeRegTfbsClustered.release2
 
