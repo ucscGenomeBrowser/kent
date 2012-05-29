@@ -42,6 +42,7 @@
 #include "bbiFile.h"
 #include "ensFace.h"
 #include "microarray.h"
+#include "trackVersion.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -2935,7 +2936,8 @@ if (ct)
 if (!ct)
     {
     /* Print data version trackDB setting, if any */
-    char *version = trackDbSetting(tdb, "dataVersion");
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    char *version = trackVersion == NULL ? trackDbSetting(tdb, "dataVersion") : trackVersion->version;
     if (version)
         {
         cgiDown(0.7);
