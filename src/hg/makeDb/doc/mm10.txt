@@ -5684,4 +5684,40 @@ enabled ORFeome tracks in etc/genbank.conf and reload genbank
 
     # and try out the conversion on genome-test from mm9 to mm10
 ############################################################################
+# EXONIPHY MM10, lifted from hg19 (DONE - braney 2012-05-29)
+#	needed for ucscGenes building
+    # create a syntenic liftOver chain file
+    cd /cluster/data/hg19/bed/lastz.mm10/axtChain
+    time nice -n +19 netFilter -syn hg19.mm10.net.gz \
+	| netChainSubset -verbose=0 stdin hg19.mm10.all.chain.gz stdout \
+	| chainStitchId stdin stdout | gzip -c > hg19.mm10.syn.chain.gz
+    #real    2m38.915s
+    #user    3m29.458s
+    #sys     0m16.033s
 
+    #	slightly smaller than the ordinary liftOver chain file:
+-rw-rw-r-- 1 78419424 Mar  7 18:40 hg19.mm10.over.chain.gz
+-rw-rw-r-- 1 74588027 May 29 12:29 hg19.mm10.syn.chain.gz
+
+    # exoniphyMm9.gp is prepared as follows
+    mkdir /cluster/data/mm10/bed/exoniphy
+    cd /cluster/data/mm10/bed/exoniphy
+    hgsql hg19 -e "select * from exoniphy" -N | cut  -f 2-16 > exoniphyHg19.gp
+    time nice -n +19 liftOver -genePred exoniphyHg19.gp \
+	/cluster/data/hg19/bed/lastz.mm10/axtChain/hg19.mm10.syn.chain.gz \
+	    exoniphyMm10.gp unmapped
+    # real    16m0.334s
+    # user    15m46.462s
+    # sys     0m7.115s
+
+    wc -l *
+    # 186601 exoniphyHg19.gp
+    # 178821 exoniphyMm10.gp
+    # 15560 unmapped
+
+    cd /cluster/data/mm10/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt mm10 exoniphy exoniphyMm10.gp
+    nice -n +19 featureBits mm10 exoniphy
+    # 26795543 bases of 2652783500 (1.010%) in intersection
+    nice -n +19 featureBits mm9 exoniphy
+    #	25931742 bases of 2620346127 (0.990%) in intersection
