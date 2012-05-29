@@ -124,7 +124,8 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra
+include wgEncodeSydhRnaSeq.ra beta,public
+include wgEncodeSydhRnaSeq.patch.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra
