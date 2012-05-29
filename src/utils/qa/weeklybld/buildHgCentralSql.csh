@@ -20,7 +20,7 @@ git pull origin master
 set CREATE_ONLY="sessionDb userDb hubStatus gbMembers namedSessionDb" 
 set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
-     | egrep -v "${CREATE_OR_LIST}" | xargs echo \
+     | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
 hgsqldump --skip-opt --no-data ${IGNORE_TABLES} -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " \
@@ -31,14 +31,14 @@ hgsqldump --skip-opt --no-data ${IGNORE_TABLES} -h genome-centdb \
 set CREATE_AND_FILL="defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb hubPublic" 
 set CREATE_OR_LIST=`echo "${CREATE_AND_FILL}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
-     | egrep -v "${CREATE_OR_LIST}" | xargs echo \
+     | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
 # --skip-extended-insert ... to make it dump rows as separate insert statements
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
 hgsqldump ${IGNORE_TABLES} --skip-add-drop-table --skip-extended-insert -c -h genome-centdb \
-        --no-create-db --databases hgcentral | sed -e \
+        --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
         "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
     >> /tmp/hgcentraltemp.sql
 
