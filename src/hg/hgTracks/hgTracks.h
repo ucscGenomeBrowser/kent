@@ -310,7 +310,7 @@ struct linkedFeatures
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
-    int highlightColor;                 /* highlight color,0 if no highlight */
+    unsigned highlightColor;            /* highlight color,0 if no highlight */
     };
 
 struct linkedFeaturesSeries
