@@ -2644,8 +2644,12 @@ if (!hideArrows)
     {
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-		 lf->orientation, bColor, FALSE);
+	if (lf->highlightColor)
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		     lf->orientation, lf->highlightColor, FALSE);
+	else
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		     lf->orientation, bColor, FALSE);
 	}
     }
 
@@ -2660,16 +2664,36 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
-            color, lf->score);
+	if (lf->highlightColor)
+	    {
+	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff , shortHeight ,
+		lf->highlightColor, lf->score);
+	    drawScaledBoxSample(hvg, s, e2, scale, xOff + 1, y+shortOff + 1, shortHeight - 2,
+		color, lf->score);
+	    }
+	else
+	    {
+	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
+		color, lf->score);
+	    }
 	s = e2;
 	}
     if (e > tallEnd)
 	{
 	s2 = s;
 	if (s2 < tallEnd) s2 = tallEnd;
-	drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
-            color, lf->score);
+	if (lf->highlightColor)
+	    {
+	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
+		lf->highlightColor, lf->score);
+	    drawScaledBoxSample(hvg, s2, e, scale, xOff+1, y+shortOff+1, shortHeight-2,
+		color, lf->score);
+	    }
+	else
+	    {
+	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
+		color, lf->score);
+	    }
 	e = s2;
 	}
     /* Draw "tall" portion of exon (or codon) */
@@ -2685,8 +2709,18 @@ for (sf = components; sf != NULL; sf = sf->next)
 				  MAXPIXELS, winStart, color);
         else
             {
-            drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-                                color, lf->score );
+	    if (lf->highlightColor)
+		{
+		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
+				    lf->highlightColor, lf->score );
+		drawScaledBoxSample(hvg, s, e, scale, xOff+1, y+1, heightPer-2,
+				    color, lf->score );
+		}
+	    else
+		{
+		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
+				    color, lf->score );
+		}
 
             if (exonArrowsAlways || (exonArrows &&
                 /* Display barbs only if no intron is visible on the item.
