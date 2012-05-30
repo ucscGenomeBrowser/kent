@@ -14,7 +14,7 @@
     <script type="text/javascript">
         $(document).ready(function()
         {
-            //tdbDoc.checkLibrary(); // Run this test during development only
+            //tdbDoc.library.checkup(); // Run this test during development only
             // TOC Self assembly EXPERIMENTAL
             tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
                                     "parent_view","parent_container"] );
@@ -25,15 +25,13 @@
 <BODY>
 <A NAME="TOP"></A>
 
-<!-- Format everthing inside this narrower window -->
-<div style="width=100%; max-width:1000px;">
+<!-- Format everthing inside this narrower "pageWidth" window -->
+<div class="pageWidth">
 <IMG SRC="/images/title.jpg">
 
 <!-- This file generates the top menu bar on Genome Browser static pages-->
-<div class='topBlueBar' style="width:inherit; height:26px;">
-      <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="2636D1" HEIGHT="24" class="topbar">
-
-    <TR><TD VALIGN="middle"><FONT COLOR="#89A1DE">
+<div class='topBlueBar'>
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 class="topbar"><TR><TD VALIGN="middle">
         <A HREF="/index.html" class="topbar">Home</A>-
         <A HREF="/cgi-bin/hgGateway" class="topbar">Genomes</A>-
         <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">Blat</A>-
@@ -44,28 +42,19 @@
         <A HREF="/cgi-bin/pbGateway?command=start" class="topbar">Proteome</A>-
         <A HREF="/cgi-bin/hgSession?hgS_doMainPage=1" class="topbar">Session</A>-
         <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
-
-    </FONT></TD></TR>
-      </TABLE>
-<!-- end topbar -->
+    </TD></TR></TABLE>
 </div>
-<div style='height:.4em;'></div> <!-- vertical spacing -->
 
 <!--Content Tables-->
     <!--outer table is for border purposes-->
 
-<div class="contentBorder"><!-- Content Border -->
-
-
-<!-- light blue bar -->
+<div class="contentBorder">
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Track Database Definition</div>
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Track Database Definition</div>
 </div>
-<div style='height:.4em;'></div> <!-- vertical spacing -->
 
 <!-- Finally to the content -->
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <DIV ID="trackDbDoc_intro" class="intro"></DIV>
 
@@ -116,15 +105,13 @@ used as a ready reference.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
+<div class="contentBorder">
 
 <A name="commonSettings"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Common trackDb settings</div>
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Common trackDb settings</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <TABLE class="settingsTable" id="Common_Settings">
 <THEAD><TR><TD><DIV ID="commonSettings_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -233,15 +220,13 @@ used as a ready reference.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
+<div class="contentBorder">
 
 <A name="settingsByType"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Settings by track type</div>
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Settings by track type</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <P>Many settings are only
 valid for certain types of tracks.  Below many of these track types
@@ -314,7 +299,7 @@ are described along with their type specific settings.</P>
             </div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterBy"><A name="filterBy"></A><IMG class='toggle detail'>
-        <div class="format"><code>filterBy &lt;field1:title=[+]opt1a...&gt; 
+        <div class="format"><code>filterBy &lt;field1:title=[+]opt1a...&gt;
                                            [field2:title=[+]opt2a...]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"></A><IMG class='toggle detail'>
@@ -435,6 +420,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of item base types:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="wig"><A name="bigWig"><A name="bedGraph"><A name="bamWig"></A>
 <TABLE class="settingsTable" id="wig_-_Signal_Graphing_Track_Settings">
@@ -512,6 +498,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of signal graphing tracks:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="genePred"></A>
 <TABLE class="settingsTable" id="genePred_-_Gene_Model_Track_Settings">
@@ -580,6 +567,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of genePred track: </B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="bam"></A>
 <TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
@@ -655,6 +643,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example for bam track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="psl"></A>
 <TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
@@ -717,6 +706,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of psl alignment tracks:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="chain"><A name="netAlign"></A>
 <TABLE class="settingsTable" id="chain_netAlign_-_Paired_Alignment_Track_Settings">
@@ -771,6 +761,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of chain and netAlign tracks:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="wigMaf"></A>
 <TABLE class="settingsTable" id="wigMaf_-_Multiple_Alignment_Track_Settings">
@@ -834,6 +825,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Examples of wigMaf tracks:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="expRatio"></A>
 <TABLE class="settingsTable" id="expRatio_-_Microarray_Expression_Track_Settings">
@@ -864,6 +856,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of an expRatio track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="vcfTabix"></A>
 <TABLE class="settingsTable" id="vcfTabix_-_Variable_Call_Format_Track_Settings">
@@ -889,6 +882,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a VCF track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="pgSnp"></A>
 <TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
@@ -904,9 +898,9 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a Personal Genome SNP track:</B></div>
     </TD></TR>
 </TABLE>
-<P>
-</P>
-<H2>Specialized or rarely used types:</H2>
+<BR><BR>
+
+<H2 class="leftAlign">Specialized or rarely used types:</H2>
 
 <A name="altGraphX"></A>
 <TABLE class="settingsTable" id="altGraphX_-_Alternate_Splicing_Track_Settings">
@@ -922,6 +916,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of an altGraphX track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="bedDetail"></A>
 <TABLE class="settingsTable" id="bedDetail_-_Text_Extended_BED_Track_Settings">
@@ -949,6 +944,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a bedDetail track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="clonePos"></A>
 <TABLE class="settingsTable" id="clonePos_-_Genome_Coverage_Track_Settings">
@@ -964,6 +960,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a clonePos track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="ctgPos"></A>
 <TABLE class="settingsTable" id="ctgPos_-_Physical_Map_Contig_Track_Settings">
@@ -979,6 +976,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a ctgPos track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="downloadsOnly"></A>
 <TABLE class="settingsTable" id="downloadsOnly_Track_Settings">
@@ -998,6 +996,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a Downloads Only track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="encodeFiveC"></A>
 <TABLE class="settingsTable" id="encodeFiveC_-_Five_C_Chromatin_Interaction_Track_Settings">
@@ -1020,6 +1019,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of an encodeFiveC track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="factorSource"></A>
 <TABLE class="settingsTable" id="factorSource_-_Combined_Item_Track_Settings">
@@ -1046,6 +1046,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a factorSource track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="rmsk"></A>
 <TABLE class="settingsTable" id="rmsk_-_Repeat_Masking_Track_Settings">
@@ -1067,6 +1068,7 @@ are described along with their type specific settings.</P>
         <div class="format"><B>Example of a Repeat Masking track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="snake"></A>
 <TABLE class="settingsTable" id="snake_-_Self_Referencing_Alignment_Track_Settings">
@@ -1093,16 +1095,14 @@ are described along with their type specific settings.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
+<div class="contentBorder">
 
 <A name="groupingTracks"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;Grouping tracks
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Grouping tracks
 into sets and hierarchies</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <P>All tracks are
 organized into one of the major groupings.  However there are several
@@ -1123,6 +1123,7 @@ into a single image.</P>
         <div class="format"><B>Example of a track belonging to a predefined group:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="superTrack"></A>
 <TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
@@ -1142,6 +1143,7 @@ into a single image.</P>
         <div class="format"><B>Example of a Supertrack track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="compositeTrack"></A>
 <TABLE class="settingsTable" id="Composite_Track_Settings">
@@ -1168,6 +1170,7 @@ into a single image.</P>
         <div class="format"><B>Example of a Composite track:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="subGroups"></A>
 <TABLE class="settingsTable" id="Composite_-_Subgroups_Settings">
@@ -1216,6 +1219,7 @@ into a single image.</P>
         <div class="format"><B>Example of a Composite track with Subgroups:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="view"></A>
 <TABLE class="settingsTable" id="Composite_-_Views_Settings">
@@ -1245,6 +1249,7 @@ into a single image.</P>
         <div class="format"><B>Example of a Composite track with Views:</B></div>
     </TD></TR>
 </TABLE>
+<BR><BR>
 
 <A name="container"><A name="aggregate"><A name="multiWig"></A>
 <TABLE class="settingsTable" id="Aggregate_or_Overlay_Track_Settings">
@@ -1274,16 +1279,14 @@ into a single image.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
+<div class="contentBorder">
 
 <A name="customTracks"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">
+    <div class="lightBlueBarTitle">
         &nbsp;&nbsp;Special settings for custom tracks</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <TABLE class="settingsTable" id="Custom_Tracks_Special_Settings">
 <THEAD><TR><TD><DIV ID="customTracks_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -1355,16 +1358,14 @@ into a single image.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
+<div class="contentBorder">
 
 <A name="alphabetical"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">
+    <div class="lightBlueBarTitle">
         &nbsp;&nbsp;Alphabetical list of all settings</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <TABLE class="settingsTable" id="Alphabetical_Settings_List">
     <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH="25%">For Types</TH><TH>Documented</TH></TR>
@@ -3156,16 +3157,14 @@ into a single image.</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder" style="background-color:#F8F8F8;"><!-- Content Border -->
+<div class="contentBorder rejectSection">
 
 <A name="loosers"></A>
 <div class="lightBlueBar">
-    <div style='height:.3em;'></div> <!-- vertical spacing -->
-    <div style="font-size:1.115em; font-weight:bold;">&nbsp;&nbsp;
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;
                                     Obscure or special case settings. (aka Rejections)</div>
 </div>
-<div style="padding:10px;">  <!-- border partol -->
+<div class="borderGuard">
 
 <H3>Rejected "types":</H3>
 <P>axt &ndash; rare bed 3 variant (replaced with
@@ -3873,17 +3872,15 @@ bigWig</P>
 </div></div>
 
 <!-- Next section -->
-<div style='height:1em;'></div> <!-- vertical spacing -->
-<div class="contentBorder"><!-- Content Border -->
-<div style="padding:10px;">  <!-- border partol -->
+<div class="contentBorder">
+<div class="borderGuard">
 <TABLE class="settingsTable" id="toc"></TABLE>
 </div></div>
 
 
 <!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
-<div id="library" style="display:none;">
+<div id="library">
 <!--#include virtual="trackDbLibrary.shtml" -->
 </div>
 
-<div style="height:100%;">&nbsp;<!-- This tricl helps jumpTo hit the right spot --></div>
 </BODY></HTML>
