@@ -278,8 +278,8 @@ hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An account activation email has been sent to you. \n"
-   "Please activate your account within 7 days.</p>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
+    "Please click the confirmation link in the email to activate your account.</p>"
     "\n"
     "<p><a href=\"%s\">Return</a></p>", returnURL);
 cartRemove(cart, "hgLogin_email");
@@ -375,7 +375,6 @@ safef(msg, sizeof(msg),
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
-
 
 void sendUsername(struct sqlConnection *conn, char *email)
 /* email user username(s)  */
@@ -563,9 +562,11 @@ hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "<h2>UCSC Genome Browser</h2>"
     "\n"
     "<h3>Login</h3>"
-    "\n"
-    "<span style='color:red;'>%s</span>"
-    "\n", errMsg ? errMsg : "");
+    "\n");
+if (errMsg && sameString(errMsg, "Your account has been activated."))
+    hPrintf("<span style='color:green;'>%s</span>\n", errMsg ? errMsg : "");
+else
+    hPrintf("<span style='color:red;'>%s</span>\n", errMsg ? errMsg : "");
 hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
     "\n"
     "<div class=\"inputGroup\">"
@@ -612,6 +613,8 @@ if (sameString(emailToken, token))
     safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'",
     username);
     sqlUpdate(conn, query);
+    freez(&errMsg);
+    errMsg = cloneString("Your account has been activated.");
     } 
 else
     {
