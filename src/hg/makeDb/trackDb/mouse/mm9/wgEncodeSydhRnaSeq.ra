@@ -10,8 +10,8 @@ subGroup4 rnaExtract RnaExtract RIBOZEROG=riboZeroGold
 subGroup5 readType ReadType R2X101D=2x101D
 subGroup6 rep Replicate rep1=1  rep2=2
 dimensions dimensionX=cellType dimensionY=treatment
-sortOrder cellType=+ treatment=+ rnaExtract=+ view=+ rep=+
-fileSortOrder cell=Cell_Line treatment=treatment rnaExtract=RNA<BR>Extract view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ treatment=+ view=+ rep=+
+fileSortOrder cell=Cell_Line treatment=treatment view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=rnaExtract
 dragAndDrop subTracks
 priority 0
