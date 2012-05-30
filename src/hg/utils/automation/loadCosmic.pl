@@ -7,14 +7,17 @@ use strict;
 
 use Cwd;
 use Getopt::Long;
+use lib "/cluster/bin/scripts";
+use HgDb;
 
 my ($verbose, $oldVer, $dryRun);
 GetOptions("verbose" => \$verbose, "oldVer=i" => \$oldVer, "dryRun" => \$dryRun);
 
-my $db = shift(@ARGV) || die "Missing assembly argument";
+my $assembly = shift(@ARGV) || die "Missing assembly argument";
 my $srcUrl = shift(@ARGV) || die "Missing source URL argument";
 my ($fileName, $ver, $cmd, $gzipped);
 my $cosmicBed =  "cosmic.bed";
+my $db = HgDb->new(DB => $assembly);
 
 if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
     $fileName = $1;
@@ -26,6 +29,7 @@ if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
 } else {
     die "Missing version number in srcUrl";
 }
+
 
 if($dryRun) {
     print STDERR "Loading COSMIC v$ver (dryRun)\n";
@@ -48,8 +52,8 @@ if(!(-e "$outsideDir/$fileName")) {
     !system($cmd) || die "cmd '$cmd' failed: err: $!";
 }
 
-my $loadDir = "/hive/data/genomes/$db/bed/cosmic/v$ver";
-my $oldLoadDir = "/hive/data/genomes/$db/bed/cosmic/v$oldVer";
+my $loadDir = "/hive/data/genomes/$assembly/bed/cosmic/v$ver";
+my $oldLoadDir = "/hive/data/genomes/$assembly/bed/cosmic/v$oldVer";
 my $oldBed = "$oldLoadDir/$cosmicBed";
 if(!(-d $loadDir)) {
     mkdir($loadDir) || die "mkdir($loadDir) failed; err: $!";
@@ -145,16 +149,19 @@ if($out =~ /(\d+)/) {
 }
 
 if(!$dryRun) {
-    $cmd = "hgsql $db -e 'drop table cosmicRaw'";
+    $cmd = "hgsql $assembly -e 'drop table cosmicRaw'";
     !system($cmd) || die "cmd '$cmd' failed: err: $!";
-    $cmd = "hgsql $db < ~/kent/src/hg/lib/cosmicRaw.sql";
-    !system($cmd) || die "cmd '$cmd' failed: err: $!";
-
-    $cmd = "hgLoadSqlTab $db cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql $tabFile";
+    $cmd = "hgsql $assembly < ~/kent/src/hg/lib/cosmicRaw.sql";
     !system($cmd) || die "cmd '$cmd' failed: err: $!";
 
-    $cmd = "hgLoadBed -allowStartEqualEnd  $db cosmic $cosmicBed";
+    $cmd = "hgLoadSqlTab $assembly cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql $tabFile";
     !system($cmd) || die "cmd '$cmd' failed: err: $!";
+
+    $cmd = "hgLoadBed -allowStartEqualEnd  $assembly cosmic $cosmicBed";
+    !system($cmd) || die "cmd '$cmd' failed: err: $!";
+
+    # add a new row to trackVersion
+    $db->execute("insert into hgFixed.trackVersion (db, name, who, version, updateTime, comment, source) values ('$assembly', 'cosmic', '$ENV{USER}', '$ver', now(), 'loaded by loadCosmic.pl', '$srcUrl')");
 }
 
 exit(0);
