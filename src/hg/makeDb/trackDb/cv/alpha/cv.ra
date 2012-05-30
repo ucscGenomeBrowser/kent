@@ -438,7 +438,7 @@ tag AOSMC
 type Cell Line
 organism human
 description aortic smooth muscle cells
-tissue heart
+tissue blood vessel
 lineage mesoderm
 karyotype normal
 vendorName Lonza
@@ -2643,10 +2643,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 from tunica adventitia
-lineage missing
+lineage mesoderm
 karyotype normal
 sex B
-tissue aorta
+tissue blood vessel
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2661,10 +2661,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Adventitial Fibroblasts from tunica adventitia
-lineage missing
+lineage mesoderm
 karyotype normal
 sex M
-tissue aorta
+tissue blood vessel 
 childOf HAoAF
 vendorName PromoCell
 vendorId C-14037
@@ -2680,10 +2680,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Adventitial Fibroblasts from tunica adventitia
-lineage missing
+lineage mesoderm
 karyotype normal
 sex F
-tissue aorta
+tissue blood vessel
 childOf HAoAF
 vendorName PromoCell
 vendorId C-14037
@@ -2699,10 +2699,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Endothelial Cells (thoracic) from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1
-lineage missing
+lineage mesoderm
 karyotype normal
 sex B
-tissue aorta
+tissue blood vessel 
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2717,10 +2717,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Endothelial Cells from throracic
-lineage missing
+lineage mesoderm
 karyotype normal
 sex M
-tissue aorta
+tissue blood vessel
 childOf HAoEC
 vendorName PromoCell
 vendorId C-14023
@@ -2736,10 +2736,10 @@ type Cell Line
 tier 3
 organism human
 description Aortic Endothelial Cells
-lineage missing
+lineage mesoderm
 karyotype normal
 sex F
-tissue aorta
+tissue blood vessel
 childOf HAoEC
 vendorName PromoCell
 vendorId C-14023
@@ -2771,9 +2771,10 @@ tag HBMEC
 type Cell Line
 organism human
 description brain microvascular endothelial cells
-tissue brain
+tissue blood vessel
 tier 3
-lineage ectoderm
+lineage mesoderm
+karyotype normal
 termId BTO:0003636
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003636
 vendorName ScienCell
@@ -2789,7 +2790,9 @@ tier 3
 organism human
 description brain vascular pericytes
 sex U
-tissue brain
+tissue blood vessel
+karyotype normal
+lineage mesoderm
 vendorName ScienCell
 vendorId 1200
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1200
@@ -2804,7 +2807,9 @@ tier 3
 organism human
 description brain vascular smooth muscle cells.
 sex F
-tissue brain
+tissue blood vessel
+karyotype normal
+lineage mesoderm
 vendorName ScienCell
 vendorId 1100
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1100
@@ -3836,6 +3841,7 @@ organism human
 description pulmonary artery endothelial cells.
 sex F
 tissue blood vessel
+lineage mesoderm
 karyotype normal
 vendorName Lonza
 vendorId CC-2530,CC-3162
@@ -4112,7 +4118,7 @@ type Cell Line
 tier 3
 organism human
 description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 from thigh
-lineage missing
+lineage mesoderm
 karyotype normal
 sex M
 tissue blood vessel
@@ -4130,7 +4136,7 @@ type Cell Line
 tier 3
 organism human
 description Saphenous Vein Endothelial Cells from thigh
-lineage missing
+lineage mesoderm
 karyotype normal
 sex M
 tissue blood vessel 
@@ -4149,7 +4155,7 @@ type Cell Line
 tier 3
 organism human
 description Saphenous Vein Endothelial Cells from thigh
-lineage missing
+lineage mesoderm
 karyotype normal
 sex M
 tissue blood vessel
