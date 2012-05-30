@@ -5,14 +5,14 @@ shortLabel HAIB Methyl WGBS
 longLabel Whole Genome Bisulfite Sequencing by ENCODE/HAIB
 group regulation
 subGroup1 view Views CpG_Sites=CpG_Sites NonCpG_Sites=NonCpG_Sites
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 
+subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1HESC=H1-hESC&nbsp;(Tier_1)
 #subGroup3 treatment Treatment NONE=None
 #subGroup4 obtainedBy ObtainedBy HAIB=HudsonAlpha
 #subGroup5 rep Replicate rep1=1 rep2=2
-#dimensions dimensionX=cellType 
+#dimensions dimensionX=cellType
 fileSortOrder cell=Cell_Line labExpId=Lab_ID view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ view=+
-controlledVocabulary encode/cv.ra cellType=cell 
+controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibilityViewDefaults CpG_Sites=dense NonCpG_Sites=dense
 #itemRgb on
@@ -23,15 +23,15 @@ noInherit on
 #scoreFilter 10
 #scoreFilterLimits 0:1000
 priority 0
-type bed 3 
+type bed 3
 wgEncode 1
 
     track wgEncodeHaibMethylWgbsViewCpGSites
-    shortLabel CpG Sites 
+    shortLabel CpG Sites
     view CpG_Sites
     itemRgb on
     type bigBed 9 +
-    useScore 1 
+    useScore 1
     scoreFilter 10
     scoreFilterLimits 0:1000
     visibility pack
@@ -41,7 +41,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewCpGSites
         shortLabel GM12878 CpG
         longLabel GM12878 Methyl WGBS CpG Sites from ENCODE/HudsonAlpha
-        subGroups view=CpG_Sites cellType=1GM12878 
+        subGroups view=CpG_Sites cellType=aGM12878 
         type bigBed 9 +
         color 153,38,0
         # subId=5890 dateSubmitted=2012-02-29
@@ -50,7 +50,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewCpGSites off
         shortLabel H1-hESC CpG
         longLabel H1-hESC Methyl WGBS CpG Sites from ENCODE/HudsonAlpha
-        subGroups view=CpG_Sites cellType=1H1HESC 
+        subGroups view=CpG_Sites cellType=aH1HESC 
         type bigBed 9 +
         color 0,107,27
         # subId=5890 dateSubmitted=2012-02-29
@@ -70,7 +70,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites
         shortLabel GM12878 NonCpG
         longLabel GM12878 Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
-        subGroups view=NonCpG_Sites cellType=1GM12878 
+        subGroups view=NonCpG_Sites cellType=aGM12878 
         type bigBed 9 +
         color 153,38,0
         # subId=5890 dateSubmitted=2012-02-29
@@ -79,7 +79,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites off
         shortLabel H1-hESC NonCpG
         longLabel H1-hESC Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
-        subGroups view=NonCpG_Sites cellType=1H1HESC 
+        subGroups view=NonCpG_Sites cellType=aH1HESC 
         type bigBed 9 +
         color 0,107,27
         # subId=5890 dateSubmitted=2012-02-29
