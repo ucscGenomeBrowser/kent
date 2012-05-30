@@ -4668,13 +4668,13 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4493 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapContigs
-        parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel NHEK nucl sm C
-        longLabel NHEK TAP-Only nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
-        subGroups view=Contigs cellType=cNHEK localization=NUCLEUS protocol=TAP rep=Pooled rank=none
-        type bed 6
-        color 179,0,134
+        #track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapContigs
+        #parent wgEncodeCshlShortRnaSeqViewContigs off
+        #shortLabel NHEK nucl sm C
+        #longLabel NHEK TAP-Only nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
+        #subGroups view=Contigs cellType=cNHEK localization=NUCLEUS protocol=TAP rep=Pooled rank=none
+        #type bed 6
+        #color 179,0,134
         # subId=4492 dateSubmitted=2011-07-12
 
         #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
