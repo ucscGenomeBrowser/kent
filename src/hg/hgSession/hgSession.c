@@ -93,8 +93,10 @@ if (loginSystemEnabled())
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
         wikiLinkUserLoginUrl(cartSessionId(cart)));
 printf("To register for an account, "
-        "<A HREF=\"http://%s/cgi-bin/hgLogin?do.signupPage=1\">"
-        "<B>click here to sign up.</B></A>\n",wikiHost);
+//        "<A HREF=\"http://%s/cgi-bin/hgLogin?do.signupPage=1\">"
+        "<A HREF=\"%s\">"
+        "<B>click here to sign up.</B></A>\n",
+        wikiLinkUserSignupUrl(cartSessionId(cart)));
     }    
 else
     {
