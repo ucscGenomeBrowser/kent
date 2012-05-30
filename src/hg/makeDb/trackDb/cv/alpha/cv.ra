@@ -1736,7 +1736,6 @@ vendorName Coriell
 vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
 lineage mesoderm
-karyotype normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex F
@@ -1811,7 +1810,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
@@ -1829,7 +1827,6 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
@@ -1847,7 +1844,6 @@ tier 3
 organism human
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lineage mesoderm
-karyotype normal
 childOf Lymphoblastoid_cell_line
 sex M
 tissue blood
@@ -1867,7 +1863,6 @@ tier 3
 organism human
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lineage mesoderm
-karyotype normal
 childOf Lymphoblastoid_cell_line
 sex F
 tissue blood
@@ -1888,7 +1883,6 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 #tissue haematopoietic
 lineage mesoderm
-karyotype normal
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
 vendorId GM12864
@@ -1907,7 +1901,6 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 tissue blood
 #tissue haematopoietic
 lineage mesoderm
-karyotype normal
 childOf Lymphoblastoid_cell_line
 vendorName Coriell
 vendorId GM12865
@@ -1929,7 +1922,6 @@ sex M
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12866
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12866&PgId=166
@@ -1949,7 +1941,6 @@ sex F
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12867
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12867&PgId=166
@@ -1969,7 +1960,6 @@ sex F
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12868
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12868&PgId=166
@@ -1989,7 +1979,6 @@ sex F
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12869
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12869&PgId=166
@@ -2009,7 +1998,6 @@ sex M
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12870
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12870&PgId=166
@@ -2029,7 +2017,6 @@ sex M
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12871
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12871&PgId=166
@@ -2047,7 +2034,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
@@ -2066,7 +2052,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
@@ -2085,7 +2070,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
@@ -2104,7 +2088,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12875
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
@@ -2160,7 +2143,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12891
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12891
@@ -2179,7 +2161,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM12892
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12892
@@ -2198,7 +2179,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
@@ -2257,7 +2237,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
@@ -2275,7 +2254,6 @@ description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nige
 tissue blood
 #tissue haematopoietic
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
@@ -2295,7 +2273,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
@@ -2314,7 +2291,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
@@ -2333,7 +2309,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
@@ -2352,7 +2327,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
@@ -2371,7 +2345,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM19238
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19238
@@ -2390,7 +2363,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM19239
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19239
@@ -2409,7 +2381,6 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-karyotype normal
 vendorName Coriell
 vendorId GM19240
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19240
@@ -3002,7 +2973,6 @@ vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 lineage mesoderm
-karyotype normal
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 sex U
@@ -3019,7 +2989,6 @@ vendorName Thermo Scientific Open Biosystems
 vendorId HCL4517
 orderUrl https://www.openbiosystems.com/
 lineage mesoderm
-karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 lab Crawford
@@ -3040,7 +3009,6 @@ sex U
 tier 3
 tissue kidney
 lineage mesoderm
-karyotype cancer
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 protocol Snyder:HEK293b_Snyder_protocol.pdf
@@ -3052,7 +3020,6 @@ tier 3
 organism human
 description embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line, hypotriploid, XXX
 lineage mesoderm
-karyotype cancer
 childOf HEK293
 sex F
 tissue kidney
