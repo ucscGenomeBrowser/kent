@@ -51,8 +51,6 @@ char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
 i = MD5_DIGEST_LENGTH;
 MD5((unsigned char *)password, strlen(password), result1);
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
-    printf("%02x", result1[i]);
-for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
     }   
