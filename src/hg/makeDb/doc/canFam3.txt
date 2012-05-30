@@ -10,6 +10,10 @@
 #	http://www.ncbi.nlm.nih.gov/bioproject/13179
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAEX00
 
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/317138/
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAEX03
+
+
 #############################################################################
 # Fetch sequence from genbank (DONE - 2012-01-04 - Hiram)
 
@@ -460,16 +464,19 @@ canFam3.upstreamGeneTbl = ensGene
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S mm10		# long running job managed in screen
     cd /cluster/data/genbank
+    # rerun this with canFam3.perChromTables = no in the genbank.conf
+    #   2012-05-24,25
     time nice -n +19 ./bin/gbAlignStep -initial canFam3 &
-    #	logFile: var/build/logs/2012.05.01-13:24:37.canFam3.initalign.log
-    #   real    381m29.244s
+    #	logFile: var/build/logs/2012.05.24-15:31:48.canFam3.initalign.log
+    #   second time: about 32 minutes
+    #   first time: real    381m29.244s
 
     # load data/genomesbase when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad canFam3 &
-    #   logFile: var/dbload/hgwdev/logs/2012.05.02-13:42:10.dbload.log
-    #   real    61m9.113s
+    #   logFile: var/dbload/hgwdev/logs/2012.05.25-12:52:27.dbload.log
+    #   real    125m30.185s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
@@ -481,3 +488,30 @@ canFam3.upstreamGeneTbl = ensGene
     make etc-update
 
 ############################################################################
+# create pushQ entry (DONE - 2012-05-23 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=canFam3 -keys all.joiner
+
+    mkdir /hive/data/genomes/canFam3/pushQ
+    cd /hive/data/genomes/canFam3/pushQ
+    makePushQSql.pl canFam3 > canFam3.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/canFam3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/canFam3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/canFam3/bbi/quality.bw
+# WARNING: canFam3 does not have seq
+# WARNING: canFam3 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p canFam3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < canFam3.sql
+
+#########################################################################

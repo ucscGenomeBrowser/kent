@@ -10880,20 +10880,17 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 # 7207422 bases of 2897316137 (0.249%) in intersection
 
 #############################################################################
-# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE, Fan, 8/2/11)
-
+# BUILD THE TRACK OF IKMC MAPPED TO HUMAN GENOME. (DONE 5/23/12 angie)
+# done 8/2/11 Fan
     ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/ikmc/110801
-    cd /hive/data/genomes/hg19/bed/ikmc/110801
-
-# recieve  20110801_human.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
-
-# build hgIkmc table from raw data file ucschuman.gff (substitue some
-# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
-
-    zcat 20110801_human.gff.gz |sort -u \
-    |sed -e 's/chr9|NT_113911.1/chr9/' \
-    |grep -v 'chrUn' \
+    mkdir -p /hive/data/genomes/hg19/bed/ikmc/2012_05
+    cd /hive/data/genomes/hg19/bed/ikmc/2012_05
+    # Save files emailed from Carol Bult as
+    # 20120518_human.gff.gz
+    # Make bed12 with itemRgb:
+    # watch out for a few items on chrUn|NT_167216.1 which we call chrUn_gl000222.
+    zcat 20120518_human.gff.gz \
+    | sed -e 's/^chrUn|NT_167216.1/chrUn_gl000222/' \
     | perl -we \
       'while (<>) { \
          s/\r?\n$//; \
@@ -10903,7 +10900,8 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
                 ($col eq "Green")  ? "0,240,0" : \
                 ($col eq "Blue")   ? "0,0,200" : "0,0,0"; \
          $s--; \
-         $id =~ s/^MGI:\d+; (\w+); .*/$1/ || die "Cant parse id \"$id\""; \
+         $id =~ s/^MGI:\d+; ([\w ]+); .*/$1/ || die "Cant parse id \"$id\""; \
+         $id =~ s/ //g; \
          my $geneId = join("|", $chr, $ctr, "${n}_$id"); \
          push @{$geneBlks{$geneId}}, [$s, $e, $col] unless $e <= 0; \
       } \
@@ -10928,25 +10926,30 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
                    $chromStart, $color, $blkCount, $blkSizes, $blkStarts) . "\n"; \
       }' \
     | sort -k 1,1 -k 2n,2n > hgIkmc.bed
+#Got 46392 genes.
     
-# build hgIkmcExtra table
-
-    zcat 20110801_human.gff.gz \
-    | grep -v 'chrUn' \
+    # Make an alias-style table with associated info (MGI ID and status):
+    zcat 20120518_human.gff.gz \
+    | sed -e 's/^chrUn|NT_167216.1/chrUn_gl000222/' \
     | perl -wpe 's/\r?\n$//; @w = split("\t"); \
       if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
       if ($w[4] <= 0) { s/^.*//; next; } # A few lines have end=0. \
-      $w[8] =~ m/^(MGI:\d+); (\w+); (\w.*)/ || die; \
+      $w[8] =~ m/^(MGI:\d+); ([\w ]+); (\w.*)/ || die; \
       ($mgi, $designId, $status) = ($1, $2, $3); \
+      $designId =~ s/ //g; \
+      # NOTE: This line differs from the mouse version: has $designId preceding $w[2]: \
       $_ = "$w[10]_$designId\t$mgi,$designId,$w[2],$status\n";' \
     | sort -u > hgIkmcExtra.tab
     wc -l hgIkmcExtra.tab
+#46392 hgIkmcExtra.tab
 
-# load tables
+    # load and check tables
     hgLoadBed hg19 hgIkmc hgIkmc.bed
     checkTableCoords  -verbose=2  hg19 hgIkmc
-
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
+    runJoiner.csh mm9 ikmc
+# mm9.ikmcExtra.name - hits 51052 of 51052 ok
+
 
 #############################################################################
 # adding patches to the sequence (DONE - 2010-07-23)
@@ -18568,4 +18571,13 @@ done
     hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
 
 
-#############################################################################
+############################################################################
+# UPDATE COSMIC TRACK - v59 (DONE 2012-05-23 larrym)
+
+~/kent/src/hg/utils/automation/loadCosmic.pl -oldVer=55 hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v59_230512.csv
+Loading COSMIC v59
+New length: 136638
+Old length: 49087
+Percent bed overlap with previous version: 99.95%
+Number of deleted IDs: 20
+Number of added IDs: 87571

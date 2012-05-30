@@ -1471,23 +1471,56 @@ boolean zoomedOutToPostProcessing =
 
 if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     {
-    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
-                                color, lf->score, font, codon, 
-                                zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
+    if (lf->highlightColor)
+	{
+	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor, lf->score );
+	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y+1, heightPer-2, 
+				    color, lf->score, font, codon, 
+				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
+	}
+    else
+	{
+	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
+				    color, lf->score, font, codon, 
+				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
+	}
     }
 else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
     {
-    drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
-		    color, chromName, s, e, sf, psl, mrnaSeq, lf,
-		    grayIx, drawOpt, maxPixels,
-		    tg->colorShades, originalColor);
+    if (lf->highlightColor)
+	{
+	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor, lf->score );
+	drawDiffTextBox(hvg, xOff+1, y+1, scale, heightPer-2, font, 
+			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			grayIx, drawOpt, maxPixels,
+			tg->colorShades, originalColor);
+	}
+    else
+	{
+	drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
+			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			grayIx, drawOpt, maxPixels,
+			tg->colorShades, originalColor);
+	}
     }
 else
     {
     /* revert to normal coloring */
-    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			color, lf->score );
+    if (lf->highlightColor)
+	{
+	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor, lf->score );
+	drawScaledBoxSample(hvg, s, e, scale, xOff+1, y+1, heightPer -2, 
+			    color, lf->score );
+	}
+    else
+	{
+	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
+			    color, lf->score );
+	}
     }
 }
 

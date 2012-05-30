@@ -15359,7 +15359,7 @@ projectName FSU
 #	Lab descriptive:
 #  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
-#  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
+#  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 promoter:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
 #  	  900s: dccInternalNotes:910 sourceObj:921 tableName:970 fileName:980 type:985 md5sum:999
 
@@ -15966,6 +15966,18 @@ cvDefined no
 validate list: wgEncode
 priority 010
 # Only one so far: all encode is under single project='wgEncode' (11/3/10)
+requiredVars term,tag,type,description #Provisional
+optionalVars label,deprecated #Provisional
+
+term promoter
+tag PROMOTER
+type typeOfTerm
+label Promoter
+description Target Promoter PROVISIONAL
+searchable no
+cvDefined yes
+validate cv
+priority 500
 requiredVars term,tag,type,description #Provisional
 optionalVars label,deprecated #Provisional
 
