@@ -13,7 +13,8 @@ function hgvaChangeRegion()
 
 function hgvaShowNextHiddenSource()
 {
-    var firstHiddenSource = $('div[id^=source]').filter(':hidden').filter(':first');
+    var hiddenSources = $("div.hideableSection").filter("[id^=source]").filter(':hidden');
+    var firstHiddenSource = hiddenSources.first();
     if (firstHiddenSource.length === 0) {
 	alert('Sorry, maximum number of sources reached.');
     }
@@ -22,6 +23,9 @@ function hgvaShowNextHiddenSource()
 	var fhs = firstHiddenSource.detach();
 	$('#sourceContainer').append(fhs);
 	firstHiddenSource.show();
+	if (hiddenSources.length <= 1) {
+	    $("div#addData").hide();
+	}
     }
 }
 
@@ -69,9 +73,12 @@ function hgvaExpandCommand(command)
 
 function hgvaUpdatePage(responseJson)
 {
+    if (!responseJson) {
+	return;
+    }
     var i, update, value;
     var message = responseJson.serverSays;
-    if (message !== null) {
+    if (message) {
 	console.log('server says: ' + JSON.stringify(message));
     }
     if (responseJson.resubmit) {
@@ -79,7 +86,7 @@ function hgvaUpdatePage(responseJson)
 	return true;
     }
     var updateList = responseJson.updates;
-    if (updateList !== null) {
+    if (updateList) {
 	for (i = 0;  i < updateList.length;  i++) {
 	    update = updateList[i];
 	    if (update.append) {
@@ -90,7 +97,7 @@ function hgvaUpdatePage(responseJson)
 	}
     }
     var valueList = responseJson.values;
-    if (valueList !== null) {
+    if (valueList) {
 	for (i=0;  i < valueList.length;  i++) {
 	    value = valueList[i];
 	    $(value.id).val(value.value);
@@ -154,32 +161,36 @@ function hgvaExecuteQuery()
     $('#mainForm').submit();
 }
 
-function hgvaEventBubble(event)
+function hgvaEventAjax(target, parentId)
 {
-    if (event.type == 'click' && event.target.type != 'submit') {
-	return true;
-    }
-    // Most events come here at the section-contents level, so event.currentTarget.id
-    // identifies the section whose contents need updating.
-    var ancestor = event.currentTarget.id;
-    // However, Remove buttons are above that level (section not section contents),
-    // and they don't bubble, I guess because the section is hidden.
-    // So Remove buttons' onclick adds the sectionId to the event and manually calls
-    // this function, so we look for that sectionId"
-    if (! ancestor && event.sectionId) {
-	ancestor = event.sectionId + 'Contents';
-    }
     hgvaAjax({'action': 'event',
-		     'ancestor': ancestor,
-		     'id': event.target.id,
-		     'name': event.target.name});
+	      'id': target.id,
+	      'name': target.name,
+	      'parentId': parentId});
+}
+
+function hgvaEventHandler(event)
+{
+    var target = (event.target) ? event.target : event.srcElement;
+    var parent = $(target).parents().first();
+    hgvaEventAjax(target, $(parent)[0].id);
+}
+
+function hgvaHideSection(event)
+{
+    var target = (event.target) ? event.target : event.srcElement;
+    var section = $(target).parents().filter(".hideableSection").first();
+    section.hide();
+    if (section.filter("[id^=source]").length > 0) {
+	$("div#addData").show();
+    }
+    hgvaEventAjax(target, $(section)[0].id + "Container");
 }
 
 function hgvaSourceSortUpdate(event, ui)
 {
     hgvaAjax({'action': 'reorderSources'});
 }
-
 
 $(document).ready(function()
 {
@@ -188,4 +199,21 @@ $(document).ready(function()
 		      "<p style='color: red; font-style: italic;'>" +
 		      "Executing your query may take some time. " +
 		      "Please leave this window open during processing.</p>");
+    // Set up event handlers:
+    $("div.sourceSection").delegate(":input", "change", hgvaEventHandler);
+    $("div.sourceSection").delegate(":submit", "click", hgvaEventHandler);
+    $("div.outputSection").delegate(":input", "change", hgvaEventHandler);
+    $("div.outputSection").delegate(":submit", "click", hgvaEventHandler);
+    $("div.hideableSection").delegate(":submit[name='removeMe']", "click", hgvaHideSection);
+    // Set up sorting of source sections:
+    $('#sourceContainer' ).sortable({
+	    containment: '#sourceContainerPlus',
+	    handle: '#sortHandle',
+	    update: hgvaSourceSortUpdate
+	    });
+    // Hide 'Select More Data' button if we have run out of extra sources to offer.
+    var hiddenSources = $("div.hideableSection").filter("[id^=source]").filter(':hidden');
+    if (hiddenSources.length == 0) {
+	$("div#addData").hide();
+    }
 });
