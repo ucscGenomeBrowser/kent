@@ -242,7 +242,7 @@ boolean tokenExpired(char *dateTime)
 return FALSE;
 }
 
-void getReturnToURL(char **returnTo)
+void getReturnToURL(char *returnTo)
 /* get URL passed in with returnto URL */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
@@ -297,7 +297,7 @@ hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An account activation email has been sent to you \n"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An account activation email has been sent to you. \n"
    "Please activate your account within 7 days.</p>"
     "\n"
     "<p><a href=\"%s\">Return</a></p>", returnURL);
@@ -390,7 +390,7 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the UCSC Genome Browser");
 safef(msg, sizeof(msg), 
-    "Someone (probably you, from IP address %s) has requested user name associated with this email address at UCSC Genome Browser. Your user name is: \n\n  %s\n\n", 
+    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at UCSC Genome Browser: \n\n  %s\n\n", 
    remoteAddr, users);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
@@ -405,16 +405,20 @@ char **row;
 char query[256];
 
 /* find all the user names assocaited with this email address */
-char user[256];
+char userList[256]="";
 safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
 sr = sqlGetResult(conn, query);
+int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-    safecpy(user, sizeof(user), m->userName);
-    mailUsername(email, user);   
+    if (numUser >= 1)
+        safecat(userList, sizeof(userList), ", ");
+    safecat(userList, sizeof(userList), m->userName);
+    numUser += 1;
     }
 sqlFreeResult(&sr);
+mailUsername(email, userList);
 }
 
 void sendNewPwdMail(char *username, char *email, char *password)
