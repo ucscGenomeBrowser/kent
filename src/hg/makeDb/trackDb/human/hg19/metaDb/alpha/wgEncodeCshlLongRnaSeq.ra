@@ -44530,6 +44530,33 @@ submittedDataVersion V2 - Replace . with -1 for missing data
 tableName wgEncodeCshlLongRnaSeqNhekCellPamContigsV2
 view Contigs
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovo
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 6998
+view ExonsDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7
 objType file
 bioRep 007WC,008WC
@@ -45087,6 +45114,33 @@ subId 5612
 submittedDataVersion V2 - Replace . with -1 for missing data
 tableName wgEncodeCshlLongRnaSeqNhekCellPapContigsV2
 view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovo
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID16631,LID16632
+labProtocolId 007WC+,008WC+
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7020
+view ExonsDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7
 objType file
@@ -46032,6 +46086,33 @@ submittedDataVersion V2 - Replace . with -1 for missing data
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPamContigsV2
 view Contigs
 
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamExonsDeNovo
+objType file
+bioRep 027C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPamExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID18554
+labProtocolId 027C-
+labVersion iIDR
+localization cytosol
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 6978
+view ExonsDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamExonsGencV7
 objType file
 bioRep 027C
@@ -46307,6 +46388,33 @@ spikeInPool Nist14
 subId 3653
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapContigs
 view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapExonsDeNovo
+objType file
+bioRep 027C,028C
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8795,LID8796
+labProtocolId 027C+,028C+
+labVersion iIDR
+localization cytosol
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 6977
+view ExonsDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapExonsGencV7
 objType file
@@ -47106,6 +47214,33 @@ subId 3654
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPamContigs
 view Contigs
 
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamExonsDeNovo
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPamExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID9204,LID9205
+labProtocolId 027N-,028N-
+labVersion iIDR
+localization nucleus
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 6956
+view ExonsDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamExonsGencV7
 objType file
 bioRep 027N,028N
@@ -47464,6 +47599,33 @@ spikeInPool Nist14
 subId 3655
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapContigs
 view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapExonsDeNovo
+objType file
+bioRep 027N,028N
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-30
+dateUnrestricted 2013-03-02
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonsDeNovo.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8797,LID8798
+labProtocolId 027N+,028N+
+labVersion iIDR
+localization nucleus
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7000
+view ExonsDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapExonsGencV7
 objType file
@@ -53560,4 +53722,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 822909057
+# MAGIC: -662663019
