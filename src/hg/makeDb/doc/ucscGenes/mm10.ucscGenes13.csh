@@ -22,7 +22,7 @@ set xdb = hg19
 set Xdb = Hg19
 set ydb = canFam2
 set zdb = rn4
-#set spDb = sp111004
+set spDb = sp120323 
 #set pbDb = proteins111004
 set ratDb = rn5
 set RatDb = Rn5
@@ -160,9 +160,7 @@ netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
-# use this if(0) statement to control section of script to run
-#	Look for the BRACKET word to find the corresponding endif and exit
-if (0) then  # BRACKET
+#if  # didn't do thie
 
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb, and filter out
 # any duplicate Rfam blocks.  In some cases, where there are two related Rfam models,
@@ -173,8 +171,12 @@ cat ${rfam}/${db}/Rfam.bed |sort -k1,1 -k2,2n > rfam.sorted.bed
 bedRemoveOverlap rfam.sorted.bed rfam.distinctHits.bed
 bedIntersect -aHitAny rfam.distinctHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
 
+
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
- 
+#endif # didn't do thie
+e
+
+
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
 pslSplitOnTarget refSeq.psl refSeq
@@ -318,11 +320,16 @@ netFilter -syn $genomes/$db/bed/lastz.$xdb/axtChain/$db.$xdb.net.gz \
 cd nets
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e $c.net) then
-        echo -n > $c.net
+        echo -n >  $c.net
     endif
 end
 
-
+cd ../chains
+foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
+    if (! -e $c.chain) then
+        echo  -n >  $c.chain
+    endif
+end
 
 # Make txOrtho directory and a para spec file
 cd $dir
@@ -364,25 +371,24 @@ cd ..
 
 
 
-
 # Do txOrtho parasol run on iServer (high RAM) cluster
 ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
-# Completed: 66 of 66 jobs
-# CPU time in finished jobs:       3497s      58.28m     0.97h    0.04d  0.000 y
-# IO & Wait Time:                  6568s     109.47m     1.82h    0.08d  0.000 y
-# Average job time:                 153s       2.54m     0.04h    0.00d
-# Longest finished job:             481s       8.02m     0.13h    0.01d
-# Submission to last job:          2861s      47.68m     0.79h    0.03d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       1473s      24.55m     0.41h    0.02d  0.000 y
+# IO & Wait Time:                  1751s      29.18m     0.49h    0.02d  0.000 y
+# Average job time:                  70s       1.17m     0.02h    0.00d
+# Longest finished job:             152s       2.53m     0.04h    0.00d
+# Submission to last job:       5254726s   87578.77m  1459.65h   60.82d
 
 # Filter out some duplicate edges. These are legitimate from txOrtho's point
 # of view, since they represent two different mouse edges both supporting
 # a human edge. However, from the human point of view we want only one
 # support from mouse orthology.  Just takes a second.
+#  TODO: assuming true is mouse is target.
 cd $dir/txOrtho
 mkdir -p uniqEdges
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -428,7 +434,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-
 #
 # special testing suggestion: uncomment below
 # compareModifiedFileSizes.csh $oldGeneDir .
@@ -467,10 +472,10 @@ txgAnalyze txWalk.txg $genomes/$db/$db.2bit stdout | sort | uniq > altSplice.bed
 
 
 # Get txWalk transcript sequences.  This'll take about an hour
+#  twoBitToFa $genomes/$db/$db.2bit -bed=txWalk/$c.bed stdout >> txWalk.fa
+    # sequenceForBed -db=$db -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 rm -f txWalk.fa
-foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    sequenceForBed -db=$db -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
-end
+twoBitToFa $genomes/$db/$db.2bit -bed=txWalk.bed txWalk.fa
 rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
@@ -497,8 +502,9 @@ hgsql -N $spDb -e \
   | awk '{print ">" $1;print $2}' >uniProt.fa
 hgsql -N $spDb -e "select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=$taxon and i.acc=x.acc" > uniCurated.tab
 
-echo "continuing after first kki job"
-echo "preparing $cpuFarm job"
+#TODO: remove these odd comments
+# echo "continuing after first kki job"
+# echo "preparing $cpuFarm job"
 
 mkdir -p blat/rna/raw
 echo '#LOOP' > blat/rna/template
@@ -507,7 +513,7 @@ echo '#ENDLOOP' >> blat/rna/template
  
 cat << '_EOF_' > blat/rna/runTxBlats
 #!/bin/csh -ef
-set ooc = /hive/data/genomes/$2/11.ooc
+set ooc = /scratch/data/$2/$2.11.ooc
 set target = ../../txFaSplit/$1
 set out1 = raw/mrna_$3.psl
 set out2 = raw/ref_$3.psl
@@ -532,13 +538,13 @@ ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
 
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
-# CPU time in finished jobs:      60973s    1016.22m    16.94h    0.71d  0.002 y
-# IO & Wait Time:                  4892s      81.53m     1.36h    0.06d  0.000 y
-# Average job time:                 340s       5.66m     0.09h    0.00d
-# Longest finished job:            2751s      45.85m     0.76h    0.03d
-# Submission to last job:          2808s      46.80m     0.78h    0.03d
+# Completed: 197 of 197 jobs
+# CPU time in finished jobs:      25076s     417.94m     6.97h    0.29d  0.001 y
+# IO & Wait Time:                  9292s     154.86m     2.58h    0.11d  0.000 y
+# Average job time:                 174s       2.91m     0.05h    0.00d
+# Longest finished job:             483s       8.05m     0.13h    0.01d
+# Submission to last job:          1884s      31.40m     0.52h    0.02d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
-
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 cd $dir
@@ -549,7 +555,7 @@ echo '#ENDLOOP' >> blat/protein/template
 
 cat << '_EOF_' > blat/protein/runTxBlats
 #!/bin/csh -ef
-set ooc = /hive/data/genomes/$2/11.ooc
+set ooc = /scratch/data/$2/$2.11.ooc
 set target = ../../txFaSplit/$1
 set out1 = uni_$3.psl
 set out2 = ref_$3.psl
@@ -577,16 +583,15 @@ ssh $cpuFarm "cd $dir/blat/protein; para make jobList"
 ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
 
 cat blat/protein/run.time
-# Completed: 194 of 194 jobs
-# CPU time in finished jobs:      34921s     582.01m     9.70h    0.40d  0.001 y
-# IO & Wait Time:                  8711s     145.19m     2.42h    0.10d  0.000 y
-# Average job time:                 225s       3.75m     0.06h    0.00d
-# Longest finished job:             621s      10.35m     0.17h    0.01d
-# Submission to last job:           629s      10.48m     0.17h    0.01d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+# Completed: 197 of 197 jobs
+# CPU time in finished jobs:      19711s     328.51m     5.48h    0.23d  0.001 y
+# IO & Wait Time:                 11799s     196.66m     3.28h    0.14d  0.000 y
+# Average job time:                 160s       2.67m     0.04h    0.00d
+# Longest finished job:             531s       8.85m     0.15h    0.01d
+# Submission to last job:           871s      14.52m     0.24h    0.01d
 
-# Sort and select best alignments. Remove raw files for space. Takes 22
-# seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
+# Sort and select best alignments. Remove raw files for space. Takes  a couple
+# of hours. Use pslReps not pslCdnaFilter because need -noIntrons flag,
 # and also working on protein as well as rna alignments. The thresholds
 # for the proteins in particular are quite loose, which is ok because
 # they will be weighted against each other.  We lose some of the refSeq
@@ -602,6 +607,9 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
 
+# use this if(0) statement to control section of script to run
+#	Look for the BRACKET word to find the corresponding endif and exit
+if (0) then  # BRACKET
 
 cd $dir
 
@@ -610,6 +618,7 @@ cd $dir
 # to speed it up.
 echo $db $xdb $ydb $zdb > ourOrgs.txt
 foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
+    echo "doing chrom $c"
     if (-s txWalk/$c.bed ) then
 	mafFrags $db $multiz txWalk/$c.bed stdout -bed12 -meFirst \
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst

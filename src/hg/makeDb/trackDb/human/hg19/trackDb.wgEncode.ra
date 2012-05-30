@@ -1,7 +1,5 @@
 # Genome-wide ENCODE tracks
-
-include wgEncodeSuper.ra beta,public
-include wgEncodeSuper.release2.ra alpha
+include wgEncodeSuper.release2.ra 
 
 # GENCODE genes on alpha only (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
@@ -119,15 +117,16 @@ include wgEncodeGisRnaSeq.ra
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.release3.ra
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.ra beta,public
-include wgEncodeCshlLongRnaSeq.release2.ra alpha
+include wgEncodeCshlLongRnaSeq.ra public
+include wgEncodeCshlLongRnaSeq.release2.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
 include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra
+include wgEncodeHaibRnaSeq.ra beta,public
+include wgEncodeHaibRnaSeq.patch.ra alpha
 
 
 
@@ -160,7 +159,8 @@ include wgEncodeBroadHistone.release2.ra
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release4.ra
+include wgEncodeUwHistone.release4.ra beta,public
+include wgEncodeUwHistone.release5.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
