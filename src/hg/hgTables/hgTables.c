@@ -141,11 +141,36 @@ freeMem(s);
 freeMem(r);
 }
 
+static void earlyAbortHandler(char *format, va_list args)
+{
+// provide more explicit message when we run out of memory (#5147).
+popWarnHandler();
+if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
+    format = "Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.";
+vaWarn(format, args);
+noWarnAbort();
+}
+
+static void errAbortHandler(char *format, va_list args)
+{
+// provide more explicit message when we run out of memory (#5147).
+if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
+    htmlVaWarn("Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.", args);
+else
+    {
+    // call previous handler
+    popWarnHandler();
+    vaWarn(format, args);
+    }
+noWarnAbort();
+}
+
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
 puts("Content-Type:text/html\n");
 cartVaWebStart(cart, database, format, args);
+pushWarnHandler(errAbortHandler);
 }
 
 void htmlOpen(char *format, ...)
@@ -1733,6 +1758,7 @@ void dispatch()
 {
 struct hashEl *varList;
 struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+pushWarnHandler(earlyAbortHandler);
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
     {
