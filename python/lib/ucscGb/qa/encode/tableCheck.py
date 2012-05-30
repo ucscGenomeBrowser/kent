@@ -237,7 +237,7 @@ def checkTableCoords(database, tables):
         return (output, results)
 
 
-    timeout = 20
+    timeout = 60
     for i in sorted(notgbdbtablelist):
         start = datetime.datetime.now()
         cmd = "checkTableCoords %s %s" % (database, i)

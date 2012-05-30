@@ -499,7 +499,7 @@ void webNewHackSection(boolean canReorderRemove, char *divId, boolean show, char
 if (inSection)
     webEndHackSection();
 inSection = TRUE;
-printf("<div id='%s'", divId);
+printf("<div id='%s'%s", divId, (canReorderRemove ? " class='hideableSection'" : ""));
 if (!show)
     printf(" style='display: none;'");
 printf(">\n");
@@ -529,12 +529,7 @@ if (isNotEmpty(format))
 	{
 	printf("</span></span>\n"
 	       "<span style=\"float: right;\">");
-	struct dyString *dy = dyStringCreate("$('#%s').hide(); event.sectionId = '%s'; "
-					     "hgvaEventBubble(event);", divId, divId);
-	cgiMakeButtonWithOnClick("removeMe", "Remove",
-				 "remove this data source",
-				 dy->string);
-	dyStringFree(&dy);
+	cgiMakeButtonWithMsg("removeMe", "Remove", "remove this section");
 	}
     printf("</span>");
     printSmallVerticalSpace(NULL);
@@ -737,13 +732,15 @@ for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
 return NULL;
 }
 
-void makeTableDropDown(struct dyString *dy, char *selTrack, char *selTable)
+char *makeTableDropDown(struct dyString *dy, char *selTrack, char *selTable)
 /* Make table drop-down for non-NULL selTrack. */
 {
 char *selectName = "tableSel";
 dyStringPrintf(dy, "<SELECT ID='%s' NAME='%s' %s>\n", selectName, selectName, "");
 struct trackDb *track = findTdb(fullTrackList, selTrack);
 struct slName *t, *tableList = tablesForTrack(track);
+if (isEmpty(selTable) && tableList != NULL)
+    selTable = tableList->name;
 for (t = tableList;  t != NULL;  t = t->next)
     {
     dyStringPrintf(dy, "<OPTION VALUE=\"%s\"%s>",
@@ -755,6 +752,7 @@ for (t = tableList;  t != NULL;  t = t->next)
 	dyStringPrintf(dy, "%s\n", t->name);
     }
 dyStringPrintf(dy, "</SELECT>\n");
+return selTable;
 }
 
 void makeEmptySelect(struct dyString *dy, char *idName)
@@ -796,7 +794,7 @@ else
     makeEmptySelect(dy, "trackSel");
 dyStringPrintf(dy, "<B>table:</B> ");
 if (isNotEmpty(selTrack))
-    makeTableDropDown(dy, selTrack, selTable);
+    selTable = makeTableDropDown(dy, selTrack, selTable);
 else
     makeEmptySelect(dy, "tableSel");
 if (slNameInList(groupList, "varRep") && !gotCustomTracks())
@@ -817,10 +815,7 @@ void printDataSourceSection(char *title, char *divId, struct slName *groupList,
  * group and may be hidden. */
 {
 webNewHackSection(TRUE, divId, show, title);
-printf("<div id='%sContents' "
-       "onchange=\"hgvaEventBubble(event);\" onsubmit=\"hgvaOnChangeBubble(event);\""
-       "onclick=\"hgvaEventBubble(event);\""
-       ">\n", divId);
+printf("<div id='%sContents' class='sourceSection'>\n", divId);
 char *selGroup = NULL;
 if (isNotEmpty(selTrack))
     {
@@ -856,8 +851,7 @@ void printOutputSection(struct hash *querySpec)
 /* Print an output format section that can't be removed like data source sections can. */
 {
 webNewHackSection(FALSE, "outFormat", TRUE, "Select Output Format");
-printf("<div id='outFormatContents' "
-       "onchange=\"hgvaEventBubble(event);\" onclick=\"hgvaEventBubble(event);\">\n");
+printf("<div id='outFormatContents' class='outputSection'>\n");
 char *selOutput = "";
 if (querySpec != NULL)
     {
@@ -1174,7 +1168,7 @@ void printSourcesFromQuerySpec(struct hash *querySpec)
 {
 int i;
 struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
-for (i = 0, srcRef = sources;  srcRef != NULL;  i++, srcRef = srcRef->next)
+for (i = 0, srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
     {
     struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
     char *srcId = stringFromJHash(srcHash, "id", FALSE);
@@ -1186,7 +1180,7 @@ for (i = 0, srcRef = sources;  srcRef != NULL;  i++, srcRef = srcRef->next)
     else if (sameString(srcId, "genesContents"))
 	printGenesSection(selTrack, selTable, isPrimary);
     else
-	printExtraSource(i, selTrack, selTable, TRUE, isPrimary);
+	printExtraSource(i++, selTrack, selTable, TRUE, isPrimary);
     }
 // If the max number of extra sources hasn't been reached, add hidden extra sources:
 for (;  i < MAX_EXTRA_SOURCES;  i++)
@@ -1219,15 +1213,6 @@ webEndHackSection();
 printf("</div>\n"); // sourceContainerPlus (extend down a bit so sections can be dragged to bottom)
 printOutputSection(querySpec);
 printSubmitSection();
-
-printf("<script>\n"
-       "$(function() { "
-       "$('#sourceContainer' ).sortable({ "
-       "  containment: '#sourceContainerPlus',"
-       "  handle: '#sortHandle',"
-       "  update: hgvaSourceSortUpdate"
-       "}); });\n"
-       "</script>\n");
 
 // __detectback trick from http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
 printf("<script>\n"
@@ -1747,7 +1732,6 @@ void doAjax(char *jsonText)
 // Undo the htmlPushEarlyHandlers() because after this point they make ugly text:
 popWarnHandler();
 popAbortHandler();
-puts("Content-Type:text/javascript\n");
 
 // Parse jsonText and make sure that it is a hash:
 struct jsonElement *request = jsonParse(jsonText);
@@ -1758,6 +1742,11 @@ struct hash *querySpec = hashFromJHash(topHash, "querySpec", FALSE);
 restoreMiniCart(topHash);
 
 char *action = stringFromJHash(topHash, "action", FALSE);
+if (sameString(action, "execute"))
+    puts("Content-Type:text/plain\n");
+else
+    puts("Content-Type:text/javascript\n");
+
 if (sameString(action, "reorderSources"))
     updateSourcesAndOutput(querySpec);
 else if (sameString(action, "lookupPosition"))
@@ -1765,7 +1754,7 @@ else if (sameString(action, "lookupPosition"))
 else if (sameString(action, "event"))
     {
     // Determine where this event originated:
-    char *ancestor = stringFromJHash(topHash, "ancestor", TRUE);
+    char *parentId = stringFromJHash(topHash, "parentId", TRUE);
     char *id = stringFromJHash(topHash, "id", TRUE);
     char *name = stringFromJHash(topHash, "name", TRUE);
     if (isEmpty(id))
@@ -1773,22 +1762,22 @@ else if (sameString(action, "event"))
     if (isEmpty(id))
 	errAbort("request must contain id and/or name, but has neither.");
     if (sameString(id, "removeMe"))
-	resetRemovedSource(ancestor);
+	resetRemovedSource(parentId);
     else if (sameString(id, "groupSel"))
-	changeGroupTrackTable(ancestor, querySpec, gttGroup);
+	changeGroupTrackTable(parentId, querySpec, gttGroup);
      else if (sameString(id, "trackSel"))
-	 changeGroupTrackTable(ancestor, querySpec, gttTrack);
+	 changeGroupTrackTable(parentId, querySpec, gttTrack);
     else if (sameString(id, "tableSel"))
-	changeGroupTrackTable(ancestor, querySpec, gttTable);
+	changeGroupTrackTable(parentId, querySpec, gttTable);
     else if (sameString(id, "addFilter"))
-	showFilter(ancestor, querySpec);
+	showFilter(parentId, querySpec);
     else if (sameString(id, "outSelectFields"))
-	showOutSelectFields(ancestor, querySpec);
-    else if (endsWith(ancestor, "Contents"))
+	showOutSelectFields(parentId, querySpec);
+    else if (endsWith(parentId, "Contents"))
 	printf("{ \"serverSays\": \"Some new input '%s' I need to handle in %s\" }\n",
-	       id, ancestor);
+	       id, parentId);
     else
-	printf("{ \"serverSays\": \"What is '%s' from %s?\" }\n", id, ancestor);
+	printf("{ \"serverSays\": \"What is '%s' from %s?\" }\n", id, parentId);
     }
 else if (sameString(action, "execute"))
     executeQuery(database, querySpec);

@@ -36,7 +36,7 @@ longLabel Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvar
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2MCF7=MCF-7&nbsp;(Tier_2) HCT116=HCT-116 NT2D1=NT2-D1 PANC1=PANC-1 PBMC=PBMC U2OS=U2OS
-subGroup3 factor Factor H3K04ME3B=H3K4me3 H3K04ME1=H3K4me1 H3K9acB=H3K9ac H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27me3B=H3K27me3 H3K36me3B=H3K36me3 INPUT=Input
+subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3B=H3K4me3 H3K09acB=H3K9ac H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27me3B=H3K27me3 H3K36me3B=H3K36me3 INPUT=Input
 subGroup4 control Control UCD=UC_Davis
 subGroup5 treatment Treatment NONE=None
 dimensions dimensionX=factor dimensionY=cellType
@@ -86,7 +86,7 @@ html wgEncodeSydhHistone.release3
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel NT2-D1 H3K9ac
 		longLabel NT2D1 H3K9ac Histone Modifications by ChIP-Seq Peaks from ENCODE/SYDH
-		subGroups view=Peaks factor=H3K9acB cellType=NT2D1 control=UCD treatment=NONE
+		subGroups view=Peaks factor=H3K09acB cellType=NT2D1 control=UCD treatment=NONE
 		type narrowPeak
 		# subId=1173 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k9acbUcdPk wong Tue Jun 28 09:39:17 2011
@@ -120,7 +120,7 @@ html wgEncodeSydhHistone.release3
 		subTrack wgEncodeSydhHistoneViewPeaks on
 		shortLabel K562 H3K9ac
 		longLabel K562 H3K9ac Histone Modifications by ChIP-Seq Peaks from ENCODE/SYDH
-		subGroups view=Peaks factor=H3K9acB cellType=1K562 control=UCD treatment=NONE
+		subGroups view=Peaks factor=H3K09acB cellType=1K562 control=UCD treatment=NONE
 		type narrowPeak
 		color 46,0,184
     	# subId=1351 dateSubmitted=2010-06-11
@@ -343,7 +343,7 @@ html wgEncodeSydhHistone.release3
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel NT2-D1 H3K9ac
 		longLabel NT2D1 H3K9ac Histone Modifications by ChIP-Seq Signal from ENCODE/SYDH
-		subGroups view=Signal factor=H3K9acB cellType=NT2D1 control=UCD treatment=NONE
+		subGroups view=Signal factor=H3K09acB cellType=NT2D1 control=UCD treatment=NONE
 		type bigWig 1.000000 6350.000000
 		# subId=1173 dateSubmitted=2010-05-04 
 		# was wgEncodeSydhHistoneNt2d1H3k9acbUcdSig wong Tue Jun 28 09:39:17 2011
@@ -377,7 +377,7 @@ html wgEncodeSydhHistone.release3
 		subTrack wgEncodeSydhHistoneViewSignal on
 		shortLabel K562 H3K9ac
 		longLabel K562 H3K9ac Histone Modifications by ChIP-Seq Signal from ENCODE/SYDH
-		subGroups view=Signal factor=H3K9acB cellType=1K562 control=UCD treatment=NONE
+		subGroups view=Signal factor=H3K09acB cellType=1K562 control=UCD treatment=NONE
 		type bigWig 1.000000 2288.000000
 		color 46,0,184
     	# subId=1351 dateSubmitted=2010-06-11

@@ -29,7 +29,7 @@ The following tests are run:
         """)
     parser.add_argument('db', help='the database to check')
     parser.add_argument('-f', dest='tableFile', nargs=1, type=argparse.FileType('r'),
-                        help='a file listing tables to check (separated by spaces or newlines')
+                        help='a file listing tables to check (separated by spaces or newlines)')
     parser.add_argument('table', help ='the name of a table to check', nargs='*')
     parser.add_argument('outFile', help='base name to give results files')
     args = parser.parse_args()

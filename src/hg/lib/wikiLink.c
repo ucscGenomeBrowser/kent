@@ -87,7 +87,7 @@ char *wikiLinkUserLoginUrl(int hgsid)
 char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
 if (loginSystemEnabled())
-{
+    {
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
            "(specified in hg.conf).");
@@ -95,14 +95,16 @@ if (loginSystemEnabled())
       "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
       wikiLinkHost(), retEnc);
 
-} else {
-if (! wikiLinkEnabled())
-    errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
+    } 
+else 
+    {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
 	     "in hg.conf).");
-safef(buf, sizeof(buf),
-      "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
-      wikiLinkHost(), retEnc);
-}
+    safef(buf, sizeof(buf),
+        "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
+        wikiLinkHost(), retEnc);
+    }   
 freez(&retEnc);
 return(cloneString(buf));
 }
@@ -114,21 +116,43 @@ char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
 
 if (loginSystemEnabled())
-{
+    {
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
-                 "(specified in hg.conf).");
-    safef(buf, sizeof(buf),
-          "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
-          wikiLinkHost(), retEnc);
-} else {
+        "(specified in hg.conf).");
+        safef(buf, sizeof(buf),
+            "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
+             wikiLinkHost(), retEnc);
+    } 
+else
+    {
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
-	         "in hg.conf).");
-    safef(buf, sizeof(buf),
-          "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
-          wikiLinkHost(), retEnc);
-}
+	    "in hg.conf).");
+        safef(buf, sizeof(buf),
+            "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+            wikiLinkHost(), retEnc);
+    }
 freez(&retEnc);
 return(cloneString(buf));
 }
+
+char *wikiLinkUserSignupUrl(int hgsid)
+/* Return the URL for the user signup  page. */
+{
+char buf[2048];
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+
+if (loginSystemEnabled())
+    {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserSignupUrl called when login system is not enabled "
+            "(specified in hg.conf).");
+        safef(buf, sizeof(buf),
+            "http://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
+            wikiLinkHost(), retEnc);
+    }
+freez(&retEnc);
+return(cloneString(buf));
+}
+
