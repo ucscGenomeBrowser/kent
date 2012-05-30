@@ -13473,7 +13473,7 @@ term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
 label Exons ENSEMBL V65
-description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
+description Expression level estimates for ENSEMBL V65 exons, and Cufflinks exons that are intergenic or antisense with respect to ENSEMBL 65 annotation. Exon RPKMs are computed by summing the expression levels in RPKM for all transcripts containing a given exon.
 
 term Fasta3p
 tag FASTA3P
@@ -13552,7 +13552,7 @@ term GeneEnsV65IAcuff
 tag GENENSV65
 type view
 label Genes ENSEMBL V65
-description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format
+description Expression level estimates for ENSEMBL 65 genes, and Cufflinks gene models that are intergenic or antisense with respect to ENSEMBL 65 annotation.
 
 term HMM
 tag HMM
@@ -13839,7 +13839,7 @@ term TranscriptEnsV65IAcuff
 tag TRANSENSV65
 type view
 label Transcript ENSEMBL V65
-description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format
+description Expression level estimates for ENSEMBL 65 transcript, and Cufflinks transcript models that are intergenic or antisense with respect to ENSEMBL 65 annotation.
 
 term Transfrags
 tag TRANSFRAGS
