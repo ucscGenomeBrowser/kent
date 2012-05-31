@@ -42,13 +42,16 @@ class TableQa(object):
             self.recordPass()
         self.reporter.endStep()
 
+    def __underscoreAllowed(self, table):
+        """Returns match if table name has one of the excepted underscores."""
+        return re.search('^(chr.*|all|trackDb|hgFindSpec)_.*', table)
+
     def checkForUnderscores(self):
-        """Checks the table name for underscores. Allows 'all_' and 'chr.*_' for split tables, and
-        'trackDb_*' and 'hgFindSpec_*'. Method is "public" for use by other table types."""
+        """Checks the table name for underscores. Knows about exceptions. Method is "public" for
+        use by other table types."""
         self.reporter.beginStep(self.db, self.table, "checking table name for underscores")
         self.reporter.writeStepInfo()
-        if re.search('.*_.*', self.table) and not re.search('^(chr.*|all|trackDb|hgFindSpec)_.*',
-                                                            self.table):
+        if re.search('.*_.*', self.table) and not self.__underscoreAllowed(self.table):
             self.reporter.writeLine(self.db + "." + self.table + " has unexpected underscores")
             self.recordError()
         else:
