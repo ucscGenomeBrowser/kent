@@ -321,7 +321,6 @@ fileName wgEncodeCshlLongRnaSeqA549CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9005,LID9006
-labProtocolId 021WC-,022WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -650,7 +649,6 @@ fileName wgEncodeCshlLongRnaSeqA549CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8963,LID8964
-labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -1250,7 +1248,6 @@ fileName wgEncodeCshlLongRnaSeqA549CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45897,LID45898
-labProtocolId 087C+,088C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -1568,7 +1565,6 @@ fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45897
-labProtocolId 087C+
 localization cytosol
 md5sum 7e69f0218733811c05a229a3b7810807
 project wgEncode
@@ -1596,7 +1592,6 @@ fileName wgEncodeCshlLongRnaSeqA549CytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45898
-labProtocolId 088C+
 localization cytosol
 md5sum 6964f461dd1643d06b70496953ca3572
 project wgEncode
@@ -1782,7 +1777,6 @@ fileName wgEncodeCshlLongRnaSeqA549NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45900,LID45899
-labProtocolId 088N+,087N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -2100,7 +2094,6 @@ fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45899
-labProtocolId 087N+
 localization nucleus
 md5sum 1e96894421e634223df6f1ab9b2ce0fa
 project wgEncode
@@ -2128,7 +2121,6 @@ fileName wgEncodeCshlLongRnaSeqA549NucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45900
-labProtocolId 088N+
 localization nucleus
 md5sum b21d1bbbfdcfc1d0a5b535f9a10901a1
 project wgEncode
@@ -2537,7 +2529,6 @@ fileName wgEncodeCshlLongRnaSeqAg04450CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9001,LID9002
-labProtocolId 017WC-,018WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -2866,7 +2857,6 @@ fileName wgEncodeCshlLongRnaSeqAg04450CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8965,LID8966
-labProtocolId 017WC+,018WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -3689,7 +3679,6 @@ fileName wgEncodeCshlLongRnaSeqBjCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9007,LID9008
-labProtocolId 037WC-,038WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -4018,7 +4007,6 @@ fileName wgEncodeCshlLongRnaSeqBjCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8969,LID8970
-labProtocolId 037WC+,038WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -4622,7 +4610,6 @@ fileName wgEncodeCshlLongRnaSeqCd20CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID44660,LID44659
-labProtocolId 042WC-,041WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -5116,7 +5103,6 @@ fileName wgEncodeCshlLongRnaSeqCd20CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID44499,LID44498
-labProtocolId 042WC+,041WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -5579,7 +5565,6 @@ fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45901
-labProtocolId 043WCt
 labVersion iIDR
 localization cell
 project wgEncode
@@ -6146,7 +6131,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8661,LID8662
-labProtocolId 003WC-,004WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -6529,7 +6513,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID16629,LID16630
-labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -7562,7 +7545,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18547,LID18548
-labProtocolId 003C-,004C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -7945,7 +7927,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8467,LID8468
-labProtocolId 003C+,004C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -8768,7 +8749,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9197,LID9198
-labProtocolId 003N-,004N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -9151,7 +9131,6 @@ fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8532,LID8533
-labProtocolId 003N+,004N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -9974,7 +9953,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8663,LID8664
-labProtocolId 005WC-,006WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -10357,7 +10335,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8461,LID8462
-labProtocolId 005WC+,006WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -11070,7 +11047,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18549
-labProtocolId 006C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -11398,7 +11374,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8536
-labProtocolId 006C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -11946,7 +11921,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9199
-labProtocolId 006N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -12274,7 +12248,6 @@ fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8558
-labProtocolId 006N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -12794,7 +12767,6 @@ fileName wgEncodeCshlLongRnaSeqHaoafCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID47021
-labProtocolId 056WCt
 labVersion iIDR
 localization cell
 project wgEncode
@@ -12876,7 +12848,6 @@ fileName wgEncodeCshlLongRnaSeqHaoafCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47021
-labProtocolId 056WCt
 localization cell
 md5sum e8bda9a226ac7fd929c555822881c5ea
 project wgEncode
@@ -13152,7 +13123,6 @@ fileName wgEncodeCshlLongRnaSeqHaoecCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID47023,LID47022
-labProtocolId 058WCt,057WCt
 labVersion iIDR
 localization cell
 project wgEncode
@@ -13372,7 +13342,6 @@ fileName wgEncodeCshlLongRnaSeqHaoecCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47022
-labProtocolId 057WCt
 localization cell
 md5sum a689023a15023db28a7fe3711339e926
 project wgEncode
@@ -13401,7 +13370,6 @@ fileName wgEncodeCshlLongRnaSeqHaoecCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47023
-labProtocolId 058WCt
 localization cell
 md5sum 9bb124b2f404aa42aa4aafbca8dcf74f
 project wgEncode
@@ -13841,7 +13809,6 @@ fileName wgEncodeCshlLongRnaSeqHchCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID47025,LID47024
-labProtocolId 060WCt,059WCt
 labVersion iIDR
 localization cell
 project wgEncode
@@ -13951,7 +13918,6 @@ fileName wgEncodeCshlLongRnaSeqHchCellTotalProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47024
-labProtocolId 059WCt
 localization cell
 md5sum 889ecb82aadcfd9395eba7186510aef8
 project wgEncode
@@ -13980,7 +13946,6 @@ fileName wgEncodeCshlLongRnaSeqHchCellTotalProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47025
-labProtocolId 060WCt
 localization cell
 md5sum d0a7bb9ade3909ecbdd4b9208a5c1e41
 project wgEncode
@@ -14338,7 +14303,6 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8790,LID8791
-labProtocolId 011WC-,012WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -14721,7 +14685,6 @@ fileName wgEncodeCshlLongRnaSeqHelas3CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID16633,LID16634
-labProtocolId 011WC+,012WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -15737,7 +15700,6 @@ fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8469,LID8470
-labProtocolId 011C+,012C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -16560,7 +16522,6 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9200,LID9201
-labProtocolId 011N-,012N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -16943,7 +16904,6 @@ fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8559,LID8560
-labProtocolId 011N+,012N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -17766,7 +17726,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8792,LID8793
-labProtocolId 013WC-,014WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -18149,7 +18108,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID16635,LID16636
-labProtocolId 013WC+,014WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -18972,7 +18930,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18552,LID18553
-labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -19355,7 +19312,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8471,LID8472
-labProtocolId 013C+,014C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -20178,7 +20134,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9202,LID9203
-labProtocolId 013N-,014N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -20561,7 +20516,6 @@ fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8534,LID8535
-labProtocolId 013N+,014N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -21823,7 +21777,6 @@ fileName wgEncodeCshlLongRnaSeqHmecCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8831
-labProtocolId 036WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -22151,7 +22104,6 @@ fileName wgEncodeCshlLongRnaSeqHmecCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8695
-labProtocolId 036WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -27427,7 +27379,6 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8826,LID8827
-labProtocolId 023WC-,024WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -27810,7 +27761,6 @@ fileName wgEncodeCshlLongRnaSeqHsmmCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8710,LID8711
-labProtocolId 023WC+,024WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -28634,7 +28584,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8788,LID8789
-labProtocolId 009WC-,010WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -29018,7 +28967,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8463,LID8464
-labProtocolId 009WC+,010WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -29732,7 +29680,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18556
-labProtocolId 029C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -30061,7 +30008,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8688,LID8689
-labProtocolId 029C+,030C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -30885,7 +30831,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9206,LID9207
-labProtocolId 029N-,030N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -31269,7 +31214,6 @@ fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8690,LID8691
-labProtocolId 029N+,030N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -32970,7 +32914,6 @@ fileName wgEncodeCshlLongRnaSeqImr90CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45017,LID45016
-labProtocolId 046WC+,045WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -33452,7 +33395,6 @@ fileName wgEncodeCshlLongRnaSeqImr90CellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45238,LID45239
-labProtocolId 045WCt,046WCt
 labVersion iIDR
 localization cell
 project wgEncode
@@ -33934,7 +33876,6 @@ fileName wgEncodeCshlLongRnaSeqImr90CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45612,LID45611
-labProtocolId 046N+,045N+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -34416,7 +34357,6 @@ fileName wgEncodeCshlLongRnaSeqImr90NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID45613,LID45635
-labProtocolId 045C+,046C+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -35119,7 +35059,6 @@ fileName wgEncodeCshlLongRnaSeqK562CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8659,LID8660
-labProtocolId 001WC-,002WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -35502,7 +35441,6 @@ fileName wgEncodeCshlLongRnaSeqK562CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID16627,LID16628
-labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -36315,7 +36253,6 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185,LID9186
-labProtocolId 025CHt,026CHt
 labVersion iIDR
 localization chromatin
 project wgEncode
@@ -37084,7 +37021,6 @@ fileName wgEncodeCshlLongRnaSeqK562CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18545,LID18546
-labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -37465,7 +37401,6 @@ fileName wgEncodeCshlLongRnaSeqK562CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8465,LID8466
-labProtocolId 001C+,002C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -38066,7 +38001,6 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187,LID9188
-labProtocolId 025NLt,026NLt
 labVersion iIDR
 localization nucleolus
 project wgEncode
@@ -38615,7 +38549,6 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189,LID9190
-labProtocolId 025NPt,026NPt
 labVersion iIDR
 localization nucleoplasm
 project wgEncode
@@ -39384,7 +39317,6 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9195,LID9196
-labProtocolId 001N-,002N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -39767,7 +39699,6 @@ fileName wgEncodeCshlLongRnaSeqK562NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8556,LID8557
-labProtocolId 001N+,002N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -40590,7 +40521,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8824,LID8825
-labProtocolId 015WC-,016WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -40973,7 +40903,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8686,LID8687
-labProtocolId 015WC+1,016WC+1
 labVersion iIDR
 localization cell
 project wgEncode
@@ -41573,7 +41502,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID46857,LID46858
-labProtocolId 089C+,090C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -41891,7 +41819,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46857
-labProtocolId 089C+
 localization cytosol
 md5sum 511eb84fa263d1cf684e2c76c87cfc00
 project wgEncode
@@ -41919,7 +41846,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46858
-labProtocolId 090C+
 localization cytosol
 md5sum fea255c5e4e0c188c5f5e8ea72905600
 project wgEncode
@@ -42105,7 +42031,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID46860,LID46859
-labProtocolId 090N+,089N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -42423,7 +42348,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46859
-labProtocolId 089N+
 localization nucleus
 md5sum 545c67a58f3916afd0fd3698a50859c6
 project wgEncode
@@ -42451,7 +42375,6 @@ fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46860
-labProtocolId 090N+
 localization nucleus
 md5sum c0d0819e3833ab4e5f7df7620d5f63af
 project wgEncode
@@ -42641,7 +42564,6 @@ fileName wgEncodeCshlLongRnaSeqMonocd14CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID44658,LID44657
-labProtocolId 040WC-,039WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -43135,7 +43057,6 @@ fileName wgEncodeCshlLongRnaSeqMonocd14CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID44497,LID44594
-labProtocolId 040WC+,039WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -44569,7 +44490,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8665,LID8666
-labProtocolId 007WC-,008WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -44596,7 +44516,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovoRep5.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8830
-labProtocolId 035WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -45182,7 +45101,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID16631,LID16632
-labProtocolId 007WC+,008WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -45209,7 +45127,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovoRep5.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8694
-labProtocolId 035WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -46181,7 +46098,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID18554
-labProtocolId 027C-
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -46484,7 +46400,6 @@ fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8795,LID8796
-labProtocolId 027C+,028C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -47309,7 +47224,6 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9204,LID9205
-labProtocolId 027N-,028N-
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -47695,7 +47609,6 @@ fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8797,LID8798
-labProtocolId 027N+,028N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -49617,7 +49530,6 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8828,LID8829
-labProtocolId 033WC-,034WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -50000,7 +49912,6 @@ fileName wgEncodeCshlLongRnaSeqNhlfCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8692,LID8701
-labProtocolId 033WC+,034WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -51149,7 +51060,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID46599,LID46598
-labProtocolId 086WC+,085WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -51467,7 +51377,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46598
-labProtocolId 085WC+
 localization cell
 md5sum 7e88e5f753d09cf2369623869bc995dc
 project wgEncode
@@ -51495,7 +51404,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCellPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46599
-labProtocolId 086WC+
 localization cell
 md5sum 70b8fc4d0ab8560e1dfacff408669b82
 project wgEncode
@@ -51681,7 +51589,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID46594,LID46595
-labProtocolId 085C+,086C+
 labVersion iIDR
 localization cytosol
 project wgEncode
@@ -51999,7 +51906,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46594
-labProtocolId 085C+
 localization cytosol
 md5sum 9e038dc7eb6cea4dabb563f7b51dbd5b
 project wgEncode
@@ -52027,7 +51933,6 @@ fileName wgEncodeCshlLongRnaSeqSknshCytosolPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46595
-labProtocolId 086C+
 localization cytosol
 md5sum 37bd8dc137c7df6ccad0a9e1b096d6d3
 project wgEncode
@@ -52213,7 +52118,6 @@ fileName wgEncodeCshlLongRnaSeqSknshNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID46597,LID46596
-labProtocolId 086N+,085N+
 labVersion iIDR
 localization nucleus
 project wgEncode
@@ -52531,7 +52435,6 @@ fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46596
-labProtocolId 085N+
 localization nucleus
 md5sum 2589e549931ba67a24ed436c1d21ecbf
 project wgEncode
@@ -52559,7 +52462,6 @@ fileName wgEncodeCshlLongRnaSeqSknshNucleusPapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46597
-labProtocolId 086N+
 localization nucleus
 md5sum ad5d94a5f9b4a3a05d2a448d520e4e8d
 project wgEncode
@@ -52968,7 +52870,6 @@ fileName wgEncodeCshlLongRnaSeqSknshraCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID9003,LID9011
-labProtocolId 019WC-,020WC-
 labVersion iIDR
 localization cell
 project wgEncode
@@ -53297,7 +53198,6 @@ fileName wgEncodeCshlLongRnaSeqSknshraCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
 labExpId LID8967,LID8968
-labProtocolId 019WC+,020WC+
 labVersion iIDR
 localization cell
 project wgEncode
@@ -53803,4 +53703,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -639468206
+# MAGIC: -1851117319

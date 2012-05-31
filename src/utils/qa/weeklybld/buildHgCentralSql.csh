@@ -22,8 +22,8 @@ set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
-hgsqldump --skip-opt --no-data ${IGNORE_TABLES} -h genome-centdb \
-        --no-create-db --databases hgcentral  | grep -v "^USE " \
+hgsqldump --skip-add-drop-table --skip-lock-tables --no-data ${IGNORE_TABLES} \
+          -h genome-centdb --no-create-db --databases hgcentral  | grep -v "^USE " \
          | sed -e "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" \
     > /tmp/hgcentraltemp.sql 
 
