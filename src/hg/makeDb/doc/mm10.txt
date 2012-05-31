@@ -5209,7 +5209,7 @@ runOne $(root1) {check out exists+ ../maf/$(root1).maf}
     cd /hive/data/genomes/mm10/bed/multiz60way/maf
     ln -s `pwd`/*.maf /gbdb/mm10/multiz60way
 
-    # this generates an immense multiz46way.tab file in the directory
+    # this generates an immense multiz60way.tab file in the directory
     #	where it is running.  Best to run this over in scratch.
     #   This is going to take all day.
     cd /scratch/tmp
@@ -5233,6 +5233,248 @@ runOne $(root1) {check out exists+ ../maf/$(root1).maf}
     #   -rw-rw-r-- 1  567210414 Apr 18 17:28 multiz60waySummary.tab
 
     rm multiz60way*.tab
+
+#######################################################################
+# MULTIZ60WAY MAF FRAMES (DONE - 2012-05-30 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/frames
+    cd /hive/data/genomes/mm10/bed/multiz60way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh > showGenes.txt
+    #   real    9m11.678s
+
+    #   rearrange that output to create four sections, and place these names
+    #           in .list files here:
+    #   1. knownGene: hg19
+    #   2. refGene: bosTau7 danRer7 galGal4 mm10 rheMac3 rn5 susScr3 xenTro3
+    #   3. ensGene: ailMel1 anoCar2 calJac3 cavPor3 choHof1 dipOrd1 echTel1
+    #               equCab2 eriEur1 fr3 gasAcu1 gorGor3 loxAfr3 melGal1
+    #               micMur1 monDom5 myoLuc2 ochPri2 ornAna1 oryCun2 oryLat2
+    #               panTro4 ponAbe2 proCap1 pteVam1 sorAra1 taeGut1 tarSyr1
+    #               tetNig2 tupBel1 vicPac1
+    #   4. xenoRefGene: canFam3 chrPic1 dasNov3 felCat5 hetGla2 latCha1 macEug2
+    #               nomLeu2 otoGar3 oviAri1 papHam1 petMar1 saiBol1 sarHar1
+    #               triMan1
+    #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
+
+    mkdir genes
+    #   1. knownGene: hg19
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg19 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/hg19.gp.gz
+    #   2. refGene:
+    for DB in `cat refGene.list`
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. ensGene:
+    for DB in `cat ensGene.list`
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   4. xenoRefGene:
+    for DB in `cat xenoRG.list`
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
+    for DB in `cat genscan.list`
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from genscan" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/ailMel1.gp.gz: 19204
+# genes/anoCar2.gp.gz: 17766
+# genes/bosTau7.gp.gz: 12957
+# genes/calJac3.gp.gz: 20843
+# genes/canFam3.gp.gz: 20843
+# genes/cavPor3.gp.gz: 18631
+# genes/choHof1.gp.gz: 12403
+# genes/chrPic1.gp.gz: 19420
+# genes/danRer7.gp.gz: 13889
+# genes/dasNov3.gp.gz: 29342
+# genes/dipOrd1.gp.gz: 15784
+# genes/echTel1.gp.gz: 16499
+# genes/equCab2.gp.gz: 20403
+# genes/eriEur1.gp.gz: 14538
+# genes/felCat5.gp.gz: 19472
+# genes/fr3.gp.gz: 18014
+# genes/gadMor1.gp.gz: 64189
+# genes/galGal4.gp.gz: 4869
+# genes/gasAcu1.gp.gz: 20631
+# genes/gorGor3.gp.gz: 20759
+# genes/hetGla2.gp.gz: 25587
+# genes/hg19.gp.gz: 20718
+# genes/latCha1.gp.gz: 18773
+# genes/loxAfr3.gp.gz: 19986
+# genes/macEug2.gp.gz: 24750
+# genes/melGal1.gp.gz: 14050
+# genes/melUnd1.gp.gz: 24095
+# genes/micMur1.gp.gz: 16240
+# genes/mm10.gp.gz: 20249
+# genes/monDom5.gp.gz: 19188
+# genes/myoLuc2.gp.gz: 19685
+# genes/nomLeu2.gp.gz: 22997
+# genes/ochPri2.gp.gz: 15970
+# genes/oreNil2.gp.gz: 28730
+# genes/ornAna1.gp.gz: 17728
+# genes/oryCun2.gp.gz: 18921
+# genes/oryLat2.gp.gz: 19576
+# genes/otoGar3.gp.gz: 23998
+# genes/oviAri1.gp.gz: 17761
+# genes/panTro4.gp.gz: 18647
+# genes/papHam1.gp.gz: 27034
+# genes/petMar1.gp.gz: 9867
+# genes/ponAbe2.gp.gz: 19895
+# genes/proCap1.gp.gz: 16043
+# genes/pteVam1.gp.gz: 16966
+# genes/ponAbe2.gp.gz: 19895
+# genes/proCap1.gp.gz: 16043
+# genes/pteVam1.gp.gz: 16966
+# genes/rheMac3.gp.gz: 5558
+# genes/rn5.gp.gz: 16114
+# genes/saiBol1.gp.gz: 23302
+# genes/sarHar1.gp.gz: 20649
+# genes/sorAra1.gp.gz: 13156
+# genes/speTri2.gp.gz: 44222
+# genes/susScr3.gp.gz: 3753
+# genes/taeGut1.gp.gz: 17343
+# genes/tarSyr1.gp.gz: 13615
+# genes/tetNig2.gp.gz: 19539
+# genes/triMan1.gp.gz: 19378
+# genes/tupBel1.gp.gz: 15407
+# genes/turTru2.gp.gz: 68272
+# genes/vicPac1.gp.gz: 11754
+# genes/xenTro3.gp.gz: 8456
+
+    # kluster job to annotate each maf file
+    screen -S mm10      # manage long running procedure with screen
+    ssh swarm
+    cd /hive/data/genomes/mm10/bed/multiz60way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../maf/${C}.maf | genePredToMafFrames mm10 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    # older instructions excluded mm10 from the gene.list
+    #   this was a mistake.  mm10 can be annotated too.
+    #   Mistakenly did this the first run through, had to manually
+    #   do the mm10 genes separately on hgwdev after this was done
+    ls ../maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=8g create jobList
+    para try ... check ... push
+# Completed: 3894 of 3894 jobs
+# CPU time in finished jobs:      84054s    1400.91m    23.35h    0.97d  0.003 y
+# IO & Wait Time:               2422614s   40376.89m   672.95h   28.04d  0.077 y
+# Average job time:                 644s      10.73m     0.18h    0.01d
+# Longest finished job:            4090s      68.17m     1.14h    0.05d
+# Submission to last job:         10377s     172.95m     2.88h    0.12d
+
+    # collect all results into one file:
+    cd /hive/data/genomes/mm10/bed/multiz60way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
+    #   -rw-rw-r-- 1 1164299719 May 30 11:28 multiz60wayFrames.bed
+
+    # verify there are frames on everything:
+    cut -f4 multiz60wayFrames.bed | sort | uniq -c | sort -n \
+        > annotation.survey.txt
+    # should be 60 species:
+    wc -l annotation.survey.txt
+    #   60 annotation.survey.txt
+    # and the minimum numbers:
+    head annotation.survey.txt
+    #   43900 susScr3
+    #   59839 rheMac3
+    #   153246 petMar1
+    #   162501 choHof1
+    # ... etc ...
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/multiz60way/frames
+    time gzip multiz60wayFrames.bed
+    #   real    1m25.102s
+    time hgLoadMafFrames mm10 multiz60wayFrames multiz60wayFrames.bed.gz
+    #   real    3m0.325s
+    time featureBits -countGaps mm10 multiz60wayFrames
+    #   78707910 bases of 2730871774 (2.882%) in intersection
+    #   real    1m51.051s
+
+    #   enable the trackDb entries:
+# frames multiz60wayFrames
+# irows on
+    #   appears to work OK
 
 #######################################################################
 # lastz nile tilapia oreNil2 (DONE - 2012-04-02 - Hiram)
@@ -5684,4 +5926,40 @@ enabled ORFeome tracks in etc/genbank.conf and reload genbank
 
     # and try out the conversion on genome-test from mm9 to mm10
 ############################################################################
+# EXONIPHY MM10, lifted from hg19 (DONE - braney 2012-05-29)
+#	needed for ucscGenes building
+    # create a syntenic liftOver chain file
+    cd /cluster/data/hg19/bed/lastz.mm10/axtChain
+    time nice -n +19 netFilter -syn hg19.mm10.net.gz \
+	| netChainSubset -verbose=0 stdin hg19.mm10.all.chain.gz stdout \
+	| chainStitchId stdin stdout | gzip -c > hg19.mm10.syn.chain.gz
+    #real    2m38.915s
+    #user    3m29.458s
+    #sys     0m16.033s
 
+    #	slightly smaller than the ordinary liftOver chain file:
+-rw-rw-r-- 1 78419424 Mar  7 18:40 hg19.mm10.over.chain.gz
+-rw-rw-r-- 1 74588027 May 29 12:29 hg19.mm10.syn.chain.gz
+
+    # exoniphyMm9.gp is prepared as follows
+    mkdir /cluster/data/mm10/bed/exoniphy
+    cd /cluster/data/mm10/bed/exoniphy
+    hgsql hg19 -e "select * from exoniphy" -N | cut  -f 2-16 > exoniphyHg19.gp
+    time nice -n +19 liftOver -genePred exoniphyHg19.gp \
+	/cluster/data/hg19/bed/lastz.mm10/axtChain/hg19.mm10.syn.chain.gz \
+	    exoniphyMm10.gp unmapped
+    # real    16m0.334s
+    # user    15m46.462s
+    # sys     0m7.115s
+
+    wc -l *
+    # 186601 exoniphyHg19.gp
+    # 178821 exoniphyMm10.gp
+    # 15560 unmapped
+
+    cd /cluster/data/mm10/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt mm10 exoniphy exoniphyMm10.gp
+    nice -n +19 featureBits mm10 exoniphy
+    # 26795543 bases of 2652783500 (1.010%) in intersection
+    nice -n +19 featureBits mm9 exoniphy
+    #	25931742 bases of 2620346127 (0.990%) in intersection

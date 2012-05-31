@@ -359,6 +359,7 @@ our %formatCheckers = (
     csqual  => \&validateCsqual,
     genePred => \&validateGene,
     gtf => \&validateGtf,
+    gff => \&validateGtf,
     txt  => \&validateFreepass,
     pdf  => \&validateFreepass,
     document => \&validateFreepass,

@@ -584,3 +584,31 @@ galGal4.downloadDir = galGal4
     make etc-update
 
 #########################################################################
+# create downloads and pushQ entry (DONE - 2012-05-24 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    time joinerCheck -database=galGal4 -keys all.joiner
+    #   real    2m30.542s
+
+    cd /hive/data/genomes/galGal4
+    time makeDownloads.pl -workhorse hgwdev galGal4 > download.log 2>&1
+    #   real    17m56.594s
+
+    mkdir /hive/data/genomes/galGal4/pushQ
+    cd /hive/data/genomes/galGal4/pushQ
+    time makePushQSql.pl galGal4 > galGal4.sql 2> stderr.out
+    #   real    3m28.689s
+    # check stderr.out for no significant problems, it is common to see:
+WARNING: hgwdev does not have /gbdb/galGal4/wib/gc5Base.wib
+WARNING: hgwdev does not have /gbdb/galGal4/wib/quality.wib
+WARNING: hgwdev does not have /gbdb/galGal4/bbi/quality.bw
+WARNING: galGal4 does not have seq
+WARNING: galGal4 does not have extFile
+
+    scp -p galGal4.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < galGal4.sql
+
+#########################################################################

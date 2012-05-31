@@ -3,7 +3,6 @@ objType composite
 composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,protocol,rnaExtract
 geoSeriesAccession GSE24565
-origAssembly hg19
 
 metaObject wgEncodeCshlShortRnaSeqA549CellCiptapContigs
 objType table
@@ -556,7 +555,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum d7e227b6da65127a37e13f4d00954bbe,b22fbec2d35b687588ae84ea1d238c4b
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -584,7 +583,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum c5e1089ebbc3813538b430c870abab5c,c71a9d8f35612a85f5d75a62554a38a7
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -619,6 +618,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep3
 view Alignments
 
@@ -646,6 +646,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep4
 view Alignments
 
@@ -669,7 +670,7 @@ labExpId LID20749,LID20750
 labVersion iIDR
 localization cell
 md5sum 132c9f971c96da17baf3ea7000ccb7fe
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -698,7 +699,7 @@ labExpId LID20749,LID20750
 labVersion iIDR
 localization cell
 md5sum 47c72ed0cdab185322dcb5319eddfbcf
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -725,7 +726,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum 078889d783147b1967c91983268f18e7
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -754,7 +755,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum 8d79aaa994c670e1cfeebf6acb3e6d09
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -790,6 +791,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep3
 view MinusRawSignal
 
@@ -818,6 +820,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep4
 view MinusRawSignal
 
@@ -839,7 +842,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum aa6e2314d0bcbaee8dbfb5160525ba67
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -868,7 +871,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum e0f8ca4ba5a4ca6df43badf72be2563f
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -904,6 +907,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep3
 view PlusRawSignal
 
@@ -932,6 +936,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep4
 view PlusRawSignal
 
@@ -953,7 +958,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum 056f6f8db8c5ca943b165959073d71e5
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -981,7 +986,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum 12ffe7ecfbc7905f7cc5998666e3bceb
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1009,7 +1014,6 @@ lab CSHL
 labExpId LID47039
 localization cell
 md5sum 13ea5b58b2fbc3e283d0015296ba465d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -1017,6 +1021,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5638
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep4
@@ -1037,7 +1042,6 @@ lab CSHL
 labExpId LID47040
 localization cell
 md5sum fb6d15f288b4f942611fac4723901526
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -1045,6 +1049,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5632
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep1
@@ -1065,7 +1070,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum c46483d72ea1793d613c7ddb829648f2
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1093,7 +1098,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum e80075b80e37905285234d584ca256b8
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1128,6 +1133,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep4
@@ -1155,6 +1161,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqA549CellTapContigs
@@ -1181,6 +1188,7 @@ readType 1x101
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6505
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellTapContigs
 view Contigs
 
@@ -1208,6 +1216,7 @@ readType 1x101
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6763
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolCiptapContigs
@@ -1923,7 +1932,6 @@ lab CSHL
 labExpId LID47041
 localization cytosol
 md5sum beb7033eb44732f1d31714f6a6bc9278
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -1950,7 +1958,6 @@ lab CSHL
 labExpId LID47042
 localization cytosol
 md5sum e5eb39081adf7ffc0bd6919ecc670a99
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -2725,7 +2732,6 @@ lab CSHL
 labExpId LID47043
 localization nucleus
 md5sum c199c67e03c852162a99ffc4496ebb6a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -2752,7 +2758,6 @@ lab CSHL
 labExpId LID47044
 localization nucleus
 md5sum 0d804f4df95130c8ab41596c77eda0ab
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -2884,7 +2889,6 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum 037b138f43f920f809ad501447d1d3d8,40f01c0d6853a85013477664a43b519e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2912,7 +2916,6 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 52e5e21990c255f31ca59085bfc9d449,b8877b581864cf7b082f5bb5b2931714
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2943,7 +2946,6 @@ labExpId LID20745,LID20746
 labVersion iIDR
 localization cell
 md5sum 991f8ebf67ccd5c4a0d3b8835266106f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2972,7 +2974,6 @@ labExpId LID20745,LID20746
 labVersion iIDR
 localization cell
 md5sum d6e76e3be0c10faacc3ce69d167f3952
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2999,7 +3000,6 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum 209d292b3f189583c4c3a766e0cfb3cc
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3028,7 +3028,6 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 74d77389d610696cf9ccf093c5df921e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3057,7 +3056,6 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum edfa6744c8883f22aebf9e3eb950b21e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3086,7 +3084,6 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 3359dba672da5f6fad1cd2d33045a372
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3115,7 +3112,6 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum 2bdc75489eac5f2e7dea7c1024a3d031
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3143,7 +3139,6 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 005d7914d595585c39e205d92e326c5f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3171,7 +3166,6 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum 01b2f0206db86547eccddbdcead616f4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3199,7 +3193,6 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 706d39a25612e65f3d97ec671d47c1eb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3226,7 +3219,6 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum 37b9f5f7941794ae15d5d77bb928c3f7,e763a2872fcb77584ea602ba852a5890
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3254,7 +3246,6 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum c2ae5eab4f1100b16b035f771d7c89c4,b7dc6f376373490ce27dbc0fcdd7b81e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3285,7 +3276,6 @@ labExpId LID20909,LID20910
 labVersion iIDR
 localization cell
 md5sum 9aeea081cb023a364989bb2fd3944aed
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3314,7 +3304,6 @@ labExpId LID20909,LID20910
 labVersion iIDR
 localization cell
 md5sum 93e865c8d5babba78f233ad73fed851d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3341,7 +3330,6 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum 48256f7699401a458862fb4070737029
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3370,7 +3358,6 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum 9404df46696fe113bab5fe0949a92732
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3399,7 +3386,6 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum 9b8fbd762726e01b7d8b9c6665331133
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3428,7 +3414,6 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum cace71c4c83f23b7a79e93fb26d9afa1
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3457,7 +3442,6 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum 72901d5d6411427c566c57f653f75898
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3485,7 +3469,6 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum 90644f5245674b449c7df27b28c9350e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3513,7 +3496,6 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum ab3568167cb4ce3d28d77f7ceafb6d98
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3541,7 +3523,6 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum 5e9eb2745e344a3cde79f9fcdcf1bb3e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3567,7 +3548,6 @@ fileName wgEncodeCshlShortRnaSeqCd20CellTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID44362,LID44363
-labProtocolId 041WCs,042WCs
 labVersion iIDR
 localization cell
 md5sum 23c532623276e534062eaa9cb064af08
@@ -3596,7 +3576,6 @@ fileName wgEncodeCshlShortRnaSeqCd20CellTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44362,LID44363
-labProtocolId 041WCs,042WCs
 labVersion iIDR
 localization cell
 md5sum 2e3c41273f780f60f962bbc2d75d1985
@@ -3624,7 +3603,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2.bam,wgEncode
 grant Gingeras
 lab CSHL
 labExpId LID44363
-labProtocolId 042WCs
 localization cell
 md5sum 329bcca692802bd8e79855ff293f3741,ef063475b7eca23ff7b8598b917223ef
 project wgEncode
@@ -3653,7 +3631,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44363
-labProtocolId 042WCs
 localization cell
 md5sum 28801fdaa896ebb8488594a2e432adee
 project wgEncode
@@ -3682,7 +3659,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44363
-labProtocolId 042WCs
 localization cell
 md5sum 28eedef0f024dcf863c99bf1e1ad29f8
 project wgEncode
@@ -3711,7 +3687,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44363
-labProtocolId 042WCs
 localization cell
 md5sum f66389ec337efcb1f3de30abc857de39
 project wgEncode
@@ -3739,7 +3714,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapAlnRep1.bam,wgEncode
 grant Gingeras
 lab CSHL
 labExpId LID44362
-labProtocolId 041WCs
 localization cell
 md5sum 9978c0e62703cdce9cb8318664ad7aac,a799c8a465e54118ad7671ecda93f631
 project wgEncode
@@ -3768,7 +3742,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44362
-labProtocolId 041WCs
 localization cell
 md5sum 124e73b5211a8988bfa182413f2467aa
 project wgEncode
@@ -3797,7 +3770,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44362
-labProtocolId 041WCs
 localization cell
 md5sum 47de984a1e71e671481e028ebecc5564
 project wgEncode
@@ -3826,7 +3798,6 @@ fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44362
-labProtocolId 041WCs
 localization cell
 md5sum 42d871f465ad51ce74e090c0a73b8124
 project wgEncode
@@ -3853,7 +3824,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapAlnRep1.bam,wgEncodeCshlShor
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 localization cell
 md5sum e25638cc786cbfb0b9475b3223376579,b7b6978e52f178a1a8b016a3b53a610a
 project wgEncode
@@ -3881,7 +3851,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 labVersion iIDR
 localization cell
 md5sum b1603ef9edd7a235570bbef1790e8eae
@@ -3909,7 +3878,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 labVersion iIDR
 localization cell
 md5sum 6ab54365ba73187979c45f71a23ea7a8
@@ -3936,7 +3904,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 localization cell
 md5sum caf438c483e02184b7d4692c27b30b64
 project wgEncode
@@ -3964,7 +3931,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 localization cell
 md5sum 49c788f6f3869eadea9c60435052d095
 project wgEncode
@@ -3992,7 +3958,6 @@ fileName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46197
-labProtocolId 043WCs
 localization cell
 md5sum 4469a4d6e430efa0fd3f46d94ad2d6c6
 project wgEncode
@@ -4159,7 +4124,6 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum 26935ba53a77022957bb761f98a7791c,9fe72c813cbde82341860ce19aee4c4e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4187,7 +4151,6 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum 689d64234d0da419adb9f0471ce50950,a20e51205ec82a4aeb21527d48ed259f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4218,7 +4181,6 @@ labExpId LID20899,LID20902
 labVersion iIDR
 localization cell
 md5sum 82317bda303c278337deaa46715bb166
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4247,7 +4209,6 @@ labExpId LID20899,LID20902
 labVersion iIDR
 localization cell
 md5sum ecb360155d1dcd894b8cefaa78652bf3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4274,7 +4235,6 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum 24710829d03156539f323530e398e0a3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4303,7 +4263,6 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum 143a411477be39cc3dda77db040b5191
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4332,7 +4291,6 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum 2a38ce6feaf3e172f20dbd08a7ed41eb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4361,7 +4319,6 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum 1aba1dae749ba1eac22245c0486ba6ae
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4390,7 +4347,6 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum ab3276ec86aa6974d8656d40a7c7ef02
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4418,7 +4374,6 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum 46aabee1a87d338b2f7581f1260b73d9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4446,7 +4401,6 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum b3e5e650aeca8f1050d16ca9525da622
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4474,7 +4428,6 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum f7402929d9a8377b295171c22f33742e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4911,7 +4864,6 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 32e18ca6acd794dbbb9ce8cc1f986f10,2d3d34079adf8051249e50d1c025ebe8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4939,7 +4891,6 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum e41f8dd0aaf9c019f6f1f055c8ea9952,f92da2727205c0a9135ae50a1953be59
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4970,7 +4921,6 @@ labExpId LID20901,LID20904
 labVersion iIDR
 localization cytosol
 md5sum 8767b294072074498488045c881058ce
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4999,7 +4949,6 @@ labExpId LID20901,LID20904
 labVersion iIDR
 localization cytosol
 md5sum b3e4bf177ec4d02b548464a4f2e3d45f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5026,7 +4975,6 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 1b692145fbefb07ff3d2265dea52cd7b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5055,7 +5003,6 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum 9bd53d6a6b7fd37604a8161d6ee013a8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5084,7 +5031,6 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 8af9e35cc9dc0c90df759ab5b64ecc0a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5113,7 +5059,6 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum 34b5b31fccea887efdc370650f481b0f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5142,7 +5087,6 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 815de8d674105a09ee4b126db350d3b5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5170,7 +5114,6 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum c153d5a3c0fa9b56e17f1065d5cd3da7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5198,7 +5141,6 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 53d0fa4292dbe046e2c471ea4261f94e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5226,7 +5168,6 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum bff82a306cc96cb35dd764cd7f1b3b09
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5396,7 +5337,6 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum 302ca6e4b1ea53fbe1d3e68cf0a59670,eb0df8cc04baf79ed269e99a4d9bc972
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5424,7 +5364,6 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum 23650e6de625f0de1148522020e302c9,68df2dc58a3e36daf7ea15dce9fd97f9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5455,7 +5394,6 @@ labExpId LID20900,LID20903
 labVersion iIDR
 localization nucleus
 md5sum 5a0210832fb59ea929b588eefb276672
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5484,7 +5422,6 @@ labExpId LID20900,LID20903
 labVersion iIDR
 localization nucleus
 md5sum 1f9ac70bbb56b4836f727535934e1975
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5511,7 +5448,6 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum ca6b72d62e5f9dfa415ce1f537fa7dd3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5540,7 +5476,6 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum e74bcdc8965d96a1de75625692083d13
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5569,7 +5504,6 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum f7a6b19f4d7f77116c43692c6a16ade7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5598,7 +5532,6 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum 471ecceaac3018f1bd7cfabe77837878
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5627,7 +5560,6 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum 9a7631dfa386f86a5ac443bfbfa138b8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5655,7 +5587,6 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum 7e64919241ec856776a45951e37ca1f7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5683,7 +5614,6 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum bc98249bb02a5e7e6fe6c6a2a608b197
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5711,7 +5641,6 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum 1645e1c4b3ae9c3647b94d8e0d77efba
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5738,7 +5667,6 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum f2599972fca418b1ce0ab702f38aebb0,20b8d76b4be3fe2735e77c3dd0469b35
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5766,7 +5694,6 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum cc23a429bfe42213ae82c221514457b8,192a92b922959e8f9ddfe49c436aec7a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5797,7 +5724,6 @@ labExpId LID20905,LID20906
 labVersion iIDR
 localization cell
 md5sum 58e33cc66e8ff9414f92fdaf58781885
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5826,7 +5752,6 @@ labExpId LID20905,LID20906
 labVersion iIDR
 localization cell
 md5sum b7915f6c1f4f1832bbc23715c888d01f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5853,7 +5778,6 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum 381ec3bdde95cf32cc2ef48dc2fe158d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5882,7 +5806,6 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum fd9ee3f60e44bffb35696496e7234bf8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5911,7 +5834,6 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum 876438b671af7d900f9d6c5351fdb7af
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5940,7 +5862,6 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum f1761d3d65f33865bb86849a81cc5594
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5969,7 +5890,6 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum b6575c80c5f694912261bedb10a1ec21
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5997,7 +5917,6 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum 97f2034c4c3d57c7abe4ce72fba75651
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6025,7 +5944,6 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum 1dce5cd6d0e7f7db15d2a24c7b302773
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6053,7 +5971,6 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum 6a25b6692785467ed6d4f07b650c981d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6080,7 +5997,6 @@ lab CSHL
 labExpId LID20908
 localization cytosol
 md5sum fd572bffc038fe6b7943623867cb8250,32343ad3ad52bfa64847cd11f5441739
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6112,7 +6028,6 @@ labExpId LID20908
 labVersion iIDR
 localization cytosol
 md5sum f3ec5c1af5742e8c68b6a73ecdebfa4c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6142,7 +6057,6 @@ labExpId LID20908
 labVersion iIDR
 localization cytosol
 md5sum 3f17c0c427a08e4308e314655d037ccb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6169,7 +6083,6 @@ lab CSHL
 labExpId LID20908
 localization cytosol
 md5sum 05f4e9214c02870fa6f7b0e807cbaffd
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6198,7 +6111,6 @@ lab CSHL
 labExpId LID20908
 localization cytosol
 md5sum dcde810070f32fbdaf722c425cd2e7d5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6227,7 +6139,6 @@ lab CSHL
 labExpId LID20908
 localization cytosol
 md5sum 9c717d33ac5a9ff3b954d35dd914cf29
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6254,7 +6165,6 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 773fae1c64130b176774ed9f69aef8e6,4c42e9f1a7adeb5cac1766a85e782698
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6286,7 +6196,6 @@ labExpId LID20907
 labVersion iIDR
 localization nucleus
 md5sum 1fc71d7535e93b09b16d8ed675ebc2f0
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6316,7 +6225,6 @@ labExpId LID20907
 labVersion iIDR
 localization nucleus
 md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6343,7 +6251,6 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 34b0ee01cf0202a92ca5c8900898f79b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6372,7 +6279,6 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 813df911b2f3c04b72beed6f888b7749
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6401,7 +6307,6 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 51daca410714ecb7423e60fbd1a7c090
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6429,7 +6334,6 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 45ac3325433a21ac411e8dcf0f5dbbd9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7287,7 +7191,6 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum bb601ea89be697303c2148860ddd9ec1,d65f50a8660a9665df78bcb1f3d016fe
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7315,7 +7218,6 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum 1027f7e402f98a0ac1dae6125ce2a445,0ffbdd41a73dd17f7672ccccd428f770
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7346,7 +7248,6 @@ labExpId LID21143,LID21146
 labVersion iIDR
 localization cell
 md5sum fa92606bb88a35030ad5c7d760232e65
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7375,7 +7276,6 @@ labExpId LID21143,LID21146
 labVersion iIDR
 localization cell
 md5sum dec20cad92d74f7c44ed4d6ea4ba80f3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7402,7 +7302,6 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum 8260224488a6271a85b6498e185c0bc3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7431,7 +7330,6 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum e5f7015c0722d153965d38ee1063a1ed
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7460,7 +7358,6 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum 4280926f2f48b85d793af36bcc26c494
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7489,7 +7386,6 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum 38240c3ed165bf6124fa05d7efd7861a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7518,7 +7414,6 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum 898e443771f88df2800e63a93c5cfb0a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7546,7 +7441,6 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum 79a434aa03ef698ee661aebfb5a45a1b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7574,7 +7468,6 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum 4b95560edc2f405c0d40021d9558ded4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7602,7 +7495,6 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum 2250920043dafed0e4513e23e1c76be7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7629,7 +7521,6 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 10a1ec54fb3bdf40a29a4163cc5e9995,6b7c0a42ff436233dbf9eb254acf24e7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7657,7 +7548,6 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum 7eddb273e507a3a79df0173ff42e05f2,14548ff52156047ee27635a9af5b9af5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7688,7 +7578,6 @@ labExpId LID21145,LID21148
 labVersion iIDR
 localization cytosol
 md5sum 88afb3b1799e36557547c9f43c6f8eb2
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7717,7 +7606,6 @@ labExpId LID21145,LID21148
 labVersion iIDR
 localization cytosol
 md5sum 8720b5fa41a309297deb9cc539dbcc7a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7744,7 +7632,6 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 4293962ed61b5edb5c726b6ef9975c58
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7773,7 +7660,6 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum f5dd66f0c73b1f5c8ea4665a692e0c4d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7802,7 +7688,6 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 89987d9f0be770f7223b90256d7bd340
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7831,7 +7716,6 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum 14d80597887629f040093d3bda26ecd8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7860,7 +7744,6 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 97a388e1ce60be1945a7abae630c88e3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7888,7 +7771,6 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum ba8502e48be3c7823bc327084864505b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7916,7 +7798,6 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 71ab9acadfe6ae1cc5cb64ebcf9e965c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7944,7 +7825,6 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum 3d1698c7c3f0671c0dc81ed639cdae29
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7971,7 +7851,6 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum edd0a9021247c896f5346bbb3f707c33,8648c674337cfabe90d0e7d4a6a2b683
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7999,7 +7878,6 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum bc3384ce4c6994a844333c3f5a712d8c,dc00f5567cf02840987016f5fdd9e9cf
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8030,7 +7908,6 @@ labExpId LID21144,LID21147
 labVersion iIDR
 localization nucleus
 md5sum 60e84fbd8031bd215e7d8103b2197dec
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8059,7 +7936,6 @@ labExpId LID21144,LID21147
 labVersion iIDR
 localization nucleus
 md5sum d801e25952c2bbaa88f79a6f2ee95b6d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8086,7 +7962,6 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum 87fbaea5961f1983d8b01aab3b2d96ab
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8115,7 +7990,6 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum 10473c0215e9a1481597846efb597ce4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8144,7 +8018,6 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum 9a1de511d5522bf3ad92fd76c7c4c9cc
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8173,7 +8046,6 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum 57b97f38feea7d5255133ec475a6c99c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8202,7 +8074,6 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum bcf25fe06918736cf99458fd6ce5e03d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8230,7 +8101,6 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum 4869b33064efb54ae8d3c9b6aa90aba4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8258,7 +8128,6 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum 5b2587944b679f1be4f9400e5a79c240
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8286,7 +8155,6 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum a2a472e72f2e505814c5fbb4b6679f0c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8313,7 +8181,6 @@ lab CSHL
 labExpId LID44460
 localization cell
 md5sum 2c351dc6f0523f40fc7e86dba023ba48,00d2403ee824ae186bca827b5122c50e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8341,7 +8208,6 @@ lab CSHL
 labExpId LID44461
 localization cell
 md5sum 8cefbe45153562f2f273ae51ea7091d7,8c7fbcc72da910f50cf19a8f7ccc5966
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8372,7 +8238,6 @@ labExpId LID44460,LID44461
 labVersion iIDR
 localization cell
 md5sum e0c22ab8dfd7c994e939be5e6c6fb633
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8401,7 +8266,6 @@ labExpId LID44460,LID44461
 labVersion iIDR
 localization cell
 md5sum 11308f834bc398b2796c05d84f5e0917
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8428,7 +8292,6 @@ lab CSHL
 labExpId LID44460
 localization cell
 md5sum a5cb40841ef1432aa986919792cab224
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8457,7 +8320,6 @@ lab CSHL
 labExpId LID44461
 localization cell
 md5sum f1f4063da30b2e9aa28fd3ffe9f128de
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8486,7 +8348,6 @@ lab CSHL
 labExpId LID44460
 localization cell
 md5sum 94d57ceaed92102ff2999ae71fae9d0a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8515,7 +8376,6 @@ lab CSHL
 labExpId LID44461
 localization cell
 md5sum 0825aa29ea183af2270f2ac76f23e749
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8544,7 +8404,6 @@ lab CSHL
 labExpId LID44460
 localization cell
 md5sum 4daa2f0023cb9e468b6be00aad2b048b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8572,7 +8431,6 @@ lab CSHL
 labExpId LID44461
 localization cell
 md5sum 8bdbad322d9ee8dc0467006ff1c02e1b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8599,7 +8457,6 @@ lab CSHL
 labExpId LID44464
 localization cytosol
 md5sum 69c21e124de6a69cfb235e6d5aeac352,f8e7923c6fdf1c566c4d8f2fab5f22d9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8627,7 +8484,6 @@ lab CSHL
 labExpId LID44465
 localization cytosol
 md5sum 09ddd4ebe294058bdee825d659c6e76d,35c3406a03eacd66aaf75fc99e006a13
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8658,7 +8514,6 @@ labExpId LID44464,LID44465
 labVersion iIDR
 localization cytosol
 md5sum e3ba859e03d02e26bde7abd8219c695f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8687,7 +8542,6 @@ labExpId LID44464,LID44465
 labVersion iIDR
 localization cytosol
 md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8714,7 +8568,6 @@ lab CSHL
 labExpId LID44464
 localization cytosol
 md5sum 4628897166af37d289a406149a948623
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8743,7 +8596,6 @@ lab CSHL
 labExpId LID44465
 localization cytosol
 md5sum 1b54aac3b8151f98100163b6526520b7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8772,7 +8624,6 @@ lab CSHL
 labExpId LID44464
 localization cytosol
 md5sum e9ef426eecda2c6a0be73caea68c25e5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8801,7 +8652,6 @@ lab CSHL
 labExpId LID44465
 localization cytosol
 md5sum 2feb41f0343a89875d9ee47cdca3bf24
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8830,7 +8680,6 @@ lab CSHL
 labExpId LID44464
 localization cytosol
 md5sum 88abb3392192592ea8ce04dabd9eb221
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8858,7 +8707,6 @@ lab CSHL
 labExpId LID44465
 localization cytosol
 md5sum 0372280ee4eb82e8bb753b44c4abba35
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8885,7 +8733,6 @@ lab CSHL
 labExpId LID44462
 localization nucleus
 md5sum 2a8762293f390f29085bb94f0e159d49,c295404effc2bab97c0db00fbb7124a1
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8913,7 +8760,6 @@ lab CSHL
 labExpId LID44463
 localization nucleus
 md5sum d65830bc54ac0f261b7ec07a8e88c387,f3d2fc0a6479e1f260cbc1e12054974d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8944,7 +8790,6 @@ labExpId LID44462,LID44463
 labVersion iIDR
 localization nucleus
 md5sum f1243aee2df502cd7ec8b177ba94e5c0
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8973,7 +8818,6 @@ labExpId LID44462,LID44463
 labVersion iIDR
 localization nucleus
 md5sum 9d4e5af3ce150589f057ec364acd3a7f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9000,7 +8844,6 @@ lab CSHL
 labExpId LID44462
 localization nucleus
 md5sum 87689296b73fc06cd51a39ed3e13fb94
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9029,7 +8872,6 @@ lab CSHL
 labExpId LID44463
 localization nucleus
 md5sum 1b5cbf9623e430913ce6c94db289678b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9058,7 +8900,6 @@ lab CSHL
 labExpId LID44462
 localization nucleus
 md5sum 632aac93ee1e44aecbabc12d776d26e8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9087,7 +8928,6 @@ lab CSHL
 labExpId LID44463
 localization nucleus
 md5sum e8ef9d3c0e235ab7a474942ea84a98fa
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9116,7 +8956,6 @@ lab CSHL
 labExpId LID44462
 localization nucleus
 md5sum fd75364af617356e54ee4dbe7cba2538
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9144,7 +8983,6 @@ lab CSHL
 labExpId LID44463
 localization nucleus
 md5sum ba8f88267ed0a03db07ffcd1b8f7d68c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11165,7 +11003,6 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum ff04ccf2cac390a81fc9f7c1275a96b8,0f947831315ddd98fb5cc331d0c861bf
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11193,7 +11030,6 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum b6a9fba1306499191fe7e562b833c210,932c7e5c98573a9b47b6a770f595adfb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11224,7 +11060,6 @@ labExpId LID21056,LID21058
 labVersion iIDR
 localization nucleus
 md5sum 9e2a283ebb77a8685de4a3b0cea95c75
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11253,7 +11088,6 @@ labExpId LID21056,LID21058
 labVersion iIDR
 localization nucleus
 md5sum 672a54c83780a160aa72362283199787
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11280,7 +11114,6 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum 913765bad3c1e58374276d7d92df8b9d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11309,7 +11142,6 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum 6f39e198619849b089e6b55c0148216d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11338,7 +11170,6 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum d8f28309df9602dfc7ee609aab5cdeb8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11367,7 +11198,6 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum c47a34ff4661284ee45b9251d607ba1b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11396,7 +11226,6 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum e572f81f55c3ca0419a023bd438bc6c4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11424,7 +11253,6 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum 64068fd361ad8d0d2169f3b43dbed7bb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11452,7 +11280,6 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum 0d6d12b60fc88da597f8f014403b4305
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11480,7 +11307,6 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum 8b41b3ed8cc82e0b580024787b734b5b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -12761,7 +12587,6 @@ lab CSHL
 labExpId LID47262
 localization cell
 md5sum d95d08c90623f1ca4fa9a9ef9a88f2a8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12788,7 +12613,6 @@ lab CSHL
 labExpId LID47263
 localization cell
 md5sum 918d8365b0e49e64e3e93c2dfa92ce23
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13594,7 +13418,6 @@ lab CSHL
 labExpId LID47264
 localization cytosol
 md5sum 31511d1db02214ce12b910b2927c1e6e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13621,7 +13444,6 @@ lab CSHL
 labExpId LID47265
 localization cytosol
 md5sum 4aa26c833002e61608f607190231b303
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14455,7 +14277,6 @@ lab CSHL
 labExpId LID47266
 localization nucleus
 md5sum 7b23b2adb9f035f85fb533a95138faf7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14482,7 +14303,6 @@ lab CSHL
 labExpId LID47267
 localization nucleus
 md5sum 6aad3fc0406b340daef19ef682b975d7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14759,7 +14579,6 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum d43bf7295915a91092026ad2c0a8c2d2,90d2326e515e8e0b882c4bb39b295ecc
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14787,7 +14606,6 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum 5d4da451d8fc41bf2c806919caa4815d,9d5d82bc2a78122abef85683d433c199
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14818,7 +14636,6 @@ labExpId LID10567,LID10568
 labVersion iIDR
 localization cell
 md5sum 6b0e3670644af6daca8f6c2e57e336c8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14847,7 +14664,6 @@ labExpId LID10567,LID10568
 labVersion iIDR
 localization cell
 md5sum 773dcf0d4702edfb17f2923a9a4afa33
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14874,7 +14690,6 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum 18de869c0d45d10cf2be39b5736874d1
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14903,7 +14718,6 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum 7ac3602b798a6d75ae6d9d0c8769a58b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14932,7 +14746,6 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum f27465fd0c8028c871e1fac627391a7c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14961,7 +14774,6 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum db0c5a6c5f60bc3125c55fa7bae88a13
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -14990,7 +14802,6 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum 7c62b99d1f374488238f3705f8103f18
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15018,7 +14829,6 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum 75422d1590238057aed56e639e4e423b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15046,7 +14856,6 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum 4b96def5b0732d53b7ff30e611e42a97
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15074,7 +14883,6 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum 49871ebb05bc2e786784ef8bd3062c9f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15244,7 +15052,6 @@ lab CSHL
 labExpId LID8930
 localization chromatin
 md5sum 44588996b7c1830a145ea17d8e3a52d1,e6ab6fd7b2ecd3fe843c04a481628711
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15272,7 +15079,6 @@ lab CSHL
 labExpId LID18560
 localization chromatin
 md5sum 1f818c6d6b7b4dbc36da9632d2635ec8,23ada0b4fc26df82da7abe7be17b3f6f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15303,7 +15109,6 @@ labExpId LID8930,LID18560
 labVersion iIDR
 localization chromatin
 md5sum fc52c70a1136cf55987080e026468551
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15332,7 +15137,6 @@ labExpId LID8930,LID18560
 labVersion iIDR
 localization chromatin
 md5sum 3b56c3b4f10c128458c0bda30438597f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15359,7 +15163,6 @@ lab CSHL
 labExpId LID8930
 localization chromatin
 md5sum 8cfc54d326127c6e517d67231c6803a2
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15388,7 +15191,6 @@ lab CSHL
 labExpId LID18560
 localization chromatin
 md5sum 37de1632c73a3d657e1ab5838e50fa09
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15417,7 +15219,6 @@ lab CSHL
 labExpId LID8930
 localization chromatin
 md5sum 4bac393e86441779fcfd6445f57a113f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15446,7 +15247,6 @@ lab CSHL
 labExpId LID18560
 localization chromatin
 md5sum 57b1b816a606f3435f415938d4340b6a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15475,7 +15275,6 @@ lab CSHL
 labExpId LID8930
 localization chromatin
 md5sum 9b470a4c3577bd40a3afed33d5fbb089
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15503,7 +15302,6 @@ lab CSHL
 labExpId LID18560
 localization chromatin
 md5sum 333136c9d2e699973dc704ee59e5eebc
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15673,7 +15471,6 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 45fedb7b863fab34cc9a1864eefe58d0,d8e7a114b29ea72a699cffc43bcc1a7a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15701,7 +15498,6 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum 1dd42d818027c74149a30b341be8a9ea,9f8ac7373accb45b041183b864af8a96
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15732,7 +15528,6 @@ labExpId LID10572,LID10571
 labVersion iIDR
 localization cytosol
 md5sum 9209ff689d1f62487a6210afc0bed839
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15761,7 +15556,6 @@ labExpId LID10572,LID10571
 labVersion iIDR
 localization cytosol
 md5sum 8faebd571ecacaea9a8ebafd6f8824f9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15788,7 +15582,6 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 561d398f0b543ed94d5a9079cfd93f4f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15817,7 +15610,6 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum 97f175810838a38fc4a9f6e7941a7c39
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15846,7 +15638,6 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 7a403e4fc6c5bc7699d04a7ad01bb13d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15875,7 +15666,6 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum a8a864882059a8bc5a8983fecae17da2
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15904,7 +15694,6 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 725654f55054db59a620c61392020e17
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15932,7 +15721,6 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum 13d393cadd13f2ddae9d9f664c5589ff
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15960,7 +15748,6 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 9d48f1ef3da7b8ab1286b53bf350c064
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -15988,7 +15775,6 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum d1975ef6efba87c8821f901af53eabc4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16158,7 +15944,6 @@ lab CSHL
 labExpId LID8928
 localization nucleolus
 md5sum 63fb0bb9ad9c1a7bbcb9cc2cd44be86d,1b941e63297d5f451091797bb6814c9a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16186,7 +15971,6 @@ lab CSHL
 labExpId LID18558
 localization nucleolus
 md5sum 4166bbab0e923c0f407861b9d230cd63,39451aad620cabf2605017dfdd08cf45
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16217,7 +16001,6 @@ labExpId LID8928,LID18558
 labVersion iIDR
 localization nucleolus
 md5sum 6e39fecf670f81058fe63c4dac7941d8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16246,7 +16029,6 @@ labExpId LID8928,LID18558
 labVersion iIDR
 localization nucleolus
 md5sum 16e37beddb6a8d43426a1d646d95bb9e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16273,7 +16055,6 @@ lab CSHL
 labExpId LID8928
 localization nucleolus
 md5sum 81ac50814794826209a74b836b8c0819
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16302,7 +16083,6 @@ lab CSHL
 labExpId LID18558
 localization nucleolus
 md5sum be54c86ef9b4b615a9ed0828537c0270
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16331,7 +16111,6 @@ lab CSHL
 labExpId LID8928
 localization nucleolus
 md5sum 5b4f8a64dcf8efb943c90e21570d2826
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16360,7 +16139,6 @@ lab CSHL
 labExpId LID18558
 localization nucleolus
 md5sum 91a25d4462f68dbe7c3dbaac3675e2c0
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16389,7 +16167,6 @@ lab CSHL
 labExpId LID8928
 localization nucleolus
 md5sum f96e4e47e52b37d978eef27adf7df636
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16417,7 +16194,6 @@ lab CSHL
 labExpId LID18558
 localization nucleolus
 md5sum 1be1fa8860e592135bba9e01ee0c4b19
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16587,7 +16363,6 @@ lab CSHL
 labExpId LID8929
 localization nucleoplasm
 md5sum 9810e20cb34749352426228fe22f2fe0,a8cb8ee02041cc431bdd6556489ec42f
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16615,7 +16390,6 @@ lab CSHL
 labExpId LID18559
 localization nucleoplasm
 md5sum 4e180551cf0af4c72d4687e3a3f4a0be,7eec99bf1310b714b26f6f52840e98e8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16646,7 +16420,6 @@ labExpId LID8929,LID18559
 labVersion iIDR
 localization nucleoplasm
 md5sum 8d9bcf4f8c0a71d8a136a1f481e13bd9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16675,7 +16448,6 @@ labExpId LID8929,LID18559
 labVersion iIDR
 localization nucleoplasm
 md5sum fa3c27ef7846dae19b90a3642c2cb600
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16702,7 +16474,6 @@ lab CSHL
 labExpId LID8929
 localization nucleoplasm
 md5sum e6054ab6e5ef0109e7e4d9031734c5e9
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16731,7 +16502,6 @@ lab CSHL
 labExpId LID18559
 localization nucleoplasm
 md5sum c22342750e8a7d444f17f756816aef1c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16760,7 +16530,6 @@ lab CSHL
 labExpId LID8929
 localization nucleoplasm
 md5sum 5e021cf32cf5d735d4ee1ece911d2491
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16789,7 +16558,6 @@ lab CSHL
 labExpId LID18559
 localization nucleoplasm
 md5sum 592a4196ebc8283f27f9d4b4c3364b2c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16818,7 +16586,6 @@ lab CSHL
 labExpId LID8929
 localization nucleoplasm
 md5sum 5d015dc471ccf8cd33abe038bdef4714
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -16846,7 +16613,6 @@ lab CSHL
 labExpId LID18559
 localization nucleoplasm
 md5sum 798b7bc9f941fadedc9d5027fc1f06f4
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17016,7 +16782,6 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum 938a80d561e144724d05d72faeee629a,452593789b1044809eacd46b91ab9989
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17044,7 +16809,6 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 770d18aceac7c6dbce6c09fbd7169650,a4e2f0a4355c19a2507f121d58ecb6ad
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17075,7 +16839,6 @@ labExpId LID10570,LID10569
 labVersion iIDR
 localization nucleus
 md5sum 7b80f1ac3518f3664d4cc1e5c283a4e0
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17104,7 +16867,6 @@ labExpId LID10570,LID10569
 labVersion iIDR
 localization nucleus
 md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17131,7 +16893,6 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum 2ae269e5e5422a9dc7ddeb4de88526da
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17160,7 +16921,6 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 1836a0ae8ee33ac6cb55508809dacbc1
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17189,7 +16949,6 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum d33b7dfb19f123ffbe91e909494cbdfa
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17218,7 +16977,6 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 8b5ca5b6923b1f7175bb643a7c59572e
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17247,7 +17005,6 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum 8f77463de47ac2d3afefc8aef66540fa
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17275,7 +17032,6 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 6adb3566110ad25a8442b7470b6ab93d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17303,7 +17059,6 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum 7857ffa8cf4b9892b8dbc2522be6b89c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17331,7 +17086,6 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 02685eb72683978c71ef658a35056631
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17495,7 +17249,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellCiptapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46458,LID46459
-labProtocolId 089WCs,090WCs
 labVersion iIDR
 localization cell
 md5sum 51b978a8e11e0c2ff4fa92b912659838
@@ -17523,7 +17276,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellCiptapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46458,LID46459
-labProtocolId 089WCs,090WCs
 labVersion iIDR
 localization cell
 md5sum 55ca3782e97a655870be6bd1c9b43beb
@@ -17550,7 +17302,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46311,LID46312
-labProtocolId 089WCs,090WCs
 labVersion iIDR
 localization cell
 md5sum 53d9dfc3e4946f16bd03c013d436c904
@@ -17578,7 +17329,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46311,LID46312
-labProtocolId 089WCs,090WCs
 labVersion iIDR
 localization cell
 md5sum 5785251bb837076156169da6d29b1765
@@ -17605,7 +17355,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep3.bam,wgEncodeCshlShortR
 grant Gingeras
 lab CSHL
 labExpId LID46311
-labProtocolId 089WCs
 localization cell
 md5sum a651083200997c69d55bdd58cd007252,1039b9bc5fd8cfd7fc3c8c99b4af27ee
 project wgEncode
@@ -17633,7 +17382,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep4.bam,wgEncodeCshlShortR
 grant Gingeras
 lab CSHL
 labExpId LID46312
-labProtocolId 090WCs
 localization cell
 md5sum 042d7a296291b10479b79eebd7174aa7,17f0a5148c2538a1ddaa9a85fa199035
 project wgEncode
@@ -17661,7 +17409,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep3.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID46458
-labProtocolId 089WCs
 localization cell
 md5sum e8d34aa78ef9b02c712cf13664f7b71e,48ed069d6afd982b2ec9817423f30672
 project wgEncode
@@ -17689,7 +17436,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep4.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID46459
-labProtocolId 090WCs
 localization cell
 md5sum 666c44ee6bae3acead61384372203f9b,b7d4d0aaf16b03b8a6a3061b3d2139e0
 project wgEncode
@@ -17717,7 +17463,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46458
-labProtocolId 089WCs
 localization cell
 md5sum 5e245fca36b0b9cec74d041f75e2cb7f
 project wgEncode
@@ -17745,7 +17490,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46459
-labProtocolId 090WCs
 localization cell
 md5sum cfc3d926fda3fa577dcebf27f6c29e2f
 project wgEncode
@@ -17773,7 +17517,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46458
-labProtocolId 089WCs
 localization cell
 md5sum c5f8f97dc2e1e2f80339d090d896c026
 project wgEncode
@@ -17801,7 +17544,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46459
-labProtocolId 090WCs
 localization cell
 md5sum 74e74a880928e30fe7523e08cf32162d
 project wgEncode
@@ -17829,7 +17571,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46458
-labProtocolId 089WCs
 localization cell
 md5sum 0c57e03e7eb405de3cb922e18a53ca5b
 project wgEncode
@@ -17856,7 +17597,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46459
-labProtocolId 090WCs
 localization cell
 md5sum ada8088eb919369e61237271ef2958ef
 project wgEncode
@@ -17887,7 +17627,7 @@ labExpId LID20743,LID20744
 labVersion iIDR
 localization cell
 md5sum 5c5c105b1f11a73199337f0aa0495964
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -17911,7 +17651,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46311
-labProtocolId 089WCs
 localization cell
 md5sum b8a25d9c874b9750395fc431343ec4a1
 project wgEncode
@@ -17939,7 +17678,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46312
-labProtocolId 090WCs
 localization cell
 md5sum 1a0aa614525ca7830d25af993b55f6dc
 project wgEncode
@@ -17967,7 +17705,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46311
-labProtocolId 089WCs
 localization cell
 md5sum 04a43797e5c150dd52d52c99418c4787
 project wgEncode
@@ -17995,7 +17732,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46312
-labProtocolId 090WCs
 localization cell
 md5sum ae95568fc7e880ec71444bbb4c40c4fe
 project wgEncode
@@ -18023,7 +17759,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46311
-labProtocolId 089WCs
 localization cell
 md5sum a5f723ec50c25dcd1607d022461f11bf
 project wgEncode
@@ -18050,7 +17785,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46312
-labProtocolId 090WCs
 localization cell
 md5sum 1c653a498ab47c074e8368cb0ad5f614
 project wgEncode
@@ -18079,7 +17813,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum 9d25c9ec6d8159c490ca1faa9e95b014,d9cffb4ecaa8877df5433fb8781d808a
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18107,7 +17841,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum cf84774a08bbe3fa3cff37dbe8853645,6e0a7b365572442adb418b0e8ce8b7c5
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18142,6 +17876,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep3
 view Alignments
 
@@ -18169,6 +17904,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep4
 view Alignments
 
@@ -18192,7 +17928,7 @@ labExpId LID20743,LID20744
 labVersion iIDR
 localization cell
 md5sum bb9edaf056aa0c5c412c7284ffd28a9f
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18220,7 +17956,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum 8dba39a523ccab75ef08d696ca113371
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18249,7 +17985,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum 681fc49d3c18c1140b5e66c0a3109fba
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18285,6 +18021,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep3
 view MinusRawSignal
 
@@ -18313,6 +18050,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep4
 view MinusRawSignal
 
@@ -18334,7 +18072,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum dc70a86afe2d597bb52e5e6597e4f1e1
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18363,7 +18101,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum 0a2c85c2f554272619a85e7a665e69a2
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18399,6 +18137,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep3
 view PlusRawSignal
 
@@ -18427,6 +18166,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep4
 view PlusRawSignal
 
@@ -18448,7 +18188,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum af4c1f86cd8e1853103cc79f6c975887
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18476,7 +18216,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum 991aa559ccec29b6d3a23407b5add05e
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18504,7 +18244,6 @@ lab CSHL
 labExpId LID47160
 localization cell
 md5sum 7600b5c5b63d867a3cebb96cfad8fced
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -18512,6 +18251,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5645
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep4
@@ -18532,7 +18272,6 @@ lab CSHL
 labExpId LID47161
 localization cell
 md5sum b21db593369ee188ac461cba38349f01
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -18540,6 +18279,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5636
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep1
@@ -18560,7 +18300,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum edab552c9bd6494c8919c1d2012e1a68
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18588,7 +18328,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum 8fde5c5bcea9add127e8f6416b523577
-origAssembly hg19
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18623,6 +18363,7 @@ replicate 3
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep4
@@ -18650,6 +18391,7 @@ replicate 4
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
+submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellTapContigs
@@ -18668,9 +18410,9 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743,LID20744
-labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18724,9 +18466,9 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743,LID20744
-labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
+objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -18777,7 +18519,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46315,LID46316
-labProtocolId 089Cs,090Cs
 labVersion iIDR
 localization cytosol
 md5sum 501be93a84524ef3b61cf73640d65724
@@ -18805,7 +18546,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46315,LID46316
-labProtocolId 089Cs,090Cs
 labVersion iIDR
 localization cytosol
 md5sum 0e58540d0f57af95394bd78c10d1036c
@@ -18832,7 +18572,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep3.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID46315
-labProtocolId 089Cs
 localization cytosol
 md5sum 10ee8e792105a16c8c04da5748749ef1,55355e4c02d7cc3e4b9c07f92189990d
 project wgEncode
@@ -18860,7 +18599,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep4.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID46316
-labProtocolId 090Cs
 localization cytosol
 md5sum 575feb4fd4a1f5ca0278204688307078,6d04c4f6c772da98837d7f44da621462
 project wgEncode
@@ -18888,7 +18626,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46315
-labProtocolId 089Cs
 localization cytosol
 md5sum 15a6c53a45a8f701ae404777368a3b7e
 project wgEncode
@@ -18916,7 +18653,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46316
-labProtocolId 090Cs
 localization cytosol
 md5sum e74bae3fb8314e6dc75f65c4ac1d97cd
 project wgEncode
@@ -18944,7 +18680,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46315
-labProtocolId 089Cs
 localization cytosol
 md5sum 1606056f3f63fc2334ca12cce05ecb73
 project wgEncode
@@ -18972,7 +18707,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46316
-labProtocolId 090Cs
 localization cytosol
 md5sum 3c3b5c780786e466e151a85f97e1a51e
 project wgEncode
@@ -19000,7 +18734,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46315
-labProtocolId 089Cs
 localization cytosol
 md5sum 8732e47fe628f63dc3e4ab19aba1c1c5
 project wgEncode
@@ -19027,7 +18760,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46316
-labProtocolId 090Cs
 localization cytosol
 md5sum ef642f48c4a250866f24693fc7aecd87
 project wgEncode
@@ -19218,7 +18950,6 @@ lab CSHL
 labExpId LID47162
 localization cytosol
 md5sum 8b32621cfabddf535eab4c3e74cc5ab3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -19245,7 +18976,6 @@ lab CSHL
 labExpId LID47163
 localization cytosol
 md5sum 135d9e0dee9bb88ac92296ca58f69287
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -19375,7 +19105,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46313,LID46314
-labProtocolId 089Ns,090Ns
 labVersion iIDR
 localization nucleus
 md5sum e5ffe612ad3d899f089e9d17d4c75bfc
@@ -19403,7 +19132,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46313,LID46314
-labProtocolId 089Ns,090Ns
 labVersion iIDR
 localization nucleus
 md5sum 834a153b79f38e6dcb15690c66293c6c
@@ -19430,7 +19158,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep3.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID46313
-labProtocolId 089Ns
 localization nucleus
 md5sum 5ec679d8158e6dc9267002efe92f272a,eb24b5fe7338a839e4d96fcbd6faddbc
 project wgEncode
@@ -19458,7 +19185,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep4.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID46314
-labProtocolId 090Ns
 localization nucleus
 md5sum 6007e4cee6fc3cfaa5df3f3e6a107175,199982b19dc572c1c26ccc3b1f719f57
 project wgEncode
@@ -19486,7 +19212,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46313
-labProtocolId 089Ns
 localization nucleus
 md5sum 5cc2b0e987d478a83cc3f8ee1e25db7b
 project wgEncode
@@ -19514,7 +19239,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46314
-labProtocolId 090Ns
 localization nucleus
 md5sum e2ff6e5506c0a049cd7360238da146ba
 project wgEncode
@@ -19542,7 +19266,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46313
-labProtocolId 089Ns
 localization nucleus
 md5sum 287684fad2f80ac9e65922071348c713
 project wgEncode
@@ -19570,7 +19293,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID46314
-labProtocolId 090Ns
 localization nucleus
 md5sum a63059b6fdfe577afb14cecf5d5d3863
 project wgEncode
@@ -19598,7 +19320,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46313
-labProtocolId 089Ns
 localization nucleus
 md5sum a69b9cb54e5db606002967b9d5fc849d
 project wgEncode
@@ -19625,7 +19346,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID46314
-labProtocolId 090Ns
 localization nucleus
 md5sum b5c85795ce1df3a8ac306b675186e5e6
 project wgEncode
@@ -19816,7 +19536,6 @@ lab CSHL
 labExpId LID47164
 localization nucleus
 md5sum 3235b95a1c1fc185a38c11a24beddc8d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -19843,7 +19562,6 @@ lab CSHL
 labExpId LID47165
 localization nucleus
 md5sum d7ddb46b5b6b0d43d271d83079e8a615
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -19974,7 +19692,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1.bam,wgEncodeCshlShortRnaS
 grant Gingeras
 lab CSHL
 labExpId LID44360
-labProtocolId 039WCs
 localization cell
 md5sum ff0021672bcb17530918aa34429fe96a,6213817ccacd1bfd3ba01f334e8e0b06
 project wgEncode
@@ -20003,7 +19720,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2.bam,wgEncodeCshlShortRnaS
 grant Gingeras
 lab CSHL
 labExpId LID44361
-labProtocolId 040WCs
 localization cell
 md5sum ffe71e0b0ab379d3c9cc349d7bd34002,31586e12c2bac7ab89b25336160d035a
 project wgEncode
@@ -20032,7 +19748,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID44360,LID44361
-labProtocolId 039WCs,040WCs
 labVersion iIDR
 localization cell
 md5sum 947daf3be39b1e0642d6da77ab5f10bc
@@ -20061,7 +19776,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44360,LID44361
-labProtocolId 039WCs,040WCs
 labVersion iIDR
 localization cell
 md5sum 9ed04ad1e4f608d2e3a233006aa572f6
@@ -20089,7 +19803,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
-labProtocolId 039WCs
 localization cell
 md5sum dc1bfbff15ff94896c3892d0246c9509
 project wgEncode
@@ -20118,7 +19831,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
-labProtocolId 040WCs
 localization cell
 md5sum af05cd93e46cb1b6eccf6986183258cf
 project wgEncode
@@ -20147,7 +19859,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44360
-labProtocolId 039WCs
 localization cell
 md5sum 7e3f792d88051246b6515e958a5b6c9f
 project wgEncode
@@ -20176,7 +19887,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44361
-labProtocolId 040WCs
 localization cell
 md5sum 904167931009f2c9b06b1f30dcbace33
 project wgEncode
@@ -20205,7 +19915,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44360
-labProtocolId 039WCs
 localization cell
 md5sum 371bfc0a60aa869ac6559ef8958002a4
 project wgEncode
@@ -20233,7 +19942,6 @@ fileName wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44361
-labProtocolId 040WCs
 localization cell
 md5sum 9af86a083eaa9dd1a4dc5b7c6be060a6
 project wgEncode
@@ -20539,7 +20247,6 @@ lab CSHL
 labExpId LID20999
 localization cell
 md5sum 3f6f90b587214ce0e8a2bbafe80b025e,1c71f337d97f1300a8a4d511aa72f533
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20567,7 +20274,6 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum ab6ac9d935ef9c2c9538512946c5f4ac,331637cf83a20d6dcc671e4b3e01a6a5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20598,7 +20304,6 @@ labExpId LID20999,LID21000
 labVersion iIDR
 localization cell
 md5sum d0af9d62c5690158f7fc413a50d3e121
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20627,7 +20332,6 @@ labExpId LID20999,LID21000
 labVersion iIDR
 localization cell
 md5sum 86221a4263bc19708058ec39e990ff9b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20654,7 +20358,6 @@ lab CSHL
 labExpId LID20999
 localization cell
 md5sum 043440435b36ce61bd34fdfdb8d7662a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20683,7 +20386,6 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum ba9944c70d4a8de032b5657ef455273a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20712,7 +20414,6 @@ lab CSHL
 labExpId LID20999
 localization cell
 md5sum 6cfbb025bc9c9a37094ce106b5f5421d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20741,7 +20442,6 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum 2f0ccdb07ccffc9addc89b7c5a42eb0a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20768,10 +20468,8 @@ geoSampleAccession GSM897086
 grant Gingeras
 lab CSHL
 labExpId LID20999
-labProtocolId 007WCs
 localization cell
 md5sum 41b637907fedafb918a7f289fe13107b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20799,7 +20497,6 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum e066dc37eae75a0c293044fbe878b599
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20827,7 +20524,6 @@ lab CSHL
 labExpId LID20999
 localization cell
 md5sum 254f04a88e62aecacf37f1de096a5979
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20855,7 +20551,6 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum e045eb3939932f6afaa7cb024f8f5758
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20882,7 +20577,6 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum 22df271f2e055ac3a6ba4f82f411bb29,a901cfd4ed7fcb7ff1d532abb64170d8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20910,7 +20604,6 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum 72345303233f9f492d7b40a7ad3d8872,299c73516e46504512a79fc44dceb25c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20941,7 +20634,6 @@ labExpId LID21002,LID21004
 labVersion iIDR
 localization cytosol
 md5sum 0aa2ccb251b6b8daa3c0f9c0b936f4c6
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20970,7 +20662,6 @@ labExpId LID21002,LID21004
 labVersion iIDR
 localization cytosol
 md5sum dc206f3ab00485e7fd9659c376981e8b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -20997,7 +20688,6 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum eff824d26e69a9053d8dddbb0684dd9c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21026,7 +20716,6 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum c1e524f323d185200277800248d1e1e5
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21055,7 +20744,6 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum cc831581083bd473b41f7cd427fffb11
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21084,7 +20772,6 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum b6ec92eb7fa88e200e046ab169ab0610
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21113,7 +20800,6 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum 62b5d06ed893cfd5bf2b70e565f317e8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21141,7 +20827,6 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum 45ca9ad813b9c291ebeb31589d7d6fb1
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21169,7 +20854,6 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum 8815f0827d4783aa21a5dd280641b0a2
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21197,7 +20881,6 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum ead145e114537185482da76f2f6c2400
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21224,7 +20907,6 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum 86dfffadc9e67c5f19870f957198ce4d,44fbb70c74744a372f8e867ccc874fce
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21252,7 +20934,6 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum 055e5581e306819524a51f19749eaa58,11b532bec87b6284b8f0d102fe1d02d8
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21283,7 +20964,7 @@ labExpId LID21001,LID21003
 labVersion iIDR
 localization nucleus
 md5sum 1dd783bbfcf1dc60bab89f72ba90f9f6
-origAssembly hg19
+objStatus replaced - new version of the data can be found in object wgEncodeCshlShortRnaSeqNhekNucleusTapContigs, the data were regenerated.
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21312,7 +20993,6 @@ labExpId LID21001,LID21003
 labVersion iIDR
 localization nucleus
 md5sum 7c4ab7c6178ec276264cc459ae2c0558
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21339,7 +21019,6 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum f1aed5ec40443beee05d7f80307ad2cb
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21368,7 +21047,6 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum d0c13d4a419eee2a3390fea8f807bc11
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21397,7 +21075,6 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum 8ed219b83cd0f36a4d0495e6642427c7
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21426,7 +21103,6 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum 61e3ab67bd0e1f27649dbc901e419a22
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21455,7 +21131,6 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum 0fbb145eec88cbe6028ae6f787dd9b15
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21483,7 +21158,6 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum 9c80675c45ec42866dfae3ef6d252929
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21511,7 +21185,6 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum a32508dc782736896419d2939422c387
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21539,7 +21212,6 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum 5d296705dea53646051ca6e752bede15
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -21565,7 +21237,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID21001,LID21003
-labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
 md5sum 21a14145c1c86b7bd60986ce5048febd
@@ -21595,7 +21266,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21001,LID21003
-labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
 md5sum ca63a435de4fc7a6aaee1ac681f237a9
@@ -23291,7 +22961,6 @@ lab CSHL
 labExpId LID46956
 localization cell
 md5sum f847a3c3496cf02d885637359495e58d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -23318,7 +22987,6 @@ lab CSHL
 labExpId LID46957
 localization cell
 md5sum 37cfff8c925cf69be3ab65b07118580a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -24146,7 +23814,6 @@ lab CSHL
 labExpId LID46958
 localization cytosol
 md5sum 30586d056d5196cb6dbb1e9e5b5ab17b
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -24173,7 +23840,6 @@ lab CSHL
 labExpId LID46959
 localization cytosol
 md5sum 2377957d23410aecf2092f45ef76221d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -24975,7 +24641,6 @@ lab CSHL
 labExpId LID46960
 localization nucleus
 md5sum 1f9dbef6e85ab924f35a31ed7b230b67
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25002,7 +24667,6 @@ lab CSHL
 labExpId LID46961
 localization nucleus
 md5sum a2f6ab85a32bf2af13b0fda3f1caf65a
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25107,7 +24771,6 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum 5cadbe1fc66d9ae3f761c1d790f02d15,f0b7aa64a574189b47c640142d077b30
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25135,7 +24798,6 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 913ee61cd5a672cd3a549a233ae2b156,101fc9a22f36362cffbb19f030c12b29
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25166,7 +24828,6 @@ labExpId LID20747,LID20748
 labVersion iIDR
 localization cell
 md5sum cfc763c1c3e0733e4b198094d1b31438
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25195,7 +24856,6 @@ labExpId LID20747,LID20748
 labVersion iIDR
 localization cell
 md5sum bdf7c62de15dd40edeaafc705ea498f3
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25222,7 +24882,6 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum 82c83d331341e068b130f7e142ee1a69
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25251,7 +24910,6 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 5566d962153a68b78fb351c5d69aef13
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25280,7 +24938,6 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum b1f6556ea8d2922511c5a3e2126787ef
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25309,7 +24966,6 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 1c598500a448a72b8b514b855baaba7d
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25338,7 +24994,6 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum 10a126dd3b95b8011132005d2b3c205c
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25366,7 +25021,6 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 4c08caaef8a04cbda0c569b21dd7c666
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25394,7 +25048,6 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum aca2e59982611d4a7dff78c742e72301
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25422,7 +25075,6 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 9e4f1246736d063a896c3172acc04a09
-origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -25432,4 +25084,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 712193445
+# MAGIC: 1357331640

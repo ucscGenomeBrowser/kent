@@ -509,3 +509,30 @@ chrPic1.perChromTables = no
     make etc-update
 
 #########################################################################
+# create pushQ entry (DONE - 2012-05-24 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=chrPic1 -keys all.joiner
+
+    mkdir /hive/data/genomes/chrPic1/pushQ
+    cd /hive/data/genomes/chrPic1/pushQ
+    makePushQSql.pl chrPic1 > chrPic1.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/chrPic1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/chrPic1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/chrPic1/bbi/quality.bw
+# WARNING: chrPic1 does not have seq
+# WARNING: chrPic1 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p chrPic1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < chrPic1.sql
+
+#########################################################################

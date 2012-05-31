@@ -867,6 +867,11 @@ var subCfg = { // subtrack config module.
                 }
             });
         }
+	// Bugfix #8048: Tim suggested using a special class to handle subtrack settings
+	// that appear alongside composite settings, as in ldUi (HapMap LD).
+	var subsInComp = $('select.subtrackInCompositeUi,input.subtrackInCompositeUi');
+	$(subsInComp).each( function(ix, el) {
+				$(el).change(function(e) { subCfg.markChange(e, el); } ) });
 
         // Because of fauxDisabled subCBs, it is necessary to truly disable them before submitting.
         $("FORM").submit(function (i) {
