@@ -860,7 +860,7 @@ fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
 geoSampleAccession GSM646563
 grant Stam
 lab UW
-labExpId 
+labExpId DS11909
 labVersion lmax-v1.0
 md5sum df182a5e11303d2f97afc410d619a738
 origAssembly hg19
@@ -6506,4 +6506,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1445796865
+# MAGIC: 1446177637
