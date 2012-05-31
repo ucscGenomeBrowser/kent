@@ -589,7 +589,7 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "<div id=\"helpBox\">"
     "<a href=\"hgLogin?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
     "Need an account? <a href=\"hgLogin?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
-    "To change password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>."
+//    "To change password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>."
     "</div><!-- END - helpBox -->"
     "</div><!-- END - loginBox -->"
     "\n"
@@ -758,7 +758,8 @@ hPrintf("<h2>UCSC Genome Browser</h2>"
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
-backToDoLoginPage(1);
+// backToDoLoginPage(1);
+returnToURL(1);
 }
 
 void signupPage(struct sqlConnection *conn)

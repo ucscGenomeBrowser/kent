@@ -23,8 +23,7 @@ include wgEncodeUncBsuProt.release2.ra alpha
 include wgEncodeUncBsuProtGenc.release1.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra public
-include wgEncodeReg.release2.ra beta
+include wgEncodeReg.release2.ra beta,public
 include wgEncodeReg.release3.ra alpha
 
 # UW Repli-Seq track (wrangler: venkat)
@@ -106,7 +105,8 @@ include wgEncodeUwDgf.release4.ra alpha
 # ENCODE RNA SEQ -----------------------------------
 
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.release3.ra
+include wgEncodeRikenCage.release3.ra beta,public
+include wgEncodeRikenCage.release4.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.release2.ra beta,public
