@@ -18,27 +18,28 @@ class TableQa(object):
         self.sumRow = summary.SumRow(db, table, tableType)
         self.sumTable.addRow(self.sumRow)
 
-    def recordPassOrError(self, error):
-        """Writes the word pass or ERROR to reporter, and sets error status in sumRow.
-        Not really for TableQa public use (it is used by TableQa subclasses). """
-        if not error:
-            self.reporter.writeLine("pass")
-        else:
-            self.reporter.writeLine("ERROR")
-            self.sumRow.setError()
+    def recordPass(self):
+        """Writes the word pass to reporter. 'Public' so that TableQa subclasses can use it."""
+        self.reporter.writeLine("pass")
+
+    def recordError(self):
+        """Writes the word ERROR to reporter, and sets error status in sumRow. 'Public' so that
+        TableQa subclasses can use it."""
+        self.reporter.writeLine("ERROR")
+        self.sumRow.setError()
 
     def __checkTableDescription(self):
         """Checks for an autoSql definition for this table in the tableDescriptions table."""
         # Ideally this would also check to see if each column in the table is described.
         self.reporter.beginStep(self.db, self.table, "checking for table descriptions")
         self.reporter.writeStepInfo()
-        error = False
         sqlOut = qaUtils.callHgsql(self.db, "select autoSqlDef from tableDescriptions where\
                                   tableName='" + self.table + "'")
         if sqlOut.strip() == '':
-            self.reporter.writeLine("ERROR: No table description for " + self.db + "." + self.table)
-            error = True
-        self.recordPassOrError(error)
+            self.reporter.writeLine("No table description for " + self.db + "." + self.table)
+            self.recordError()
+        else:
+            self.recordPass()
         self.reporter.endStep()
 
     def checkForUnderscores(self):
@@ -46,13 +47,12 @@ class TableQa(object):
         'trackDb_*' and 'hgFindSpec_*'. Method is "public" for use by other table types."""
         self.reporter.beginStep(self.db, self.table, "checking table name for underscores")
         self.reporter.writeStepInfo()
-        error = False
         if re.search('.*_.*', self.table) and not re.search('^(chr.*|all|trackDb|hgFindSpec)_.*',
                                                             self.table):
-            self.reporter.writeLine("ERROR: " + self.db + "." + self.table + 
-                                    " has unexpected underscores")
-            error = True
-        self.recordPassOrError(error)
+            self.reporter.writeLine(self.db + "." + self.table + " has unexpected underscores")
+            self.recordError()
+        else:
+            self.recordPass()
         self.reporter.endStep()
 
     def __rowCount(self):

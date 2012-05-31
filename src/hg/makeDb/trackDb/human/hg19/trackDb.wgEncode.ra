@@ -23,9 +23,8 @@ include wgEncodeUncBsuProt.release2.ra alpha
 include wgEncodeUncBsuProtGenc.release1.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra beta,public
-include wgEncodeReg.release2.ra alpha
-
+include wgEncodeReg.release2.ra beta,public
+include wgEncodeReg.release3.ra alpha
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
@@ -124,7 +123,8 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra
+include wgEncodeSydhRnaSeq.ra beta,public
+include wgEncodeSydhRnaSeq.patch.ra alpha
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra beta,public
