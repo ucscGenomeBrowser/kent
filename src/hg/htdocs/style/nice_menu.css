@@ -27,10 +27,17 @@ body {
 	margin:0px;
 }
 #main-menu {
-	width:1031px;
-	margin:auto;
+	/* width:1031px; */
+	margin-left: 30px;
 }
 
+
+/* from Jabico ... probably need to apply this to <body>
+#maindiv-whole {
+    background: url("../images/internal_bg1.jpg") repeat-x scroll left bottom 	
+    	#F9F9F7;
+}
+*/
 
 /* from nice_menus_default.css */
 
