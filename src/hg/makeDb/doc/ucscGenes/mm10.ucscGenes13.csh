@@ -20,8 +20,8 @@ set testingDir = $scratchDir/ucscGenes
 set db = mm10
 set xdb = hg19
 set Xdb = Hg19
-set ydb = canFam2
-set zdb = rn4
+set ydb = canFam3
+set zdb = rn5
 set spDb = sp120323 
 #set pbDb = proteins111004
 set ratDb = rn5
@@ -83,7 +83,7 @@ set rfam = /hive/data/outside/Rfam/111130
 
 
 # Tracks
-set multiz = multiz4way
+set multiz = multiz60way
 
 # NCBI Taxon 10090 for mouse, 9606 for human
 set taxon = 10090
@@ -173,6 +173,9 @@ bedIntersect -aHitAny rfam.distinctHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.b
 
 
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+#else
+touch rfam.syntenic.psl
+touch  rfam.syntenic.bed
 #endif # didn't do thie
 e
 
@@ -609,8 +612,6 @@ rm -r protein/raw
 
 # use this if(0) statement to control section of script to run
 #	Look for the BRACKET word to find the corresponding endif and exit
-if (0) then  # BRACKET
-
 cd $dir
 
 # Get parts of multiple alignments corresponding to transcripts.
@@ -654,7 +655,9 @@ cat cdsEvidence/*.tce | sort  > unweighted.tce
 # through txWalk because their gene boundaries should not change much.  Before
 # adding them, weed out anything that overlaps a txWalk transcript to avoid 
 # getting duplicate transcripts.
+
 bedWeedOverlapping txWalk.bed rfam.syntenic.bed rfam.weeded.bed
+
 bedWeedOverlapping txWalk.bed trna.bed trna.weeded.bed
 cat txWalk.bed antibody.bed trna.weeded.bed rfam.weeded.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
@@ -697,6 +700,8 @@ txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 
 sequenceForBed -db=$db -bedIn=weededCds.bed -fastaOut=weeded.fa \
     -upCase -keepName
+
+if (0) then  # BRACKET
 
 
 # Separate out transcripts into coding and 4 uncoding categories.
