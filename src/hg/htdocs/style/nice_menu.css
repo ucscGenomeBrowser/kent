@@ -352,7 +352,7 @@ span#home-link {
 	width: 23px;
 	/* margin-right: 1px; */
 	display: inline-block;
-	background-image: url("../images/home_icon_sprite_white.png");
+	background-image: url("../images/homeIconSprite.png");
 	background-position: 0 -18px;
 	background-color: #00457c;
 }
