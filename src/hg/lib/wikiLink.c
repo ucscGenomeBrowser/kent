@@ -156,3 +156,22 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
+char *wikiLinkChangePasswordUrl(int hgsid)
+/* Return the URL for the user change password page. */
+{
+char buf[2048];
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+
+if (loginSystemEnabled())
+    {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkChangePasswordUrl called when login system is not enabled "
+            "(specified in hg.conf).");
+        safef(buf, sizeof(buf),
+            "http://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
+            wikiLinkHost(), retEnc);
+    }
+freez(&retEnc);
+return(cloneString(buf));
+}
+
