@@ -51,8 +51,6 @@ char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
 i = MD5_DIGEST_LENGTH;
 MD5((unsigned char *)password, strlen(password), result1);
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
-    printf("%02x", result1[i]);
-for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
     }   
@@ -242,19 +240,24 @@ boolean tokenExpired(char *dateTime)
 return FALSE;
 }
 
-void returnToURL(int nSec)
-/* delay for N/10  micro seconds then return to the "returnto" URL */
+char *getReturnToURL()
+/* get URL passed in with returnto URL */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
 char returnTo[512];
-
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
+return cloneString(returnTo);
+}
 
+void returnToURL(int nSec)
+/* delay for N/10  micro seconds then return to the "returnto" URL */
+{
+char *returnURL = getReturnToURL();
 int delay=nSec*100;
 hPrintf(
     "<script  language=\"JavaScript\">\n"
@@ -264,22 +267,68 @@ hPrintf(
     "function afterDelay() {\n"
     "window.location =\"%s\";\n}"
     "\n//-->\n"
-    "</script>", delay, returnTo);
+    "</script>", delay, returnURL);
+}
+
+void  displayActMailSuccess()
+/* display Activate mail success box */
+{
+char *returnURL = getReturnToURL(); 
+hPrintf(
+    "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
+    "\n"
+    "<h2>UCSC Genome Browser</h2>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
+    "Please click the confirmation link in the email to activate your account.</p>"
+    "\n"
+    "<p><a href=\"%s\">Return</a></p>", returnURL);
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_userName");
+}
+
+
+void sendActMailOut(char *email, char *subject, char *msg)
+/* send mail to email address */
+{
+char *hgLoginHost = wikiLinkHost();
+char cmd[4096];
+safef(cmd,sizeof(cmd),
+    "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
+int result = system(cmd);
+if (result == -1)
+    {
+    hPrintf(
+        "<h2>UCSC Genome Browser</h2>"
+        "<p align=\"left\">"
+        "</p>"
+        "<h3>Error emailing to: %s</h3>"
+        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", email );
+    }
+else
+    {
+    hPrintf("<script  language=\"JavaScript\">\n"
+        "<!-- \n"
+        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayActMailSuccess=1\""
+        "//-->"
+        "\n"
+        "</script>", hgLoginHost);
+    }
 }
 
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
-char *email = cartUsualString(cart, "hgLogin_email", "");
-char *obj=cartUsualString(cart, "hgLogin_helpWith", "");
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to "
-    " <span id=\"emailaddress\">%s</span> containing %s...</p>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An email has been sent to you \n"
+   "containing information that you requested.</p>"
     "\n"
-    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>", email, obj);
+    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
+cartRemove(cart, "hgLogin_helpWith");
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_userName");
 }
 
 void sendMailOut(char *email, char *subject, char *msg)
@@ -321,12 +370,11 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the UCSC Genome Browser");
 safef(msg, sizeof(msg), 
-    "Someone (probably you, from IP address %s) has requested user name associated with this email address at UCSC Genome Browser. Your user name is: \n\n  %s\n\n", 
+    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at UCSC Genome Browser: \n\n  %s\n\n", 
    remoteAddr, users);
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
-
 
 void sendUsername(struct sqlConnection *conn, char *email)
 /* email user username(s)  */
@@ -336,16 +384,20 @@ char **row;
 char query[256];
 
 /* find all the user names assocaited with this email address */
-char user[256];
+char userList[256]="";
 safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
 sr = sqlGetResult(conn, query);
+int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gbMembers *m = gbMembersLoad(row);
-    safecpy(user, sizeof(user), m->userName);
-    mailUsername(email, user);   
+    if (numUser >= 1)
+        safecat(userList, sizeof(userList), ", ");
+    safecat(userList, sizeof(userList), m->userName);
+    numUser += 1;
     }
 sqlFreeResult(&sr);
+mailUsername(email, userList);
 }
 
 void sendNewPwdMail(char *username, char *email, char *password)
@@ -483,7 +535,7 @@ safef(msg, sizeof(msg),
     "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the UCSC Genome Browser.\n\nTo confirm that this account really does belong to you on the UCSC Genome Browser, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n", 
      remoteAddr, username, activateURL);
 safecat (msg, sizeof(msg), signature);
-sendMailOut(email, subject, msg);
+sendActMailOut(email, subject, msg);
 }
 
 void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
@@ -510,9 +562,11 @@ hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "<h2>UCSC Genome Browser</h2>"
     "\n"
     "<h3>Login</h3>"
-    "\n"
-    "<span style='color:red;'>%s</span>"
-    "\n", errMsg ? errMsg : "");
+    "\n");
+if (errMsg && sameString(errMsg, "Your account has been activated."))
+    hPrintf("<span style='color:green;'>%s</span>\n", errMsg ? errMsg : "");
+else
+    hPrintf("<span style='color:red;'>%s</span>\n", errMsg ? errMsg : "");
 hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
     "\n"
     "<div class=\"inputGroup\">"
@@ -559,6 +613,8 @@ if (sameString(emailToken, token))
     safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'",
     username);
     sqlUpdate(conn, query);
+    freez(&errMsg);
+    errMsg = cloneString("Your account has been activated.");
     } 
 else
     {
@@ -839,6 +895,7 @@ safef(query,sizeof(query), "insert into gbMembers set "
     "lastUse=NOW(),accountActivated='N'",
     sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
 sqlUpdate(conn, query);
+/********** new signup process start *******************/
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
 /* and comback here to contine back to URL */
@@ -851,7 +908,8 @@ cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-backToHgSession(1);
+//backToHgSession(1);
+returnToURL(1);
 }
 
 void accountHelp(struct sqlConnection *conn)
@@ -1047,6 +1105,8 @@ else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
     accountHelp(conn);
 else if (cartVarExists(cart, "hgLogin.do.activateAccount"))
     activateAccount(conn);
+else if (cartVarExists(cart, "hgLogin.do.displayActMailSuccess"))
+    displayActMailSuccess();
 else if (cartVarExists(cart, "hgLogin.do.displayMailSuccess"))
     displayMailSuccess();
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))

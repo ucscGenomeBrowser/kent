@@ -1582,10 +1582,11 @@ type Cell Line
 organism human
 description epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
 tissue luminal epithelium
+#tissue epithelium
 vendorName ATCC
 vendorId CRL-2923
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2923&Template=cellBiology
-lineage epithelia
+lineage endoderm
 karyotype cancer
 termId BTO:0000194
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000194
@@ -3240,7 +3241,7 @@ tag HIPE
 type Cell Line
 organism human
 description iris pigment epithelial cells
-tissue eye
+tissue epithelium
 lineage ectoderm
 karyotype normal
 termId BTO:0000653
@@ -3276,6 +3277,7 @@ type Cell Line
 organism human
 description mammary epithelial cells
 tissue breast
+#tissue epithelium
 lineage ectoderm
 karyotype normal
 vendorName Lonza
@@ -3293,10 +3295,11 @@ type Cell Line
 tier 3
 organism human
 description Mammary Epithelial Cells (placeholder, waiting on second lot/donor from PromoCell)
-lineage missing
+lineage ectoderm
 karyotype normal
 sex F
 tissue mammary gland
+#tissue epithelium
 vendorName PromoCell
 vendorId HMEpC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
@@ -3311,10 +3314,11 @@ type Cell Line
 tier 3
 organism human
 description Mammary Epithelial Cells
-lineage missing
+lineage ectoderm
 karyotype normal
 sex F
 tissue mammary gland
+#tissue epithelium
 childOf HMEpC
 vendorName PromoCell
 vendorId C-14066
@@ -3998,6 +4002,7 @@ lineage missing
 karyotype normal
 sex B
 tissue placenta
+#tissue epithelium
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -4016,6 +4021,7 @@ lineage missing
 karyotype normal
 sex F
 tissue placenta
+#tissue epithelium
 childOf HPIEpC
 vendorName PromoCell
 vendorId C-14069
@@ -4034,6 +4040,7 @@ description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex M
+#tissue epithelium
 tissue placenta
 childOf HPIEpC
 vendorName PromoCell
@@ -4733,7 +4740,7 @@ type Cell Line
 organism human
 description mammary gland, non-tumorigenic epithelial, inducible cell line, derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
 tissue breast
-karyotype normal
+#tissue epithelium
 vendorName Struhl laboratory
 vendorId MCF10A-Er-Src
 orderUrl https://struhl.med.harvard.edu/
@@ -4750,6 +4757,7 @@ type Cell Line
 organism human
 description breast adenocarcinoma, epithelial cell line, derived from metastatic site: pleural effusion. (PMID: 730202)
 tissue breast
+#tissue epithelium
 vendorName ATCC
 vendorId HTB-26
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-26&Template=cellBiology
@@ -5024,6 +5032,7 @@ description bronchial epithelial cells with retinoic acid
 karyotype normal
 sex F
 tissue bronchial epithelium
+#tissue epithelium
 vendorName Lonza
 vendorId CC-2540, CC3170
 orderUrl http://www.lonza.com
@@ -5463,6 +5472,7 @@ organism human
 tier 3
 description prostate epithelial cell line
 tissue prostate
+#tissue epithelium
 vendorName Lonza
 vendorId CC-2555
 orderUrl http://www.lonza.com/
@@ -5562,6 +5572,7 @@ type Cell Line
 organism human
 description prostate epithelial
 tissue prostate
+#tissue epithelium
 vendorName ATCC
 vendorId CRL-11609
 karyotype normal
@@ -5848,7 +5859,8 @@ tag T47D
 type Cell Line
 organism human
 description epithelial cell line derived from a mammary ductal carcinoma.
-tissue duct
+tissue breast
+#tissue epithelium
 vendorName ATCC
 vendorId HTB-133
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology

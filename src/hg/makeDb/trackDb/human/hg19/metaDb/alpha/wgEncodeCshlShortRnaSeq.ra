@@ -21283,6 +21283,7 @@ labExpId LID21001,LID21003
 labVersion iIDR
 localization nucleus
 md5sum 1dd783bbfcf1dc60bab89f72ba90f9f6
+objStatus revoked - new version of the data can be found in object wgEncodeCshlShortRnaSeqNhekNucleusTapContigs, the data were regenerated.
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -25432,4 +25433,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 712193445
+# MAGIC: 1632837325
