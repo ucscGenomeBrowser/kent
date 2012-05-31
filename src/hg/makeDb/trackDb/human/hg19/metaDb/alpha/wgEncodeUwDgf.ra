@@ -636,6 +636,7 @@ fileName wgEncodeUwDgfGm06990RawData.fastq.gz
 geoSampleAccession GSM646568
 grant Stam
 lab UW
+labExpId DS7748
 md5sum c36aa30f98f8fd7ea2cfa19874f6a85e
 origAssembly hg18
 project wgEncode
@@ -859,6 +860,7 @@ fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
 geoSampleAccession GSM646563
 grant Stam
 lab UW
+labExpId 
 labVersion lmax-v1.0
 md5sum df182a5e11303d2f97afc410d619a738
 origAssembly hg19
@@ -994,6 +996,7 @@ fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
 geoSampleAccession GSM646560
 grant Stam
 lab UW
+labExpId DS12663
 labVersion lmax-v1.0
 md5sum b7cc473cb7b98bae93551a14b429009a
 origAssembly hg19
@@ -1787,6 +1790,7 @@ fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
 geoSampleAccession GSM646565
 grant Stam
 lab UW
+labExpId DS12447
 labVersion lmax-v1.0
 md5sum f68d1b8295471bf1bbe2d3fe6c469826
 origAssembly hg19
@@ -2585,6 +2589,7 @@ fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
 geoSampleAccession GSM646561
 grant Stam
 lab UW
+labExpId DS13368
 labVersion lmax-v1.0
 md5sum 1b4cad662d9eeb29498eb62da55d6207
 origAssembly hg19
@@ -2988,6 +2993,7 @@ fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
 geoSampleAccession GSM646570
 grant Stam
 lab UW
+labExpId DS13337
 labVersion lmax-v1.0
 md5sum 5e90e1f5346d2d8bd034e0f82aed77f9
 origAssembly hg19
@@ -4362,6 +4368,7 @@ fileName wgEncodeUwDgfK562RawData.fastq.gz
 geoSampleAccession GSM646567
 grant Stam
 lab UW
+labExpId DS9767
 md5sum a6e16172ebd5491635a56702a09075e7
 origAssembly hg18
 project wgEncode
@@ -5486,6 +5493,7 @@ fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
 geoSampleAccession GSM646564
 grant Stam
 lab UW
+labExpId DS12863
 labVersion lmax-v1.0
 md5sum 2ba7fe2760bd9bd7e867853bc7fa7aad
 origAssembly hg19
@@ -6144,6 +6152,7 @@ fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
 geoSampleAccession GSM646562
 grant Stam
 lab UW
+labExpId DS11949
 labVersion lmax-v1.0
 md5sum c43f5e704b469c4f06180d42789957c6
 origAssembly hg19
@@ -6497,4 +6506,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1422661091
+# MAGIC: 1445796865
