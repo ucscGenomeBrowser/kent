@@ -51,8 +51,6 @@ char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
 i = MD5_DIGEST_LENGTH;
 MD5((unsigned char *)password, strlen(password), result1);
 for(i = 0; i < MD5_DIGEST_LENGTH; i++)
-    printf("%02x", result1[i]);
-for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
     }   
@@ -242,31 +240,24 @@ boolean tokenExpired(char *dateTime)
 return FALSE;
 }
 
-void getReturnToURL(char *returnTo)
+char *getReturnToURL()
 /* get URL passed in with returnto URL */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
-
+char returnTo[512];
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
+return cloneString(returnTo);
 }
 
 void returnToURL(int nSec)
 /* delay for N/10  micro seconds then return to the "returnto" URL */
 {
-char *returnURL = cartUsualString(cart, "returnto", "");
-char *hgLoginHost = wikiLinkHost();
-char returnTo[512];
-
-if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo),
-        "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
-else
-   safecpy(returnTo, sizeof(returnTo), returnURL);
+char *returnURL = getReturnToURL();
 int delay=nSec*100;
 hPrintf(
     "<script  language=\"JavaScript\">\n"
@@ -279,29 +270,18 @@ hPrintf(
     "</script>", delay, returnURL);
 }
 
-
 void  displayActMailSuccess()
 /* display Activate mail success box */
 {
-char *returnURL = cartUsualString(cart, "returnto", "");
-char *hgLoginHost = wikiLinkHost();
-char returnTo[512];
-
-if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo),
-        "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
-else
-   safecpy(returnTo, sizeof(returnTo), returnURL);
-
+char *returnURL = getReturnToURL(); 
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>UCSC Genome Browser</h2>"
-    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">An account activation email has been sent to you. \n"
-   "Please activate your account within 7 days.</p>"
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
+    "Please click the confirmation link in the email to activate your account.</p>"
     "\n"
     "<p><a href=\"%s\">Return</a></p>", returnURL);
-cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
 }
@@ -395,7 +375,6 @@ safef(msg, sizeof(msg),
 safecat (msg, sizeof(msg), signature);
 sendMailOut(email, subject, msg);
 }
-
 
 void sendUsername(struct sqlConnection *conn, char *email)
 /* email user username(s)  */
@@ -583,9 +562,11 @@ hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "<h2>UCSC Genome Browser</h2>"
     "\n"
     "<h3>Login</h3>"
-    "\n"
-    "<span style='color:red;'>%s</span>"
-    "\n", errMsg ? errMsg : "");
+    "\n");
+if (errMsg && sameString(errMsg, "Your account has been activated."))
+    hPrintf("<span style='color:green;'>%s</span>\n", errMsg ? errMsg : "");
+else
+    hPrintf("<span style='color:red;'>%s</span>\n", errMsg ? errMsg : "");
 hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
     "\n"
     "<div class=\"inputGroup\">"
@@ -632,6 +613,8 @@ if (sameString(emailToken, token))
     safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'",
     username);
     sqlUpdate(conn, query);
+    freez(&errMsg);
+    errMsg = cloneString("Your account has been activated.");
     } 
 else
     {
