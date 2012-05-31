@@ -19,18 +19,25 @@ body {
 }
 #main-menu-whole {
 	width:100%;
-	height:36px;
+	height:32px;
 	background:#00457c;
 	font-family: Arial,Helvetica,sans-serif;
 	line-height:19px;
 	font-size:13px;
-	margin:0px;
+	margin:0 0 5px 0;
 }
 #main-menu {
-	width:1031px;
-	margin:auto;
+	/* width:1031px; */
+	margin-left: 30px;
 }
 
+
+/* from Jabico ... probably need to apply this to <body>
+#maindiv-whole {
+    background: url("../images/internal_bg1.jpg") repeat-x scroll left bottom 	
+    	#F9F9F7;
+}
+*/
 
 /* from nice_menus_default.css */
 
@@ -277,7 +284,7 @@ ul.nice-menu ul, ul.nice-menu li {
 	padding: 0;
 }
 ul.nice-menu li {
-	padding-top:10px;
+	padding-top:8px;
 	padding-left:11px;
 	padding-right:11px;
 }
@@ -299,7 +306,7 @@ ul.nice-menu a {
 	padding:0px 10px 0px 3px;
 }
 ul.nice-menu li.menuparent{
-padding-top:10px;
+padding-top:8px;
 }
 
 ul.nice-menu li.menuparent span {
@@ -352,7 +359,7 @@ span#home-link {
 	width: 23px;
 	/* margin-right: 1px; */
 	display: inline-block;
-	background-image: url("../images/home_icon_sprite_white.png");
+	background-image: url("../images/homeIconSprite.png");
 	background-position: 0 -18px;
 	background-color: #00457c;
 }
