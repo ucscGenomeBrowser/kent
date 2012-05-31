@@ -3141,6 +3141,7 @@ fileName wgEncodeUwTfbsBjCtcfStdRawDataRep2.fastq.gz
 geoSampleAccession GSM749752
 grant Stam
 lab UW
+labExpId DS11562
 md5sum e0777bcd4fd00e7181773c3bf7f7e750
 origAssembly hg19
 project wgEncode
@@ -3256,6 +3257,7 @@ fileName wgEncodeUwTfbsBjInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749770
 grant Stam
 lab UW
+labExpId DS11544
 md5sum 0a759dde4af7b02a345dd23dba37df5d
 origAssembly hg19
 project wgEncode
@@ -3633,6 +3635,7 @@ fileName wgEncodeUwTfbsCaco2InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749691
 grant Stam
 lab UW
+labExpId DS13597
 md5sum 55d68ef64a0d3d3cf0febe0d3b20a46c
 origAssembly hg19
 project wgEncode
@@ -3684,11 +3687,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
+donorId RO_01778
 expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
-labExpId RO 01778
+labExpId DS18984
 labVersion Bowtie 0.12.7
 md5sum a998c692fd0af13254f1b919c94b8602,b2b9aa448f7d2eab1d7289e9259ee1b9
 origAssembly hg19
@@ -3711,11 +3715,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
+donorId RO_01778
 expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
-labExpId RO 01778
+labExpId DS18984
 md5sum 446280508b26672b70dbc041a4847dc4
 origAssembly hg19
 project wgEncode
@@ -3737,11 +3742,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
+donorId RO_01778
 expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdRawRep1.bigWig
 grant Stam
 lab UW
-labExpId RO 01778
+labExpId DS18984
 labVersion WindowDensity-bin20-win+/-75
 md5sum 27f7d35df75cab7ae6a7b0af362b05ef
 origAssembly hg19
@@ -3765,11 +3771,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
+donorId RO_01794
 expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
-labExpId RO 01794
+labExpId DS18982
 labVersion Bowtie 0.12.7
 md5sum c0bfafd13b7c89847334e7f0434a40e0,475e09e65139e129257aea9cadafffab
 origAssembly hg19
@@ -3792,11 +3799,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
+donorId RO_01794
 expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
-labExpId RO 01794
+labExpId DS18982
 md5sum 9b347753e5eb9c139014e48dcae42604
 origAssembly hg19
 project wgEncode
@@ -3818,11 +3826,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
+donorId RO_01794
 expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdRawRep1.bigWig
 grant Stam
 lab UW
-labExpId RO 01794
+labExpId DS18982
 labVersion WindowDensity-bin20-win+/-75
 md5sum 9a985235a976c5851aff3396d0b62a9b
 origAssembly hg19
@@ -4173,6 +4182,7 @@ fileName wgEncodeUwTfbsGm06990InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749731
 grant Stam
 lab UW
+labExpId DS11497
 md5sum ee6e586d3c6ce2a8dbf30d93daf99e4a
 origAssembly hg19
 project wgEncode
@@ -4405,6 +4415,7 @@ fileName wgEncodeUwTfbsGm12801InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749701
 grant Stam
 lab UW
+labExpId DS13665
 md5sum e62e6dfe2518c546cd9b56e5d6437c15
 origAssembly hg19
 project wgEncode
@@ -4919,6 +4930,7 @@ fileName wgEncodeUwTfbsGm12864InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749754
 grant Stam
 lab UW
+labExpId DS13587
 md5sum f5bb45c5281e5703b0efa8914c21b150
 origAssembly hg19
 project wgEncode
@@ -5433,6 +5445,7 @@ fileName wgEncodeUwTfbsGm12865InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749777
 grant Stam
 lab UW
+labExpId DS13590
 md5sum 6ae768f7b7886f7bff11eeb386621120
 origAssembly hg19
 project wgEncode
@@ -7699,6 +7712,7 @@ fileName wgEncodeUwTfbsGm12872InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749765
 grant Stam
 lab UW
+labExpId DS13585
 md5sum 85e6ba5d5db3e43938b44c965943d25c
 origAssembly hg19
 project wgEncode
@@ -8213,6 +8227,7 @@ fileName wgEncodeUwTfbsGm12873InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749685
 grant Stam
 lab UW
+labExpId DS13586
 md5sum 6542e0a1a95846669389d893b576598f
 origAssembly hg19
 project wgEncode
@@ -8590,6 +8605,7 @@ fileName wgEncodeUwTfbsGm12874InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749742
 grant Stam
 lab UW
+labExpId DS13588
 md5sum 9e28bf6f14289906f3becdafd99fa548
 origAssembly hg19
 project wgEncode
@@ -8967,6 +8983,7 @@ fileName wgEncodeUwTfbsGm12875InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749724
 grant Stam
 lab UW
+labExpId DS13589
 md5sum 7ec9354f47087d512e7720255b1b039d
 origAssembly hg19
 project wgEncode
@@ -9345,6 +9362,7 @@ fileName wgEncodeUwTfbsGm12878InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749669
 grant Stam
 lab UW
+labExpId DS11883
 md5sum dd208b0322c2ae946934173ec06cceb0
 origAssembly hg19
 project wgEncode
@@ -12895,6 +12913,7 @@ fileName wgEncodeUwTfbsHek293InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749767
 grant Stam
 lab UW
+labExpId DS13603
 md5sum 8aebd0bae90b27cd0435541b9149c898
 origAssembly hg19
 project wgEncode
@@ -13272,6 +13291,7 @@ fileName wgEncodeUwTfbsHelas3InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749721
 grant Stam
 lab UW
+labExpId DS11540
 md5sum 460da45fe036a7004a251a79bfd9d7c5
 origAssembly hg19
 project wgEncode
@@ -13651,6 +13671,7 @@ fileName wgEncodeUwTfbsHepg2InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749756
 grant Stam
 lab UW
+labExpId DS13599
 md5sum da1975dfded72c3e1af2c989d9af0011
 origAssembly hg19
 project wgEncode
@@ -14456,6 +14477,7 @@ fileName wgEncodeUwTfbsHl60InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749775
 grant Stam
 lab UW
+labExpId DS13664
 md5sum e5f46979a738d0a959e4fa545eb80c95
 origAssembly hg19
 project wgEncode
@@ -14824,6 +14846,7 @@ fileName wgEncodeUwTfbsHmecInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749755
 grant Stam
 lab UW
+labExpId DS13600
 md5sum 5b2fcc78ec3f9d0041a30cf1d27629a2
 origAssembly hg19
 project wgEncode
@@ -16305,6 +16328,7 @@ fileName wgEncodeUwTfbsHreInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749778
 grant Stam
 lab UW
+labExpId DS11549
 md5sum d817c18853440eafabc8b3be3cc026f8
 origAssembly hg19
 project wgEncode
@@ -17046,6 +17070,7 @@ fileName wgEncodeUwTfbsHuvecInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749758
 grant Stam
 lab UW
+labExpId DS11470
 md5sum 6b2fa3de35a69ec142c229a2afcc0583
 origAssembly hg19
 project wgEncode
@@ -17866,6 +17891,7 @@ fileName wgEncodeUwTfbsK562InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749719
 grant Stam
 lab UW
+labExpId DS11470
 md5sum 5e2673f266277918b7a10498ef9303b7
 origAssembly hg19
 project wgEncode
@@ -18356,11 +18382,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
+donorId RO_01746
 expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam,wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
-labExpId RO 01746
+labExpId DS18980
 labVersion Bowtie 0.12.7
 md5sum db0dd73402806e1932dcf9289f623044,aaf3ed6bd65b7ea5220dc192992b83db
 origAssembly hg19
@@ -18383,11 +18410,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
+donorId RO_01746
 expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
-labExpId RO 01746
+labExpId DS18980
 md5sum a32a40d3445b0d09480d7127877d1cb5
 origAssembly hg19
 project wgEncode
@@ -18409,11 +18437,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
+donorId RO_01746
 expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdRawRep1.bigWig
 grant Stam
 lab UW
-labExpId RO 01746
+labExpId DS18980
 labVersion WindowDensity-bin20-win+/-75
 md5sum 8853c6528b861db17db4a1d20ead82df
 origAssembly hg19
@@ -19343,6 +19372,7 @@ fileName wgEncodeUwTfbsNhekInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749744
 grant Stam
 lab UW
+labExpId DS11542
 md5sum 3b6748477b2e844d5a025e81cacb0c8a
 origAssembly hg19
 project wgEncode
@@ -20374,6 +20404,7 @@ fileName wgEncodeUwTfbsSaecInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749682
 grant Stam
 lab UW
+labExpId DS11550
 md5sum 3ce39457bba2339e0ae47c3e8382fd76
 origAssembly hg19
 project wgEncode
@@ -20913,6 +20944,7 @@ fileName wgEncodeUwTfbsSknshraInputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749700
 grant Stam
 lab UW
+labExpId DS11605
 md5sum 46c2f2dc9e3be8eca8d41a2d27977150
 origAssembly hg19
 project wgEncode
@@ -21292,6 +21324,7 @@ fileName wgEncodeUwTfbsWerirb1InputStdRawDataRep1.fastq.gz
 geoSampleAccession GSM749766
 grant Stam
 lab UW
+labExpId DS11888
 md5sum 5e860bca54b605911e762ec79d24f4dd
 origAssembly hg19
 project wgEncode
@@ -21767,4 +21800,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1517635888
+# MAGIC: 1590931182
