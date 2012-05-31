@@ -1,3 +1,5 @@
+# coding 35031, codingJunk 8955, nearCoding 3941, junk 4045, antisense 1082, noncoding 10112
+
 #!/bin/tcsh -efx
 # :vim nowrap
 # for emacs: -*- mode: sh; -*-
@@ -91,6 +93,7 @@ set taxon = 10090
 # Previous gene set
 #set oldGeneDir = $genomes/hg19/bed/ucsc.12
 #set oldGeneBed = $oldGeneDir/ucscGenes.bed
+set oldGeneBed = /dev/null
 
 # Machines
 set dbHost = hgwdev
@@ -701,13 +704,14 @@ txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 sequenceForBed -db=$db -bedIn=weededCds.bed -fastaOut=weeded.fa \
     -upCase -keepName
 
-if (0) then  # BRACKET
 
 
 # Separate out transcripts into coding and 4 uncoding categories.
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
 txGeneSeparateNoncoding weededCds.bed weededCds.info \
 	coding.bed nearCoding.bed nearCodingJunk.bed antisense.bed uncoding.bed separated.info
+# coding 35031, codingJunk 8955, nearCoding 3941, junk 4045, antisense 1082, noncoding 10112
+
 awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 cat coding.bed nearCoding.bed antisense.bed uncoding.bed | sort -k1,1 -k2,3n >weeded.bed
@@ -794,12 +798,11 @@ ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
 
 cat run.time
 # Completed: 97 of 97 jobs
-# CPU time in finished jobs:       4111s      68.52m     1.14h    0.05d  0.000 y
-# IO & Wait Time:                   508s       8.47m     0.14h    0.01d  0.000 y
-# Average job time:                  48s       0.79m     0.01h    0.00d
-# Longest finished job:             491s       8.18m     0.14h    0.01d
-# Submission to last job:           501s       8.35m     0.14h    0.01d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+# CPU time in finished jobs:       1813s      30.22m     0.50h    0.02d  0.000 y
+# IO & Wait Time:                   413s       6.88m     0.11h    0.00d  0.000 y
+# Average job time:                  23s       0.38m     0.01h    0.00d
+# Longest finished job:              84s       1.40m     0.02h    0.00d
+# Submission to last job:            96s       1.60m     0.03h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
@@ -918,7 +921,10 @@ hgLoadSqlTab $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.prot
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
+#if 0 # didn't do this
+# TODO
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db allenBrainAli -type=psl knownGene knownToAllenBrain
+
 
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
@@ -964,6 +970,7 @@ if ($db =~ mm*) then
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
 
+#endif
 
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
@@ -984,6 +991,7 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
 endif
 
 
+#if 0 TODO..... needs work on rn5 to get protein fa
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
@@ -1006,7 +1014,7 @@ ${wormDb}Fa $wormFa
 ${yeastDb}Fa $yeastFa
 
 buildDir $dir/hgNearBlastp
-scratchDir $scratchDir/jkgHgNearBlastp
+scratchDir $scratchDir/brHgNearBlastp
 _EOF_
 
 
@@ -1023,6 +1031,7 @@ cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
+#endif
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
@@ -1033,6 +1042,7 @@ ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 
+#if 0 TODO
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
 synBlastp.csh $tempDb $ratDb
@@ -1086,6 +1096,7 @@ hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
+#endif
 
 
 # MAKE FOLDUTR TABLES 
@@ -1134,6 +1145,7 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
+#if 0 # didn't do this
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
@@ -1197,6 +1209,7 @@ hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 
+
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
 mkdir -p $dir/scop
@@ -1249,6 +1262,8 @@ genePredToBed knownGeneOld.gp >knownGeneOld.bed
 txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.tab
 hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
+#endif
+
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
 hgsql $tempDb -N -e \
@@ -1273,6 +1288,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 
+#if 0 # not done
 # Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
@@ -1308,6 +1324,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
     hgsql $tempDb -e "delete k from knownToKeggEntrez k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+#endif
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1333,26 +1350,28 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
 
 
+cd $dir
 # Make PCR target for UCSC Genes, Part 1.
 # 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
 #    gene symbol, e.g. uc010nxr.1__DDX11L1
-hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \                            
-    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \                             
+hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt
 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each 
 #    UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.
 #    Convert that file to TwoBit format and soft-link it into /gbdb/hg19/targetDb/
 subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
-sequenceForBed -keepName -db=hg19 -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit 
-mkdir -p /gbdb/hg19/targetDb/
-rm -f /gbdb/hg19/targetDb/kgTargetSeq.2bit
-ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
+mkdir -p /gbdb/$db/targetDb/
+rm -f /gbdb/$db/targetDb/kgTargetSeq.2bit
+ln -s $dir/kgTargetSeq.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
 cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
+#if 0 # didn't do this first time through
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1378,6 +1397,7 @@ sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
+#endif
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
@@ -1392,7 +1412,7 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
-# /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
+# /gbdb/$db/targetDb/kgTargetSeq.2bit .          
 
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
@@ -1431,6 +1451,7 @@ synBlastp.csh $ratDb $db
 rm -r run.*/out
 
 
+if (0) then  # BRACKET
 # move this exit statement to the end of the section to be done next
 exit $status # BRACKET
 
