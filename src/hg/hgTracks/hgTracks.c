@@ -4520,7 +4520,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<div style='height:1em;'></div>\n");
+    hWrites("<div style='height:0.3em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
