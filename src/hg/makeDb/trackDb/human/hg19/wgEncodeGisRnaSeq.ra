@@ -3,11 +3,11 @@ compositeTrack on
 shortLabel GIS RNA-seq
 longLabel RNA-seq from ENCODE/Genome Institute of Singapore
 group expression
-subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 
+subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=PolyA+
-subGroup5 localization Localization cell=Whole_Cell cytosol=Cytosol 
+subGroup5 localization Localization cell=Whole_Cell cytosol=Cytosol
 dimensions dimensionY=localization dimensionX=cellType dimensionA=rep
 dimensionAchecked rep1,rep2
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract replicate=Rep bioRep=Cross_Lab<BR>Replicate labExpId=Lab<BR>Exp_ID view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
@@ -50,7 +50,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1
-        parent wgEncodeGisRnaSeqViewPlusRawSignal on 
+        parent wgEncodeGisRnaSeqViewPlusRawSignal on
         shortLabel GM12 cyto pA+ + 1
         longLabel GM12878 cytosol polyA+ RNA-seq Plus raw signal rep 1 from ENCODE/GIS
         subGroups view=1-PlusRawSignal cellType=1GM12878  rnaExtract=longPolyA rep=rep1 localization=cytosol
@@ -70,7 +70,7 @@ superTrack wgEncodeRnaSeqSuper dense
     track wgEncodeGisRnaSeqViewMinusRawSignal
     shortLabel Minus Raw Signal
     view 2-MinusRawSignal
-    visibility full 
+    visibility full
     subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -79,7 +79,7 @@ superTrack wgEncodeRnaSeqSuper dense
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1
-        parent wgEncodeGisRnaSeqViewMinusRawSignal on 
+        parent wgEncodeGisRnaSeqViewMinusRawSignal on
         shortLabel K562 cyto pA+ - 1
         longLabel K562 cytosol polyA+ RNA-seq Minus raw signal rep 1 from ENCODE/GIS
         subGroups view=2-MinusRawSignal cellType=1K562 rnaExtract=longPolyA rep=rep1 localization=cytosol
@@ -97,7 +97,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1
-        parent wgEncodeGisRnaSeqViewMinusRawSignal on 
+        parent wgEncodeGisRnaSeqViewMinusRawSignal on
         shortLabel GM12 cyto pA+ - 1
         longLabel GM12878 cytosol polyA+ RNA-seq Minus raw signal rep 1 from ENCODE/GIS
         subGroups view=2-MinusRawSignal cellType=1GM12878  rnaExtract=longPolyA rep=rep1 localization=cytosol
@@ -152,7 +152,6 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1401 dateSubmitted=2010-07-01
 
-
         track wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1
         parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel GM12 cyto pA+ 1
@@ -161,7 +160,6 @@ superTrack wgEncodeRnaSeqSuper dense
         type bam
         color 153,38,0
         # subId=1399 dateSubmitted=2010-07-03
-
 
         track wgEncodeGisRnaSeqH1hescCellPapAlnRep1
         parent wgEncodeGisRnaSeqViewAlignments on
