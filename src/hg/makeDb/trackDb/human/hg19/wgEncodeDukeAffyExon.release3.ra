@@ -4,7 +4,7 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel Affymetrix Exon Array from ENCODE/Duke
 group expression
-subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) 38988T=8988T A549=A549 AOSMC=AoSMC  CHORION=Chorion CLL=CLL COLO829=Colo829 FIBROBL=Fibrobl FIBROPAG08395=FibroP_(AG08395) FIBROPAG08396=FibroP_(AG08396) FIBROPAG20443=FibroP_(AG20443) GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9ES=H9ES HEK293T=HEK293T HEPATO=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMFSHD=HSMM&#95;FSHD HSMMT=HSMMtube HSMMTUBEFSHD=HSMMtube&#95;FSHD HTR8=HTR8svn HUH7=Huh-7 HUH75=Huh-7.5 IPSCWRU1=iPS_(CWRU1) IPSNIHI7=iPS_(NIHi7) IPSNIHIZ11=iPS_(NIHi11) LNCAP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEL2183=Mel_2183 MELANO=Melano MYOMETR=Myometr NHA=NH-A NHEK=NHEK OSTEO=Osteobl PROGFIB=ProgFib STELLATE=Stellate UCH1=UCH-1 UROTHEL=Urothelia
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3A8988T=8988T t3AOSMC=AoSMC t3CHORION=Chorion t3CLL=CLL t3COLO829=Colo829 t3FIBROBL=Fibrobl t3FIBROPAG08395=FibroP_AG08395 t3FIBROPAG08396=FibroP_AG08396 t3FIBROPAG20443=FibroP_AG20443 t3GLIOBLA=Gliobla t3GM12891=GM12891 t3GM12892=GM12892 t3GM18507=GM18507 t3GM19238=GM19238 t3GM19239=GM19239 t3GM19240=GM19240 t3H7HESC=H7-hESC t3H9ES=H9ES t3HEK293T=HEK293T t3HEPATOCYTES=Hepatocytes t3HMEC=HMEC t3HPDE6E6E7=HPDE6-E6E7 t3HSMM=HSMM t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HSMMTUBEFSHD=HSMMtube_FSHD t3HTR8SVN=HTR8svn t3HUH7=Huh-7 t3HUH75=Huh-7.5 t3IPSCWRU1=iPS_CWRU1 t3IPSNIHI7=iPS_NIHi7 t3IPSNIHI11=iPS_NIHi11 t3LNCAP=LNCaP t3MEDULLO=Medullo t3MEL2183=Mel_2183 t3MELANO=Melano t3MYOMETR=Myometr t3NHA=NH-A t3NHEK=NHEK t3OSTEOBLASTS=Osteoblasts t3PROGFIB=ProgFib t3STELLATE=Stellate t3UCH1=UCH-1 t3UROTHELIA=Urothelia
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
 subGroup3 treatment Treatment zNONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control HYPOXLAC=Hypoxia,_Lactic_acidosis ESTRO=Estradiol_100_nM VEH=Vehicle IFNA4H=IFN-&alpha;_4_h IFNG4H=IFN-&gamma;_4_h METHYLTRI=Methyltrienolone NABUT=Sodium_Butyrate SERUMFREE=Serum-free_media TGFB=TGF-&beta; UT189=UT189_<em>E._coli</em>
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
@@ -31,7 +31,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC 1
     longLabel AoSMC Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=zNONE rep=rep1
+    subGroups cellType=t3AOSMC treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -39,7 +39,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC 2
     longLabel AoSMC Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=zNONE rep=rep2
+    subGroups cellType=t3AOSMC treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -47,7 +47,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC 1
     longLabel AoSMC Serum-free media Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=SERUMFREE rep=rep1
+    subGroups cellType=t3AOSMC treatment=SERUMFREE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -55,7 +55,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC 2
     longLabel AoSMC Serum-free media Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=SERUMFREE rep=rep2
+    subGroups cellType=t3AOSMC treatment=SERUMFREE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -63,7 +63,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC TGFb 1
     longLabel AoSMC TGFb Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=TGFB rep=rep1
+    subGroups cellType=t3AOSMC treatment=TGFB rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -71,7 +71,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel AoSMC TGFb 2
     longLabel AoSMC TGFb Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=AOSMC treatment=TGFB rep=rep2
+    subGroups cellType=t3AOSMC treatment=TGFB rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -79,7 +79,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel NH-A 1
     longLabel NH-A Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=NHA treatment=zNONE rep=rep1
+    subGroups cellType=t3NHA treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -87,7 +87,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel NH-A 2
     longLabel NH-A Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=NHA treatment=zNONE rep=rep2
+    subGroups cellType=t3NHA treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -95,7 +95,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Chorion 1
     longLabel Chorion Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=CHORION treatment=zNONE rep=rep1
+    subGroups cellType=t3CHORION treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -103,7 +103,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel CLL 1
     longLabel CLL Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=CLL treatment=zNONE rep=rep1
+    subGroups cellType=t3CLL treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -111,7 +111,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel CLL 2
     longLabel CLL Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=CLL treatment=zNONE rep=rep2
+    subGroups cellType=t3CLL treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -119,7 +119,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Fibrobl 1
     longLabel Fibrobl Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=FIBROBL treatment=zNONE rep=rep1
+    subGroups cellType=t3FIBROBL treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -127,7 +127,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Fibrobl 2
     longLabel Fibrobl Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=FIBROBL treatment=zNONE rep=rep2
+    subGroups cellType=t3FIBROBL treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -135,7 +135,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Gliobla 1
     longLabel Gliobla Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GLIOBLA treatment=zNONE rep=rep1
+    subGroups cellType=t3GLIOBLA treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -143,7 +143,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Gliobla 2
     longLabel Gliobla Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GLIOBLA treatment=zNONE rep=rep2
+    subGroups cellType=t3GLIOBLA treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -151,7 +151,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Gliobla 3
     longLabel Gliobla Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=GLIOBLA treatment=zNONE rep=rep3
+    subGroups cellType=t3GLIOBLA treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -159,7 +159,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Gliobla 4
     longLabel Gliobla Exon array Signal Rep 4 from ENCODE/Duke
-    subGroups cellType=GLIOBLA treatment=zNONE rep=rep4
+    subGroups cellType=t3GLIOBLA treatment=zNONE rep=rep4
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -167,7 +167,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel GM12878 1
     longLabel GM12878 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=1GM12878 treatment=zNONE rep=rep1
+    subGroups cellType=t1GM12878 treatment=zNONE rep=rep1
     type bigBed 6 +
     color 153,38,0
     # subId=5987 dateSubmitted=2012-03-08
@@ -176,7 +176,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel GM12878 2
     longLabel GM12878 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=1GM12878 treatment=zNONE rep=rep2
+    subGroups cellType=t1GM12878 treatment=zNONE rep=rep2
     type bigBed 6 +
     color 153,38,0
     # subId=5987 dateSubmitted=2012-03-08
@@ -185,7 +185,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM12878 3
     longLabel GM12878 Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=1GM12878 treatment=zNONE rep=rep3
+    subGroups cellType=t1GM12878 treatment=zNONE rep=rep3
     type bigBed 6 +
     color 153,38,0
     # subId=5987 dateSubmitted=2012-03-08
@@ -194,7 +194,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM12891 1
     longLabel GM12891 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM12891 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM12891 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -202,7 +202,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM12891 2
     longLabel GM12891 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM12891 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM12891 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -210,7 +210,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM12892 1
     longLabel GM12892 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM12892 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM12892 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -218,7 +218,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM12892 2
     longLabel GM12892 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM12892 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM12892 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -226,7 +226,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM18507 1
     longLabel GM18507 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM18507 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM18507 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -234,7 +234,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM18507 2
     longLabel GM18507 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM18507 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM18507 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -242,7 +242,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM18507 3
     longLabel GM18507 Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=GM18507 treatment=zNONE rep=rep3
+    subGroups cellType=t3GM18507 treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -250,7 +250,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19238 1
     longLabel GM19238 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM19238 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM19238 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -258,7 +258,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19238 2
     longLabel GM19238 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM19238 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM19238 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -266,7 +266,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19239 1
     longLabel GM19239 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM19239 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM19239 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -274,7 +274,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19239 2
     longLabel GM19239 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM19239 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM19239 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -282,7 +282,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19240 1
     longLabel GM19240 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=GM19240 treatment=zNONE rep=rep1
+    subGroups cellType=t3GM19240 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -290,7 +290,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel GM19240 2
     longLabel GM19240 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=GM19240 treatment=zNONE rep=rep2
+    subGroups cellType=t3GM19240 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -298,7 +298,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel H1-hESC 1
     longLabel H1-hESC Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=1H1HESC treatment=zNONE rep=rep1
+    subGroups cellType=t1H1HESC treatment=zNONE rep=rep1
     type bigBed 6 +
     color 0,107,27
     # subId=5987 dateSubmitted=2012-03-08
@@ -307,7 +307,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel H1-hESC 2
     longLabel H1-hESC Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=1H1HESC treatment=zNONE rep=rep2
+    subGroups cellType=t1H1HESC treatment=zNONE rep=rep2
     type bigBed 6 +
     color 0,107,27
     # subId=5987 dateSubmitted=2012-03-08
@@ -316,7 +316,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H1-hESC 3
     longLabel H1-hESC Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=1H1HESC treatment=zNONE rep=rep3
+    subGroups cellType=t1H1HESC treatment=zNONE rep=rep3
     type bigBed 6 +
     color 0,107,27
     # subId=5987 dateSubmitted=2012-03-08
@@ -325,7 +325,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H1-hESC 4
     longLabel H1-hESC Exon array Signal Rep 4 from ENCODE/Duke
-    subGroups cellType=1H1HESC treatment=zNONE rep=rep4
+    subGroups cellType=t1H1HESC treatment=zNONE rep=rep4
     type bigBed 6 +
     color 0,107,27
     # subId=5987 dateSubmitted=2012-03-08
@@ -334,7 +334,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H9ES 1
     longLabel H9ES Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=H9ES treatment=zNONE rep=rep1
+    subGroups cellType=t3H9ES treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -342,7 +342,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 1
     longLabel HeLa-S3 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=zNONE rep=rep1
+    subGroups cellType=t2HELAS3 treatment=zNONE rep=rep1
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -351,7 +351,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 2
     longLabel HeLa-S3 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=zNONE rep=rep2
+    subGroups cellType=t2HELAS3 treatment=zNONE rep=rep2
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -360,7 +360,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 3
     longLabel HeLa-S3 Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=zNONE rep=rep3
+    subGroups cellType=t2HELAS3 treatment=zNONE rep=rep3
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -369,7 +369,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 1
     longLabel HeLa-S3 IFN-a 4 h Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=IFNA4H rep=rep1
+    subGroups cellType=t2HELAS3 treatment=IFNA4H rep=rep1
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -378,7 +378,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 2
     longLabel HeLa-S3 IFN-a 4 h Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=IFNA4H rep=rep2
+    subGroups cellType=t2HELAS3 treatment=IFNA4H rep=rep2
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -387,7 +387,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 1
     longLabel HeLa-S3 IFN-g 4 h Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=IFNG4H rep=rep1
+    subGroups cellType=t2HELAS3 treatment=IFNG4H rep=rep1
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -396,7 +396,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HeLa-S3 2
     longLabel HeLa-S3 IFN-g 4 h Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=2HELAS3 treatment=IFNG4H rep=rep2
+    subGroups cellType=t2HELAS3 treatment=IFNG4H rep=rep2
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -405,7 +405,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Hepatocytes 1
     longLabel Hepatocytes Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HEPATO treatment=zNONE rep=rep1
+    subGroups cellType=t3HEPATOCYTES treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -413,7 +413,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Hepatocytes 2
     longLabel Hepatocytes Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HEPATO treatment=zNONE rep=rep2
+    subGroups cellType=t3HEPATOCYTES treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -421,7 +421,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HepG2 1
     longLabel HepG2 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=2HEPG2 treatment=zNONE rep=rep1
+    subGroups cellType=t2HEPG2 treatment=zNONE rep=rep1
     type bigBed 6 +
     color 189,0,157
     # subId=5987 dateSubmitted=2012-03-08
@@ -430,7 +430,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HepG2 2
     longLabel HepG2 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=2HEPG2 treatment=zNONE rep=rep2
+    subGroups cellType=t2HEPG2 treatment=zNONE rep=rep2
     type bigBed 6 +
     color 189,0,157
     # subId=5987 dateSubmitted=2012-03-08
@@ -439,7 +439,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HepG2 3
     longLabel HepG2 Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=2HEPG2 treatment=zNONE rep=rep3
+    subGroups cellType=t2HEPG2 treatment=zNONE rep=rep3
     type bigBed 6 +
     color 189,0,157
     # subId=5987 dateSubmitted=2012-03-08
@@ -448,7 +448,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HMEC 1
     longLabel HMEC Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HMEC treatment=zNONE rep=rep1
+    subGroups cellType=t3HMEC treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -456,7 +456,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HMEC 2
     longLabel HMEC Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HMEC treatment=zNONE rep=rep2
+    subGroups cellType=t3HMEC treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -464,7 +464,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HPDE6-E6E7 1
     longLabel HPDE6-E6E7 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HPDE6E6E7 treatment=zNONE rep=rep1
+    subGroups cellType=t3HPDE6E6E7 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -472,7 +472,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HPDE6-E6E7 2
     longLabel HPDE6-E6E7 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HPDE6E6E7 treatment=zNONE rep=rep2
+    subGroups cellType=t3HPDE6E6E7 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -480,7 +480,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM 1
     longLabel HSMM Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HSMM treatment=zNONE rep=rep1
+    subGroups cellType=t3HSMM treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -488,7 +488,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM 2
     longLabel HSMM Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HSMM treatment=zNONE rep=rep2
+    subGroups cellType=t3HSMM treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -496,7 +496,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM 3
     longLabel HSMM Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=HSMM treatment=zNONE rep=rep3
+    subGroups cellType=t3HSMM treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -504,7 +504,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube 1
     longLabel HSMMtube Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HSMMT treatment=zNONE rep=rep1
+    subGroups cellType=t3HSMMTUBE treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -512,7 +512,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube 2
     longLabel HSMMtube Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HSMMT treatment=zNONE rep=rep2
+    subGroups cellType=t3HSMMTUBE treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -520,7 +520,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube 3
     longLabel HSMMtube Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=HSMMT treatment=zNONE rep=rep3
+    subGroups cellType=t3HSMMTUBE treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -528,7 +528,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HTR8svn 1
     longLabel HTR8svn Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HTR8 treatment=zNONE rep=rep1
+    subGroups cellType=t3HTR8SVN treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -536,7 +536,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HTR8svn 2
     longLabel HTR8svn Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HTR8 treatment=zNONE rep=rep2
+    subGroups cellType=t3HTR8SVN treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -544,7 +544,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Huh-7.5 1
     longLabel Huh-7.5 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HUH75 treatment=zNONE rep=rep1
+    subGroups cellType=t3HUH75 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -552,7 +552,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Huh-7 1
     longLabel Huh-7 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HUH7 treatment=zNONE rep=rep1
+    subGroups cellType=t3HUH7 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -560,7 +560,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HUVEC 1
     longLabel HUVEC Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=2HUVEC treatment=zNONE rep=rep1
+    subGroups cellType=t2HUVEC treatment=zNONE rep=rep1
     type bigBed 6 +
     color 224,75,0
     # subId=5987 dateSubmitted=2012-03-08
@@ -569,7 +569,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HUVEC 2
     longLabel HUVEC Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=2HUVEC treatment=zNONE rep=rep2
+    subGroups cellType=t2HUVEC treatment=zNONE rep=rep2
     type bigBed 6 +
     color 224,75,0
     # subId=5987 dateSubmitted=2012-03-08
@@ -578,7 +578,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel K562 1
     longLabel K562 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=zNONE rep=rep1
+    subGroups cellType=t1K562 treatment=zNONE rep=rep1
     type bigBed 6 +
     color 46,0,184
     # subId=5987 dateSubmitted=2012-03-08
@@ -587,7 +587,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon
     shortLabel K562 2
     longLabel K562 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=zNONE rep=rep2
+    subGroups cellType=t1K562 treatment=zNONE rep=rep2
     type bigBed 6 +
     color 46,0,184
     # subId=5987 dateSubmitted=2012-03-08
@@ -596,7 +596,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 3
     longLabel K562 Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=zNONE rep=rep3
+    subGroups cellType=t1K562 treatment=zNONE rep=rep3
     type bigBed 6 +
     color 46,0,184
     # subId=5987 dateSubmitted=2012-03-08
@@ -605,7 +605,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel LNCaP ANDRO 1
     longLabel LNCaP Methyltrienolone Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=LNCAP treatment=METHYLTRI rep=rep1
+    subGroups cellType=t3LNCAP treatment=METHYLTRI rep=rep1
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -614,7 +614,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel LNCaP ANDRO 2
     longLabel LNCaP Methyltrienolone Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=LNCAP treatment=METHYLTRI rep=rep2
+    subGroups cellType=t3LNCAP treatment=METHYLTRI rep=rep2
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -623,7 +623,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel LNCaP 1
     longLabel LNCaP Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=LNCAP treatment=zNONE rep=rep1
+    subGroups cellType=t3LNCAP treatment=zNONE rep=rep1
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -632,7 +632,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel LNCaP 2
     longLabel LNCaP Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=LNCAP treatment=zNONE rep=rep2
+    subGroups cellType=t3LNCAP treatment=zNONE rep=rep2
     type bigBed 6 +
     color 0,119,158
     # subId=5987 dateSubmitted=2012-03-08
@@ -641,7 +641,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 1
     longLabel MCF-7 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=zNONE rep=rep1
+    subGroups cellType=t2MCF7 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -649,7 +649,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 ESTRO 1
     longLabel MCF-7 Estradiol 100 nM Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=ESTRO rep=rep1
+    subGroups cellType=t2MCF7 treatment=ESTRO rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -657,7 +657,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 ESTRO 2
     longLabel MCF-7 Estradiol 100 nM Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=ESTRO rep=rep2
+    subGroups cellType=t2MCF7 treatment=ESTRO rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -665,7 +665,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 Veh 1
     longLabel MCF-7 Vehicle Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=VEH rep=rep1
+    subGroups cellType=t2MCF7 treatment=VEH rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -673,7 +673,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 Veh 2
     longLabel MCF-7 Vehicle Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=VEH rep=rep2
+    subGroups cellType=t2MCF7 treatment=VEH rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -681,7 +681,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Medullo 1
     longLabel Medullo Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MEDULLO treatment=zNONE rep=rep1
+    subGroups cellType=t3MEDULLO treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -689,7 +689,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Medullo 2
     longLabel Medullo Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MEDULLO treatment=zNONE rep=rep2
+    subGroups cellType=t3MEDULLO treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -697,7 +697,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Medullo 3
     longLabel Medullo Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=MEDULLO treatment=zNONE rep=rep3
+    subGroups cellType=t3MEDULLO treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -705,7 +705,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Melano 1
     longLabel Melano Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MELANO treatment=zNONE rep=rep1
+    subGroups cellType=t3MELANO treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -713,7 +713,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Melano 2
     longLabel Melano Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MELANO treatment=zNONE rep=rep2
+    subGroups cellType=t3MELANO treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -721,7 +721,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Melano 3
     longLabel Melano Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=MELANO treatment=zNONE rep=rep3
+    subGroups cellType=t3MELANO treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -729,7 +729,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Melano 4
     longLabel Melano Exon array Signal Rep 4 from ENCODE/Duke
-    subGroups cellType=MELANO treatment=zNONE rep=rep4
+    subGroups cellType=t3MELANO treatment=zNONE rep=rep4
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -737,7 +737,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Myometr 1
     longLabel Myometr Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MYOMETR treatment=zNONE rep=rep1
+    subGroups cellType=t3MYOMETR treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -745,7 +745,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Myometr 2
     longLabel Myometr Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MYOMETR treatment=zNONE rep=rep2
+    subGroups cellType=t3MYOMETR treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -753,7 +753,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel NHEK 1
     longLabel NHEK Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=NHEK treatment=zNONE rep=rep1
+    subGroups cellType=t3NHEK treatment=zNONE rep=rep1
     type bigBed 6 +
     color 179,0,134
     # subId=5987 dateSubmitted=2012-03-08
@@ -762,7 +762,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel NHEK 2
     longLabel NHEK Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=NHEK treatment=zNONE rep=rep2
+    subGroups cellType=t3NHEK treatment=zNONE rep=rep2
     type bigBed 6 +
     color 179,0,134
     # subId=5987 dateSubmitted=2012-03-08
@@ -771,7 +771,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Osteobl 1
     longLabel Osteobl Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=OSTEO treatment=zNONE rep=rep1
+    subGroups cellType=t3OSTEOBLASTS treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -779,7 +779,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Osteobl 2
     longLabel Osteobl Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=OSTEO treatment=zNONE rep=rep2
+    subGroups cellType=t3OSTEOBLASTS treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -787,7 +787,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Osteobl 3
     longLabel Osteobl Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=OSTEO treatment=zNONE rep=rep3
+    subGroups cellType=t3OSTEOBLASTS treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -795,7 +795,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel 8988T 1
     longLabel 8988T Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=38988T treatment=zNONE rep=rep1
+    subGroups cellType=t3A8988T treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -803,7 +803,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel 8988T 2
     longLabel 8988T Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=38988T treatment=zNONE rep=rep2
+    subGroups cellType=t3A8988T treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -811,7 +811,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel ProgFib 1
     longLabel ProgFib Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=PROGFIB treatment=zNONE rep=rep1
+    subGroups cellType=t3PROGFIB treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -819,7 +819,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel ProgFib 2
     longLabel ProgFib Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=PROGFIB treatment=zNONE rep=rep2
+    subGroups cellType=t3PROGFIB treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -827,7 +827,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Stellate 1
     longLabel Stellate Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=STELLATE treatment=zNONE rep=rep1
+    subGroups cellType=t3STELLATE treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -835,7 +835,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Urothelia 1
     longLabel Urothelia Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=UROTHEL treatment=zNONE rep=rep1
+    subGroups cellType=t3UROTHELIA treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -843,7 +843,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Uro UT189 1
     longLabel Urothelia UT189 E. coli Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=UROTHEL treatment=UT189 rep=rep1
+    subGroups cellType=t3UROTHELIA treatment=UT189 rep=rep1
     type bigBed 6 +
     # subId=5987 dateSubmitted=2012-03-08
 
@@ -851,7 +851,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel A549 1
     longLabel A549 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=A549 treatment=zNONE rep=rep1
+    subGroups cellType=t2A549 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -859,7 +859,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel A549 2
     longLabel A549 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=A549 treatment=zNONE rep=rep2
+    subGroups cellType=t2A549 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -867,7 +867,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Colo829 1
     longLabel Colo829 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=COLO829 treatment=zNONE rep=rep1
+    subGroups cellType=t3COLO829 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -875,7 +875,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Colo829 2
     longLabel Colo829 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=COLO829 treatment=zNONE rep=rep2
+    subGroups cellType=t3COLO829 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -883,7 +883,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08395 1
     longLabel FibroP (AG08395) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep1
+    subGroups cellType=t3FIBROPAG08395 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -891,7 +891,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08395 2
     longLabel FibroP (AG08395) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep2
+    subGroups cellType=t3FIBROPAG08395 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -899,7 +899,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08395 3
     longLabel FibroP (AG08395) Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep3
+    subGroups cellType=t3FIBROPAG08395 treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -907,7 +907,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08396 1
     longLabel FibroP (AG08396) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep1
+    subGroups cellType=t3FIBROPAG08396 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -915,7 +915,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08396 2
     longLabel FibroP (AG08396) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep2
+    subGroups cellType=t3FIBROPAG08396 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -923,7 +923,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG08396 3
     longLabel FibroP (AG08396) Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep3
+    subGroups cellType=t3FIBROPAG08396 treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -931,7 +931,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG20443 1
     longLabel FibroP (AG20443) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep1
+    subGroups cellType=t3FIBROPAG20443 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -939,7 +939,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG20443 2
     longLabel FibroP (AG20443) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep2
+    subGroups cellType=t3FIBROPAG20443 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -947,7 +947,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel FibroP_AG20443 3
     longLabel FibroP (AG20443) Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep3
+    subGroups cellType=t3FIBROPAG20443 treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -955,7 +955,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H7-hESC 1
     longLabel H7-hESC Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=H7ES treatment=zNONE rep=rep1
+    subGroups cellType=t3H7HESC treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -963,7 +963,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H7-hESC 2
     longLabel H7-hESC Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=H7ES treatment=zNONE rep=rep2
+    subGroups cellType=t3H7HESC treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -971,7 +971,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H7-hESC 3
     longLabel H7-hESC Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=H7ES treatment=zNONE rep=rep3
+    subGroups cellType=t3H7HESC treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -979,7 +979,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H9ES 2
     longLabel H9ES Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=H9ES treatment=zNONE rep=rep2
+    subGroups cellType=t3H9ES treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -987,7 +987,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel H9ES 3
     longLabel H9ES Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=H9ES treatment=zNONE rep=rep3
+    subGroups cellType=t3H9ES treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -995,7 +995,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HEK293T 1
     longLabel HEK293T Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HEK293T treatment=zNONE rep=rep1
+    subGroups cellType=t3HEK293T treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1003,7 +1003,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HEK293T 2
     longLabel HEK293T Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HEK293T treatment=zNONE rep=rep2
+    subGroups cellType=t3HEK293T treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1011,7 +1011,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM_FSHD 1
     longLabel HSMM_FSHD Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HSMMFSHD treatment=zNONE rep=rep1
+    subGroups cellType=t3HSMMFSHD treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1019,7 +1019,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM_FSHD 2
     longLabel HSMM_FSHD Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HSMMFSHD treatment=zNONE rep=rep2
+    subGroups cellType=t3HSMMFSHD treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1027,7 +1027,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMM_FSHD 3
     longLabel HSMM_FSHD Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=HSMMFSHD treatment=zNONE rep=rep3
+    subGroups cellType=t3HSMMFSHD treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1035,7 +1035,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube_FSHD 1
     longLabel HSMMtube_FSHD Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=HSMMTUBEFSHD treatment=zNONE rep=rep1
+    subGroups cellType=t3HSMMTUBEFSHD treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1043,7 +1043,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube_FSHD 2
     longLabel HSMMtube_FSHD Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HSMMTUBEFSHD treatment=zNONE rep=rep2
+    subGroups cellType=t3HSMMTUBEFSHD treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1051,7 +1051,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel HSMMtube_FSHD 3
     longLabel HSMMtube_FSHD Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=HSMMTUBEFSHD treatment=zNONE rep=rep3
+    subGroups cellType=t3HSMMTUBEFSHD treatment=zNONE rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1059,7 +1059,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Huh-7.5 2
     longLabel Huh-7.5 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HUH75 treatment=zNONE rep=rep2
+    subGroups cellType=t3HUH75 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1067,7 +1067,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Huh-7 2
     longLabel Huh-7 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=HUH7 treatment=zNONE rep=rep2
+    subGroups cellType=t3HUH7 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1075,7 +1075,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_CWRU1 1
     longLabel iPS (CWRU1) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=IPSCWRU1 treatment=zNONE rep=rep1
+    subGroups cellType=t3IPSCWRU1 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1083,7 +1083,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_CWRU1 2
     longLabel iPS (CWRU1) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=IPSCWRU1 treatment=zNONE rep=rep2
+    subGroups cellType=t3IPSCWRU1 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1091,7 +1091,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_NIHi11 1
     longLabel iPS (NIHi11) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=IPSNIHIZ11 treatment=zNONE rep=rep1
+    subGroups cellType=t3IPSNIHI11 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1099,7 +1099,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_NIHi11 2
     longLabel iPS (NIHi11) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=IPSNIHIZ11 treatment=zNONE rep=rep2
+    subGroups cellType=t3IPSNIHI11 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1107,7 +1107,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_NIHi7 1
     longLabel iPS (NIHi7) Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=IPSNIHI7 treatment=zNONE rep=rep1
+    subGroups cellType=t3IPSNIHI7 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1115,7 +1115,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel iPS_NIHi7 2
     longLabel iPS (NIHi7) Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=IPSNIHI7 treatment=zNONE rep=rep2
+    subGroups cellType=t3IPSNIHI7 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1123,7 +1123,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 4
     longLabel K562 Exon array Signal Rep 4 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=zNONE rep=rep4
+    subGroups cellType=t1K562 treatment=zNONE rep=rep4
     type bigBed 6 +
     color 46,0,184
     # subId=5988 dateSubmitted=2012-03-08
@@ -1132,7 +1132,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 NaBut 1
     longLabel K562 NaBut Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=NABUT rep=rep1
+    subGroups cellType=t1K562 treatment=NABUT rep=rep1
     type bigBed 6 +
     color 46,0,184
     # subId=5988 dateSubmitted=2012-03-08
@@ -1141,7 +1141,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 Nabut 2
     longLabel K562 NaBut Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=NABUT rep=rep2
+    subGroups cellType=t1K562 treatment=NABUT rep=rep2
     type bigBed 6 +
     color 46,0,184
     # subId=5988 dateSubmitted=2012-03-08
@@ -1150,7 +1150,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 Nabut 3
     longLabel K562 NaBut Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=NABUT rep=rep3
+    subGroups cellType=t1K562 treatment=NABUT rep=rep3
     type bigBed 6 +
     color 46,0,184
     # subId=5988 dateSubmitted=2012-03-08
@@ -1159,7 +1159,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel K562 Nabut 4
     longLabel K562 NaBut Exon array Signal Rep 4 from ENCODE/Duke
-    subGroups cellType=1K562 treatment=NABUT rep=rep4
+    subGroups cellType=t1K562 treatment=NABUT rep=rep4
     type bigBed 6 +
     color 46,0,184
     # subId=5988 dateSubmitted=2012-03-08
@@ -1168,7 +1168,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 CTCFsh 1
     longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep1
+    subGroups cellType=t2MCF7 treatment=CTCFSHRNA rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1176,7 +1176,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 CTCFsh 2
     longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep2
+    subGroups cellType=t2MCF7 treatment=CTCFSHRNA rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1184,7 +1184,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 CTCFsh 3
     longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep3
+    subGroups cellType=t2MCF7 treatment=CTCFSHRNA rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1192,7 +1192,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 Hypox 1
     longLabel MCF-7 Hypoxia, Lactic acidosis Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=HYPOXLAC rep=rep1
+    subGroups cellType=t2MCF7 treatment=HYPOXLAC rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1200,7 +1200,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 RANDsh 1
     longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep1
+    subGroups cellType=t2MCF7 treatment=RANDSHRNA rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1208,7 +1208,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 RANDsh 2
     longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep2
+    subGroups cellType=t2MCF7 treatment=RANDSHRNA rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1216,7 +1216,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel MCF-7 RANDsh 3
     longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 3 from ENCODE/Duke
-    subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep3
+    subGroups cellType=t2MCF7 treatment=RANDSHRNA rep=rep3
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1224,7 +1224,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Mel_2183 1
     longLabel Mel 2183 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=MEL2183 treatment=zNONE rep=rep1
+    subGroups cellType=t3MEL2183 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1232,7 +1232,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Mel_2183 2
     longLabel Mel 2183 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=MEL2183 treatment=zNONE rep=rep2
+    subGroups cellType=t3MEL2183 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1240,7 +1240,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Stellate 2
     longLabel Stellate Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=STELLATE treatment=zNONE rep=rep2
+    subGroups cellType=t3STELLATE treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1248,7 +1248,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel UCH-1 1
     longLabel UCH-1 Exon array Signal Rep 1 from ENCODE/Duke
-    subGroups cellType=UCH1 treatment=zNONE rep=rep1
+    subGroups cellType=t3UCH1 treatment=zNONE rep=rep1
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1256,7 +1256,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel UCH-1 2
     longLabel UCH-1 Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=UCH1 treatment=zNONE rep=rep2
+    subGroups cellType=t3UCH1 treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1264,7 +1264,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Urothelia 2
     longLabel Urothelia Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=UROTHEL treatment=zNONE rep=rep2
+    subGroups cellType=t3UROTHELIA treatment=zNONE rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
 
@@ -1272,8 +1272,7 @@ scoreFilter 10
     parent wgEncodeDukeAffyExon off
     shortLabel Uro UT189 2
     longLabel Urothelia UT189 E. coli Exon array Signal Rep 2 from ENCODE/Duke
-    subGroups cellType=UROTHEL treatment=UT189 rep=rep2
+    subGroups cellType=t3UROTHELIA treatment=UT189 rep=rep2
     type bigBed 6 +
     # subId=5988 dateSubmitted=2012-03-08
-
 
