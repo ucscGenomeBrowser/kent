@@ -134,3 +134,4 @@ wgEncode 1
         color 0,100,0
         type bigWig 0.00 1.00
         origAssembly hg19
+

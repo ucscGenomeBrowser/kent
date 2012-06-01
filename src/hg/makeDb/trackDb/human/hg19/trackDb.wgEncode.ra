@@ -51,8 +51,7 @@ include wgEncodeHaibGenotype.release2.ra
 include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
-include wgEncodeAffyRnaChip.ra beta,public
-include wgEncodeAffyRnaChip.patch.ra alpha
+include wgEncodeAffyRnaChip.ra
 
 
 # Chromatin Interactions ------
@@ -125,7 +124,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.patch.ra
+include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra beta,public
