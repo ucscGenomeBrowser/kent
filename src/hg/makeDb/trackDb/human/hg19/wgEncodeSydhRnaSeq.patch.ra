@@ -1,0 +1,124 @@
+track wgEncodeSydhRnaSeq
+compositeTrack on
+shortLabel SYDH RNA-seq
+longLabel RNA-seq from ENCODE/Stanford/Yale/USC/Harvard
+group expression
+superTrack wgEncodeRnaSeqSuper dense
+subGroup1 view Views RawSignal=_Raw_Signal Alignments=Alignments
+subGroup2 cellType Cell_Line t1K562=K562&nbsp;(Tier_1)
+subGroup3 treatment Treatment None=None AMA50ug9h=AMA50ug9h IFNg6h=IFNg6h IFNg30=IFNg30 IFNa30=IFNa30 IFNa6h=IFNa6h
+subGroup4 rnaExtract RnaExtract nonPolyA=PolyA- polyA=PolyA+ nonPolyARRna=PolyA-_rRna-
+dimensions dimensionX=cellType dimensionY=treatment
+#dimensionBchecked polyA
+sortOrder cellType=+ treatment=+ view=+
+fileSortOrder cell=Cell_Line treatment=treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=rnaExtract
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+html wgEncodeSydhRnaSeq.patch
+
+    track wgEncodeSydhRnaSeqViewSignal
+    shortLabel Signal
+    view RawSignal
+    visibility full
+    subTrack wgEncodeSydhRnaSeq
+    viewLimits 0:78
+    autoScale off
+    transformFunc NONE
+    windowingFunction mean+whiskers
+    maxHeightPixels 100:24:16
+
+        track wgEncodeSydhRnaSeqK562Ifna30PolyaRaw
+        parent wgEncodeSydhRnaSeqViewSignal on
+        shortLabel K562 pA+ Na30
+        longLabel K562 polyA+ IFNa30 RNA-seq Raw Signal from ENCODE/SYDH
+        subGroups view=RawSignal cellType=t1K562 rnaExtract=polyA treatment=IFNa30
+        type bigWig 0.000000 165257.000000
+        color 46,0,184
+        # subId=3113 dateSubmitted=2010-12-17
+
+        track wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw
+        parent wgEncodeSydhRnaSeqViewSignal on
+        shortLabel K562 pA+ Ng6h
+        longLabel K562 polyA+ IFNg6h RNA-seq Raw Signal from ENCODE/SYDH
+        subGroups view=RawSignal cellType=t1K562 rnaExtract=polyA treatment=IFNg6h
+        type bigWig 0.000000 184050.000000
+        color 46,0,184
+        # subId=3113 dateSubmitted=2010-12-17
+
+        track wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw
+        parent wgEncodeSydhRnaSeqViewSignal on
+        shortLabel K562 pA+ Na6h
+        longLabel K562 polyA+ IFNa6h RNA-seq Raw Signal from ENCODE/SYDH
+        subGroups view=RawSignal cellType=t1K562 rnaExtract=polyA treatment=IFNa6h
+        type bigWig 0.000000 134219.000000
+        color 46,0,184
+        # subId=3113 dateSubmitted=2010-12-17
+
+        track wgEncodeSydhRnaSeqK562Ifng30PolyaRaw
+        parent wgEncodeSydhRnaSeqViewSignal on
+        shortLabel K562 pA+ Ng30
+        longLabel K562 polyA+ IFNg30 RNA-seq Raw Signal from ENCODE/SYDH
+        subGroups view=RawSignal cellType=t1K562 rnaExtract=polyA treatment=IFNg30
+        type bigWig 0.000000 172495.000000
+        color 46,0,184
+        # subId=3113 dateSubmitted=2010-12-17
+
+    track wgEncodeSydhRnaSeqViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide
+    subTrack wgEncodeSydhRnaSeq
+    type bam
+    pairEndsByName on
+    showNames off
+    noColorTag .
+    bamColorMode off
+    bamGrayMode aliQual
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
+        track wgEncodeSydhRnaSeqK562Ifna30PolyaAln
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel K562 pA+ Na30
+        longLabel K562 polyA+ IFNa30 RNA-seq Alignments from ENCODE/SYDH
+        subGroups view=Alignments cellType=t1K562 rnaExtract=polyA treatment=IFNa30
+        type bam
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeSydhRnaSeqK562Ifna6hPolyaAln
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel K562 pA+ Na6h
+        longLabel K562 polyA+ IFNa6h RNA-seq Alignments from ENCODE/SYDH
+        subGroups view=Alignments cellType=t1K562 rnaExtract=polyA treatment=IFNa6h
+        type bam
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeSydhRnaSeqK562Ifng30PolyaAln
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel K562 pA+ Ng30
+        longLabel K562 polyA+ IFNg30 RNA-seq Alignments from ENCODE/SYDH
+        subGroups view=Alignments cellType=t1K562 rnaExtract=polyA treatment=IFNg30
+        type bam
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeSydhRnaSeqK562Ifng6hPolyaAln
+        parent wgEncodeSydhRnaSeqViewAlignments off
+        shortLabel K562 pA+ Ng6h
+        longLabel K562 polyA+ IFNg6h RNA-seq Alignments from ENCODE/SYDH
+        subGroups view=Alignments cellType=t1K562 rnaExtract=polyA treatment=IFNg6h
+        type bam
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+

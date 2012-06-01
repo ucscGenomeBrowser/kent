@@ -15,10 +15,13 @@ class PslQa(PositionalQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        self.recordPassOrError(p.returncode)
+        if p.returncode:
+            self.recordError()
+        else:
+            self.recordPass()
         self.reporter.endStep()
 
     def validate(self):
-        """Adds psl-specific table checks to errorLog."""
+        """Adds psl-specific table checks to basic table checks."""
         super(PslQa, self).validate()
         self.__pslCheck()

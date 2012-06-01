@@ -26,8 +26,8 @@
 </ul>
 </li>
 <li class="menuparent"><span>Mirrors</span><ul style="display: none; visibility: hidden;">
-<li class="first"><a href="XXXX">US Server</a></li>
-<li><a href="XXXX">Euro Server</a></li>
+<li class="first"><a href="WILL_BE_US_DOMAIN">US Server</a></li>
+<li><a href="WILL_BE_EURONODE_DOMAIN">Euro Server</a></li>
 <li><a href="../mirror.html">Other Mirrors</a></li>
 <li class="last"><a href="../admin/mirror.html">Mirroring Instructions</a></li>
 </ul>
@@ -36,8 +36,7 @@
 <li class="first"><a href="../downloads.html">Genome Data</a></li>
 <li><a href="../downloads.html">Source Code</a></li>
 <li><a href="../downloads.html">Utilities</a></li>
-<li><a href="ftp://hgdownload.cse.ucsc.edu/goldenPath">FTP/MySQL Access</a></li>
-<li class="last"><a href="../cgi-bin/hgTables?command=start">Table Browser</a></li>
+<li class="last"><a href="ftp://hgdownload.cse.ucsc.edu/goldenPath">FTP/MySQL Access</a></li>
 </ul>
 </li>
 <li class="menuparent"><span>My Data</span><ul style="display: none; visibility: hidden;">

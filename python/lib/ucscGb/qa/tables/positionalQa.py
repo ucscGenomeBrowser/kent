@@ -69,17 +69,17 @@ class PositionalQa(TableQa):
         if parent:
             self.__getLabels(parent, shortLabels, longLabels)
         for label in shortLabels:
-            error = False
             self.reporter.writeLine('"' + label + '"')
             if len(label) > shortLabelLimit and label != "$o_Organism Chain/Net":
-                error = True
-            self.recordPassOrError(error)
+                self.recordError()
+            else:
+                self.recordPass()
         for label in longLabels:
-            error = False
             self.reporter.writeLine('"' + label + '"')
             if len(label) > longLabelLimit:
-                error = True
-            self.recordPassOrError(error)
+                self.recordeError()
+            else:
+                self.recordPass()
         self.reporter.endStep()
 
     def __isGenbankTable(self):
@@ -95,7 +95,10 @@ class PositionalQa(TableQa):
             self.reporter.writeCommand(command)
             p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
             p.wait()
-            self.recordPassOrError(p.returncode)
+            if p.returncode:
+                self.recordError()
+            else:
+                self.recordPass()
             self.reporter.endStep()
 
     def __checkTableCoords(self):
@@ -105,7 +108,10 @@ class PositionalQa(TableQa):
         self.reporter.writeCommand(command)
         p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
         p.wait()
-        self.recordPassOrError(p.returncode)
+        if p.returncode:
+            self.recordError()
+        else:
+            self.recordPass()
         self.reporter.endStep()
 
     def __chromosomeCoverage(self):

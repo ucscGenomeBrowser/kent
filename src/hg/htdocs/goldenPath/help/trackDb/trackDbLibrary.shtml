@@ -107,8 +107,8 @@
      each setting organized roughly by track type  -->
 
 <DIV class="trackDbDoc_intro">
-<H1 ALIGN=CENTER STYLE="margin-top: 0in">Track Database Definition</H1>
-<H2 ALIGN=CENTER STYLE="margin-top: 0in">How to declare Dataset Display Settings
+<H1>Track Database Definition</H1>
+<H2>How to declare Dataset Display Settings
                                         in the Genome Browser</H2>
     <P>This document is
     intended to describe how to declare dataset display characteristics
@@ -131,14 +131,14 @@
     and most will have certain common settings followed by track specific
     settings.  Here is an example:</P>
 
-    <pre style="margin-left:3em;">
+    <pre>
         track myFirstTrack
         type bed 6
         shortLabel Example Data
         longLabel The data in this track is format "bed 6".
     </pre>
 
-    <div class="hintBox" style="margin-left:2em; width:580px;">
+    <div class="hintBox">
         <I><B>Inside hint:</B></I><I> The ra file
         format supports  '<code>\</code>' continuation characters.  If the
         setting is long or complex, break it into several lines using
@@ -163,10 +163,10 @@
 
 <!-- - - - - - - - COMMON settings - - - - - - - -->
 <DIV class="commonSettings_intro">
-    <P>The following trackDb
+    The following trackDb
     settings are common to all data format types.  Only the settings in
     this section are required, though some type specific requirements
-    will be mentioned in the appropriate sections to follow.</P><BR>
+    will be mentioned in the appropriate sections to follow.
 </DIV>
 
 <DIV class="track"><span class="types all"></span>
@@ -182,12 +182,6 @@
     <pre>   track myFirstTrack</pre>
 </DIV>
 
-<DIV class="strangeness" style="display:none;"><span class="types none"></span>
-    <div class="format"></div>
-    <P>This makes no sense but with this IE can open the "type" details
-    but without it, IE fails!
-    <A onclick="return jumpTo(this);" HREF="#">strangeness</A></P>
-</DIV>
 <DIV class="type"><span class="types all"></span>
     <div class="format"><code>type</code></div>
     <P>Required: <span class="red">Yes</span></P>
@@ -301,30 +295,30 @@
     ".html" suffix is implied.  This description should contain
     several sections:</P>
     <P><B>Description</B></P>
-    <P STYLE="margin-left: 0.26in; margin-right: 0in">One
+    <P class="indent1">One
     to three sentences describing the contents of the track and what
     it attempts to show.  The description can include additional
     paragraphs giving further details and can include links to outside
     sources.</P>
     <P><B>Display Conventions and Configuration</B></P>
-    <P STYLE="margin-left: 0.26in; margin-right: 0in">A
+    <P class="indent1">A
     description of what the data itself means, such as how to
     interpret scores or full signal values.  This section can also be
     used to describe how the display may be customized by using
     configuration controls.</P>
     <P><B>Methods</B></P>
-    <P STYLE="margin-left: 0.26in; margin-right: 0in">A
+    <P class="indent1">A
     description of how the data was generated, which may include how
     physical samples were treated as well as explanations of data
     handling algorithms.</P>
     <P><B>Credits</B></P>
-    <P STYLE="margin-left: 0.26in; margin-right: 0in">Names
+    <P class="indent1">Names
     and institutions of those who performed the experiments and/or
     prepared the data as well as any funding sources.  This section
     should include a contact email address for questions concerning
     the data.</P>
     <P><B>References</B></P>
-    <P STYLE="margin-left: 0.26in; margin-right: 0in">References
+    <P class="indent1">References
     to any published work referring to or dependent upon this data as
     well as any sources upon which the work is based or can be
     understood.</P>
@@ -886,8 +880,8 @@
     that this setting will be redefined at some point, given that it
     is very complicated and ugly. However, this current format will
     continue to be honored until entirely replaced.</I></P><BR>
-    <div class="hintBox" style="margin-left:2em; width:680px; color:black;">
-        <I style="color:#880000;">Secret tricks:</I>
+    <div class="hintBox">
+        <I class="red">Secret tricks:</I>
         <OL>
         <LI>The titles and
         labels need to avoid use of the delimiter chars (<code> ,=:|</code>).  But
@@ -2446,29 +2440,17 @@
     <P>Here the <code>$matrix</code> token found in the
     chainNet.html file will be replaced by the following matrix:</P>
     <!-- Note that this table is within "settingsTable" so CSS must be defined here -->
-    <TABLE BORDER=1 CELLPADDING=7 style="text-align:RIGHT; width:242px; border-collapse:separate; border-spacing:0px; empty-cells:show;">
-        <TR VALIGN=TOP>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;"></TH>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">A</TH>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">C</TH>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">G</TH>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">T</TH>
-        </TR><TR VALIGN=TOP>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">A</TH>
-            <TD WIDTH=34>91</TD><TD WIDTH=34>-114</TD><TD WIDTH=34>-31</TD><TD WIDTH=34>-123</TD>
-        </TR>
-        <TR VALIGN=TOP>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">C</TH>
-            <TD WIDTH=34>-114</TD><TD WIDTH=34>100</TD><TD WIDTH=34>-125</TD><TD WIDTH=34>-31</TD>
-        </TR>
-        <TR VALIGN=TOP>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">T</TH>
-            <TD WIDTH=34>-31</TD><TD WIDTH=34>-125</TD><TD WIDTH=34>100</TD><TD WIDTH=34>-114</TD>
-        </TR>
-        <TR VALIGN=TOP>
-            <TH WIDTH=34 style="text-align:center; color:black; background-color:#FFFEE8;">G</TH>
-            <TD WIDTH=34>-123</TD><TD WIDTH=34>-31</TD><TD WIDTH=34>-114</TD><TD WIDTH=34>91</TD>
-        </TR>
+    <STYLE TYPE="text/css">
+    TABLE.matrixTable { text-align:RIGHT; width:242px; border-collapse:separate;
+                        border-spacing:0px; empty-cells:show; }
+    TABLE.matrixTable TH { text-align:center; color:black; background-color:#FFFEE8; width:34px; }
+    </STYLE>
+    <TABLE BORDER=1 CELLPADDING=7 class="matrixTable">
+        <TR><TH></TH><TH>A</TH><TH>C</TH><TH>G</TH><TH>T</TH></TR>
+        <TR><TH>A</TH><TD>91</TD><TD>-114</TD><TD>-31</TD><TD>-123</TD></TR>
+        <TR><TH>C</TH><TD>-114</TD><TD>100</TD><TD>-125</TD><TD>-31</TD></TR>
+        <TR><TH>T</TH><TD>-31</TD><TD>-125</TD><TD>100</TD><TD>-114</TD></TR>
+        <TR><TH>G</TH><TD>-123</TD><TD>-31</TD><TD>-114</TD><TD>91</TD></TR>
     </TABLE>
 </DIV>
 
@@ -3987,7 +3969,7 @@ for each cell associated with the particular TF binding location.</P>
     That is, a signal height of 100 should be interpretable in the same
     way for the whole set of tracks.  While this is true for a composite
     or view, it is especially important for overlay tracks.  You cannot
-    reasonably overlay a signal from 0-1 with another signal fro 0-1000.</P>
+    reasonably overlay a signal from 0-1 with another signal from 0-1000.</P>
 </DIV>
 
 <DIV class="container"><span class="types container multiWig"></span>
