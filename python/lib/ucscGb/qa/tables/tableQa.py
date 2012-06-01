@@ -64,7 +64,7 @@ class TableQa(object):
         self.sumRow.setCount(rowCount.strip())
 
     def validate(self):
-        """Runs validation methods.  Puts errors captured from programs in errorLog."""
+        """Runs validation methods. Sends errors captured from programs to reporter."""
         self.__checkTableDescription()
         self.checkForUnderscores()
 

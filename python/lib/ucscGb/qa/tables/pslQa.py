@@ -22,6 +22,6 @@ class PslQa(PositionalQa):
         self.reporter.endStep()
 
     def validate(self):
-        """Adds psl-specific table checks to errorLog."""
+        """Adds psl-specific table checks to basic table checks."""
         super(PslQa, self).validate()
         self.__pslCheck()
