@@ -46,7 +46,11 @@ vSelf->query = query;
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 if (self->needHeader)
     {
-    printHeaderColumns(self->f, query->primarySource, TRUE);
+    struct annoStreamer *primary = query->primarySource;
+    char *primaryHeader = primary->getHeader(primary);
+    if (isNotEmpty(primaryHeader))
+	printf("# Header from primary input:\n%s", primaryHeader);
+    printHeaderColumns(self->f, primary, TRUE);
     struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
     for (;  grator != NULL;  grator = grator->next)
 	printHeaderColumns(self->f, grator, FALSE);
