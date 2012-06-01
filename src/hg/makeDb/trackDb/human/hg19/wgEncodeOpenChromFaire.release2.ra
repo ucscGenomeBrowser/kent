@@ -200,7 +200,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HTR8svn FAIRE Pk
         longLabel HTR8svn FAIRE Peaks from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=Peaks cellType=cHTR8SVN
+        subGroups treatment=AANONE view=Peaks cellType=cHTR8SVN 
         type narrowPeak
         # subId=3379 dateSubmitted=2011-01-19
 
@@ -224,7 +224,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Urothl FAIRE Pk
         longLabel Urothelia FAIRE Peaks from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=Peaks cellType=cUROTHELIA
+        subGroups treatment=AANONE view=Peaks cellType=cUROTHELIA 
         type narrowPeak
         # subId=3277 dateSubmitted=2011-01-18
 
@@ -423,7 +423,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HTR8svn FAIRE DS
         longLabel HTR8svn FAIRE Density Signal from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=SIG cellType=cHTR8SVN
+        subGroups treatment=AANONE view=SIG cellType=cHTR8SVN 
         type bigWig 0.000000 0.335400
         # subId=3379 dateSubmitted=2011-01-19
 
@@ -447,7 +447,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Urothl FAIRE DS
         longLabel Urothelia FAIRE Density Signal from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=SIG cellType=cUROTHELIA
+        subGroups treatment=AANONE view=SIG cellType=cUROTHELIA 
         type bigWig 0.000000 0.358300
         # subId=3277 dateSubmitted=2011-01-18
 
@@ -646,7 +646,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HTR8svn FAIRE OS
         longLabel HTR8svn FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=SIGBO cellType=cHTR8SVN
+        subGroups treatment=AANONE view=SIGBO cellType=cHTR8SVN 
         type bigWig 0.000000 1371.000000
         # subId=3379 dateSubmitted=2011-01-19
 
@@ -670,7 +670,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Urothl FAIRE OS
         longLabel Urothelia FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
-        subGroups treatment=AANONE view=SIGBO cellType=cUROTHELIA
+        subGroups treatment=AANONE view=SIGBO cellType=cUROTHELIA 
         type bigWig 0.000000 1146.000000
         # subId=3277 dateSubmitted=2011-01-18
 

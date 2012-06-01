@@ -1611,7 +1611,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=4640 dateSubmitted=2011-09-08
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1        #        parent wgEncodeUwHistoneViewHot off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1        #
+        parent wgEncodeUwHistoneViewHot off
         #        shortLabel H7ES H3K4M3 Ht 1
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         #        subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep1
@@ -1637,7 +1638,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5152 dateSubmitted=2011-12-12
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2        #        parent wgEncodeUwHistoneViewHot off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2        #
+        parent wgEncodeUwHistoneViewHot off
         #        shortLabel H7ES H3K4M3 Ht 2
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         #        subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep2
@@ -3492,7 +3494,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=4640 dateSubmitted=2011-09-08
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdPkRep1        #        parent wgEncodeUwHistoneViewPeaks off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdPkRep1        #
+        parent wgEncodeUwHistoneViewPeaks off
         #        shortLabel H7ES H3K4M3 Pk 1
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         #        subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep1
@@ -3518,7 +3521,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5152 dateSubmitted=2011-12-12
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdPkRep2        #        parent wgEncodeUwHistoneViewPeaks off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdPkRep2        #
+        parent wgEncodeUwHistoneViewPeaks off
         #        shortLabel H7ES H3K4M3 Pk 2
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         #        subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep2
@@ -5914,7 +5918,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg18
         # subId=5046 dateSubmitted=2011-11-01
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdRawRep1        #        parent wgEncodeUwHistoneViewRawSig off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdRawRep1        #
+        parent wgEncodeUwHistoneViewRawSig off
         #        shortLabel H7ES H3K4M3 Sg 1
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         #        subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep1
@@ -5949,7 +5954,8 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5152 dateSubmitted=2011-12-12
 
-        #        track wgEncodeUwHistoneH7esH3k04me3StdRawRep2        #        parent wgEncodeUwHistoneViewRawSig off
+        #        track wgEncodeUwHistoneH7esH3k04me3StdRawRep2        #
+        parent wgEncodeUwHistoneViewRawSig off
         #        shortLabel H7ES H3K4M3 Sg 2
         #        longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         #        subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=zNone rep=rep2

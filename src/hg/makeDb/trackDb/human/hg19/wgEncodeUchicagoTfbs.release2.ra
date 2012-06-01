@@ -2,24 +2,26 @@
 # Notes:
 #       - Track Long Label: Transcription Factor Binding Sites by Epitope-Tag ChIP-seq from ENCODE/University of Chicago
 #       - Track Short Label: UChicago TFBS
-#       - View Long Labels: [cell] [factor] TFBS GFP-tag ChIP-seq [view] from ENCODE/UChicago
+#       - View Long Labels: [cell] [factor] TFBS GFP-tag ChIP-seq [view] from ENCODE/UChicago 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
-#       - Short Labels:
+#       - Short Labels: 
 #               Template: [cell] [factor]/GFP [view]
 #					- Views: For consistency sake view will be two letters
 #                       - Peaks = Pk
 #                       - Signal = Sg
-#       - cellType Order: Ordering is based on tier and alphabetical within a tier.
-#       - Default Tracks on:
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
+#       - Default Tracks on: 
 #       - Display matrix:
 #               - Tier 1 and Tier 2 cell lines have distinct labels that define their tier and distinct  cell names.
 #               - Dimension X - Factor
 #                       - factor Order: Ordering is based alphabetically
 #               - Dimension Y - Cell Type
-#                       - cellType Order: Ordering is based on tier and alphabetical within a tier.
+#                       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
 #       - View default settings:
 #           - Peaks: dense
 #           - Signal: full
+
+
 
 track wgEncodeUchicagoTfbs
 compositeTrack on
@@ -32,7 +34,7 @@ subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1)
 subGroup3 factor Factor BACH1=BACH1 CCNE1=CCNE1 CDKN1B=CDKN1B ELF1=ELF1 ESR=ESR FOS=FOS GATA2=GATA2 HDAC8=HDAC8 ILF2=ILF2 JunB=JunB JunD=JunD MLL5=MLL5 NCOR1=NCOR1 NF90=NF90 NR4A1=NR4A1 STAT1=STAT1 zINPUTBACH1=Input_(<i>BACH1</i>) zINPUTCCNE1=Input_(<i>CCNE1</i>) zINPUTCDKN1B=Input_(<i>CDKN1B</i>) zINPUTELF1=Input_(<i>ELF1</i>) zINPUTESR=Input_(<i>ESR</i>) zINPUTILF2=Input_(<i>ILF2</i>) zINPUTMLL5=Input_(<i>MLL5</i>) zINPUTNCOR1=Input_(<i>COR1</i>) zINPUTNF90=Input_(<i>NF90</i>) zINPUTSTAT1=Input_(<i>STAT1</i>)
 subGroup4 control Control CONTROLBACH1=Control_eGFP-BACH1 CONTROLCCNE1=Control_eGFP-CCNE1 CONTROLCDKN1B=Control_eGFP-CDKN1B CONTROLELF1=Control_eGFP-E2F1 CONTROLESR=Control_eGFP-ESR ControlFOS=Control_eGFP-FOS ControlGATA2=Control_eGFP-GATA2 ControlHDAC8=Control_eGFP-HDAC8 CONTROLILF2=Control_eGFP-ILF2 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB CONTROLMLL5=Control_eGFP-MLL5 CONTROLNCOR1=Control_eGFP-NCOR1 CONTROLNF90=Control_eGFP-NF90 ControlNR4A1=Control_eGFP-NR4A1 CONTROLSTAT1=Control_eGFP-STAT1
 subGroup5 rep Replicate rep1=1 rep2=2 POOLED=Pooled
-dimensions dimensionX=rep dimensionY=factor
+dimensions dimensionX=rep dimensionY=factor 
 sortOrder cellType=+ factor=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
@@ -43,30 +45,30 @@ wgEncode 1
 noInherit on
 html wgEncodeUchicagoTfbs.release2
 
-    track wgEncodeUchicagoTfbsPeaks
-    shortLabel Peaks
-    view Peaks
-    visibility dense
-    viewUi on
-    subTrack wgEncodeUchicagoTfbs
-    signalFilter 0
-    signalFilterLimits 0:18241
-    pValueFilter 5
-    pValueFilterLimits 0:300
-    qValueFilter 0
-    qValueFilterLimits 0:300
+	track wgEncodeUchicagoTfbsPeaks
+	shortLabel Peaks
+	view Peaks
+	visibility dense
+	viewUi on
+	subTrack wgEncodeUchicagoTfbs
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 5
+	pValueFilterLimits 0:300
+	qValueFilter 0
+	qValueFilterLimits 0:300
 
         track wgEncodeUchicagoTfbsK562EfosControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 FOS/GFP Pk
-        longLabel K562 FOS TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
+        longLabel K562 FOS TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago 
         subGroups view=Peaks factor=FOS cellType=1K562 control=ControlFOS rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Egata2ControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 GATA2/GFP Pk
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=GATA2 cellType=1K562 control=ControlGATA2 rep=POOLED
@@ -75,7 +77,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Ehdac8ControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 HDAC8/GFP Pk
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=HDAC8 cellType=1K562 control=ControlHDAC8 rep=POOLED
@@ -84,7 +86,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562EjunbControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunB/GFP Pk
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=JunB cellType=1K562 control=ControlJunB rep=POOLED
@@ -93,7 +95,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562EjundControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunD/GFP Pk
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=JunD cellType=1K562 control=ControlJunD rep=POOLED
@@ -102,7 +104,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Enr4a1ControlPk
-        parent wgEncodeUchicagoTfbsPeaks
+        parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 NR4A1/GFP Pk
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=NR4A1 cellType=1K562 control=ControlNR4A1 rep=POOLED
@@ -289,20 +291,21 @@ html wgEncodeUchicagoTfbs.release2
         type narrowPeak
         color 46,0,184
         # subId=5862 dateSubmitted=2012-02-20
-
-    track wgEncodeUchicagoTfbsViewSignal
-    shortLabel Signal
-    view Signal
-    visibility full
-    subTrack wgEncodeUchicagoTfbs
-    viewLimits 0:50
-    minLimit 0
-    maxLimit 12768
-    maxHeightPixels 100:32:16
-    windowingFunction mean+whiskers
+	
+	
+	track wgEncodeUchicagoTfbsViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	subTrack wgEncodeUchicagoTfbs
+	viewLimits 0:50
+	minLimit 0
+	maxLimit 12768
+	maxHeightPixels 100:32:16
+	windowingFunction mean+whiskers
 
         track wgEncodeUchicagoTfbsK562EfosControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 FOS/GFP Sg
         longLabel K562 FOS TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=FOS cellType=1K562 control=ControlFOS rep=POOLED
@@ -311,7 +314,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Egata2ControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 GATA2/GFP Sg
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=GATA2 cellType=1K562 control=ControlGATA2 rep=POOLED
@@ -320,7 +323,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Ehdac8ControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 HDAC8/GFP Sg
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=HDAC8 cellType=1K562 control=ControlHDAC8 rep=POOLED
@@ -329,7 +332,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562EjunbControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunB/GFP Sg
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=JunB cellType=1K562 control=ControlJunB rep=POOLED
@@ -338,7 +341,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562EjundControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunD/GFP Sg
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=JunD cellType=1K562 control=ControlJunD rep=POOLED
@@ -347,7 +350,7 @@ html wgEncodeUchicagoTfbs.release2
         # subId=3310 dateSubmitted=2011-01-27
 
         track wgEncodeUchicagoTfbsK562Enr4a1ControlSig
-        parent wgEncodeUchicagoTfbsViewSignal
+        parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 NR4A1/GFP Sg
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
         subGroups view=Signal factor=NR4A1 cellType=1K562 control=ControlNR4A1 rep=POOLED
