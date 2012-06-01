@@ -9,7 +9,7 @@ class PointerQa(PositionalQa):
     """
 
     def validate(self):
-        """Adds pointer-specific table checks to errorLog."""
+        """Adds pointer-specific table checks to basic table checks."""
         TableQa.checkForUnderscores(self)
         PositionalQa.checkLabelLengths(self)
 

@@ -51,7 +51,9 @@ include wgEncodeHaibGenotype.release2.ra
 include wgEncodeBuOrchid.ra
 
 # Affy Rna Chip (wrangler: cricket)
-include wgEncodeAffyRnaChip.ra
+include wgEncodeAffyRnaChip.ra beta,public
+include wgEncodeAffyRnaChip.patch.ra alpha
+
 
 # Chromatin Interactions ------
 
@@ -123,8 +125,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra beta,public
-include wgEncodeSydhRnaSeq.patch.ra alpha
+include wgEncodeSydhRnaSeq.patch.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra beta,public
@@ -142,7 +143,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra
+include wgEncodeHaibMethylRrbs.ra beta,public
+include wgEncodeHaibMethylRrbs.release3.ra alpha
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 

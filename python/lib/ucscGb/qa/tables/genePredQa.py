@@ -21,6 +21,6 @@ class GenePredQa(PositionalQa):
         self.reporter.endStep()
 
     def validate(self):
-        """Adds genePred-specific table checks to errorLog."""
+        """Adds genePred-specific table checks to basic table checks."""
         super(GenePredQa, self).validate()
         self.__genePredCheck()
