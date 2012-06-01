@@ -6,6 +6,8 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#include "common.h"
+
 /* Types for options */
 #define OPTION_BOOLEAN    0x01
 #define OPTION_STRING     0x02
