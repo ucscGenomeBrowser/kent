@@ -35,14 +35,9 @@ struct annoFormatter
     void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
     /* Initialize output (header, etc) and set query pointer */
 
-    void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows);
-    /* Collect data from one source */
-
-    void (*discard)(struct annoFormatter *self);
-    /* Discard data collected so far (filter failure) */
-
-    void (*formatOne)(struct annoFormatter *self);
-    /* Aggregate all sources' data for a single primarySource item into output: */
+    void (*formatOne)(struct annoFormatter *self, struct annoRow *primaryRow,
+		      struct slRef *gratorRowList);
+    /* Aggregate all sources' data for a single primarySource item into output. */
 
     void (*close)(struct annoFormatter **pSelf);
     /* End of input; finish output, close connection/handle and free self. */
