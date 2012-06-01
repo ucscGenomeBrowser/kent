@@ -6,7 +6,7 @@ shortLabel Affy RNA Loc
 longLabel RNA Subcellular Localization by Tiling Microarray from ENCODE Affymetrix/CSHL
 group expression
 subGroup1 view Views FiltTransfrags=Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aK562=K562&nbsp;(Tier_1) bHEPG2=HepG2&nbsp;(Tier_2) cNHEK=NHEK cPROSTATE=prostate
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HEPG2=HepG2&nbsp;(Tier_2) t3NHEK=NHEK t3PROSTATE=prostate
 subGroup3 localization Localization aCELL=Whole_Cell bCYTOSOL=Cytosol cPOLYSOME=Polysome dNUCLEUS=Nucleus eNUCLEOPLASM=Nucleoplasm fCHROMATIN=Chromatin gNUCLEOLUS=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -35,7 +35,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel Prostate cell pA-
         longLabel Prostate whole cell polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cPROSTATE localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t3PROSTATE localization=aCELL rnaExtract=longNonPolyA
         type broadPeak
         color 0,102,136
 
@@ -43,7 +43,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel Prostate cell pA+
         longLabel Prostate whole cell polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cPROSTATE localization=aCELL rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t3PROSTATE localization=aCELL rnaExtract=longPolyA
         type broadPeak
         color 0,102,136
 
@@ -51,7 +51,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nucl pA-
         longLabel K562 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t1K562 localization=dNUCLEUS rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
 
@@ -59,7 +59,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cell tot
         longLabel K562 whole cell total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=aCELL rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1K562 localization=aCELL rnaExtract=total
         type broadPeak
         color 46,0,184
 
@@ -67,7 +67,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nucl pA+
         longLabel K562 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t1K562 localization=dNUCLEUS rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
 
@@ -75,7 +75,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cyto pA-
         longLabel K562 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=bCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t1K562 localization=bCYTOSOL rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
 
@@ -83,7 +83,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 cyto pA+
         longLabel K562 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=bCYTOSOL rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t1K562 localization=bCYTOSOL rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
 
@@ -91,7 +91,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 psom pA-
         longLabel K562 polysome polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=cPOLYSOME rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t1K562 localization=cPOLYSOME rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
 
@@ -99,7 +99,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12878 nucl pA-
         longLabel GM12878 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=dNUCLEUS rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
 
@@ -107,7 +107,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12878 cyto pA+
         longLabel GM12878 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=bCYTOSOL rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=bCYTOSOL rnaExtract=longPolyA
         type broadPeak
         color 153,38,0
 
@@ -115,7 +115,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12878 cyto pA-
         longLabel GM12878 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=bCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=bCYTOSOL rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
 
@@ -123,7 +123,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 chrm tot
         longLabel K562 chromatin total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=fCHROMATIN rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1K562 localization=fCHROMATIN rnaExtract=total
         type broadPeak
         noInherit on
         color 46,0,184
@@ -132,7 +132,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nlus tot
         longLabel K562 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1K562 localization=gNUCLEOLUS rnaExtract=total
         type broadPeak
         color 46,0,184
 
@@ -140,7 +140,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12878 nucl pA+
         longLabel GM12878 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=dNUCLEUS rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 153,38,0
@@ -149,7 +149,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel GM12878 cell tot
         longLabel GM12878 whole cell total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=aCELL rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=aCELL rnaExtract=total
         type broadPeak
         noInherit on
         color 153,38,0
@@ -158,7 +158,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 nplm tot
         longLabel K562 nucleoplasm total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aK562 localization=eNUCLEOPLASM rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1K562 localization=eNUCLEOPLASM rnaExtract=total
         type broadPeak
         noInherit on
         color 46,0,184
@@ -167,7 +167,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG2 cyto pA-
         longLabel HepG2 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=bHEPG2 localization=bCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t2HEPG2 localization=bCYTOSOL rnaExtract=longNonPolyA
         type broadPeak
         noInherit on
         color 189,0,157
@@ -176,7 +176,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG2 cyto pA+
         longLabel HepG2 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=bHEPG2 localization=bCYTOSOL rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t2HEPG2 localization=bCYTOSOL rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 189,0,157
@@ -185,7 +185,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK cyto pA-
         longLabel NHEK cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cNHEK localization=bCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t3NHEK localization=bCYTOSOL rnaExtract=longNonPolyA
         type broadPeak
         noInherit on
         color 179,0,134
@@ -194,7 +194,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK cyto pA+
         longLabel NHEK cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cNHEK localization=bCYTOSOL rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t3NHEK localization=bCYTOSOL rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 179,0,134
@@ -203,7 +203,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK nucl pA-
         longLabel NHEK nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cNHEK localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t3NHEK localization=dNUCLEUS rnaExtract=longNonPolyA
         type broadPeak
         color 179,0,134
 
@@ -211,7 +211,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel NHEK nucl pA+
         longLabel NHEK nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=cNHEK localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t3NHEK localization=dNUCLEUS rnaExtract=longPolyA
         type broadPeak
         color 179,0,134
 
@@ -219,7 +219,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG2 nucl pA-
         longLabel HepG2 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=bHEPG2 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=t2HEPG2 localization=dNUCLEUS rnaExtract=longNonPolyA
         type broadPeak
         color 189,0,157
 
@@ -227,7 +227,7 @@ origAssembly hg18
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
         shortLabel HepG2 nucl pA+
         longLabel HepG2 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=bHEPG2 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=FiltTransfrags cellType=t2HEPG2 localization=dNUCLEUS rnaExtract=longPolyA
         type broadPeak
         color 189,0,157
 
@@ -236,7 +236,7 @@ origAssembly hg18
         shortLabel HepG2 nlus tot
         color 189,0,157
         longLabel HepG2 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=bHEPG2 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t2HEPG2 localization=gNUCLEOLUS rnaExtract=total
         type broadPeak
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
@@ -244,6 +244,6 @@ origAssembly hg18
         shortLabel GM12878 nlus tot
         color 153,38,0
         longLabel GM12878 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
-        subGroups view=FiltTransfrags cellType=aGM12878 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=FiltTransfrags cellType=t1GM12878 localization=gNUCLEOLUS rnaExtract=total
         type broadPeak
 
