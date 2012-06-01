@@ -1,8 +1,6 @@
 # Open Chromatin Duke DNaseI HS (wrangler: Tim, assisted by Venkat)
 # changed the METHYLT tag to METHYLT
 
-
-
 track wgEncodeOpenChromDnase
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
@@ -28,7 +26,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks
-    visibility pack 
+    visibility pack
     subTrack wgEncodeOpenChromDnase
     pValueFilter 0.0
     pValueFilterLimits 0:16
@@ -171,7 +169,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 Pk
@@ -188,7 +185,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=Peaks cellType=MCF7 treatment=AANONE
         type narrowPeak
         # subId=1545 dateSubmitted=2010-06-17
-
 
         track wgEncodeOpenChromDnaseProgfibPk
         parent wgEncodeOpenChromDnaseViewPeaks off
@@ -780,7 +776,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DS
@@ -797,7 +792,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=SIG cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 0.624200
         # subId=1545 dateSubmitted=2010-06-17
-
 
         track wgEncodeOpenChromDnaseProgfibSig
         parent wgEncodeOpenChromDnaseViewSignal off
@@ -1243,7 +1237,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 0.876800
         # subId=5992 dateSubmitted=2012-03-13
 
-
     track wgEncodeOpenChromDnaseViewSigBo
     view SIGBO
     visibility full
@@ -1390,7 +1383,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 OS
@@ -1407,7 +1399,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=SIGBO cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 198.000000
         # subId=1545 dateSubmitted=2010-06-17
-
 
         track wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
@@ -1825,7 +1816,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel K562 OS
         longLabel K562 DNaseI Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=1K562 treatment=AANONE 
+        subGroups view=SIGBO cellType=1K562 treatment=AANONE
         type bigWig 0.000000 352.000000
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
