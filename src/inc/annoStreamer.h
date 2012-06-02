@@ -30,6 +30,9 @@ struct annoStreamer
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query (should be called only by annoGratorQuerySetRegion) */
 
+    char *(*getHeader)(struct annoStreamer *self);
+    /* Get the file header as a string (possibly NULL, possibly multi-line). */
+
     struct annoFilter *(*getFilters)(struct annoStreamer *self);
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
     /* Get and set filters */
