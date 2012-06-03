@@ -5091,17 +5091,54 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 return trackIsType(database, table, parent, "bigBed", ctLookupName);
 }
 
-char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
-/* Return file name from bigDataUrl or little table. */
+static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)
+/* Return file name from table.  If table has a seqName column, then grab the
+ * row associated with chrom (which can be e.g. '1' not 'chr1' if that is the
+ * case in the big remote file). */
 {
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
+if (checkSeqName && seqName == NULL)
+    errAbort("bamFileNameFromTable: table %s has seqName column, but NULL seqName passed in",
+	     table);
+char query[512];
+if (checkSeqName)
+    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	  table, seqName);
+else
+    safef(query, sizeof(query), "select fileName from %s", table);
+char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL && checkSeqName)
+    {
+    if (startsWith("chr", seqName))
+	safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	      table, seqName+strlen("chr"));
+    else
+	safef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
+	      table, seqName);
+    fileName = sqlQuickString(conn, query);
+    }
 if (fileName == NULL)
     {
-    char query[256];
-    safef(query, sizeof(query), "select fileName from %s", table);
-    fileName = sqlQuickString(conn, query);
-    if (fileName == NULL)
+    if (checkSeqName)
+	errAbort("Missing fileName for seqName '%s' in %s table", seqName, table);
+    else
 	errAbort("Missing fileName in %s table", table);
     }
 return fileName;
+}
+
+char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *conn, char *table,
+				     char *seqName)
+/* Return file name from bigDataUrl or little table (which might have a seqName column). */
+{
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+if (fileName == NULL)
+    fileName = bbiNameFromTableChrom(conn, table, seqName);
+return fileName;
+}
+
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
+/* Return file name from bigDataUrl or little table. */
+{
+return bbiNameFromSettingOrTableChrom(tdb, conn, table, NULL);
 }

@@ -9,7 +9,7 @@ subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=N
 subGroup4 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
 sortOrder cellType=+ rep=+ phase=+ view=+
-fileSortOrder cell=Cell_Line replicate=Rep phase=Phase view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+fileSortOrder cell=Cell_Line replicate=Rep phase=Phase view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell phase=phase replicate=Rep view=view
 dragAndDrop subTracks
 noInherit on
@@ -17,13 +17,13 @@ priority 0
 type bed 3
 wgEncode 1
 
-	track wgEncodeUwRepliSeqViewPeaks
-	shortLabel Peaks
-	view 2Peaks
-	visibility hide
-	parent wgEncodeUwRepliSeq
-	itemRgb on
-	useScore 1
+    track wgEncodeUwRepliSeqViewPeaks
+    shortLabel Peaks
+    view 2Peaks
+    visibility hide
+    parent wgEncodeUwRepliSeq
+    itemRgb on
+    useScore 1
 
         track wgEncodeUwRepliSeqGm12878PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
@@ -176,13 +176,13 @@ wgEncode 1
         origAssembly hg19
         # subId=4867 dateSubmitted=2011-10-27
 
-	track wgEncodeUwRepliSeqViewValleys
-	shortLabel Valleys
-	view 3Valleys
-	visibility hide
-	parent wgEncodeUwRepliSeq
-	itemRgb on
-	useScore 1
+    track wgEncodeUwRepliSeqViewValleys
+    shortLabel Valleys
+    view 3Valleys
+    visibility hide
+    parent wgEncodeUwRepliSeq
+    itemRgb on
+    useScore 1
 
         track wgEncodeUwRepliSeqGm12878ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
@@ -335,13 +335,13 @@ wgEncode 1
         origAssembly hg19
         # subId=4867 dateSubmitted=2011-10-27
 
-	track wgEncodeUwRepliSeqViewPctSignal
-	shortLabel Percentile Normalized Signal
-	view 1PctSignal
-	visibility dense
-	parent wgEncodeUwRepliSeq
-	windowingFunction mean+whiskers
-	viewLimits 15:35
+    track wgEncodeUwRepliSeqViewPctSignal
+    shortLabel Percentile Normalized Signal
+    view 1PctSignal
+    visibility dense
+    parent wgEncodeUwRepliSeq
+    windowingFunction mean+whiskers
+    viewLimits 15:35
 
         track wgEncodeUwRepliSeqGm12878G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
@@ -1249,16 +1249,16 @@ wgEncode 1
         origAssembly hg19
         # subId=4867 dateSubmitted=2011-10-27
 
-	track wgEncodeUwRepliSeqViewSumSignal
-	shortLabel Summed Densities
-	view 5SumSignal
-	visibility hide
-	parent wgEncodeUwRepliSeq
-	windowingFunction mean+whiskers
-	viewLimits 0:2500
+    track wgEncodeUwRepliSeqViewSumSignal
+    shortLabel Summed Densities
+    view 5SumSignal
+    visibility hide
+    parent wgEncodeUwRepliSeq
+    windowingFunction mean+whiskers
+    viewLimits 0:2500
 
         track wgEncodeUwRepliSeqGm12878SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal off 
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel GM12878 Sd 1
         longLabel GM12878 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1GM12878 phase=zNONE rep=rep1
@@ -1408,14 +1408,14 @@ wgEncode 1
         origAssembly hg19
         # subId=4867 dateSubmitted=2011-10-27
 
-   	track wgEncodeUwRepliSeqViewWaveSignal
-	shortLabel Wavelet-smoothed Signal
-	view 4WaveSignal
-	visibility full
-	parent wgEncodeUwRepliSeq
-	windowingFunction mean+whiskers
-	viewLimits -10:100
-	maxHeightPixels 128:64:11
+    track wgEncodeUwRepliSeqViewWaveSignal
+    shortLabel Wavelet-smoothed Signal
+    view 4WaveSignal
+    visibility full
+    parent wgEncodeUwRepliSeq
+    windowingFunction mean+whiskers
+    viewLimits -10:100
+    maxHeightPixels 128:64:11
 
         track wgEncodeUwRepliSeqGm12878WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal

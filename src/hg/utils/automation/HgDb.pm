@@ -21,14 +21,27 @@ use Cwd;
 
 @ISA = qw(Exporter);
 
-sub processConfFile
+sub loadConfFile
 {
-    my ($ref, $include, $profile) = @_;
+# Load name/values from .hg.conf file into a hash (passed in via $ref).
+# Optional args: CONF_FILE == name of conf file; if not present we use default name and location.
+    my ($ref, %args) = @_;
+    my $confFile = $args{CONF_FILE};
+    if(!defined($confFile)) {
+        if ($ENV{HGDB_CONF}) {
+            $confFile = $ENV{HGDB_CONF};
+        } else {
+            $confFile = "$ENV{HOME}/.hg.conf";
+        }
+    }
+    if(! -e $confFile) {
+        die "Cannot locate conf file: '$confFile'";
+    }
     my $fh;
     # we chdir to handle non-absolute references in includes
     my $currentDir = getcwd();
-    my ($filename) = fileparse($include);
-    my $newDir = dirname($include);
+    my ($filename) = fileparse($confFile);
+    my $newDir = dirname($confFile);
     chdir($newDir) || die "Couldn't chdir into '$newDir'; err: $!";
     open($fh, $filename) or die "Can't open $newDir/$filename; err: $!\n";
     while(<$fh>) {
@@ -36,17 +49,28 @@ sub processConfFile
         chomp $line;
         next if($line =~ /^#/ || $line =~ /^$/);
         if ($line =~ m/^include\s+(.+)$/) {
-            processConfFile($ref, $1, $profile);
-        } else {
-            for my $name (qw(host user password db)) {
-                if ($line =~ m/^$profile\.$name\s*=\s*(.+)/) {
-                    $ref->{uc($name)} = $1;
-                }
-            }
+            # recursively load include file
+            loadConfFile($ref, CONF_FILE => $1);
+        } elsif ($line =~ m/^(.+)\s*=\s*(.+)/) {
+            $ref->{$1} = $2;
         }
     }
     close($fh);
     chdir($currentDir);
+}
+
+sub processConfFile
+{
+# load db specific configurations from .hg.conf
+    my ($ref, $profile) = @_;
+    my %confs;
+    loadConfFile(\%confs);
+    for my $name (qw(host user password db)) {
+        my $val = $confs{"$profile.$name"};
+        if($val) {
+            $ref->{uc($name)} = $val;
+        }
+    }
 }
 
 sub new
@@ -56,18 +80,8 @@ sub new
 # $args{USER}, $args{PASSWORD} and $args{HOST} are optional (and override .hg.conf values).
     my ($class, %args) = (@_);
     my $ref = {};
-
-    my $confFile = "";
-    if ($ENV{HGDB_CONF}) {
-        $confFile = "$ENV{HGDB_CONF}"
-    } else {
-        $confFile = "$ENV{HOME}/.hg.conf";
-    }
-    if(! -e $confFile) {
-        die "Cannot locate conf file: '$confFile'";
-    }
     my $profile = $args{PROFILE} || "db";
-    processConfFile($ref, $confFile, $profile);
+    processConfFile($ref, $profile);
     for (keys %args) {
         # %args override values in conf file.
         $ref->{$_} = $args{$_};
