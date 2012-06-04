@@ -23,8 +23,8 @@ distinguishing between the different cell types and compartments.</p>
 <dl>
 <dt><i>Contigs</i></dt>
 <dd>The Contigs are BED format files representing blocks of overlapping mapped reads from pooled biological replicates. The corresponding number of mapped reads, the RPKM value, and the non-parametric IDR (npIDR) are reported for each contig.</dd>
-<dt><i>Raw Signal</i></dt>
-<dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).</dd>
+<dt><i>Signal</i></dt>
+<dd>The Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).</dd>
 <dt><i>Alignments</i></dt>
 <dd>The Alignments view shows individual reads mapped to the genome and indicates where bases may mismatch. Every mapped read is displayed. The alignments file follows the standard SAM format. See the <a target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf#page=4">SAM Format Specification</a> for more information on the SAM/BAM file format.
 </dd>
@@ -56,7 +56,7 @@ Complete protocols are available in the <a target="_BLANK" href="../cgi-bin/hgFi
 
 
 <h3>Data Processing and Analysis</h3>
-<p>Data from the Gingeras and Guigo labs were preprocessed to remove experimentally derived poly-A tails and Illumina 3' linkers from raw reads. The best alignment to the Illumina 3' linker for each read was determined. If the number of mismatches in the alignment was less than 20% of the aligned length, the read was clipped from the first aligned base. Pre-processed reads were mapped using the STAR algorithm. For a description of STAR, the source code and mapping parameters used, see <a target="_BLANK" href="http://gingeraslab.cshl.edu/STAR/">the STAR project website</a>. Reads mapping 10 times or less  are reported in the Raw Signal and Alignment files.</p>
+<p>Data from the Gingeras and Guigo labs were preprocessed to remove experimentally derived poly-A tails and Illumina 3' linkers from raw reads. The best alignment to the Illumina 3' linker for each read was determined. If the number of mismatches in the alignment was less than 20% of the aligned length, the read was clipped from the first aligned base. Pre-processed reads were mapped using the STAR algorithm. For a description of STAR, the source code and mapping parameters used, see <a target="_BLANK" href="http://gingeraslab.cshl.edu/STAR/">the STAR project website</a>. Reads mapping 10 times or less  are reported in the Signal and Alignment files.</p>
 
 <p>Mapped reads were discarded if they fell into one of the following categories: 1) it contained five or more consecutive A's, 2) it was less than 16 nt in length, 3) it mapped to more than one genomic position (multiply-mapped reads), 4) it mapped upstream of genomically encoded poly-A sequences. The remaining reads were used both to call contigs and to produce expression values over GENCODE V7 exons. Contigs were generated from overlapping reads in pooled biological replicates.</p>
 
