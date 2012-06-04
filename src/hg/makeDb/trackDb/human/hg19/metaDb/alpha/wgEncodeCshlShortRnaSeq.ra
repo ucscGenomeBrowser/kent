@@ -586,7 +586,7 @@ md5sum 5abd4ef1a96b07369de5f37912028fac,4eb781249cba36a1cd23ef9ae6d8404c
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
@@ -642,7 +642,7 @@ md5sum f5b566f253e1e5a0b58e000c8cc707c3,0a73fe8e7ac3f8ea8ba9097d43904b19
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
@@ -787,7 +787,7 @@ md5sum e933875929f9401f964093b46f032505
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
@@ -816,7 +816,7 @@ md5sum 5ef5826105c69b997bcd20e2c4c85e04
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
@@ -903,7 +903,7 @@ md5sum c42b776d26985b9ba5c21e89e46624e8
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
@@ -932,7 +932,7 @@ md5sum bf44c47375039462351efba8e0bf3a78
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
@@ -989,7 +989,7 @@ md5sum 13ea5b58b2fbc3e283d0015296ba465d
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5638
@@ -1045,7 +1045,7 @@ md5sum fb6d15f288b4f942611fac4723901526
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5632
@@ -1101,7 +1101,7 @@ md5sum 3853711aa15759e77364f5d4c1f0f3ca
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5925
@@ -1157,7 +1157,7 @@ md5sum eade40c9be84a83e5856d56904fd2ced
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5919
@@ -17844,7 +17844,7 @@ md5sum d5028b68bb1789cda597ae6a502e8f02,1553ffb0f88526c7f082173e78c118f4
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
@@ -17900,7 +17900,7 @@ md5sum 83e906399cdb5977bfb165138ca1a7d6,d93dd535c84b0172d36489a99d2db7e5
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
@@ -18017,7 +18017,7 @@ md5sum 4fb86c63ce408f1dd81d9e9c6d999d1e
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
@@ -18046,7 +18046,7 @@ md5sum dce18f6c5640343fd8d8cb08c887003a
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
@@ -18133,7 +18133,7 @@ md5sum 4a7d1ee5cd3fce77c107ffd69ac26230
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
@@ -18162,7 +18162,7 @@ md5sum 4c578f7cc5eaf741c409fc6eae83309d
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
@@ -18219,7 +18219,7 @@ md5sum 7600b5c5b63d867a3cebb96cfad8fced
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5645
@@ -18275,7 +18275,7 @@ md5sum b21db593369ee188ac461cba38349f01
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5636
@@ -18331,7 +18331,7 @@ md5sum 71306c02029ec02fada9279de2952f48
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 3
+replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5937
@@ -18387,7 +18387,7 @@ md5sum ff5e653fcf26eda119d69288f65e9576
 project wgEncode
 protocol TAP-Only
 readType 1x101
-replicate 4
+replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5923
@@ -25084,4 +25084,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1764349572
+# MAGIC: 1764349492
