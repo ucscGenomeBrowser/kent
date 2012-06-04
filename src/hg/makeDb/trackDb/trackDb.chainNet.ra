@@ -2663,8 +2663,8 @@ html chainNet
 
 track chainNetMm10
 compositeTrack on
-shortLabel $o_db Chain/Net
-longLabel $o_db $o_Organism ($o_date), Chain and Net Alignments
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
