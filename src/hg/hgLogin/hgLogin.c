@@ -468,10 +468,10 @@ hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "\n"
     "<div class=\"formControls\">"
     "    <input type=\"submit\" name=\"hgLogin.do.accountHelp\" value=\"Continue\" class=\"largeButton\">"
-    "     &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
+    "     &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
     "</form>"
-    "</div><!-- END - accountHelpBox -->", username, email);
+    "</div><!-- END - accountHelpBox -->", username, email, getReturnToURL());
 cartSaveSession(cart);
 }
 
@@ -583,7 +583,7 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "\n"
     "<div class=\"formControls\">"
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
-    "    &nbsp;<a href=\"javascript:history.go(-1)\">Cancel</a>"
+    "    &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
     "</form>"
     "\n"
@@ -591,13 +591,12 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "<div id=\"helpBox\">"
     "<a href=\"hgLogin?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
     "Need an account? <a href=\"hgLogin?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
-//    "To change password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>."
     "</div><!-- END - helpBox -->"
     "</div><!-- END - loginBox -->"
     "\n"
     "\n"
     "</body>"
-    "</html>", username);
+    "</html>", username, getReturnToURL());
 cartSaveSession(cart);
 }
 
@@ -668,13 +667,13 @@ hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<div class=\"formControls\">"
     "    <input type=\"submit\" name=\"hgLogin.do.changePassword\" value=\"Change Password\" class=\"largeButton\"> &nbsp; "
-    "    <a href=\"javascript:history.go(-1)\">Cancel</a>"
+    "    <a href=\"%s\">Cancel</a>"
     "\n"
     "</div>"
     "</form>"
     "\n"
     "</div><!-- END - changePwBox -->"
-    "\n");
+    "\n", getReturnToURL());
 cartSaveSession(cart);
 }
 
@@ -808,12 +807,13 @@ hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<div class=\"formControls\">"
     "    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign Up\" class=\"largeButton\"> &nbsp; "
-    "    <a href=\"javascript:history.go(-1)\">Cancel</a>"
+    "    <a href=\"%s\">Cancel</a>"
     "</div>"
     "</form>"
     "</div><!-- END - signUpBox -->",
-     cartUsualString(cart, "hgLogin_password", ""), cartUsualString(cart, "hgLogin_password2", ""));
-// hPrintf("</FORM>");
+    cartUsualString(cart, "hgLogin_password", ""), 
+    cartUsualString(cart, "hgLogin_password2", ""),
+    getReturnToURL());
 /**** new validate code *****/
 
 cartSaveSession(cart);
