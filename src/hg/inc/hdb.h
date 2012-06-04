@@ -893,4 +893,8 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
 /* Return file name from bigDataUrl or little table. */
 
+char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *conn, char *table,
+				     char *seqName);
+/* Return file name from bigDataUrl or little table (which might have a seqName column). */
+
 #endif /* HDB_H */

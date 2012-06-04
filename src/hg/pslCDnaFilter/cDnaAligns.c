@@ -133,6 +133,8 @@ return alnSize;
 struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna, struct psl *psl)
 /* construct a new object and add to the cdna list, updating the stats */
 {
+if ((cdna->alns != NULL) && (cdna->alns->psl->qSize != psl->qSize))
+    errAbort("Inconsistent qSize for alignment of %s, found %d and %d", psl->qName, cdna->alns->psl->qSize, psl->qSize);
 int adjMisMatch = psl->misMatch + ((cdna->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
 struct cDnaAlign *aln;
 AllocVar(aln);

@@ -61,7 +61,7 @@ if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
     printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
         "<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\">"
         "<li>Username:  %s</li>",wikiUserName);
-    printf("<li><A HREF=\"%s\">Change password</A><\li></ul>",
+    printf("<li><A HREF=\"%s\">Change password</A></li></ul>",
         wikiLinkChangePasswordUrl(cartSessionId(cart)));
     printf("<p><A HREF=\"%s\">Sign out</A></p>",
         wikiLinkUserLogoutUrl(cartSessionId(cart)));

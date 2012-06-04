@@ -293,7 +293,8 @@ void sendActMailOut(char *email, char *subject, char *msg)
 char *hgLoginHost = wikiLinkHost();
 char cmd[4096];
 safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
+    "echo '%s' | mail -s \"%s\" %s  -- -f genome-www@soe.ucsc.edu", 
+    msg, subject, email);
 int result = system(cmd);
 if (result == -1)
     {
@@ -338,7 +339,8 @@ char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 char cmd[4096];
 safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s" , msg, subject, email);
+    "echo '%s' | mail -s \"%s\" %s -- -f genome-www@soe.ucsc.edu",
+    msg, subject, email);
 int result = system(cmd);
 if (result == -1)
     {
@@ -365,7 +367,7 @@ void mailUsername(char *email, char *users)
 /* send user name list to the email address */
 {
 char subject[256];
-char msg[256];
+char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the UCSC Genome Browser");
@@ -621,6 +623,8 @@ else
     freez(&errMsg);
     errMsg = cloneString("Token does not match.");
     }
+cartSetString(cart, "hgLogin_userName", username);
+
 displayLoginPage(conn);
 return;
 }
@@ -807,10 +811,12 @@ hPrintf("<div class=\"inputGroup\">"
     "    <a href=\"javascript:history.go(-1)\">Cancel</a>"
     "</div>"
     "</form>"
-    "</div><!-- END - signUpBox -->"
-    "\n", cartUsualString(cart, "hgLogin_password", ""), cartUsualString(cart, "hgLogin_password2", ""));
+    "</div><!-- END - signUpBox -->",
+     cartUsualString(cart, "hgLogin_password", ""), cartUsualString(cart, "hgLogin_password2", ""));
+// hPrintf("</FORM>");
+/**** new validate code *****/
+
 cartSaveSession(cart);
-hPrintf("</FORM>");
 }
 
 void signup(struct sqlConnection *conn)
