@@ -21,7 +21,7 @@ priority 0
 type bed 3
 wgEncode 1
 superTrack wgEncodeRnaSeqSuper dense
-html wgEncodeCshlShortRnaSeq.release2
+html wgEncodeCshlShortRnaSeq.release3
 
     track wgEncodeCshlShortRnaSeqViewAlignments
     shortLabel Alignments
