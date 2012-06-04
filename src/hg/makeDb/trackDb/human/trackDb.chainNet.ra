@@ -151,6 +151,8 @@ priority 490.3
 
 track chainNetEchTel1 override
 priority 500.3
+chainMinScore 5000
+chainLinearGap loose
 
 track chainNetLoxAfr2 override
 priority 520.3
