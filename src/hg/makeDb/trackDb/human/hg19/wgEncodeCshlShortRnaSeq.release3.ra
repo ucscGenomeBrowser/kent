@@ -1155,13 +1155,14 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         # subId=5951 dateSubmitted=2012-03-01
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep4
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm Aln 4
         longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep4 rank=rank2
         type bam
         # subId=5919 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep4 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -1235,13 +1236,14 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         # subId=5936 dateSubmitted=2012-03-01
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep3
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF-7 cell sm Aln 3
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep3 rank=rank1
         type bam
         # subId=5937 dateSubmitted=2012-03-01
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep3 wong Mon Jun  4 13:45:31 2012
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -1299,13 +1301,14 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         # subId=5922 dateSubmitted=2012-02-29
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep4
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF-7 cell sm Aln 4
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep4 rank=rank2
         type bam
         # subId=5923 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep4 wong Mon Jun  4 13:45:32 2012
 
         track wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -1315,13 +1318,14 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         # subId=5924 dateSubmitted=2012-02-29
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep3
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm Aln 3
         longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep3 rank=rank1
         type bam
         # subId=5925 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep3 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -2706,7 +2710,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5951 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRawRep1 wong Mon Jun  4 13:35:13 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep4
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep2V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel A549 cell sm MinusRaw 4
         longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 4 from ENCODE/CSHL
@@ -2714,6 +2718,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 6935555.000000
         # subId=5919 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep4 wong Mon Jun  4 13:35:03 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep4 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2796,7 +2801,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5936 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:21 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep3
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep1V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel MCF-7 cell sm MinusRaw 3
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 3 from ENCODE/CSHL
@@ -2804,6 +2809,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 16735774.000000
         # subId=5937 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep3 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep3 wong Mon Jun  4 13:45:32 2012
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2868,7 +2874,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5922 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:20 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep4
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel MCF-7 cell sm MinusRaw 4
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 4 from ENCODE/CSHL
@@ -2876,6 +2882,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 12171585.000000
         # subId=5923 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep4 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep4 wong Mon Jun  4 13:45:32 2012
 
         track wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2886,7 +2893,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5924 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:18 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep3
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel A549 cell sm MinusRaw 3
         longLabel A549 TAP-Only whole cell small RNA-seq Minus Raw signal Rep 3 from ENCODE/CSHL
@@ -2894,6 +2901,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 6730925.000000
         # subId=5925 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep3 wong Mon Jun  4 13:35:03 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep3 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -4300,7 +4308,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5951 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRawRep1 wong Mon Jun  4 13:35:13 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep4
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep2V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel A549 cell sm + 4
         longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 4 from ENCODE/CSHL
@@ -4308,6 +4316,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 7325977.000000
         # subId=5919 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep4 wong Mon Jun  4 13:35:04 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep4 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -4390,7 +4399,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5936 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:22 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep3
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel MCF-7 cell sm + 3
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 3 from ENCODE/CSHL
@@ -4398,6 +4407,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 10828348.000000
         # subId=5937 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:32 2012
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -4462,7 +4472,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5922 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:20 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep4
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep2V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel MCF-7 cell sm + 4
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 4 from ENCODE/CSHL
@@ -4470,6 +4480,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 10482101.000000
         # subId=5923 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep4 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep4 wong Mon Jun  4 13:45:32 2012
 
         track wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -4480,7 +4491,7 @@ html wgEncodeCshlShortRnaSeq.release2
         # subId=5924 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:18 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep3
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel A549 cell sm + 3
         longLabel A549 TAP-Only whole cell small RNA-seq Plus Raw signal Rep 3 from ENCODE/CSHL
@@ -4488,6 +4499,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 6306518.000000
         # subId=5925 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:04 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
