@@ -956,6 +956,31 @@ struct joinerDtf *filterTables = NULL;
 boolean doJoin = joinRequired(primaryDb, primaryTable,
 			      fieldList, &dtfList, &filterTables);
 
+boolean hasIdentifiers = (identifierFileName() != NULL);
+if (hasIdentifiers)
+    {
+    boolean hasPrimary = FALSE;
+    struct joinerDtf *temp;
+    for (temp = dtfList; temp; temp = temp->next)
+	if (sameString(temp->database, primaryDb) && sameString(temp->table, primaryTable))
+	    hasPrimary = TRUE;
+    for (temp = filterTables; temp; temp = temp->next)
+	if (sameString(temp->database, primaryDb) && sameString(temp->table, primaryTable))
+	    hasPrimary = TRUE;
+    /* if primary table is not in output or filter, 
+     *  add it to the filterTables list to trigger joining and identifier filtering */
+    if (!hasPrimary)
+	{	    
+	struct joinerDtf *dtf;
+	AllocVar(dtf);
+	dtf->database = cloneString(primaryDb);
+	dtf->table = cloneString(primaryTable);
+	slAddTail(&filterTables, dtf);
+	doJoin = TRUE;
+	}
+    }
+
+
 if (! doJoin)
     {
     struct sqlConnection *conn = hAllocConn(dtfList->database);

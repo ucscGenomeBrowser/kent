@@ -10,8 +10,6 @@ struct annoFormatTab
     char *fileName;
     FILE *f;
     boolean needHeader;			// TRUE if we should print out the header
-    struct annoRow *primaryRow;		// Single row from primary source
-    struct slRef *gratorRowLists;	// Accumulated from each grator (0 or more annoRows each)
     };
 
 static void printHeaderColumns(FILE *f, struct annoStreamer *source, boolean isFirst)
@@ -48,32 +46,17 @@ vSelf->query = query;
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 if (self->needHeader)
     {
-    printHeaderColumns(self->f, query->primarySource, TRUE);
+    struct annoStreamer *primary = query->primarySource;
+    char *primaryHeader = primary->getHeader(primary);
+    if (isNotEmpty(primaryHeader))
+	printf("# Header from primary input:\n%s", primaryHeader);
+    printHeaderColumns(self->f, primary, TRUE);
     struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
     for (;  grator != NULL;  grator = grator->next)
 	printHeaderColumns(self->f, grator, FALSE);
     fputc('\n', self->f);
     self->needHeader = FALSE;
     }
-}
-
-static void aftCollect(struct annoFormatter *vSelf, struct annoStreamer *stub, struct annoRow *rows)
-/* Gather columns from a single source's row(s). */
-{
-struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-if (self->primaryRow == NULL)
-    self->primaryRow = rows;
-else
-    slAddHead(&(self->gratorRowLists), slRefNew(rows));
-}
-
-static void aftDiscard(struct annoFormatter *vSelf)
-/* Forget what we've collected so far, time to start over. */
-{
-struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-self->primaryRow = NULL;
-slFreeList(&(self->gratorRowLists));
-return;
 }
 
 static double wigRowAvg(struct annoRow *row)
@@ -180,18 +163,18 @@ if (freeWhenDone)
     }
 }
 
-static void aftFormatOne(struct annoFormatter *vSelf)
+static void aftFormatOne(struct annoFormatter *vSelf, struct annoRow *primaryRow,
+			 struct slRef *gratorRowList)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
  * and start over fresh for the next line of output. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-slReverse(&(self->gratorRowLists));
 // How many rows did each grator give us, and what's the largest # of rows?
 int maxRows = 1;
 int i;
 struct slRef *grRef;
-int numGrators = slCount(self->gratorRowLists);
-for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->next)
+int numGrators = slCount(gratorRowList);
+for (i = 0, grRef = gratorRowList;  i < numGrators;  i++, grRef = grRef->next)
     {
     int gratorRowCount = slCount(grRef->val);
     if (gratorRowCount > maxRows)
@@ -201,18 +184,15 @@ for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->
 struct annoStreamer *primarySource = vSelf->query->primarySource;
 for (i = 0;  i < maxRows;  i++)
     {
-    printColumns(self->f, primarySource, self->primaryRow, TRUE);
+    printColumns(self->f, primarySource, primaryRow, TRUE);
     struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
-    for (grRef = self->gratorRowLists;  grRef != NULL;  grRef = grRef->next,
-	     grator = grator->next)
+    for (grRef = gratorRowList;  grRef != NULL;  grRef = grRef->next, grator = grator->next)
 	{
 	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
 	printColumns(self->f, grator, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }
-self->primaryRow = NULL;
-slFreeList(&(self->gratorRowLists));
 }
 
 static void aftClose(struct annoFormatter **pVSelf)
@@ -223,7 +203,6 @@ if (pVSelf == NULL)
 struct annoFormatTab *self = *(struct annoFormatTab **)pVSelf;
 freeMem(self->fileName);
 carefulClose(&(self->f));
-slFreeList(&(self->gratorRowLists));
 annoFormatterFree(pVSelf);
 }
 
@@ -236,8 +215,6 @@ struct annoFormatter *formatter = &(aft->formatter);
 formatter->getOptions = annoFormatterGetOptions;
 formatter->setOptions = annoFormatterSetOptions;
 formatter->initialize = aftInitialize;
-formatter->collect = aftCollect;
-formatter->discard = aftDiscard;
 formatter->formatOne = aftFormatOne;
 formatter->close = aftClose;
 aft->fileName = cloneString(fileName);

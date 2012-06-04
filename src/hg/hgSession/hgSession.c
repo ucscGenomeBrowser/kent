@@ -58,20 +58,13 @@ cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
 if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
     {
-    printf("<B>Your account</B><BR>"
-        "<B>Name</B>:  %s<BR>",wikiUserName);
-    printf("<A HREF=\"%s\"><B>Change password</B></A><BR>",
+    printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
+        "<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\">"
+        "<li>Username:  %s</li>",wikiUserName);
+    printf("<li><A HREF=\"%s\">Change password</A></li></ul>",
         wikiLinkChangePasswordUrl(cartSessionId(cart)));
-    printf("<A HREF=\"%s\"><B>Sign out</B></A>\n",
+    printf("<p><A HREF=\"%s\">Sign out</A></p>",
         wikiLinkUserLogoutUrl(cartSessionId(cart)));
-/**** to be removed 
-    printf("If you are not %s (on the %s at "
-        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
-        "and would like to sign out or change identity, \n",
-        wikiUserName, loginSystemName(), wikiHost, wikiHost);
-    printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
-        wikiLinkUserLogoutUrl(cartSessionId(cart)));
-*************************/
     }
 else
     {
@@ -94,14 +87,16 @@ cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 if (loginSystemEnabled())
     {
-    printf("<A HREF=\"%s\"><B>Login</B></A><BR>",
+   printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
+        "<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\""
+"<li><A HREF=\"%s\">Login</A></li>",
         wikiLinkUserLoginUrl(cartSessionId(cart)));
-    printf("<A HREF=\"%s\">"
-        "<B>Create an account</B></A><BR><BR>",
+    printf("<li><A HREF=\"%s\">"
+        "Create an account</A></li></ul>",
         wikiLinkUserSignupUrl(cartSessionId(cart)));
-    printf("Signing in enables you to save current settings into a "
-        "named session, and then restore settings from the session later.\n"
-        "If you wish, you can share named sessions with other users.\n");
+    printf("<P>Signing in enables you to save current settings into a "
+        "named session, and then restore settings from the session later. <BR>"
+        "If you wish, you can share named sessions with other users.</P>");
     }    
 else
     {

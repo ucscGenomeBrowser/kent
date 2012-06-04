@@ -6,7 +6,7 @@
 #bigData file names and corresponding chromosome names
 CREATE TABLE bbiChroms (
     fileName varchar(255) not null,	# bigData (e.g. bigWig, BAM) file path with data for one chromosome
-    chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
+    seqName varchar(255) not null,	# Reference sequence chromosome or scaffold
               #Indices
-    PRIMARY KEY(fileName)
+    PRIMARY KEY(seqName)
 );
