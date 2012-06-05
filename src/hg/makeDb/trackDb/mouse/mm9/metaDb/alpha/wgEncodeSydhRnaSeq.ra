@@ -793,4 +793,30 @@ subId 6815
 treatment None
 view Signal
 
-# MAGIC: -1818386995
+metaObject wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep2
+objType file
+age immortalized
+attic auxSup
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep2.document.tgz
+grant Snyder
+lab Stanford-m
+localization cell
+origAssembly mm9
+project wgEncode
+readType 2x101D
+replicate 2
+rnaExtract riboZeroGold
+seqPlatform Illumina_HiSeq_2000
+sex M
+strain Unknown
+subId 6815
+treatment None
+view Signal
+
+# MAGIC: -1226632009
