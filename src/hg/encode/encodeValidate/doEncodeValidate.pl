@@ -407,6 +407,7 @@ sub validateBed {
     if (exists ($bedPlusTypes{$type})) {
         $cmdtype = $bedPlusTypes{$type};
     }
+    $cmdtype =~ s/\s+//g;
     my $asFile = "";
     unless ($sex) {
         $sex = "M";
