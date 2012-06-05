@@ -210,6 +210,7 @@ return cloneString(boundary);
 /* ---- General purpose helper routines. ---- */
 
 int spc_email_isvalid(const char *address) {
+/* Check the format of an email address syntactically. Return 1 if valid, else 0 */
 /* Code copied from the book: 
 "Secure Programming Cookbook for C and C++"
 By: John Viega; Matt Messier
@@ -994,7 +995,14 @@ if (sameString(helpWith,"username"))
         errMsg = cloneString("Email address cannot be blank.");
         displayAccHelpPage(conn);
         return;
-        } 
+        }
+    else if (spc_email_isvalid(email) == 0)
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Invalid email address format.");
+        displayAccHelpPage(conn);
+        return;
+        }
     else 
         {
         sendUsername(conn, email);
