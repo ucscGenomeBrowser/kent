@@ -77,7 +77,7 @@ class PositionalQa(TableQa):
         for label in longLabels:
             self.reporter.writeLine('"' + label + '"')
             if len(label) > longLabelLimit:
-                self.recordeError()
+                self.recordError()
             else:
                 self.recordPass()
         self.reporter.endStep()
