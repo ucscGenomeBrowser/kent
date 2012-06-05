@@ -208,6 +208,57 @@ return cloneString(boundary);
 }
 
 /* ---- General purpose helper routines. ---- */
+
+int spc_email_isvalid(const char *address) {
+/* Check the format of an email address syntactically. Return 1 if valid, else 0 */
+/* Code copied from the book: 
+"Secure Programming Cookbook for C and C++"
+By: John Viega; Matt Messier
+Publisher: O'Reilly Media, Inc.
+Pub. Date: July 14, 2003
+Print ISBN-13: 978-0-596-00394-4
+*/
+int  count = 0;
+const char *c, *domain;
+static char *rfc822_specials = "()<>@,;:\\\"[]";
+
+/* first we validate the name portion (name@domain) */
+for (c = address;  *c;  c++) 
+    {
+    if (*c == '\"' && (c == address || *(c - 1) == '.' || *(c - 1) ==  '\"')) 
+        {
+        while (*++c) 
+            {
+            if (*c == '\"') break;
+            if (*c == '\\' && (*++c == ' ')) continue;
+            if (*c <= ' ' || *c >= 127) return 0;
+            }
+         if (!*c++) return 0;
+         if (*c == '@') break;
+         if (*c != '.') return 0;
+         continue;
+        }
+    if (*c == '@') break;
+    if (*c <= ' ' || *c >= 127) return 0;
+    if (strchr(rfc822_specials, *c)) return 0;
+    }
+if (c == address || *(c - 1) == '.') return 0;
+
+/* next we validate the domain portion (name@domain) */
+if (!*(domain = ++c)) return 0;
+do {
+    if (*c == '.') 
+        {
+        if (c == domain || *(c - 1) == '.') return 0;
+        count++;
+        }
+    if (*c <= ' ' || *c >= 127) return 0;
+    if (strchr(rfc822_specials, *c)) return 0;
+} while (*++c);
+
+return (count >= 1);
+}
+
 void backToHgSession(int nSec)
 /* delay for N/10 micro seconds then go back to hgSession page */
 {
@@ -852,6 +903,14 @@ if (!email || sameString(email,""))
     return;
     }
 
+if (spc_email_isvalid(email) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid email address format.");
+    signupPage(conn);
+    return;
+    }
+
 char *email2 = cartUsualString(cart, "hgLogin_email2", "");
 if (!email2 || sameString(email2,"")) 
     {
@@ -936,7 +995,14 @@ if (sameString(helpWith,"username"))
         errMsg = cloneString("Email address cannot be blank.");
         displayAccHelpPage(conn);
         return;
-        } 
+        }
+    else if (spc_email_isvalid(email) == 0)
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Invalid email address format.");
+        displayAccHelpPage(conn);
+        return;
+        }
     else 
         {
         sendUsername(conn, email);
