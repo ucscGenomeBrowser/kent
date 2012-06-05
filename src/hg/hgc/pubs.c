@@ -601,7 +601,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
         // column 1: type of file (main or supp)
         if (showDesc)
-            web2PrintCellS(fileDesc, "word-break:break-all");
+            web2PrintCellS("word-break:break-all", fileDesc);
         
         // column 2: snippet
         web2StartCellS("word-break:break-all");
