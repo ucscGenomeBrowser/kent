@@ -142,7 +142,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel MEL Immt Hs 1
-        longLabel MEL immortalized Unknown DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -364,7 +364,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel MEL Immt Pk 1
-        longLabel MEL immortalized Unknown DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -586,7 +586,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalSigRep1
         parent wgEncodeUwDgfViewSignal
         shortLabel MEL Immt Sg 1
-        longLabel MEL immortalized Unknown DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 300871.000000
         color 86,180,233
@@ -809,7 +809,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel MEL Immt Rw 1
-        longLabel MEL immortalized Unknown DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Raw signal Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 974470.000000
         color 86,180,233
