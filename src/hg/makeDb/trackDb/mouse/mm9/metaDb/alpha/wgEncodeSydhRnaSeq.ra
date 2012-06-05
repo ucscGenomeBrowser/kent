@@ -12,6 +12,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep1.bam,wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
@@ -38,6 +40,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep2.bam,wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
@@ -64,6 +68,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dFastqRd1Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -89,6 +95,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dFastqRd1Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -114,6 +122,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dFastqRd2Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -139,6 +149,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dFastqRd2Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -165,6 +177,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dSigRep1.document.tgz
 grant Snyder
 lab Stanford-m
@@ -191,6 +205,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002000
+expId 2000
 fileName wgEncodeSydhRnaSeqCh12RibozerogR2x101dSigRep2.document.tgz
 grant Snyder
 lab Stanford-m
@@ -216,6 +232,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep1.bam,wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
@@ -242,6 +260,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep2.bam,wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
@@ -268,6 +288,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dFastqRd1Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -293,6 +315,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dFastqRd1Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -318,6 +342,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dFastqRd2Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -343,6 +369,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dFastqRd2Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -369,6 +397,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dSigRep1.document.tgz
 grant Snyder
 lab Stanford-m
@@ -395,6 +425,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM002899
+expId 2899
 fileName wgEncodeSydhRnaSeqEse14RibozerogR2x101dSigRep2.document.tgz
 grant Snyder
 lab Stanford-m
@@ -420,6 +452,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep1.bam,wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
@@ -446,6 +480,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep2.bam,wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
@@ -472,6 +508,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dFastqRd1Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -497,6 +535,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dFastqRd1Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -522,6 +562,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dFastqRd2Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -547,6 +589,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dFastqRd2Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -573,6 +617,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dSigRep1.document.tgz
 grant Snyder
 lab Stanford-m
@@ -599,6 +645,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-19
 dateUnrestricted 2013-01-19
+dccAccession wgEncodeEM001998
+expId 1998
 fileName wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dSigRep2.document.tgz
 grant Snyder
 lab Stanford-m
@@ -624,6 +672,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep1.bam,wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
@@ -650,6 +700,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep2.bam,wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
@@ -676,6 +728,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dFastqRd1Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -701,6 +755,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dFastqRd1Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -726,6 +782,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dFastqRd2Rep1.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -751,6 +809,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dFastqRd2Rep2.fastq.tgz
 grant Snyder
 lab Stanford-m
@@ -777,6 +837,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep1.document.tgz
 grant Snyder
 lab Stanford-m
@@ -803,6 +865,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-01
 dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
 fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep2.document.tgz
 grant Snyder
 lab Stanford-m
@@ -819,4 +883,4 @@ subId 6815
 treatment None
 view Signal
 
-# MAGIC: -1226632009
+# MAGIC: 1379785703
