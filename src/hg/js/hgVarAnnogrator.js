@@ -184,7 +184,7 @@ function hgvaHideSection(event)
     if (section.filter("[id^=source]").length > 0) {
 	$("div#addData").show();
     }
-    hgvaEventAjax(target, $(section)[0].id + "Container");
+    hgvaEventAjax(target, $(section)[0].id + "Contents");
 }
 
 function hgvaSourceSortUpdate(event, ui)
