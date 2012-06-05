@@ -943,10 +943,24 @@ return retDb;
 }
 
 static unsigned long expireSeconds = 0;
+static boolean lazarus = FALSE;
+void lazarusLives(unsigned long newExpireSeconds)
+/* Long running process requests more time */
+{
+lazarus = TRUE;
+expireSeconds = newExpireSeconds;
+}
+
 /* phoneHome business */
 static void cgiApoptosis(int status)
 /* signal handler for SIGALRM for phoneHome function and CGI expiration */
 {
+if (lazarus)
+    {
+    (void) alarm(expireSeconds);    /* CGI timeout */
+    lazarus = FALSE;
+    return;
+    }
 if (expireSeconds > 0)
     {
     /* want to see this error message in the apache error_log also */

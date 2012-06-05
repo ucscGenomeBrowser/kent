@@ -29,16 +29,6 @@ else
     return trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
 }
 
-char *vcfFileName(char *table, struct sqlConnection *conn, char *seqName)
-/* Return file name associated with VCF.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
-{
-char *fileName = bigFileNameFromCtOrHub(table, conn);
-if (fileName == NULL)
-    fileName = bamFileNameFromTable(conn, table, seqName);
-return fileName;
-}
-
 struct hTableInfo *vcfToHti(char *table)
 /* Get standard fields of VCF into hti structure. */
 {
@@ -233,6 +223,7 @@ if (anyFilter())
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
 int maxOut = bigFileMaxOutput();
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 // Include the header, absolutely necessary for VCF parsing.
 boolean printedHeader = FALSE;
 // Temporary storage for row-ification:
@@ -243,7 +234,7 @@ struct dyString *dyGt = newDyString(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
-    char *fileName = vcfFileName(table, conn, region->chrom);
+    char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, region->chrom);
     struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
 					       100, maxOut);
     if (vcff == NULL)
@@ -356,11 +347,12 @@ struct asFilter *filter = asFilterFromCart(cart, db, table, as);
 struct hash *idHash = identifierHash(db, table);
 
 /* Get beds a region at a time. */
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    char *fileName = vcfFileName(table, conn, region->chrom);
+    char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, region->chrom);
     addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut);
     freeMem(fileName);
     if (maxOut <= 0)
@@ -378,7 +370,8 @@ struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count)
 /* Return some semi-random IDs from a VCF file. */
 {
 /* Read 10000 items from vcf file,  or if they ask for a big list, then 4x what they ask for. */
-char *fileName = vcfFileName(table, conn, NULL);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(database));
 struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();
@@ -411,8 +404,9 @@ return idList;
 void showSchemaVcf(char *table)
 /* Show schema on vcf. */
 {
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = vcfFileName(table, conn, NULL);
+char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(database));
 
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);

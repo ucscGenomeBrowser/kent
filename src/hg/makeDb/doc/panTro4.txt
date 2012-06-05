@@ -675,3 +675,97 @@ done
     #   54088961 bases of 2902338967 (1.864%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2902338967 / 2897316137 \) \* 1024
+    #	( 2902338967 / 2897316137 ) * 1024 = 1025.775222
+
+    # round up to 1050  (panTro3 was 1024)
+
+    cd /hive/data/genomes/panTro4
+    time blat panTro4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/panTro4.11.ooc -repMatch=1050
+    #   Wrote 29671 overused 11-mers to jkStuff/panTro4.11.ooc
+    #   panTro3 had: Wrote 31038 overused 11-mers to jkStuff/panTro3.11.ooc
+    #	real     0m59.729s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" panTro4 | sort | uniq -c
+    #   2936 no
+    #   180174 yes
+
+    cd /hive/data/genomes/panTro4/jkStuff
+    gapToLift panTro4 panTro4.nonBridged.lift -bedFile=panTro4.nonBridged.bed
+    # this assembly has gaps abutting each other which produces warnings
+    #   from this gapToLift program.
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' panTro4.nonBridged.bed | sort -nr | head
+    #   44492345 chr6   107033290       151525635       chr6.60
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Felis catus	1081	919	354
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# panTro4 (chimp)
+panTro4.serverGenome = /hive/data/genomes/panTro4/panTro4.2bit
+panTro4.clusterGenome = /hive/data/genomes/panTro4/panTro4.2bit
+panTro4.ooc = /hive/data/genomes/panTro4/jkStuff/panTro4.11.ooc
+panTro4.lift = /hive/data/genomes/panTro4/jkStuff/panTro4.nonBridged.lift
+panTro4.perChromTables = no
+panTro4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+panTro4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+panTro4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+panTro4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+panTro4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+panTro4.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+panTro4.downloadDir = panTro4
+panTro4.refseq.mrna.native.load  = yes
+panTro4.refseq.mrna.xeno.load  = yes
+panTro4.genbank.mrna.xeno.load = yes
+panTro4.genbank.mrna.xeno.loadDesc = yes
+panTro4.genbank.est.native.load = yes
+# panTro4.upstreamGeneTbl = ensGene
+# panTro4.upstreamMaf = multiz12way
+# /hive/data/genomes/panTro4/bed/multiz12way/species.list
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding panTro4 chimp" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S panTro4           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial panTro4 &
+# real    3m23.828s
+    #	  var/build/logs/2012.05.04-17:28:16.panTro4.initalign.log
+    #   real    2021m4.989s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad panTro4 &
+    #   var/dbload/hgwdev/logs/2012.05.06-22:07:50.dbload.log
+    #   real    194m11.702s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add panTro4 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added panTro4." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

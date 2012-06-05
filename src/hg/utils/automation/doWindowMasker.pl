@@ -226,7 +226,7 @@ sub doLoad {
   my $whatItDoes = "load sdust.bed and filter with gaps to clean";
   &HgAutomate::checkExistsUnlessDebug('twobit', 'load', ("$runDir/$db.wmsk.sdust.2bit", 
            "$runDir/$db.wmsk.2bit", "$runDir/faSize.$db.wmsk.sdust.txt"));
-  my $bossScript = new HgRemoteScript("$runDir/doLoadClean.csh", $dbHost,
+  my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 hgLoadBed $db windowmaskerSdust windowmasker.sdust.bed

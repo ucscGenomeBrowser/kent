@@ -339,3 +339,87 @@ taxId 9361
     #   85113391 bases of 3299882059 (2.579%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 3299882028 / 2897316137 \) \* 1024
+    #	( 3299882028 / 2897316137 ) * 1024 = 1166.279079
+
+    # round up to 1200
+
+    cd /hive/data/genomes/dasNov3
+    time blat dasNov3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/dasNov3.11.ooc -repMatch=1200
+    #   Wrote 34644 overused 11-mers to jkStuff/dasNov3.11.ooc
+    #	real     2m17.323s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" dasNov3 | sort | uniq -c
+    #   268413  yes
+#    cd /hive/data/genomes/dasNov3/jkStuff
+#    gapToLift dasNov3 dasNov3.nonBridged.lift -bedFile=dasNov3.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' dasNov3.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism             mrnaCnt estCnt  refSeqCnt
+# Dasypus novemcinctus    23      0       0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add dasNov3 just after ce2
+# dasNov3 (armadillo)
+dasNov3.serverGenome = /hive/data/genomes/dasNov3/dasNov3.2bit
+dasNov3.clusterGenome = /hive/data/genomes/dasNov3/dasNov3.2bit
+dasNov3.ooc = /hive/data/genomes/dasNov3/jkStuff/dasNov3.11.ooc
+dasNov3.lift = no
+dasNov3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+dasNov3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+dasNov3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+dasNov3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+dasNov3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+dasNov3.refseq.mrna.native.load = no
+dasNov3.refseq.mrna.xeno.load = yes
+dasNov3.genbank.mrna.xeno.load = yes
+dasNov3.genbank.est.native.load = no
+dasNov3.downloadDir = dasNov3
+dasNov3.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding dasNov3 armadillo" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S dasNov3           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial dasNov3 &
+    #	var/build/logs/2012.05.03-16:02:26.dasNov3.initalign.log
+    #   real    1567m32.727s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dasNov3 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-14:17:49.dbload.log
+    #   real    39m52.260s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add dasNov3 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added dasNov3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

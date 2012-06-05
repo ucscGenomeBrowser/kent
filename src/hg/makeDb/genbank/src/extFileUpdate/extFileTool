@@ -78,7 +78,7 @@ set host [lindex [split [exec hostname] .] 0]
 # host specific setup
 switch -glob $host {
     hgwdev {
-        set genbankRoot /cluster/data/genbank
+        set genbankRoot /hive/data/outside/genbank
         set dbFile etc/hgwdev.dbs
         set env(HGDB_CONF) etc/.hg.conf
     }

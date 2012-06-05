@@ -235,6 +235,8 @@
 #include "parClick.h"
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
+#include "itemDetailsHtml.h"
+#include "trackVersion.h"
 
 static char *rootDir = "hgcData";
 
@@ -605,6 +607,7 @@ if (!genbankCdsParse(cdsStr, &cds))
 return cds;
 }
 
+
 void printCappedSequence(int start, int end, int extra)
 /* Print DNA from start to end including extra at either end.
  * Capitalize bits from start to end. */
@@ -893,6 +896,23 @@ for (i=0; i<subCount; ++i)
     d = NULL;
     }
 return s;
+}
+
+void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
+/* if track has an itemDetailsHtml, retrieve and print the HTML */
+{
+char *tableName = trackDbSetting(tdb, "itemDetailsHtmlTable");
+if (tableName != NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct itemDetailsHtml *html, *htmls
+        = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+                       "select name, html from %s where name = '%s'", tableName, itemName);
+    for (html = htmls; html != NULL; html = html->next)
+        printf("<br>\n%s\n", html->html);
+    itemDetailsHtmlFreeList(&htmls);
+    hFreeConn(&conn);
+    }
 }
 
 char *getIdInUrl(struct trackDb *tdb, char *itemName)
@@ -1553,6 +1573,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 getBedTopScorers(conn, tdb, table, item, start, bedSize);
+printItemDetailsHtml(tdb, item);
 }
 
 #define INTRON 10
@@ -2775,6 +2796,7 @@ if (oldToNew != NULL && sqlTableExists(conn, oldToNew))
     sqlFreeResult(&sr);
     }
 geneShowCommon(item, tdb, pepTable);
+printItemDetailsHtml(tdb, item);
 }
 
 void pslDumpHtml(struct psl *pslList)
@@ -2813,6 +2835,7 @@ else
     pslDumpHtml(pslList);
     }
 pslFreeList(&pslList);
+printItemDetailsHtml(tdb, item);
 }
 
 
@@ -2863,14 +2886,10 @@ static void printDataVersion(struct trackDb *tdb)
 {
 metadataForTable(database,tdb,NULL);
 const char *version = metadataFindValue(tdb,"dataVersion");
-if(version != NULL)
-    printf("<B>Data version:</B> %s <BR>\n", version);
-else
-    {
+if(version == NULL)
     version = trackDbSetting(tdb,"dataVersion");
-    if (version != NULL)
-        printf("<B>Data version:</B> %s <BR>\n", version);
-    }
+if (version != NULL)
+    printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
@@ -2912,7 +2931,11 @@ if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
-    printDataVersion(tdb);
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    if(trackVersion == NULL)
+        printDataVersion(tdb);
+    else
+        printf("<B>Data version:</B> %s <BR>\n", trackVersion->version);
     printOrigAssembly(tdb);
     printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);

@@ -279,4 +279,7 @@ boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
 // The reference will be to a link with timestamp.
 #define webIncludeResourceFile(fileName)  webIncludeResourcePrintToFile(NULL,fileName)
 
+void lazarusLives(unsigned long newExpireSeconds);
+/* Long running process requests more time */
+
 #endif /* WEB_H */

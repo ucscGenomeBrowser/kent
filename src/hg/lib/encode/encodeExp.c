@@ -826,6 +826,13 @@ safef(accession, sizeof(accession), "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp-
 return cloneString(accession);
 }
 
+int encodeExpIdOffset() {
+/* Length of prefix preceding experiment ID in the accession. 
+   Prefix is defined string + 1 for org character
+*/
+    return strlen(ENCODE_EXP_ACC_PREFIX) + 1;
+}
+
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
 /* Add encodeExp as a new row to the table specified by tableName.
 */

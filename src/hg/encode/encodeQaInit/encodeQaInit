@@ -1,6 +1,9 @@
 #!/usr/bin/env python2.7
 import sys, os, re, argparse, subprocess, math, datetime
-from ucscgenomics import ra, track, mkChangeNotes, qa, ucscUtils
+from ucscGb.encode import track, mkChangeNotes, encodeUtils
+from ucscGb.qa.encode import tableCheck as qa
+from ucscGb.gbData import ra, ucscUtils
+#from ucsc.gbData import ucscUtils
 
 def getMethods(qaDir, args, user, d):
     cmd = "curl -X GET http://genomewiki.cse.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"

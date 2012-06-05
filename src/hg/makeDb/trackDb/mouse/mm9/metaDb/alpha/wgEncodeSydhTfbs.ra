@@ -8638,7 +8638,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
@@ -8665,7 +8665,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
@@ -8692,7 +8692,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
@@ -8720,7 +8720,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
@@ -8747,7 +8747,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
@@ -8774,7 +8774,7 @@ antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/DMSO_2.0pct/Input/IgG-rab
+controlId wgEncodeEM002782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22

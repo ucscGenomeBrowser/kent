@@ -1,7 +1,7 @@
 metaObject wgEncodeGisRnaPet
 objType composite
 composite wgEncodeGisRnaPet
-expVars lab,dataType,cell,localization,rnaExtract
+expVars lab,dataType,cell,localization
 geoSeriesAccession GSE33600
 
 metaObject wgEncodeGisRnaPetA549CellPapAlnRep3
@@ -5772,6 +5772,30 @@ subId 6410
 tableName wgEncodeGisRnaPetMcf7NucleusPapAlnRep4
 view Alignments
 
+metaObject wgEncodeGisRnaPetMcf7NucleusPapClusters
+objType table
+bioRep 089N,090N
+cell MCF-7
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-04
+dateUnrestricted 2013-02-04
+fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedRnaElements.gz
+grant Gingeras
+lab GIS
+labExpId RHM054,RHM055
+labProtocolId 089N+pet,090N+pet
+labVersion iIDR
+localization nucleus
+project wgEncode
+readType 2x36
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+subId 6921
+tableName wgEncodeGisRnaPetMcf7NucleusPapClusters
+view Clusters
+
 metaObject wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep3
 objType file
 bioRep 089N
@@ -7053,6 +7077,30 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapAlnRep4
 view Alignments
 
+metaObject wgEncodeGisRnaPetSknshNucleusPapClusters
+objType table
+bioRep 085N,086N
+cell SK-N-SH
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-04
+dateUnrestricted 2013-02-04
+fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedRnaElements.gz
+grant Gingeras
+lab GIS
+labExpId RHS019,RHS020
+labProtocolId 085N+pet,086N+pet
+labVersion iIDR
+localization nucleus
+project wgEncode
+readType 2x36
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+subId 6922
+tableName wgEncodeGisRnaPetSknshNucleusPapClusters
+view Clusters
+
 metaObject wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep3
 objType file
 bioRep 085N
@@ -7241,4 +7289,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -184210563
+# MAGIC: -1009608367

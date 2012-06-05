@@ -23,7 +23,7 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
 
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
-    if (!genomePos.original) {
+    if (typeof(hgTracks) != "undefined" && !genomePos.original) {
         // remember initial position and size so we can restore it if user cancels
         genomePos.original = genomePos.getOriginalPos();
         genomePos.originalSize = $('#size').text();

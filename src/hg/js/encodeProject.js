@@ -167,6 +167,27 @@ var encodeProject = (function () {
             return dataGroups;
         },
 
+        pruneDataGroupsToExps: function (groups, dataTypeExps) {
+            // Create new list of data groups and types having experiments (prune old list)
+            var dataGroups = [], dataGroup, dataType;
+            $.each(groups, function (i, group) {
+                dataGroup = { 
+                    label: group.label, 
+                    dataTypes: [] 
+                };
+                $.each(group.dataTypes, function (i, label) {
+                    dataType = encodeProject.getDataTypeByLabel(label);
+                    if (dataTypeExps[dataType.term]){
+                        dataGroup.dataTypes.push(dataType.label);
+                    }
+                });
+                if (dataGroup.dataTypes.length) {
+                    dataGroups.push(dataGroup);
+                }
+            });
+            return dataGroups;
+        },
+
         getCellType: function (cellType) {
             // Return cellType object from term
             // Needs loader function (using getCellTiers below for now)
@@ -176,7 +197,7 @@ var encodeProject = (function () {
             return undefined;
         },
 
-        getCellTiers: function (cellTypes) {
+        getCellTiers: function (cellTypes, org) {
             // Unpack JSON list of cellTypes
             // Return sorted array of cellTier objects each having a .term,
             // with tier number, .celltypes, and an array of cell types, alphasorted
@@ -184,10 +205,18 @@ var encodeProject = (function () {
             var cellTiers = [],
                 tier;
             $.each(cellTypes, function (i, cellType) {
-                tier = cellType.tier;
-                // ignore untiered cell types (all human should have a tier)
-                if (!tier) {
+                if (cellType.organism !== org) {
                     return true;
+                }
+                tier = cellType.tier;
+                if (org === 'human') {
+                    // ignore untiered cell types (all human should have a tier)
+                    if (!tier) {
+                        return true;
+                    }
+                } else {
+                    // no tiers in mouse, so assign to dummy tier 0
+                    tier = 0;
                 }
                 cellTypeTermHash[cellType.term] = cellType;
                 if (!cellTiers[tier]) {
@@ -293,6 +322,27 @@ var encodeProject = (function () {
                 antibodyGroups[i].targets.sort(encodeProject.cmpNoCase);
             });
             return antibodyGroups;
+        },
+
+        pruneAntibodyGroupsToExps: function (groups, antibodyTargetExps) {
+            // Create new list of antibody groups and types to those having experiments
+            var antibodyGroups = [], antibodyGroup;
+            $.each(groups, function (i, group) {
+                antibodyGroup = { 
+                    label: group.label, 
+                    targets: [] 
+                };
+                $.each(group.targets, function (i, target) {
+                    if (antibodyTargetExps[target]){
+                        antibodyGroup.targets.push(target);
+                    }
+                });
+                if (antibodyGroup.targets.length) {
+                    antibodyGroups.push(antibodyGroup);
+                }
+            });
+            return antibodyGroups;
         }
     };
+
 }());

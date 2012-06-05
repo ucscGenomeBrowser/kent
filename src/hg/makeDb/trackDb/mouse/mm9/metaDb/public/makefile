@@ -1,5 +1,6 @@
 LIST=\
 wgEncodeCaltechHist.ra \
+wgEncodeCaltechRnaSeq.ra \
 wgEncodeCaltechTfbs.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeLicrHistone.ra \

@@ -5,6 +5,8 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+/* The various static routines sql<Type>StaticArray are NOT thread-safe. */
+
 #include "common.h"
 #include "sqlNum.h"
 #include "sqlList.h"
@@ -64,19 +66,30 @@ for (;;)
 
 void sqlByteDynamicArray(char *s, signed char **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-signed char *sArray, *dArray = NULL;
-int size;
+signed char *array = NULL;
+int count = 0;
 
-sqlByteStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlSignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -133,19 +146,30 @@ for (;;)
 
 void sqlUbyteDynamicArray(char *s, unsigned char **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-unsigned char *sArray, *dArray = NULL;
-int size;
+unsigned char *array = NULL;
+int count = 0;
 
-sqlUbyteStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlUnsignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -202,19 +226,40 @@ for (;;)
 
 void sqlCharDynamicArray(char *s, char **retArray, int *retSize)
 /* Convert comma separated list of chars to a dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-char *sArray, *dArray = NULL;
-int size;
+char *array = NULL;
+int count = 0;
 
-sqlCharStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    if (*s == ',')
+		errAbort("Empty element in list. Each element should contain one character.");
+	    array[count++] = *s++;
+	    if (!(*s == 0 || *s == ','))
+		{
+		--s;
+		char *e = strchr(s, ',');
+		if (e)
+		    *e = 0;
+		errAbort("Invalid character: %s", s);
+		}
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -271,19 +316,30 @@ for (;;)
 
 void sqlShortDynamicArray(char *s, short **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-short *sArray, *dArray = NULL;
-int size;
+short *array = NULL;
+int count = 0;
 
-sqlShortStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlSignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -340,19 +396,30 @@ for (;;)
 
 void sqlUshortDynamicArray(char *s, unsigned short **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-unsigned short *sArray, *dArray = NULL;
-int size;
+unsigned short *array = NULL;
+int count = 0;
 
-sqlUshortStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlUnsignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -459,36 +526,58 @@ for (;;)
 
 void sqlDoubleDynamicArray(char *s, double **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe.*/
 {
-double *sArray, *dArray = NULL;
-int size;
+double *array = NULL;
+int count = 0;
 
-sqlDoubleStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlDoubleInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 void sqlFloatDynamicArray(char *s, float **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-float *sArray, *dArray = NULL;
-int size;
+float *array = NULL;
+int count = 0;
 
-sqlFloatStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlFloatInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -545,19 +634,30 @@ for (;;)
 
 void sqlUnsignedDynamicArray(char *s, unsigned **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-unsigned *sArray, *dArray = NULL;
-int size;
+unsigned *array = NULL;
+int count = 0;
 
-sqlUnsignedStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlUnsignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -614,20 +714,32 @@ for (;;)
 
 void sqlSignedDynamicArray(char *s, int **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-int *sArray, *dArray = NULL;
-int size;
+int *array = NULL;
+int count = 0;
 
-sqlSignedStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlSignedInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
+
 
 /*-------------------------*/
 
@@ -683,19 +795,30 @@ for (;;)
 
 void sqlLongLongDynamicArray(char *s, long long **retArray, int *retSize)
 /* Convert comma separated list of numbers to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. Thread-safe. */
 {
-long long *sArray, *dArray = NULL;
-int size;
+long long *array = NULL;
+int count = 0;
 
-sqlLongLongStaticArray(s, &sArray, &size);
-if (size > 0)
+if (s)
     {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	for (;;)
+	    {
+	    array[count++] = sqlLongLongInList(&s);
+	    if (*s++ == 0)
+		break;
+	    if (*s == 0)
+		break;
+	    }
+	}
     }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 /*-------------------------*/
@@ -722,8 +845,7 @@ return count;
 
 void sqlStringStaticArray(char *s, char  ***retArray, int *retSize)
 /* Convert comma separated list of strings to an array which will be
- * overwritten next call to this function or to sqlStringDynamicArray,
- * but need not be freed. */
+ * overwritten next call to this function,  but need not be freed. */
 {
 static char **array = NULL;
 static int alloc = 0;
@@ -762,26 +884,33 @@ void sqlStringDynamicArray(char *s, char ***retArray, int *retSize)
  * DoSomeFunction(retArray, retSize);
  * freeMem(retArray[0]);
  * freeMem(retArray);
- */
+ * Thread-safe. */
 {
-char **sArray, **dArray = NULL;
-int size;
-
-if (s == NULL)
+char **array = NULL;
+int count = 0;
+if (s)
     {
-    *retArray = NULL;
-    *retSize = 0;
-    return;
+    count = countSeparatedItems(s, ',');
+    if (count > 0)
+	{
+	AllocArray(array, count);
+	count = 0;
+	s = cloneString(s);
+	for (;;)
+	    {
+	    char *e;
+	    if (s == NULL || s[0] == 0)
+		break;
+	    e = strchr(s, ',');
+	    if (e != NULL)
+		*e++ = 0;
+	    array[count++] = s;
+	    s = e;
+	    }
+	}
     }
-s = cloneString(s);
-sqlStringStaticArray(s, &sArray, &size);
-if (size > 0)
-    {
-    AllocArray(dArray,size);
-    CopyArray(sArray, dArray, size);
-    }
-*retArray = dArray;
-*retSize = size;
+*retArray = array;
+*retSize = count;
 }
 
 char *sqlDoubleArrayToString( double *array, int arraySize)

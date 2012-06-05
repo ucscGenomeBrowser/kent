@@ -14,7 +14,7 @@ import re
 import string
 import sys
 import urllib2
-from ucscgenomics.rafile.RaFile import *
+from ucscGb.gbData.ra.raStanza import RaStanza
 
 
 

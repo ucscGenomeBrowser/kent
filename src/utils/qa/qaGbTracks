@@ -3,11 +3,11 @@ import sys
 import argparse
 import time
 
-from ucscgenomics.qa import qaUtils
-from ucscgenomics.qa.tables import factory
-from ucscgenomics.qa.tables import reporter
-from ucscgenomics.qa.tables import summary
-from ucscgenomics.qa.encode import tableCheck
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import factory
+from ucscGb.qa.tables import reporter
+from ucscGb.qa.tables import summary
+from ucscGb.qa.encode import tableCheck
 
 def parseCommandLine():
     parser = argparse.ArgumentParser(
@@ -15,68 +15,82 @@ def parseCommandLine():
         description='Validates tables and records table statistics',
         epilog="""
 The following tests are run:
+  checks for underscores in table names
+  checks for the existence of table descriptions
+  checks shortLabel and longLabel length
   positionalTblCheck
   checkTblCoords
   genePredCheck
   pslCheck
-  checks for the existence of table descriptions
-  (checks for shortLabels and longLabels that are too long)
-  checks for underscores in table names
   featureBits
-  (joinerCheck) - not yet implemented
-  countPerChrom
+  (a version of) countPerChrom
 
   creates 3 files:  outFile.summary, outFile.log, outFile.chrom
         """)
     parser.add_argument('db', help='the database to check')
-    parser.add_argument('tableList', help='a file listing the tables to check')
-    parser.add_argument('outFile', help='base name for results files')
-    return parser.parse_args()
+    parser.add_argument('-f', dest='tableFile', nargs=1, type=argparse.FileType('r'),
+                        help='a file listing tables to check (separated by spaces or newlines)')
+    parser.add_argument('table', help ='the name of a table to check', nargs='*')
+    parser.add_argument('outFile', help='base name to give results files')
+    args = parser.parse_args()
+    if args.tableFile:
+        # add any additional tables in the table file to the table list
+        args.table.extend((args.tableFile[0].read()).split())
+        args.tableFile[0].close()
+    return args
 
-def getTableListFromFile():
-    with open(args.tableList, "r") as f:
-        raw = f.readlines()
-    return [name.strip() for name in raw]
+def tableExists(db, table):
+    """True if the table exists in the given database."""
+    sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
+    return sqlResult.strip() == table
 
-delimiterLine = "==============================================="
-def runTests():
+def checkTablesExist(db, tableList):
+    """Raises an exception if any table in the tables list does not exist in the database."""
+    for name in tableList:
+        if not tableExists(db, name):
+            raise Exception("Table " + name + " in " + db + " does not exist")
+
+def runTests(db, tableList, reporter, sumTable):
     """Runs validate() and statistics() methods on each table. Writes log output."""
+    delimiterLine = "==============================================="
     reporter.writeTimestamp()
     reporter.writeBlankLine()
     for table in tableList:
         reporter.writeLine(delimiterLine)
-        reporter.writeLine(args.db + "." + table +":\n")
-        table = factory.tableQaFactory(args.db, table, reporter, sumTable)
+        reporter.writeLine(db + "." + table +":\n")
+        table = factory.tableQaFactory(db, table, reporter, sumTable)
         table.validate()
         table.statistics()
     reporter.writeLine(delimiterLine)
     reporter.writeLine("Tests complete:")
     reporter.writeTimestamp()
 
-def writeSummaryFile():
+def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
 
-def runChromCounts():
+def runChromCounts(db, tableList, chromFile):
     chromFile.write(time.asctime() + "\n")
-    chromFile.write("Database: " + args.db + "\n\n")
+    chromFile.write("Database: " + db + "\n\n")
     tableSet = set(tableList)
-    output, tablecounts = tableCheck.countPerChrom(args.db, tableSet)
+    output, tablecounts = tableCheck.countPerChrom(db, tableSet)
     for line in output:
         chromFile.write(line + "\n")
 
 args = parseCommandLine()
-tableList = getTableListFromFile()
-qaUtils.checkTablesExist(args.db, tableList)
+tableList = args.table
+db = args.db
+outFile = args.outFile
+checkTablesExist(db, tableList)
 
-logFile = open(args.outFile + ".log", "w")
-chromFile = open(args.outFile + ".chroms", "w")
-sumFile = open(args.outFile + ".summary", "w")
+logFile = open(outFile + ".log", "w")
+chromFile = open(outFile + ".chroms", "w")
+sumFile = open(outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
 
-runTests()
-runChromCounts()
-writeSummaryFile()
+runTests(db, tableList, reporter, sumTable)
+runChromCounts(db, tableList, chromFile)
+writeSummaryFile(sumTable, sumFile)
 
 logFile.close()
 sumFile.close()

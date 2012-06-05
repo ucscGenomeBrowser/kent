@@ -13,12 +13,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH002546
 expId 2546
 fileName wgEncodeUmassDekker5CEnmPrimer.doc.tgz
 grant Dekker
 lab UMass-Dekker
 md5sum d151fab2c55504980fc432e1def8dd5f
+objStatus renamed - Moved files to supplemental directory as these are files associated with entire composite
 project wgEncode
 region ENM
 subId 5451
@@ -34,12 +34,12 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH002546
 expId 2546
 fileName wgEncodeUmassDekker5CEnrPrimer.doc.tgz
 grant Dekker
 lab UMass-Dekker
 md5sum 8e146bec2010e5dcf4f5d6aae1aca5d2
+objStatus renamed - Moved files to supplemental directory as these are files associated with entire composite
 project wgEncode
 region ENR
 subId 5451
@@ -985,4 +985,4 @@ subId 5451
 tableName wgEncodeUmassDekker5CK562Pk
 view Peaks
 
-# MAGIC: -1283637503
+# MAGIC: -996569267

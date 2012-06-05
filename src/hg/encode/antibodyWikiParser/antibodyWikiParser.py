@@ -15,7 +15,7 @@ import string
 import subprocess
 import sys
 import urllib2 
-from ucscgenomics.ra import *
+from ucscGb.gbData.ra.raStanza import RaStanza
 
 
 

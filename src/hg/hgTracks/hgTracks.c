@@ -56,6 +56,7 @@
 #include "suggest.h"
 #include "search.h"
 #include "errCatch.h"
+#include "iupac.h"
 
 
 /* Other than submit and Submit all these vars should start with hgt.
@@ -968,7 +969,7 @@ if (s != NULL)
     {
     int len;
     tolowers(s);
-    dnaFilter(s, s);
+    iupacFilter(s, s);
     len = strlen(s);
     if (len < 2)
        s = NULL;
@@ -997,12 +998,18 @@ if (seq == NULL)
 return seq->dna;
 }
 
+char *stringInWrapper(char *needle, char *haystack)
+/* Wrapper around string in to make it so it's a function rather than a macro. */
+{
+return stringIn(needle, haystack);
+}
 
 void oligoMatchLoad(struct track *tg)
 /* Create track of perfect matches to oligo on either strand. */
 {
 char *dna = dnaInWindow();
 char *fOligo = oligoMatchSeq();
+char *(*finder)(char *needle, char *haystack) = (anyIupac(fOligo) ? iupacIn : stringInWrapper);
 int oligoSize = strlen(fOligo);
 char *rOligo = cloneString(fOligo);
 char *rMatch = NULL, *fMatch = NULL;
@@ -1012,12 +1019,12 @@ int count = 0, maxCount = 1000000;
 
 if (oligoSize >= 2)
     {
-    fMatch = stringIn(fOligo, dna);
-    reverseComplement(rOligo, oligoSize);
+    fMatch = finder(fOligo, dna);
+    iupacReverseComplement(rOligo, oligoSize);
     if (sameString(rOligo, fOligo))
         rOligo = NULL;
     else
-    rMatch = stringIn(rOligo, dna);
+	rMatch = finder(rOligo, dna);
     for (;;)
         {
 	char *oneMatch = NULL;
@@ -1028,26 +1035,26 @@ if (oligoSize >= 2)
 	    else
 		{
 		oneMatch = fMatch;
-		fMatch = stringIn(fOligo, fMatch+1);
+		fMatch = finder(fOligo, fMatch+1);
 		strand = '+';
 		}
 	    }
 	else if (fMatch == NULL)
 	    {
 	    oneMatch = rMatch;
-	    rMatch = stringIn(rOligo, rMatch+1);
+	    rMatch = finder(rOligo, rMatch+1);
 	    strand = '-';
 	    }
 	else if (rMatch < fMatch)
 	    {
 	    oneMatch = rMatch;
-	    rMatch = stringIn(rOligo, rMatch+1);
+	    rMatch = finder(rOligo, rMatch+1);
 	    strand = '-';
 	    }
 	else
 	    {
 	    oneMatch = fMatch;
-	    fMatch = stringIn(fOligo, fMatch+1);
+	    fMatch = finder(fOligo, fMatch+1);
 	    strand = '+';
 	    }
 	if (count < maxCount)
@@ -3688,11 +3695,7 @@ else
     for (i=0; i<len; i++)
         paddedLabel[i+1] = label[i];
     }
-#if IN_PLACE_UPDATE
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
-#else
-hButton(var, paddedLabel);
-#endif
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -4452,7 +4455,7 @@ if (!hideControls)
     /* set white-space to nowrap to prevent buttons from wrapping when screen is
      * narrow */
     hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
-    menuBar();
+    printMenuBar();
 
     /* Show title . */
     freezeName = hFreezeFromDb(database);
@@ -4488,21 +4491,12 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
-#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return imageV2.navigateButtonClick(this);");
-#else
-    hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
-    hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
-    hButtonWithMsg("hgt.left1", " < ", "move 10% to the left");
-    hButtonWithMsg("hgt.right1", " > ", "move 10% to the right");
-    hButtonWithMsg("hgt.right2", ">> ", "move 47.5% to the right");
-    hButtonWithMsg("hgt.right3", ">>>", "move 95% to the right");
-#endif
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
@@ -4528,14 +4522,12 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
-    #if IN_PLACE_UPDATE
         // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
         // If so and it is reached by the back button, a page reload will occur instead.
         hPrintf("<INPUT TYPE='text' style='display:none;' name='dirty' id='dirty' VALUE='false'>\n");
         // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
         // NOTE: Larry and I have seen that the new URL is not even used, but this will abort the page load and hasten the isDirty() check in hgTracks.js
         hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') {document.getElementById('dirty').value = 'false'; window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
-    #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
 	    hPrintf("\n%s", trackGroupsHidden1->string);
@@ -4649,15 +4641,9 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
-#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return imageV2.navigateButtonClick(this);");
-#else
-    hButton("hgt.dinkLL", " < ");
-    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButton("hgt.dinkLR", " > ");
-#endif
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
@@ -4672,15 +4658,9 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
-#if IN_PLACE_UPDATE
     hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return imageV2.navigateButtonClick(this);");
-#else
-    hButton("hgt.dinkRL", " < ");
-    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButton("hgt.dinkRR", " > ");
-#endif
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
@@ -5060,7 +5040,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 
 if(!trackImgOnly)
     {
-    menuBar();
+    printMenuBar();
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "

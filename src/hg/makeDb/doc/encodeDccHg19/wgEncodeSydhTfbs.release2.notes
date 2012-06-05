@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeSydhTfbs Release 2 vs Release 1
-2012-05-04
+2012-05-10
 
 QA Count Summaries for Release 2:
 Tables: 715
 Files: 3122
 Gbdbs: 391
 Supplemental: 0
-Other: 2
+Other: 3
 
 REVOKED:
 Tables: 4
@@ -4325,19 +4325,19 @@ Revoked/Replaced/Renamed Gbdb Files (2):
 
 
 OTHER FILES:
-New: 2
+New: 3
 Revoked/Replace: 0
-Total: 2
+Total: 3
 
-New Other Files (2):
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release2/md5sum.txt
 
 Revoked Other Files (0):
 
 
-Files that dropped between releases (2):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/README.txt
+Files that dropped between releases (1):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/md5sum.history.bak
 
 

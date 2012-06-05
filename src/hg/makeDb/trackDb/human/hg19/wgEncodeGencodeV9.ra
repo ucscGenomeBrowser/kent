@@ -1,6 +1,7 @@
 
 track wgEncodeGencodeV9
 compositeTrack on
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V9
 longLabel Gene Annotations from ENCODE/GENCODE Version 9
 group genes
@@ -20,7 +21,7 @@ hgsid on
 # html wgEncodeGencodeV9
 baseColorUseCds given
 baseColorDefault genomicCodons
-subGroup1 view View 1Basic=Basic 2Comp=Comprehensive 3Pseudo=PseudoGenes 42-way=2-way_PseudoGene  5Polya=Polya
+subGroup1 view View aBasic=Basic bComp=Comprehensive cPseudo=PseudoGenes d2-way=2-way_PseudoGene  ePolya=Polya
 sortOrder view=+
 wgEncode 1
 wgEncodeGencodeVersion 9
@@ -55,14 +56,14 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
     track wgEncodeGencodeBasicV9
     subTrack wgEncodeGencodeV9
     shortLabel Basic
-    subGroups view=1Basic
+    subGroups view=aBasic
     longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 9
     type genePred
     priority 1
 
     track wgEncodeGencodeCompV9
     subTrack wgEncodeGencodeV9 off
-    subGroups view=2Comp
+    subGroups view=bComp
     shortLabel Comprehensive
     longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 9 
     type genePred
@@ -70,7 +71,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencodePseudoGeneV9
     subTrack wgEncodeGencodeV9 off
-    subGroups view=3Pseudo
+    subGroups view=cPseudo
     shortLabel Pseudo
     longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 9
     type genePred
@@ -79,7 +80,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencode2wayConsPseudoV9
     subTrack wgEncodeGencodeV9 off
-    subGroups view=42-way
+    subGroups view=d2-way
     shortLabel 2-Way Pseudo
     longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 9
     type genePred
@@ -88,7 +89,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencodePolyaV9
     subTrack wgEncodeGencodeV9 off
-    subGroups view=5Polya
+    subGroups view=ePolya
     shortLabel PolyA
     longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 9
     type genePred

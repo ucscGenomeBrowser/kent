@@ -731,12 +731,12 @@ dataType 5C
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
-dccAccession wgEncodeEH002105
 expId 2105
 fileName wgEncodeUw5cGeneTargetedPrimers.txt.tgz
 grant Stam
 lab UW
 md5sum f9648602414cf4cad60245d14c0b1911
+objStatus renamed - Moved files to supplemental directory as these are files associated with entire composite
 project wgEncode
 region UW-5C-Gene-Regions
 replicate 1
@@ -751,16 +751,16 @@ dataType 5C
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
-dccAccession wgEncodeEH002106
 expId 2106
 fileName wgEncodeUw5cMycPrimers.txt.tgz
 grant Stam
 lab UW
 md5sum a914038f9eced6ee90c42eb520d5cc32
+objStatus renamed - Moved files to supplemental directory as these are files associated with entire composite
 project wgEncode
 region UW-5C-Myc-Region
 replicate 1
 subId 3813
 view Primer
 
-# MAGIC: -1379830366
+# MAGIC: -1092761952

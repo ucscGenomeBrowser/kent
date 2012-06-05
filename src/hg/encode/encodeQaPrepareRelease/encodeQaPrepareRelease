@@ -1,6 +1,7 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python
 import sys, os, re, argparse, shutil 
-from ucscgenomics import track, qa
+from ucscGb.encode import track
+from ucscGb.qa.encode import tableCheck as qa
 
 def addInclude(composite, makefile, stage):
     f = open(makefile, "r")

@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -18,7 +20,7 @@ type ctgPos
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex GJ0[0-9]+(\.1)?
+termRegex ^(JH|GL)[0-9]+(\.[0-9])?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 

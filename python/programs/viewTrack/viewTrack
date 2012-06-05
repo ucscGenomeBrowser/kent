@@ -1,7 +1,10 @@
 #!/usr/bin/env python2.7
 
 import sys, os, shutil, argparse, urllib2, re
-from ucscgenomics import ra, soft, track, styles, geo
+from ucscGb.gbData.ra import raFile
+from ucscGb.encode import track
+from ucscGb.encode import styles
+from ucscGb.externalData.geo import submission
 
 def filesize(val):
     if val > 1099511627776:
@@ -78,8 +81,8 @@ def trackLine(args, t):
         if datatype == '' and len(t.alphaMetaDb.experiments) == 0:
             datatype = styles.style('no expIds'.ljust(16), 'red')
                 
-        if wantSubmit:
-            nametext = styles.style(nametext, 'green')
+        #if wantSubmit:
+        #    nametext = styles.style(nametext, 'green')
             
         geouptodate = ''    
         if args.geo and t.geo != None:
@@ -196,7 +199,7 @@ def main():
                 t.geo = None
                 try:
                     if 'geoSeriesAccession' in t.alphaMetaDb.compositeStanza:
-                        t.geo = geo.Submission(t.alphaMetaDb.compositeStanza['geoSeriesAccession'])
+                        t.geo = submission.Submission(t.alphaMetaDb.compositeStanza['geoSeriesAccession'])
                 except KeyError:
                     pass
         displayAll(args, tracks)
@@ -214,7 +217,7 @@ def main():
             if args.geo:
                 tracks[args.composite].geo = None
                 if 'geoSeriesAccession' in tracks[args.composite].alphaMetaDb.compositeTrack:
-                    tracks[args.composite].geo = geo.Submission(tracks[args.composite].alphaMetaDb.compositeTrack['geoSeriesAccession'])
+                    tracks[args.composite].geo = submission.Submission(tracks[args.composite].alphaMetaDb.compositeTrack['geoSeriesAccession'])
             displayTrack(args, tracks[args.composite], ids)        
                     
                     

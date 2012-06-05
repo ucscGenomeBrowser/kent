@@ -3,11 +3,12 @@
 
 <ul>
 <li>Sequences found in publications, grouped by article and searched in genomes with BLAT</li>
-<li>Identifiers in publications that directly relate to chromosome locations (e.g. gene symbols, SNP identifiers, etc)</li>
+<li>Identifiers in publications that directly relate to chromosome locations (e.g., gene symbols, SNP identifiers, etc)</li>
 </ul>
 <P>Both sources of information are linked to the respective articles.
 Background information on how permission to full-text data was obtained can be found on the <A
-href="http://text.soe.ucsc.edu">project website</A>.</P>
+href="http://text.soe.ucsc.edu">project website</A>. See also
+<a href="http://text2genome.smith.man.ac.uk/" target="_blank">text2genome</a>.</P>
 
 <H2>Display Convention and Configuration</H2>
 <P>The sequence subtrack indicates the location of sequences in publications
@@ -44,17 +45,17 @@ TARGET=_blank>Sciverse Apps</A> program). </P>
 
 <H2>Methods</H2>
 <P>
-All filetypes (incl. XML, raw ASCII, PDFs and various
-office formats (Excel, Word, Powerpoint)) were converted to text. The results were processed 
+All file types (including XML, raw ASCII, PDFs and various Microsoft
+Office formats (Excel, Word, PowerPoint)) were converted to text. The results were processed 
 to find groups of words that look like DNA/RNA sequences or
-words that look like protein sequences. These are then mapped with BLAT to the
+words that look like protein sequences. These were then mapped with BLAT to the
 human genome and these model organisms: mouse (mm9), rat (rn4), zebrafish
-(danRer6), Drosophila melanogaster (dm3), X. tropicalis (xenTro2), Medaka
-(oryLat2), C. intestinalis (ci2), C. elegans (ce6) and yeast (sacCer2).
+(danRer6), <em>Drosophila melanogaster</em> (dm3), <em>X. tropicalis</em> (xenTro2), Medaka
+(oryLat2), <em>C. intestinalis</em> (ci2), <em>C. elegans</em> (ce6) and yeast (sacCer2).
 
 The pipeline roughly proceeds through these steps:
 <UL>
-<LI>For sequences, the best match across all genomes is used, if it is longer than 17bp and matches at 90% identity. 
+<LI>For sequences, the best match across all genomes is used, if it is longer than 17 bp and matches at 90% identity. 
 Two sets of BLAT parameters are tried, the default ones for sequences longer than 25 bp, very sensitive ones (stepSize=5) for shorter sequences.</LI>
 <LI>Sequences are mapped to genomic DNA. Those that do not match are mapped to RefSeq cDNAs.</LI>
 <LI>Hits from the same article that are closer than 30 kbp are
@@ -75,38 +76,36 @@ English words which can sometimes lead to many false positives.</P>
 Larry Meyer and Hiram Clawson. Elsevier support by Max Berenstein, Raphael
 Sidi, Judd Dunham, Scott Robbins and colleagues. Original version written at the <A
 HREF="http://bergmanlab.smith.man.ac.uk/">Bergman Lab</A>, University of
-Manchester, UK. Testing by Mary Mangan, Openhelix Inc, and Greg Roe, UCSC.</P>
+Manchester, UK. Testing by Mary Mangan, OpenHelix Inc, and Greg Roe, UCSC.</P>
 
 <H2>Feedback</H2>
 Please send ideas, comments or feedback on this track to
-<A HREF="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.
-uc&#115;&#99;.
-e&#100;&#117;">
-&#109;a&#120;&#64;&#115;&#111;&#101;.
-uc&#115;&#99;.
+<A HREF="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.e&#100;&#117;">
+&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.e&#100;&#117;</A>.
 <!-- above address is max at soe.ucsc.edu -->
-e&#100;&#117;</A>. We are very interested in getting access to more 
-articles from publishers for this dataset; see <A HREF="http://text.soe.ucsc.edu">projet website</a>.
+We are very interested in getting access to more articles from publishers for this
+dataset; see the <A HREF="http://text.soe.ucsc.edu">project website</a>.
 </P>
 
 <H2>References</H2>
 
-<P> Richard van Noorden. <A
-HREF="http://www.nature.com/news/trouble-at-the-text-mine-1.10184"
-TARGET=_BLANK>Trouble at the text mine (News and Views)</A>, Nature 483, 134-135 (08 March
-2012) </P>
+<p>
+Aerts S, Haeussler M, van Vooren S, Griffith OL, Hulpiau P, Jones SJ, Montgomery SB, Bergman CM, Open Regulatory Annotation Consortium.
+<a href="http://genomebiology.com/content/9/2/R31" target="_blank">
+Text-mining assisted regulatory annotation</a>.
+<em>Genome Biol</em>. 2008;9(2):R31.
+</p>
 
-<P> 
-Haeussler M, Gerner M, Bergman CM. <A
-HREF="http://www.ncbi.nlm.nih.gov/pubmed/21325301" TARGET=_blank>Annotating genes and genomes
-with sequences extracted from biomedical articles</A>, Bioinformatics 2011 27(7):980-6, see also <A
-HREF="http://text2genome.org/" TARGET=_blank>www.text2genome.org</A>
-</P>
+<p>
+Haeussler M, Gerner M, Bergman CM.
+<a href="http://bioinformatics.oxfordjournals.org/content/27/7/980.long" target="_blank">
+Annotating genes and genomes with DNA sequences extracted from biomedical articles</a>.
+<em>Bioinformatics</em>. 2011 Apr 1;27(7):980-6.
+</p>
 
-<P> 
-Aerts S, Haeussler M, van Vooren S, Griffith OL, Hulpiau P, Jones SJM,
-Montgomery SB, Bergman CM, The Open Regulatory Annotation Consortium.
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/18271954"
-TARGET=_blank>Text-mining assisted regulatory annotation</A>.
-Genome Biol. 2008;9(2):R31.
-</P>
+<p>
+Van Noorden R.
+<a href="http://www.nature.com/news/trouble-at-the-text-mine-1.10184" target="_blank">
+Trouble at the text mine</a>.
+<em>Nature</em>. 2012 Mar 7;483(7388):134-5.
+</p>

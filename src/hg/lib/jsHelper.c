@@ -606,7 +606,7 @@ switch (ele->type)
         }
     case jsonString:
         {
-        hPrintf("\"%s\"", javaScriptLiteralEncode(ele->val.jeString));
+        hPrintf("\"%s\"", jsonStringEscape(ele->val.jeString));
         break;
         }
     case jsonBoolean:
@@ -683,7 +683,7 @@ va_start(args, format);
 dyStringPrintf(ds, "{\"error\": \"");
 struct dyString *buf = newDyString(1000);
 dyStringVaPrintf(buf, format, args);
-dyStringAppend(ds, javaScriptLiteralEncode(dyStringCannibalize(&buf)));
+dyStringAppend(ds, jsonStringEscape(dyStringCannibalize(&buf)));
 dyStringPrintf(ds, "\"}");
 va_end(args);
 }
@@ -895,4 +895,62 @@ skipLeadingSpacesWithPos(str, &pos);
 if(str[pos])
     errAbort("Invalid JSON: unprocessed trailing string at position: %d: %s", pos, str + pos);
 return ele;
+}
+
+char *jsonStringEscape(char *inString)
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or ' */
+{
+char c;
+int outSize = 0;
+char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
+
+/* Count up how long it will be */
+in = inString;
+while ((c = *in++) != 0)
+    {
+    switch(c)
+        {
+        case '\"':
+        case '\\':
+        case '/':
+        case '\b':
+        case '\f':
+        case '\n':
+        case '\r':
+        case '\t':
+            outSize += 2;
+            break;
+        default:
+            outSize += 1;
+        }
+    }
+outString = needMem(outSize+1);
+
+/* Encode string */
+in = inString;
+out = outString;
+while ((c = *in++) != 0)
+    {
+    switch(c)
+        {
+        case '\"':
+        case '\\':
+        case '/':
+        case '\b':
+        case '\f':
+        case '\n':
+        case '\r':
+        case '\t':
+            *out++ = '\\';
+            break;
+        }
+    *out++ = c;
+    }
+*out++ = 0;
+return outString;
 }

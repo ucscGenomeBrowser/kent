@@ -35,7 +35,7 @@ The program ccdsImport imports the table dumps into a database ccds,
 which is then used to generate the tables that are loaded into
 the browser databases. For example:
 
-    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+    /hive/data/outside/genbank/bin/x86_64/ccdsImport ccds data/*.txt
 
 
 The browser tables created are:
@@ -45,10 +45,10 @@ The browser tables created are:
 The ccdsMkTables program create the browser database tables from the imported
 ccds database:
 
-    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    /hive/data/outside/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
 
 to load canidates:
-    /cluster/data/genbank/bin/x86_64/ccdsMkTables -stat=Candidate -loadDb ccds mm8 ccdsInfo ccdsGene
+    /hive/data/outside/genbank/bin/x86_64/ccdsMkTables -stat=Candidate -loadDb ccds mm8 ccdsInfo ccdsGene
 
   
 

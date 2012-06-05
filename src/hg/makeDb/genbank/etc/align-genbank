@@ -19,7 +19,7 @@ trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 databases=`gbGetDatabases etc/align.dbs`

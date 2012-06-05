@@ -31,6 +31,12 @@ else
     }
 }
 
+static char *annoStreamerGetHeader(struct annoStreamer *self)
+/* Default method: return NULL. */
+{
+return NULL;
+}
+
 struct annoFilter *annoStreamerGetFilters(struct annoStreamer *self)
 /* Return supported filters with current settings.  Callers can modify and free when done. */
 {
@@ -71,6 +77,7 @@ void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
 {
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
+self->getHeader = annoStreamerGetHeader;
 self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
 self->getColumns = annoStreamerGetColumns;

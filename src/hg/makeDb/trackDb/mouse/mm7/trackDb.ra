@@ -204,7 +204,7 @@ type bed 9
     color 128,0,128
     priority 2
 
-searchName picTarPrefix
+searchName picTarPrefixDog
 searchTable picTarMiRNADog
 searchMethod prefix
 searchType bed
@@ -213,7 +213,7 @@ termRegex NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?
 dontCheck NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
 searchPriority 18
 
-searchName picTarPrefix
+searchName picTarPrefixChicken
 searchTable picTarMiRNAChicken
 searchMethod prefix
 searchType bed

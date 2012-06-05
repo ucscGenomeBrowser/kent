@@ -1,6 +1,6 @@
 # Data Agreement File for Stanford/Yale RNA-seq experiments for mm9  
 
-#$Revision: 1.5 $
+#$Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -44,9 +44,10 @@ hasReplicates    yes
 required         no
 
 view             Signal
-type             bigWig
+type             document
 hasReplicates    yes
 required         no
+downloadOnly	yes
 
 view             Alignments
 type             bam

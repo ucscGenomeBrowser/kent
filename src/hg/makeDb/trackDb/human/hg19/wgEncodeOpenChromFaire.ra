@@ -245,7 +245,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=3507 dateSubmitted=2011-02-11
 
-
     track wgEncodeOpenChromFaireViewSignal
     shortLabel FAIRE F-Seq Density Signal
     view SIG
@@ -468,7 +467,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=SIG cellType=NHBE treatment=AANONE
         type bigWig 0.000000 0.366700
         # subId=3507 dateSubmitted=2011-02-11
-
 
     track wgEncodeOpenChromFaireViewSigBo
     shortLabel Base Overlap Signal

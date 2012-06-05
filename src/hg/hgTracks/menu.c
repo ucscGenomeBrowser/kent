@@ -123,16 +123,14 @@ if (1 == itemCount)
 	{
 	int agpStart = winStart - agpItem->chromStart;
 	int agpEnd = agpStart + winEnd - winStart;
-	hPuts("<TD ALIGN=CENTER>");
 	printEnsemblAnchor(database, archive, agpItem->frag,
                            agpStart, agpEnd, links);
-	hPrintf("%s</A></TD>", "Ensembl");
 	}
     }
 agpFragFree(&agpItem);  // the one we maybe used
 }
 
-void menuBar()
+void printMenuBar()
 /* Put up the menu bar. */
 {
 boolean gotBlat = hIsBlatIndexedDatabase(database);

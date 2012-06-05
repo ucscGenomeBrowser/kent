@@ -292,7 +292,13 @@ else	/* Add to settings. */
     }
 }
 
-struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile)
+static void hgFindSpecAddRelease(struct hgFindSpec *hfs, char *releaseTag)
+/* Add release tag */
+{
+hgFindSpecAddInfo(hfs, "release", cloneString(releaseTag));
+}
+
+struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile, char *releaseTag)
 /* Load track info from ra file into list. */
 {
 static boolean reEntered = FALSE;
@@ -320,11 +326,15 @@ for (;;)
 	   }
         else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
             {
+            if (subRelease)
+                trackDbCheckValidRelease(subRelease);
+            if (releaseTag && subRelease && !sameString(subRelease, releaseTag))
+                errAbort("Include with release %s inside include with release %s line %d of %s", subRelease, releaseTag, lf->lineIx, lf->fileName);
 	    /* Set reEntered=TRUE whenever we recurse, so we don't polish
 	     * multiple times and get too many backslash-escapes. */
 	    boolean reBak = reEntered;
 	    reEntered = TRUE;
-            struct hgFindSpec *incHfs = hgFindSpecFromRa(db, incFile);
+            struct hgFindSpec *incHfs = hgFindSpecFromRa(db, incFile, subRelease);
 	    reEntered = reBak;
             hfsList = slCat(hfsList, incHfs);
             }
@@ -356,6 +366,8 @@ for (;;)
 	line = trimSpaces(line);
 	hgFindSpecAddInfo(hfs, word, line);
 	}
+    if (releaseTag)
+        hgFindSpecAddRelease(hfs, releaseTag);
     }
 lineFileClose(&lf);
 if (! reEntered)

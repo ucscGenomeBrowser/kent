@@ -54,7 +54,7 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    if (actualVisibility(track) != tvDense)
+    if (!(track->limitedVisSet && track->limitedVis == tvDense))
 	{
 	int maxItems = maximumTrackItems(track) + 1;
 	result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);

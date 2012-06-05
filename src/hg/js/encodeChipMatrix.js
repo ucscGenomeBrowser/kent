@@ -33,14 +33,14 @@ $(function () {
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
 
         // set up structures for cell types and their tiers
-        cellTiers = encodeProject.getCellTiers(cellTypes);
+        cellTiers = encodeProject.getCellTiers(cellTypes, encodeMatrix_organism);
 
         // gather experiments into matrix
         matrix = makeExperimentMatrix(experiments, antibodyTargetExps);
 
        // fill in table using matrix
-        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
-                        antibodyGroups, antibodyTargetExps, tableHeaderOut, rowAddCells);
+        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, antibodyGroups, antibodyTargetExps, 
+                encodeProject.pruneAntibodyGroupsToExps, tableHeaderOut, rowAddCells);
     }
 
     function makeExperimentMatrix(experiments, antibodyTargetExps) {
@@ -86,7 +86,7 @@ $(function () {
     return matrix;
     }
 
-    function tableHeaderOut($table, antibodyGroups, antibodyTargetExps) {
+    function tableHeaderOut($table, antibodyGroups) {
         // Generate table header and add to document
 
         var $tableHeaders, $thead, $th;
@@ -108,10 +108,6 @@ $(function () {
             $thead.before('<colgroup></colgroup>');
 
             $.each(group.targets, function (i, target) {
-                // prune out targets with no experiments 
-                if (antibodyTargetExps[target] === undefined) {
-                    return true;
-                }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $th = $('<th class="elementType">' + '<div class="verticalText">'+
                     '<a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&target=' + 
@@ -137,7 +133,7 @@ $(function () {
         }
     }
 
-    function rowAddCells($row, antibodyGroups, antibodyTargetExps, matrix, cellType) {
+    function rowAddCells($row, antibodyGroups, matrix, cellType) {
         // populate a row in the matrix with cells for antibody target groups and the targets
         // null cellType indicates this is a row for a cell group (tier)
 
@@ -150,10 +146,6 @@ $(function () {
             $row.append($td);
 
             $.each(group.targets, function (i, target) {
-                // prune out targets with no experiments
-                if (antibodyTargetExps[target] === undefined) {
-                    return true;
-                }
                 $td = $('<td></td>');
                 $td.addClass('matrixCell');
                 $row.append($td);

@@ -44,14 +44,18 @@ errAbort(
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options:\n"
-  "            -out=out -in=in -dir=dir -results=file -verbose\n"
+  "            -out=out -in=in -dir=dir -verbose\n"
+  "            -results=resultFile fully qualified path to the results file, \n"
+  "             or `results' in the current directory if not specified.\n"
   "            -cpu=N  Number of CPUs used by the jobs, default 1.\n"
   "            -ram=N  Number of bytes of RAM used by the jobs.\n"
   "             Default is RAM on node divided by number of cpus on node.\n"
   "             Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
   "             e.g. 4g = 4 Gigabytes.\n"
   "   parasol [options] clear sick  - Clear sick stats on a batch.\n"
-  "         options: -results=file\n"
+  "         options:\n"
+  "            -results=resultFile fully qualified path to the results file, \n"
+  "             or `results' in the current directory if not specified.\n"
   "   parasol remove job id  - Remove job of given ID.\n"
   "   parasol ping [count]  - Ping hub server to make sure it's alive.\n"
   "   parasol remove jobs userName [jobPattern]  - Remove jobs submitted by user that\n"
@@ -63,12 +67,32 @@ errAbort(
   "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
   "   parasol [options] pstat2  - Get status of jobs queued and running.\n"
-  "         options: -results=file\n"
+  "         options:\n"
+  "            -results=resultFile fully qualified path to the results file, \n"
+  "             or `results' in the current directory if not specified.\n"
+  "   parasol freeBatch\n"
+  "         options:\n"
+  "            -results=resultFile fully qualified path to the results file, \n"
+  "             or `results' in the current directory if not specified.\n"
+  "   Free all batch info on hub.  Works only if batch has nothing queued or running.\n"
   "options:\n"
   "   -host=hostname - connect to a paraHub process on a remote host instead\n"
   "                    localhost.\n"
+  "Important note:\n"
+  "  Options must precede positional arguments\n"
   , version
   );
+}
+
+void getResultsFile(char results[PATH_LEN])
+/* get the results file, either from -results= option or a default.*/
+{
+char curDir[PATH_LEN];
+char defaultResults[PATH_LEN];
+
+getcwd(curDir, sizeof(curDir));
+safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
+safecpy(results, PATH_LEN, optionVal("results", defaultResults));
 }
 
 boolean commandHubExt(char *command, struct paraMessage *pm, struct paraMultiMessage *pmm)
@@ -174,17 +198,16 @@ void addJob(int argc, char *argv[], boolean printId)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[PATH_LEN];
-char defaultResults[PATH_LEN];
 char *in = optionVal("in", "/dev/null"); 
 char *out = optionVal("out", "/dev/null"); 
 char *jobIdString;
 int i;
-
+char curDir[PATH_LEN];
 getcwd(curDir, sizeof(curDir));
-safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
 char *dir = optionVal("dir", curDir);
-char *results = optionVal("results", defaultResults);
+char results[PATH_LEN];
+getResultsFile(results);
+
 dyStringPrintf(dy, "addJob2 %s %s %s %s %s %f %lld",
                userName, dir, in, out, results, cpuUsage, ramUsage);
 for (i=0; i<argc; ++i)
@@ -214,13 +237,10 @@ void clearSickBatch()
 /* Tell hub to clear sick stats on a batch. */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
-char defaultResults[512];
 char *response;
+char results[PATH_LEN];
+getResultsFile(results);
 
-getcwd(curDir, sizeof(curDir));
-safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
-char *results = optionVal("results", defaultResults);
 dyStringPrintf(dy, "clearSickNodes %s %s", userName, results);
 response = hubCommandGetReciept(dy->string);
 if (!sameString(response, "0"))
@@ -389,12 +409,8 @@ void pstat2()
 /* Send status command to hub and print. */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
-char defaultResults[512];
-
-getcwd(curDir, sizeof(curDir));
-safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
-char *results = optionVal("results", defaultResults);
+char results[PATH_LEN];
+getResultsFile(results);
 dyStringPrintf(dy, "pstat2 %s %s", userName, results);
 hubCommandAndPrint(dy->string);
 dyStringFree(&dy);
@@ -412,6 +428,26 @@ for (i=0; i<count; ++i)
 printf("Pinged hub %d times\n", count);
 }
 
+void freeBatch()
+/* Send msg to hub to reset done and crashed counts on batch */
+{
+char results[PATH_LEN];
+getResultsFile(results);
+char command[2*PATH_LEN];
+safef(command, sizeof(command), "freeBatch %s %s", getUser(), results);
+char *result = hubCommandGetReciept(command);
+if (result == NULL)
+    errAbort("result == NULL\n");
+if (sameOk(result, "-3"))
+    errAbort("User not found.\n");
+if (sameOk(result, "-2"))
+    errAbort("Batch not found.\n");
+if (sameOk(result, "-1"))
+    warn("Unable to free batch.  Jobs are queued or running.\n");
+if (sameOk(result, "0"))
+    verbose(1, "Batch freed.\n");
+freez(&result);
+}
 
 void parasol(char *command, int argc, char *argv[])
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
@@ -526,6 +562,12 @@ else if (sameString(command, "ping"))
     }
 else if (sameString(command, "status"))
     status();
+else if (sameString(command, "freeBatch"))
+    {
+    if (argc != 0)
+        usage();
+    freeBatch();
+    }
 else
     usage();
 }

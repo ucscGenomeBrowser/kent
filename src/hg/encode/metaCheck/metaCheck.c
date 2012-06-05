@@ -22,8 +22,9 @@ errAbort(
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   "   -onlyCompTdb        only check trackDb entries that start with composite\n"
   "   -release            set release state, default alpha\n"
-  "   -metaDb=            specify a path for the metaDb, by default, this looks in <database>'s metaDb.\n"
-  "   -trackDb=           specify a path for the trackDb, by default, this is looks in <database>'s trackDb.\n"
+  "   -releaseNum=        specify which release directory to look in (e.g. -releaseNum=2)\n"
+  "   -metaDb=            specify a path for the metaDb, by default, this looks in <database>'s metaDb\n"
+  "   -trackDb=           specify a path for the trackDb, by default, this is looks in <database>'s trackDb\n"
   "   -downloadDir=       specify a path for the downloads directory\n"
   "   -help               print out extended information about what metaCheck is doing\n"
   );
@@ -32,6 +33,7 @@ errAbort(
 char *outMdb = NULL;
 boolean onlyCompTdb = FALSE;
 char *release = "alpha";
+int releaseNum = 0;
 
 static struct optionSpec options[] = {
    {"outMdb", OPTION_STRING},
@@ -41,6 +43,7 @@ static struct optionSpec options[] = {
    {"metaDb", OPTION_STRING},
    {"trackDb", OPTION_STRING},
    {"downloadDir", OPTION_STRING},
+   {"releaseNum", OPTION_INT},
    {NULL, 0},
 };
 
@@ -120,7 +123,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
         warn("composite not found in object %s", mdbObj->obj);
         continue;
         }
-    char *composite = mdbVar->val;
+    // char *composite = mdbVar->val;
 
     mdbVar = hashFindVal(mdbObj->varHash, "fileName");
 
@@ -196,7 +199,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
 	    warn("fileName %s does not start with object name %s", el->name, mdbObj->obj);
 	    }
 
-	safef(buffer, sizeof buffer, "%s/%s/%s", downDir, composite, el->name);
+	safef(buffer, sizeof buffer, "%s/%s", downDir, el->name);
 
 	verbose(2, "checking for fileExists %s\n", buffer);
 	if (!fileExists(buffer))
@@ -215,7 +218,7 @@ verbose(1, "-----------------------------------------------------------------\n"
 verbose(1, "Checking that wgEncode* files in the download dir exist in metaDb\n");
 verbose(1, "-----------------------------------------------------------------\n");
 char buffer[10 * 1024];
-safef(buffer, sizeof buffer, "%s/%s", downDir, composite);
+safef(buffer, sizeof buffer, "%s", downDir);
 struct slName *list = listDir(buffer, "wgEncode*"), *el;
 for(el=list;el;el=el->next)
     {
@@ -698,6 +701,7 @@ if (argc != 3)
 outMdb = optionVal("outMdb", outMdb);
 onlyCompTdb = optionExists("onlyCompTdb");
 release = optionVal("release", release);
+releaseNum = optionInt("releaseNum", releaseNum);
 
 char *database = argv[1];
 char *composite = argv[2];
@@ -705,14 +709,17 @@ char *composite = argv[2];
 
 char defaultMetaDb[1024];
 char defaultDownloadDir[1024];
+char tempDownloadDir[1024];
 char *src = getSrcDir();
 char *org = cloneString(hOrganism(database));
 org[0] = tolower(org[0]);
 /* If user doesn't provide a metaDB, assume the path using the database and composite  */
 safef(defaultMetaDb, sizeof(defaultMetaDb), "%s/hg/makeDb/trackDb/%s/%s/metaDb/%s/%s.ra", src, org, database, release, composite);
 /* If user doesn't provide a downloadDir, assume the path using the database and composite  */
-safef(defaultDownloadDir, sizeof(defaultDownloadDir), "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC", database);
-
+safef(defaultDownloadDir, sizeof(defaultDownloadDir), "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s", database, composite);
+safef(tempDownloadDir, sizeof(tempDownloadDir), "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s", database, composite);
+if (releaseNum)
+    safef(defaultDownloadDir, sizeof(defaultDownloadDir), "%s/release%d", tempDownloadDir, releaseNum);
 
 /* If user doesn't provide a trackDB, assume the path using the database and composite  */
 char defaultTrackDb[1024];

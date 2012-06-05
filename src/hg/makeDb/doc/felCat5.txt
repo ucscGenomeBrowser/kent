@@ -621,3 +621,92 @@ done
     #   50327551 bases of 2364296207 (2.129%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-04 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2364296207 / 2897316137 \) \* 1024
+    #	( 2364296207 / 2897316137 ) * 1024 = 835.614480
+
+    # round up to 850  (felCat4 was 700)
+
+    cd /hive/data/genomes/felCat5
+    time blat felCat5.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/felCat5.11.ooc -repMatch=850
+    #   Wrote 24227 overused 11-mers to jkStuff/felCat5.11.ooc
+    #   felCat4 had: Wrote 23033 overused 11-mers to jkStuff/felCat4.11.ooc
+    #	real     1m10.025s
+
+    # there are non-bridged gaps, create lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" felCat5 | sort | uniq -c
+    #   900 no
+    #   196683 yes
+
+    cd /hive/data/genomes/felCat5/jkStuff
+    gapToLift felCat5 felCat5.nonBridged.lift -bedFile=felCat5.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' felCat5.nonBridged.bed | sort -nr | head
+    #   22000847 chrA1  191124230       213125077       chrA1.58
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Felis catus	1081	919	354
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+# felCat5
+felCat5.serverGenome = /hive/data/genomes/felCat5/felCat5.2bit
+felCat5.clusterGenome = /hive/data/genomes/felCat5/felCat5.2bit
+felCat5.ooc = /hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc
+felCat5.lift = /hive/data/genomes/felCat5/jkStuff/felCat5.nonBridged.lift
+felCat5.perChromTables = no
+felCat5.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+felCat5.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+felCat5.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+felCat5.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+felCat5.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+felCat5.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+felCat5.downloadDir = felCat5
+felCat5.refseq.mrna.native.load  = yes
+felCat5.refseq.mrna.xeno.load = yes
+felCat5.refseq.mrna.xeno.loadDesc  = yes
+# felCat5.upstreamGeneTbl = refGene
+# felCat5.upstreamMaf = multiz6way
+# /hive/data/genomes/felCat5/bed/multiz6way/species.list
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding felCat5 rat" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S felCat5           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial felCat5 &
+    #	  var/build/logs/2012.05.04-15:01:45.felCat5.initalign.log
+    #   real    1299m14.421s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad felCat5 &
+    #	logFile: var/dbload/hgwdev/logs/2012.05.08-09:58:52.dbload.log
+    #   real    41m1.805s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add felCat5 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added felCat5." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################

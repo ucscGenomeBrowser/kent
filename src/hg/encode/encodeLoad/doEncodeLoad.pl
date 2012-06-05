@@ -521,7 +521,7 @@ for my $key (keys %ra) {
             }
 
             # Two possibilities: cat then gz or tgz
-            if (($type eq "fastq") || ($type eq "doc")) {
+            if (($type eq "fastq") || ($type eq "document")) {
                 if ( ! Encode::isTarZipped($targetFile) ) {
                     die "Target $targetFile of multiple $type files must be tgz";
                 }

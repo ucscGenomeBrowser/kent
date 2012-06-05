@@ -48,7 +48,7 @@
                         <td bgcolor="#0004D99" height="100%" valign="top">
                         <font color="#FFCC00"><b><em>Human</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a><font color="#FF0000"><sup><strong><em>New</strong></em></sup></font>
+                        <a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a>
                         <hr><a class="leftbar" href="/ENCODE/dataSummary.html" title="formerly Data Summary">Experiment List</a>
                         <hr><a class="leftbar" href="search.html">Search</a>
                         <hr><a class="leftbar" href="downloads.html">Downloads</a>
@@ -61,7 +61,8 @@
                         <img src="../images/DOT.gif" alt="" height="5" width="0"><br>
                         <font color="#FFCC00"><b><em>Mouse</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="/ENCODE/dataSummaryMouse.html">Data Summary</a>
+                        <a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixMouse.html">Experiment Matrix</a><font color="#FF0000"><sup><strong><em>New</strong></em></sup></font>
+                        <hr><a class="leftbar" href="/ENCODE/dataSummaryMouse.html"title="formerly Data Summary">Experiment List</a>
                         <hr><a class="leftbar" href="search.html">Search</a>
                         <hr><a class="leftbar" href="downloadsMouse.html">Downloads</a>
                         <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Genome Browser (mm9)</a>
@@ -198,9 +199,11 @@ target="_blank">Data mining</a> with the UCSC Table Browser and other
 </p>
 <p>
 To search for ENCODE data related to your area of interest and set up a browser view, use the UCSC
+<a href="dataMatrix/encodeDataMatrixHuman.html" target="_blank">Experiment Matrix</a> or
 <a href="/cgi-bin/hgTracks?hgt_tSearch=1" target="_blank">Track Search tool</a> (<em>Advanced</em> features).
-The <a href="dataSummary.html" target="_blank">Data Summary</a> shows a comprehensive listing of
-ENCODE data that is released or in preparation.
+The <a href="dataSummary.html" target="_blank">Experiment List (Human)</a> and 
+ <a href="dataSummaryMouse.html" target="_blank">Experiment List (Mouse)</a> links provide
+comprehensive listings of ENCODE data that is released or in preparation.
 Early access to pre-release ENCODE data is provided at
 <a href="http://genome-preview.ucsc.edu" target="_blank">http://genome-preview.ucsc.edu</a>.
 If you would like to receive notifications of ENCODE data releases and related news by email,
@@ -208,11 +211,6 @@ subscribe to the
 <a href="https://lists.soe.ucsc.edu/mailman/listinfo/encode-announce" target="_blank">encode-announce mailing list</a>.
 For more information about how to access this data, see the free online
 <a target=="_blank" href="http://www.openhelix.com/ENCODE/" target="_blank">OpenHelix ENCODE tutorial</a>.
-<p>
-To complement the human ENCODE data, Mouse ENCODE experiments are currently underway. Early
-access to this data is available on the Mouse mm9/NCBI37 browser at the UCSC preview site.
-The <a href="/encode/dataSummaryMouse.html" target="_blank">Mouse ENCODE
-Data Summary</a> lists experiments that are planned or in progress.
 </p>
 <p>
 All ENCODE data is freely available for download and analysis.
@@ -281,6 +279,75 @@ months following data release. &nbsp;&nbsp;
                               <td width="15"><br>
                               </td>
                               <td style="font-family: arial, Geneva, Helvetica, sans-serif;">
+<!-- start news item -->
+<p>
+<font size="3"><b> 25 May 2012 -  Mouse ENCODE data releases: Caltech RNA-seq, PSU Histone, LICR RNA-seq (Release 2)
+</b></font>
+<p>
+Two new tracks and one track update were released on the mm9 genome browser:
+<p>
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeCaltechRnaSeq">
+RNA-seq from ENCODE/Caltech</a>:
+This track shows transcriptome measurements in 10T1/2 fibroblasts and C2C12 myoblasts, 
+and these same cell types treated with differentiation media to produce fibrocytes and myocytes.
+RNA-seq was performed on total cellular polyA+ RNA with 100bp paired end reads aligned to the genome.
+<p>
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodePsuHistone">
+Histone Modifications by ChIP-seq from ENCODE/PSU</a>:
+This track displays levels of three histone modifications - H3K4me1 (indicative of active chromatin and enhancers), H3K4me3 (enriched at active promoters), and H3K27me3 (associated with some silenced genes), in 5 blood-derived primary cells and cell lines.
+<p>
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrRnaSeq">
+RNA-seq from ENCODE/LICR (Release 2)</a>:
+<p>
+This release adds RNA-seq data for 12 additional primary cell types, bringing the total for this track to 22. 
+</p>
+<hr>
+<!-- end news item -->
+
+<!-- start news item -->
+<p>
+<font size="3"><b> 8 May 2012 - ENCODE Experiment Matrix web tool
+</b></font>
+<p>
+The ENCODE DCC at UCSC is pleased to announce the release of a new
+web tool for accessing ENCODE data.  
+The new 
+<a class="euro" target=_blank href="dataMatrix/encodeDataMatrixHuman.html"> Experiment Matrix</a> 
+link on the ENCODE portal
+leads to a set of three web pages that provide an up-to-date view of the
+breadth of human ENCODE data available, along with an interface for
+selecting experiments for viewing in the browser or downloading as
+files for analysis. (Note: the related 
+<a class="euro" target=_blank href="dataSummary.html"> Experiment List</a> 
+(previously 'Data Summary') spreadsheets have been updated to reflect newer status).
+</p>
+<p>
+The main Experiment Matrix page shows the number of experiments for
+each cell type/assay pairing. The related
+<a class="euro" target=_blank href="dataMatrix/encodeChipMatrixHuman.html">
+ChIP-seq Experiment Matrix</a>
+provides a view of the transcription factor and histone modification
+datasets, showing experiments by cell type and antibody target. The
+<a class="euro" target=_blank href="dataMatrix/encodeDataSummaryHuman.html">
+Experiment Summary</a>
+lists the number of experiments by assay type
+alone and includes annotations that are cell-type independent
+(annotations on the reference genome). Each page has a file/track
+selector.  Clicking an experiment item produces a search window with
+resulting files or tracks listed.
+</p>
+<p>
+These pages are best viewed in FireFox, Chrome, and Safari browsers, and
+zoomed out as far as readability on your screen allows.
+<p>
+Special thanks to Katrina Learned and Steve Heitner for careful QA review and testing, 
+to the Genome Browser build & release group for shepherding the new program
+to the public site, and to the DCC wranglers for the high quality
+metadata curation that supports this new access tool.
+</p>
+<hr>
+<!-- end news item -->
+
 <!-- start news item -->
 <p>
 <font size="3"><b> 20 Apr 2012 -  Human ENCODE data releases: UMass 5C, ENCODE Pilot Regions, FSU Repli-chip and 11 track updates

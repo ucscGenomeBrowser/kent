@@ -1,7 +1,9 @@
 #!/usr/bin/env python2.7
 
 import sys, os, shutil, argparse
-from ucscgenomics import ra, soft, track, styles
+from ucscGb.gbData.ra import raFile
+from ucscGb.encode import track
+from ucscGb.encode import styles
 
 def filesize(val):
     if val > 1099511627776:
