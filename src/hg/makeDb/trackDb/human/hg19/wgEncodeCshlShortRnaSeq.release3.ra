@@ -296,15 +296,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3 cricket Tue Feb  7 13:42:39 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1
-        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        #        shortLabel MCF7 cell sm A 1
-        #        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        #        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bam
-        #        # subId=3353 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1 cricket Tue Feb  7 15:38:30 2012
-
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SKRA cell sm A 2
@@ -373,15 +364,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2 cricket Tue Feb  7 13:42:38 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2
-        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        #        shortLabel MCF7 cell sm A 2
-        #        longLabel MCF-7 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        #        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bam
-        #        # subId=3370 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2 cricket Tue Feb  7 15:38:30 2012
-
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 4
@@ -444,7 +426,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVEC nucl sm A 3
+        shortLabel HUVE nucl sm A 3
         longLabel HUVEC TAP-only nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -572,31 +554,13 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVEC nucl sm A 2
+        shortLabel HUVE nucl sm A 2
         longLabel HUVEC TAP-only nucleus small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bam
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4 cricket Tue Feb  7 15:38:24 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
-        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        #        shortLabel A549 cell sm A 2
-        #        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        #        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bam
-        #        # subId=4059 dateSubmitted=2011-05-11
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:34 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
-        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        #        shortLabel A549 cell sm A 1
-        #        longLabel A549 TAP-only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        #        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bam
-        #        # subId=4058 dateSubmitted=2011-05-09
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -650,7 +614,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG2 cyto sm A 1
+        shortLabel HepG cyto sm A 1
         longLabel HepG2 TAP-only cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2HEPG2 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -701,7 +665,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 4
+        shortLabel A549 nucl sm A 4
         longLabel A549 Untreated nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -709,7 +673,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 2
+        shortLabel IMR9 nucl sm A 2
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep2 rank=rank2
         type bam
@@ -717,7 +681,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 4
+        shortLabel SKSH nucl sm A 4
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -725,7 +689,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 3
+        shortLabel SKSH cell sm A 3
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -733,7 +697,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 4
+        shortLabel MCF7 cell sm A 4
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -741,7 +705,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 3
+        shortLabel A549 cyto sm A 3
         longLabel A549 Untreated cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -749,7 +713,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 4
+        shortLabel MCF7 cell sm A 4
         longLabel MCF-7 Untreated whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -757,7 +721,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 nucleus sm Aln 3
+        shortLabel MCF7 nucl sm A 3
         longLabel MCF-7 Untreated nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -765,7 +729,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 4
+        shortLabel SKSH cell sm A 4
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -773,7 +737,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 1
+        shortLabel IMR9 nucl sm A 1
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep1 rank=rank1
         type bam
@@ -781,7 +745,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 4
+        shortLabel SKSH cyto sm A 4
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -789,7 +753,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 4
+        shortLabel A549 cyto sm A 4
         longLabel A549 CIP-TAP cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -797,7 +761,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 2
+        shortLabel IMR9 nucl sm A 2
         longLabel IMR90 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep2 rank=rank2
         type bam
@@ -805,7 +769,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 4
+        shortLabel SKSH nucl sm A 4
         longLabel SK-N-SH nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -813,7 +777,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 3
+        shortLabel A549 cell sm A 3
         longLabel A549 whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -821,7 +785,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cytosol sm Aln 4
+        shortLabel MCF7 cyto sm A 4
         longLabel MCF-7 cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -829,7 +793,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 4
+        shortLabel SKSH cyto sm A 4
         longLabel SK-N-SH cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -837,7 +801,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cytosol sm Aln 3
+        shortLabel MCF7 cyto sm A 3
         longLabel MCF-7 cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -845,7 +809,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 3
+        shortLabel SKSH cyto sm A 3
         longLabel SK-N-SH cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -853,7 +817,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 4
+        shortLabel A549 cell sm A 4
         longLabel A549 CIP-TAP whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -861,7 +825,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 4
+        shortLabel SKSH cell sm A 4
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -869,7 +833,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 nucleus sm Aln 4
+        shortLabel MCF7 nucl sm A 4
         longLabel MCF-7 nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -877,7 +841,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 3
+        shortLabel SKSH nucl sm A 3
         longLabel SK-N-SH nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -885,7 +849,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 4
+        shortLabel A549 cyto sm A 4
         longLabel A549 cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -893,7 +857,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 3
+        shortLabel SKSH nucl sm A 3
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -901,7 +865,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 2
+        shortLabel IMR9 cyto sm A 2
         longLabel IMR90 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep2 rank=rank2
         type bam
@@ -909,7 +873,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 3
+        shortLabel A549 nucl sm A 3
         longLabel A549 nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -917,7 +881,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 3
+        shortLabel SKSH cyto sm A 3
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -925,7 +889,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 3
+        shortLabel A549 cell sm A 3
         longLabel A549 CIP-TAP whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -933,7 +897,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 2
+        shortLabel IMR9 cell sm A 2
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep2 rank=rank2
         type bam
@@ -941,7 +905,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 4
+        shortLabel A549 nucl sm A 4
         longLabel A549 CIP-TAP nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bam
@@ -949,7 +913,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 3
+        shortLabel SKSH cell sm A 3
         longLabel SK-N-SH whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -957,7 +921,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 1
+        shortLabel IMR9 nucl sm A 1
         longLabel IMR90 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep1 rank=rank1
         type bam
@@ -965,7 +929,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 3
+        shortLabel MCF7 cell sm A 3
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -973,7 +937,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 1
+        shortLabel IMR9 cell sm A 1
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep1 rank=rank1
         type bam
@@ -981,7 +945,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 3
+        shortLabel A549 nucl sm A 3
         longLabel A549 CIP-TAP nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -989,7 +953,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 3
+        shortLabel A549 cyto sm A 3
         longLabel A549 CIP-TAP cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -997,7 +961,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 4
+        shortLabel SKSH cell sm A 4
         longLabel SK-N-SH whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -1005,7 +969,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 1
+        shortLabel IMR9 cyto sm A 1
         longLabel IMR90 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep1 rank=rank1
         type bam
@@ -1013,7 +977,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 1
+        shortLabel IMR9 cell sm A 1
         longLabel IMR90 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=NONE rep=rep1 rank=rank1
         type bam
@@ -1021,7 +985,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 2
+        shortLabel IMR9 cell sm A 2
         longLabel IMR90 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=NONE rep=rep2 rank=rank2
         type bam
@@ -1029,7 +993,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 3
+        shortLabel MCF7 cell sm A 3
         longLabel MCF-7 whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bam
@@ -1037,7 +1001,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 4
+        shortLabel A549 cell sm A 4
         longLabel A549 whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bam
@@ -1045,7 +1009,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 2
+        shortLabel IMR9 cyto sm A 2
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep2 rank=rank2
         type bam
@@ -1053,7 +1017,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 3
+        shortLabel SKSH nucl sm A 3
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1061,7 +1025,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 1
+        shortLabel IMR9 cyto sm A 1
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep1 rank=rank1
         type bam
@@ -1069,7 +1033,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 4
+        shortLabel SKSH cyto sm A 4
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1077,7 +1041,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cell sm Aln 3
+        shortLabel SKSH cell sm A 3
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bam
@@ -1085,7 +1049,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH cytosol sm Aln 3
+        shortLabel SKSH cyto sm A 3
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1093,7 +1057,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HAoAF Aln 2
+        shortLabel HAoA A 2
         longLabel HAoAF 6090101.11 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HAOAF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1101,7 +1065,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf61113019CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HAoAF Aln 1
+        shortLabel HAoA A 1
         longLabel HAoAF 6111301.9 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HAOAF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1109,7 +1073,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SkMC Aln 2
+        shortLabel SkMC A 2
         longLabel SkMC 8121902.17 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKMC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1117,7 +1081,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01027033CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HFDPC Aln 1
+        shortLabel HFDP A 1
         longLabel HFDPC 0102703.3 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HFDPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1125,7 +1089,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HAoEC Aln 1
+        shortLabel HAoE A 1
         longLabel HAoEC 7071706.1 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HAOEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1133,7 +1097,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel hMSC-AT Aln 2
+        shortLabel hMAT A 2
         longLabel hMSC-AT 9061601.12 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1141,7 +1105,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HFDPC Aln 2
+        shortLabel HFDP A 2
         longLabel HFDPC 0100503.2 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HFDPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1149,24 +1113,15 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel hMSC-AT Aln 1
+        shortLabel hMAT A 1
         longLabel hMSC-AT 0102604.12 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5951 dateSubmitted=2012-03-01
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 4
-        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep4 rank=rank2
-        type bam
-        # subId=5919 dateSubmitted=2012-02-29
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep4 wong Mon Jun  4 13:45:33 2012
-
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHDF cell sm Aln 1
+        shortLabel NHDF cell sm A 1
         longLabel NHDF 7071701.2 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHDF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1174,7 +1129,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HCH cell sm Aln 2
+        shortLabel HCH cell sm A 2
         longLabel HCH 8100808.2 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HCH localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1182,7 +1137,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HCH cell sm Aln 1
+        shortLabel HCH cell sm A 1
         longLabel HCH 0011308.2P TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HCH localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1190,7 +1145,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 2
+        shortLabel IMR9 nucl sm A 2
         longLabel IMR90 TAP-Only nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1198,7 +1153,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cytosol sm Aln 4
+        shortLabel MCF7 cyto sm A 4
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1206,7 +1161,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 2
+        shortLabel IMR9 cyto sm A 2
         longLabel IMR90 TAP-Only cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1214,7 +1169,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cytosol sm Aln 3
+        shortLabel MCF7 cyto sm A 3
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1222,7 +1177,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHDF cell sm Aln 2
+        shortLabel NHDF cell sm A 2
         longLabel NHDF 0060801.3 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHDF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1230,24 +1185,15 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cytosol sm Aln 1
+        shortLabel IMR9 cyto sm A 1
         longLabel IMR90 TAP-Only cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5936 dateSubmitted=2012-03-01
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 3
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep3 rank=rank1
-        type bam
-        # subId=5937 dateSubmitted=2012-03-01
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep3 wong Mon Jun  4 13:45:31 2012
-
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 2
+        shortLabel IMR9 cell sm A 2
         longLabel IMR90 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1255,7 +1201,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 nucleus sm Aln 4
+        shortLabel MCF7 nucl sm A 4
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1263,7 +1209,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 nucleus sm Aln 3
+        shortLabel MCF7 nucl sm A 3
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1271,7 +1217,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec80611021CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HAoEC Aln 2
+        shortLabel HAoE A 2
         longLabel HAoEC 8061102.1 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HAOEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1279,7 +1225,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 3
+        shortLabel A549 cyto sm A 3
         longLabel A549 TAP-Only cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1287,7 +1233,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SkMC cell sm Aln 1
+        shortLabel SkMC cell sm A 1
         longLabel SkMC 9011302 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKMC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1295,41 +1241,95 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 cell sm Aln 1
+        shortLabel IMR9 cell sm A 1
         longLabel IMR90 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5922 dateSubmitted=2012-02-29
 
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel MCF7 cell sm A 1
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        type bam
+        # subId=5937 dateSubmitted=2012-03-01
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep3 wong Mon Jun  4 13:45:31 2012
+
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel MCF-7 cell sm Aln 4
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 4 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep4 rank=rank2
+        shortLabel MCF7 cell sm A 2
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        subGroups view=Alignments cellType=t2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
         # subId=5923 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep4 wong Mon Jun  4 13:45:32 2012
 
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1
+        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        #        shortLabel MCF7 cell sm A 1
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        #        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bam
+        #        # subId=3353 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1 cricket Tue Feb  7 15:38:30 2012
+
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2
+        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        #        shortLabel MCF7 cell sm A 2
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        #        subGroups view=Alignments cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bam
+        #        # subId=3370 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2 cricket Tue Feb  7 15:38:30 2012
+
         track wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HVMF cell sm Aln 1
+        shortLabel HVMF cell sm A 1
         longLabel HVMF 6091203.3 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HVMF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5924 dateSubmitted=2012-02-29
 
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel A549 cell sm A 2
+        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        type bam
+        # subId=5919 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep4 wong Mon Jun  4 13:45:33 2012
+
         track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1V2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell sm Aln 3
-        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 3 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep3 rank=rank1
+        shortLabel A549 cell sm A 1
+        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        subGroups view=Alignments cellType=t2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
         # subId=5925 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep3 wong Mon Jun  4 13:45:33 2012
 
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
+        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        #        shortLabel A549 cell sm A 2
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        #        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bam
+        #        # subId=4059 dateSubmitted=2011-05-11
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:34 2012
+
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
+        #        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        #        shortLabel A549 cell sm A 1
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        #        subGroups view=Alignments cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bam
+        #        # subId=4058 dateSubmitted=2011-05-09
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:34 2012
+
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 3
+        shortLabel A549 nucl sm A 3
         longLabel A549 TAP-Only nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1337,7 +1337,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HVMF cell sm Aln 2
+        shortLabel HVMF cell sm A 2
         longLabel HVMF 6100401.3 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HVMF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1345,7 +1345,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cytosol sm Aln 4
+        shortLabel A549 cyto sm A 4
         longLabel A549 TAP-Only cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1353,7 +1353,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HOB cell sm Aln 2
+        shortLabel HOB cell sm A 2
         longLabel HOB 0090202.1 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HOB localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1361,7 +1361,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 nucleus sm Aln 4
+        shortLabel A549 nucl sm A 4
         longLabel A549 TAP-Only nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1369,7 +1369,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel IMR90 nucleus sm Aln 1
+        shortLabel IMR9 nucl sm A 1
         longLabel IMR90 TAP-Only nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1377,7 +1377,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel SK-N-SH nucleus sm Aln 4
+        shortLabel SKSH nucl sm A 4
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1385,7 +1385,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel GM12878 Aln 3
+        shortLabel GM78 A 3
         longLabel GM12878 TAP-Only chromatin small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep3 rank=rank1
         type bam
@@ -1394,7 +1394,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HWP Aln 1
+        shortLabel HWP A 1
         longLabel HWP TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HWP localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1402,7 +1402,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel hMSC-UC Aln 2
+        shortLabel hMUC A 2
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1410,7 +1410,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HWP Aln 2
+        shortLabel HWP A 2
         longLabel HWP TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HWP localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1418,7 +1418,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HSaVEC Aln 2
+        shortLabel HSaV A 2
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1426,7 +1426,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HPIEpC Aln 2
+        shortLabel HPIE A 2
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1434,7 +1434,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHEM.f_M2 Aln 1
+        shortLabel NHEf A 1
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1442,7 +1442,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel hMSC-UC Aln 1
+        shortLabel hMUC A 1
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1450,7 +1450,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HPC-PL Aln 2
+        shortLabel HPCP A 2
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HPCPL localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1458,7 +1458,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmepcCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HMEpC Aln 1
+        shortLabel HMEpC A 1
         longLabel HMEpC TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1466,7 +1466,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel GM12878 Aln 4
+        shortLabel GM78 A 4
         longLabel GM12878 TAP-Only chromatin small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep4 rank=rank2
         type bam
@@ -1475,7 +1475,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HSaVEC Aln 1
+        shortLabel HSaV A 1
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1483,7 +1483,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HPIEpC Aln 1
+        shortLabel HPIE A 1
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1491,7 +1491,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHEM.f_M2 Aln 2
+        shortLabel NHEf A 2
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1499,7 +1499,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HPC-PL Aln 1
+        shortLabel HPCP A 1
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HPCPL localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1507,7 +1507,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHEM_M2 Aln 2
+        shortLabel NHEM A 2
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bam
@@ -1515,7 +1515,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel NHEM_M2 Aln 1
+        shortLabel NHEM A 1
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bam
@@ -1787,15 +1787,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1
-        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        #        shortLabel MCF7 cell sm - 1
-        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-        #        subGroups view=MinusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bigWig 1.000000 620692.000000
-        #        # subId=3353 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1 cricket Tue Feb  7 15:38:30 2012
-
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel SKRA cell sm - 2
@@ -1864,15 +1855,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
-        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        #        shortLabel MCF7 cell sm - 2
-        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-        #        subGroups view=MinusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bigWig 1.000000 1184608.000000
-        #        # subId=3370 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2 cricket Tue Feb  7 15:38:30 2012
-
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel K562 nplm sm - 2
@@ -1935,7 +1917,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HUVEC nucl sm - 1
+        shortLabel HUVE nucl sm - 1
         longLabel HUVEC TAP-Only nucleus small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 3801872.000000
@@ -2063,31 +2045,13 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HUVEC nucl sm - 2
+        shortLabel HUVE nucl sm - 2
         longLabel HUVEC TAP-Only nucleus small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 1938277.000000
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4 cricket Tue Feb  7 15:38:24 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
-        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        #        shortLabel A549 cell sm - 2
-        #        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-        #        subGroups view=MinusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bigWig 1.000000 1785277.000000
-        #        # subId=4059 dateSubmitted=2011-05-11
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:35 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
-        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        #        shortLabel A549 cell sm - 1
-        #        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-        #        subGroups view=MinusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bigWig 1.000000 2036805.000000
-        #        # subId=4058 dateSubmitted=2011-05-09
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -2143,7 +2107,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HepG2 cyto sm - 1
+        shortLabel HepG cyto sm - 1
         longLabel HepG2 TAP-Only cytosol small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2HEPG2 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2034826.000000
@@ -2152,7 +2116,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel CD20+ cell sm MinusRaw 1
+        shortLabel CD20 cell sm - 1
         longLabel CD20+ RO01794 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2BCELLSCD20 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 3448617.000000
@@ -2161,7 +2125,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd34mobilizedCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel CD34+_Mobilized MinusRaw 1
+        shortLabel CD34 - 1
         longLabel CD34+ Mobilized TAP-Only whole cell small RNA-seq Minus Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3CD34MOBILIZED localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 16845334.000000
@@ -2170,7 +2134,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel CD20+ cell sm MinusRaw 2
+        shortLabel CD20 cell sm - 2
         longLabel CD20+ RO01778 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2BCELLSCD20 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 6581650.000000
@@ -2179,7 +2143,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel Monocytes-CD14+_RO01746 MinusRaw 2
+        shortLabel CD14 - 2
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MONOCYTESCD14 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 6453896.000000
@@ -2189,7 +2153,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel Monocytes-CD14+_RO01746 MinusRaw 1
+        shortLabel CD14 - 1
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MONOCYTESCD14 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2294792.000000
@@ -2199,7 +2163,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 4
+        shortLabel A549 nucl sm - 4
         longLabel A549 nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 16039876.000000
@@ -2208,7 +2172,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 2
+        shortLabel IMR9 nucl sm - 2
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 27604254.000000
@@ -2217,7 +2181,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 4
+        shortLabel SKSH nucl sm - 4
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 45034264.000000
@@ -2226,7 +2190,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 3
+        shortLabel SKSH cell sm - 3
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 33895712.000000
@@ -2235,7 +2199,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 4
+        shortLabel MCF7 cell sm - 4
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 10455944.000000
@@ -2244,7 +2208,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 3
+        shortLabel A549 cyto sm - 3
         longLabel A549 cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 13784293.000000
@@ -2253,7 +2217,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 4
+        shortLabel MCF7 cell sm - 4
         longLabel MCF-7 whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 12942165.000000
@@ -2262,7 +2226,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 nucleus sm MinusRaw 3
+        shortLabel MCF7 nucl sm - 3
         longLabel MCF-7 nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 15125938.000000
@@ -2271,7 +2235,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 4
+        shortLabel SKSH cell sm - 4
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 2018451.000000
@@ -2280,7 +2244,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 1
+        shortLabel IMR9 nucl sm - 1
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 6502829.000000
@@ -2289,7 +2253,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 4
+        shortLabel SKSH cyto sm - 4
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 7955198.000000
@@ -2298,7 +2262,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 4
+        shortLabel A549 cyto sm - 4
         longLabel A549 CIP-TAP cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 39285896.000000
@@ -2307,7 +2271,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 2
+        shortLabel IMR9 nucl sm - 2
         longLabel IMR90 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 24131304.000000
@@ -2316,7 +2280,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 4
+        shortLabel SKSH nucl sm - 4
         longLabel SK-N-SH nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 22725982.000000
@@ -2325,7 +2289,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 3
+        shortLabel A549 cell sm - 3
         longLabel A549 whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 14944297.000000
@@ -2334,7 +2298,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cytosol sm MinusRaw 4
+        shortLabel MCF7 cyto sm - 4
         longLabel MCF-7 cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 16662908.000000
@@ -2343,7 +2307,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 4
+        shortLabel SKSH cyto sm - 4
         longLabel SK-N-SH cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 20057648.000000
@@ -2352,7 +2316,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cytosol sm MinusRaw 3
+        shortLabel MCF7 cyto sm - 3
         longLabel MCF-7 cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 11094548.000000
@@ -2361,7 +2325,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 3
+        shortLabel SKSH cyto sm - 3
         longLabel SK-N-SH cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 17039768.000000
@@ -2370,7 +2334,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 4
+        shortLabel A549 cell sm - 4
         longLabel A549 CIP-TAP whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 6632740.000000
@@ -2379,7 +2343,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 4
+        shortLabel SKSH cell sm - 4
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 21201852.000000
@@ -2388,7 +2352,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 nucleus sm MinusRaw 4
+        shortLabel MCF7 nucl sm - 4
         longLabel MCF-7 nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 25205180.000000
@@ -2397,7 +2361,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 3
+        shortLabel SKSH nucl sm - 3
         longLabel SK-N-SH nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 17926340.000000
@@ -2406,7 +2370,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 4
+        shortLabel A549 cyto sm - 4
         longLabel A549 cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 17388524.000000
@@ -2415,7 +2379,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 3
+        shortLabel SKSH nucl sm - 3
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 27571684.000000
@@ -2424,7 +2388,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 2
+        shortLabel IMR9 cyto sm - 2
         longLabel IMR90 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 28516262.000000
@@ -2433,7 +2397,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 3
+        shortLabel A549 nucl sm - 3
         longLabel A549 nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 21361588.000000
@@ -2442,7 +2406,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 3
+        shortLabel SKSH cyto sm - 3
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 4685140.000000
@@ -2451,7 +2415,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 3
+        shortLabel A549 cell sm - 3
         longLabel A549 CIP-TAP whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 4763731.000000
@@ -2460,7 +2424,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 2
+        shortLabel IMR9 cell sm - 2
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 7589970.000000
@@ -2469,7 +2433,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 4
+        shortLabel A549 nucl sm - 4
         longLabel A549 CIP-TAP nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 2598772.000000
@@ -2478,7 +2442,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 3
+        shortLabel SKSH cell sm - 3
         longLabel SK-N-SH whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 19972644.000000
@@ -2487,7 +2451,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 1
+        shortLabel IMR9 nucl sm - 1
         longLabel IMR90 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 4873298.000000
@@ -2496,7 +2460,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 3
+        shortLabel MCF7 cell sm - 3
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 5859769.000000
@@ -2505,7 +2469,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 1
+        shortLabel IMR9 cell sm - 1
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 14584083.000000
@@ -2514,7 +2478,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 3
+        shortLabel A549 nucl sm - 3
         longLabel A549 CIP-TAP nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 18127534.000000
@@ -2523,7 +2487,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 3
+        shortLabel A549 cyto sm - 3
         longLabel A549 CIP-TAP cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 4845573.000000
@@ -2532,7 +2496,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 4
+        shortLabel SKSH cell sm - 4
         longLabel SK-N-SH whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 7249939.000000
@@ -2541,7 +2505,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 1
+        shortLabel IMR9 cyto sm - 1
         longLabel IMR90 cytosol small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 3122334.000000
@@ -2550,7 +2514,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 1
+        shortLabel IMR9 cell sm - 1
         longLabel IMR90 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 4116483.000000
@@ -2559,7 +2523,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 2
+        shortLabel IMR9 cell sm - 2
         longLabel IMR90 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 13289710.000000
@@ -2568,7 +2532,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 3
+        shortLabel MCF7 cell sm - 3
         longLabel MCF-7 whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 14948869.000000
@@ -2577,7 +2541,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 4
+        shortLabel A549 cell sm - 4
         longLabel A549 whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 13048663.000000
@@ -2586,7 +2550,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 2
+        shortLabel IMR9 cyto sm - 2
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 13297189.000000
@@ -2595,7 +2559,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 3
+        shortLabel SKSH nucl sm - 3
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 24639678.000000
@@ -2604,7 +2568,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 1
+        shortLabel IMR9 cyto sm - 1
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 8303185.000000
@@ -2613,7 +2577,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 4
+        shortLabel SKSH cyto sm - 4
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 25982922.000000
@@ -2622,7 +2586,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cell sm MinusRaw 3
+        shortLabel SKSH cell sm - 3
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 1678623.000000
@@ -2631,7 +2595,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH cytosol sm MinusRaw 3
+        shortLabel SKSH cyto sm - 3
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 22061716.000000
@@ -2640,7 +2604,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HAoAF MinusRaw 2
+        shortLabel HAoA - 2
         longLabel HAoAF 6090101.11 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HAOAF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 16086446.000000
@@ -2649,7 +2613,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf61113019CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HAoAF MinusRaw 1
+        shortLabel HAoA - 1
         longLabel HAoAF 6111301.9 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HAOAF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 12118013.000000
@@ -2658,7 +2622,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSkmc812190217CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SkMC MinusRaw 2
+        shortLabel SkMC - 2
         longLabel SkMC 8121902.17 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKMC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 22704648.000000
@@ -2667,7 +2631,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01027033CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HFDPC MinusRaw 1
+        shortLabel HFDP - 1
         longLabel HFDPC 0102703.3 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HFDPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 7300360.000000
@@ -2676,7 +2640,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec70717061CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HAoEC MinusRaw 1
+        shortLabel HAoE - 1
         longLabel HAoEC 7071706.1 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HAOEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 20783798.000000
@@ -2685,7 +2649,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel hMSC-AT MinusRaw 2
+        shortLabel hMAT - 2
         longLabel hMSC-AT 9061601.12 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 17641766.000000
@@ -2694,7 +2658,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01005032CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HFDPC MinusRaw 2
+        shortLabel HFDP - 2
         longLabel HFDPC 0100503.2 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HFDPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 6959560.000000
@@ -2703,26 +2667,54 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel hMSC-AT MinusRaw 1
+        shortLabel hMAT - 1
         longLabel hMSC-AT 0102604.12 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 23879364.000000
         # subId=5951 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRawRep1 wong Mon Jun  4 13:35:13 2012
 
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2
+        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        shortLabel A549 cell sm - 1
+        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        type bigWig 1.000000 6730925.000000
+        # subId=5925 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep3 wong Mon Jun  4 13:35:03 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep3 wong Mon Jun  4 13:45:33 2012
+
         track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep2V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 4
-        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep4 rank=rank2
+        shortLabel A549 cell sm - 2
+        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 6935555.000000
         # subId=5919 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep4 wong Mon Jun  4 13:35:03 2012
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep4 wong Mon Jun  4 13:45:33 2012
 
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
+        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        #        shortLabel A549 cell sm - 2
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        #        subGroups view=MinusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bigWig 1.000000 1785277.000000
+        #        # subId=4059 dateSubmitted=2011-05-11
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:35 2012
+
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
+        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        #        shortLabel A549 cell sm - 1
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        #        subGroups view=MinusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bigWig 1.000000 2036805.000000
+        #        # subId=4058 dateSubmitted=2011-05-09
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:34 2012
+
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHDF cell sm MinusRaw 1
+        shortLabel NHDF cell sm - 1
         longLabel NHDF 7071701.2 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHDF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 20039400.000000
@@ -2731,7 +2723,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HCH cell sm MinusRaw 2
+        shortLabel HCH cell sm - 2
         longLabel HCH 8100808.2 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HCH localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 9197164.000000
@@ -2740,7 +2732,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HCH cell sm MinusRaw 1
+        shortLabel HCH cell sm - 1
         longLabel HCH 0011308.2P TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HCH localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 10251913.000000
@@ -2749,7 +2741,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 2
+        shortLabel IMR9 nucl sm - 2
         longLabel IMR90 TAP-Only nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 19802312.000000
@@ -2758,7 +2750,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cytosol sm MinusRaw 4
+        shortLabel MCF7 cyto sm - 4
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 10680805.000000
@@ -2767,7 +2759,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 2
+        shortLabel IMR9 cyto sm - 2
         longLabel IMR90 TAP-Only cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 18509746.000000
@@ -2776,7 +2768,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cytosol sm MinusRaw 3
+        shortLabel MCF7 cyto sm - 3
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 7757250.000000
@@ -2785,7 +2777,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHDF cell sm MinusRaw 2
+        shortLabel NHDF cell sm - 2
         longLabel NHDF 0060801.3 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHDF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 20547782.000000
@@ -2794,18 +2786,46 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cytosol sm MinusRaw 1
+        shortLabel IMR9 cyto sm - 1
         longLabel IMR90 TAP-Only cytosol small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 15492213.000000
         # subId=5936 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:21 2012
 
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1
+        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        #        shortLabel MCF7 cell sm - 1
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        #        subGroups view=MinusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bigWig 1.000000 620692.000000
+        #        # subId=3353 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1 cricket Tue Feb  7 15:38:30 2012
+
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
+        #        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        #        shortLabel MCF7 cell sm - 2
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        #        subGroups view=MinusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bigWig 1.000000 1184608.000000
+        #        # subId=3370 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2 cricket Tue Feb  7 15:38:30 2012
+
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2
+        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
+        shortLabel MCF7 cell sm - 2
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        type bigWig 1.000000 12171585.000000
+        # subId=5923 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep4 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep4 wong Mon Jun  4 13:45:32 2012
+
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep1V2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 3
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep3 rank=rank1
+        shortLabel MCF7 cell sm - 1
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 16735774.000000
         # subId=5937 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep3 wong Mon Jun  4 13:35:25 2012
@@ -2813,7 +2833,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 2
+        shortLabel IMR9 cell sm - 2
         longLabel IMR90 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 8596151.000000
@@ -2822,7 +2842,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 nucleus sm MinusRaw 4
+        shortLabel MCF7 nucl sm - 4
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 16231031.000000
@@ -2831,7 +2851,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 nucleus sm MinusRaw 3
+        shortLabel MCF7 nucl sm - 3
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 19547114.000000
@@ -2840,7 +2860,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec80611021CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HAoEC MinusRaw 2
+        shortLabel HAoE - 2
         longLabel HAoEC 8061102.1 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HAOEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 14732295.000000
@@ -2849,7 +2869,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 3
+        shortLabel A549 cyto sm - 3
         longLabel A549 TAP-Only cytosol small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 5539866.000000
@@ -2858,7 +2878,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SkMC cell sm MinusRaw 1
+        shortLabel SkMC cell sm - 1
         longLabel SkMC 9011302 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKMC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 31271290.000000
@@ -2867,45 +2887,26 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 cell sm MinusRaw 1
+        shortLabel IMR9 cell sm - 1
         longLabel IMR90 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 5355623.000000
         # subId=5922 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:20 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel MCF-7 cell sm MinusRaw 4
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep4 rank=rank2
-        type bigWig 1.000000 12171585.000000
-        # subId=5923 dateSubmitted=2012-02-29
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep4 wong Mon Jun  4 13:35:25 2012
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep4 wong Mon Jun  4 13:45:32 2012
-
         track wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HVMF cell sm MinusRaw 1
+        shortLabel HVMF cell sm - 1
         longLabel HVMF 6091203.3 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HVMF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 30661662.000000
         # subId=5924 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRawRep1 wong Mon Jun  4 13:35:18 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2
-        parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cell sm MinusRaw 3
-        longLabel A549 TAP-Only whole cell small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep3 rank=rank1
-        type bigWig 1.000000 6730925.000000
-        # subId=5925 dateSubmitted=2012-02-29
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep3 wong Mon Jun  4 13:35:03 2012
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep3 wong Mon Jun  4 13:45:33 2012
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 3
+        shortLabel A549 nucl sm - 3
         longLabel A549 TAP-Only nucleus small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 29513508.000000
@@ -2914,7 +2915,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HVMF cell sm MinusRaw 2
+        shortLabel HVMF cell sm - 2
         longLabel HVMF 6100401.3 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HVMF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 32525208.000000
@@ -2923,7 +2924,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 cytosol sm MinusRaw 4
+        shortLabel A549 cyto sm - 4
         longLabel A549 TAP-Only cytosol small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 5349724.000000
@@ -2932,7 +2933,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HOB cell sm MinusRaw 2
+        shortLabel HOB cell sm - 2
         longLabel HOB 0090202.1 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HOB localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 20368200.000000
@@ -2941,7 +2942,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel A549 nucleus sm MinusRaw 4
+        shortLabel A549 nucl sm - 4
         longLabel A549 TAP-Only nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 15597996.000000
@@ -2950,7 +2951,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel IMR90 nucleus sm MinusRaw 1
+        shortLabel IMR9 nucl sm - 1
         longLabel IMR90 TAP-Only nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 39546976.000000
@@ -2959,7 +2960,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel SK-N-SH nucleus sm MinusRaw 4
+        shortLabel SKSH nucl sm - 4
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 19567104.000000
@@ -2968,7 +2969,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel GM12878 MinusRaw 3
+        shortLabel GM78 - 3
         longLabel GM12878 TAP-Only chromatin small RNA-seq Minus signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 7691881.000000
@@ -2978,7 +2979,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HWP MinusRaw 1
+        shortLabel HWP - 1
         longLabel HWP TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HWP localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 66054032.000000
@@ -2987,7 +2988,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel hMSC-UC MinusRaw 2
+        shortLabel hMUC - 2
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 49881228.000000
@@ -2996,7 +2997,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HWP MinusRaw 2
+        shortLabel HWP - 2
         longLabel HWP TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HWP localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 40354152.000000
@@ -3005,7 +3006,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HSaVEC MinusRaw 2
+        shortLabel HSaV - 2
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 42906208.000000
@@ -3014,7 +3015,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HPIEpC MinusRaw 2
+        shortLabel HPIE - 2
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 28200544.000000
@@ -3023,7 +3024,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHEM.f_M2 MinusRaw 1
+        shortLabel NHEf - 1
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 60132288.000000
@@ -3032,7 +3033,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel hMSC-UC MinusRaw 1
+        shortLabel hMUC - 1
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 45376876.000000
@@ -3041,7 +3042,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HPC-PL MinusRaw 2
+        shortLabel HPCP - 2
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HPCPL localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 17179356.000000
@@ -3050,7 +3051,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmepcCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HMEpC MinusRaw 1
+        shortLabel HMEpC - 1
         longLabel HMEpC TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 8067777.000000
@@ -3059,7 +3060,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel GM12878 MinusRaw 4
+        shortLabel GM78 - 4
         longLabel GM12878 TAP-Only chromatin small RNA-seq Minus signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 9070952.000000
@@ -3069,7 +3070,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HSaVEC MinusRaw 1
+        shortLabel HSaV - 1
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 56622540.000000
@@ -3078,7 +3079,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HPIEpC MinusRaw 1
+        shortLabel HPIE - 1
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 39373300.000000
@@ -3087,7 +3088,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHEM.f_M2 MinusRaw 2
+        shortLabel NHEf - 2
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 45512792.000000
@@ -3096,7 +3097,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel HPC-PL MinusRaw 1
+        shortLabel HPCP - 1
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HPCPL localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 36839416.000000
@@ -3105,7 +3106,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHEM_M2 MinusRaw 2
+        shortLabel NHEM - 2
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 36152212.000000
@@ -3114,7 +3115,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
-        shortLabel NHEM_M2 MinusRaw 1
+        shortLabel NHEM - 1
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 83772768.000000
@@ -3387,15 +3388,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3380 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
-        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        #        shortLabel MCF7 cell sm + 1
-        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-        #        subGroups view=PlusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bigWig 1.000000 9000205.000000
-        #        # subId=3353 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1 cricket Tue Feb  7 15:38:30 2012
-
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel SKRA cell sm + 2
@@ -3464,15 +3456,6 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=3372 dateSubmitted=2011-01-19
         # was wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
-        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        #        shortLabel MCF7 cell sm + 2
-        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-        #        subGroups view=PlusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bigWig 1.000000 13069436.000000
-        #        # subId=3370 dateSubmitted=2011-01-19
-        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2 cricket Tue Feb  7 15:38:31 2012
-
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel K562 nplm sm + 2
@@ -3535,7 +3518,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HUVEC nucl sm + 1
+        shortLabel HUVE nucl sm + 1
         longLabel HUVEC TAP-Only nucleus small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2075138.000000
@@ -3663,31 +3646,13 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HUVEC nucl sm + 2
+        shortLabel HUVE nucl sm + 2
         longLabel HUVEC TAP-Only nucleus small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 2777483.000000
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
         # was wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4 cricket Tue Feb  7 15:38:24 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
-        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        #        shortLabel A549 cell sm + 2
-        #        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-        #        subGroups view=PlusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
-        #        type bigWig 1.000000 10013224.000000
-        #        # subId=4059 dateSubmitted=2011-05-11
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:35 2012
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
-        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        #        shortLabel A549 cell sm + 1
-        #        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-        #        subGroups view=PlusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
-        #        type bigWig 1.000000 7091328.000000
-        #        # subId=4058 dateSubmitted=2011-05-09
-        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:35 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -3741,7 +3706,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HepG2 cyto sm + 1
+        shortLabel HepG cyto sm + 1
         longLabel HepG2 TAP-Only cytosol small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2HEPG2 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2592219.000000
@@ -3750,7 +3715,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel CD20+ cell sm + 1
+        shortLabel CD20 cell sm + 1
         longLabel CD20+ RO01794 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2BCELLSCD20 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 1616914.000000
@@ -3759,7 +3724,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd34mobilizedCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel CD34+_Mobilized + 1
+        shortLabel CD34 + 1
         longLabel CD34+ Mobilized TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3CD34MOBILIZED localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 14466668.000000
@@ -3768,7 +3733,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel CD20+ cell sm + 2
+        shortLabel CD20 cell sm + 2
         longLabel CD20+ RO01778 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2BCELLSCD20 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 1459351.000000
@@ -3777,7 +3742,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel Monocytes-CD14+_RO01746 + 2
+        shortLabel CD14 + 2
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MONOCYTESCD14 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 1850105.000000
@@ -3787,7 +3752,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel Monocytes-CD14+_RO01746 + 1
+        shortLabel CD14 + 1
         longLabel Monocytes-CD14+ RO01746 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MONOCYTESCD14 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 2291643.000000
@@ -3797,7 +3762,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 4
+        shortLabel A549 nucl sm + 4
         longLabel A549 nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 10536828.000000
@@ -3806,7 +3771,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 2
+        shortLabel IMR9 nucl sm + 2
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 27572884.000000
@@ -3815,7 +3780,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 4
+        shortLabel SKSH nucl sm + 4
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 16963256.000000
@@ -3824,7 +3789,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 3
+        shortLabel SKSH cell sm + 3
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 8519202.000000
@@ -3833,7 +3798,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 4
+        shortLabel MCF7 cell sm + 4
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 10427667.000000
@@ -3842,7 +3807,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 3
+        shortLabel A549 cyto sm + 3
         longLabel A549 cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 8900805.000000
@@ -3851,7 +3816,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 4
+        shortLabel MCF7 cell sm + 4
         longLabel MCF-7 whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 25658906.000000
@@ -3860,7 +3825,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 nucleus sm + 3
+        shortLabel MCF7 nucl sm + 3
         longLabel MCF-7 nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 4260655.000000
@@ -3869,7 +3834,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 4
+        shortLabel SKSH cell sm + 4
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 1552471.000000
@@ -3878,7 +3843,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 1
+        shortLabel IMR9 nucl sm + 1
         longLabel IMR90 CIP-TAP nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 6343795.000000
@@ -3887,7 +3852,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 4
+        shortLabel SKSH cyto sm + 4
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 3592191.000000
@@ -3896,7 +3861,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 4
+        shortLabel A549 cyto sm + 4
         longLabel A549 CIP-TAP cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 10026360.000000
@@ -3905,7 +3870,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 2
+        shortLabel IMR9 nucl sm + 2
         longLabel IMR90 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 24104172.000000
@@ -3914,7 +3879,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 4
+        shortLabel SKSH nucl sm + 4
         longLabel SK-N-SH nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 3396263.000000
@@ -3932,7 +3897,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cytosol sm + 4
+        shortLabel MCF7 cyto sm + 4
         longLabel MCF-7 cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 23678792.000000
@@ -3941,7 +3906,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 4
+        shortLabel SKSH cyto sm + 4
         longLabel SK-N-SH cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 7278151.000000
@@ -3950,7 +3915,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cytosol sm + 3
+        shortLabel MCF7 cyto sm + 3
         longLabel MCF-7 cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 22572416.000000
@@ -3959,7 +3924,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 3
+        shortLabel SKSH cyto sm + 3
         longLabel SK-N-SH cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 7257308.000000
@@ -3977,7 +3942,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 4
+        shortLabel SKSH cell sm + 4
         longLabel SK-N-SH TAP-Only whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 8371917.000000
@@ -3986,7 +3951,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 nucleus sm + 4
+        shortLabel MCF7 nucl sm + 4
         longLabel MCF-7 nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=NUCLEUS protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 6463194.000000
@@ -3995,7 +3960,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 3
+        shortLabel SKSH nucl sm + 3
         longLabel SK-N-SH nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 2670928.000000
@@ -4004,7 +3969,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 4
+        shortLabel A549 cyto sm + 4
         longLabel A549 cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 9212263.000000
@@ -4013,7 +3978,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 3
+        shortLabel SKSH nucl sm + 3
         longLabel SK-N-SH CIP-TAP nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 8831757.000000
@@ -4022,7 +3987,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 2
+        shortLabel IMR9 cyto sm + 2
         longLabel IMR90 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 28484972.000000
@@ -4031,7 +3996,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 3
+        shortLabel A549 nucl sm + 3
         longLabel A549 nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 10118687.000000
@@ -4040,7 +4005,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 3
+        shortLabel SKSH cyto sm + 3
         longLabel SK-N-SH CIP-TAP cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 4684785.000000
@@ -4058,7 +4023,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 2
+        shortLabel IMR9 cell sm + 2
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 3842329.000000
@@ -4067,7 +4032,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 4
+        shortLabel A549 nucl sm + 4
         longLabel A549 CIP-TAP nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep4 rank=rank2
         type bigWig 1.000000 2588978.000000
@@ -4076,7 +4041,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 3
+        shortLabel SKSH cell sm + 3
         longLabel SK-N-SH whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 8651386.000000
@@ -4085,7 +4050,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 1
+        shortLabel IMR9 nucl sm + 1
         longLabel IMR90 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 4735303.000000
@@ -4094,7 +4059,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 3
+        shortLabel MCF7 cell sm + 3
         longLabel MCF-7 CIP-TAP whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 5834134.000000
@@ -4103,7 +4068,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 1
+        shortLabel IMR9 cell sm + 1
         longLabel IMR90 CIP-TAP whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 14581044.000000
@@ -4112,7 +4077,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 3
+        shortLabel A549 nucl sm + 3
         longLabel A549 CIP-TAP nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 3722878.000000
@@ -4121,7 +4086,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 3
+        shortLabel A549 cyto sm + 3
         longLabel A549 CIP-TAP cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 4828783.000000
@@ -4130,7 +4095,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 4
+        shortLabel SKSH cell sm + 4
         longLabel SK-N-SH whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=NONE rep=rep4 rank=rank2
         type bigWig 1.000000 8053986.000000
@@ -4139,7 +4104,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 1
+        shortLabel IMR9 cyto sm + 1
         longLabel IMR90 cytosol small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 2846913.000000
@@ -4148,7 +4113,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 1
+        shortLabel IMR9 cell sm + 1
         longLabel IMR90 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=NONE rep=rep1 rank=rank1
         type bigWig 1.000000 3737667.000000
@@ -4157,7 +4122,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 2
+        shortLabel IMR9 cell sm + 2
         longLabel IMR90 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=NONE rep=rep2 rank=rank2
         type bigWig 1.000000 8640129.000000
@@ -4166,7 +4131,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 3
+        shortLabel MCF7 cell sm + 3
         longLabel MCF-7 whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=NONE rep=rep3 rank=rank1
         type bigWig 1.000000 22266626.000000
@@ -4184,7 +4149,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 2
+        shortLabel IMR9 cyto sm + 2
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep2 rank=rank2
         type bigWig 1.000000 13294850.000000
@@ -4193,7 +4158,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 3
+        shortLabel SKSH nucl sm + 3
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 27761852.000000
@@ -4202,7 +4167,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 1
+        shortLabel IMR9 cyto sm + 1
         longLabel IMR90 CIP-TAP cytosol small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=CIPTAP rep=rep1 rank=rank1
         type bigWig 1.000000 8302856.000000
@@ -4211,7 +4176,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 4
+        shortLabel SKSH cyto sm + 4
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 6139576.000000
@@ -4220,7 +4185,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cell sm + 3
+        shortLabel SKSH cell sm + 3
         longLabel SK-N-SH CIP-TAP whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CELL protocol=CIPTAP rep=rep3 rank=rank1
         type bigWig 1.000000 1678252.000000
@@ -4229,7 +4194,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH cytosol sm + 3
+        shortLabel SKSH cyto sm + 3
         longLabel SK-N-SH TAP-Only cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 6061962.000000
@@ -4238,7 +4203,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HAoAF + 2
+        shortLabel HAoA + 2
         longLabel HAoAF 6090101.11 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HAOAF localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 5052458.000000
@@ -4247,7 +4212,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoaf61113019CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HAoAF + 1
+        shortLabel HAoA + 1
         longLabel HAoAF 6111301.9 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HAOAF localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 3929703.000000
@@ -4265,7 +4230,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01027033CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HFDPC + 1
+        shortLabel HFDP + 1
         longLabel HFDPC 0102703.3 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HFDPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 10346878.000000
@@ -4274,7 +4239,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec70717061CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HAoEC + 1
+        shortLabel HAoE + 1
         longLabel HAoEC 7071706.1 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HAOEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 3336007.000000
@@ -4283,7 +4248,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel hMSC-AT + 2
+        shortLabel hMAT + 2
         longLabel hMSC-AT 9061601.12 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 21364454.000000
@@ -4292,7 +4257,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHfdpc01005032CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HFDPC + 2
+        shortLabel HFDP + 2
         longLabel HFDPC 0100503.2 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HFDPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 8562871.000000
@@ -4301,7 +4266,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel hMSC-AT + 1
+        shortLabel hMAT + 1
         longLabel hMSC-AT 0102604.12 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMSCAT localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 18116456.000000
@@ -4310,13 +4275,41 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep2V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cell sm + 4
-        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep4 rank=rank2
+        shortLabel A549 cell sm + 2
+        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        subGroups view=PlusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 7325977.000000
         # subId=5919 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep4 wong Mon Jun  4 13:35:04 2012
         # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep4 wong Mon Jun  4 13:45:33 2012
+
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2
+        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        shortLabel A549 cell sm + 1
+        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        subGroups view=PlusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        type bigWig 1.000000 6306518.000000
+        # subId=5925 dateSubmitted=2012-02-29
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:04 2012
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:33 2012
+
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
+        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        #        shortLabel A549 cell sm + 2
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        #        subGroups view=PlusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bigWig 1.000000 10013224.000000
+        #        # subId=4059 dateSubmitted=2011-05-11
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:35 2012
+
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
+        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        #        shortLabel A549 cell sm + 1
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        #        subGroups view=PlusSignal cellType=b2A549 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bigWig 1.000000 7091328.000000
+        #        # subId=4058 dateSubmitted=2011-05-09
+        #        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:35 2012
 
         track wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -4347,7 +4340,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 2
+        shortLabel IMR9 nucl sm + 2
         longLabel IMR90 TAP-Only nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 25724416.000000
@@ -4356,7 +4349,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cytosol sm + 4
+        shortLabel MCF7 cyto sm + 4
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 9344259.000000
@@ -4365,7 +4358,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 2
+        shortLabel IMR9 cyto sm + 2
         longLabel IMR90 TAP-Only cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 18501126.000000
@@ -4374,7 +4367,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cytosol sm + 3
+        shortLabel MCF7 cyto sm + 3
         longLabel MCF-7 TAP-Only cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 15087596.000000
@@ -4392,26 +4385,16 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cytosol sm + 1
+        shortLabel IMR9 cyto sm + 1
         longLabel IMR90 TAP-Only cytosol small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CYTOSOL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 6113304.000000
         # subId=5936 dateSubmitted=2012-03-01
         # was wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:22 2012
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 3
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep3 rank=rank1
-        type bigWig 1.000000 10828348.000000
-        # subId=5937 dateSubmitted=2012-03-01
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:25 2012
-        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:32 2012
-
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 2
+        shortLabel IMR9 cell sm + 2
         longLabel IMR90 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 2238216.000000
@@ -4420,7 +4403,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 nucleus sm + 4
+        shortLabel MCF7 nucl sm + 4
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 21517840.000000
@@ -4429,7 +4412,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 nucleus sm + 3
+        shortLabel MCF7 nucl sm + 3
         longLabel MCF-7 TAP-Only nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2MCF7 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 25153132.000000
@@ -4438,7 +4421,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHaoec80611021CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HAoEC + 2
+        shortLabel HAoE + 2
         longLabel HAoEC 8061102.1 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HAOEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 3765711.000000
@@ -4447,7 +4430,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 3
+        shortLabel A549 cyto sm + 3
         longLabel A549 TAP-Only cytosol small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 4428397.000000
@@ -4465,18 +4448,46 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 cell sm + 1
+        shortLabel IMR9 cell sm + 1
         longLabel IMR90 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 4671571.000000
         # subId=5922 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:20 2012
 
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
+        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        #        shortLabel MCF7 cell sm + 1
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        #        subGroups view=PlusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        #        type bigWig 1.000000 9000205.000000
+        #        # subId=3353 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1 cricket Tue Feb  7 15:38:30 2012
+
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
+        #        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        #        shortLabel MCF7 cell sm + 2
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        #        subGroups view=PlusSignal cellType=b2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
+        #        type bigWig 1.000000 13069436.000000
+        #        # subId=3370 dateSubmitted=2011-01-19
+        #        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2 cricket Tue Feb  7 15:38:31 2012
+
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2
+        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
+        shortLabel MCF7 cell sm + 1
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep1 rank=rank1
+        type bigWig 1.000000 10828348.000000
+        # subId=5937 dateSubmitted=2012-03-01
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:25 2012
+        # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:32 2012
+
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep2V2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel MCF-7 cell sm + 4
-        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep4 rank=rank2
+        shortLabel MCF7 cell sm + 2
+        longLabel MCF-7 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        subGroups view=PlusSignal cellType=t2MCF7 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 10482101.000000
         # subId=5923 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep4 wong Mon Jun  4 13:35:25 2012
@@ -4491,19 +4502,9 @@ html wgEncodeCshlShortRnaSeq.release3
         # subId=5924 dateSubmitted=2012-02-29
         # was wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRawRep1 wong Mon Jun  4 13:35:18 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2
-        parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cell sm + 3
-        longLabel A549 TAP-Only whole cell small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t2A549 localization=CELL protocol=TAP rep=rep3 rank=rank1
-        type bigWig 1.000000 6306518.000000
-        # subId=5925 dateSubmitted=2012-02-29
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep3 wong Mon Jun  4 13:35:04 2012
-        # was wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep3 wong Mon Jun  4 13:45:33 2012
-
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 3
+        shortLabel A549 nucl sm + 3
         longLabel A549 TAP-Only nucleus small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 18103400.000000
@@ -4521,7 +4522,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 cytosol sm + 4
+        shortLabel A549 cyto sm + 4
         longLabel A549 TAP-Only cytosol small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=CYTOSOL protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 5125971.000000
@@ -4539,7 +4540,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel A549 nucleus sm + 4
+        shortLabel A549 nucl sm + 4
         longLabel A549 TAP-Only nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2A549 localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 17734868.000000
@@ -4548,7 +4549,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel IMR90 nucleus sm + 1
+        shortLabel IMR9 nucl sm + 1
         longLabel IMR90 TAP-Only nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2IMR90 localization=NUCLEUS protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 47475744.000000
@@ -4557,7 +4558,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel SK-N-SH nucleus sm + 4
+        shortLabel SKSH nucl sm + 4
         longLabel SK-N-SH TAP-Only nucleus small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t2SKNSH localization=NUCLEUS protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 13348455.000000
@@ -4566,7 +4567,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel GM12878 PlusRaw 3
+        shortLabel GM78 + 3
         longLabel GM12878 TAP-Only chromatin small RNA-seq Plus signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 8723293.000000
@@ -4576,7 +4577,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HWP PlusRaw 1
+        shortLabel HWP + 1
         longLabel HWP TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HWP localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 9672967.000000
@@ -4585,7 +4586,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel hMSC-UC PlusRaw 2
+        shortLabel hMUC + 2
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 8190606.000000
@@ -4594,7 +4595,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHwpCellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HWP PlusRaw 2
+        shortLabel HWP + 2
         longLabel HWP TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HWP localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 10266937.000000
@@ -4603,7 +4604,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HSaVEC PlusRaw 2
+        shortLabel HSaV + 2
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 13154209.000000
@@ -4612,7 +4613,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HPIEpC PlusRaw 2
+        shortLabel HPIE + 2
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 9086925.000000
@@ -4621,7 +4622,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel NHEM.f_M2 PlusRaw 1
+        shortLabel NHEf + 1
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 9014913.000000
@@ -4630,7 +4631,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel hMSC-UC PlusRaw 1
+        shortLabel hMUC + 1
         longLabel hMSC-UC TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMSCUC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 7229470.000000
@@ -4639,7 +4640,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HPC-PL PlusRaw 2
+        shortLabel HPCP + 2
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HPCPL localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 9258468.000000
@@ -4648,7 +4649,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHmepcCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HMEpC PlusRaw 1
+        shortLabel HMEpC + 1
         longLabel HMEpC TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 14128431.000000
@@ -4657,7 +4658,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel GM12878 PlusRaw 4
+        shortLabel GM78 + 4
         longLabel GM12878 TAP-Only chromatin small RNA-seq Plus signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1GM12878 localization=CHROMATIN protocol=TAP rep=rep4 rank=rank2
         type bigWig 1.000000 17276008.000000
@@ -4667,7 +4668,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HSaVEC PlusRaw 1
+        shortLabel HSaV + 1
         longLabel HSaVEC TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HSAVEC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 7078113.000000
@@ -4676,7 +4677,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HPIEpC PlusRaw 1
+        shortLabel HPIE + 1
         longLabel HPIEpC TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HPIEPC localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 10642166.000000
@@ -4685,7 +4686,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel NHEM.f_M2 PlusRaw 2
+        shortLabel NHEf + 2
         longLabel NHEM.f M2 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3NHEMFM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 4278888.000000
@@ -4694,7 +4695,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel HPC-PL PlusRaw 1
+        shortLabel HPCP + 1
         longLabel HPC-PL TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HPCPL localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 7592293.000000
@@ -4703,7 +4704,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel NHEM_M2 PlusRaw 2
+        shortLabel NHEM + 2
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep2 rank=rank2
         type bigWig 1.000000 3224204.000000
@@ -4712,7 +4713,7 @@ html wgEncodeCshlShortRnaSeq.release3
 
         track wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
-        shortLabel NHEM_M2 PlusRaw 1
+        shortLabel NHEM + 1
         longLabel NHEM M2 TAP-Only whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3NHEMM2 localization=CELL protocol=TAP rep=rep1 rank=rank1
         type bigWig 1.000000 10394852.000000
@@ -4770,14 +4771,6 @@ html wgEncodeCshlShortRnaSeq.release3
         #type bed 6
         #color 179,0,134
         # subId=4492 dateSubmitted=2011-07-12
-
-        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
-        #        parent wgEncodeCshlShortRnaSeqViewContigs off
-        #        shortLabel MCF7 cell sm C
-        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
-        #        subGroups view=Contigs cellType=b2MCF7 localization=CELL protocol=TAP rep=Pooled rank=none
-        #        type bed 6
-        #        # subId=4491 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
@@ -4876,14 +4869,6 @@ html wgEncodeCshlShortRnaSeq.release3
         type bed 6
         color 189,0,157
         # subId=4479 dateSubmitted=2011-07-12
-
-        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
-        #        parent wgEncodeCshlShortRnaSeqViewContigs off
-        #        shortLabel A549 cell sm C
-        #        longLabel A549 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
-        #        subGroups view=Contigs cellType=b2A549 localization=CELL protocol=TAP rep=Pooled rank=none
-        #        type bed 6
-        #        # subId=4478 dateSubmitted=2011-07-12
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
@@ -5108,6 +5093,14 @@ html wgEncodeCshlShortRnaSeq.release3
         type bed 6
         # subId=6505 dateSubmitted=2012-03-28
 
+        #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
+        #        parent wgEncodeCshlShortRnaSeqViewContigs off
+        #        shortLabel A549 cell sm C
+        #        longLabel A549 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
+        #        subGroups view=Contigs cellType=b2A549 localization=CELL protocol=TAP rep=Pooled rank=none
+        #        type bed 6
+        #        # subId=4478 dateSubmitted=2011-07-12
+
         track wgEncodeCshlShortRnaSeqImr90NucleusTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel IMR90
@@ -5252,9 +5245,17 @@ html wgEncodeCshlShortRnaSeq.release3
         type bed 6
         # subId=6524 dateSubmitted=2012-03-28
 
+        #        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
+        #        parent wgEncodeCshlShortRnaSeqViewContigs off
+        #        shortLabel MCF7 cell sm C
+        #        longLabel MCF-7 TAP-Only whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
+        #        subGroups view=Contigs cellType=b2MCF7 localization=CELL protocol=TAP rep=Pooled rank=none
+        #        type bed 6
+        #        # subId=4491 dateSubmitted=2011-07-12
+
         track wgEncodeCshlShortRnaSeqMcf7CellTapContigsV2
         parent wgEncodeCshlShortRnaSeqViewContigs off
-        shortLabel MCF-7
+        shortLabel MCF7 cell sm C
         longLabel MCF-7 TAP-Only whole cell small RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=t2MCF7 localization=CELL protocol=TAP rank=none
         type bed 6

@@ -822,7 +822,7 @@ if (differentWord(type,CV_TOT) || typeOpt != NULL )  // If type resolves to type
             if (val == NULL)
                 {
                 // Special case for input that has no target
-                if (queryBy == CV_TARGET)
+                if (sameString(queryBy, CV_TARGET))
                     val = hashMustFindVal(ra, CV_TERM);
                 else
                     continue;
