@@ -105,8 +105,12 @@ priority 440.3
 track chainNetEquCab1 override
 priority 440.3
 
+track chainNetBosTau7 override
+priority 450.3
+
 track chainNetBosTau6 override
 priority 450.3
+shortLabel $o_db Chain/Net
 
 track chainNetBosTau4 override
 priority 450.3

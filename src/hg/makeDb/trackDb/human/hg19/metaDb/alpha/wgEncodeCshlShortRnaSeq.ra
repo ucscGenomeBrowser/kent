@@ -243,7 +243,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5831
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapMinusRep4
 objType table
@@ -270,7 +270,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5818
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapPlusRep3
 objType table
@@ -297,7 +297,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5831
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapPlusRep4
 objType table
@@ -324,7 +324,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5818
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapRawDataRep3
 objType file
@@ -403,7 +403,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5813
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRep4
 objType table
@@ -430,7 +430,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5846
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRep3
 objType table
@@ -457,7 +457,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5813
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRep4
 objType table
@@ -484,7 +484,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5846
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep3
 objType file
@@ -735,7 +735,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4058
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
 objType table
@@ -764,7 +764,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4059
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2
 objType table
@@ -793,7 +793,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5925
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep2V2
 objType table
@@ -822,7 +822,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5919
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep2V2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
 objType table
@@ -851,7 +851,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4058
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
 objType table
@@ -880,7 +880,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4059
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2
 objType table
@@ -909,7 +909,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5925
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep2V2
 objType table
@@ -938,7 +938,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5919
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep2V2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep1
 objType file
@@ -1458,7 +1458,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5840
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapMinusRep4
 objType table
@@ -1485,7 +1485,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5810
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep3
 objType table
@@ -1512,7 +1512,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5840
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep4
 objType table
@@ -1539,7 +1539,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5810
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapRawDataRep3
 objType file
@@ -1618,7 +1618,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5804
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalMinusRep4
 objType table
@@ -1645,7 +1645,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5825
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep3
 objType table
@@ -1672,7 +1672,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5804
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep4
 objType table
@@ -1699,7 +1699,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5825
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalRawDataRep3
 objType file
@@ -1832,7 +1832,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5920
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep4
 objType table
@@ -1859,7 +1859,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5940
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep3
 objType table
@@ -1886,7 +1886,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5920
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep4
 objType table
@@ -1913,7 +1913,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5940
 tableName wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapProtocolRep3
 objType file
@@ -2258,7 +2258,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5839
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapMinusRep4
 objType table
@@ -2285,7 +2285,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5834
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep3
 objType table
@@ -2312,7 +2312,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5839
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep4
 objType table
@@ -2339,7 +2339,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5834
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapRawDataRep3
 objType file
@@ -2418,7 +2418,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5829
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRep4
 objType table
@@ -2445,7 +2445,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5798
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep3
 objType table
@@ -2472,7 +2472,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5829
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep4
 objType table
@@ -2499,7 +2499,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5798
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalRawDataRep3
 objType file
@@ -2632,7 +2632,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5926
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep4
 objType table
@@ -2659,7 +2659,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5930
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep3
 objType table
@@ -2686,7 +2686,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5926
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep4
 objType table
@@ -2713,7 +2713,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5930
 tableName wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapProtocolRep3
 objType file
@@ -3008,7 +3008,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3335
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep2
 objType table
@@ -3036,7 +3036,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3336
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep1
 objType table
@@ -3064,7 +3064,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3335
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2
 objType table
@@ -3092,7 +3092,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3336
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep1
 objType file
@@ -3338,7 +3338,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3294
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
 objType table
@@ -3366,7 +3366,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3293
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
 objType table
@@ -3394,7 +3394,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3294
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
 objType table
@@ -3422,7 +3422,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3293
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep1
 objType file
@@ -3641,7 +3641,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5823
 tableName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRep2
 objType table
@@ -3669,7 +3669,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5823
 tableName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapRawDataRep2
 objType file
@@ -3752,7 +3752,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5819
 tableName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRep1
 objType table
@@ -3780,7 +3780,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5819
 tableName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapRawDataRep1
 objType file
@@ -3914,7 +3914,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5820
 tableName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd34mobilizedCellTapPlusRep1
 objType table
@@ -3941,7 +3941,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5820
 tableName wgEncodeCshlShortRnaSeqCd34mobilizedCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqCd34mobilizedCellTapRawDataRep1
 objType file
@@ -4049,7 +4049,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
@@ -4078,7 +4078,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortRawData
 objType file
@@ -4243,7 +4243,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3302
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep2
 objType table
@@ -4271,7 +4271,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3304
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep1
 objType table
@@ -4299,7 +4299,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3302
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep2
 objType table
@@ -4327,7 +4327,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3304
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep1
 objType file
@@ -4569,7 +4569,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6087
 tableName wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4
 objType table
@@ -4596,7 +4596,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6097
 tableName wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3
 objType table
@@ -4623,7 +4623,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6087
 tableName wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4
 objType table
@@ -4650,7 +4650,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6097
 tableName wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapRawDataRep3
 objType file
@@ -4760,7 +4760,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
@@ -4789,7 +4789,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortRawData
 objType file
@@ -4983,7 +4983,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3305
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep2
 objType table
@@ -5011,7 +5011,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3307
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep1
 objType table
@@ -5039,7 +5039,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3305
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep2
 objType table
@@ -5067,7 +5067,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3307
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep1
 objType file
@@ -5233,7 +5233,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
@@ -5262,7 +5262,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortRawData
 objType file
@@ -5456,7 +5456,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3308
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep2
 objType table
@@ -5484,7 +5484,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3338
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep1
 objType table
@@ -5512,7 +5512,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3308
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep2
 objType table
@@ -5540,7 +5540,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3338
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep1
 objType file
@@ -5786,7 +5786,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3340
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep2
 objType table
@@ -5814,7 +5814,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3341
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep1
 objType table
@@ -5842,7 +5842,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3340
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2
 objType table
@@ -5870,7 +5870,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3341
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep1
 objType file
@@ -6091,7 +6091,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2
 objType table
@@ -6119,7 +6119,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapRawDataRep2
 objType file
@@ -6259,7 +6259,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2
 objType table
@@ -6287,7 +6287,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapProtocolRep2
 objType file
@@ -6397,7 +6397,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5928
 tableName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRep2
 objType table
@@ -6425,7 +6425,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5928
 tableName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapRawDataRep2
 objType file
@@ -6508,7 +6508,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5942
 tableName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapPlusRep1
 objType table
@@ -6536,7 +6536,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5942
 tableName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapRawDataRep1
 objType file
@@ -6674,7 +6674,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5947
 tableName wgEncodeCshlShortRnaSeqHaoec70717061CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapPlusRep1
 objType table
@@ -6702,7 +6702,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5947
 tableName wgEncodeCshlShortRnaSeqHaoec70717061CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapRawDataRep1
 objType file
@@ -6785,7 +6785,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5953
 tableName wgEncodeCshlShortRnaSeqHaoec80611021CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapPlusRep2
 objType table
@@ -6813,7 +6813,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5953
 tableName wgEncodeCshlShortRnaSeqHaoec80611021CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapRawDataRep2
 objType file
@@ -6951,7 +6951,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5950
 tableName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapPlusRep1
 objType table
@@ -6979,7 +6979,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5950
 tableName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapRawDataRep1
 objType file
@@ -7062,7 +7062,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5948
 tableName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapPlusRep2
 objType table
@@ -7090,7 +7090,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5948
 tableName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapRawDataRep2
 objType file
@@ -7310,7 +7310,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3344
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep2
 objType table
@@ -7338,7 +7338,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3345
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep1
 objType table
@@ -7366,7 +7366,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3344
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2
 objType table
@@ -7394,7 +7394,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3345
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep1
 objType file
@@ -7640,7 +7640,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3346
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep2
 objType table
@@ -7668,7 +7668,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3347
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep1
 objType table
@@ -7696,7 +7696,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3346
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2
 objType table
@@ -7724,7 +7724,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3347
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep1
 objType file
@@ -7970,7 +7970,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3348
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep2
 objType table
@@ -7998,7 +7998,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3349
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep1
 objType table
@@ -8026,7 +8026,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3348
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2
 objType table
@@ -8054,7 +8054,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3349
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep1
 objType file
@@ -8300,7 +8300,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4060
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep2
 objType table
@@ -8328,7 +8328,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4062
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep1
 objType table
@@ -8356,7 +8356,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4060
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep2
 objType table
@@ -8384,7 +8384,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4062
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapRawDataRep1
 objType file
@@ -8576,7 +8576,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4061
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep2
 objType table
@@ -8604,7 +8604,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4114
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1
 objType table
@@ -8632,7 +8632,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4061
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep2
 objType table
@@ -8660,7 +8660,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4114
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep1
 objType file
@@ -8852,7 +8852,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4112
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep2
 objType table
@@ -8880,7 +8880,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4113
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1
 objType table
@@ -8908,7 +8908,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4112
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep2
 objType table
@@ -8936,7 +8936,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4113
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapRawDataRep1
 objType file
@@ -9046,7 +9046,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5952
 tableName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapPlusRep2
 objType table
@@ -9074,7 +9074,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5952
 tableName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapRawDataRep2
 objType file
@@ -9157,7 +9157,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5946
 tableName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapPlusRep1
 objType table
@@ -9185,7 +9185,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5946
 tableName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapRawDataRep1
 objType file
@@ -9378,7 +9378,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6096
 tableName wgEncodeCshlShortRnaSeqHmepcCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmepcCellTapPlusRep1
 objType table
@@ -9406,7 +9406,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6096
 tableName wgEncodeCshlShortRnaSeqHmepcCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmepcCellTapRawDataRep1
 objType file
@@ -9489,7 +9489,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5951
 tableName wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRep1
 objType table
@@ -9517,7 +9517,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5951
 tableName wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapRawDataRep1
 objType file
@@ -9600,7 +9600,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5949
 tableName wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRep2
 objType table
@@ -9628,7 +9628,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5949
 tableName wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapRawDataRep2
 objType file
@@ -9849,7 +9849,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6094
 tableName wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep2
 objType table
@@ -9877,7 +9877,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6089
 tableName wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep1
 objType table
@@ -9905,7 +9905,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6094
 tableName wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep2
 objType table
@@ -9933,7 +9933,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6089
 tableName wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapRawDataRep1
 objType file
@@ -10043,7 +10043,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5929
 tableName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRep2
 objType table
@@ -10071,7 +10071,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5929
 tableName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapRawDataRep2
 objType file
@@ -10292,7 +10292,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6101
 tableName wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep2
 objType table
@@ -10320,7 +10320,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6095
 tableName wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep1
 objType table
@@ -10348,7 +10348,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6101
 tableName wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep2
 objType table
@@ -10376,7 +10376,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6095
 tableName wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapRawDataRep1
 objType file
@@ -10569,7 +10569,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6099
 tableName wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep2
 objType table
@@ -10597,7 +10597,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6092
 tableName wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep1
 objType table
@@ -10625,7 +10625,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6099
 tableName wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep2
 objType table
@@ -10653,7 +10653,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6092
 tableName wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapRawDataRep1
 objType file
@@ -10846,7 +10846,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6098
 tableName wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep2
 objType table
@@ -10874,7 +10874,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6091
 tableName wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep1
 objType table
@@ -10902,7 +10902,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6098
 tableName wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep2
 objType table
@@ -10930,7 +10930,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6091
 tableName wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapRawDataRep1
 objType file
@@ -11122,7 +11122,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3362
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep4
 objType table
@@ -11150,7 +11150,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3295
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3
 objType table
@@ -11178,7 +11178,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3362
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4
 objType table
@@ -11206,7 +11206,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3295
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep3
 objType file
@@ -11370,7 +11370,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5924
 tableName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRep1
 objType table
@@ -11398,7 +11398,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5924
 tableName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapRawDataRep1
 objType file
@@ -11481,7 +11481,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5927
 tableName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapPlusRep2
 objType table
@@ -11509,7 +11509,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5927
 tableName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapRawDataRep2
 objType file
@@ -11730,7 +11730,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6088
 tableName wgEncodeCshlShortRnaSeqHwpCellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapMinusRep2
 objType table
@@ -11758,7 +11758,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6090
 tableName wgEncodeCshlShortRnaSeqHwpCellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapPlusRep1
 objType table
@@ -11786,7 +11786,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6088
 tableName wgEncodeCshlShortRnaSeqHwpCellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapPlusRep2
 objType table
@@ -11814,7 +11814,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6090
 tableName wgEncodeCshlShortRnaSeqHwpCellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapRawDataRep1
 objType file
@@ -12113,7 +12113,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5838
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapMinusRep2
 objType table
@@ -12140,7 +12140,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5833
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep1
 objType table
@@ -12167,7 +12167,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5838
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep2
 objType table
@@ -12194,7 +12194,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5833
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapRawDataRep1
 objType file
@@ -12273,7 +12273,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5843
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalMinusRep2
 objType table
@@ -12300,7 +12300,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5844
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep1
 objType table
@@ -12327,7 +12327,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5843
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep2
 objType table
@@ -12354,7 +12354,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5844
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalRawDataRep1
 objType file
@@ -12487,7 +12487,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5922
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep2
 objType table
@@ -12514,7 +12514,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5939
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep1
 objType table
@@ -12541,7 +12541,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5922
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep2
 objType table
@@ -12568,7 +12568,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5939
 tableName wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapProtocolRep1
 objType file
@@ -12944,7 +12944,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5849
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapMinusRep2
 objType table
@@ -12971,7 +12971,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5847
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep1
 objType table
@@ -12998,7 +12998,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5849
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep2
 objType table
@@ -13025,7 +13025,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5847
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapRawDataRep1
 objType file
@@ -13104,7 +13104,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5842
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalMinusRep2
 objType table
@@ -13131,7 +13131,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5828
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep1
 objType table
@@ -13158,7 +13158,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5842
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep2
 objType table
@@ -13185,7 +13185,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5828
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalRawDataRep1
 objType file
@@ -13318,7 +13318,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5936
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRep2
 objType table
@@ -13345,7 +13345,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5933
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep1
 objType table
@@ -13372,7 +13372,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5936
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep2
 objType table
@@ -13399,7 +13399,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5933
 tableName wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapProtocolRep1
 objType file
@@ -13803,7 +13803,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5808
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapMinusRep2
 objType table
@@ -13830,7 +13830,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5800
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep1
 objType table
@@ -13857,7 +13857,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5808
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep2
 objType table
@@ -13884,7 +13884,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5800
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapRawDataRep1
 objType file
@@ -13963,7 +13963,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5836
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalMinusRep2
 objType table
@@ -13990,7 +13990,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5811
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep1
 objType table
@@ -14017,7 +14017,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5836
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep2
 objType table
@@ -14044,7 +14044,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5811
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalRawDataRep1
 objType file
@@ -14177,7 +14177,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5931
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapMinusRep2
 objType table
@@ -14204,7 +14204,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5954
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep1
 objType table
@@ -14231,7 +14231,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5931
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep2
 objType table
@@ -14258,7 +14258,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5954
 tableName wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapProtocolRep1
 objType file
@@ -14475,7 +14475,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
@@ -14504,7 +14504,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShortRawData
 objType file
@@ -14698,7 +14698,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3296
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep2
 objType table
@@ -14726,7 +14726,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3363
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep1
 objType table
@@ -14754,7 +14754,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3296
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep2
 objType table
@@ -14782,7 +14782,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3363
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep1
 objType file
@@ -14948,7 +14948,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
@@ -14977,7 +14977,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortRawData
 objType file
@@ -15171,7 +15171,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3364
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep4
 objType table
@@ -15199,7 +15199,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3365
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep3
 objType table
@@ -15227,7 +15227,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3364
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep4
 objType table
@@ -15255,7 +15255,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3365
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapRawDataRep3
 objType file
@@ -15367,7 +15367,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
@@ -15396,7 +15396,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShortRawData
 objType file
@@ -15590,7 +15590,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3297
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep2
 objType table
@@ -15618,7 +15618,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3298
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep1
 objType table
@@ -15646,7 +15646,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3297
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep2
 objType table
@@ -15674,7 +15674,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3298
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep1
 objType file
@@ -15840,7 +15840,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
@@ -15869,7 +15869,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortRawData
 objType file
@@ -16063,7 +16063,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3366
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep4
 objType table
@@ -16091,7 +16091,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3367
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep3
 objType table
@@ -16119,7 +16119,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3366
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep4
 objType table
@@ -16147,7 +16147,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3367
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapRawDataRep3
 objType file
@@ -16259,7 +16259,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
@@ -16288,7 +16288,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortRawData
 objType file
@@ -16482,7 +16482,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3368
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4
 objType table
@@ -16510,7 +16510,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3369
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep3
 objType table
@@ -16538,7 +16538,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3368
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4
 objType table
@@ -16566,7 +16566,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3369
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapRawDataRep3
 objType file
@@ -16678,7 +16678,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
@@ -16707,7 +16707,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShortRawData
 objType file
@@ -16901,7 +16901,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3299
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep2
 objType table
@@ -16929,7 +16929,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep1
 objType table
@@ -16957,7 +16957,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3299
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep2
 objType table
@@ -16985,7 +16985,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep1
 objType file
@@ -17149,7 +17149,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
 objType table
@@ -17177,7 +17177,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortRawData
 objType file
@@ -17473,7 +17473,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5837
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRep4
 objType table
@@ -17500,7 +17500,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5803
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep3
 objType table
@@ -17527,7 +17527,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5837
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep4
 objType table
@@ -17554,7 +17554,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5803
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapRawDataRep3
 objType file
@@ -17661,7 +17661,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5845
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRep4
 objType table
@@ -17688,7 +17688,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5805
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep3
 objType table
@@ -17715,7 +17715,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5845
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep4
 objType table
@@ -17742,7 +17742,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5805
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep3
 objType file
@@ -17965,7 +17965,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3353
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
 objType table
@@ -17994,7 +17994,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3370
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep1V2
 objType table
@@ -18023,7 +18023,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5937
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep1V2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2
 objType table
@@ -18052,7 +18052,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5923
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
 objType table
@@ -18081,7 +18081,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3353
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
 objType table
@@ -18110,7 +18110,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3370
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2
 objType table
@@ -18139,7 +18139,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5937
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep2V2
 objType table
@@ -18168,7 +18168,7 @@ seqPlatform Illumina_HiSeq_2000
 subId 5923
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep2V2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep1
 objType file
@@ -18636,7 +18636,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5816
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRep4
 objType table
@@ -18663,7 +18663,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5814
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep3
 objType table
@@ -18690,7 +18690,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5816
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep4
 objType table
@@ -18717,7 +18717,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5814
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalRawDataRep3
 objType file
@@ -18850,7 +18850,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5934
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapMinusRep4
 objType table
@@ -18877,7 +18877,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5955
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep3
 objType table
@@ -18904,7 +18904,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5934
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep4
 objType table
@@ -18931,7 +18931,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5955
 tableName wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapProtocolRep3
 objType file
@@ -19222,7 +19222,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5806
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRep4
 objType table
@@ -19249,7 +19249,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5822
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep3
 objType table
@@ -19276,7 +19276,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5806
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep4
 objType table
@@ -19303,7 +19303,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5822
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalRawDataRep3
 objType file
@@ -19436,7 +19436,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5944
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapMinusRep4
 objType table
@@ -19463,7 +19463,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5941
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep3
 objType table
@@ -19490,7 +19490,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5944
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep4
 objType table
@@ -19517,7 +19517,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5941
 tableName wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapProtocolRep3
 objType file
@@ -19813,7 +19813,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
 tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep2
 objType table
@@ -19841,7 +19841,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
 tableName wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep1
 objType table
@@ -19869,7 +19869,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5832
 tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep2
 objType table
@@ -19897,7 +19897,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 5826
 tableName wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1
 objType file
@@ -20007,7 +20007,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5935
 tableName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapPlusRep2
 objType table
@@ -20035,7 +20035,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5935
 tableName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapRawDataRep2
 objType file
@@ -20118,7 +20118,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5945
 tableName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRep1
 objType table
@@ -20146,7 +20146,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5945
 tableName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapRawDataRep1
 objType file
@@ -20366,7 +20366,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3371
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep2
 objType table
@@ -20394,7 +20394,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3372
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep1
 objType table
@@ -20422,7 +20422,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3371
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2
 objType table
@@ -20450,7 +20450,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3372
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1
 objType file
@@ -20696,7 +20696,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3373
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep4
 objType table
@@ -20724,7 +20724,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3374
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep3
 objType table
@@ -20752,7 +20752,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3373
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4
 objType table
@@ -20780,7 +20780,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3374
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep3
 objType file
@@ -21027,7 +21027,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3380
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep4
 objType table
@@ -21055,7 +21055,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3375
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep3
 objType table
@@ -21083,7 +21083,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3380
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4
 objType table
@@ -21111,7 +21111,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3375
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep3
 objType file
@@ -21415,7 +21415,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6093
 tableName wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep2
 objType table
@@ -21443,7 +21443,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6100
 tableName wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep1
 objType table
@@ -21471,7 +21471,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6093
 tableName wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep2
 objType table
@@ -21499,7 +21499,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6100
 tableName wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapRawDataRep1
 objType file
@@ -21692,7 +21692,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6103
 tableName wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep2
 objType table
@@ -21720,7 +21720,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6102
 tableName wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep1
 objType table
@@ -21748,7 +21748,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6103
 tableName wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep2
 objType table
@@ -21776,7 +21776,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6102
 tableName wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapRawDataRep1
 objType file
@@ -21915,7 +21915,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 objType table
@@ -21943,7 +21943,7 @@ protocol TAP-Only
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalRawData
 objType file
@@ -22025,7 +22025,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5943
 tableName wgEncodeCshlShortRnaSeqSkmc812190217CellTapMinusRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapPlusRep2
 objType table
@@ -22053,7 +22053,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5943
 tableName wgEncodeCshlShortRnaSeqSkmc812190217CellTapPlusRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapRawDataRep2
 objType file
@@ -22136,7 +22136,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5921
 tableName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapMinusRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapPlusRep1
 objType table
@@ -22164,7 +22164,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5921
 tableName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapPlusRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapRawDataRep1
 objType file
@@ -22487,7 +22487,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5851
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapMinusRep4
 objType table
@@ -22514,7 +22514,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5807
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep3
 objType table
@@ -22541,7 +22541,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5851
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep4
 objType table
@@ -22568,7 +22568,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5807
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapRawDataRep3
 objType file
@@ -22647,7 +22647,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5835
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalMinusRep4
 objType table
@@ -22674,7 +22674,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5841
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep3
 objType table
@@ -22701,7 +22701,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5835
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep4
 objType table
@@ -22728,7 +22728,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5841
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalRawDataRep3
 objType file
@@ -22861,7 +22861,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5802
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapMinusRep4
 objType table
@@ -22888,7 +22888,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5821
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep3
 objType table
@@ -22915,7 +22915,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5802
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep4
 objType table
@@ -22942,7 +22942,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5821
 tableName wgEncodeCshlShortRnaSeqSknshCellShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapProtocolRep3
 objType file
@@ -23340,7 +23340,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5830
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapMinusRep4
 objType table
@@ -23367,7 +23367,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5809
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep3
 objType table
@@ -23394,7 +23394,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5830
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep4
 objType table
@@ -23421,7 +23421,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5809
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapRawDataRep3
 objType file
@@ -23500,7 +23500,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5817
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalMinusRep4
 objType table
@@ -23527,7 +23527,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5815
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep3
 objType table
@@ -23554,7 +23554,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5817
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep4
 objType table
@@ -23581,7 +23581,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5815
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalRawDataRep3
 objType file
@@ -23714,7 +23714,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5852
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapMinusRep4
 objType table
@@ -23741,7 +23741,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5850
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep3
 objType table
@@ -23768,7 +23768,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5852
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep4
 objType table
@@ -23795,7 +23795,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5850
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep3
 objType file
@@ -24167,7 +24167,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5827
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapMinusRep4
 objType table
@@ -24194,7 +24194,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5801
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep3
 objType table
@@ -24221,7 +24221,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5827
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep4
 objType table
@@ -24248,7 +24248,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5801
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapRawDataRep3
 objType file
@@ -24327,7 +24327,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5824
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalMinusRep4
 objType table
@@ -24354,7 +24354,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5812
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep3
 objType table
@@ -24381,7 +24381,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5824
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep4
 objType table
@@ -24408,7 +24408,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5812
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalRawDataRep3
 objType file
@@ -24541,7 +24541,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5848
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep4
 objType table
@@ -24568,7 +24568,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5932
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep3
 objType table
@@ -24595,7 +24595,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5848
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep4
 objType table
@@ -24622,7 +24622,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 5932
 tableName wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapProtocolRep3
 objType file
@@ -24890,7 +24890,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
 objType table
@@ -24918,7 +24918,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3377
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1
 objType table
@@ -24946,7 +24946,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
 objType table
@@ -24974,7 +24974,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3377
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep1
 objType file
@@ -25084,4 +25084,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1764349492
+# MAGIC: 78334572
