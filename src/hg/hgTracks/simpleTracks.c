@@ -2636,6 +2636,18 @@ if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
 x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
+
+// are we highlighting this feature with background highlighting
+if (lf->highlightColor && (lf->highlightMode == highlightBackground))
+    {
+    // draw the background
+    hvGfxBox(hvg, x1, y, w, heightPer, lf->highlightColor);
+
+    // draw the item slightly smaller
+    y++;
+    heightPer -=2;
+    }
+
 if (!hideLine)
     {
     innerLine(hvg, x1, midY, w, color);
@@ -2644,7 +2656,7 @@ if (!hideArrows)
     {
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	if (lf->highlightColor)
+	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
 		     lf->orientation, lf->highlightColor, FALSE);
 	else
@@ -2664,7 +2676,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	if (lf->highlightColor)
+	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    {
 	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff , shortHeight ,
 		lf->highlightColor, lf->score);
@@ -2682,7 +2694,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	s2 = s;
 	if (s2 < tallEnd) s2 = tallEnd;
-	if (lf->highlightColor)
+	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    {
 	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
 		lf->highlightColor, lf->score);
@@ -2709,7 +2721,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 				  MAXPIXELS, winStart, color);
         else
             {
-	    if (lf->highlightColor)
+	    if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 		{
 		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
 				    lf->highlightColor, lf->score );
