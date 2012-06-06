@@ -87,8 +87,7 @@ cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 if (loginSystemEnabled())
     {
-   printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
-        "<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\""
+   printf("<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\""
 "<li><A HREF=\"%s\">Login</A></li>",
         wikiLinkUserLoginUrl(cartSessionId(cart)));
     printf("<li><A HREF=\"%s\">"
