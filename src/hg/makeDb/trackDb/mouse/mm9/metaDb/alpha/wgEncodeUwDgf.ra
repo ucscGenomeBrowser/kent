@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDgf
 objType composite
 composite wgEncodeUwDgf
-expVars lab,dataType,cell,age
+expVars lab,dataType,cell,age, treatment
 
 metaObject wgEncodeUwDgf3134RiiiMImmortalAlnRep1
 objType file
