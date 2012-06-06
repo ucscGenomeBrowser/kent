@@ -34,7 +34,7 @@ name refSeq
 shortLabel RefSeq
 tables sangerToRefSeq
 idSql select value from sangerToRefSeq where name = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 priority 10
 
 name locusLink

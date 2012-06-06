@@ -67,7 +67,7 @@ priority 10
 #shortLabel RefSeq
 #tables kgXref
 #idSql select refseq from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+#url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
 name entrezGene
@@ -81,7 +81,7 @@ priority 10
 #shortLabel GenBank
 #tables kgXref
 #idSql select kgID from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+#url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
 name pubMed
