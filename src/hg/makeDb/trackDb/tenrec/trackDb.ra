@@ -10,7 +10,7 @@ termRegex contig_[0-9]+
 searchPriority 8
 
 searchTable ensemblGeneScaffold
-searchMethod exact
+searchMethod prefix
 searchType bed
 shortCircuit 1
 termRegex GS_[0-9]+(\.[0-9]+)?
