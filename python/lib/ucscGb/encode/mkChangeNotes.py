@@ -371,7 +371,7 @@ class makeNotes(object):
         errors = []
         atticTables = self.newMdb.filter(lambda s: s['objType'] == 'table' and 'attic' in s, lambda s: s['tableName'])
         for i in atticTables:
-            foo = self.trackDb.filter(lambda s: i in s['track'], lambda s: s['track'])
+            foo = self.trackDb.filter(lambda s: s['track'] == i, lambda s: s['track'])
             if foo:
                 errors.append("trackDb: %s is attic in metaDb, has an active trackDb entry" % i)
 
@@ -435,12 +435,15 @@ class makeNotes(object):
             if self.newInAttic:
                 output.append("New Attic Objects (%s):" % len(self.newInAttic))
                 output.extend(ucscUtils.printIter((self.newInAttic)))
+                output.append("\n")
             if self.stillInAttic:
                 output.append("Untouched Attic Objects (%s):" % len(self.stillInAttic))
                 output.extend(ucscUtils.printIter((self.stillInAttic)))
+                output.append("\n")
             if self.noMoreAttic:
-                output.append("Untouched Attic Objects (%s):" % len(self.noMoreAttic))
-                output.extend(ucscUtils.printIter((self.noMoreAttic))) 
+                output.append("Removed from Attic Objects (%s):" % len(self.noMoreAttic))
+                output.extend(ucscUtils.printIter((self.noMoreAttic)))
+                output.append("\n")
             output.append("\n")
         if not args['ignore']:
             output.append("No Errors")
