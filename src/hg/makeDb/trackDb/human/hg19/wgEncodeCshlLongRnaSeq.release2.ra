@@ -12,7 +12,7 @@ subGroup4 rnaExtract RNA_Extract PAP=PolyA+ PAM=PolyA- TOTAL=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
 subGroup6 rank Replicate_rank rank1=1st rank2=2nd none=Pooled
 dimensions dimensionY=cellType dimensionX=localization dimensionZ=rnaExtract dimensionA=rank
-dimensionZchecked PAP,TOTAL
+dimensionZchecked PAP
 dimensionAchecked rank1,none
 filterComposite dimZ=multi
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rank=+
@@ -334,7 +334,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=2341 dateSubmitted=2010-09-29
 
         track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep2
-        parent wgEncodeCshlLongRnaSeqViewPlusSig on
+        parent wgEncodeCshlLongRnaSeqViewPlusSig off 
         shortLabel GM78 cel pA- + 2
         longLabel GM12878 whole cell polyA- RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1GM12878 localization=CELL rnaExtract=PAM rep=rep2 rank=rank2
@@ -343,7 +343,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=2402 dateSubmitted=2010-09-29
 
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
-        parent wgEncodeCshlLongRnaSeqViewPlusSig on
+        parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel K562 cel pA- + 1
         longLabel K562 whole cell polyA- RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1K562 localization=CELL rnaExtract=PAM rep=rep1 rank=rank1
@@ -403,7 +403,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=2409 dateSubmitted=2010-09-29
 
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2
-        parent wgEncodeCshlLongRnaSeqViewPlusSig on
+        parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel K562 cel pA- + 2
         longLabel K562 whole cell polyA- RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1K562 localization=CELL rnaExtract=PAM rep=rep2 rank=rank2
@@ -1044,7 +1044,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3229 dateSubmitted=2011-01-11
 
         track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
-        parent wgEncodeCshlLongRnaSeqViewPlusSig on
+        parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel GM78 cel pA- + 1
         longLabel GM12878 whole cell polyA- RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t1GM12878 localization=CELL rnaExtract=PAM rep=rep1 rank=rank1
