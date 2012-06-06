@@ -3383,7 +3383,7 @@ html wgEncodeCshlLongRnaSeq.release2
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    maxWindowToDraw 100000
 
     #        track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
     #        parent wgEncodeCshlLongRnaSeqViewAlignments on
