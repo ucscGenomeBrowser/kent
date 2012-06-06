@@ -573,8 +573,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1V2.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1V2.bam.bai
@@ -629,8 +630,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2.bam.bai
@@ -773,8 +775,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep1V2.bigWig
@@ -802,8 +805,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRep2V2.bigWig
@@ -889,8 +893,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep1V2.bigWig
@@ -918,8 +923,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRep2V2.bigWig
@@ -975,8 +981,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
+dateResubmitted 2012-02-14
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep1V2.pdf.gz
@@ -1031,8 +1038,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
+dateResubmitted 2012-02-14
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep2V2.pdf.gz
@@ -1087,8 +1095,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep1V2.fastq.gz
@@ -1143,8 +1152,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep2V2.fastq.gz
@@ -1164,18 +1174,19 @@ subId 5919
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqA549CellTapContigs
+metaObject wgEncodeCshlShortRnaSeqA549CellTapContigsV2
 objType table
 bioRep 087WC,088WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dateResubmitted 2012-03-28
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
-fileName wgEncodeCshlShortRnaSeqA549CellTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqA549CellTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID47039,LID47040
@@ -1189,7 +1200,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6505
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
-tableName wgEncodeCshlShortRnaSeqA549CellTapContigs
+tableName wgEncodeCshlShortRnaSeqA549CellTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqA549CellTapExonsGencV10
@@ -1199,8 +1210,9 @@ cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
+dateResubmitted 2012-03-30
+dateSubmitted 2011-05-11
+dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
 fileName wgEncodeCshlShortRnaSeqA549CellTapExonsGencV10.gtf.gz
@@ -17831,8 +17843,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-01
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-03-01
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2.bam.bai
@@ -17887,8 +17900,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2V2.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2V2.bam.bai
@@ -18003,8 +18017,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-01
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-03-01
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep1V2.bigWig
@@ -18032,8 +18047,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRep2V2.bigWig
@@ -18119,8 +18135,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-01
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-03-01
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep1V2.bigWig
@@ -18148,8 +18165,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRep2V2.bigWig
@@ -18205,8 +18223,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
+dateResubmitted 2012-02-14
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep1V2.pdf.gz
@@ -18261,8 +18280,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
+dateResubmitted 2012-02-14
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep2V2.pdf.gz
@@ -18317,8 +18337,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-01
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-03-01
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep1V2.fastq.gz
@@ -18373,8 +18394,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-29
-dateUnrestricted 2012-11-29
+dateResubmitted 2012-02-29
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep2V2.fastq.gz
@@ -18412,6 +18434,7 @@ lab CSHL
 labExpId LID20743,LID20744
 labVersion iIDR
 localization cell
+md5sum e6381b5c59c85ba20c17b41827ddc519
 objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
@@ -18429,8 +18452,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dateResubmitted 2012-03-28
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellTapContigsV2.bedRnaElements.gz
@@ -18468,6 +18492,7 @@ lab CSHL
 labExpId LID20743,LID20744
 labVersion iIDR
 localization cell
+md5sum 4fd76347a2d7c7be12170440e808f53c
 objStatus replaced - A newer experiment has been run on the HiSeq2000
 project wgEncode
 protocol TAP-Only
@@ -18484,8 +18509,9 @@ cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
+dateResubmitted 2012-03-30
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 expId 1090
 fileName wgEncodeCshlShortRnaSeqMcf7CellTapExonsGencV10V2.gtf.gz
@@ -25084,4 +25110,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 78334572
+# MAGIC: 1573864678
