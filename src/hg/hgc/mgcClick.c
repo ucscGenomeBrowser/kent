@@ -117,7 +117,7 @@ printf("http://www.ncbi.nlm.nih.gov/genome/clone/orderclone.cgi?db=nucleotide&ui
 static void printImageUrl(int imageId)
 /* print out an URL to link to IMAGE database for a clone */
 {
-printf("http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
+printf("http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
 }
 
 void printMgcDetailsUrl(char *acc, int start)
