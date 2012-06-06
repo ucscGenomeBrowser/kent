@@ -278,7 +278,6 @@ void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-//int delay=nSec*1000;
 hPrintf(
     "<script  language=\"JavaScript\">\n"
     "<!-- "
