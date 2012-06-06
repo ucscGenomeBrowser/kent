@@ -30,7 +30,7 @@ html wgEncodeUwDgf
 	track wgEncodeUwDgfViewHotspots
 	shortLabel Hotspots
 	view Hotspots
-	visibility full
+	visibility pack
 	parent wgEncodeUwDgf
 	pValueFilter 0.0
 	pValueFilterLimits 1:324
@@ -696,7 +696,7 @@ html wgEncodeUwDgf
 	track wgEncodeUwDgfViewRawSignal
 	shortLabel RawSignal
 	view RawSignal
-	visibility full
+	visibility pack
 	parent wgEncodeUwDgf
 	viewLimits 1:250
 	minLimit 1
