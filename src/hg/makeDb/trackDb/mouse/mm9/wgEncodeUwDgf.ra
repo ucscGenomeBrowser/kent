@@ -6,8 +6,8 @@ shortLabel UW DNaseI DGF
 longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line m3134=3134 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
-subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII S129=129 129OLA=129/Ola 129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
+subGroup2 cellType Cell_Line Cel3134=3134 Cel416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
+subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII Str129=129 Str129OLA=129/Ola Str129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 sex Sex M=M
 subGroup5 age Age ADULT1WKS=adult-1wks ADULT8WKS=adult-8wks E0=E0 E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5 IMMORTAL=immortalized NEW1DAYS=newborn-1days
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10 rep11=11 rep12=12
@@ -16,14 +16,15 @@ dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=treatmen
 dimensionAchecked rep1
 dimensionBchecked NONE
 filterComposite dimensionA=multi dimensionB=multi
-sortOrder cellType=+ treatment=+ strain=+ age=+ sex=+ rep=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ treatment=+ strain=+ age=+ rep=+ view=+
+fileSortOrder cell=Cell_Line treatment=Treatment strain=Strain age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex treatment=treatment
 dragAndDrop subTracks
 noInherit on
 priority 0
 type bed 3
 wgEncode 1
+html wgEncodeUwDgf
 
 
 	track wgEncodeUwDgfViewHotspots
@@ -61,7 +62,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel 3134 Immt Hs 1
         longLabel 3134 immortalized RIII DNase-DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=m3134 sex=M strain=RIII treatment=NONE rep=rep1
+        subGroups view=Hotspots age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type broadPeak
         color 0,158,115
         # subId=5235 dateSubmitted=2011-12-17
@@ -89,7 +90,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel 416B Immt Hs 1
         longLabel 416B immortalized B6D2F1/J DNase-DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
+        subGroups view=Hotspots age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
         # subId=5238 dateSubmitted=2011-12-17
@@ -142,7 +143,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel MEL Immt Hs 1
-        longLabel MEL immortalized Unknown DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -207,7 +208,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ES-CJ7 E0 Hs 1
         longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=129S1 treatment=NONE rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type broadPeak
         color 65,105,225
         # subId=6913 dateSubmitted=2012-05-01
@@ -234,7 +235,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ZhBTc4 E0 Hs 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type broadPeak
         color 65,105,225
         # subId=6916 dateSubmitted=2012-05-01
@@ -243,7 +244,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ZhBTc4 E0 Hs 1
         longLabel ZhBTc4 E0 129/Ola DNase-DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=NONE rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type broadPeak
         color 65,105,225
         # subId=6917 dateSubmitted=2012-05-01
@@ -283,7 +284,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel 3134 Immt Pk 1
         longLabel 3134 immortalized RIII DNase-DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=m3134 sex=M strain=RIII treatment=NONE rep=rep1
+        subGroups view=Peaks age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type narrowPeak
         color 0,158,115
         # subId=5235 dateSubmitted=2011-12-17
@@ -311,7 +312,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel 416B Immt Pk 1
         longLabel 416B immortalized B6D2F1/J DNase-DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
+        subGroups view=Peaks age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
         # subId=5238 dateSubmitted=2011-12-17
@@ -364,7 +365,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel MEL Immt Pk 1
-        longLabel MEL immortalized Unknown DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -429,7 +430,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ES-CJ7 E0 Pk 1
         longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=129S1 treatment=NONE rep=rep1
+        subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=6913 dateSubmitted=2012-05-01
@@ -456,7 +457,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ZhBTc4 E0 Pk 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=6916 dateSubmitted=2012-05-01
@@ -465,7 +466,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ZhBTc4 E0 Pk 1
         longLabel ZhBTc4 E0 129/Ola DNase-DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=NONE rep=rep1
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=6917 dateSubmitted=2012-05-01
@@ -492,7 +493,7 @@ wgEncode 1
         # subId=5248 dateSubmitted=2011-12-18
 
         track wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal
         shortLabel Brain E14.5 Sg 1
         longLabel WholeBrain E14.5 C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
@@ -505,7 +506,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel 3134 Immt Sg 1
         longLabel 3134 immortalized RIII DNase-DGF Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=IMMORTAL cellType=m3134 sex=M strain=RIII treatment=NONE rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type bigWig 1.000000 134493.000000
         color 0,158,115
         # subId=5235 dateSubmitted=2011-12-17
@@ -521,7 +522,7 @@ wgEncode 1
         # was wgEncodeUwDgfWholebrainC57bl6MAdult8wksSigRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
         track wgEncodeUwDgfLiverC57bl6MAdult8wksSigRep1
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal
         shortLabel Liver 8w Sg 1
         longLabel Liver adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 treatment=NONE rep=rep1
@@ -533,7 +534,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel 416B Immt Sg 1
         longLabel 416B immortalized B6D2F1/J DNase-DGF Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=IMMORTAL cellType=416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type bigWig 1.000000 137025.000000
         color 86,180,233
         # subId=5238 dateSubmitted=2011-12-17
@@ -558,7 +559,7 @@ wgEncode 1
         # subId=5242 dateSubmitted=2011-12-17
 
         track wgEncodeUwDgfHeartC57bl6MAdult8wksSigRep1
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal
         shortLabel Heart 8w Sg 1
         longLabel Heart adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 treatment=NONE rep=rep1
@@ -584,9 +585,9 @@ wgEncode 1
         # subId=5246 dateSubmitted=2011-12-17
 
         track wgEncodeUwDgfMelUknImmortalSigRep1
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal
         shortLabel MEL Immt Sg 1
-        longLabel MEL immortalized Unknown DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 300871.000000
         color 86,180,233
@@ -651,7 +652,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ES-CJ7 E0 Sg 1
         longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=129S1 treatment=NONE rep=rep1
+        subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type bigWig 1.000000 79700.000000
         color 65,105,225
         # subId=6913 dateSubmitted=2012-05-01
@@ -678,7 +679,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ZhBTc4 E0 Sg 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 130305.000000
         color 65,105,225
         # subId=6916 dateSubmitted=2012-05-01
@@ -687,7 +688,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ZhBTc4 E0 Sg 1
         longLabel ZhBTc4 E0 129/Ola DNase-DGF Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=NONE rep=rep1
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type bigWig 1.000000 90713.000000
         color 65,105,225
         # subId=6917 dateSubmitted=2012-05-01
@@ -727,7 +728,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel 3134 Immt Rw 1
         longLabel 3134 immortalized RIII DNase-DGF Raw signal Rep 1 from ENCODE/UW 
-        subGroups view=RawSignal age=IMMORTAL cellType=m3134 sex=M strain=RIII treatment=NONE rep=rep1
+        subGroups view=RawSignal age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type bigWig 1.000000 340336.000000
         color 0,158,115
         # subId=5235 dateSubmitted=2011-12-17
@@ -755,7 +756,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel 416B Immt Rw 1
         longLabel 416B immortalized B6D2F1/J DNase-DGF Raw signal Rep 1 from ENCODE/UW 
-        subGroups view=RawSignal age=IMMORTAL cellType=416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
+        subGroups view=RawSignal age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type bigWig 1.000000 466076.000000
         color 86,180,233
         # subId=5238 dateSubmitted=2011-12-17
@@ -809,7 +810,7 @@ wgEncode 1
         track wgEncodeUwDgfMelUknImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel MEL Immt Rw 1
-        longLabel MEL immortalized Unknown DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel MEL immortalized DNase-DGF Raw signal Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 974470.000000
         color 86,180,233
@@ -874,7 +875,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ES-CJ7 E0 Rw 1
         longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Raw signal Rep 1 from ENCODE/UW 
-        subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=129S1 treatment=NONE rep=rep1
+        subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type bigWig 1.000000 425541.000000
         color 65,105,225
         # subId=6913 dateSubmitted=2012-05-01
@@ -901,7 +902,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ZhBTc4 E0 Rw 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Raw signal Rep 1 from ENCODE/UW 
-        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 759516.000000
         color 65,105,225
         # subId=6916 dateSubmitted=2012-05-01
@@ -910,7 +911,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ZhBTc4 E0 Rw 1
         longLabel ZhBTc4 E0 129/Ola DNase-DGF Raw signal Rep 1 from ENCODE/UW 
-        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=NONE rep=rep1
+        subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type bigWig 1.000000 563374.000000
         color 65,105,225
         # subId=6917 dateSubmitted=2012-05-01

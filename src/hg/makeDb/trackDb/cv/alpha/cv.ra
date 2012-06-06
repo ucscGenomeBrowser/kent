@@ -13461,7 +13461,7 @@ term ExonsDeNovo
 tag EXONSDENOVO
 type view
 label ExonsDenovo
-description 'De novo' exons defined by Cufflinks with FPKM.
+description Expression level estimates for Cufflinks exons, derived by summing the expression levels in RPKM for all transcripts containing a given exon
 
 term ExonsGencV3c
 tag EXONGENCV3C
@@ -13485,7 +13485,7 @@ term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
 label Exons ENSEMBL V65
-description Expression level estimates for ENSEMBL V65 exons, and Cufflinks exons that are intergenic or antisense with respect to ENSEMBL 65 annotation. Exon RPKMs are computed by summing the expression levels in RPKM for all transcripts containing a given exon.
+description Expression level estimates for ENSEMBL V65 exons, and Cufflinks exons that are intergenic or antisense with respect to ENSEMBL 65 annotation. Exon RPKMs are computed by summing the expression levels in RPKM for all transcripts containing a given exon
 
 term Fasta3p
 tag FASTA3P
@@ -13540,7 +13540,7 @@ term GeneDeNovo
 tag GENEDENO
 type view
 label Genes De Novo
-description 'De novo' genes defined by Cufflinks with FPKM.
+description 'De novo' genes defined by Cufflinks, and their associated RPKMs, as computed by the Flux Capacitor
 
 term GeneGencV7
 tag GENEGENCV7
@@ -13564,7 +13564,7 @@ term GeneEnsV65IAcuff
 tag GENENSV65
 type view
 label Genes ENSEMBL V65
-description Expression level estimates for ENSEMBL 65 genes, and Cufflinks gene models that are intergenic or antisense with respect to ENSEMBL 65 annotation.
+description Expression level estimates for ENSEMBL 65 genes, and Cufflinks gene models that are intergenic or antisense with respect to ENSEMBL 65 annotation
 
 term HMM
 tag HMM
@@ -13827,7 +13827,7 @@ term TranscriptDeNovo
 tag TRANSDENOVO
 type view
 label Transcripts De novo
-description 'De novo' transcripts with FPKM produced by Cufflinks
+description 'De novo' transcripts defined by Cufflinks, and  their associated RPKMs, as computed by the Flux Capacitor
 
 term TranscriptGencV10
 tag TRANSGENCV10
@@ -13851,7 +13851,7 @@ term TranscriptEnsV65IAcuff
 tag TRANSENSV65
 type view
 label Transcript ENSEMBL V65
-description Expression level estimates for ENSEMBL 65 transcript, and Cufflinks transcript models that are intergenic or antisense with respect to ENSEMBL 65 annotation.
+description Expression level estimates for ENSEMBL 65 transcript, and Cufflinks transcript models that are intergenic or antisense with respect to ENSEMBL 65 annotation
 
 term Transfrags
 tag TRANSFRAGS

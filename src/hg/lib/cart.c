@@ -1485,6 +1485,7 @@ va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
+cgiMakeHiddenVar("db", db);
 }
 
 void cartWebEnd()
@@ -1514,49 +1515,44 @@ popWarnHandler();
 }
 
 void setThemeFromCart(struct cart *cart) 
-/* If 'theme' variable is set in cart: overwrite background with the one from
- * defined for this theme Also set the "styleTheme", with additional styles
- * that can overwrite the main style settings */
+/* If 'theme' variable is set in cart: overwrite background with the one 
+ * defined for this theme in hg.conf. Also set the "styleTheme", with additional
+ * styles that can overwrite the main style settings 
+ * config syntax in hg.conf is:
+ *   browser.theme.<name>=<cssFile>
+ * or:
+ *   browser.theme.<name>=<cssFile>,<backgroundFile>
+ * */
 {
-// Get theme from cart and use it to get background file from config;
-// format is browser.theme.<name>=<stylesheet>[,<background>]
-
-char **options;
-int optionCount;
+// get theme from cart and use it to get style/background file from config
 char *cartTheme = cartOptionalString(cart, "theme");
 if (cartTheme==NULL)
     return;
 
 char *themeKey = catTwoStrings("browser.theme.", cartTheme);
 char *themeDefLine = cfgOption(themeKey);
-freez(&themeKey);
+freeMem(themeKey);
 if (themeDefLine == NULL)
     return;
 
-sqlStringDynamicArray(themeDefLine, &options, &optionCount);
-if(options == NULL)
+// set style file 
+char * styleFile = cloneString(themeDefLine);
+chopSuffixAt(styleFile, ',');
+if (strlen(styleFile)==0)
     return;
-
-char *styleFile = options[0];
-if(isNotEmpty(styleFile))
+char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
+if (link!=NULL)
     {
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-    if (link)
-        {
-        htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
-        webSetStyle(link);       // for web.c, used by hgc
-        }
+    htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
+    webSetStyle(link);       // for web.c, used by hgc
     }
 
-if(optionCount >= 2)
-    {
-    char *background = options[1];
-    if(isNotEmpty(background))
-        htmlSetBackground(cloneString(background));
-    }
-
-freeMem(options[0]);
-freez(&options);
+// set background file (optional, after ',' in hg.conf line)
+if (! stringIn(",", themeDefLine))
+    return;
+char * backgroundFile = cloneString(themeDefLine);
+backgroundFile = chopPrefixAt(backgroundFile, ',');
+htmlSetBackground(backgroundFile);
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),

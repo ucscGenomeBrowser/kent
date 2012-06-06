@@ -24,7 +24,6 @@ static void themeDropDown(struct cart* cart)
  * */
 {
 struct slName* themes = cfgNamesWithPrefix("browser.theme.");
-//struct slName* themes = cfgNames();
 if (themes==NULL)
     return;
 
@@ -400,10 +399,9 @@ hPrintf("<TD>characters<TD></TR>");
 hPrintf("<TR><TD>text size:");
 hPrintf("<TD style=\"text-align: right\">");
 textSizeDropDown();
-hPrintf("</TD>");
+hPrintf("<TD>");
 if (trackLayoutInclFontExtras())
     {
-    hPrintf("<TD>");
     char *defaultStyle = cartUsualString(cart, "fontType", "medium");
     cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);
     hPrintf("&nbsp;medium&nbsp;");
@@ -412,9 +410,7 @@ if (trackLayoutInclFontExtras())
     cartMakeRadioButton(cart, "fontType", "bold", defaultStyle);
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
-    hPrintf("</TD>");
     }
-hPrintf("</TR>");
 
 themeDropDown(cart);
 
