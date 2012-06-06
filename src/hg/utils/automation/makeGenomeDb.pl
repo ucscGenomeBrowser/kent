@@ -46,6 +46,7 @@ options:
 print STDERR <<_EOF_
     -splitGoldGap         split the gold/gap tables (default is not split)
     -noGoldGapSplit       default behavior, this option no longer required
+    -forceDescription     construct a new description.html when -continue=trackDb
 _EOF_
   ;
   print STDERR "
@@ -214,6 +215,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_splitGoldGap
     $opt_noGoldGapSplit
+    $opt_forceDescription
     /;
 
 # Required config parameters:
@@ -225,7 +227,7 @@ my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
 # Optional config parameters:
 my ($commonName, $agpFiles, $qualFiles, $mitoSize, $subsetLittleIds);
 # Other globals:
-my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased);
+my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased, $forceDescription);
 my ($bedDir, $scriptDir, $endNotes);
 
 sub checkOptions {
@@ -234,6 +236,7 @@ sub checkOptions {
 		      @HgAutomate::commonOptionSpec,
 		      "splitGoldGap",
 		      "noGoldGapSplit",
+		      "forceDescription",
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -241,6 +244,8 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if (defined $opt_dbHost);
+  $forceDescription = 0;
+  $forceDescription = 1 if (defined $opt_forceDescription)
 } # checkOptions
 
 sub requireVar {
@@ -1270,6 +1275,9 @@ mkdir -p $dbDbSpeciesDir/$db
 # Move local description files into place:
 mv $localFiles $dbDbSpeciesDir/$db/
 
+if (1 == $forceDescription) then
+  rm -f $dbDbSpeciesDir/$db/description.html
+endif
 # Copy the template description.html for $db into place, and link to it
 # from $HgAutomate::gbdb/$db/html/ .
 if (! -e $dbDbSpeciesDir/$db/description.html) then
