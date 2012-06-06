@@ -2941,7 +2941,7 @@ if (!ct)
     if (version)
         {
         cgiDown(0.7);
-        printf("<B>Data version:</B> %s\n", version);
+        printf("<B>Data version:</B> %s <BR>\n", version);
         }
 
    /* Print lift information from trackDb, if any */
