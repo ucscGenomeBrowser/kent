@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db galGal4
+clade vertebrate
+genomeCladePriority 50
+scientificName Gallus gallus
+commonName Chicken
+assemblyDate Nov. 2011
+assemblyLabel ICGSC Gallus_gallus-4.0 (GCA_000002315.2)
+assemblyShortLabel ICGSC Gallus_gallus-4.0
+orderKey 434
+mitoAcc NC_001323
+fastaFiles /hive/data/genomes/galGal4/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/galGal4/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir chicken
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 111
+ncbiAssemblyId 317958
+ncbiAssemblyName ICGSC Gallus_gallus-4.0
+ncbiBioProject 13342
+genBankAccessionID GCA_000002315.2
+taxId	9031
