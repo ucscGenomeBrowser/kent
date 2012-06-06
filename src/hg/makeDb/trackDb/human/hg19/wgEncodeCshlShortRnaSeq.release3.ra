@@ -5085,13 +5085,14 @@ html wgEncodeCshlShortRnaSeq.release3
         type bed 6
         # subId=6504 dateSubmitted=2012-03-28
 
-        track wgEncodeCshlShortRnaSeqA549CellTapContigs
+        track wgEncodeCshlShortRnaSeqA549CellTapContigsV2
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel A549 cell sm C
         longLabel A549 TAP-Only whole cell small RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=t2A549 localization=CELL protocol=TAP rank=none
         type bed 6
         # subId=6505 dateSubmitted=2012-03-28
+        # was wgEncodeCshlShortRnaSeqA549CellTapContigs cricket Wed Jun  6 13:32:27 2012
 
         #        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
         #        parent wgEncodeCshlShortRnaSeqViewContigs off

@@ -1174,7 +1174,7 @@ subId 5919
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqA549CellTapContigs
+metaObject wgEncodeCshlShortRnaSeqA549CellTapContigsV2
 objType table
 bioRep 087WC,088WC
 cell A549
@@ -1186,7 +1186,7 @@ dateSubmitted 2011-05-11
 dateUnrestricted 2012-2-11
 dccAccession wgEncodeEH001740
 expId 1740
-fileName wgEncodeCshlShortRnaSeqA549CellTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqA549CellTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID47039,LID47040
@@ -1200,7 +1200,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_HiSeq_2000
 subId 6505
 submittedDataVersion V2 - Same experiment experiment as before, but run on a HiSeq2000 this version.
-tableName wgEncodeCshlShortRnaSeqA549CellTapContigs
+tableName wgEncodeCshlShortRnaSeqA549CellTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqA549CellTapExonsGencV10
@@ -25110,4 +25110,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 344345496
+# MAGIC: 1573864678
