@@ -27,6 +27,7 @@
 #include <htmlPage.h>
 #include <signal.h>
 #include "geoMirror.h"
+#include <regex.h>
 /* phoneHome business */
 
 
@@ -95,10 +96,6 @@ webInTextMode = TRUE;
 webPushErrHandlers();
 }
 
-// NEW_MENUS is used to experiment with using jabico derived menus (see redmine #5245)
-// curently only used in larrym's tree
-// #define NEW_MENUS
-
 static void webStartWrapperDetailedInternal(struct cart *theCart,
 	char *db, char *headerText, char *textOutBuf,
 	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
@@ -108,10 +105,6 @@ static void webStartWrapperDetailedInternal(struct cart *theCart,
 char uiState[256];
 char *scriptName = cgiScriptName();
 boolean isEncode = FALSE;
-#ifndef NEW_MENUS
-boolean isGsid   = hIsGsidServer();
-boolean isGisaid = hIsGisaidServer();
-#endif
 if (theCart)
     {
     char *theGenome = NULL;
@@ -228,164 +221,12 @@ if (withLogo)
 
 /* Put up the hot links bar. */
 
-#ifdef NEW_MENUS
-
-    char *docRoot = hDocumentRoot();
+char *menuStr = menuBar(theCart);
+if(menuStr)
+    {
     jsIncludeFile("jquery.js", NULL);
-    if(docRoot != NULL)
-        {
-        struct dyString *file = dyStringCreate("%s/%s", docRoot, "NavBar.html");
-        FILE *fd = fopen(dyStringContents(file), "r");
-        if(fd == NULL)
-            // fail some other way (e.g. HTTP 500)?
-            errAbort("Couldn't open header file '%s' for reading", dyStringContents(file));
-        else
-            {
-            char buf[4096];
-            while(TRUE)
-                {
-                size_t n = fread(buf, 1, sizeof(buf), fd);
-                if(n)
-                    fwrite(buf, 1, n, stdout);
-                else
-                    break;
-                }
-            fclose(fd);
-            printf("<base href='http://hgwdev-larrym.cse.ucsc.edu/'>\n");
-            }
-        }
-    else
-        {
-        // tolerate missing docRoot (i.e. when running from command line)
-        // XXXX ????
-        }
-
-#else
-
-if (isGisaid)
-    {
-    printf("<TABLE WIDTH='100%%' class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
-    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                           // Home
-    if (haveBlat)
-        printf("<TD><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");     // Blat
-    printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");          // Subject  View
-    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);  // Sequence View
-    printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");            // Table View
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    puts(menuStr);
     }
-else if (isGsid)
-    {
-    printf("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
-    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                                               // Home
-    if (haveBlat)
-        printf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");            // Blat
-    printf("<TD><A HREF='../cgi-bin/gsidSubj' class='topbar'>Subject View</A></TD>\n");                                 // Subject View
-    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);                      // Sequence View
-    printf("<TD><A HREF='../cgi-bin/gsidTable' class='topbar'>Table View</A></TD>\n");                                  // Table View
-    if (endsWith(scriptName, "hgBlat"))
-        printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank class='topbar'>Help</A></TD>\n");   // Help
-    else
-        printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank class='topbar'>Help</A></TD>\n");    // Help
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
-    }
-else if (dbIsFound)
-    {
-    puts("<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->\n<TR><TD COLSPAN=3 HEIGHT=40>");
-    puts("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>");
-
-    if (isEncode)
-        printf("<TD><A HREF='../encode/' class='topbar'>Home</A></TD>\n");
-    else
-        {
-        printf("<TD><A HREF='../index.html%s' class='topbar'>Home</A></TD>\n", uiState);
-        if (isGsid)
-            printf("<TD><A HREF='../cgi-bin/gsidSubj%s' class='topbar'>Subject View</A></TD>\n",uiState);
-        else
-            printf("<TD><A HREF='../cgi-bin/hgGateway%s' class='topbar'>Genomes</A></TD>\n",uiState);
-
-        if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
-            endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
-            endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
-	    endsWith(scriptName, "hgHubConnect") ||
-            endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
-            printf("<TD><A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>Genome Browser</A></TD>\n",uiState,TRACK_SEARCH);
-
-        if (haveBlat && !endsWith(scriptName, "hgBlat"))
-            printf("<TD><A HREF='../cgi-bin/hgBlat?command=start%s%s' class='topbar'>Blat</A></TD>\n",theCart ? "&" : "", uiState+1 );
-        }
-
-    if (!isGsid && !hIsCgbServer())  // disable TB for both GSID and CGB servers
-        {
-        char *table = (theCart == NULL ? NULL :
-                    (endsWith(scriptName, "hgGene") ?
-                        cartOptionalString(theCart, "hgg_type") :
-                        cartOptionalString(theCart, "g")));
-        if (table && theCart &&
-            (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
-            endsWith(scriptName, "hgGene")))
-            {
-            struct trackDb *tdb = hTrackDbForTrack(db, table);
-            if (tdb != NULL)
-                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s' class='topbar'>",
-                    uiState, tdb->grp, tdb->track, tdb->table);
-            else
-                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1' class='topbar'>", uiState);
-            trackDbFree(&tdb);
-            }
-        else
-            printf("<TD><A HREF='../cgi-bin/hgTables%s%shgta_doMainPage=1' class='topbar'>",
-                uiState, theCart ? "&" : "?" );
-        printf("Tables</A></TD>\n");
-        }
-
-    if (!endsWith(scriptName, "hgNear") && db != NULL && hgNearOk(db)) //  possible to make this conditional: if (db != NULL && hgNearOk(db))
-        {
-        if (isGsid)
-            printf("<TD><A HREF='../cgi-bin/gsidTable%s' class='topbar'>Table View</A></TD>\n",uiState);
-        else
-            printf("<TD><A HREF='../cgi-bin/hgNear%s' class='topbar'>Gene Sorter</A></TD>\n",uiState);
-        }
-    if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
-        printf("<TD><A HREF='../cgi-bin/hgPcr%s' class='topbar'>PCR</A></TD>\n",uiState);
-    if (endsWith(scriptName, "hgGenome"))
-        printf("<TD><A HREF='../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
-    if (endsWith(scriptName, "hgHeatmap"))
-        printf("<TD><A HREF='../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
-#ifndef GBROWSE
-    if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
-        printf("<TD><A HREF='../cgi-bin/hgSession%s%shgS_doMainPage=1' class='topbar'>Session</A></TD>\n",uiState, theCart ? "&" : "?" );
-#endif /* GBROWSE */
-    if (!isGsid)
-        printf("<TD><A HREF='../FAQ/' class='topbar'>FAQ</A></TD>");
-    if (!isGsid)
-        {
-        if (endsWith(scriptName, "hgBlat"))
-            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html#BLATAlign'");
-        else if (endsWith(scriptName, "hgHubConnect"))
-            printf("<TD><A HREF='../goldenPath/help/hgTrackHubHelp.html'");
-        else if (endsWith(scriptName, "hgText"))
-            printf("<TD><A HREF='../goldenPath/help/hgTextHelp.html'");
-        else if (endsWith(scriptName, "hgNear"))
-            printf("<TD><A HREF='../goldenPath/help/hgNearHelp.html'");
-        else if (endsWith(scriptName, "hgTables"))
-            printf("<TD><A HREF='../goldenPath/help/hgTablesHelp.html'");
-        else if (endsWith(scriptName, "hgGenome"))
-            printf("<TD><A HREF='../goldenPath/help/hgGenomeHelp.html'");
-        else if (endsWith(scriptName, "hgSession"))
-            printf("<TD><A HREF='../goldenPath/help/hgSessionHelp.html'");
-        else if (endsWith(scriptName, "pbGateway"))
-            printf("<TD><A HREF='../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml'");
-        else if (endsWith(scriptName, "hgVisiGene"))
-            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html#VisiGeneHelp'");
-        else
-            printf("<TD><A HREF='../goldenPath/help/hgTracksHelp.html'");
-        printf(" class='topbar'>Help</A></TD>\n");
-        }
-    }
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
-    puts("</TD></TR>\n");
-
-#endif
 
 if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
     {
@@ -527,6 +368,7 @@ webStartWrapperGatewayHeader(theCart, db, headerText, format, args, TRUE, TRUE,
 			     FALSE);
 va_end(args);
 }
+
 
 static void webEndSection()
 /* Close down a section */
@@ -1452,3 +1294,55 @@ if (link)
 return FALSE;
 }
 
+char *menuBar(struct cart *cart)
+// Return HTML for the menu bar (read from a configuration file);
+// we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
+{
+char *docRoot = hDocumentRoot();
+char *menuStr, buf[4096], uiVars[128];
+FILE *fd;
+int len, offset, err;
+char *navBarFile = "inc/globalNavBar.inc";
+struct stat statBuf;
+regex_t re;
+regmatch_t match[2];
+safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
+
+if(docRoot == NULL)
+    // tolerate missing docRoot (i.e. don't bother with menu when running from command line)
+    return NULL;
+
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery.plugins.js", NULL);
+webIncludeResourceFile("nice_menu.css");
+
+// Read in menu bar html
+safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);
+fd = mustOpen(buf, "r");
+fstat(fileno(fd), &statBuf);
+len = statBuf.st_size;
+menuStr = needMem(len + 1);
+mustRead(fd, menuStr, statBuf.st_size);
+menuStr[len] = 0;
+carefulClose(&fd);
+
+// fixup internal CGIs to have hgsid
+safef(buf, sizeof(buf), "/cgi-bin/hg[A-Za-z]+(%c%c?)", '\\', '?');
+err = regcomp(&re, buf, REG_EXTENDED);
+if(err)
+    errAbort("regcomp failed; err: %d", err);
+struct dyString *dy = newDyString(0);
+for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
+    {
+    dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
+    if(match[1].rm_so == match[1].rm_eo)
+        dyStringAppend(dy, "?");
+    dyStringAppend(dy, uiVars);
+    if(match[1].rm_so != match[1].rm_eo)
+        dyStringAppend(dy, "&");
+    }
+if(offset < len)
+    dyStringAppend(dy, menuStr + offset);
+
+return dyStringCannibalize(&dy);
+}

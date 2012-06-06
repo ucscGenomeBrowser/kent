@@ -282,4 +282,7 @@ boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
 void lazarusLives(unsigned long newExpireSeconds);
 /* Long running process requests more time */
 
+char *menuBar(struct cart *cart);
+// return HTML for the menu bar (read from a configuration file).
+
 #endif /* WEB_H */
