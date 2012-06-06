@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db echTel1
+clade mammal
+scientificName Echinops telfairi
+commonName Tenrec
+assemblyDate Jul. 2005
+assemblyLabel Broad/echTel1
+assemblyShortLabel Broad/echTel1
+orderKey 3370
+mitoAcc none
+fastaFiles /hive/data/genomes/echTel1/echTel1.fa.gz
+agpFiles /hive/data/genomes/echTel1/broad/assembly.agp
+qualFiles /hive/data/genomes/echTel1/broad/scaffolds.qac
+dbDbSpeciesDir tenrec
+photoCreditURL http://www.hobbygarten.com/
+photoCreditName Kathrin Holzer, all rights reserved
+ncbiGenomeId 234
+ncbiAssemblyId 229058
+ncbiAssemblyName echTel1
+ncbiBioProject 12590
+genBankAccessionID GCA_000181355.1
+taxId 9371
