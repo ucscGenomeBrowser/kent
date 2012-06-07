@@ -106,8 +106,9 @@ def makeHtml(infoDict, original):
         fetch = urllib2.urlopen(infoDict['url'])
         doc = fetch.read()
         m = re.search('<div class="icons"><a href="(\S+)"', doc)
-        if m.group(1):
-            infoDict['url'] = m.group(1).replace("&amp;", "&")
+        if m:
+            if m.group(1):
+                infoDict['url'] = m.group(1).replace("&amp;", "&")
         else:
             origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
     htmlStr = """
