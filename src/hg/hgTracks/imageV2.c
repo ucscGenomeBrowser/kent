@@ -1849,10 +1849,9 @@ if(imgBox->showPortal)
 else
     jsonObjectAdd(jsonForClient,"imgBoxPortal", newJsonBoolean(FALSE));
 
-hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
-hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
-hPrintf(" class='tableWithDragAndDrop'");
-hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
+hPrintf("<TABLE id='imgTbl' cellspacing='0' cellpadding='0'");
+hPrintf(" width='%d'",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
+hPrintf(" class='tableWithDragAndDrop'>\n");
 
 struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 jsonTdbSettingsInit(jsonTdbVars);
