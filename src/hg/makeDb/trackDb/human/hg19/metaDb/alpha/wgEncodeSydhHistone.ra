@@ -2084,6 +2084,298 @@ tableName wgEncodeSydhHistoneMcf7H3k27acUcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep1
+objType file
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep1.bam,wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep1.bam.bai
+grant Snyder
+lab USC
+md5sum 40b7afdd434585a12f061ee4b47800f9,d04892a9b1c9db5e29cdc696cca1fa00
+project wgEncode
+replicate 1
+setType exp
+subId 7027
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep2
+objType file
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep2.bam,wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep2.bam.bai
+grant Snyder
+lab USC
+md5sum b11c2764dc8bf1285dcf8fba55add229,0d2620b8d842a9b05e4942b3085ac162
+project wgEncode
+replicate 2
+setType exp
+subId 7027
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdPk
+objType table
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+md5sum 74522cef31706aa3d9274923ee525ec9
+project wgEncode
+setType exp
+subId 7027
+tableName wgEncodeSydhHistoneMcf7H3k27me3bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep1
+objType file
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+md5sum 74388f10eeafa035dde131d07804e702
+project wgEncode
+replicate 1
+setType exp
+subId 7027
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep2
+objType file
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+md5sum 328db7eca8d97e6c57bbfd7921818b8a
+project wgEncode
+replicate 2
+setType exp
+subId 7027
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7H3k27me3bUcdSig
+objType table
+antibody H3K27me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002922
+expId 2922
+fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+md5sum ec265a4feb533aaff7e1842211fbbdf9
+project wgEncode
+setType exp
+subId 7027
+tableName wgEncodeSydhHistoneMcf7H3k27me3bUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep1
+objType file
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep1.bam,wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep1.bam.bai
+grant Snyder
+lab USC
+md5sum da88e642518ef00ca3795d4bb9693499,600e0b51c8d7c429c9619a75a1242a25
+project wgEncode
+replicate 1
+setType exp
+subId 7028
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep2
+objType file
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep2.bam,wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep2.bam.bai
+grant Snyder
+lab USC
+md5sum c46e3e52d2b35d2ec779e269913b3584,6b5570f2ce1a8da2aa1bf1ed2450a554
+project wgEncode
+replicate 2
+setType exp
+subId 7028
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdPk
+objType table
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+md5sum bc207e1c6e9db09822d095bb71b27c40
+project wgEncode
+setType exp
+subId 7028
+tableName wgEncodeSydhHistoneMcf7H3k36me3bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep1
+objType file
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+md5sum 65ac0f4db2dcf8a05f57d9dad7ad9ec8
+project wgEncode
+replicate 1
+setType exp
+subId 7028
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep2
+objType file
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+md5sum f9431fca31ccbb1d067028e8ee918d8f
+project wgEncode
+replicate 2
+setType exp
+subId 7028
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneMcf7H3k36me3bUcdSig
+objType table
+antibody H3K36me3B
+cell MCF-7
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH000762
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-07
+dateUnrestricted 2013-03-07
+dccAccession wgEncodeEH002923
+expId 2923
+fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+md5sum db04ddab92cad6d0bceaf016cc69c0f1
+project wgEncode
+setType exp
+subId 7028
+tableName wgEncodeSydhHistoneMcf7H3k36me3bUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistoneMcf7InputUcdAlnRep1
 objType file
 antibody Input
@@ -4812,4 +5104,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 845457268
+# MAGIC: -323693922
