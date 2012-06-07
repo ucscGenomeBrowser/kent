@@ -190,9 +190,7 @@ if (withHtmlHeader)
         webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
-    printf("</HEAD>" "\n"
-           "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
-           hgColOutside());
+    printf("</HEAD>\n<BODY>");
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
     puts(commonCssStyles());
     }
