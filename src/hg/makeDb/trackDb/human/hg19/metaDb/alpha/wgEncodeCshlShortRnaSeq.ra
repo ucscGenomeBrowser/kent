@@ -18418,7 +18418,6 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellTapContigs
 objType table
-attic auxExp
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -18476,7 +18475,6 @@ view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellTapExonsGencV10
 objType file
-attic auxExp
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -23823,58 +23821,6 @@ subId 5850
 tableName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapPlusRep4
 view PlusSignal
 
-metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep3
-objType file
-bioRep 085C
-cell SK-N-SH
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
-dccAccession wgEncodeEH002468
-expId 2468
-fileName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep3.pdf.gz
-grant Gingeras
-lab CSHL
-labExpId LID46958
-localization cytosol
-md5sum 30586d056d5196cb6dbb1e9e5b5ab17b
-project wgEncode
-protocol TAP-Only
-readType 1x101
-replicate 3
-rnaExtract shortTotal
-seqPlatform Illumina_HiSeq_2000
-subId 5653
-view Protocol
-
-metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep4
-objType file
-bioRep 086C
-cell SK-N-SH
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-14
-dateUnrestricted 2012-11-14
-dccAccession wgEncodeEH002468
-expId 2468
-fileName wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapProtocolRep4.pdf.gz
-grant Gingeras
-lab CSHL
-labExpId LID46959
-localization cytosol
-md5sum 2377957d23410aecf2092f45ef76221d
-project wgEncode
-protocol TAP-Only
-readType 1x101
-replicate 4
-rnaExtract shortTotal
-seqPlatform Illumina_HiSeq_2000
-subId 5650
-view Protocol
-
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapRawDataRep3
 objType file
 bioRep 085C
@@ -25110,4 +25056,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1573864678
+# MAGIC: 1194295318
