@@ -688,7 +688,6 @@ cgiVarExcludeExcept(except);
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 if (cgiVarExists("pbt.reset"))
     resetVars();
 /* call cartHtmlShellPbGlobal to accomodate situations that PB not entered from GB */

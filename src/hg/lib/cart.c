@@ -1526,33 +1526,34 @@ void setThemeFromCart(struct cart *cart)
 {
 // get theme from cart and use it to get style/background file from config
 char *cartTheme = cartOptionalString(cart, "theme");
-if (cartTheme==NULL)
-    return;
 
-char *themeKey = catTwoStrings("browser.theme.", cartTheme);
-char *themeDefLine = cfgOption(themeKey);
-freeMem(themeKey);
-if (themeDefLine == NULL)
-    return;
+// XXXX which setting should take precedence? Currently browser.theme does.
 
-// set style file 
-char * styleFile = cloneString(themeDefLine);
-chopSuffixAt(styleFile, ',');
-if (strlen(styleFile)==0)
-    return;
-char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-if (link!=NULL)
+char *styleFile = cfgOption("browser.style");
+if(styleFile != NULL)
     {
-    htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
-    webSetStyle(link);       // for web.c, used by hgc
+    char buf[512];
+    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    char *copy = cloneString(buf);
+    htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
+    webSetStyle(copy);       // for web.c, used by hgc
     }
 
-// set background file (optional, after ',' in hg.conf line)
-if (! stringIn(",", themeDefLine))
-    return;
-char * backgroundFile = cloneString(themeDefLine);
-backgroundFile = chopPrefixAt(backgroundFile, ',');
-htmlSetBackground(backgroundFile);
+if(isNotEmpty(cartTheme))
+    {
+    char *themeKey = catTwoStrings("browser.theme.", cartTheme);
+    styleFile = cfgOption(themeKey);
+    freeMem(themeKey);
+    if (isEmpty(styleFile))
+        return;
+
+    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
+    if (link != NULL)
+        {
+        htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
+        webSetStyle(link);       // for web.c, used by hgc
+        }
+    }
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
