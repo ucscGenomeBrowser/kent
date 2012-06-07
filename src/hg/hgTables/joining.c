@@ -957,7 +957,13 @@ boolean doJoin = joinRequired(primaryDb, primaryTable,
 			      fieldList, &dtfList, &filterTables);
 
 boolean hasIdentifiers = (identifierFileName() != NULL);
-if (hasIdentifiers)
+
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+boolean hasRegions = sameString(regionType, hgtaRegionTypeRange)
+		 ||  sameString(regionType, hgtaRegionTypeEncode)
+		 || (sameString(regionType, hgtaRegionTypeUserRegions) && (userRegionsFileName() != NULL));
+
+if (hasIdentifiers || hasRegions)
     {
     boolean hasTable = FALSE;
     char *dtfDb, *dtfTable;
@@ -988,7 +994,7 @@ if (hasIdentifiers)
 	if (sameString(temp->database, dtfDb) && sameString(temp->table, dtfTable))
 	    hasTable = TRUE;
     /* if primary table is not in output or filter, 
-     *  add it to the filterTables list to trigger joining and identifier filtering */
+     *  add it to the filterTables list to trigger joining and identifier and/or region filtering */
     if (!hasTable)
 	{	    
 	struct joinerDtf *dtf;
