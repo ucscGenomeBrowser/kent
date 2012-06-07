@@ -457,7 +457,8 @@ ul.nice-menu-down li ul li ul {
 a:link {color: #1122CC;}
 
 
-#imgTable, #chrom {
+#imgTbl, #chrom {
+    background-color: #fff;
     border: 1px solid #000;
     border-radius: 2px;
 }
