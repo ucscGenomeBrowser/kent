@@ -60,9 +60,6 @@ char *hCgiRoot();
 /* get the path to the CGI directory.
  * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
 
-char *hBackgroundImage();
-/* get the path to the configured background image to use, or the default */
-
 /* Definitions for ruler pseudo-track.  It's not yet a full-fledged
  * track, so it can't appear in trackDb. */
 #define RULER_TRACK_NAME        "ruler"

@@ -350,7 +350,6 @@ if (argc != 1)
 
 if (onWeb)
     {
-    htmlSetBackground(hBackgroundImage());  /* uses cfgOption */
     /* this will cause it to kick out the set-cookie: http response header line */
     cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
     }

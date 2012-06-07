@@ -3103,7 +3103,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
