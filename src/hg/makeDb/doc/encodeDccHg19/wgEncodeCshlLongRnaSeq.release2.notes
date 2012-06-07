@@ -1,12 +1,12 @@
 mkChangeNotes v2
 hg19 wgEncodeCshlLongRnaSeq Release 2 vs Release 1
-2012-06-06
+2012-05-25
 
 QA Count Summaries for Release 2:
 Tables: 732
 Files: 2046
 Gbdbs: 720
-Supplemental: 9
+Supplemental: 0
 Other: 3
 
 REVOKED:
@@ -3649,8 +3649,6 @@ wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7Rep5
 wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7Rep5
 wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
-
-
 Untouched Attic Objects (129):
 wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep1
 wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep2
@@ -3781,8 +3779,6 @@ wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep1
 wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep2
 wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep1
 wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep2
-
-
 
 
 No Errors
