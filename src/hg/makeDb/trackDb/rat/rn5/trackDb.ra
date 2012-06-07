@@ -8,3 +8,8 @@ html gold
 track gap override
 html gap
 
+track mgcFullMrna override
+visibility pack
+
+track xenoRefGene override
+visibility pack
