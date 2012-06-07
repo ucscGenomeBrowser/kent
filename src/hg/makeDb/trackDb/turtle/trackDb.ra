@@ -1,0 +1,7 @@
+
+searchTable gold
+searchMethod 
+searchMethod prefix
+shortCircuit 1
+termRegex [AN][HC][G_][Y0]0[0-9]+(\.1)?
+searchPriority 8
