@@ -1,11 +1,11 @@
 mkChangeNotes v2
 hg19 wgEncodeSydhHistone Release 3 vs Release 2
-2012-05-29
+2012-06-07
 
 QA Count Summaries for Release 3:
-Tables: 53
-Files: 215
-Gbdbs: 30
+Tables: 57
+Files: 231
+Gbdbs: 32
 Supplemental: 0
 Other: 3
 
@@ -15,22 +15,22 @@ Files: 36
 Gbdbs: 5
 
 Sizes of New:
-Table: 79 MB
-Files: 23090 MB (23 GB)
-Gbdbs: 1745 MB (2 GB)
+Table: 83 MB
+Files: 31939 MB (31 GB)
+Gbdbs: 2327 MB (2 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 24915 MB (24 GB)
+Total: 34350 MB (34 GB)
 
 
 TABLES:
-New: 12
+New: 16
 Untouched: 41
 Revoked/Replaced/Renamed: 9
-New + Untouched: 53
-Total (New + Untouched + Revoked/Replaced/Renamed): 62
+New + Untouched: 57
+Total (New + Untouched + Revoked/Replaced/Renamed): 66
 
-New Tables (12):
+New Tables (16):
 wgEncodeSydhHistoneHct116H3k04me1UcdPk
 wgEncodeSydhHistoneHct116H3k04me1UcdSig
 wgEncodeSydhHistoneHct116H3k27acUcdPk
@@ -40,6 +40,10 @@ wgEncodeSydhHistoneMcf7H3k09me3UcdPk
 wgEncodeSydhHistoneMcf7H3k09me3UcdSig
 wgEncodeSydhHistoneMcf7H3k27acUcdPk
 wgEncodeSydhHistoneMcf7H3k27acUcdSig
+wgEncodeSydhHistoneMcf7H3k27me3bUcdPk
+wgEncodeSydhHistoneMcf7H3k27me3bUcdSig
+wgEncodeSydhHistoneMcf7H3k36me3bUcdPk
+wgEncodeSydhHistoneMcf7H3k36me3bUcdSig
 wgEncodeSydhHistoneMcf7InputUcdSig
 wgEncodeSydhHistonePanc1H3k04me3bUcdPk
 wgEncodeSydhHistonePanc1H3k04me3bUcdSig
@@ -100,13 +104,13 @@ wgEncodeSydhHistoneK562bInputUcdSig
 
 
 DOWNLOAD FILES:
-New: 51
+New: 67
 Untouched: 164
 Revoked/Replaced/Renamed: 36
-New + Untouched: 215
-Total (New + Untouched + Revoked/Replaced/Renamed): 251
+New + Untouched: 231
+Total (New + Untouched + Revoked/Replaced/Renamed): 267
 
-New Download Files (51):
+New Download Files (67):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneHct116H3k04me1UcdAlnRep2.bam
@@ -143,6 +147,22 @@ New Download Files (51):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27acUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k27me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7H3k36me3bUcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7InputUcdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7InputUcdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release3/wgEncodeSydhHistoneMcf7InputUcdAlnRep2.bam
@@ -365,18 +385,20 @@ Revoked/Replaced/Renamed Download Files (36):
 
 
 GBDBS:
-New: 7
+New: 9
 Untouched: 23
 Revoked/Replaced/Renamed: 5
-New + Untouched: 30
-Total (New + Untouched + Revoked/Replaced/Renamed): 35
+New + Untouched: 32
+Total (New + Untouched + Revoked/Replaced/Renamed): 37
 
-New Gbdb Files (7):
+New Gbdb Files (9):
 /gbdb/hg19/bbi/wgEncodeSydhHistoneHct116H3k04me1UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneHct116H3k27acUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneHct116InputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneMcf7H3k09me3UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneMcf7H3k27acUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneMcf7H3k27me3bUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneMcf7H3k36me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneMcf7InputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistonePanc1H3k04me3bUcdSig.bigWig
 

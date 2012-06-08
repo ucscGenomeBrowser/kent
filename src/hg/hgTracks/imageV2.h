@@ -3,9 +3,6 @@
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 
-// set IN_PLACE_UPDATE 1 to update the hgTracks image in-place in the client.
-#define IN_PLACE_UPDATE  1
-
 //  DRAG_SCROLL means dragging the image left-right to reposition the viwing window on the chromosome.
 //  NOTE: 1x works fine and is released. Set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to see hidden image while dragging.
 //        Problems with >1x: nextExon and nextItem arrows not addressed.  Dynamic resize occasionally fails.

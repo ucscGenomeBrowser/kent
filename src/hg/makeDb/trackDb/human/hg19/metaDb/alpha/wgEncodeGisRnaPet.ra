@@ -19,6 +19,7 @@ lab GIS
 labExpId RHA009
 labProtocolId 087WC+pet
 localization cell
+md5sum 01cecc1be0758fb805ccaf24218b36db,2dadb34a602e1d6b59d7459bf6696a99
 project wgEncode
 readType 2x36
 replicate 3
@@ -43,6 +44,7 @@ lab GIS
 labExpId RHA010
 labProtocolId 088WC+pet
 localization cell
+md5sum ef6bcf7408b4521936b77b4b5a55c96f,e6c786835662438f67f5203fa436a146
 project wgEncode
 readType 2x36
 replicate 4
@@ -68,6 +70,7 @@ labExpId RHA009,RHA010
 labProtocolId 087WC+pet,088WC+pet
 labVersion iIDR
 localization cell
+md5sum 7e21b066dfd20ba339d400542d8250d2
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -91,6 +94,7 @@ lab GIS
 labExpId RHA009
 labProtocolId 087WC+pet
 localization cell
+md5sum 02cabf541367a3cbdae1927d3c8101ad
 project wgEncode
 readType 2x36
 replicate 3
@@ -114,6 +118,7 @@ lab GIS
 labExpId RHA010
 labProtocolId 088WC+pet
 localization cell
+md5sum 03f5501cc9a9dddc658cc943ba1160c5
 project wgEncode
 readType 2x36
 replicate 4
@@ -137,6 +142,7 @@ lab GIS
 labExpId RHA009
 labProtocolId 087WC+pet
 localization cell
+md5sum 52a67c9c28603bb079bbed2bb28e5d7f
 project wgEncode
 readType 2x36
 replicate 3
@@ -160,6 +166,7 @@ lab GIS
 labExpId RHA010
 labProtocolId 088WC+pet
 localization cell
+md5sum e8e6248f4cdd00f7f8b9aa664fe00b30
 project wgEncode
 readType 2x36
 replicate 4
@@ -183,6 +190,7 @@ lab GIS
 labExpId RHA009
 labProtocolId 087WC+pet
 localization cell
+md5sum 4cc175aa25b9f9bc6214e91599610b04
 project wgEncode
 readType 2x36
 replicate 3
@@ -207,6 +215,7 @@ lab GIS
 labExpId RHA010
 labProtocolId 088WC+pet
 localization cell
+md5sum 0dc46f2227d8b2e0cefc3794f21a76bf
 project wgEncode
 readType 2x36
 replicate 4
@@ -231,6 +240,7 @@ lab GIS
 labExpId RHA009
 labProtocolId 087WC+pet
 localization cell
+md5sum 57630f684575ffaaba6e549a299077c8
 project wgEncode
 readType 2x36
 replicate 3
@@ -255,6 +265,7 @@ lab GIS
 labExpId RHA010
 labProtocolId 088WC+pet
 localization cell
+md5sum c309d71f61b496b4907c485e10b2443c
 project wgEncode
 readType 2x36
 replicate 4
@@ -279,6 +290,7 @@ lab GIS
 labExpId RHA011
 labProtocolId 087C+pet
 localization cytosol
+md5sum b07798aeb4399b24706b853c28b2fc89,7b5e02d4e14c05d2394395707e6bd518
 project wgEncode
 readType 2x36
 replicate 3
@@ -303,6 +315,7 @@ lab GIS
 labExpId RHA012
 labProtocolId 088C+pet
 localization cytosol
+md5sum c99dffdc175998518a08a3c8ec3e3831,484a6d7652d69247a04f50b0748ecc9e
 project wgEncode
 readType 2x36
 replicate 4
@@ -328,6 +341,7 @@ labExpId RHA011,RHA012
 labProtocolId 087C+pet,088C+pet
 labVersion iIDR
 localization cytosol
+md5sum 9d0f79b9c8483f92600d83d9f16d69c2
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -351,6 +365,7 @@ lab GIS
 labExpId RHA011
 labProtocolId 087C+pet
 localization cytosol
+md5sum 43672868c4d6958ad2e4d0f763c2c3be
 project wgEncode
 readType 2x36
 replicate 3
@@ -374,6 +389,7 @@ lab GIS
 labExpId RHA012
 labProtocolId 088C+pet
 localization cytosol
+md5sum 5f6ca7d7a305acdd7872bf4d2b39ae55
 project wgEncode
 readType 2x36
 replicate 4
@@ -397,6 +413,7 @@ lab GIS
 labExpId RHA011
 labProtocolId 087C+pet
 localization cytosol
+md5sum 1178867a0ccf9cb64603b518fa52dafd
 project wgEncode
 readType 2x36
 replicate 3
@@ -420,6 +437,7 @@ lab GIS
 labExpId RHA012
 labProtocolId 088C+pet
 localization cytosol
+md5sum 7ad2176ef0ee561f7bad61b027d9f0a3
 project wgEncode
 readType 2x36
 replicate 4
@@ -443,6 +461,7 @@ lab GIS
 labExpId RHA011
 labProtocolId 087C+pet
 localization cytosol
+md5sum cde3550b00463fe64a5a382fea9857cb
 project wgEncode
 readType 2x36
 replicate 3
@@ -467,6 +486,7 @@ lab GIS
 labExpId RHA012
 labProtocolId 088C+pet
 localization cytosol
+md5sum 3016b0fbd14d7dc4a565f98ffc7e5dbc
 project wgEncode
 readType 2x36
 replicate 4
@@ -491,6 +511,7 @@ lab GIS
 labExpId RHA011
 labProtocolId 087C+pet
 localization cytosol
+md5sum 29a7cde0305d472d06dbb201b6b0f1b1
 project wgEncode
 readType 2x36
 replicate 3
@@ -515,6 +536,7 @@ lab GIS
 labExpId RHA012
 labProtocolId 088C+pet
 localization cytosol
+md5sum 2f8059b8fb75b33d0f3c33cec605bf5b
 project wgEncode
 readType 2x36
 replicate 4
@@ -539,6 +561,7 @@ lab GIS
 labExpId RHA013
 labProtocolId 087N+pet
 localization nucleus
+md5sum ad1a4828fd993d8085614132a6b754a5,9071f6b836d3472fc5cd2f191c26ae31
 project wgEncode
 readType 2x36
 replicate 3
@@ -563,6 +586,7 @@ lab GIS
 labExpId RHA014
 labProtocolId 088N+pet
 localization nucleus
+md5sum 56eea9bedd4cae6c745680db799f0543,a28c09b604568bd3e53072f8d1f54bab
 project wgEncode
 readType 2x36
 replicate 4
@@ -588,6 +612,7 @@ labExpId RHA013,RHA014
 labProtocolId 087N+pet,088N+pet
 labVersion iIDR
 localization nucleus
+md5sum e8eab1a32843506fd0ef8db3e61786c4
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -611,6 +636,7 @@ lab GIS
 labExpId RHA013
 labProtocolId 087N+pet
 localization nucleus
+md5sum 92558cdcf454cdeea5b009d91f07d8a2
 project wgEncode
 readType 2x36
 replicate 3
@@ -634,6 +660,7 @@ lab GIS
 labExpId RHA014
 labProtocolId 088N+pet
 localization nucleus
+md5sum 0fa1fd8a7c194b410d1784f4fb20f18a
 project wgEncode
 readType 2x36
 replicate 4
@@ -657,6 +684,7 @@ lab GIS
 labExpId RHA013
 labProtocolId 087N+pet
 localization nucleus
+md5sum fc621a7dce30b184afc7832f8ab316e1
 project wgEncode
 readType 2x36
 replicate 3
@@ -680,6 +708,7 @@ lab GIS
 labExpId RHA014
 labProtocolId 088N+pet
 localization nucleus
+md5sum 812307dda46c44681502850f9dc520c1
 project wgEncode
 readType 2x36
 replicate 4
@@ -703,6 +732,7 @@ lab GIS
 labExpId RHA013
 labProtocolId 087N+pet
 localization nucleus
+md5sum 22513fce1cbd14131a70526fb037bc6a
 project wgEncode
 readType 2x36
 replicate 3
@@ -727,6 +757,7 @@ lab GIS
 labExpId RHA014
 labProtocolId 088N+pet
 localization nucleus
+md5sum 570c86a891c89eb744e8f0bae13461f4
 project wgEncode
 readType 2x36
 replicate 4
@@ -751,6 +782,7 @@ lab GIS
 labExpId RHA013
 labProtocolId 087N+pet
 localization nucleus
+md5sum 2266fed91fa7e54459bb5cdd44024233
 project wgEncode
 readType 2x36
 replicate 3
@@ -775,6 +807,7 @@ lab GIS
 labExpId RHA014
 labProtocolId 088N+pet
 localization nucleus
+md5sum 44e45648287353e37b422347ec74e970
 project wgEncode
 readType 2x36
 replicate 4
@@ -893,7 +926,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum 43d7ca9a887f31047a1baccb796d9c8b
+md5sum 927644527b04fea14e544236c778a3fd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -924,7 +957,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
-md5sum d6aca3475c5cb1c7b4e8a9ac6d1026ed
+md5sum bd1c3ae97d07de1a5debd9d6889622b6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -953,7 +986,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
-md5sum 9c1a439d01fb082b23e026388b6718dd
+md5sum 48763242783e077fd5ddd697d43b6969
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -983,7 +1016,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum fc34aca1582ce3c791a4f5df7311ca96
+md5sum c57288b61e645beb3689f6ee35ec8ab8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1012,7 +1045,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
-md5sum 71652744741071a5964d03e30149243b
+md5sum 77d2d0ac459f83a4c223f55af5036f1d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1040,7 +1073,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
-md5sum 7f50a4196a6557139a5b0b39a73b9de3
+md5sum b54da1aa919da0cf1b818cc563de09dd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1069,7 +1102,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-free
 localization cytosol
-md5sum a124b93ec33b6930e9ba241a13c749a8
+md5sum e2ad5fc07a8f727aeb6a3fccd64658a8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1097,7 +1130,7 @@ labExpId DHG001
 labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
-md5sum 84d5e9d31ed8eed12a827c9cc3f6982c
+md5sum d53b25727740a365620efc52c2607f97
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1125,7 +1158,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
-md5sum 4784bfb738c10b61e34c6177e7c29adf
+md5sum 054624748b11266dc4bef4cdd6e611ed
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1365,7 +1398,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
-md5sum 011715b1976580d3837f46b6efdd6fb1
+md5sum c55682f7a3bf37d20d6af81fe5f0842a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1394,7 +1427,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
-md5sum eb7b79830c23d3d729bdc9c605f6368f
+md5sum 0ed640ba88d1e5cb702fd41ed0f26cc3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1422,7 +1455,7 @@ labExpId DHG002
 labProtocolId gen0111N+pet
 labVersion clone-based
 localization nucleus
-md5sum 2894f464d1a7646ffc5a27eef1b1c3dc
+md5sum 015408fe68f41e10ab0993e1a152f49d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1540,7 +1573,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
-md5sum 0a28028ba1f146b003881c674ed35d62
+md5sum ed52fdd87447ac04c2a67c8036e617fa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1569,7 +1602,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
-md5sum 8f8266709db516faed3d2127780096df
+md5sum fcd1ef8ffb346888bd36e0830dec1f48
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1597,7 +1630,7 @@ labExpId IHE001
 labProtocolId gen0114WC+pet
 labVersion clone-free
 localization cell
-md5sum cd82d6011ecf2e188b8f2a774508a94d
+md5sum daa6a09e3a88a84c06e9bffd922088cf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1741,7 +1774,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
-md5sum d8d7ccd1781bbf316a68e8ed88b8d9e6
+md5sum b1c071be3fab2f36af1ee504775c1ea6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1770,7 +1803,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
-md5sum e847205019dba276b4450a05969dbba9
+md5sum a436b1d295aa2985d20c1db445e59482
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1798,7 +1831,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
-md5sum bc3680fa8452e4880fb94bba4aa95f13
+md5sum 34c7a52501a75d010613734311b07def
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1825,7 +1858,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
-md5sum c78d3fa812d92c4e0c890a6a963e8b5e
+md5sum 7e1a4068b0dd8a19958ce3cb44a7185e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1852,7 +1885,7 @@ labExpId RHH014
 labProtocolId 011WC+pet
 labVersion clone-free
 localization cell
-md5sum 5c64b47ef025e6e0ad672c3bf15c18cc
+md5sum 4ed83de07bd6528b08652336116370f5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1879,7 +1912,7 @@ labExpId RHH015
 labProtocolId 012WC+pet
 labVersion clone-free
 localization cell
-md5sum 2e6413f1465078a23f376322c2ccd9b2
+md5sum c26479c9bcf4db5a9f5199bba84c80e4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2052,7 +2085,7 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
-md5sum 4656002d3fe512e9e27e09042794d5ae
+md5sum 655b9edfd19654af2ed95127ff0e8085
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2081,7 +2114,7 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
-md5sum bce8b4ba72d31a8d49e51dc1bf4a9ba3
+md5sum 0fe2f6902a856f4a89a6208bfc45f3b4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2109,7 +2142,7 @@ labExpId RHH002
 labProtocolId gen0122C+pet
 labVersion clone-free
 localization cytosol
-md5sum 2ac73eb4931bf1d2de942c69d8f2b578
+md5sum 06475ca109055b147953b22d1ce8a0d6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2259,7 +2292,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum de49cfc7cc6a4a4f84b4db0d4f1dea29
+md5sum e6a6e268a1473c12fd2639d0b0403b45
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2288,7 +2321,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum ad5af8d508129839e0eded6504192c15
+md5sum b1ad9c86e6f91c6a7b280b4853f217a3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2319,7 +2352,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum 85c16b6826b41e4b702a1550edc37f54
+md5sum cfd949158be49d6e896b1a8026516089
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2347,7 +2380,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum de20f645ea6d70f0d2b7fcc10bf01e6d
+md5sum 68fb641df5cb5675b0545f4bd8baf36b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2377,7 +2410,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum bd9c8453f8cc1b462d327614321046da
+md5sum 96be75480c5ba4a7661b79ab436ea538
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2405,7 +2438,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
-md5sum 9c1bb79ddf69ed86900fe1ff3abe2a40
+md5sum 3bcdb71547d2174a62aba8f569c22f0a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2586,7 +2619,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
-md5sum 9d66639de524ab6d159d9ceef85c7110
+md5sum 5340bd7fd0e817d1f4bc97d54a9cc616
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2615,7 +2648,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
-md5sum 01ac2447678a0ab4b72678a3ec64b0e5
+md5sum d030fe790b3bd228dba12c20120502fe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2643,7 +2676,7 @@ labExpId DHH002
 labProtocolId gen0126C+pet
 labVersion clone-based
 localization cytosol
-md5sum d800bc3b41a0f5b2430b2fee91c59021
+md5sum 15b48b7e515203a8da15d6574e530302
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2761,7 +2794,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
-md5sum 0792cee5750de10dbc1c82a0badf9e15
+md5sum 6d1013d3708a627e7bfea530cc956a20
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2790,7 +2823,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
-md5sum 7fce1c15605e19bb2fc7019179026010
+md5sum 611c84aac912a872ebd7b5e96b56a411
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2818,7 +2851,7 @@ labExpId DHH003
 labProtocolId gen0129N+pet
 labVersion clone-based
 localization nucleus
-md5sum bd73d6539f8d343dc89195842c92849e
+md5sum b460f513d02ba179e300a7707c304f05
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2968,7 +3001,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum 3b1164ace222f4650fa689ea9b14177c
+md5sum eebddd4159a45dca0830358f11bb8900
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2997,7 +3030,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum 3f522dc545a5c02d8ba385097fb45adc
+md5sum 80c305101f2009d07355d970e29b7a68
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3028,7 +3061,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum cce0e097972fbd372eacd426b1754e65
+md5sum fc6b364e07f4627f5beb8470d1d928f3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3056,7 +3089,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum 69b3970780cbfa5ac12d6c8b6a1cc0a0
+md5sum 85087703eccb962bc6a6219987045ad8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3086,7 +3119,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum d5c2c815089dede8f9fcc1f408ef7bb2
+md5sum d5f62548021f4f652d91cd27b7f01f60
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3114,7 +3147,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
-md5sum 04d5abf878044ef7697e64d2be3354b9
+md5sum e36bbb621397a521ad8dd50e0f91212e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3295,7 +3328,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
-md5sum b0830a5c107425e6a16e0d2d45906614
+md5sum 61b8749ad28fc63fcf004a03fd981f9a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3324,7 +3357,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
-md5sum 0c6af2812bcc366d3f043aca8992807d
+md5sum 911bf003341fcf8141f5f26747db7dbe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3352,7 +3385,7 @@ labExpId RHH001
 labProtocolId gen0118N+pet
 labVersion clone-free
 localization nucleus
-md5sum 2a61843bca0be12bccfca3f009297455
+md5sum 90aeea4d36c645ac2d14291b18b72914
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3437,6 +3470,7 @@ lab GIS
 labExpId RHI001
 labProtocolId 045WC+pet
 localization cell
+md5sum 6ec7adae8231c730e9483d2d652d415e,3c98959a863b06a0379a11571e912664
 project wgEncode
 readType 2x36
 replicate 1
@@ -3462,6 +3496,7 @@ lab GIS
 labExpId RHI002
 labProtocolId 046WC+pet
 localization cell
+md5sum 438f5818fc0625dda374348487483c6b,c13768256e2f75c234b46d4129f7e57c
 project wgEncode
 readType 2x36
 replicate 2
@@ -3488,6 +3523,7 @@ labExpId RHI001,RHI002
 labProtocolId 045WC+pet,046WC+pet
 labVersion iIDR
 localization cell
+md5sum 5226123225f6b3207fb36cb4eacadee2
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -3512,6 +3548,7 @@ lab GIS
 labExpId RHI001
 labProtocolId 045WC+pet
 localization cell
+md5sum 25a14832cc5879304047435c6fdc24e1
 project wgEncode
 readType 2x36
 replicate 1
@@ -3536,6 +3573,7 @@ lab GIS
 labExpId RHI002
 labProtocolId 046WC+pet
 localization cell
+md5sum cdcfbd1b9b69321d5c0aa5afa9d176c4
 project wgEncode
 readType 2x36
 replicate 2
@@ -3560,6 +3598,7 @@ lab GIS
 labExpId RHI001
 labProtocolId 045WC+pet
 localization cell
+md5sum b54da859be8703ed12b7c88d018aa02c
 project wgEncode
 readType 2x36
 replicate 1
@@ -3584,6 +3623,7 @@ lab GIS
 labExpId RHI002
 labProtocolId 046WC+pet
 localization cell
+md5sum eb21f85a37a56f2e3f52292e76cdef9a
 project wgEncode
 readType 2x36
 replicate 2
@@ -3608,6 +3648,7 @@ lab GIS
 labExpId RHI001
 labProtocolId 045WC+pet
 localization cell
+md5sum dc7958ee2d4650829639706cd1f0cbf7
 project wgEncode
 readType 2x36
 replicate 1
@@ -3633,6 +3674,7 @@ lab GIS
 labExpId RHI002
 labProtocolId 046WC+pet
 localization cell
+md5sum f14710c35a251e3a2c8da8c3477f6d94
 project wgEncode
 readType 2x36
 replicate 2
@@ -3658,6 +3700,7 @@ lab GIS
 labExpId RHI001
 labProtocolId 045WC+pet
 localization cell
+md5sum debae4fde60d2eff9b89f2ded03c7819
 project wgEncode
 readType 2x36
 replicate 1
@@ -3683,6 +3726,7 @@ lab GIS
 labExpId RHI002
 labProtocolId 046WC+pet
 localization cell
+md5sum db21b257c5251ca835c00fe74f2cdb87
 project wgEncode
 readType 2x36
 replicate 2
@@ -3708,6 +3752,7 @@ lab GIS
 labExpId RHI003
 labProtocolId 045C+pet
 localization cytosol
+md5sum 096039af97496deba283185219d3aab2,3ac0c72ab414d6266806f92bdca490d2
 project wgEncode
 readType 2x36
 replicate 1
@@ -3733,6 +3778,7 @@ lab GIS
 labExpId RHI004
 labProtocolId 046C+pet
 localization cytosol
+md5sum 6b656282c05cdb8d0b0cb8b34f638a16,f99e73a16ffc3052b5c673a31226592f
 project wgEncode
 readType 2x36
 replicate 2
@@ -3759,6 +3805,7 @@ labExpId RHI003,RHI004
 labProtocolId 045C+pet,046C+pet
 labVersion iIDR
 localization cytosol
+md5sum 26660ffc356f5edcf36be2dd32cf9f0e
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -3783,6 +3830,7 @@ lab GIS
 labExpId RHI003
 labProtocolId 045C+pet
 localization cytosol
+md5sum 73ae7d716f3e2a5f5d4b3735b585abc5
 project wgEncode
 readType 2x36
 replicate 1
@@ -3807,6 +3855,7 @@ lab GIS
 labExpId RHI004
 labProtocolId 046C+pet
 localization cytosol
+md5sum 671aa4e1301ab1fa7be9d98c8aa2c695
 project wgEncode
 readType 2x36
 replicate 2
@@ -3831,6 +3880,7 @@ lab GIS
 labExpId RHI003
 labProtocolId 045C+pet
 localization cytosol
+md5sum c18bacd62a8e40981a0fde32aa3f01bf
 project wgEncode
 readType 2x36
 replicate 1
@@ -3855,6 +3905,7 @@ lab GIS
 labExpId RHI004
 labProtocolId 046C+pet
 localization cytosol
+md5sum 6cbe900c67d989c639b759d17a2dd613
 project wgEncode
 readType 2x36
 replicate 2
@@ -3879,6 +3930,7 @@ lab GIS
 labExpId RHI003
 labProtocolId 045C+pet
 localization cytosol
+md5sum 559118b91b757919ee0c39e3764da1ea
 project wgEncode
 readType 2x36
 replicate 1
@@ -3904,6 +3956,7 @@ lab GIS
 labExpId RHI004
 labProtocolId 046C+pet
 localization cytosol
+md5sum caabf1bce1ba1b24bac6ee7e1ab3a1b5
 project wgEncode
 readType 2x36
 replicate 2
@@ -3929,6 +3982,7 @@ lab GIS
 labExpId RHI003
 labProtocolId 045C+pet
 localization cytosol
+md5sum a0c754ee0a44deaa9b15304c3290ecb8
 project wgEncode
 readType 2x36
 replicate 1
@@ -3954,6 +4008,7 @@ lab GIS
 labExpId RHI004
 labProtocolId 046C+pet
 localization cytosol
+md5sum d6ba0a51e726b63bab92f379e6924f1b
 project wgEncode
 readType 2x36
 replicate 2
@@ -3979,6 +4034,7 @@ lab GIS
 labExpId RHI005
 labProtocolId 045N+pet
 localization nucleus
+md5sum 9b688928c1b9b9a524c46ab696f3e5f2,8680e23f8b1186f70be5c5c8c183962e
 project wgEncode
 readType 2x36
 replicate 1
@@ -4004,6 +4060,7 @@ lab GIS
 labExpId RHI006
 labProtocolId 046N+pet
 localization nucleus
+md5sum ea30ac65f46bf45ddfd78188ac710a85,9812ba448137f9d7c2c6a9bc93ccefb2
 project wgEncode
 readType 2x36
 replicate 2
@@ -4030,6 +4087,7 @@ labExpId RHI005,RHI006
 labProtocolId 045N+pet,046N+pet
 labVersion iIDR
 localization nucleus
+md5sum 7c0f62626bb1c83f0186f5ea4279536d
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -4054,6 +4112,7 @@ lab GIS
 labExpId RHI005
 labProtocolId 045N+pet
 localization nucleus
+md5sum cc8258801a21ee5fbfcc7363f7dc0aed
 project wgEncode
 readType 2x36
 replicate 1
@@ -4078,6 +4137,7 @@ lab GIS
 labExpId RHI006
 labProtocolId 046N+pet
 localization nucleus
+md5sum 9b114dab268079c57676edadeba13f1d
 project wgEncode
 readType 2x36
 replicate 2
@@ -4102,6 +4162,7 @@ lab GIS
 labExpId RHI005
 labProtocolId 045N+pet
 localization nucleus
+md5sum 818d133a7cb0eeb18138cfa980d46220
 project wgEncode
 readType 2x36
 replicate 1
@@ -4126,6 +4187,7 @@ lab GIS
 labExpId RHI006
 labProtocolId 046N+pet
 localization nucleus
+md5sum ba037139508f7bb9df97751477ab3d85
 project wgEncode
 readType 2x36
 replicate 2
@@ -4150,6 +4212,7 @@ lab GIS
 labExpId RHI005
 labProtocolId 045N+pet
 localization nucleus
+md5sum 188ce7e0f0717d8c1f17b3269d25780a
 project wgEncode
 readType 2x36
 replicate 1
@@ -4175,6 +4238,7 @@ lab GIS
 labExpId RHI006
 labProtocolId 046N+pet
 localization nucleus
+md5sum a936e9dacca2d7565b03404d2a3a0efe
 project wgEncode
 readType 2x36
 replicate 2
@@ -4200,6 +4264,7 @@ lab GIS
 labExpId RHI005
 labProtocolId 045N+pet
 localization nucleus
+md5sum e24450de00e320f5e46aeb8e2c10c676
 project wgEncode
 readType 2x36
 replicate 1
@@ -4225,6 +4290,7 @@ lab GIS
 labExpId RHI006
 labProtocolId 046N+pet
 localization nucleus
+md5sum a603b124c13c0784294e8bf7f64e1198
 project wgEncode
 readType 2x36
 replicate 2
@@ -4283,7 +4349,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
-md5sum 3160d3f0ea455fdde6dcc71daef5f1d3
+md5sum 16ffaaa53f93a84e8c3015d2eb1de073
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4312,7 +4378,7 @@ labExpId PHK001
 labProtocolId gen0135CHtpet
 labVersion clone-based
 localization chromatin
-md5sum 5bb5797e8b3652e1db48d4e40cc7b8f6
+md5sum cee07690167916813020639b9b0c7cec
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4430,7 +4496,7 @@ labExpId IHK009010015
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
-md5sum 385505dab8c87f9f4836b9f295159343
+md5sum 9b9fd57b832df82baad1afd3c847765f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4459,7 +4525,7 @@ labExpId IHK009010015
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
-md5sum b5c88c91eea636eaf4525fa99e0f61c0
+md5sum 8ef48f1596c5cadcdbefaa7a67218413
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4487,7 +4553,7 @@ labExpId IHK009010015
 labProtocolId gen0138C+pet
 labVersion clone-free
 localization cytosol
-md5sum 970adbb8dfe23f802af69a7d4b166742
+md5sum 507d7b722ee096954356cb00e25a06c6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4605,7 +4671,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
-md5sum 6245e6e550bdd7b02943dbec4e98500d
+md5sum 76fd054dbb1842f9c58fa0d3631f53d8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4634,7 +4700,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
-md5sum 4ab47e7e40bca37fd0bcb366128747e3
+md5sum 09a7d6a2c09127c185a426201229d8dc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4662,7 +4728,7 @@ labExpId DHK008
 labProtocolId gen0145NLtpet
 labVersion clone-based
 localization nucleolus
-md5sum eb0e49911e705623dee7f3e6e39badf6
+md5sum 1080104d5622e38d8884f4c97c98b9f4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4780,7 +4846,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
-md5sum 60279d2d6461fa892258d58fb35bb211
+md5sum 643381be4177a6bc13a2052defa3b3ae
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4809,7 +4875,7 @@ labExpId PHK002
 labProtocolId gen0148NPtpet
 labVersion clone-based
 localization nucleoplasm
-md5sum fbc0be62aee6010a9e633b141be8b951
+md5sum f9f78b4c36a26c0663f74f264fc98034
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4927,7 +4993,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
-md5sum c622f345e6ab92dee2ef9fb4d7b91c42
+md5sum 398974455a7b7a22faa37baef00b89e7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4956,7 +5022,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
-md5sum 9777c2e01d3693705695a377d40dee98
+md5sum 70a243e36a1a02ba1aa3e796f2e5c059
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4984,7 +5050,7 @@ labExpId DHK006
 labProtocolId gen0150N+pet
 labVersion clone-based
 localization nucleus
-md5sum 5b6963834b726eb0379e97d9ee3a3e72
+md5sum 8c3460c1bbff5e8bb08bcacd67978e05
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5102,7 +5168,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
-md5sum 1c669e9eb5dcc50d94576297ab48991b
+md5sum ca9b0f37cf1e3eab147d690374ba6991
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5131,7 +5197,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
-md5sum 71187261d5a845d218f80ee0fa3d8306
+md5sum 11e2b327e72491d169218b2446cabbe8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5159,7 +5225,7 @@ labExpId DHK007
 labProtocolId gen0153P+pet
 labVersion clone-based
 localization polysome
-md5sum 34362616d7bd2cf7b940cea07c5d10ec
+md5sum 8ba34c4d5b57f981b499e73e9b252a2a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5243,6 +5309,7 @@ lab GIS
 labExpId RHM046
 labProtocolId 089WC+pet
 localization cell
+md5sum 8b5e9689e83a1cfdefe99ca74670eec7,1af0036ed9aff87b124926ba0270ac3c
 project wgEncode
 readType 2x36
 replicate 3
@@ -5267,6 +5334,7 @@ lab GIS
 labExpId RHM047
 labProtocolId 090WC+pet
 localization cell
+md5sum 43ba39a1ad89c733b4db24a99f86e6d7,6d88775f3c3baaf73d5c85436a5d7fd2
 project wgEncode
 readType 2x36
 replicate 4
@@ -5291,6 +5359,7 @@ lab GIS
 labExpId RHM046
 labProtocolId 089WC+pet
 localization cell
+md5sum 741ea38a005ddb164ae1d2ede35853a9
 project wgEncode
 readType 2x36
 replicate 3
@@ -5314,6 +5383,7 @@ lab GIS
 labExpId RHM047
 labProtocolId 090WC+pet
 localization cell
+md5sum 89c3166f2974ab3dc7ecf64b3bf45e60
 project wgEncode
 readType 2x36
 replicate 4
@@ -5337,6 +5407,7 @@ lab GIS
 labExpId RHM046
 labProtocolId 089WC+pet
 localization cell
+md5sum 973e5e20a1bb0c3efd1d47ca97cf89e9
 project wgEncode
 readType 2x36
 replicate 3
@@ -5360,6 +5431,7 @@ lab GIS
 labExpId RHM047
 labProtocolId 090WC+pet
 localization cell
+md5sum 0b320665c59fa414d6bf305f737cd64e
 project wgEncode
 readType 2x36
 replicate 4
@@ -5383,6 +5455,7 @@ lab GIS
 labExpId RHM046
 labProtocolId 089WC+pet
 localization cell
+md5sum d47c57713fe0a6eb59c891efe25b4747
 project wgEncode
 readType 2x36
 replicate 3
@@ -5407,6 +5480,7 @@ lab GIS
 labExpId RHM047
 labProtocolId 090WC+pet
 localization cell
+md5sum 707ee6124af96edd2ddded4618a0fbe8
 project wgEncode
 readType 2x36
 replicate 4
@@ -5431,6 +5505,7 @@ lab GIS
 labExpId RHM046
 labProtocolId 089WC+pet
 localization cell
+md5sum b8a21b1aeb7ec64675f7f9a43348765b
 project wgEncode
 readType 2x36
 replicate 3
@@ -5455,6 +5530,7 @@ lab GIS
 labExpId RHM047
 labProtocolId 090WC+pet
 localization cell
+md5sum 3372d1241d34f69a80b2c759835253f3
 project wgEncode
 readType 2x36
 replicate 4
@@ -5479,6 +5555,7 @@ lab GIS
 labExpId RHM044
 labProtocolId 089C+pet
 localization cytosol
+md5sum ddffbcb748bcb4ccd45f678d904c4e69,e6e92e482e6787322d8c9301ece8c010
 project wgEncode
 readType 2x36
 replicate 3
@@ -5503,6 +5580,7 @@ lab GIS
 labExpId RHM045
 labProtocolId 090C+pet
 localization cytosol
+md5sum 4fb4372cdfaa15ed807b110fa58bafc8,5c153bdbdcfbbe44f5c607499ea355b4
 project wgEncode
 readType 2x36
 replicate 4
@@ -5528,6 +5606,7 @@ labExpId RHM044,RHM045
 labProtocolId 089C+pet,090C+pet
 labVersion iIDR
 localization cytosol
+md5sum 84641dab41e83944b520241c654d6e97
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -5551,6 +5630,7 @@ lab GIS
 labExpId RHM044
 labProtocolId 089C+pet
 localization cytosol
+md5sum 2d2d1ce2fa2f10c1e2c6236f2d516c0d
 project wgEncode
 readType 2x36
 replicate 3
@@ -5574,6 +5654,7 @@ lab GIS
 labExpId RHM045
 labProtocolId 090C+pet
 localization cytosol
+md5sum 846eb856626b8df9ce22a9e792040a30
 project wgEncode
 readType 2x36
 replicate 4
@@ -5597,6 +5678,7 @@ lab GIS
 labExpId RHM044
 labProtocolId 089C+pet
 localization cytosol
+md5sum ad3d80d4213ac3967a1a4da1c74ffaa1
 project wgEncode
 readType 2x36
 replicate 3
@@ -5620,6 +5702,7 @@ lab GIS
 labExpId RHM045
 labProtocolId 090C+pet
 localization cytosol
+md5sum 1d87bac52bb37e929438e8ad52032b57
 project wgEncode
 readType 2x36
 replicate 4
@@ -5643,6 +5726,7 @@ lab GIS
 labExpId RHM044
 labProtocolId 089C+pet
 localization cytosol
+md5sum cde79b57f953ae7617f3087280489498
 project wgEncode
 readType 2x36
 replicate 3
@@ -5667,6 +5751,7 @@ lab GIS
 labExpId RHM045
 labProtocolId 090C+pet
 localization cytosol
+md5sum cd60d5a1e9466b8d280734cb60d79c5f
 project wgEncode
 readType 2x36
 replicate 4
@@ -5691,6 +5776,7 @@ lab GIS
 labExpId RHM044
 labProtocolId 089C+pet
 localization cytosol
+md5sum bbd85b5f6078d66e7c6c879d50019eaa
 project wgEncode
 readType 2x36
 replicate 3
@@ -5715,6 +5801,7 @@ lab GIS
 labExpId RHM045
 labProtocolId 090C+pet
 localization cytosol
+md5sum c616cab896b3fd3a8a7d30a5186a4b9a
 project wgEncode
 readType 2x36
 replicate 4
@@ -5739,6 +5826,7 @@ lab GIS
 labExpId RHM054
 labProtocolId 089N+pet
 localization nucleus
+md5sum cba510d76113b610b882d5a83bdf1bb1,984a7e9cbde44afa8d3dc3aeaa752ebd
 project wgEncode
 readType 2x36
 replicate 3
@@ -5763,6 +5851,7 @@ lab GIS
 labExpId RHM055
 labProtocolId 090N+pet
 localization nucleus
+md5sum 6a773ae9b3cc196d9dd8f484ab6423f1,689a12d24c2c8a113b87dd9d6cc5409d
 project wgEncode
 readType 2x36
 replicate 4
@@ -5771,6 +5860,31 @@ seqPlatform Illumina_HiSeq_2000
 subId 6410
 tableName wgEncodeGisRnaPetMcf7NucleusPapAlnRep4
 view Alignments
+
+metaObject wgEncodeGisRnaPetMcf7NucleusPapClusters
+objType table
+bioRep 089N,090N
+cell MCF-7
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-04
+dateUnrestricted 2013-02-04
+fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedRnaElements.gz
+grant Gingeras
+lab GIS
+labExpId RHM054,RHM055
+labProtocolId 089N+pet,090N+pet
+labVersion iIDR
+localization nucleus
+md5sum d2f6644516c56a348c972997fb193f15
+project wgEncode
+readType 2x36
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+subId 6921
+tableName wgEncodeGisRnaPetMcf7NucleusPapClusters
+view Clusters
 
 metaObject wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep3
 objType file
@@ -5787,6 +5901,7 @@ lab GIS
 labExpId RHM054
 labProtocolId 089N+pet
 localization nucleus
+md5sum bcb40b24f500ab611370e63bd71f9154
 project wgEncode
 readType 2x36
 replicate 3
@@ -5810,6 +5925,7 @@ lab GIS
 labExpId RHM055
 labProtocolId 090N+pet
 localization nucleus
+md5sum 92d572430fc74bd97d67f8a3f9693c78
 project wgEncode
 readType 2x36
 replicate 4
@@ -5833,6 +5949,7 @@ lab GIS
 labExpId RHM054
 labProtocolId 089N+pet
 localization nucleus
+md5sum 70521fe20dd1d97c53b5adcb615b4cc1
 project wgEncode
 readType 2x36
 replicate 3
@@ -5856,6 +5973,7 @@ lab GIS
 labExpId RHM055
 labProtocolId 090N+pet
 localization nucleus
+md5sum 14c71b084f756fafe871c0a27795e1fb
 project wgEncode
 readType 2x36
 replicate 4
@@ -5879,6 +5997,7 @@ lab GIS
 labExpId RHM054
 labProtocolId 089N+pet
 localization nucleus
+md5sum e65fb041c024dc00b862152051088dc4
 project wgEncode
 readType 2x36
 replicate 3
@@ -5903,6 +6022,7 @@ lab GIS
 labExpId RHM055
 labProtocolId 090N+pet
 localization nucleus
+md5sum d1f9121730e28ff9ae9902e77aaa24db
 project wgEncode
 readType 2x36
 replicate 4
@@ -5927,6 +6047,7 @@ lab GIS
 labExpId RHM054
 labProtocolId 089N+pet
 localization nucleus
+md5sum fe7f1d386ccba5e63ab97c58b7152702
 project wgEncode
 readType 2x36
 replicate 3
@@ -5951,6 +6072,7 @@ lab GIS
 labExpId RHM055
 labProtocolId 090N+pet
 localization nucleus
+md5sum 5d0a60eec0e517bfe5acc20aa637931b
 project wgEncode
 readType 2x36
 replicate 4
@@ -6009,7 +6131,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
-md5sum 350035cc394b24a152381400b9d908bf
+md5sum 937dd4a0a0c71f512bbb64ce4c3af912
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6038,7 +6160,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
-md5sum 3d66efa677d17add52deec772909e365
+md5sum 1dfd651571f3e562651269b20d317a2d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6066,7 +6188,7 @@ labExpId IHN011
 labProtocolId gen0156C+pet
 labVersion clone-free
 localization cytosol
-md5sum c515db639fc264e726e0ecf9f60ff981
+md5sum 63ad89abb193d2afc5ce52cfd7d6f00b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6184,7 +6306,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
-md5sum 80ae968e0ee60496f19a619eb58e6884
+md5sum 5d6f7fafd4c46def32f966f51ab92ee5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6213,7 +6335,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
-md5sum 499f6f261dcfa2f451db94d0f5e587af
+md5sum 335aa957d884afa7957abf29bcc58e62
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6241,7 +6363,7 @@ labExpId IHN012
 labProtocolId gen0158N+pet
 labVersion clone-free
 localization nucleus
-md5sum 98008b9f33e355d609b99502a92ae134
+md5sum 0574f548bfca92c6400452cf71dffb0c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6359,7 +6481,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
-md5sum 75ca48713aa261be31525b68a33181be
+md5sum 03f9cd2ff4caa0dfc6406e53e6660487
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6388,7 +6510,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
-md5sum d3d270b6d0d0a6ef995eff021b192170
+md5sum bccec7defc834d01fcc1c491d2b38ef0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6416,7 +6538,7 @@ labExpId DHP001
 labProtocolId gen0160WC+pet
 labVersion clone-based
 localization cell
-md5sum 012910ec5fc11f4a25dd0c1cc10d8cb4
+md5sum 8b04f434b5b80d74948578f2182b1e2e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6500,6 +6622,7 @@ lab GIS
 labExpId RHS015
 labProtocolId 085WC+pet
 localization cell
+md5sum 3abe63a1fb584354ec9b3fe0d4816418,bf6ae18f1bc1b7a4dba20fd64cdeab3d
 project wgEncode
 readType 2x36
 replicate 3
@@ -6524,6 +6647,7 @@ lab GIS
 labExpId RHS016
 labProtocolId 086WC+pet
 localization cell
+md5sum c637bf532ae67265474f21f810effc84,2f9d4f859ad4895c990f4ef5c33d1aa0
 project wgEncode
 readType 2x36
 replicate 4
@@ -6549,6 +6673,7 @@ labExpId RHS015,RHS016
 labProtocolId 085WC+pet,086WC+pet
 labVersion iIDR
 localization cell
+md5sum 0dc46f7dbcb449ca9c5a1d3fabe5c3bb
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -6572,6 +6697,7 @@ lab GIS
 labExpId RHS015
 labProtocolId 085WC+pet
 localization cell
+md5sum 10a04f8aaac77dd0c95c5f99154f26a2
 project wgEncode
 readType 2x36
 replicate 3
@@ -6595,6 +6721,7 @@ lab GIS
 labExpId RHS016
 labProtocolId 086WC+pet
 localization cell
+md5sum 5b63acc9d3114b5adac33a49e64c73da
 project wgEncode
 readType 2x36
 replicate 4
@@ -6618,6 +6745,7 @@ lab GIS
 labExpId RHS015
 labProtocolId 085WC+pet
 localization cell
+md5sum 018df0bf60d5e64763cb95457052e0cf
 project wgEncode
 readType 2x36
 replicate 3
@@ -6641,6 +6769,7 @@ lab GIS
 labExpId RHS016
 labProtocolId 086WC+pet
 localization cell
+md5sum af6057a960aaa679a7d6fdbbd06e68da
 project wgEncode
 readType 2x36
 replicate 4
@@ -6664,6 +6793,7 @@ lab GIS
 labExpId RHS015
 labProtocolId 085WC+pet
 localization cell
+md5sum ceba74b3bc5d6be1f31ebbeebee6f582
 project wgEncode
 readType 2x36
 replicate 3
@@ -6688,6 +6818,7 @@ lab GIS
 labExpId RHS016
 labProtocolId 086WC+pet
 localization cell
+md5sum cacc867f656b84bd48f72f9d35e55e06
 project wgEncode
 readType 2x36
 replicate 4
@@ -6712,6 +6843,7 @@ lab GIS
 labExpId RHS015
 labProtocolId 085WC+pet
 localization cell
+md5sum cc4ee85c657d319f9415ddef7a3f6f2d
 project wgEncode
 readType 2x36
 replicate 3
@@ -6736,6 +6868,7 @@ lab GIS
 labExpId RHS016
 labProtocolId 086WC+pet
 localization cell
+md5sum 11dc9961e8ef2eda1d806ae3fb7a003a
 project wgEncode
 readType 2x36
 replicate 4
@@ -6760,6 +6893,7 @@ lab GIS
 labExpId RHS017
 labProtocolId 085C+pet
 localization cytosol
+md5sum 3c4d5b02df0a4850c1c5ac5c5d01c2ff,77f6df953ec8e698ca470f21237c2190
 project wgEncode
 readType 2x36
 replicate 3
@@ -6784,6 +6918,7 @@ lab GIS
 labExpId RHS018
 labProtocolId 086C+pet
 localization cytosol
+md5sum 52e859ee9a4b85f6fdf6b0c8ed4b4f97,5006111f9b0d4c6b7b4042368ba38d1c
 project wgEncode
 readType 2x36
 replicate 4
@@ -6809,6 +6944,7 @@ labExpId RHS017,RHS018
 labProtocolId 085C+pet,086C+pet
 labVersion iIDR
 localization cytosol
+md5sum 1a556b534c84992a1cbd3d9e8cf8d72b
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -6832,6 +6968,7 @@ lab GIS
 labExpId RHS017
 labProtocolId 085C+pet
 localization cytosol
+md5sum d349a414b6463655257997e472833808
 project wgEncode
 readType 2x36
 replicate 3
@@ -6855,6 +6992,7 @@ lab GIS
 labExpId RHS018
 labProtocolId 086C+pet
 localization cytosol
+md5sum bb70ff63a5b2626f9bfb2123311ab350
 project wgEncode
 readType 2x36
 replicate 4
@@ -6878,6 +7016,7 @@ lab GIS
 labExpId RHS017
 labProtocolId 085C+pet
 localization cytosol
+md5sum cbaf46d2e28eaef63b076cd184b6321b
 project wgEncode
 readType 2x36
 replicate 3
@@ -6901,6 +7040,7 @@ lab GIS
 labExpId RHS018
 labProtocolId 086C+pet
 localization cytosol
+md5sum 8ffd49094e03aa343d0e48b060159750
 project wgEncode
 readType 2x36
 replicate 4
@@ -6924,6 +7064,7 @@ lab GIS
 labExpId RHS017
 labProtocolId 085C+pet
 localization cytosol
+md5sum 445087e435232f2feef85a922af137a7
 project wgEncode
 readType 2x36
 replicate 3
@@ -6948,6 +7089,7 @@ lab GIS
 labExpId RHS018
 labProtocolId 086C+pet
 localization cytosol
+md5sum e330d3fe393d4db2ca5c66325d4ed0a9
 project wgEncode
 readType 2x36
 replicate 4
@@ -6972,6 +7114,7 @@ lab GIS
 labExpId RHS017
 labProtocolId 085C+pet
 localization cytosol
+md5sum 816b437e91b912a31b6e1cd5fd8c70dc
 project wgEncode
 readType 2x36
 replicate 3
@@ -6996,6 +7139,7 @@ lab GIS
 labExpId RHS018
 labProtocolId 086C+pet
 localization cytosol
+md5sum 70411a1c7c75a0318cbe11c0270900ee
 project wgEncode
 readType 2x36
 replicate 4
@@ -7020,6 +7164,7 @@ lab GIS
 labExpId RHS019
 labProtocolId 085N+pet
 localization nucleus
+md5sum 93b947b661ecfd029225651b45be81db,b74fdac20250028ef26afb6e4bea23f1
 project wgEncode
 readType 2x36
 replicate 3
@@ -7044,6 +7189,7 @@ lab GIS
 labExpId RHS020
 labProtocolId 086N+pet
 localization nucleus
+md5sum c52fe1b870e579da294e039a72ba3a21,24efc785bc877cb56dd55cc613a00f01
 project wgEncode
 readType 2x36
 replicate 4
@@ -7052,6 +7198,31 @@ seqPlatform Illumina_HiSeq_2000
 subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapAlnRep4
 view Alignments
+
+metaObject wgEncodeGisRnaPetSknshNucleusPapClusters
+objType table
+bioRep 085N,086N
+cell SK-N-SH
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-04
+dateUnrestricted 2013-02-04
+fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedRnaElements.gz
+grant Gingeras
+lab GIS
+labExpId RHS019,RHS020
+labProtocolId 085N+pet,086N+pet
+labVersion iIDR
+localization nucleus
+md5sum 512df87379c4bf91c009af37eaf29de2
+project wgEncode
+readType 2x36
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+subId 6922
+tableName wgEncodeGisRnaPetSknshNucleusPapClusters
+view Clusters
 
 metaObject wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep3
 objType file
@@ -7068,6 +7239,7 @@ lab GIS
 labExpId RHS019
 labProtocolId 085N+pet
 localization nucleus
+md5sum 822858501aaf49faa18900ba2befe6e3
 project wgEncode
 readType 2x36
 replicate 3
@@ -7091,6 +7263,7 @@ lab GIS
 labExpId RHS020
 labProtocolId 086N+pet
 localization nucleus
+md5sum ca3f35e8f553081d794a7e8f5fba044c
 project wgEncode
 readType 2x36
 replicate 4
@@ -7114,6 +7287,7 @@ lab GIS
 labExpId RHS019
 labProtocolId 085N+pet
 localization nucleus
+md5sum 7525f58b8cfbfc649775fe56ed62a0d0
 project wgEncode
 readType 2x36
 replicate 3
@@ -7137,6 +7311,7 @@ lab GIS
 labExpId RHS020
 labProtocolId 086N+pet
 localization nucleus
+md5sum 54dfecaaeb1c31cde353afd48e4b1b80
 project wgEncode
 readType 2x36
 replicate 4
@@ -7160,6 +7335,7 @@ lab GIS
 labExpId RHS019
 labProtocolId 085N+pet
 localization nucleus
+md5sum 2579fb9bd0f5a07fc430001bc0a765fe
 project wgEncode
 readType 2x36
 replicate 3
@@ -7184,6 +7360,7 @@ lab GIS
 labExpId RHS020
 labProtocolId 086N+pet
 localization nucleus
+md5sum 7473e4548a38bc2ae1fac86241cf9ba7
 project wgEncode
 readType 2x36
 replicate 4
@@ -7208,6 +7385,7 @@ lab GIS
 labExpId RHS019
 labProtocolId 085N+pet
 localization nucleus
+md5sum 738f5c5b04374f2132330ad11e72b7ac
 project wgEncode
 readType 2x36
 replicate 3
@@ -7232,6 +7410,7 @@ lab GIS
 labExpId RHS020
 labProtocolId 086N+pet
 localization nucleus
+md5sum e0120f6ed47a3b699908a0119723a6d3
 project wgEncode
 readType 2x36
 replicate 4
@@ -7241,4 +7420,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -184210563
+# MAGIC: 856139535

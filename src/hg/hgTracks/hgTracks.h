@@ -291,6 +291,13 @@ enum {lfWithBarbs = 3}; /* Turn on barbs to show direction based on
 enum {lfSubChain = 4};
 enum {lfNoIntronLines = 5}; /* Draw no lines between exon blocks */
 
+enum highlightMode
+    {
+    highlightNone=0,
+    highlightBackground=1,
+    highlightOutline=2
+    };
+
 struct linkedFeatures
 /* A linked set of features - drawn as a bunch of boxes (often exons)
  * connected by horizontal lines (often introns).  About 75% of
@@ -311,6 +318,7 @@ struct linkedFeatures
 					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
     unsigned highlightColor;            /* highlight color,0 if no highlight */
+    enum highlightMode highlightMode;   /* highlight mode,0 if no highlight */
     };
 
 struct linkedFeaturesSeries

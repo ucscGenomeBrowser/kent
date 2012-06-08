@@ -592,7 +592,7 @@ if (hIsBetaHost())
     }
 
 cgiDown(0.9);
-puts("<B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("<B>Data is <A HREF='../ENCODE/terms.html' TARGET='_BLANK'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B>");
 
 cgiDown(0.7);

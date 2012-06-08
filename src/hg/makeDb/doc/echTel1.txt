@@ -1265,3 +1265,48 @@ supporting and genbank tables) which tracks to assign these tables to:
     hgsql qapushq < echTel1.sql
 
 #########################################################################
+# quality table loaded (DONE - 2008-11-24 - Hiram)
+    mkdir /hive/data/genomes/echTel1/bed/qual
+    cd /hive/data/genomes/echTel1/bed/qual
+    qacToWig -fixed ../../broad/scaffolds.qac stdout \
+        | wigEncode stdin qual.wig qual.wib
+    ln -s `pwd`/qual.wib /gbdb/echTel1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/echTel1/wib echTel1 quality qual.wig
+    wigTableStats.sh  echTel1 quality
+# db.table      min max mean count sumData stdDev viewLimits
+echTel1.quality 0 68 24.872 3823724728 9.51037e+10 23.6258 viewLimits=0:68
+
+#########################################################################
+# fixup search rules for the gold track (DONE - 2012-06-04 - Hiram)
+    # scan the names to see if there is a pattern:
+    hgsql -N -e "select frag from gold;" echTel1 | sort | head
+contig_0
+    hgsql -N -e "select frag from gold;" echTel1 | sort | tail
+contig_99990
+    # the pattern appears to be: contig_[0-9]+
+    # this search rule in trackDb/tenrec/trackDb.ra seems to work:
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex contig_[0-9]+
+searchPriority 8
+
+#########################################################################
+# fixup search rules for the ensemblGeneScaffold (DONE - 2012-06-04 - Hiram)
+    # scan the names to see if there is a pattern:
+    hgsql -N -e "select name from ensemblGeneScaffold;" echTel1 | sort | head
+GS_1.1
+    hgsql -N -e "select name from ensemblGeneScaffold;" echTel1 | sort | tail
+GS_999.6
+    # the pattern appears to be: GS_[0-9]+(\.[0-9]+)?
+    # to get the option of searching for GS_999 or GS_999.6
+    # this search rule in trackDb/tenrec/trackDb.ra seems to work:
+searchTable ensemblGeneScaffold
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex GS_[0-9]+(\.[0-9]+)?
+searchPriority 18
+
+#########################################################################

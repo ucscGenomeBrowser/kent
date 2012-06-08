@@ -1941,6 +1941,13 @@ track pgSaqqaqHc override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track tgpPhase1
+shortLabel 1000Genomes Ph 1
+longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
+type vcfTabix
+group varRep
+priority 101.5
+visibility hide
 
 searchTable nscanGene
 searchType genePred

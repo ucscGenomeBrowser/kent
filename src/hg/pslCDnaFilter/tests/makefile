@@ -10,7 +10,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
 	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
 	uniqueMappedTest uniqueMappedHapTest blackListTest \
-	decayMinCoverTest
+	decayMinCoverTest inconsistentQSizeTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -109,6 +109,12 @@ decayMinCoverTest:
 
 blackListTest:
 	${MAKE} doFilter name=$@ inPsl=blackList.psl filtArgs='-blackList=input/blackList.txt'
+
+# test for catching PSLs with inconsistent qSize
+inconsistentQSizeTest:
+	@mkdir -p output
+	if pslCDnaFilter input/inconsistentQSize.psl /dev/null 2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
+	diff expected/$@.err output/$@.err
 
 ####
 # Recursive targets.  Results are sorted to allow consistent comparisons, as

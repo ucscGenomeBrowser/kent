@@ -23,8 +23,7 @@ include wgEncodeUncBsuProt.release2.ra alpha
 include wgEncodeUncBsuProtGenc.release1.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra public
-include wgEncodeReg.release2.ra beta
+include wgEncodeReg.release2.ra beta,public
 include wgEncodeReg.release3.ra alpha
 
 # UW Repli-Seq track (wrangler: venkat)
@@ -54,6 +53,7 @@ include wgEncodeBuOrchid.ra
 # Affy Rna Chip (wrangler: cricket)
 include wgEncodeAffyRnaChip.ra
 
+
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
@@ -73,7 +73,8 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra
+include wgEncodeUwAffyExonArray.ra beta,public
+include wgEncodeUwAffyExonArray.release3.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
@@ -91,8 +92,8 @@ include wgEncodeOpenChromDnase.release2.ra beta,public
 include wgEncodeOpenChromDnase.patch.ra alpha
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release4.ra beta,public
-include wgEncodeUwDnase.release5.ra alpha
+include wgEncodeUwDnase.release4.ra public
+include wgEncodeUwDnase.release5.ra alpha,beta
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra beta,public
@@ -106,7 +107,8 @@ include wgEncodeUwDgf.release4.ra alpha
 # ENCODE RNA SEQ -----------------------------------
 
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.release3.ra
+include wgEncodeRikenCage.release3.ra beta,public
+include wgEncodeRikenCage.release4.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.release2.ra beta,public
@@ -141,7 +143,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra
+include wgEncodeHaibMethylRrbs.ra beta,public
+include wgEncodeHaibMethylRrbs.release3.ra alpha
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 
@@ -161,7 +164,7 @@ include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.release4.ra beta,public
-include wgEncodeUwHistone.patch.ra alpha
+include wgEncodeUwHistone.release5.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public

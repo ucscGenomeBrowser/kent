@@ -300,7 +300,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 // TODO: will need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this::
-char *fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
 hFreeConn(&conn);
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;

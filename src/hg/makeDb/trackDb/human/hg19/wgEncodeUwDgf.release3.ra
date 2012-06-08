@@ -1,20 +1,18 @@
-
-
 # UW DGF (wrangler: Venkat, assisted by Tim)
 # Notes:
 #       - Track Long Label:  DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 #	- Track Short Label: UW DNaseI DGF
-#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
+#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
-#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines.
 #	- Default View selections
 #		- Hotspots = hide
 #		- Peaks = hide
 #		- Signal = full
 #		- Raw Signal = hide
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
-#       - Short Labels: 
-#               Template: [cell] [view] 
+#       - Short Labels:
+#               Template: [cell] [view]
 #               - Cell: Abbreviations for cells
 #                       - SK-N-SH_RA = SKRA
 #               - Views: For consistency sake view will be:
@@ -25,7 +23,7 @@
 
 track wgEncodeUwDgf
 compositeTrack on
-superTrack wgEncodeDNAseSuper dense 
+superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI DGF
 longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
@@ -46,7 +44,7 @@ wgEncode 1
     track wgEncodeUwDgfViewHotspots
     shortLabel Hotspots
     view Hotspots
-    visibility hide 
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -165,7 +163,7 @@ wgEncode 1
         track wgEncodeUwDgfHpafHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HPAF Hot
-	longLabel HPAF DNaseI DGF Hotspots from ENCODE/UW
+        longLabel HPAF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HPAF
         type broadPeak
         origAssembly hg19
@@ -400,7 +398,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
-
 
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
@@ -767,7 +764,6 @@ wgEncode 1
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
-
     track wgEncodeUwDgfViewSignal
     shortLabel Signal
     view Signal
@@ -797,7 +793,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Sig
-        parent wgEncodeUwDgfViewSignal on 
+        parent wgEncodeUwDgfViewSignal on
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=2HEPG2
@@ -1125,7 +1121,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
-
 
     track wgEncodeUwDgfViewzRaw
     shortLabel RawSignal
@@ -1484,5 +1479,4 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
-
 
