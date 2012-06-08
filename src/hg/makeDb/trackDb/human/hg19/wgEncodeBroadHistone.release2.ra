@@ -65,7 +65,7 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Ti
 subGroup3 factor Antibody CHD1A301218A=CHD1_(A301-218A) CTCF=CTCF EZH239875=EZH2_(39875) JARID1AAB26049=JARID1A_(ab26049) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) P300=P300 PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) SAP3039731=SAP30_(39731) zCTRL=Input_Control
 subGroup4 treatment Treatment ETOH02=EtOH_0.02pct zNONE=None
 dimensions dimensionY=cellType dimensionX=factor
-sortOrder cellType=+ factor=+ view=+ 
+sortOrder cellType=+ factor=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
@@ -1980,7 +1980,6 @@ html wgEncodeBroadHistone.release2
         type broadPeak
         origAssembly hg19
         # subId=5026 dateSubmitted=2011-10-26
-
 
     track wgEncodeBroadHistoneViewSignal
     shortLabel Signal

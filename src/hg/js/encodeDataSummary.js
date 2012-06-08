@@ -97,10 +97,10 @@ $(function () {
             $('#buttonChipMatrix').remove();
         } else { 
             $('#buttonDataMatrix').click(function () {
-                window.location = encodeMatrix.pageForDataMatrix(encodeMatrix_organism);
+                window.location = encodeMatrix.pageFor('dataMatrix', encodeMatrix_organism);
             });
             $('#buttonChipMatrix').click(function () {
-                window.location = encodeMatrix.pageForChipMatrix(encodeMatrix_organism);
+                window.location = encodeMatrix.pageFor('chipMatrix', encodeMatrix_organism);
             });
         }
 

@@ -236,6 +236,7 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 #include "itemDetailsHtml.h"
+#include "trackVersion.h"
 
 static char *rootDir = "hgcData";
 
@@ -2885,14 +2886,10 @@ static void printDataVersion(struct trackDb *tdb)
 {
 metadataForTable(database,tdb,NULL);
 const char *version = metadataFindValue(tdb,"dataVersion");
-if(version != NULL)
-    printf("<B>Data version:</B> %s <BR>\n", version);
-else
-    {
+if(version == NULL)
     version = trackDbSetting(tdb,"dataVersion");
-    if (version != NULL)
-        printf("<B>Data version:</B> %s <BR>\n", version);
-    }
+if (version != NULL)
+    printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
@@ -2934,7 +2931,11 @@ if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
-    printDataVersion(tdb);
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    if(trackVersion == NULL)
+        printDataVersion(tdb);
+    else
+        printf("<B>Data version:</B> %s <BR>\n", trackVersion->version);
     printOrigAssembly(tdb);
     printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
@@ -10580,14 +10581,14 @@ if (row != NULL)
     image = cloneString(row[0]);
     printf("<BR><B>IMAGE Clone: </B>");
     printf("<A HREF=\"");
-    printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+    printf("%s%s", "http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=", image);
     printf("\" TARGET=_blank> %s</A>", image);
     row = sqlNextRow(sr);
     while (row != NULL)
 	{
 	image = cloneString(row[0]);
 	printf(", <A HREF=\"");
-	printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+	printf("%s%s", "http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=", image);
 	printf("\" TARGET=_blank>%s</A>", image);
         row = sqlNextRow(sr);
 	}

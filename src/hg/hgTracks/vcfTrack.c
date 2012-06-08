@@ -1101,7 +1101,7 @@ else
     {
     // TODO: may need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this:
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
     hFreeConn(&conn);
     }
 int vcfMaxErr = -1;

@@ -1,18 +1,18 @@
-track wgEncodeSunyRipSeq      
+track wgEncodeSunyRipSeq
 compositeTrack on
 shortLabel SUNY RIP-seq
 longLabel RIP-seq from ENCODE/SUNY Albany
 group regulation
 superTrack wgEncodeRbpSuper dense
-subGroup1 view Views Peaks=Peaks Signal=Signal Alignments=Alignments 
+subGroup1 view Views Peaks=Peaks Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)
 subGroup3 factor Target_Protein ELAVL1=ELAVL1 PABPC1=PABPC1 ripInput=RIP-Input T7Tag=T7Tag
-subGroup4 rep Replicate rep1=1 rep2=2 Pooled=Pooled 
+subGroup4 rep Replicate rep1=1 rep2=2 Pooled=Pooled
 dimensions dimX=factor dimY=cellType dimZ=rep
 dimensionZchecked Pooled
-sortOrder cellType=+ factor=+ view=+ rep=+ 
+sortOrder cellType=+ factor=+ view=+ rep=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target labVersion=Antibody replicate=Rep view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accesssion fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody 
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
 type bed 3
@@ -23,7 +23,7 @@ noInherit on
     shortLabel Alignments
     view Alignments
     subTrack wgEncodeSunyRipSeq
-    visibility hide 
+    visibility hide
     type bam
     pairEndsByName on
     showNames on
@@ -184,7 +184,7 @@ noInherit on
     track wgEncodeSunyRipSeqViewSignal
     shortLabel Signal
     view Signal
-    visibility full 
+    visibility full
     type bigWig
     subTrack wgEncodeSunyRipSeq
     maxHeightPixels 100:24:16
@@ -194,7 +194,7 @@ noInherit on
     windowingFunction mean+whiskers
 
         track wgEncodeSunyRipSeqGm12878RipinputSigRep1
-        parent wgEncodeSunyRipSeqViewSignal off 
+        parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 Input 1
         longLabel GM12878 RIP-Input RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=1GM12878 rep=rep1
@@ -266,7 +266,7 @@ noInherit on
         # subId=3408 dateSubmitted=2011-01-20
 
         track wgEncodeSunyRipSeqK562RipinputSigRep1
-        parent wgEncodeSunyRipSeqViewSignal off 
+        parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 Input 1
         longLabel K562 RIP-Input RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=1K562 rep=rep1
@@ -284,7 +284,7 @@ noInherit on
         # subId=3407 dateSubmitted=2011-01-20
 
         track wgEncodeSunyRipSeqK562Elavl1SigRep1
-        parent wgEncodeSunyRipSeqViewSignal off 
+        parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 ELAVL1 1
         longLabel K562 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=1K562 rep=rep1
@@ -320,7 +320,7 @@ noInherit on
         # subId=3407 dateSubmitted=2011-01-20
 
         track wgEncodeSunyRipSeqK562T7tagSigRep1
-        parent wgEncodeSunyRipSeqViewSignal off 
+        parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 T7Tag 1
         longLabel K562 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=1K562 rep=rep1
@@ -337,10 +337,10 @@ noInherit on
         color 46,0,184
         # subId=3407 dateSubmitted=2011-01-20
 
-    track wgEncodeSunyRipSeqViewPeaks      
-    shortLabel Peaks      
-    view Peaks 
-    visibility full 
+    track wgEncodeSunyRipSeqViewPeaks
+    shortLabel Peaks
+    view Peaks
+    visibility full
     subTrack wgEncodeSunyRipSeq
     scoreFilter 0
     scoreFilterLimits 0:1000
@@ -387,7 +387,7 @@ noInherit on
         # was wgEncodeSunyRipSeqK562RipinPk cricket Tue Aug 23 08:13:04 2011
 
         track wgEncodeSunyRipSeqK562Elavl1Pk
-        parent wgEncodeSunyRipSeqViewPeaks on 
+        parent wgEncodeSunyRipSeqViewPeaks on
         shortLabel K562 ELAVL1 Pk
         longLabel K562 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ELAVL1 cellType=1K562 rep=Pooled
@@ -403,5 +403,4 @@ noInherit on
         type broadPeak
         color 46,0,184
         # subId=3291 dateSubmitted=2011-01-18
-
 

@@ -1,4 +1,7 @@
 
+track gap override
+html gap
+
 track blastzBestHg17
 shortLabel Human Best
 longLabel Human Blastz Best Reciprocal Alignments
@@ -16,3 +19,12 @@ priority 178.109
 
 track netMm7 override
 priority 178.209
+
+track xenoRefGene override
+visibility pack
+
+track ensGene override
+visibility pack
+
+track chainNetMm10 override
+visibility pack

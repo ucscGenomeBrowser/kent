@@ -1,3 +1,17 @@
 #	"$Id: trackDb.ra,v 1.1 2010/01/04 19:59:33 hiram Exp $";
 
 include trackDb.chainNet.ra
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex contig_[0-9]+
+searchPriority 8
+
+searchTable ensemblGeneScaffold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex GS_[0-9]+(\.[0-9]+)?
+searchPriority 18

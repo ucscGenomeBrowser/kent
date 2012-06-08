@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Quality Metrics</title>
+        <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+        <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    </head>
+
+    <body>
+        <!--#include virtual="/inc/encodeProject.topbar.html"-->
+
+        <div class="encodeHeader">
+            <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+            <span class="txt">Quality Metrics</span>
+        </div>
+       <div class="wrapper">
+                <div class="bar"><h4 class="title">Quality Metrics: Human Genome</h4></div>
+                <div class="content">
+                	<!--CONTENT GOES HERE-->
+
+                	<p>The ENCODE consortium analyzes the quality of the data produced using a 
+                	variety of metrics.  This page has very brief descriptions of what these 
+                	quality metrics are, and what they appear to measure.  This page also has 
+                	hyperlinks to the software tools and more detailed descriptions on their use, 
+                	as well as other ENCODE data quality measures, such as Antibody Validation 
+                	information (<a href="http://encodeproject.org/ENCODE/antibodies.html">
+                	http://encodeproject.org/ENCODE/antibodies.html</a>) and platform 
+                	characterization, (described above).  These quality metrics will be updated 
+                	on occasion to include analysis of more recent data.
+                	</p>
+
+                	<p>It is important to note that quality metrics for evaluating epigenomic 
+                	assays is an area of research, so standards are emerging as the more metrics 
+                	are used with more datasets and types of experiments.  The typical values for 
+                	a quality metric can be quite different with different experiment types, or 
+                	even comparing different features in the same experiment type, such as different 
+                	antibodies used, in ChIP-seq experiments.  Currently, there is no single 
+                	measurement that identifies all high quality or low quality samples.  As with 
+                	quality control for other types of experiments, multiple assessments (including 
+                	manually inspection of tracks) are useful because they may capture different 
+                	concerns.  Comparison within an experimental method can be very helpful in 
+                	identifying stochastic error in experiments (ie. comparing replicates to 
+                	each other, or comparing values for one Ab in several cell types, or the same 
+                	Ab and cell type in different labs).
+                	</p>
+
+                	<h4>Many of the software tools used for quality metrics, and their citations, 
+                	can be found at the <a href="/ENCODE/softwareTools.html">Software Tools Page</a>.
+                	</h4>
+                	
+                        <h4>Quality Metric Spreadsheets:</h4> 
+
+                        <p>Datasets are divided into TF CHIP-seq, Histone ChIP-seq, DNase-seq, FAIRE-seq, and Control 
+                        samples.  The worksheet is downloadable as an 
+                        <a href="https://docs.google.com/spreadsheet/pub?key=0AjZ83he54vu1dEloTm93M3g2dkxTYXIzZndyN2VWMlE&output=xls">
+                        excel file</a>.</p>
+                	
+                        <p><iframe width='1500' height='550' frameborder='0' 
+                	src='https://docs.google.com/spreadsheet/pub?key=0AjZ83he54vu1dEloTm93M3g2dkxTYXIzZndyN2VWMlE&output=html&widget=true'></iframe>
+                	</p>                	
+
+                	<h4>What are the individual metrics?</h4>
+
+                	<p><b>Uniquely mappable reads:</b><br>
+                	This is the count of the number of sequence reads for this sample that can be 
+                	aligned to a single genomic location; this does not distinguish between reads 
+                	that were obtained multiple times (redundant reads) and reads obtained only once 
+                	(non-redundant reads).  A larger number of reads from a sufficiently complex 
+                	library increases the chances of finding all true binding sites; however, the 
+                	number of reads required is not known with certainty, and likely depends on 
+                	enrichment, antibody quality in ChIP experiments, and the fraction of the genome 
+                	containing the feature being measured.
+                	</p>
+
+                	<p><b>Self-consistent peaks, IDR n</b><br>
+                	An estimate of the number of enriched regions in a single sample.  A dataset 
+                	is divided into 2 pseudo-replicates that are analyzed by peak-calling at relaxed 
+                	stringency followed by IDR filtering at the indicated IDR threshold.
+                	</p>
+
+                        <p><b>Replicate-consistent peaks, IDR n</b><br>
+                        The number of enriched regions, determined using IDR (Irreproducible Discovery Rate) 
+                        using this sample and a replicate.  Potential enriched regions are identified using a 
+                        peak caller at very low stringency, then the IDR method is used to determine which peaks 
+                        are signal and which are noise, at the indicated IDR threshold.  As this analysis is 
+                        performed using pairs of datasets, the output number of peaks is identical for these two 
+                        datasets using this method.
+                        </p>
+
+                        <p><b>SPOT</b><br>
+                        SPOT (Signal Portion Of Tags) is a measure of enrichment, analogous to the commonly used 
+                        fraction of reads in peaks metric.  SPOT calculates the fraction of reads that fall in 
+                        tag-enriched regions identified using the Hotspot program, (Hotspot and SPOT are described 
+                        on the ENCODE Tools page) from a sample of 10 million reads.  Note that because methods of 
+                        measuring enrichment based on determining the fraction of reads that fall in peaks are 
+                        sensitive to the determination of enriched regions, comparison is possible only when using 
+                        the identical peak caller and parameters.  Larger SPOT values indicate higher signal to 
+                        noise; 1.0 is the maximum possible value (all reads are signal) and 0 is the minimum possible 
+                        value (all reads are noise).  For FAIRE, more than 10 million reads are typically required to 
+                        reliably detect peaks.
+                        </p>
+
+                        <p><b>PBC</b><br>
+                        The PCR Bottleneck Coefficient is a measure of library complexity.  This is the ratio 
+                        (non-redundant, uniquely mappable reads)/(all uniquely mappable reads), and is further 
+                        described on the ENCODE Tools page.  Provisionally, 0-0.5 is severe bottlenecking, 0.5-0.8 
+                        is moderate bottlenecking, 0.8-0.9 is mild bottlenecking, while 0.9-1.0 is no bottlenecking.  
+                        Very low values can indicate a technical problem, such as PCR bias, or a biological finding, 
+                        such as a very rare genomic feature.  Nuclease-based assays (DNase, MNase) detecting features 
+                        with base-pair resolution (transcription factor footprints, positioned nucleosomes) are 
+                        expected to recover the same read multiple times, resulting in a lower PBC score for these 
+                        assays. Note that the most complex library, random DNA, would approach 1.0, thus the very 
+                        highest values can indicate technical problems with libraries.  It is the practice for some 
+                        labs outside of ENCODE to remove redundant reads; after this has been done, the value for this 
+                        metric is 1.0, and this metric is not meaningful.  82% of TF ChIP, 89% of His ChIP, 77% of 
+                        DNase, 98% of FAIRE, and 97% of control ENCODE datasets have no or mild bottlenecking.
+                        </p>
+
+                        <p><b>NSC</b><br>
+                        NSC (Normalized Strand Cross-correlation coefficient) is a measure of enrichment, derived 
+                        without dependence on prior determination of enriched regions.  The measurement is the ratio 
+                        of the peak height at the distance that forward strand and reverse strand reads are most 
+                        strongly correlated (signal), divided by the same ratio at a large read separation (background).  
+                        Higher values indicate more enrichment, values less than 1.1 are relatively low NSC scores, and 
+                        the minimum possible value is 1 (no enrichment).  This score is sensitive to technical effects; 
+                        for example, high quality antibodies such as H3K4me3 and CTCF score well for all cell types 
+                        and ENCODE production groups, and variation in enrichment in particular IPs is detected as 
+                        stochastic variation.  This score is also sensitive to biological effects; narrow marks score 
+                        higher than broad marks (H3K4me3 v H3K36me3, H3K27me3) for all cell types and ENCODE production 
+                        groups, and features present in some individual cells but not others in a population are expected 
+                        to have lower scores.
+                        </p>
+
+                        <p><b>RSC</b><br>
+                        RSC (Relative Strand Cross-correlation coefficient) is a measure of enrichment, and can detect 
+                        some failed experiments.  The measurement is the peak height at fragment length relative to 
+                        background, divided by the peak height at read length relative to background.  The minimum possible 
+                        value is 0 (no signal), highly enriched experiments have values greater than 1, and values much 
+                        less than 1 may indicate low quality.
+                        </p>
+
+                        <h4>These metrics appear on the TF CHIP-seq experiments only:</h4>
+                        <p><b>UNDER SEQ</b><br>
+                        If set to 1, this means it was manually annotated that this dataset is likely to be 
+                        undersequenced.
+                        </p>
+                        
+                        <p><b>DIFF REP</b><br>
+                        If set to 1, it means this row is a replicate that is different from the other replicates (based 
+                        on self-consistency, NSC, or RSC).  Therefore, this sample should not be used for replicate-based 
+                        comparisons such as IDR.
+                        </p>
+                        
+                        <p><b>MANUAL LOW S/N</b><br>
+                        If set to 1 this means it was manually annotated that the data has low signal to noise.  This 
+                        could be the result of under-sequencing, poor enrichment during ChIP, poor antibody quality, or 
+                        the biological nature of the feature being examined.
+                        </p>
+                        
+                        <p><b>AUTO LOW S/N</b><br>
+                        If set to 1 this means the data has low signal to noise, scored by NSC &lt; 1.09 and RSC &lt; 0.9.  
+                        This could be the result of under-sequencing, poor enrichment during ChIP, poor antibody quality, 
+                        or the biological nature of the feature being examined.
+                        </p>
+                        
+                        <p><b>REVOKE FLAG</b><br>
+                        These datasets have been revoked by the production lab.  R = revoked dataset, D = duplicate good 
+                        dataset.
+                        </p>
+                        
+                        <p><b>MACS FDR 0.01</b><br>
+                        This is the number of enriched regions identified by MACS using an FDR threshold of 0.01 (1%).</p>
+
+
+                </div><!--end content-->
+       </div><!--end wrapper-->
+       <p class="date">Updated June 1st, 2012</p>
+    </body>
+</html>

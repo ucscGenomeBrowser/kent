@@ -131,7 +131,7 @@ if (udcCacheTimeout() < 300)
 #endif//def USE_TABIX && KNETFILE_HOOKS
 char *db = cartString(cart, "db");
 struct sqlConnection *conn = hAllocConnTrack(db, tdb);
-char *fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, hDefaultChrom(db));
 hFreeConn(&conn);
 int vcfMaxErr = 100;
 struct vcfFile *vcff = NULL;

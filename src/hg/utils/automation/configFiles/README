@@ -1,0 +1,6 @@
+This directory contains the configuration files use with the
+makeGenomeDb.pl script to construct the initial genome browser
+from the NCBI FTP site:
+
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/.../
+

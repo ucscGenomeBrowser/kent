@@ -359,6 +359,7 @@ our %formatCheckers = (
     csqual  => \&validateCsqual,
     genePred => \&validateGene,
     gtf => \&validateGtf,
+    gff => \&validateGtf,
     txt  => \&validateFreepass,
     pdf  => \&validateFreepass,
     document => \&validateFreepass,
@@ -406,6 +407,7 @@ sub validateBed {
     if (exists ($bedPlusTypes{$type})) {
         $cmdtype = $bedPlusTypes{$type};
     }
+    $cmdtype =~ s/\s+//g;
     my $asFile = "";
     unless ($sex) {
         $sex = "M";
@@ -1060,7 +1062,7 @@ sub validationSettings {
                     my @pair = split('\:',$setting,2);
                     my @subTypes = split('\.',$pair[0],2);
                     unless ($subTypes[1] eq "bam") {
-                        return "";
+                        next;
                     }
                     if($fileType eq $subTypes[1]) {
                         my @params = split('\,',$pair[1]);

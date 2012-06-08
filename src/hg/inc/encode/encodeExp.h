@@ -187,6 +187,10 @@ char *encodeExpAddAccession(struct sqlConnection *conn, char *tableName, int id)
  * after experiment is determined to be valid.
  * Return the accession. */
 
+int encodeExpIdOffset();
+/* Length of prefix preceding experiment ID in the accession. 
+ * Prefix is defined string + 1 for org character */
+
 void encodeExpSetAccession(struct encodeExp *exp, char *tableName);
 // Adds accession field to an existing experiment, updating the table.
 

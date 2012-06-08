@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeUwDnase Release 5 vs Release 4
-2012-04-04
+2012-05-31
 
 QA Count Summaries for Release 5:
 Tables: 624
 Files: 1248
 Gbdbs: 208
 Supplemental: 0
-Other: 2
+Other: 3
 
 REVOKED:
 Tables: 9
@@ -2179,19 +2179,16 @@ Revoked/Replaced/Renamed Gbdb Files (3):
 
 
 OTHER FILES:
-New: 2
+New: 3
 Revoked/Replace: 0
-Total: 2
+Total: 3
 
-New Other Files (2):
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release5/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release5/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release5/md5sum.txt
 
 Revoked Other Files (0):
-
-
-Files that dropped between releases (1):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release4/README.txt
 
 
 

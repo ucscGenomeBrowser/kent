@@ -1,0 +1,6 @@
+
+track chainNetMm10 override
+matrix 16 100,-139,-54,-170,-139,95,-83,-54,-54,-83,95,-139,-170,-54,-139,100
+chainMinScore 5000
+chainLinearGap medium
+visibility pack

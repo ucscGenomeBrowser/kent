@@ -509,3 +509,61 @@ chrPic1.perChromTables = no
     make etc-update
 
 #########################################################################
+# create pushQ entry (DONE - 2012-05-24 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=chrPic1 -keys all.joiner
+
+    mkdir /hive/data/genomes/chrPic1/pushQ
+    cd /hive/data/genomes/chrPic1/pushQ
+    makePushQSql.pl chrPic1 > chrPic1.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/chrPic1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/chrPic1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/chrPic1/bbi/quality.bw
+# WARNING: chrPic1 does not have seq
+# WARNING: chrPic1 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p chrPic1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < chrPic1.sql
+
+#########################################################################
+# fetch a photo, found in Wiki Commons (DONE - 2012-06-07 - Hiram)
+    mkdir /hive/data/genomes/chrPic1/photo
+    cd /hive/data/genomes/chrPic1/photo
+    wget --timestamping \
+http://upload.wikimedia.org/wikipedia/commons/4/47/A4_Western_painted_turtle.jpg
+
+    convert -quality 80 -geometry "350x200" A4_Western_painted_turtle.jpg \
+        Chrysemys_picta_bellii.jpg
+
+# original source URL:
+http://digitalmedia.fws.gov/cdm4/item_viewer.php?CISOROOT=/natdiglib&CISOPTR=2894&CISOBOX=1&REC=4
+
+# in the public domain courtesy of:
+    #   U.S. Fish & Wildlife Service
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2012-06-07 - Hiram)
+    hgsql -N -e "select frag from gold;" chrPic1 | sort | head -1
+AHGY01000001.1
+    hgsql -N -e "select frag from gold;" chrPic1 | sort | tail -2
+AHGY01551716.1
+NC_002073
+
+    # hence, add to trackDb/turtle/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][HC][G_][Y0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################

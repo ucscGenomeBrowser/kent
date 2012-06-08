@@ -11,31 +11,27 @@
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="trackDbDoc.js"></script>
     <STYLE TYPE="text/css">
-    <!--
+    /* Style inside the page to override trackDbDoc.css */
     BODY { background-color:#CCFFEE; }
+    DIV#library { display:block; background-color:#CCFFEE; border-style:none; margin-left:0em; max-width:900px; }
     DIV { margin:.5em; background-color:#FFFEE8; border:1px inset gray; padding:10px; }
-    DIV#library { background-color:#CCFFEE; border-style:none; margin-left:0em; max-width:900px; }
-    DIV.format { margin:0em; display:-moz-inline-stack;
-                 display:inline-block; zoom:1; *display:inline;
-            border-style:none; padding:0px; }
-    -->
+    DIV.format { margin:0em; border-style:none; padding:0px; }
     </STYLE>
     <script type="text/javascript">
         $(document).ready(function()
         {
-            tdbDoc.checkLibrary();
+            tdbDoc.library.checkup();
         });
     </script>
 
 </HEAD>
 <BODY>
 
-<H3 style="color:#880000;">This page is for testing the trackDbLibrary blurbs only.
+<H3 class="red">This page is for testing the trackDbLibrary blurbs only.
             No "jumpTo" links will work.</H3>
 <!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
 <div id="library">
 <!--#include virtual="trackDbLibrary.shtml" -->
 </div>
 
-<div style="height:100%;">&nbsp;<!-- This tricl helps jumpTo hit the right spot --></div>
 </BODY></HTML>

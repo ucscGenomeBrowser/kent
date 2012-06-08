@@ -125,7 +125,7 @@ $(function () {
 
         // add click handler to navigate to Chip-seq matrix
         $('#chipButton').click(function() {
-            window.open(encodeMatrix.pageForChipMatrix(encodeMatrix_organism), 'matrixWindow');
+            window.open(encodeMatrix.pageFor('chipMatrix', encodeMatrix_organism), 'matrixWindow');
         });
 
         // adjust size of headers based on longest label length

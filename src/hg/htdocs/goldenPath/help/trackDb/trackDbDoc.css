@@ -1,14 +1,8 @@
 /* CSS definitions used by trackDbDoc.html and friends */
 
-/* @page { size: 8.5in 11in; margin: 1in } */
-P { margin-bottom: 0.08in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
-H1 { margin-top: 0.33in; margin-bottom: 0in; direction: ltr; color: #365f91;
-        page-break-inside: avoid; widows: 2; orphans: 2 }
-H2 { margin-top: 0.14in; margin-bottom: 0in; direction: ltr; color: #365f91;
-        page-break-inside: avoid; widows: 2; orphans: 2 }
-H3 { margin-top: 0.14in; margin-bottom: 0in; direction: ltr; color: #365f91;
-        page-break-inside: avoid; widows: 2; orphans: 2 }
-TD P { margin-bottom: 0in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+H1,H2 { text-align: center; margin-top:0em; margin-bottom:0.1em; color: #365f91; }
+H3 { margin-top: 0.1em; margin-bottom: 0in; color: #365f91; }
+H2.leftAlign { text-align: left; }
 
 /* From our standard BODY tag */
 BODY { background-color:#FFF9D2; }
@@ -19,19 +13,19 @@ A:active.topbar { color:#330066; }
 CODE { color:#000088; }  /* Blue to stand out */
 PRE { color:#000088; }   /* Blue to stand out */
 I { color:#006600; }     /* Green until issues are dealt with */
-.contentBorder { border: 1px solid black; background-color:#FFFEE8; }
-.lightBlueBar { background-color:#D9E4F8; height:26px; }
-.hintBox { border: 1px inset #000088; color:#000088; padding:.3em .5em; }
-/* TABLE.settingsTable { width:98%; border: 1px inset gray; border-collapse:separate;
-                        border-spacing:0px; empty-cells:show; } */
+
+DIV.pageWidth { width:100%; max-width:1000px; }
+
+/* Section tables */
 TABLE.settingsTable { width:98%; border-style:none; border-collapse:separate;
                         border-spacing:0px; empty-cells:show; }
 TABLE.settingsTable TD, TABLE.settingsTable TH { border:0.1em inset gray; padding:7px; }
 TABLE.settingsTable TH { font-size:1em; color:#FFFFFF; background-color:#536ED3;
                             text-align:left; max-height:20px; }
 TABLE.settingsTable THEAD TD { border-style:none; }
-TR.related TD { border-top-style:none; }
-.red { color: #AA0000; }
+TR.related>TD { border-top-style:none; }
+
+/* Standard library blurbs and how they are integrated with sectionTables */
 DIV.details { margin-left:5em; }
 DIV.format { margin-left:0.4em; display:-moz-inline-stack; display:inline-block;
                 zoom:1; *display:inline; } /* obscure trick for IE to make inline-block work */
@@ -39,6 +33,21 @@ TR.examples { background-color:#F8F8F8; }
 TR.examples DIV.details { margin-left:0em; }
 .toggle  { height:16px; width:16px; vertical-align:top; cursor: pointer; }
 HR.example { border:1px inset #FFFFFF; color:#FFFFFF; }
-/* DIV.typeExamples { display:none; }  toggling */
+TD.filterBy { display: table-cell; } /* Override css in HGStyle.css */
 
-/* .fixed2 { color:#000088; font-family: "Courier New, monospace"; font-size: 1.1em; }   */
+/* The library itself is always hidden */
+DIV#library { display:none; }
+
+/* additional classes for sectioning/formatting */
+.topBlueBar { width:98%; height:26px; margin-bottom:.4em; text-align:left; margin-right:1em; }
+.topbar { height:100%; background-color:#2636D1; color:#89A1DE; text-align:left; }
+.contentBorder { border: 1px solid black; background-color:#FFFEE8; margin-bottom:1em; }
+.borderGuard { padding:10px; }
+.lightBlueBar { background-color:#D9E4F8; height:26px; }
+.lightBlueBarTitle { padding-top:.3em; font-size:1.12em; font-weight:bold; }
+.indent1 { margin-left:1.5em; }
+.hintBox { border: 1px inset #000088; padding:.3em .5em;
+           margin-left:2em; margin-right:2em; max-width:680px; }
+.red { color: #990000; }
+.rejectSection { background-color:#F8F8F8; }
+
