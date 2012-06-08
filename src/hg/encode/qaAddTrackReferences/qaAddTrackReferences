@@ -111,16 +111,42 @@ def makeHtml(infoDict, original):
                 infoDict['url'] = m.group(1).replace("&amp;", "&")
         else:
             origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
-    htmlStr = """
-<p>
-%s
-<a href="%s" target="_blank">
-%s</a>.
-<em>%s</em>. %s
-</p>
-%s
-""" % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr, origComment)
+    htmlLines = list()
+    htmlLines.append("<p>")
+    htmlLines.append("%s" % authStr)
+    htmlLines.append("<a href=\"%s\" target=\"_blank\">" % htmlEscape(infoDict['url']))
+    htmlLines.append("%s</a>." % htmlEscape(title))
+    htmlLines.append("<em>%s</em>. %s" % (htmlEscape(journal), dateStr))
+    htmlLines.append("</p>")
+    if origComment:
+        htmlLines.append("%s" %  origComment)
+    sep = "\n"
+    space = " "
 
+    processLines = list()
+
+    for i in htmlLines:
+        if len(i) > 100:
+            total = len(i)
+            parts = re.split("\s+", i)
+            count = 0
+            newParts = list()
+            for j in parts:
+                total = total - len(j) - 1
+                count = count + len(j)
+                if count > 50:
+                    if total < 20:
+                        newParts.append(j)
+                        count = 0
+                        continue
+                    processLines.append(space.join(newParts))
+                    count = 0
+                    newParts = list()
+                newParts.append(j)
+            processLines.append(space.join(newParts))
+        else:
+            processLines.append(i)
+    htmlStr = sep.join(processLines)
     return htmlStr, authStr
 
 def main():
@@ -141,9 +167,9 @@ def main():
         infoDict = parseInit(i)
         html, authStr = makeHtml(infoDict, args.original)
         references[authStr] = html
-
+    print "\n"
     for i in sorted(references.keys()):
-        print "%s" % references[i]
+        print "%s\n" % references[i]
 
 if __name__ == "__main__":
     main()
