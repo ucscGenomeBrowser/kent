@@ -5,7 +5,7 @@ shortLabel HAIB Methyl WGBS
 longLabel Whole Genome Bisulfite Sequencing by ENCODE/HAIB
 group regulation
 subGroup1 view Views CpG_Sites=CpG_Sites NonCpG_Sites=NonCpG_Sites
-subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1HESC=H1-hESC&nbsp;(Tier_1)
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1)
 #subGroup3 treatment Treatment NONE=None
 #subGroup4 obtainedBy ObtainedBy HAIB=HudsonAlpha
 #subGroup5 rep Replicate rep1=1 rep2=2
@@ -41,7 +41,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewCpGSites
         shortLabel GM12878 CpG
         longLabel GM12878 Methyl WGBS CpG Sites from ENCODE/HudsonAlpha
-        subGroups view=CpG_Sites cellType=aGM12878
+        subGroups view=CpG_Sites cellType=t1GM12878 
         type bigBed 9 +
         color 153,38,0
         # subId=5890 dateSubmitted=2012-02-29
@@ -50,7 +50,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewCpGSites off
         shortLabel H1-hESC CpG
         longLabel H1-hESC Methyl WGBS CpG Sites from ENCODE/HudsonAlpha
-        subGroups view=CpG_Sites cellType=aH1HESC
+        subGroups view=CpG_Sites cellType=t1H1HESC 
         type bigBed 9 +
         color 0,107,27
         # subId=5890 dateSubmitted=2012-02-29
@@ -70,7 +70,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites
         shortLabel GM12878 NonCpG
         longLabel GM12878 Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
-        subGroups view=NonCpG_Sites cellType=aGM12878
+        subGroups view=NonCpG_Sites cellType=t1GM12878 
         type bigBed 9 +
         color 153,38,0
         # subId=5890 dateSubmitted=2012-02-29
@@ -79,7 +79,7 @@ wgEncode 1
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites off
         shortLabel H1-hESC NonCpG
         longLabel H1-hESC Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
-        subGroups view=NonCpG_Sites cellType=aH1HESC
+        subGroups view=NonCpG_Sites cellType=t1H1HESC 
         type bigBed 9 +
         color 0,107,27
         # subId=5890 dateSubmitted=2012-02-29

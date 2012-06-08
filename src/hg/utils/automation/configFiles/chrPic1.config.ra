@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db chrPic1
+clade vertebrate
+genomeCladePriority 50
+scientificName Chrysemys picta bellii
+commonName Painted Turtle
+assemblyDate Dec. 2011
+assemblyLabel International Painted Turtle Genome Sequencing Consortium
+assemblyShortLabel v3.0.1
+orderKey 4000
+# chrM already included
+mitoAcc none
+fastaFiles /hive/data/genomes/chrPic1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/chrPic1/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir turtle
+photoCreditURL http://digitalmedia.fws.gov/cdm4/item_viewer.php?CISOROOT=/natdiglib&CISOPTR=2894&CISOBOX=1&REC=4
+photoCreditName U.S. Fish &amp; Wildlife Service
+ncbiGenomeId 12107
+ncbiAssemblyId 326468
+ncbiAssemblyName Chrysemys_picta_bellii-3.0.1
+ncbiBioProject 78657
+genBankAccessionID GCA_000241765.1
+taxId   8478
