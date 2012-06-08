@@ -60,7 +60,7 @@ def parseInit(id):
 def htmlEscape(str):
     return cgi.escape(str).encode('ascii', 'xmlcharrefreplace')
 
-def makeHtml(infoDict, original):
+def makeHtml(infoDict, original, plain):
     authors = list()
     authcount = 0
     etal = 0
@@ -76,8 +76,10 @@ def makeHtml(infoDict, original):
     sep = ", "
     authStr = sep.join(authors)
     authStr = htmlEscape(authStr)
-    if etal:
+    if etal and not plain:
         authStr = authStr + " <em>et al</em>"
+    if etal and plain:
+       authStr = authStr + " et al"
     authStr = authStr + "."
     title = re.sub("\.$", "", infoDict['Title'])
     if 'Source' in infoDict:
@@ -118,7 +120,13 @@ def makeHtml(infoDict, original):
     htmlLines.append("%s</a>." % htmlEscape(title))
     htmlLines.append("<em>%s</em>. %s" % (htmlEscape(journal), dateStr))
     htmlLines.append("</p>")
-    if origComment:
+    if plain:
+        htmlLines = list()
+        htmlLines.append("%s" % authStr)
+        htmlLines.append("%s" % title)
+        htmlLines.append("%s" % infoDict['url'])
+        htmlLines.append("%s. %s" % (journal, dateStr))
+    if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
     space = " "
@@ -133,8 +141,8 @@ def makeHtml(infoDict, original):
             newParts = list()
             for j in parts:
                 total = total - len(j) - 1
-                count = count + len(j)
-                if count > 50:
+                count = count + len(j) + 1
+                if count > 80:
                     if total < 20:
                         newParts.append(j)
                         count = 0
@@ -157,6 +165,7 @@ def main():
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
     parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link. Currently an experimental feature.")
+    parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     if len(sys.argv) <= 1:
         parser.print_help()
     args = parser.parse_args(sys.argv[1:])
@@ -165,7 +174,7 @@ def main():
 
     for i in ids:
         infoDict = parseInit(i)
-        html, authStr = makeHtml(infoDict, args.original)
+        html, authStr = makeHtml(infoDict, args.original, args.plain)
         references[authStr] = html
     print "\n"
     for i in sorted(references.keys()):
