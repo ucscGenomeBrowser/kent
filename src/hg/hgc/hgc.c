@@ -10581,14 +10581,14 @@ if (row != NULL)
     image = cloneString(row[0]);
     printf("<BR><B>IMAGE Clone: </B>");
     printf("<A HREF=\"");
-    printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+    printf("%s%s", "http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=", image);
     printf("\" TARGET=_blank> %s</A>", image);
     row = sqlNextRow(sr);
     while (row != NULL)
 	{
 	image = cloneString(row[0]);
 	printf(", <A HREF=\"");
-	printf("%s%s", "http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=", image);
+	printf("%s%s", "http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=", image);
 	printf("\" TARGET=_blank>%s</A>", image);
         row = sqlNextRow(sr);
 	}

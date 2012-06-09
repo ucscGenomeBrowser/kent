@@ -246,7 +246,8 @@ if (c == address || *(c - 1) == '.') return 0;
 
 /* next we validate the domain portion (name@domain) */
 if (!*(domain = ++c)) return 0;
-do {
+do 
+    {
     if (*c == '.') 
         {
         if (c == domain || *(c - 1) == '.') return 0;
@@ -254,41 +255,9 @@ do {
         }
     if (*c <= ' ' || *c >= 127) return 0;
     if (strchr(rfc822_specials, *c)) return 0;
-} while (*++c);
+    } while (*++c);
 
 return (count >= 1);
-}
-
-void backToHgSession(int nSec)
-/* delay for N/10 micro seconds then go back to hgSession page */
-{
-char *hgLoginHost = wikiLinkHost();
-int delay=nSec*100;
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.setTimeout(afterDelay, %d);\n"
-    "function afterDelay() {\n"
-    "window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";\n}"
-    "\n//-->\n</script>", delay, hgLoginHost);
-}
-
-void backToDoLoginPage(int nSec)
-/* delay for N micro seconds then go back to Login page */
-{
-char *hgLoginHost = wikiLinkHost();
-int delay=nSec*1000;
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.setTimeout(afterDelay, %d);\n"
-    "function afterDelay() {\n"
-    "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1\";\n}"
-    "//-->\n</script>", delay, hgLoginHost);
-}
-
-boolean tokenExpired(char *dateTime)
-/* Is token expired? */
-{
-return FALSE;
 }
 
 char *getReturnToURL()
@@ -296,7 +265,7 @@ char *getReturnToURL()
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
-char returnTo[512];
+char returnTo[2048];
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http://%s/cgi-bin/hgSession?hgS_doMainPage=1", hgLoginHost);
@@ -305,11 +274,10 @@ else
 return cloneString(returnTo);
 }
 
-void returnToURL(int nSec)
-/* delay for N/10  micro seconds then return to the "returnto" URL */
+void returnToURL(int delay)
+/* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-int delay=nSec*100;
 hPrintf(
     "<script  language=\"JavaScript\">\n"
     "<!-- "
@@ -812,8 +780,7 @@ hPrintf("<h2>UCSC Genome Browser</h2>"
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
-// backToDoLoginPage(1);
-returnToURL(1);
+returnToURL(150);
 }
 
 void signupPage(struct sqlConnection *conn)
@@ -865,8 +832,6 @@ hPrintf("<div class=\"inputGroup\">"
     cartUsualString(cart, "hgLogin_password", ""), 
     cartUsualString(cart, "hgLogin_password2", ""),
     getReturnToURL());
-/**** new validate code *****/
-
 cartSaveSession(cart);
 }
 
@@ -882,6 +847,15 @@ if (!user || sameString(user,""))
     signupPage(conn);
     return;
     }
+/* Make sure the escaped usrename is less than 32 characters */
+if (strlen(user) > 32)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Encoded username longer than 32 characters.");
+    signupPage(conn);
+    return;
+    }
+
 safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
 
 char *password = sqlQuickString(conn, query);
@@ -961,10 +935,8 @@ safef(query,sizeof(query), "insert into gbMembers set "
     "lastUse=NOW(),accountActivated='N'",
     sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
 sqlUpdate(conn, query);
-/********** new signup process start *******************/
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
-/* and comback here to contine back to URL */
 hPrintf("<h2>UCSC Genome Browser</h2>\n"
     "<p align=\"left\">\n"
     "</p>\n"
@@ -974,8 +946,7 @@ cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-//backToHgSession(1);
-returnToURL(1);
+returnToURL(150);
 }
 
 void accountHelp(struct sqlConnection *conn)
@@ -1071,7 +1042,7 @@ hPrintf("<script language=\"JavaScript\">"
     " </script>"
     "\n", userName,userID);
 cartRemove(cart,"hgLogin_userName");
-returnToURL(1);
+returnToURL(150);
 }
 
 void displayLogin(struct sqlConnection *conn)
@@ -1157,7 +1128,7 @@ hPrintf("<script language=\"JavaScript\">"
     "document.cookie =  \"wikidb_mw1_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
     "</script>\n");
 /* return to "returnto" URL */
-returnToURL(1);
+returnToURL(150);
 }
 
 void doMiddle(struct cart *theCart)

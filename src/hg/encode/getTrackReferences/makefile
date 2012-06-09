@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	qaAddTrackReferences
+	getTrackReferences
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 
@@ -24,4 +24,4 @@ ${SCRIPTS}/%: %
 	mv -f $@.tmp $@
 
 clean::
-	echo nothing to clean in hg/encode/qaAddTrackReferences/
+	echo nothing to clean in hg/encode/getTrackReferences/

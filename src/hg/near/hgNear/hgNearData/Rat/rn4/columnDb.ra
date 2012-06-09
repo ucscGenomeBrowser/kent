@@ -112,7 +112,7 @@ priority 2.2
 visibility off
 type lookup rgdGene2ToRefSeq name value
 search exact
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 
 name ensembl
 shortLabel Ensembl
@@ -129,7 +129,7 @@ longLabel GenBank mRNA Accession
 priority 2.31
 visibility off
 type lookup rgdGene2ToGenbank name value
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 
 name entrezGene
 shortLabel Entrez Gene
