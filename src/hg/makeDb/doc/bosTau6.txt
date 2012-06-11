@@ -848,5 +848,47 @@ CREATE TABLE ucscToEnsembl (
     md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
     popd
 
+#############################################################################
+# LIFTOVER TO bosTau4 ( redo DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
+    # real    1590m52.986s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau5 > doLiftOverToBosTau5.log 2>&1 &
+    # real    1567m22.050s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau5.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau7 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau7 > doLiftOverToBosTau7.log 2>&1 &
+    # real    1594m27.003s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau7.over.chain.gz >> md5sum.txt
+    popd
+
 ############################################################################
 
