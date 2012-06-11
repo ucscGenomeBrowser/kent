@@ -7,7 +7,7 @@
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRP00
 
 #########################################################################
-# DOWNLOAD SEQUENCE 
+# DOWNLOAD SEQUENCE
     ssh kkstore05
     mkdir /cluster/store12/pteVam1
     ln -s /cluster/store12/pteVam1 /cluster/data
@@ -17,12 +17,12 @@
     wget --timestamping \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.bases.gz \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.quals.gz 
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.quals.gz
     md5sum ass* > assembly.md5sum
 
     qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin pteVam1.qual.qac
 
-    cut -f 1 assembly.agp | uniq -c | wc -l 
+    cut -f 1 assembly.agp | uniq -c | wc -l
 # Number of scaffolds: 96944
 
 #########################################################################
@@ -37,7 +37,7 @@ genomeCladePriority 35
 scientificName Pteropus vampyrus
 commonName Megabat
 assemblyDate Jul. 2008
-assemblyLabel Broad Institute pteVam1 
+assemblyLabel Broad Institute pteVam1
 orderKey 233.5
 #mitoAcc AJ222767
 mitoAcc none
@@ -80,7 +80,7 @@ _EOF_
     screen # use a screen to manage this job
     mkdir /cluster/data/pteVam1/bed/simpleRepeat
     cd /cluster/data/pteVam1/bed/simpleRepeat
-    # 
+    #
     time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
 	-buildDir=/cluster/data/pteVam1/bed/simpleRepeat pteVam1 > do.log 2>&1 &
     #	real    98m59.097
@@ -187,7 +187,7 @@ skipInvalid yes
         -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev pteVam1 > do.log 2>&1
     #   real    278m34.535s
     # fixing the last couple of commands from doLoadClean step
-    time ./lastClean.csh 
+    time ./lastClean.csh
     # real    4m47.606s
 
     cat fb.pteVam1.windowmaskerSdust.clean.txt
@@ -205,5 +205,94 @@ skipInvalid yes
         -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
         -dbHost=hgwdev pteVam1 > cleanup.log 2>&1
     #   real    2m19.430s
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1839436660 / 2897316137 \) \* 1024
+    #	( 1839436660 / 2897316137 ) * 1024 = 650.113088
+
+    # round up to 700
+
+    cd /hive/data/genomes/pteVam1
+    time blat pteVam1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/pteVam1.11.ooc -repMatch=700
+    #   Wrote 19840 overused 11-mers to jkStuff/pteVam1.11.ooc
+    #   real    0m31.002s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" pteVam1 | sort | uniq -c
+    #   291864 yes
+#    cd /hive/data/genomes/pteVam1/jkStuff
+#    gapToLift pteVam1 pteVam1.nonBridged.lift -bedFile=pteVam1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' pteVam1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Pteropus vampyrus	2	1	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add pteVam1 just after ce2
+# pteVam1 (megabat)
+pteVam1.serverGenome = /hive/data/genomes/pteVam1/pteVam1.2bit
+pteVam1.clusterGenome = /hive/data/genomes/pteVam1/pteVam1.2bit
+pteVam1.ooc = /hive/data/genomes/pteVam1/jkStuff/pteVam1.11.ooc
+pteVam1.lift = no
+pteVam1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+pteVam1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+pteVam1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+pteVam1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+pteVam1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+pteVam1.refseq.mrna.native.load = no
+pteVam1.refseq.mrna.xeno.load = yes
+pteVam1.genbank.mrna.xeno.load = yes
+pteVam1.genbank.est.native.load = no
+pteVam1.downloadDir = pteVam1
+pteVam1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding pteVam1 megabat" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for pteVamNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S pteVam1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial pteVam1 &
+    #   var/build/logs/2012.06.08-09:55:28.pteVam1.initalign.log
+    #   real    1862m46.698s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad pteVam1 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.11-13:09:05.dbload.log
+    #   real    14m48.000s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add pteVam1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added pteVam1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
 
 #########################################################################
