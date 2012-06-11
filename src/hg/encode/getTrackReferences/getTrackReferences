@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-import sys, os, urllib2, argparse, re, cgi
+import sys, os, urllib2, argparse, re, cgi, textwrap
 from xml.etree import ElementTree as ET
 
 def parsePubmed(doc, id):
@@ -60,7 +60,7 @@ def parseInit(id):
 def htmlEscape(str):
     return cgi.escape(str).encode('ascii', 'xmlcharrefreplace')
 
-def makeHtml(infoDict, original):
+def makeHtml(infoDict, original, plain):
     authors = list()
     authcount = 0
     etal = 0
@@ -76,8 +76,10 @@ def makeHtml(infoDict, original):
     sep = ", "
     authStr = sep.join(authors)
     authStr = htmlEscape(authStr)
-    if etal:
+    if etal and not plain:
         authStr = authStr + " <em>et al</em>"
+    if etal and plain:
+       authStr = authStr + " et al"
     authStr = authStr + "."
     title = re.sub("\.$", "", infoDict['Title'])
     if 'Source' in infoDict:
@@ -106,20 +108,31 @@ def makeHtml(infoDict, original):
         fetch = urllib2.urlopen(infoDict['url'])
         doc = fetch.read()
         m = re.search('<div class="icons"><a href="(\S+)"', doc)
-        if m.group(1):
-            infoDict['url'] = m.group(1).replace("&amp;", "&")
+        if m:
+            if m.group(1):
+                infoDict['url'] = m.group(1).replace("&amp;", "&")
         else:
             origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
-    htmlStr = """
-<p>
-%s
-<a href="%s" target="_blank">
-%s</a>.
-<em>%s</em>. %s
-</p>
-%s
-""" % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr, origComment)
+    htmlLines = list()
+    htmlLines.append("<p>")
+    htmlLines.append("%s" % authStr)
+    htmlLines.append("<a href=\"%s\" target=\"_blank\">" % htmlEscape(infoDict['url']))
+    htmlLines.append("%s</a>." % htmlEscape(title))
+    htmlLines.append("<em>%s</em>. %s" % (htmlEscape(journal), dateStr))
+    htmlLines.append("</p>")
+    if plain:
+        htmlLines = list()
+        htmlLines.append("%s %s %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
+    if not plain and origComment:
+        htmlLines.append("%s" %  origComment)
+    sep = "\n"
+    space = " "
 
+    processLines = list()
+
+    for i in htmlLines:
+        processLines.append(textwrap.fill(i, 100))
+    htmlStr = sep.join(processLines)
     return htmlStr, authStr
 
 def main():
@@ -130,6 +143,7 @@ def main():
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
     parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link. Currently an experimental feature.")
+    parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     if len(sys.argv) <= 1:
         parser.print_help()
     args = parser.parse_args(sys.argv[1:])
@@ -138,11 +152,11 @@ def main():
 
     for i in ids:
         infoDict = parseInit(i)
-        html, authStr = makeHtml(infoDict, args.original)
+        html, authStr = makeHtml(infoDict, args.original, args.plain)
         references[authStr] = html
-
+    print "\n"
     for i in sorted(references.keys()):
-        print "%s" % references[i]
+        print "%s\n" % references[i]
 
 if __name__ == "__main__":
     main()

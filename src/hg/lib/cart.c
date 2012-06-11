@@ -1485,7 +1485,13 @@ va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
-cgiMakeHiddenVar("db", db);
+// WTF - variable outside of a form on almost every page we make below?
+// Tim put this in.  Talking with him it sounds like some pages might actually
+// depend on it.  Not removing it until we have a chance to test.  Best fix
+// might be to add it to cartSaveSession, though this would then no longer be
+// well named, and not all things have 'db.'  Arrr.  Probably best to remove
+// and test a bunch.
+cgiMakeHiddenVar("db", db);  
 }
 
 void cartWebEnd()
@@ -1515,16 +1521,15 @@ popWarnHandler();
 }
 
 void setThemeFromCart(struct cart *cart) 
-/* If 'theme' variable is set in cart: overwrite background with the one 
- * defined for this theme in hg.conf. Also set the "styleTheme", with additional
- * styles that can overwrite the main style settings 
- * config syntax in hg.conf is:
- *   browser.theme.<name>=<cssFile>
- * or:
- *   browser.theme.<name>=<cssFile>,<backgroundFile>
- * */
+/* If 'theme' variable is set in cart: overwrite background with the one from
+ * defined for this theme Also set the "styleTheme", with additional styles
+ * that can overwrite the main style settings */
 {
-// get theme from cart and use it to get style/background file from config
+// Get theme from cart and use it to get background file from config;
+// format is browser.theme.<name>=<stylesheet>[,<background>]
+
+char **options;
+int optionCount;
 char *cartTheme = cartOptionalString(cart, "theme");
 
 // XXXX which setting should take precedence? Currently browser.theme does.

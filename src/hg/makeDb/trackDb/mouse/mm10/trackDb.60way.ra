@@ -25,8 +25,8 @@ priority 103.29
         subGroups view=align clade=vert
         noInherit on
         irows on
-#        summary multiz60waySummary
-#        frames multiz60wayFrames
+        summary multiz60waySummary
+        frames multiz60wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
