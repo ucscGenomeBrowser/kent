@@ -3155,19 +3155,13 @@ void hgPositionsHelpHtml(char *organism, char *database)
 char *htmlPath = hHtmlPath(database);
 char *htmlString = NULL;
 size_t htmlStrLength = 0;
-char *freeze = hFreezeFromDb(database);
 
 if (strstrNoCase(organism, "zoo")) 
     webNewSection("About the NISC Comparative Sequencing Program Browser");
-else if (stringIn(database, freeze))
-    webNewSection("About the %s %s assembly"
-		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, freeze,
-		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 else
-    webNewSection("About the %s %s (%s) assembly"
+    webNewSection("%s Genome Browser -- %s assembly"
 		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, freeze, database,
+		  organism, database,
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 if (htmlPath != NULL && fileExists(htmlPath))
