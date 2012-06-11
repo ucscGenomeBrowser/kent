@@ -122,10 +122,8 @@ def makeHtml(infoDict, original, plain):
     htmlLines.append("</p>")
     if plain:
         htmlLines = list()
-        htmlLines.append("%s" % authStr)
-        htmlLines.append("%s" % title)
-        htmlLines.append("%s" % infoDict['url'])
-        htmlLines.append("%s. %s" % (journal, dateStr))
+        htmlLines.append("%s %s %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
+        #htmlLines.append("%s" % infoDict['url'])
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
@@ -143,7 +141,7 @@ def makeHtml(infoDict, original, plain):
                 total = total - len(j) - 1
                 count = count + len(j) + 1
                 if count > 80:
-                    if total < 20:
+                    if total < 20 and (count + len(j) < 100):
                         newParts.append(j)
                         count = 0
                         continue
