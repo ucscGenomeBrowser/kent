@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-import sys, os, urllib2, argparse, re, cgi
+import sys, os, urllib2, argparse, re, cgi, textwrap
 from xml.etree import ElementTree as ET
 
 def parsePubmed(doc, id):
@@ -122,10 +122,7 @@ def makeHtml(infoDict, original, plain):
     htmlLines.append("</p>")
     if plain:
         htmlLines = list()
-        htmlLines.append("%s" % authStr)
-        htmlLines.append("%s" % title)
-        htmlLines.append("%s" % infoDict['url'])
-        htmlLines.append("%s. %s" % (journal, dateStr))
+        htmlLines.append("%s %s %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
@@ -134,26 +131,7 @@ def makeHtml(infoDict, original, plain):
     processLines = list()
 
     for i in htmlLines:
-        if len(i) > 100:
-            total = len(i)
-            parts = re.split("\s+", i)
-            count = 0
-            newParts = list()
-            for j in parts:
-                total = total - len(j) - 1
-                count = count + len(j) + 1
-                if count > 80:
-                    if total < 20:
-                        newParts.append(j)
-                        count = 0
-                        continue
-                    processLines.append(space.join(newParts))
-                    count = 0
-                    newParts = list()
-                newParts.append(j)
-            processLines.append(space.join(newParts))
-        else:
-            processLines.append(i)
+        processLines.append(textwrap.fill(i, 100))
     htmlStr = sep.join(processLines)
     return htmlStr, authStr
 
