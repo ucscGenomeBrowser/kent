@@ -1,3 +1,10 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: #e6e3db;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 .topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
                 color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
