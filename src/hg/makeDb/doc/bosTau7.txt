@@ -151,6 +151,13 @@ fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
 agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
 # qualFiles none
 dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName BGSC Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
 taxId 9913
 '_EOF_'
     # << happy emacs
@@ -177,7 +184,9 @@ taxId 9913
 # - Run make update DBS=bosTau7 and make alpha when done.
 # - (optional) Clean up /cluster/data/bosTau7/TemporaryTrackDbCheckout
 
-
+    # re-generated description html using update makeGenomeDb.pl and config.ra
+    /hive/data/genomes/bosTau7
+    makeGenomeDb.pl -forceDescription -continue=trackDb bosTau7.config.ra
 
 #########################################################################
 # RepeatMasker (DONE 2012-01-04 - Chin)
