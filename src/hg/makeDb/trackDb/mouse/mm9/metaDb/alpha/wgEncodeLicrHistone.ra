@@ -16152,6 +16152,114 @@ subId 5361
 tableName wgEncodeLicrHistoneSmintInputMAdult8wksC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep1V2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Spleen
+composite wgEncodeLicrHistone
+control std
+controlId Spleen/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-06
+dateUnrestricted 2013-03-05
+fileName wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 09/19/10 Lane 8C
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7045
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+view RawData
+
+metaObject wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep2V2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Spleen
+composite wgEncodeLicrHistone
+control std
+controlId Spleen/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-06
+dateUnrestricted 2013-03-05
+fileName wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/30/10 Lane 3F
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7045
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+view RawData
+
+metaObject wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep1V2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Spleen
+composite wgEncodeLicrHistone
+control std
+controlId Spleen/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-06
+dateUnrestricted 2013-03-05
+fileName wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 09/19/10 Lane 8D
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7046
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+view RawData
+
+metaObject wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep2V2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Spleen
+composite wgEncodeLicrHistone
+control std
+controlId Spleen/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-06
+dateUnrestricted 2013-03-05
+fileName wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/30/10 Lane 4G
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7046
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+view RawData
+
 metaObject wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -20366,4 +20474,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 16499326
+# MAGIC: 375608883
