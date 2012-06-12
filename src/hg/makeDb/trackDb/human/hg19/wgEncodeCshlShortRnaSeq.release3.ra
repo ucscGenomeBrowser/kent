@@ -3519,6 +3519,8 @@ html wgEncodeCshlShortRnaSeq.release3
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HUVE nucl sm + 1
+        longLabel HUVEC TAP-only nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        subGroups view=PlusSignal cellType=t2HUVEC localization=NUCLEUS protocol=TAP rep=rep3 rank=rank1
         type bigWig 1.000000 2075138.000000
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
