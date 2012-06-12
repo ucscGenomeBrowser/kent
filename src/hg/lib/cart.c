@@ -1528,8 +1528,6 @@ void setThemeFromCart(struct cart *cart)
 // Get theme from cart and use it to get background file from config;
 // format is browser.theme.<name>=<stylesheet>[,<background>]
 
-char **options;
-int optionCount;
 char *cartTheme = cartOptionalString(cart, "theme");
 
 // XXXX which setting should take precedence? Currently browser.theme does.
