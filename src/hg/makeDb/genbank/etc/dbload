@@ -23,7 +23,7 @@
 
 # errors terminate with message
 set -e
-trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
+trap "echo Error: $(hostname) dbload failed >&2; exit 1" ERR
 exec </dev/null
 
 maxExtFileUpdate=10000000
@@ -72,8 +72,8 @@ cd $gbRoot
 verb=3
 
 # data files and dirs
-dbloadVar=var/dbload/`hostname`
-lastTime=$dbloadVar/`basename $timeFile`
+dbloadVar=var/dbload/$(hostname)
+lastTime=$dbloadVar/$(basename $timeFile)
 lastTimeTmp=$lastTime.tmp
 dbloadTime=$dbloadVar/dbload.time
 
@@ -126,5 +126,5 @@ if [ $largeDeletes = YES ] ; then
     echo "WARNING: -allowLargeDeletes is enabled"
 fi
 
-echo "`hostname`: dbload completed"
+echo "$(hostname): dbload completed"
 

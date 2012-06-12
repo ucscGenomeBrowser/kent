@@ -12,7 +12,7 @@ otherOpts=""
 gbRoot=/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/rr.dbs`
+databases=$(gbGetDatabases etc/rr.dbs)
 
 # workdir is a local dir
 # FIXME: tmp change during hgsqlrr transition
