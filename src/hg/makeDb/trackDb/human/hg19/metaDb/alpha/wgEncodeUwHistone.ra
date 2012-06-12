@@ -6507,6 +6507,32 @@ subId 5041
 treatment None
 view Alignments
 
+metaObject wgEncodeUwHistoneGm12864InputStdRawData
+objType file
+antibody Input
+cell GM12864
+composite wgEncodeUwHistone
+control std
+controlId GM12864/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2010-06-10
+dateSubmitted 2012-06-07
+dateUnrestricted 2011-03-09
+dccAccession wgEncodeEH000457
+expId 457
+fileName wgEncodeUwHistoneGm12864InputStdRawData.fastq.gz
+geoSampleAccession GSM749754
+grant Stam
+lab UW
+labExpId DS13587
+origAssembly hg19
+project wgEncode
+setType input
+subId 7049
+treatment None
+view RawData
+
 metaObject wgEncodeUwHistoneGm12864InputStdRawRep1
 objType table
 antibody Input
@@ -6835,6 +6861,32 @@ setType input
 subId 5046
 treatment None
 view Alignments
+
+metaObject wgEncodeUwHistoneGm12865InputStdRawData
+objType file
+antibody Input
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2010-06-10
+dateSubmitted 2012-06-07
+dateUnrestricted 2011-03-09
+dccAccession wgEncodeEH000458
+expId 458
+fileName wgEncodeUwHistoneGm12865InputStdRawData.fastq.gz
+geoSampleAccession GSM749777
+grant Stam
+lab UW
+labExpId DS13590
+origAssembly hg19
+project wgEncode
+setType input
+subId 7049
+treatment None
+view RawData
 
 metaObject wgEncodeUwHistoneGm12865InputStdRawRep1
 objType table
@@ -7167,6 +7219,32 @@ setType input
 subId 5044
 treatment None
 view Alignments
+
+metaObject wgEncodeUwHistoneGm12875InputStdRawData
+objType file
+antibody Input
+cell GM12875
+composite wgEncodeUwHistone
+control std
+controlId GM12875/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2010-06-10
+dateSubmitted 2012-06-07
+dateUnrestricted 2011-03-09
+dccAccession wgEncodeEH000462
+expId 462
+fileName wgEncodeUwHistoneGm12875InputStdRawData.fastq.gz
+geoSampleAccession GSM749724
+grant Stam
+lab UW
+labExpId DS13589
+origAssembly hg19
+project wgEncode
+setType input
+subId 7049
+treatment None
+view RawData
 
 metaObject wgEncodeUwHistoneGm12875InputStdRawRep1
 objType table
@@ -32380,6 +32458,32 @@ subId 4633
 treatment None
 view Alignments
 
+metaObject wgEncodeUwHistoneWerirb1InputStdRawData
+objType file
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2010-06-10
+dateSubmitted 2012-06-07
+dateUnrestricted 2011-03-09
+dccAccession wgEncodeEH000475
+expId 475
+fileName wgEncodeUwHistoneWerirb1InputStdRawData.fastq.gz
+geoSampleAccession GSM749766
+grant Stam
+lab UW
+labExpId DS11888
+origAssembly hg19
+project wgEncode
+setType input
+subId 7049
+treatment None
+view RawData
+
 metaObject wgEncodeUwHistoneWerirb1InputStdRawRep1
 objType table
 antibody Input
@@ -33118,4 +33222,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -337292751
+# MAGIC: -1108238522

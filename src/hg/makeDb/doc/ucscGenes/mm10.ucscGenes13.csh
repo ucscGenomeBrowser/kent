@@ -70,10 +70,10 @@ set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
-set ratFa = $genomes/$ratDb/bed/blastp/known.faa
+set ratFa = $genomes/$ratDb/bed/blastp/rn5.refGenePep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
-set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
+set wormFa = $genomes/$wormDb/bed/blastp/ensPep.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
@@ -991,7 +991,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
 endif
 
 
-#if 0 TODO..... needs work on rn5 to get protein fa
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
@@ -1019,8 +1018,26 @@ _EOF_
 
 
 doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
-# real    464m36.473s
-# done 2009-06-29
+# *** All done!
+# *** -noLoad was specified -- you can run this script manually to load mm10 tables:
+#        run.mm10.mm10/loadPairwise.csh
+#
+# *** -noLoad was specified -- you can run these scripts manually to load mm10 tables:
+#        run.mm10.hg19/loadPairwise.csh
+#        run.mm10.rn5/loadPairwise.csh
+#        run.mm10.danRer7/loadPairwise.csh
+#        run.mm10.dm3/loadPairwise.csh
+#        run.mm10.ce10/loadPairwise.csh
+#        run.mm10.sacCer3/loadPairwise.csh
+#
+# *** -noLoad was specified -- you can run these scripts manually to load mmBlastTab in query databases:
+#        run.hg19.mm10/loadPairwise.csh
+#        run.rn5.mm10/loadPairwise.csh
+#        run.danRer7.mm10/loadPairwise.csh
+#        run.dm3.mm10/loadPairwise.csh
+#        run.ce10.mm10/loadPairwise.csh
+#        run.sacCer3.mm10/loadPairwise.csh
+
 
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
@@ -1031,7 +1048,6 @@ cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
-#endif
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
@@ -1145,23 +1161,26 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
-#if 0 # didn't do this
 # Make pfam run.  Actual cluster run is about 6 hours.
-# First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
-# Did this with
-#   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-set pfamScratch = $scratchDir/pfam
-ssh $cpuFarm mkdir -p $pfamScratch
-ssh $cpuFarm cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+# TODO:  Should grab newest Pfam, but for the moment, use what we have
+# mkdir -p /hive/data/outside/pfam/Pfam26.0
+# cd /hive/data/outside/pfam/Pfam26.0
+# wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
+# gunzip Pfam-A.hmm.gz
+#set pfamScratch = $scratchDir/pfamBR
+#ssh $cpuFarm mkdir -p $pfamScratch
+#ssh $cpuFarm cp /hive/data/outside/pfam/Pfam26.0/Pfam-A.hmm $pfamScratch
+
 mkdir -p $dir/pfam
 cd $dir/pfam
 mkdir -p splitProt
 faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
 mkdir -p result
 ls -1 splitProt > prot.list
+# /hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/Pfam26.0/Pfam-A.hmm 
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/scratch/pfam/Pfam_fs \
+/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/current/Pfam_fs \
 	splitProt/$1 > /scratch/tmp/$2.pf
 mv /scratch/tmp/$2.pf $3
 '_EOF_'
@@ -1175,14 +1194,15 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/pfam; para make jobList"
+ssh $cpuFarm "cd $dir/pfam; para time > run.time"
+cat run.time
 
-# Completed: 9667 of 9667 jobs
-# CPU time in finished jobs:    3704753s   61745.89m  1029.10h   42.88d  0.117 y
-# IO & Wait Time:              12906097s  215101.61m  3585.03h  149.38d  0.409 y
-# Average job time:                1718s      28.64m     0.48h    0.02d
-# Longest finished job:            8907s     148.45m     2.47h    0.10d
-# Submission to last job:         29041s     484.02m     8.07h    0.34d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+# Completed: 9671 of 9671 jobs
+# CPU time in finished jobs:    2507411s   41790.18m   696.50h   29.02d  0.080 y
+# IO & Wait Time:               2797331s   46622.19m   777.04h   32.38d  0.089 y
+# Average job time:                 549s       9.14m     0.15h    0.01d
+# Longest finished job:            3917s      65.28m     1.09h    0.05d
+# Submission to last job:         16029s     267.15m     4.45h    0.19d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -1208,10 +1228,9 @@ hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
-
-
 # Do scop run. Takes about 6 hours
-# First get pfam global HMMs into /san/sanvol1/scop somehow.
+# First get pfam global HMMs into /hive/data/outside/scop/scop.hmm 
+# used existing ones...TODO
 mkdir -p $dir/scop
 cd $dir/scop
 mkdir -p result
@@ -1233,12 +1252,14 @@ doScop $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/scop; para make jobList"
-# CPU time in finished jobs:    3980861s   66347.69m  1105.79h   46.07d  0.126 y
-# IO & Wait Time:              11114844s  185247.39m  3087.46h  128.64d  0.352 y
-# Average job time:                1562s      26.03m     0.43h    0.02d
-# Longest finished job:            8166s     136.10m     2.27h    0.09d
-# Submission to last job:         18306s     305.10m     5.08h    0.21d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+ssh $cpuFarm "cd $dir/scop; para time > run.time"
+cat run.time
+# Completed: 9671 of 9671 jobs
+# CPU time in finished jobs:    2713367s   45222.78m   753.71h   31.40d  0.086 y
+# IO & Wait Time:               3992929s   66548.82m  1109.15h   46.21d  0.127 y
+# Average job time:                 693s      11.56m     0.19h    0.01d
+# Longest finished job:            4503s      75.05m     1.25h    0.05d
+# Submission to last job:         22778s     379.63m     6.33h    0.26d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1252,6 +1273,7 @@ hgsql $tempDb -e "delete k from knownToSuper k, kgXref x where k.gene = x.kgID a
 hgLoadSqlTab $tempDb scopDesc $kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
+#if 0 TODO
 # Regenerate ccdsKgMap table
 $kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
@@ -1287,14 +1309,13 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-
-#if 0 # not done
 # Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
 
     # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
-    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+    cp /cluster/data/hg19/bed/ucsc.13/kegg/map_title.tab .
+    # wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
     cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
     cut -f 2 j.tmp >j.hsa
     cut -f 1,3 j.tmp >j.1
@@ -1306,7 +1327,8 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
     # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
     # in the keggPathway table, overloading the schema.
-    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+    cp /cluster/data/hg19/bed/ucsc.13/kegg/hsa_pathway.list .
+    # wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
     cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql j.tmp
 
@@ -1324,7 +1346,6 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
     hgsql $tempDb -e "delete k from knownToKeggEntrez k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
-#endif
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1416,13 +1437,13 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
-# blatServer by the keyword hg19Kg with the version number appended
-hgsql hgcentraltest -e \                                                
-      'INSERT into blatServers values ("hg19Kgv13", "blat5", 17783, 0, 1);'
+# blatServer by the keyword "$db"Kg with the version number appended
+hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("mm10Kgv13", "blat4a", 17829, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kgv13", "UCSC Genes", \                    
-         "hg19", "kgTargetAli", "", "", \                                       
-         "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+      'INSERT into targetDb values("mm10Kgv13", "UCSC Genes", \
+         "mm10", "kgTargetAli", "", "", \
+         "/gbdb/mm10/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 
 # move this endif statement past business that has successfully been completed
