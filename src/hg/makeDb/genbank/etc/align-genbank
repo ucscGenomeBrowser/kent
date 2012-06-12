@@ -23,7 +23,7 @@ gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 databases=$(gbGetDatabases etc/align.dbs)
-maxParallel=16
+maxParallel=8
 
 buildTime=var/build/build.time
 
