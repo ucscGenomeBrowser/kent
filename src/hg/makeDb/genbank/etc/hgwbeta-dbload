@@ -12,7 +12,7 @@ opts="$*"
 gbRoot=/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/hgwbeta.dbs`
+databases=$(gbGetDatabases etc/hgwbeta.dbs)
 
 # wait for copy to hgwnfs1
 copyTime=var/copy/copy.time
