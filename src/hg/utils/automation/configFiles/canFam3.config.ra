@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db canFam3
+clade vertebrate
+genomeCladePriority 20
+scientificName Canis lupus familiaris
+commonName Dog
+assemblyDate Sep. 2011
+assemblyLabel Broad CanFam3.1
+assemblyShortLabel Broad CanFam3.1
+orderKey 226
+mitoAcc NC_002008
+fastaFiles /hive/data/genomes/canFam3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/canFam3/ucsc/*.agp.gz
+dbDbSpeciesDir dog
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=50
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 85
+ncbiAssemblyId 237548
+ncbiAssemblyName CanFam3.1
+ncbiBioProject 13179
+genBankAccessionID GCA_000002285.2
+taxId	9615
