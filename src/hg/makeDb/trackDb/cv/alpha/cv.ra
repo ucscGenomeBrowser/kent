@@ -7177,7 +7177,7 @@ label Small Intestine
 #Shortened term
 
 term Spleen
-tag SPLEEN
+tag SPL
 type Cell Line
 organism mouse
 tissue spleen
