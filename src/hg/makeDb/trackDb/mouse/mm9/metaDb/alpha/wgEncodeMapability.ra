@@ -3,15 +3,12 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
-dccAccession wgEncodeEH000317
-expId 317
 fileName wgEncodeCrgMapabilityAlign100mer.bigWig
 grant Gingeras
 lab CRG-Guigo
-md5sum a1b1a8c99431fedf6a3b4baef028cca4
+md5sum 0fc0a6ff28f4e2ee780bf6702ed7aea7
 project wgEncode
 size 100mer
-subId 4945
 tableName wgEncodeCrgMapabilityAlign100mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -21,15 +18,12 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
-dccAccession wgEncodeEH000318
-expId 318
 fileName wgEncodeCrgMapabilityAlign36mer.bigWig
 grant Gingeras
 lab CRG-Guigo
-md5sum debdda148b79a5b5d22ebd13caaf069c
+md5sum cea40c2bca1572ebfab8edc8936ea9ab
 project wgEncode
 size 36mer
-subId 4945
 tableName wgEncodeCrgMapabilityAlign36mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -39,15 +33,12 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
-dccAccession wgEncodeEH000319
-expId 319
 fileName wgEncodeCrgMapabilityAlign40mer.bigWig
 grant Gingeras
 lab CRG-Guigo
-md5sum 97d55005d426e4e4a7c304a7a0f3b2a8
+md5sum 13cc3bf69325fb580586e79e75d82654
 project wgEncode
 size 40mer
-subId 4945
 tableName wgEncodeCrgMapabilityAlign40mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -57,15 +48,12 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
-dccAccession wgEncodeEH000320
-expId 320
 fileName wgEncodeCrgMapabilityAlign50mer.bigWig
 grant Gingeras
 lab CRG-Guigo
-md5sum 2e73d575594ad4aa3b66e2b436930b8d
+md5sum def4bb1db43b8d93f16cf91f6987ecad
 project wgEncode
 size 50mer
-subId 4945
 tableName wgEncodeCrgMapabilityAlign50mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -75,15 +63,12 @@ objType table
 composite wgEncodeMapability
 dataType Mapability
 dataVersion January 2010
-dccAccession wgEncodeEH000321
-expId 321
 fileName wgEncodeCrgMapabilityAlign75mer.bigWig
 grant Gingeras
 lab CRG-Guigo
-md5sum 82bbdf76bf5f1df5e73dcbf4480e0f43
+md5sum 39b8af3492edd29d935f0b8d5b1dbdda
 project wgEncode
 size 75mer
-subId 4945
 tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -93,4 +78,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: -1437020678
+# MAGIC: 900211322
