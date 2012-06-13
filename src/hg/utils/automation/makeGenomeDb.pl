@@ -957,11 +957,16 @@ sub makeDescription {
   my $anchorRoot = lc($genome);
   $anchorRoot =~ s/\. /_/;
   $anchorRoot =~ s/ /_/;
-  if ( ! -s "/usr/local/apache/htdocs/images/$sciUnderscore.jpg" ) {
-    warn "missing htdocs/images/$sciUnderscore.jpg\n\n";
-    exit 1;
+  my $img = "/usr/local/apache/htdocs/images/$sciUnderscore.jpg";
+  if ( ! -s $img ) {
+      if ( ! -s "/usr/local/apache/htdocs/images/$sciUnderscore.png" ) {
+        warn "missing htdocs/images/$sciUnderscore.{jpg|png}\n\n";
+        exit 1;
+    } else {
+      $img = "/usr/local/apache/htdocs/images/$sciUnderscore.png";
+    }
   }
-  my $widthHeight = `identify /usr/local/apache/htdocs/images/$sciUnderscore.jpg | awk '{print \$3}'`;
+  my $widthHeight = `identify $img | awk '{print \$3}'`;
   chomp $widthHeight;
   my ($width, $height) = split('x', $widthHeight);
   my $borderWidth = $width + 15;
