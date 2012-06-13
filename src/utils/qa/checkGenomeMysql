@@ -47,7 +47,8 @@ for table in $tableList
 do
   mysql --user=genome --host=public-mysql1.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
       $db > /dev/null
-  mysql --user=genome --host=hgfs-sd.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
-      $db > /dev/null
+
+#PUT THIS BACK IF SD MACHINES COME BACK  mysql --user=genome --host=hgfs-sd.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
+#      $db > /dev/null
 done
 exit 0
