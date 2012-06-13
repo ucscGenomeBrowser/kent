@@ -3,8 +3,7 @@
 #Encode Composite tracks (main wrangler:Venkat)
 
 # mapability liftover
-include wgEncodeMapability.ra beta,public
-include wgEncodeMatability.patch.ra alpha
+include wgEncodeMapability.ra alpha
 
 # Stan/Yale TFBS (wrangler: Venkat) 
 include wgEncodeSydhTfbs.ra public
