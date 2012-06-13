@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "dlist.h"
 
 /* Global vars - all of which can be set by command line options. */
@@ -186,6 +187,47 @@ for (child = wt->children; child != NULL; child = child->next)
     }
 }
 
+char *wordTreeString(struct wordTree *wt)
+/* Return something like '(a b c)' where c would be the value at wt itself, and
+ * a and b would be gotten by following parents. */
+{
+struct slName *list = NULL, *el;
+for (;wt != NULL; wt = wt->parent)
+    {
+    if (!isEmpty(wt->word))   // Avoid blank great grandparent
+	slNameAddHead(&list, wt->word);
+    }
+
+struct dyString *dy = dyStringNew(0);
+dyStringAppendC(dy, '(');
+for (el = list; el != NULL; el = el->next)
+   {
+   dyStringPrintf(dy, "%s", el->name);
+   if (el->next != NULL)
+       dyStringAppendC(dy, ' ');
+   }
+dyStringAppendC(dy, ')');
+slFreeList(&list);
+return dyStringCannibalize(&dy);
+}
+
+char *dlListFragWords(struct dlNode *head)
+/* Return string containing all words in list pointed to by head. */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringAppendC(dy, '{');
+struct dlNode *node;
+for (node = head; !dlEnd(node); node = node->next)
+    {
+    if (node != head)
+       dyStringAppendC(dy, ' ');
+    char *word = node->val;
+    dyStringAppend(dy, word);
+    }
+dyStringAppendC(dy, '}');
+return dyStringCannibalize(&dy);
+}
+
 void wordTreeDump(int level, struct wordTree *wt, FILE *f)
 /* Write out wordTree to file. */
 {
@@ -217,11 +259,25 @@ struct wordTree *pickRandomOnOutTarget(struct wordTree *list)
 {
 struct wordTree *picked = NULL;
 
+/* Debug output. */
+    {
+    uglyf("   pickRandomOnOutTarget(");
+    struct wordTree *wt;
+    for (wt = list; wt != NULL; wt = wt->next)
+        {
+	if (wt != list)
+	    uglyf(" ");
+	uglyf("%s:%d", wt->word, wt->outTarget);
+	}
+    uglyf(") total %d\n", wordTreeSumOutTargets(list));
+    }
+
 /* Figure out total number of outputs left, and a random number between 0 and that total. */
 int total = wordTreeSumOutTargets(list);
 if (total > 0)
     {
     int threshold = rand() % total; 
+    uglyf("      threshold %d\n", threshold);
 
     /* Loop through list returning selection corresponding to random threshold. */
     int binStart = 0;
@@ -230,9 +286,11 @@ if (total > 0)
 	{
 	int size = wt->outTarget;
 	int binEnd = binStart + size;
+	uglyf("      %s size %d, binEnd %d\n", wt->word, size, binEnd);
 	if (threshold < binEnd)
 	    {
 	    picked = wt;
+	    uglyf("      picked %s\n", wt->word);
 	    break;
 	    }
 	binStart = binEnd;
@@ -295,11 +353,13 @@ struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNo
  * have statistics for what comes next given the words in list, then it returns
  * NULL. */
 {
+uglyf(" predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
 struct dlNode *node;
 for (node = list; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
     wt = wordTreeFindInList(wt->children, word);
+    uglyf("   wordTreeFindInList(%s) = %p %s\n", word, wt, wordTreeString(wt));
     if (wt == NULL || wt->children == NULL)
         break;
     }
@@ -316,13 +376,17 @@ struct wordTree *predictNext(struct wordTree *wt, struct dlList *recent)
  * word. */
 {
 struct dlNode *node;
+
 for (node = recent->head; !dlEnd(node); node = node->next)
     {
     struct wordTree *result = predictNextFromAllPredecessors(wt, node);
     if (result != NULL)
         return result;
     }
-return pickRandom(wt->children); 
+struct wordTree *topLevel = pickRandom(wt->children);
+verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent->head));
+verbose(2, "last resort pick of %s\n", topLevel->word);
+return topLevel;
 }
 
 void decrementOutputCounts(struct wordTree *wt)
@@ -330,11 +394,15 @@ void decrementOutputCounts(struct wordTree *wt)
 {
 while (wt != NULL)
     {
-    /* Decrement target count, but don't let it go below zero. */
+    /* Decrement target count, but don't let it fall below sum of counts of all children. 
+     * This can happen with incomplete data if we don't prevent it.  This
+     * same code also prevents us from having negative outTarget. */
     int outTarget = wt->outTarget - 1;
-    if (outTarget >= 0)
-        wt->outTarget = outTarget;
-    
+    int kidSum = wordTreeSumOutTargets(wt->children);
+    if (outTarget < kidSum)
+        outTarget = kidSum;
+    wt->outTarget = outTarget;
+
     /* Always bump outCount for debugging. */
     wt->outCount += 1;
     wt = wt->parent;
@@ -368,7 +436,6 @@ for (;;)
 	{
 	node = dlPopHead(ll);
 	picked = predictNext(wt, ll);
-//         decrementOutputCounts(picked);   // ugly placement?
 	}
     else
 	{
