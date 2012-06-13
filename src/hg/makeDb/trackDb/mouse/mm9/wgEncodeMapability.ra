@@ -1,7 +1,7 @@
 track wgEncodeMapability
 compositeTrack on
 shortLabel Mapability
-longLabel Mapability or Uniqueness of Reference Genome from encode
+longLabel Mapability or Uniqueness of Reference Genome from ENCODE
 group map
 subGroup1 win Window_Size w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp
 subGroup2 lab Lab CRG=CRG-Guigo
@@ -22,7 +22,7 @@ wgEncode 1
     track wgEncodeCrgMapabilityAlign36mer
     parent wgEncodeMapability
     shortLabel CRG Align 36
-    longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
+    longLabel Alignability of 36mers by GEM from ENCODE/CRG(Guigo)
     subGroups win=w036 lab=CRG
     color 120,0,0
     priority 1
@@ -30,7 +30,7 @@ wgEncode 1
     track wgEncodeCrgMapabilityAlign40mer
     parent wgEncodeMapability
     shortLabel CRG Align 40
-    longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
+    longLabel Alignability of 40mers by GEM from ENCODE/CRG(Guigo)
     subGroups win=w040 lab=CRG
     color 120,0,0
     priority 2
@@ -38,7 +38,7 @@ wgEncode 1
     track wgEncodeCrgMapabilityAlign50mer
     parent wgEncodeMapability
     shortLabel CRG Align 50
-    longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
+    longLabel Alignability of 50mers by GEM from ENCODE/CRG(Guigo)
     subGroups win=w050 lab=CRG
     color 120,0,0
     priority 3
@@ -46,7 +46,7 @@ wgEncode 1
     track wgEncodeCrgMapabilityAlign75mer
     parent wgEncodeMapability
     shortLabel CRG Align 75
-    longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
+    longLabel Alignability of 75mers by GEM from ENCODE/CRG(Guigo)
     subGroups win=w075 lab=CRG
     color 120,0,0
     priority 4
@@ -54,7 +54,7 @@ wgEncode 1
     track wgEncodeCrgMapabilityAlign100mer
     parent wgEncodeMapability
     shortLabel CRG Align 100
-    longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
+    longLabel Alignability of 100mers by GEM from ENCODE/CRG(Guigo)
     subGroups win=w100 lab=CRG
     color 120,0,0
     priority 5
