@@ -65,7 +65,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
-	 ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
+	 featureBits ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
 	 pslCDnaFilter genePredToGtf pslPretty pslReps pslSort 
 
 

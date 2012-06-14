@@ -7,6 +7,7 @@ wgEncodeFsuRepliChip.ra \
 wgEncodeLicrHistone.ra \
 wgEncodeLicrRnaSeq.ra \
 wgEncodeLicrTfbs.ra \
+wgEncodeMapability.ra \
 wgEncodeNhgriBip.ra \
 wgEncodePsuHistone.ra \
 wgEncodePsuRnaSeq.ra \
