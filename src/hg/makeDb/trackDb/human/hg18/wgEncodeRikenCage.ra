@@ -3,9 +3,9 @@ compositeTrack on
 shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
-subGroup1 view Views aPLUSCLUSTERS=Plus_Clusters bMINUSCLUSTERS=Minus_Clusters cALIGNMENTS=Alignments
+subGroup1 view Views 1-PlusClusters=Plus_Clusters 3-MinusClusters=Minus_Clusters 5-Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK prostate=Prostate
-subGroup3 localization Localization aCELL=Cell bPOLYSOME=Polysome cCYTOSOL=Cytosol dNUCLEUS=Nucleus eNUCLEOPLASM=Nucleoplasm fCHROMATIN=Chromatin gNUCLEOLUS=Nucleolus
+subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
 dimensionZchecked longNonPolyA,longPolyA,total
@@ -18,9 +18,9 @@ priority 0
 type bed 3
 wgEncode 1
 
-    track wgEncodeRikenCageViewaPLUSCLUSTERS
+    track wgEncodeRikenCageView1-PlusClusters
     shortLabel Plus Clusters
-    view aPLUSCLUSTERS
+    view 1-PlusClusters
     visibility full
     parent wgEncodeRikenCage
     maxHeightPixels 100:24:16
@@ -31,160 +31,160 @@ wgEncode 1
     windowingFunction mean
 
         track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel Pros cell pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in prostate whole cell)
-        subGroups view=aPLUSCLUSTERS cellType=prostate localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
 
         track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 cyto pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 nucl pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 nucleus)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 cyto pA+ +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=cCYTOSOL rnaExtract=longPolyA
+        subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 nucl pA+ +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA+ RNA in K562 nucleus)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 psom pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in K562 polysome)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=bPOLYSOME rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562NucleolusTotal
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 nlos tot +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleolus)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=1-PlusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 nplm tot +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 nucleoplasm)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=eNUCLEOPLASM rnaExtract=total
+        subGroups view=1-PlusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersK562ChromatinTotal
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel K562 chrm tot +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (Total RNA in K562 chromatin)
-        subGroups view=aPLUSCLUSTERS cellType=K562 localization=fCHROMATIN rnaExtract=total
+        subGroups view=1-PlusClusters cellType=K562 localization=50-chromatin rnaExtract=total
         type bedGraph 4
         color 46,0,184
 
         track wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel GM128 cyto pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=GM12878 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
 
         track wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel GM128 nucl pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in GM12878 nucleus)
-        subGroups view=aPLUSCLUSTERS cellType=GM12878 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
 
         track wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel HUVEC cyto pA- + 
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in HUVEC cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=HUVEC localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
 
         track wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel H1 cell pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in H1-hESC cell)
-        subGroups view=aPLUSCLUSTERS cellType=H1hESC localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
 
         track wgEncodeRikenCagePlusClustersGm12878NucleolusTotal
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS on
+        parent wgEncodeRikenCageView1-PlusClusters on
         shortLabel GM128 nlos tot +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (Total RNA in GM12878 nucleolus)
-        subGroups view=aPLUSCLUSTERS cellType=GM12878 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=1-PlusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
 
         track wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel NHEK cyto pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in NHEK cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=NHEK localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
 
         track wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 cyto pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in HepG2 cytosol)
-        subGroups view=aPLUSCLUSTERS cellType=HepG2 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 nucl pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in HepG2 nucleus)
-        subGroups view=aPLUSCLUSTERS cellType=HepG2 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCagePlusClustersHepg2NucleolusTotal
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel HepG2 nlos tot +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (Total RNA in HepG2 nucleolus)
-        subGroups view=aPLUSCLUSTERS cellType=HepG2 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya
-        parent wgEncodeRikenCageViewaPLUSCLUSTERS off
+        parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel NHEK nucl pA- +
         longLabel ENCODE RIKEN CAGE Plus Strand  Start Sites (PolyA- RNA in NHEK nucleus)
-        subGroups view=aPLUSCLUSTERS cellType=NHEK localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=1-PlusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
 
-    track wgEncodeRikenCageViewbMINUSCLUSTERS
+    track wgEncodeRikenCageView3-MinusClusters
     shortLabel Minus Clusters
-    view bMINUSCLUSTERS
+    view 3-MinusClusters
     visibility full
     parent wgEncodeRikenCage
     maxHeightPixels 100:24:16
@@ -195,178 +195,178 @@ wgEncode 1
     autoScale off
 
         track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel Pros cell pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in prostate whole cell)
-        subGroups view=bMINUSCLUSTERS cellType=prostate localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
 
         track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 cyto pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 nucl pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 nucleus)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 cyto pA+ -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=cCYTOSOL rnaExtract=longPolyA
+        subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 nucl pA+ -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA+ RNA in K562 nucleus)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 psom pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in K562 polysome)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=bPOLYSOME rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562NucleolusTotal
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 nlos tot -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleolus)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=3-MinusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 nplm tot -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 nucleoplasm)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=eNUCLEOPLASM rnaExtract=total
+        subGroups view=3-MinusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersK562ChromatinTotal
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel K562 chrm tot -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (Total RNA in K562 chromatin)
-        subGroups view=bMINUSCLUSTERS cellType=K562 localization=fCHROMATIN rnaExtract=total
+        subGroups view=3-MinusClusters cellType=K562 localization=50-chromatin rnaExtract=total
         type bedGraph 4
         #color 238,85,34
         color 46,0,184
 
         track wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel GM128 cyto pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=GM12878 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
         #color 34,136,0
 
         track wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel GM128 nucl pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in GM12878 nucleus)
-        subGroups view=bMINUSCLUSTERS cellType=GM12878 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 153,38,0
         #color 34,136,0
 
         track wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel HUVEC cyto pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in HUVEC cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=HUVEC localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 224,75,0
 
         track wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel H1 cell pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in H1-hESC cell)
-        subGroups view=bMINUSCLUSTERS cellType=H1hESC localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 0,107,27
 
         track wgEncodeRikenCageMinusClustersGm12878NucleolusTotal
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS on
+        parent wgEncodeRikenCageView3-MinusClusters on
         shortLabel GM128 nlos tot -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (Total RNA in GM12878 nucleolus)
-        subGroups view=bMINUSCLUSTERS cellType=GM12878 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=3-MinusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 153,38,0
 
         track wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel NHEK cyto pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in NHEK cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=NHEK localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
 
         track wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 cyto pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in HepG2 cytosol)
-        subGroups view=bMINUSCLUSTERS cellType=HepG2 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 nucl pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in HepG2 nucleus)
-        subGroups view=bMINUSCLUSTERS cellType=HepG2 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCageMinusClustersHepg2NucleolusTotal
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel HepG2 nlos tot -  
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (Total RNA in HepG2 nucleolus)
-        subGroups view=bMINUSCLUSTERS cellType=HepG2 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=3-MinusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bedGraph 4
         color 189,0,157
 
         track wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya
-        parent wgEncodeRikenCageViewbMINUSCLUSTERS off
+        parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel NHEK nucl pA- -
         longLabel ENCODE RIKEN CAGE Minus Strand  Start Sites (PolyA- RNA in NHEK nucleus)
-        subGroups view=bMINUSCLUSTERS cellType=NHEK localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=3-MinusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bedGraph 4
         color 179,0,134
 
-    track wgEncodeRikenCageViewcALIGNMENTS
+    track wgEncodeRikenCageView5-Alignments
     shortLabel Alignments
-    view cALIGNMENTS
+    view 5-Alignments
     visibility hide
     parent wgEncodeRikenCage
 
         track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 cyto pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 cytosol)
-        subGroups view=cALIGNMENTS cellType=K562 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type bed 6
         # leave out until code translates from colorspace to base space
         #baseColorDefault diffBases
@@ -378,10 +378,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 nucl pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 nucleus)
-        subGroups view=cALIGNMENTS cellType=K562 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type bed 6
         #baseColorDefault diffBases
         #baseColorUseSequence nameIsSequence
@@ -392,10 +392,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel Pros cell pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
-        subGroups view=cALIGNMENTS cellType=prostate localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type bed 6
         #baseColorDefault diffBases
         #baseColorUseSequence nameIsSequence
@@ -407,10 +407,10 @@ wgEncode 1
         colorByStrand 0,102,136 221,17,153
 
         track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 cyto pA+ A
         longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 cytosol)
-        subGroups view=cALIGNMENTS cellType=K562 localization=cCYTOSOL rnaExtract=longPolyA
+        subGroups view=5-Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -422,10 +422,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 nucl pA+ A
         longLabel ENCODE RIKEN CAGE Tags (PolyA+ RNA in K562 nucleus)
-        subGroups view=cALIGNMENTS cellType=K562 localization=dNUCLEUS rnaExtract=longPolyA
+        subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -437,10 +437,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 psom pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in K562 polysome)
-        subGroups view=cALIGNMENTS cellType=K562 localization=bPOLYSOME rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -452,10 +452,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562NucleolusTotal
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 nlos tot A
         longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleolus)
-        subGroups view=cALIGNMENTS cellType=K562 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=5-Alignments cellType=K562 localization=60-nucleolus rnaExtract=total
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -467,10 +467,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 nplm tot A
         longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 nucleoplasm)
-        subGroups view=cALIGNMENTS cellType=K562 localization=eNUCLEOPLASM rnaExtract=total
+        subGroups view=5-Alignments cellType=K562 localization=40-nucleoplasm rnaExtract=total
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -482,10 +482,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsK562ChromatinTotal
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel K562 chrm tot A
         longLabel ENCODE RIKEN CAGE Tags (Total RNA in K562 chromatin)
-        subGroups view=cALIGNMENTS cellType=K562 localization=fCHROMATIN rnaExtract=total
+        subGroups view=5-Alignments cellType=K562 localization=50-chromatin rnaExtract=total
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -497,10 +497,10 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel GM128 cyto pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 cytosol)
-        subGroups view=cALIGNMENTS cellType=GM12878 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -515,10 +515,10 @@ wgEncode 1
 
 
         track wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel GM128 nucl pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in GM12878 nucleus)
-        subGroups view=cALIGNMENTS cellType=GM12878 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type bed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -531,74 +531,74 @@ wgEncode 1
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsHuvecCytosolLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel HUVEC cyto pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HUVEC cytosol)
-        subGroups view=cALIGNMENTS cellType=HUVEC localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 224,75,0
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsGm12878NucleolusTotal
-        parent wgEncodeRikenCageViewcALIGNMENTS on
+        parent wgEncodeRikenCageView5-Alignments on
         shortLabel GM128 nucl tot A
         longLabel ENCODE RIKEN CAGE Tags (Total RNA in GM12878 nucleolus)
-        subGroups view=cALIGNMENTS cellType=GM12878 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=5-Alignments cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type bigBed 6
         accession Nexalign
         color 153,38,0
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel NHEK cyto pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in NHEK cytosol)
-        subGroups view=cALIGNMENTS cellType=NHEK localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 179,0,134
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel NHEK nucl pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in NHEK nucleus)
-        subGroups view=cALIGNMENTS cellType=NHEK localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type bigBed 6
         color 179,0,134
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel H1 cell pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in H1-hESC cell)
-        subGroups view=cALIGNMENTS cellType=H1hESC localization=aCELL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=H1hESC localization=0-cell rnaExtract=longNonPolyA
         type bigBed 6
         color 0,107,27
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsHepg2CytosolLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 cyto pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HepG2 cytosol)
-        subGroups view=cALIGNMENTS cellType=HepG2 localization=cCYTOSOL rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type bigBed 6
         color 189,0,157
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsHepg2NucleusLongnonpolya
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 nucl pA- A
         longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in HepG2 nucleus)
-        subGroups view=cALIGNMENTS cellType=HepG2 localization=dNUCLEUS rnaExtract=longNonPolyA
+        subGroups view=5-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type bigBed 6
         color 189,0,157
         colorByStrand 46,0,184 238,85,34
 
         track wgEncodeRikenCageAlignmentsHepg2NucleolusTotal
-        parent wgEncodeRikenCageViewcALIGNMENTS off
+        parent wgEncodeRikenCageView5-Alignments off
         shortLabel HepG2 nlos tot A
         longLabel ENCODE RIKEN CAGE Tags (Total RNA in HepG2 nucleolus)
-        subGroups view=cALIGNMENTS cellType=HepG2 localization=gNUCLEOLUS rnaExtract=total
+        subGroups view=5-Alignments cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type bigBed 6
         color 189,0,157
         colorByStrand 46,0,184 238,85,34
