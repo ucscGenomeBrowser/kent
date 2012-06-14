@@ -841,13 +841,13 @@ html hg19mammalChainNet
         type chain myoLuc1
         otherDb myoLuc1
 
-        track chainBosTau6
+        track chainBosTau7
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=lCow clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain bosTau6
-        otherDb bosTau6
+        type chain bosTau7
+        otherDb bosTau7
 
         track chainCavPor3
         subTrack placentalChainNetViewchain off
@@ -899,13 +899,13 @@ html hg19mammalChainNet
         type chain echTel1
         otherDb echTel1
 
-        track chainMm9
+        track chainMm10
         subTrack placentalChainNetViewchain on 
         subGroups view=chain species=bMouse clade=aEuarch
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain mm9
-        otherDb mm9
+        type chain mm10
+        otherDb mm10
 
         track chainRn4
         subTrack placentalChainNetViewchain off
@@ -1062,13 +1062,13 @@ html hg19mammalChainNet
         type netAlign myoLuc1 chainMyoLuc1
         otherDb myoLuc1
 
-        track netBosTau6
+        track netBosTau7
         subTrack placentalChainNetViewnet on 
         subGroups view=net species=lCow clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign bosTau6 chainBosTau6
-        otherDb bosTau6
+        type netAlign bosTau7 chainBosTau7
+        otherDb bosTau7
 
         track netCavPor3
         subTrack placentalChainNetViewnet off
@@ -1120,13 +1120,13 @@ html hg19mammalChainNet
         type netAlign echTel1 chainEchTel1
         otherDb echTel1
 
-        track netMm9
+        track netMm10
         subTrack placentalChainNetViewnet on
         subGroups view=net species=bMouse clade=aEuarch
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign mm9 chainMm9
-        otherDb mm9
+        type netAlign mm10 chainMm10
+        otherDb mm10
 
         track netRn4
         subTrack placentalChainNetViewnet on 
