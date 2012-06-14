@@ -187,9 +187,9 @@ it on your own server, you should use the
 </OL>
 <P><B><I>Example:</I></B><BR>
 Here's an example of an annotation track that uses a complete BED definition:</P>
-<PRE><TT>track name=pairedReads description=&quot;Clone Paired Reads&quot; useScore=1
+<PRE>track name=pairedReads description=&quot;Clone Paired Reads&quot; useScore=1
 chr22 1000 5000 cloneA 960 + 1000 5000 0 2 567,488, 0,3512
-chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE>
+chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</PRE>
 
 <P><B><I>Example:</I></B><BR>
 This example shows an annotation track that uses the itemRgb attribute to
@@ -201,7 +201,7 @@ NOTE: The track and data lines in this example have been reformatted for
 documentation purposes. This <A HREF="../goldenPath/help/ItemRGBDemo.txt"
 TARGET="_blank">example</A> can be pasted into the browser without editing.
 <BR>
-<PRE><TT>browser position chr7:127471196-127495720
+<PRE>browser position chr7:127471196-127495720
 browser hide all
 track name="ItemRGBDemo" description="Item RGB demonstration" visibility=2
 itemRgb="On"
@@ -214,7 +214,7 @@ chr7    127477031  127478198  Neg2  0  -  127477031  127478198  0,0,255
 chr7    127478198  127479365  Neg3  0  -  127478198  127479365  0,0,255
 chr7    127479365  127480532  Pos5  0  +  127479365  127480532  255,0,0
 chr7    127480532  127481699  Neg4  0  -  127480532  127481699  0,0,255
-</TT></PRE>
+</PRE>
 Click
 <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ItemRGBDemo.txt"
 TARGET=_blank>here</a> to display this track in the Genome Browser.
@@ -229,7 +229,7 @@ NOTE: The track and data lines in this example have been reformatted for
 documentation purposes. This <A HREF="../goldenPath/help/ColorByStrandDemo.txt"
 TARGET="_blank">example</A> can be pasted into the browser without editing.
 <BR>
-<PRE><TT>browser position chr7:127471196-127495720
+<PRE>browser position chr7:127471196-127495720
 browser hide all
 track name="ColorByStrandDemo" description="Color by strand demonstration"
 visibility=2 colorByStrand="255,0,0 0,0,255"
@@ -242,7 +242,7 @@ chr7    127477031  127478198  Neg2  0  -
 chr7    127478198  127479365  Neg3  0  -
 chr7    127479365  127480532  Pos5  0  +
 chr7    127480532  127481699  Neg4  0  -
-</TT></PRE>
+</PRE>
 Click
 <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ColorByStrandDemo.txt"
 TARGET=_blank>here</a> to display this track in the Genome Browser.
@@ -451,7 +451,7 @@ Here is an example of an annotation track in PSL format. Note that line
 breaks have been inserted into the PSL lines in this example for
 documentation display purposes. This <A HREF="../goldenPath/help/fishBlats.txt"
 TARGET="blank">example</A> can be pasted into the browser without editing.
-<PRE><TT>
+<PRE>
 browser position chr22:13073000-13074000
 browser hide all
 track name=fishBlats description=&quot;Fish BLAT&quot; visibility=2
@@ -462,7 +462,7 @@ useScore=1
     47748585 13073626 13073747 2 21,45,  2456,2532,  34674838,34674914,
 59 7 0 0 1 55 1 55 -+ FS_CONTIG_26780_1 2825 2455 2676 chr22
     47748585 13073727 13073848 2 45,21,  249,349,  13073727,13073827,
-</TT></PRE>
+</PRE>
 Click
 <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/fishBlats.txt"
 TARGET=_blank>here</a> to display this track in the Genome Browser.
@@ -477,7 +477,7 @@ Here is a 30-mer containing 2 blocks that align on the minus strand and
 2 blocks that align on the plus strand (this sometimes can happen in response to
 assembly errors): 
 <BR><BR>
-<PRE><TT>
+<PRE>
 0         1         2         3 tens position in query  
 0123456789012345678901234567890 ones position in query   
             ++++          +++++ plus strand alignment on query   
@@ -496,7 +496,7 @@ Minus strand:
      qEnd=26 
      blockSizes=10,8 
      qStarts=5,19   
-</TT></PRE>
+</PRE>
 Essentially, the minus strand <I>blockSizes</I> and <I>qStarts</I> are
 what you would get if you reverse-complemented the query.
 However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to the other:
@@ -574,7 +574,7 @@ itself into the custom annotation track text box. If you encounter an error
 when loading a GFF track, check that the data lines contain tabs rather than
 spaces.
 
-<PRE><TT>
+<PRE>
 browser position chr22:10000000-10025000
 browser hide all
 track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot;
@@ -582,7 +582,7 @@ visibility=2
 chr22  TeleGene enhancer  10000000  10001000  500 +  .  touch1
 chr22  TeleGene promoter  10010000  10010100  900 +  .  touch1
 chr22  TeleGene promoter  10020000  10025000  800 -  .  touch2
-</TT></PRE>
+</PRE>
 Click
 <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/regulatory.txt"
 TARGET="_blank">here</a> to display this track in the Genome Browser.
@@ -702,7 +702,7 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    that contains a name=value pair specifying the track name.
 		    Here is an example of a minimal track line:
 		    
-		    <FONT color="#0000FF"><PRE><TT> track name=sample</TT></PRE></FONT>
+		    <FONT color="#0000FF"><PRE> track name=sample</PRE></FONT>
                     The following variables can be specified in the track line
 		    of a custom MAF:
                     <UL>
@@ -732,7 +732,7 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    This word is followed by white-space-separated
                     variable=value pairs.  There should be <em>no</em> white
                     space surrounding the &quot;=&quot;.  
-		    <FONT color="#0000FF"><PRE><TT> ##maf version=1 scoring=tba.v8 </TT></PRE></FONT>
+		    <FONT color="#0000FF"><PRE> ##maf version=1 scoring=tba.v8 </PRE></FONT>
 		    The currently defined variables are:
                     <UL>
                     <LI><B>version</B> - Required.  Currently set to one.  </LI>
@@ -758,11 +758,11 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    <P>
                     The second line displays the parameters that were
                     used to run the alignment program.
-		    <FONT color="#0000FF"><PRE><TT> # tba.v8 (((human chimp) baboon) (mouse rat))</TT></PRE></FONT>
+		    <FONT color="#0000FF"><PRE> # tba.v8 (((human chimp) baboon) (mouse rat))</PRE></FONT>
                     <P>
 		    <B>Alignment Block Lines</B> (lines starting with 'a' -- parameters for a new alignment block)
 		    <P>                    
-		    <FONT color="#0000FF"><PRE><TT> a score=23262.0</TT></PRE></FONT>
+		    <FONT color="#0000FF"><PRE> a score=23262.0</PRE></FONT>
                     Each alignment begins with an 'a' line that set 
 		    variables for the entire alignment block.  The 'a'
                     is followed by name=value pairs.  There are no
@@ -786,11 +786,11 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    <B>Lines starting with 's' -- a sequence within an alignment block</B>
 		    <P>
 		    <FONT color="#0000FF">
-<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+<PRE> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
  s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
  s baboon         249182 13 +   4622798 gcagctgaaaaca
  s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
-</TT></PRE></FONT>
+</PRE></FONT>
                     The 's' lines together with the 'a' lines define a
                     multiple alignment.  The 's' lines have the
                     following fields which are defined by position
@@ -831,11 +831,11 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    happening before and after this block in the aligning 
 		    species</B> 
                     <P><FONT color="#0000ff">
-<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+<PRE> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
  s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
  i panTro1.chr6 N 0 C 0
  s baboon         249182 13 +   4622798 gcagctgaaaaca
- i baboon       I 234 n 19</TT></PRE></FONT>
+ i baboon       I 234 n 19</PRE></FONT>
 		    <P>
 		    The 'i' lines contain information about the context of the 
 		    sequence lines immediately preceeding them. The following 
@@ -878,8 +878,8 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    <B>Lines starting with 'e' -- information about empty parts 
 		    of the alignment block</B>                        
 		    <P><FONT color=#0000ff>
-<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
- e mm4.chr6     53310102 13 + 151104725 I</TT></PRE></FONT>
+<PRE> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+ e mm4.chr6     53310102 13 + 151104725 I</PRE></FONT>
 		    <P>
 		    The 'e' lines indicate that there isn't aligning DNA for a 
 		    species but that the current block is bridged by a chain 
@@ -930,11 +930,11 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
 		    <B>Lines starting with 'q' -- information about the quality
 		    of each aligned base for the species</B> 
                     <P><FONT color=#0000ff>
-<PRE><TT> s hg18.chr1                  32741 26 + 247249719 TTTTTGAAAAACAAACAACAAGTTGG
+<PRE> s hg18.chr1                  32741 26 + 247249719 TTTTTGAAAAACAAACAACAAGTTGG
  s panTro2.chrUn            9697231 26 +  58616431 TTTTTGAAAAACAAACAACAAGTTGG
  q panTro2.chrUn                                   99999999999999999999999999
  s dasNov1.scaffold_179265     1474  7 +      4584 TT----------AAGCA---------
- q dasNov1.scaffold_179265                         99----------32239--------- </TT></PRE></FONT>
+ q dasNov1.scaffold_179265                         99----------32239--------- </PRE></FONT>
 		    <P>
 		    The 'q' lines contain a compressed version of the actual
 		    raw quality data, representing the quality of each 
@@ -997,7 +997,7 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
                     (no columns or rows that contain only insertions).
 
 		    <FONT color="#0000FF">
-<PRE><TT> 
+<PRE>
 track name=euArc visibility=pack
 ##maf version=1 scoring=tba.v8 
 # tba.v8 (((human chimp) baboon) (mouse rat)) 
@@ -1022,7 +1022,7 @@ s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
 s baboon         249182 13 +   4622798 gcagctgaaaaca
 s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
 &nbsp
-</TT></PRE></FONT>
+</PRE></FONT>
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
 		     </TD></TR>
@@ -1522,7 +1522,7 @@ in some of the Genome Variants subtracks are not available.)</P>
 Here is an example of an annotation track in Personal Genome SNP format. The
 first SNP using a '-' is an insertion; the second is a deletion. The last 3
 SNPs are in a coding region.</P>
-<PRE><TT>track type=pgSnp visibility=3 db=hg19 name="pgSnp" description="Personal Genome SNP example"
+<PRE>track type=pgSnp visibility=3 db=hg19 name="pgSnp" description="Personal Genome SNP example"
 browser position chr21:31811924-31812937
 chr21	31812007	31812008	T/G	2	21,70	90,70
 chr21	31812031	31812032	T/G/A	3	9,60,7	80,80,30
@@ -1532,7 +1532,7 @@ chr21	31812277	31812278	T	1	15	90
 chr21	31812771	31812772	A	1	36	80
 chr21	31812827	31812828	A/T	2	15,5	0,0
 chr21	31812879	31812880	C	1	0	0
-</TT></PRE>
+</PRE>
                             </TD><TD WIDTH=15></TD></TR>
                         </TABLE><BR>
                      </TD></TR>
@@ -1691,11 +1691,11 @@ page for more information about VCF custom tracks.</P>
 </ol>
 <P>
 Here is an example of narrowPeak format:
-<PRE><TT>
+<PRE>
 chrX    9091548 9091648 .       0       .       182     5.0945  -1  50
 chrX    9358722 9358822 .       0       .       91      4.6052  -1  40
 chrX    9391082 9391182 .       0       .       182     9.2103  -1  75
-</TT></PRE>
+</PRE>
 </P>
         		     </td><td width=15></td></tr>
 	    		</table><br>
@@ -1855,10 +1855,10 @@ It is a BED3+3 format.
 <P>
 Here is an example of tagAlign format:
 </P>
-<PRE><TT>
+<PRE>
 chrX 8823384 8823409 AGAAGGAAAATGATGTGAAGACATA 1000 +
 chrX 8823387 8823412 TCTTATGTCTTCACATCATTTTCCT 500  -
-</TT></PRE>
+</PRE>
         		     </td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
