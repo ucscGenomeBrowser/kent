@@ -29,14 +29,15 @@ html wgEncodeGisRnaPet.release2
     shortLabel Clusters
     view Clusters
     visibility full
-    subTrack wgEncodeGisRnaPet
+    type bed 6
+    parent wgEncodeGisRnaPet
 
         track wgEncodeGisRnaPetSknshNucleusPapClusters
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel SKSH nucl pA+
         longLabel SK-N-SH nucleus polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS 
         subGroups view=Clusters cellType=bSKNSH cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=none
-        type bed 6
+        type bed 6 +
         # subId=6922 dateSubmitted=2012-05-04
 
         track wgEncodeGisRnaPetMcf7NucleusPapClusters
@@ -44,7 +45,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel MCF7 nucl pA+
         longLabel MCF-7 nucleus polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters cellType=bMCF7 cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=none
-        type bed 6
+        type bed 6 +
         # subId=6921 dateSubmitted=2012-05-04
 
         track wgEncodeGisRnaPetMcf7CellPapClusters
@@ -52,7 +53,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel MCF7 cell pA+ 
         longLabel MCF-7 whole cell polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters cellType=bMCF7 cloned=Free localization=cell rnaExtract=PAP rep=rep1 rank=none
-        type bed 6
+        type bed 6 +
         # subId=6550 dateSubmitted=2012-03-29
 
         track wgEncodeGisRnaPetNhekNucleusPapClustersRep1
@@ -60,7 +61,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel NHEK nucl pA+ 1
         longLabel NHEK nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=cNHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 179,0,134
         # subId=4028 dateSubmitted=2011-05-05
         # subId=2118 dateSubmitted=2010-10-09
@@ -70,7 +71,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel GM12 nucl pA+ 1
         longLabel GM12878 nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aGM12878 cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
@@ -79,7 +80,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 poly pA+ 1
         longLabel K562 polysome polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Based localization=polysome rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
 
@@ -88,7 +89,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel Pros cell pA+ 1
         longLabel Prostate whole cell polyA+ clone-based RNA PET Clusters Pooled Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=cPROSTATE cloned=Based localization=cell rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         # subId=1989 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
@@ -96,7 +97,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 nplm tot 1
         longLabel K562 nucleoplasm total clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Based localization=nucleoplasm rnaExtract=total rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=1987 dateSubmitted=2010-08-18
 
@@ -105,7 +106,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 chrm tot 1
         longLabel K562 chromatin total clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Based localization=chromatin rnaExtract=total rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=1986 dateSubmitted=2010-08-18
 
@@ -114,7 +115,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 nlus tot 1
         longLabel K562 nucleolus total clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Based localization=nucleolus rnaExtract=total rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=1988 dateSubmitted=2010-08-18
 
@@ -123,7 +124,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HepG cyto pA+ 1
         longLabel HepG2 cytosol polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHEPG2 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 189,0,157
         # subId=2116 dateSubmitted=2010-08-19
 
@@ -132,7 +133,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HepG nucl pA+ 1
         longLabel HepG2 nucleus polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHEPG2 cloned=Based localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 189,0,157
         # subId=2117 dateSubmitted=2010-08-18
 
@@ -141,7 +142,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 nucl pA+ 1
         longLabel K562 nucleus polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Based localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=1984 dateSubmitted=2010-08-18
 
@@ -150,7 +151,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel NHEK cyto pA+ 1
         longLabel NHEK cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=cNHEK cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 179,0,134
         # subId=4026 dateSubmitted=2011-05-05
 
@@ -159,7 +160,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HeLa cell pA+ 2
         longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Clusters Rep 2 from ENCODE/GIS
         subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
-        type bed 6
+        type bed 6 +
         color 0,119,158
         # subId=4029 dateSubmitted=2011-04-29
 
@@ -168,7 +169,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HeLa cell pA+ 1
         longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 0,119,158
         # subId=4025 dateSubmitted=2011-04-29
 
@@ -177,7 +178,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel H1ES cell pA+ 1
         longLabel H1-hESC whole cell polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aH1HESC cloned=Free localization=cell rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 0,107,27
         # subId=4032 dateSubmitted=2011-05-05
 
@@ -186,7 +187,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HeLa cyto pA+ 1
         longLabel HeLa-S3 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 0,119,158
         # subId=4617 dateSubmitted=2011-08-09
 
@@ -195,7 +196,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel K562 cyto pA+ 1
         longLabel K562 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aK562 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 46,0,184
         # subId=4616 dateSubmitted=2011-08-09
 
@@ -204,7 +205,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HUVE nucl pA+ 1
         longLabel HUVEC nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHUVEC cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 224,75,0
         # subId=4031 dateSubmitted=2011-05-05
 
@@ -213,7 +214,7 @@ html wgEncodeGisRnaPet.release2
         # shortLabel GM12 cyto pA+ f
         # longLabel GM12878 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         # subGroups view=Clusters cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        # type bed 6
+        # type bed 6 +
         # color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
         # was wgEncodeGisRnaPetGm12878CytosolPapClustersRep2 cricket Tue Aug 23 11:30:19 2011
@@ -223,7 +224,7 @@ html wgEncodeGisRnaPet.release2
         # shortLabel GM12 cyto pA+ b
         # longLabel GM12878 cytosol polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         # subGroups view=Clusters cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        # type bed 6
+        # type bed 6 +
         # color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
 
@@ -232,7 +233,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel GM12 cyto pA+ 1
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 153,38,0
         # subId=5098 dateSubmitted=2011-11-09
 
@@ -241,7 +242,7 @@ html wgEncodeGisRnaPet.release2
         # shortLabel HUVE cyto pA+ 1
         # longLabel HUVEC cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         # subGroups view=Clusters cellType=bHUVEC cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        # type bed 6
+        # type bed 6 +
         # color 224,75,0
         # subId=4614 dateSubmitted=2011-08-09
 
@@ -250,7 +251,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HUVE cyto pA+ 1
         longLabel HUVEC cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHUVEC cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 224,75,0
         # subId=5099 dateSubmitted=2011-11-09
 
@@ -259,7 +260,7 @@ html wgEncodeGisRnaPet.release2
         # shortLabel HeLa nucl pA+ 1
         # longLabel HeLa-S3 nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         # subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        # type bed 6
+        # type bed 6 +
         # color 0,119,158
         # subId=4615 dateSubmitted=2011-08-09
 
@@ -268,7 +269,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel HeLa nucl pA+ 1
         longLabel HeLa-S3 nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=nucleus rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
+        type bed 6 +
         color 0,119,158
         # subId=5100 dateSubmitted=2011-11-09
 
@@ -277,7 +278,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel IMR9 nucl pA+
         longLabel IMR90 nucleus polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bIMR90 cloned=Free localization=nucleus rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6532 dateSubmitted=2012-03-28
 
         track wgEncodeGisRnaPetSknshCellPapClusters
@@ -285,7 +286,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel SKSH cell pA+
         longLabel SK-N-SH whole cell polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bSKNSH cloned=Free localization=cell rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6533 dateSubmitted=2012-03-28
 
         track wgEncodeGisRnaPetImr90CytosolPapClusters
@@ -293,7 +294,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel IMR9 cyto pA+
         longLabel IMR90 cytosol polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bIMR90 cloned=Free localization=cytosol rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6534 dateSubmitted=2012-03-28
 
         track wgEncodeGisRnaPetSknshCytosolPapClusters
@@ -301,7 +302,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel SKSH cyto pA+
         longLabel SK-N-SH cytosol polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bSKNSH cloned=Free localization=cytosol rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6535 dateSubmitted=2012-03-28
 
         track wgEncodeGisRnaPetImr90CellPapClusters
@@ -309,7 +310,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel IMR9 cell pA+
         longLabel IMR90 whole cell polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bIMR90 cloned=Free localization=cell rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6536 dateSubmitted=2012-03-28
 
         track wgEncodeGisRnaPetA549CellPapClusters
@@ -317,7 +318,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel A549 cell pA+
         longLabel A549 whole cell polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bA549 cloned=Free localization=cell rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6546 dateSubmitted=2012-03-29
 
         track wgEncodeGisRnaPetA549CytosolPapClusters
@@ -325,7 +326,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel A549 cyto pA+
         longLabel A549 cytosol polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bA549 cloned=Free localization=cytosol rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6547 dateSubmitted=2012-03-29
 
         track wgEncodeGisRnaPetMcf7CytosolPapClusters
@@ -333,7 +334,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel MCF7 cyto pA+
         longLabel MCF-7 cytosol polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bMCF7 cloned=Free localization=cytosol rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6548 dateSubmitted=2012-03-29
 
         track wgEncodeGisRnaPetA549NucleusPapClusters
@@ -341,7 +342,7 @@ html wgEncodeGisRnaPet.release2
         shortLabel A549 nucl pA+
         longLabel A549 nucleus polyA+ clone-free RNA PET Clusters Pooled from ENCODE/GIS
         subGroups view=Clusters rep=rep1 rank=none cellType=bA549 cloned=Free localization=nucleus rnaExtract=PAP
-        type bed 6
+        type bed 6 +
         # subId=6549 dateSubmitted=2012-03-29
 
     track wgEncodeGisRnaPetViewAlignments
