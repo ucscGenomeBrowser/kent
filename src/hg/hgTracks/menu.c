@@ -342,14 +342,16 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
     {
     char class[100];
     if(i == 0)
-        safef(class, sizeof(class), "first ");
+        safef(class, sizeof(class), "first");
     else if (i + 1 == len)
-        safef(class, sizeof(class), "last ");
+        safef(class, sizeof(class), "last");
     else
         class[0] = 0;
-    safecat(class, sizeof(class), i % 2 ? "odd" : "even");
     char *encodedName = htmlEncode(link->name);
-    dyStringPrintf(viewMenu, "<li class='%s'><a href='%s' id='%s'%s>%s</a></li>\n", class, link->url, link->id, 
+    dyStringAppend(viewMenu, "<li");
+    if(*class)
+        dyStringPrintf(viewMenu, " class='%s'", class);
+    dyStringPrintf(viewMenu, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
                    link->external ? " TARGET='_blank'" : "", encodedName);
     freez(&encodedName);
     }
