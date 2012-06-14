@@ -91,16 +91,6 @@ html wgEncodeGisRnaPet.release2
         type bed 6
         # subId=1989 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetGm12878CytosolPapClustersFree
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel GM12 cyto pA+ f
-        longLabel GM12878 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
-        subGroups view=Clusters cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bed 6
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-        # was wgEncodeGisRnaPetGm12878CytosolPapClustersRep2 cricket Tue Aug 23 11:30:19 2011
-
         track wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel K562 nplm tot 1
@@ -218,6 +208,16 @@ html wgEncodeGisRnaPet.release2
         color 224,75,0
         # subId=4031 dateSubmitted=2011-05-05
 
+        # track wgEncodeGisRnaPetGm12878CytosolPapClustersFree
+        # parent wgEncodeGisRnaPetViewClusters off
+        # shortLabel GM12 cyto pA+ f
+        # longLabel GM12878 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
+        # subGroups view=Clusters cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bed 6
+        # color 153,38,0
+        # subId=1979 dateSubmitted=2010-07-22
+        # was wgEncodeGisRnaPetGm12878CytosolPapClustersRep2 cricket Tue Aug 23 11:30:19 2011
+
         # track wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
         # parent wgEncodeGisRnaPetViewClusters off
         # shortLabel GM12 cyto pA+ b
@@ -229,7 +229,7 @@ html wgEncodeGisRnaPet.release2
 
         track wgEncodeGisRnaPetGm12878CytosolPapClustersRep1V2
         parent wgEncodeGisRnaPetViewClusters off
-        shortLabel GM12 cyto pA+ b
+        shortLabel GM12 cyto pA+ 1
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
         type bed 6
@@ -389,16 +389,6 @@ html wgEncodeGisRnaPet.release2
         type bam
         # subId=1989 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetGm12878CytosolPapAlnFree
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel GM12 cyto pA+ A f
-        longLabel GM12878 cytosol polyA+ clone-free RNA PET Alignments Rep 1 from ENCODE/GIS
-        subGroups view=Alignments cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bam
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-        # was wgEncodeGisRnaPetGm12878CytosolPapAlnRep2 cricket Tue Aug 23 11:24:45 2011
-
         track wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel K562 nplm tot A 1
@@ -526,6 +516,16 @@ html wgEncodeGisRnaPet.release2
         color 179,0,134
         # subId=4026 dateSubmitted=2011-05-05
 
+        # track wgEncodeGisRnaPetGm12878CytosolPapAlnFree
+        # parent wgEncodeGisRnaPetViewAlignments off
+        # shortLabel GM12 cyto pA+ A f
+        # longLabel GM12878 cytosol polyA+ clone-free RNA PET Alignments Rep 1 from ENCODE/GIS
+        # subGroups view=Alignments cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bam
+        # color 153,38,0
+        # subId=1979 dateSubmitted=2010-07-22
+        # was wgEncodeGisRnaPetGm12878CytosolPapAlnRep2 cricket Tue Aug 23 11:24:45 2011
+
         # track wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
         # parent wgEncodeGisRnaPetViewAlignments off
         # shortLabel GM12 cyto pA+ A b
@@ -537,7 +537,7 @@ html wgEncodeGisRnaPet.release2
 
         track wgEncodeGisRnaPetGm12878CytosolPapAlnRep1V2
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel GM12 cyto pA+ A b
+        shortLabel GM12 cyto pA+ A 1
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Alignments Rep 1 from ENCODE/GIS
         subGroups view=Alignments cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
         type bam
@@ -811,25 +811,6 @@ html wgEncodeGisRnaPet.release2
         type bigWig 1.000000 47234.000000
         # subId=1989 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel GM12 cyto pA+ - b
-        longLabel GM12878 cytosol polyA+ clone-based RNA PET Minus signal Rep 1 from ENCODE/GIS
-        subGroups view=MinusRawSignal cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bigWig 1.000000 822224.000000
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel GM12 cyto pA+ - f
-        longLabel GM12878 cytosol polyA+ clone-free RNA PET Minus signal Rep 1 from ENCODE/GIS
-        subGroups view=MinusRawSignal cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bigWig 1.000000 13358.000000
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-        # was wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2 cricket Tue Aug 23 11:27:06 2011
-
         track wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel K562 nplm tot - 1
@@ -956,6 +937,25 @@ html wgEncodeGisRnaPet.release2
         color 224,75,0
         # subId=1991 dateSubmitted=2010-07-22
         # subId=4031 dateSubmitted=2011-05-05
+
+        # track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
+        # parent wgEncodeGisRnaPetViewMinusRawSig off
+        # shortLabel GM12 cyto pA+ - b
+        # longLabel GM12878 cytosol polyA+ clone-based RNA PET Minus signal Rep 1 from ENCODE/GIS
+        # subGroups view=MinusRawSignal cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bigWig 1.000000 822224.000000
+        # color 153,38,0
+        # # subId=1979 dateSubmitted=2010-07-22
+
+        # track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
+        # parent wgEncodeGisRnaPetViewMinusRawSig off
+        # shortLabel GM12 cyto pA+ - f
+        # longLabel GM12878 cytosol polyA+ clone-free RNA PET Minus signal Rep 1 from ENCODE/GIS
+        # subGroups view=MinusRawSignal cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bigWig 1.000000 13358.000000
+        # color 153,38,0
+        # # subId=1979 dateSubmitted=2010-07-22
+        # was wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2 cricket Tue Aug 23 11:27:06 2011
 
         track wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep1V2
         parent wgEncodeGisRnaPetViewMinusRawSig off
@@ -1232,25 +1232,6 @@ html wgEncodeGisRnaPet.release2
         type bigWig 1.000000 79623.000000
         # subId=1989 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel GM12 cyto pA+ + b
-        longLabel GM12878 cytosol polyA+ clone-based RNA PET Plus signal Rep 1 from ENCODE/GIS
-        subGroups view=PlusRawSignal cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bigWig 1.000000 341723.000000
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel GM12 cyto pA+ + f
-        longLabel GM12878 cytosol polyA+ clone-free RNA PET Plus signal Rep 1 from ENCODE/GIS
-        subGroups view=PlusRawSignal cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
-        type bigWig 1.000000 81924.000000
-        color 153,38,0
-        # subId=1979 dateSubmitted=2010-07-22
-        # was wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2 cricket Tue Aug 23 11:27:50 2011
-
         track wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel K562 nplm tot + 1
@@ -1379,9 +1360,28 @@ html wgEncodeGisRnaPet.release2
         # subId=4031 dateSubmitted=2011-05-05
         # subId=1991 dateSubmitted=2010-07-22
 
+        # track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
+        # parent wgEncodeGisRnaPetViewPlusRawSig off
+        # shortLabel GM12 cyto pA+ + b
+        # longLabel GM12878 cytosol polyA+ clone-based RNA PET Plus signal Rep 1 from ENCODE/GIS
+        # subGroups view=PlusRawSignal cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bigWig 1.000000 341723.000000
+        # color 153,38,0
+        # # subId=1979 dateSubmitted=2010-07-22
+
+        # track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
+        # parent wgEncodeGisRnaPetViewPlusRawSig off
+        # shortLabel GM12 cyto pA+ + f
+        # longLabel GM12878 cytosol polyA+ clone-free RNA PET Plus signal Rep 1 from ENCODE/GIS
+        # subGroups view=PlusRawSignal cellType=aGM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
+        # type bigWig 1.000000 81924.000000
+        # color 153,38,0
+        # subId=1979 dateSubmitted=2010-07-22
+        # was wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2 cricket Tue Aug 23 11:27:50 2011
+
         track wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep1V2
         parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel GM12 cyto pA+ + b
+        shortLabel GM12 cyto pA+ + 1
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Plus signal Rep 1 from ENCODE/GIS
         subGroups view=PlusRawSignal cellType=aGM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 1657960.000000
