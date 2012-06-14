@@ -590,7 +590,7 @@ karyotype normal
 sex B
 vendorName BioChain ; BioChain ; BioChain ; BioChain
 vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053 
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -651,7 +651,7 @@ karyotype normal
 sex B
 vendorName BioChain; BioChain; BioChain; BioChain
 vendorId CP-S12-D1234106-05_A803198; CP-S10-R1234106-20_B402075; CP-S13-D1234106-05_B302113
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -726,7 +726,7 @@ karyotype normal
 sex B
 vendorName BioChain; BioChain; BioChain; BioChain
 vendorId CP-S12-D1234142-05_B402060; CP-S10-R1234142-20_A808055; CP-S13-D1234142-05_B402061; CP-S10-R1234142-20_B111054
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -837,7 +837,7 @@ karyotype normal
 sex B
 vendorName BioChain; BioChain; BioChain; BioChain
 vendorId CP-S12-D1234152-05_A610240; CP-S10-R1234152-20_A906114; CP-S13-D1234152-05_B402062; CP-S10-R1234152-20_B207133
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1002,7 +1002,7 @@ karyotype normal
 sex B
 vendorName BioChain; BioChain; BioChain; BioChain
 vendorId CP-S12-D1234171-05_A610262; CP-S10-R1234171-20_A808148; CP-S13-D1234171-05_B402065; CP-S10-R1234230-20_A911037
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
 protocol Myers:Myers_BioChain_protocol.pdf
