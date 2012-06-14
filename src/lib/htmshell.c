@@ -438,6 +438,20 @@ if(isSecure == TRUE)
 printf("\n");
 }
 
+void printBodyTag(FILE *f)
+{
+// print starting BODY tag, including any appropriate attributes (class, background and bgcolor). 
+fprintf(f, "<BODY");
+if (htmlFormClass == NULL )
+    fprintf(f, " CLASS=\"cgi\"");
+else
+    fprintf(f, " CLASS=\"cgi %s\"", htmlFormClass);
+if (htmlBackground != NULL )
+    fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
+if (gotBgColor)
+    fprintf(f, " BGCOLOR=\"#%X\"", htmlBgColor);
+fputs(">\n",f);
+}
 
 void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)
 /* Write out bits of header that both stand-alone .htmls
@@ -470,15 +484,7 @@ if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
 
 fputs("</HEAD>\n\n",f);
-fputs("<BODY",f);
-if (htmlFormClass != NULL )
-    fprintf(f, " CLASS=\"%s\"", htmlFormClass);
-if (htmlBackground != NULL )
-    fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
-if (gotBgColor)
-    fprintf(f, " BGCOLOR=\"#%X\"", htmlBgColor);
-fputs(">\n",f);
-
+printBodyTag(f);
 htmlWarnBoxSetup(f);
 }
 
@@ -608,10 +614,7 @@ puts("\n");
 
 puts("<HTML>");
 printf("<HEAD>%s<TITLE>%s</TITLE>\n</HEAD>\n\n", head, title);
-if (htmlBackground == NULL)
-    puts("<BODY>\n");
-else
-    printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
+printBodyTag(stdout);
 
 htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
 

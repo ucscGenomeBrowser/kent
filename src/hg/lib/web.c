@@ -190,7 +190,8 @@ if (withHtmlHeader)
         webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
-    printf("</HEAD>\n<BODY>");
+    printf("</HEAD>\n");
+    printBodyTag(stdout);
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
     puts(commonCssStyles());
     }
