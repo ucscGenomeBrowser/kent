@@ -957,14 +957,19 @@ sub makeDescription {
   my $anchorRoot = lc($genome);
   $anchorRoot =~ s/\. /_/;
   $anchorRoot =~ s/ /_/;
-  my $img = "/usr/local/apache/htdocs/images/$sciUnderscore.jpg";
+  my $imgExtn = "jpg";
+  my $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
   if ( ! -s $img ) {
-      if ( ! -s "/usr/local/apache/htdocs/images/$sciUnderscore.png" ) {
-        warn "missing htdocs/images/$sciUnderscore.{jpg|png}\n\n";
-        exit 1;
-    } else {
-      $img = "/usr/local/apache/htdocs/images/$sciUnderscore.png";
-    }
+      $imgExtn = "png";
+      $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
+      if ( ! -s $img ) {
+        $imgExtn = "gif";
+        $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
+          if ( ! -s $img ) {
+            warn "missing htdocs/images/$sciUnderscore.{jpg|png|gif}\n\n";
+            exit 1;
+          }
+      }
   }
   my $widthHeight = `identify $img | awk '{print \$3}'`;
   chomp $widthHeight;
@@ -977,7 +982,7 @@ sub makeDescription {
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=$borderWidth>
   <TR><TD ALIGN=RIGHT>
     <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
-    <IMG SRC="/images/$sciUnderscore.jpg" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
+    <IMG SRC="/images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>$scientificName</em><BR> 
