@@ -43,6 +43,7 @@ autoScale off
 windowingFunction mean
 maxHeightPixels 100:32:16
 visibility hide
+release beta,public
 
     track crgMapabilityAlign36mer
     parent mapability
@@ -50,6 +51,7 @@ visibility hide
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
     color 120,0,0
     priority 1
+    release beta,public
 
     track crgMapabilityAlign40mer
     parent mapability
@@ -57,6 +59,7 @@ visibility hide
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 120,0,0
     priority 2
+    release beta,public
     
     track crgMapabilityAlign50mer
     parent mapability
@@ -64,6 +67,7 @@ visibility hide
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
     color 120,0,0
     priority 3
+    release beta,public
 
     track crgMapabilityAlign75mer
     parent mapability
@@ -71,6 +75,7 @@ visibility hide
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
     color 120,0,0
     priority 4
+    release beta,public
 
     track crgMapabilityAlign100mer
     parent mapability
@@ -78,6 +83,7 @@ visibility hide
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
     color 120,0,0
     priority 5
+    release beta,public
 
 track knownGeneOld4
 shortLabel Old UCSC Genes

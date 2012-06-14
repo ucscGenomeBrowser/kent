@@ -131,6 +131,31 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
     # 1490559789 one half size
     # 1529939826  13  chr12   85119472
 
+    cat << '_EOF_' > bosTau7.config.ra
+# Config parameters for makeGenomeDb.pl:
+db bosTau7
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate OCt. 2011
+assemblyLabel Baylor Btau_4.6.1
+assemblyShortLabel Baylor Btau_4.6.1
+orderKey 236
+mitoAcc AY526085
+fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName Baylor Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
+taxId 9913
+'_EOF_'
 
 #########################################################################
 # Initial  database build (DONE - 2012-01-03 - Chin)
@@ -143,7 +168,7 @@ genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
 assemblyDate OCt. 2011
-assemblyLabel Btau_4.6.1 (NCBI project 12555, accession GCA_000003205.4)
+assemblyLabel Baylor Btau_4.6.1 
 assemblyShortLabel Btau_4.6.1
 orderKey 236
 mitoAcc AY526085
@@ -151,6 +176,13 @@ fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
 agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
 # qualFiles none
 dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName Baylor Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
 taxId 9913
 '_EOF_'
     # << happy emacs
@@ -177,7 +209,9 @@ taxId 9913
 # - Run make update DBS=bosTau7 and make alpha when done.
 # - (optional) Clean up /cluster/data/bosTau7/TemporaryTrackDbCheckout
 
-
+    # re-generated description html using update makeGenomeDb.pl and config.ra
+    cd /hive/data/genomes/bosTau7
+    makeGenomeDb.pl -forceDescription -continue=trackDb bosTau7.config.ra
 
 #########################################################################
 # RepeatMasker (DONE 2012-01-04 - Chin)

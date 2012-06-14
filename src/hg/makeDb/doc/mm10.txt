@@ -5235,6 +5235,129 @@ runOne $(root1) {check out exists+ ../maf/$(root1).maf}
     rm multiz60way*.tab
 
 #######################################################################
+# GAP ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE - 2012-05-31 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/mm10/bed/multiz60way/anno
+    cd /hive/data/genomes/mm10/bed/multiz60way/anno
+
+    cd /hive/data/genomes/mm10/bed/multiz60way/anno
+    # check for N.bed files everywhere:
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/mm10/bed/multiz60way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S mm10      # use a screen to control this longish job
+    ssh swarm
+    cd /hive/data/genomes/mm10/bed/multiz60way/anno
+    mkdir result
+    # NEXT TIME: this template should have a check out exists+ statement
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/mm10/mm10.2bit {check out line+ result/$(file1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls ../maf/*.maf > maf.list
+    # the tac puts the short jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 46 of 66 jobs
+# CPU time in finished jobs:        350s       5.83m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                   603s      10.06m     0.17h    0.01d  0.000 y
+# Average job time:                  21s       0.35m     0.01h    0.00d
+# Longest finished job:              54s       0.90m     0.01h    0.00d
+# Submission to last job:           113s       1.88m     0.03h    0.00d
+
+    # XXX a number of these jobs did not finish due to memory limitations.
+    # The jobs would sit on the nodes appearing to occupy 8 Gb of memory,
+    # but did not see any swapping or CPU time accumulation.  Stop the
+    # batch and run the rest manually on hgwdev:
+#!/bin/sh
+
+export maxMem=188743680
+ulimit -S -m $maxMem -v $maxMem
+
+mafAddIRows -nBeds=nBeds ../maf/chrX.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chrX.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr9.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr9.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr8.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr8.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr7.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr7.maf &
+wait
+mafAddIRows -nBeds=nBeds ../maf/chr6.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr6.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr5.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr5.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr4.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr4.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr3.maf /hive/data/genomes/mm10/mm10.2bit hgwdev/chr3.maf &
+wait
+... etc ...
+    # the run time for those 20 jobs:
+    #   real    159m49.217s
+
+    # verify all result files have some content, look for 0 size files:
+    find . -type f -size 0
+    # should see none
+
+    # combine into one file  (realized after this, that we do *not* need
+    #                           this single file.  Individual files are OK.
+    head -q -n 1 result/chrM.maf > mm10.60way.maf
+    time for F in hgwdev/*.maf result/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> mm10.60way.maf
+    #   real    1082m47.484s -> 18 hours !
+# -rw-rw-r-- 1 261567878241 Jun  8 10:30 mm10.60way.maf
+    du -hsc mm10.60way.maf
+    #   244G    mm10.60way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/chrM.maf >> mm10.60way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> mm10.60way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    mkdir /gbdb/mm10/multiz60way/maf
+    ln -s `pwd`/result/*.maf `pwd`/hgwdev/*.maf /gbdb/mm10/multiz60way/maf/
+
+    # Load into database
+    rm /gbdb/mm10/multiz60way/*.maf   # remove previous results
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/mm10/multiz60way/maf \
+        mm10 multiz60way
+    #   Loaded 58087742 mafs in 66 files from /gbdb/mm10/multiz60way/maf
+    #   real    868m28.108s
+
+    time (cat /gbdb/mm10/multiz60way/maf/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 mm10 multiz60waySummary stdin)
+
+    #   -rw-rw-r-- 1 3009209972 Jun  9 03:23 multiz60way.tab
+    #   -rw-rw-r-- 1  591235982 Jun 11 18:34 multiz60waySummary.tab
+
+    rm multiz60way*.tab
+
+#######################################################################
 # MULTIZ60WAY MAF FRAMES (DONE - 2012-05-30 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/mm10/bed/multiz60way/frames
@@ -5475,6 +5598,108 @@ done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
 # frames multiz60wayFrames
 # irows on
     #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 60-way (WORKING - 2012-05-31 - 2012-06-12 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/4d
+    cd /hive/data/genomes/mm10/bed/multiz60way/4d
+
+    # the annotated maf's are in:
+    ../anno/result/*.maf
+
+    # using ensGene for mm10, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql mm10 -Ne \
+    "select * from ensGene WHERE cdsEnd > cdsStart;" | cut -f 2-20 \
+	| egrep -E -v "chrM|chrUn|random|_hap" > ensGene.gp
+    wc -l *.gp
+    #   55423 ensGene.gp
+
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	22457 ensGeneNR.gp
+
+    ssh encodek
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/4d/run
+    cd /hive/data/genomes/mm10/bed/multiz60way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/mm10/bed/multiz60way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tmm10.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/mm10/bed/multiz60way/anno/result/*.maf \
+	| sed -e "s#.*multiz60way/anno/result/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # the tac puts the quick jobs at the front
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:      13176s     219.60m     3.66h    0.15d  0.000 y
+# IO & Wait Time:                 31790s     529.84m     8.83h    0.37d  0.001 y
+# Average job time:                 681s      11.36m     0.19h    0.01d
+# Longest finished job:            2883s      48.05m     0.80h    0.03d
+# Submission to last job:          2925s      48.75m     0.81h    0.03d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/multiz60way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    ls -og mfa | awk '$3 == 1' | awk '{print $NF}' > empty.list
+    sed -e "s#^#mfa/##" empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    #   60
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #   real    98m59.203s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+#TREE: (((((((((((((((mm10:0.0855383,rn5:0.0922719):0.202381,dipOrd1:0.210819):0.0258471,(hetGla2:0.0917322,cavPor3:0.136876):0.0994271):0.00910944,speTri2:0.145483):0.0274969,(oryCun2:0.109639,ochPri2:0.200966):0.102067):0.0141654,(((((((((hg19:0.00674057,panTro4:0.00692231):0.00309904,gorGor3:0.00918625):0.00954082,ponAbe2:0.0191843):0.00356049,nomLeu2:0.0218207):0.0116848,(rheMac3:0.00814945,papHam1:0.0079848):0.0289473):0.0208338,(calJac3:0.0342405,saiBol1:0.0333221):0.0359171):0.0594469,tarSyr1:0.137467):0.011091,(micMur1:0.0918138,otoGar3:0.127231):0.0351527):0.0153171,tupBel1:0.18879):0.0042463):0.0214646,((susScr3:0.121641,(vicPac1:0.109818,(turTru2:0.0635753,(oviAri1:0.0392493,bosTau7:0.0315816):0.0939861):0.0203711):0.00368417):0.0444758,((((felCat5:0.0897448,(canFam3:0.0888602,ailMel1:0.0767935):0.021837):0.05011,equCab2:0.109367):0.00605998,(myoLuc2:0.137144,pteVam1:0.114013):0.0339604):0.00395001,(eriEur1:0.226934,sorAra1:0.270619):0.0628319):0.00292667):0.0291403):0.0231397,((((loxAfr3:0.078841,proCap1:0.160295):0.00825096,echTel1:0.266786):0.0031636,triMan1:0.0685675):0.0736043,(dasNov3:0.112086,choHof1:0.0974658):0.0535724):0.00739115):0.245967,(monDom5:0.139913,(sarHar1:0.132596,macEug2:0.111778):0.0294309):0.21273):0.0770867,ornAna1:0.50425):0.135096,(((((melGal1:0.067697,galGal4:0.05253):0.13729,taeGut1:0.202681):0.00899388,melUnd1:0.127774):0.216078,anoCar2:0.575186):0.0128221,chrPic1:0.201659):0.137011):0.113527,xenTro3:0.943162):0.0646458,latCha1:0.596956):0.463611,((((((tetNig2:0.223213,fr3:0.198755):0.263107,oreNil2:0.33649):0.0139699,gasAcu1:0.314841):0.0573697,oryLat2:0.430105):0.185668,gadMor1:0.562778):0.169352,danRer7:0.753326):0.117017):0.501088,petMar1:0.501088);
 
 #######################################################################
 # lastz nile tilapia oreNil2 (DONE - 2012-04-02 - Hiram)

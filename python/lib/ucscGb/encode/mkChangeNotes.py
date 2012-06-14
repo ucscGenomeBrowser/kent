@@ -313,7 +313,7 @@ class makeNotes(object):
             output.append("")
         return output
 
-    def __qaHeader(self, output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTables, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c):
+    def __qaHeader(self, output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, oldSupp, additionalList, revokedTables, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c):
         output = []
         tableSize = self.__getTableSize()
 
@@ -331,7 +331,7 @@ class makeNotes(object):
         output.append("Tables: %d" % int(len(newTableSet)))
         output.append("Files: %d" % int(len(filesNoRevoke)))
         output.append("Gbdbs: %d" % int(len(newGbdbSet)))
-        output.append("Supplemental: %d" % int(len(newSupp)))
+        output.append("Supplemental: %d" % int(len(newSupp | oldSupp)))
         output.append("Other: %d" % int(len(additionalList)))
         output.append("")
         output.append("REVOKED:")
@@ -402,7 +402,7 @@ class makeNotes(object):
         allOther = additionalList | oldAdditionalList
         removedOther = oldAdditionalList - additionalList
 
-        output.extend(self.__qaHeader(output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTableSet, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c))
+        output.extend(self.__qaHeader(output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, oldSupplementalSet, additionalList, revokedTableSet, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c))
  
         output.extend(self.__printSection(pushTables, untouchedTables, revokedTableSet, allTables, "tables", 0, args['summary']))
         output.extend(self.__printSection(pushFiles, untouchedFiles, revokedFiles, allFiles, "download", self.releasePath, args['summary']))
@@ -468,7 +468,7 @@ class makeNotes(object):
         newFiles = totalFiles - revokedFiles
         newGbdbs = newGbdbSet - revokedGbdbs
 
-        output.extend(self.__qaHeader(output, newTables, newFiles, newGbdbSet, newSupplementalSet, additionalList, revokedTables, revokedFiles, revokedGbdbs, totalFiles, newGbdbSet, args, c))
+        output.extend(self.__qaHeader(output, newTables, newFiles, newGbdbSet, newSupplementalSet, set(), additionalList, revokedTables, revokedFiles, revokedGbdbs, totalFiles, newGbdbSet, args, c))
         self.newTables = set(newTables)
         self.newFiles = set(ucscUtils.printIter(newFiles, self.releasePath))
         self.newGbdbs = set(ucscUtils.printIter(newGbdbs, self.gbdbPath))

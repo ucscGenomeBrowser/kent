@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db sarHar1
+clade mammal
+genomeCladePriority 64
+scientificName Sarcophilus harrisii
+commonName Tasmanian devil
+assemblyDate Feb. 2011
+assemblyLabel WTSI Devil_ref v7.0
+assemblyShortLabel WTSI Devil_ref v7.0
+orderKey 3590
+mitoAcc none
+fastaFiles /hive/data/genomes/sarHar1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/sarHar1/ucsc/*.agp.gz
+dbDbSpeciesDir tasmanianDevil
+photoCreditURL http://commons.wikimedia.org/wiki/File:Sarcophilus_harrisii_taranna.jpg
+photoCreditName Courtesy of JJ Harrison and Wikimedia Commons
+ncbiGenomeId 3066
+ncbiAssemblyId 328478
+ncbiAssemblyName Devil_ref v7.0
+ncbiBioProject 51853
+genBankAccessionID GCA_000189315.1
+taxId   9305
