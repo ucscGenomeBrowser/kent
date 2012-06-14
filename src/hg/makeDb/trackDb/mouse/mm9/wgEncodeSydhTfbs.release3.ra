@@ -62,7 +62,7 @@ html wgEncodeSydhTfbs.release3
 	track wgEncodeSydhTfbsViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	viewUi on
 	parent wgEncodeSydhTfbs
 	signalFilter 0
