@@ -1,7 +1,7 @@
 track wgEncodeSydhRnaSeq
 compositeTrack on
 shortLabel Stan/Yale RNA-seq
-longLabel RNA-seq from ENCODE/Stanford/Yale
+longLabel RNA-seq from ENCODE/Stanford
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL ESE14=ES-E14
