@@ -2,7 +2,9 @@ metaObject wgEncodeCrgMapabilityAlign100mer
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion January 2010
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
 fileName wgEncodeCrgMapabilityAlign100mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -17,7 +19,9 @@ metaObject wgEncodeCrgMapabilityAlign36mer
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion January 2010
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
 fileName wgEncodeCrgMapabilityAlign36mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -32,7 +36,9 @@ metaObject wgEncodeCrgMapabilityAlign40mer
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion January 2010
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
 fileName wgEncodeCrgMapabilityAlign40mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -47,7 +53,9 @@ metaObject wgEncodeCrgMapabilityAlign50mer
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion January 2010
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
 fileName wgEncodeCrgMapabilityAlign50mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -62,7 +70,9 @@ metaObject wgEncodeCrgMapabilityAlign75mer
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion January 2010
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
 fileName wgEncodeCrgMapabilityAlign75mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -78,4 +88,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: 900211322
+# MAGIC: 608531153
