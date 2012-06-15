@@ -1,7 +1,7 @@
 metaObject wgEncodeCrgMapabilityAlign100mer
 objType table
 composite wgEncodeMapability
-dataType Mapability
+dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
@@ -11,6 +11,7 @@ lab CRG-Guigo
 md5sum 0fc0a6ff28f4e2ee780bf6702ed7aea7
 project wgEncode
 size 100mer
+subId 7051
 tableName wgEncodeCrgMapabilityAlign100mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -18,7 +19,7 @@ view Alignability
 metaObject wgEncodeCrgMapabilityAlign36mer
 objType table
 composite wgEncodeMapability
-dataType Mapability
+dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
@@ -28,6 +29,7 @@ lab CRG-Guigo
 md5sum cea40c2bca1572ebfab8edc8936ea9ab
 project wgEncode
 size 36mer
+subId 7051
 tableName wgEncodeCrgMapabilityAlign36mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -35,7 +37,7 @@ view Alignability
 metaObject wgEncodeCrgMapabilityAlign40mer
 objType table
 composite wgEncodeMapability
-dataType Mapability
+dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
@@ -45,6 +47,7 @@ lab CRG-Guigo
 md5sum 13cc3bf69325fb580586e79e75d82654
 project wgEncode
 size 40mer
+subId 7051
 tableName wgEncodeCrgMapabilityAlign40mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -52,7 +55,7 @@ view Alignability
 metaObject wgEncodeCrgMapabilityAlign50mer
 objType table
 composite wgEncodeMapability
-dataType Mapability
+dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
@@ -62,6 +65,7 @@ lab CRG-Guigo
 md5sum def4bb1db43b8d93f16cf91f6987ecad
 project wgEncode
 size 50mer
+subId 7051
 tableName wgEncodeCrgMapabilityAlign50mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -69,7 +73,7 @@ view Alignability
 metaObject wgEncodeCrgMapabilityAlign75mer
 objType table
 composite wgEncodeMapability
-dataType Mapability
+dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
@@ -79,6 +83,7 @@ lab CRG-Guigo
 md5sum 39b8af3492edd29d935f0b8d5b1dbdda
 project wgEncode
 size 75mer
+subId 7051
 tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -88,4 +93,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: 608531153
+# MAGIC: -1517902528
