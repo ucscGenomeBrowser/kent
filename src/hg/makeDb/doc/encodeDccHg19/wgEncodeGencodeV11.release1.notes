@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeGencodeV11 Release 1
-2012-02-29
+2012-06-14
 
 QA Count Summaries for Release 1:
 Tables: 17
 Files: 17
 Gbdbs: 0
 Supplemental: 7
-Other: 0
+Other: 3
 
 REVOKED:
 Tables: 0
@@ -19,8 +19,8 @@ Table: 1664 MB (2 GB)
 Files: 126 MB
 Gbdbs: 0 MB
 Supplemental: 64 MB
-Other: 0 MB
-Total: 1854 MB (2 GB)
+Other: 1 MB
+Total: 1855 MB (2 GB)
 
 
 New Tables (17):
@@ -71,6 +71,12 @@ New Supplemental Files (7):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/supplemental/gencode.v11.pc_translations.fa.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/supplemental/gencode.v11.polyAs.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/supplemental/gencode.v11.tRNAs.gtf.gz
+
+
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGencodeV11/release1/md5sum.txt
 
 
 No Errors
