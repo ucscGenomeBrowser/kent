@@ -83,7 +83,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12P300sc584IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks 
-		shortLabel CH12 p300(S) P
+		shortLabel CH12 p300 (SC) P
 		longLabel CH12 p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300SC584 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
@@ -129,7 +129,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsMelP300sc584IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks 
-		shortLabel MEL p300 P
+		shortLabel MEL p300 (SC) P
 		longLabel MEL p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300SC584 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
@@ -732,7 +732,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12P300sc584IggrabSig
 		parent wgEncodeSydhTfbsViewSig 
-		shortLabel CH12 p300 S
+		shortLabel CH12 p300 (SC) S
 		longLabel CH12 p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=P300SC584 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 106426.000000
@@ -778,7 +778,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsMelP300sc584IggrabSig
 		parent wgEncodeSydhTfbsViewSig 
-		shortLabel MEL p300 S
+		shortLabel MEL p300 (SC) S
 		longLabel MEL p300 (SC-584) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=P300SC584 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 93877.000000
