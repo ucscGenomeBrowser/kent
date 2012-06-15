@@ -83,7 +83,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12P300sc584IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks 
-		shortLabel CH12 p300(SC) P
+		shortLabel CH12 p300 (SC) P
 		longLabel CH12 p300 (SC-584) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=P300SC584 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
