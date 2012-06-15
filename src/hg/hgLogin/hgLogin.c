@@ -1046,12 +1046,12 @@ char *cookieDomainName()
 {
 char *centralDomain=cloneString(cfgOption(CFG_CENTRAL_DOMAIN));
 char *returnURL = getReturnToURL();
-char *returnToDomain;
+char returnToDomain[256];
 sscanf(returnURL, "http://%[^/]", returnToDomain);
 if (endsWith(returnToDomain,centralDomain))
     return centralDomain;
 else
-    return returnToDomain;
+    return cloneString(returnToDomain);
 }
 
 void displayLoginSuccess(char *userName, int userID)
