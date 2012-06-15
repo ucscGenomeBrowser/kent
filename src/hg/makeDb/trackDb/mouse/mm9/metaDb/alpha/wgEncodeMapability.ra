@@ -5,6 +5,8 @@ dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002937
+expId 2937
 fileName wgEncodeCrgMapabilityAlign100mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -23,6 +25,8 @@ dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002938
+expId 2938
 fileName wgEncodeCrgMapabilityAlign36mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -41,6 +45,8 @@ dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002939
+expId 2939
 fileName wgEncodeCrgMapabilityAlign40mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -59,6 +65,8 @@ dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002940
+expId 2940
 fileName wgEncodeCrgMapabilityAlign50mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -77,6 +85,8 @@ dataType Mapability-m
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-02-09
 dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002941
+expId 2941
 fileName wgEncodeCrgMapabilityAlign75mer.bigWig
 grant Gingeras
 lab CRG-Guigo
@@ -93,4 +103,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: -1517902528
+# MAGIC: 1842140808
