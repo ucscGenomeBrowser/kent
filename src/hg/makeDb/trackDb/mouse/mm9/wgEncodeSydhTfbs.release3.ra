@@ -751,7 +751,7 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12Rad21IggrabSig
 		parent wgEncodeSydhTfbsViewSig off
-		shortLabel CH12 Rad21 S
+		shortLabel CH12 Rad21 
 		longLabel CH12 Rad21 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=RAD21 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 78996.000000
