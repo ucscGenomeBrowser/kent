@@ -15404,7 +15404,7 @@ cvDefined yes
 validate cv or control
 priority 190
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab #Provisional
-optionalVars label,validation,targetUrl,lots,displayName,deprecated #Provisional
+optionalVars label,validation,targetUrl,lots,deprecated #Provisional
 
 term attic
 tag ATTIC
