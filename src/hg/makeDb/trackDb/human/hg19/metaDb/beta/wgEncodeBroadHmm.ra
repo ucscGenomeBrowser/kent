@@ -2,6 +2,7 @@ metaObject wgEncodeBroadHmm
 objType composite
 composite wgEncodeBroadHmm
 expVars lab,dataType,cell
+geoSeriesAccession GSE38163
 
 metaObject wgEncodeBroadHmmGm12878HMM
 objType table
@@ -14,6 +15,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000784
 expId 784
 fileName wgEncodeBroadHmmGm12878HMM.bed.gz
+geoSampleAccession GSM936082
 grant Bernstein
 lab Broad
 md5sum 29a58b030fbb79da2b385a4af4352ac7
@@ -35,6 +37,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000785
 expId 785
 fileName wgEncodeBroadHmmH1hescHMM.bed.gz
+geoSampleAccession GSM936083
 grant Bernstein
 lab Broad
 md5sum 2ba11bd6b7e90308e4a8a5de099ebd64
@@ -56,6 +59,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000789
 expId 789
 fileName wgEncodeBroadHmmHepg2HMM.bed.gz
+geoSampleAccession GSM936090
 grant Bernstein
 lab Broad
 md5sum 47cbafd04a8c1a2ec376c71ebbe1a87a
@@ -77,6 +81,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000786
 expId 786
 fileName wgEncodeBroadHmmHmecHMM.bed.gz
+geoSampleAccession GSM936084
 grant Bernstein
 lab Broad
 md5sum f1a3a1443ad37555d6781318705834fc
@@ -98,6 +103,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000787
 expId 787
 fileName wgEncodeBroadHmmHsmmHMM.bed.gz
+geoSampleAccession GSM936085
 grant Bernstein
 lab Broad
 md5sum aa5ae42f4fee3d24f0dbf62997d0eec4
@@ -119,6 +125,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000788
 expId 788
 fileName wgEncodeBroadHmmHuvecHMM.bed.gz
+geoSampleAccession GSM936089
 grant Bernstein
 lab Broad
 md5sum e904cd14a58938a9d82441d4cd8d3a38
@@ -140,6 +147,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000790
 expId 790
 fileName wgEncodeBroadHmmK562HMM.bed.gz
+geoSampleAccession GSM936088
 grant Bernstein
 lab Broad
 md5sum eb23b5e0970e8d7367bfd784079c088a
@@ -161,6 +169,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000791
 expId 791
 fileName wgEncodeBroadHmmNhekHMM.bed.gz
+geoSampleAccession GSM936087
 grant Bernstein
 lab Broad
 md5sum f2d0115e4aa58cbf9121a39729f0a48c
@@ -182,6 +191,7 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000792
 expId 792
 fileName wgEncodeBroadHmmNhlfHMM.bed.gz
+geoSampleAccession GSM936086
 grant Bernstein
 lab Broad
 md5sum a0d63a5e1ffeacb2fdd91a528bd96fa9
@@ -192,4 +202,4 @@ subId 3823
 tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
-# MAGIC: 853605587
+# MAGIC: -2104607417
