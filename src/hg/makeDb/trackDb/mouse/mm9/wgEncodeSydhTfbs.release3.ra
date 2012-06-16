@@ -299,8 +299,8 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12Mafkab50322IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
-		shortLabel CH12 MafK 
-		longLabel CH12 MafK TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+		shortLabel CH12 MafK_a
+		longLabel CH12 MafK (ab50322) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MafKab50322 cellType=CH12 control=IGGRAB treatment=zNONE
 		type narrowPeak
 		color 86,180,233
@@ -308,8 +308,8 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsMelMafkab50322IggrabPk
 		parent wgEncodeSydhTfbsViewPeaks off
-		shortLabel MEL MafK 
-		longLabel MEL MafK TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+		shortLabel MEL MafK_a 
+		longLabel MEL MafK (ab50322) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 		subGroups view=Peaks factor=MafKab50322 cellType=MEL control=IGGRAB treatment=zNONE
 		type narrowPeak
 		color 86,180,233
@@ -959,8 +959,8 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsCh12Mafkab50322IggrabSig
 		parent wgEncodeSydhTfbsViewSig off
-		shortLabel CH12 MafK 
-		longLabel CH12 MafK TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+		shortLabel CH12 MafK_a 
+		longLabel CH12 MafK (ab50322) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MafKab50322 cellType=CH12 control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 211268.000000
 		color 86,180,233
@@ -968,8 +968,8 @@ html wgEncodeSydhTfbs.release3
 
 		track wgEncodeSydhTfbsMelMafkab50322IggrabSig
 		parent wgEncodeSydhTfbsViewSig off
-		shortLabel MEL MafK 
-		longLabel MEL MafK TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+		shortLabel MEL MafK_a 
+		longLabel MEL MafK (ab50322) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=MafKab50322 cellType=MEL control=IGGRAB treatment=zNONE
 		type bigWig 1.000000 120440.000000
 		color 86,180,233
