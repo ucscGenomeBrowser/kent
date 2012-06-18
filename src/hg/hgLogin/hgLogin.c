@@ -1051,7 +1051,7 @@ sscanf(returnURL, "http://%[^/]", returnToDomain);
 if (endsWith(returnToDomain,centralDomain))
     return centralDomain;
 else
-    return returnToDomain;
+    return cloneString(returnToDomain);
 }
 
 void displayLoginSuccess(char *userName, int userID)
