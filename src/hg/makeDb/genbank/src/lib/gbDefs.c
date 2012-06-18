@@ -135,6 +135,18 @@ return NULL;
 
 }
 
+char* gbTypeNameLower(unsigned type)
+/* convert a type constant to lower-case string, as used in file names */
+{
+if (type == GB_MRNA)
+    return "mrna";
+if (type == GB_EST)
+    return "est";
+assert(FALSE);
+return NULL;
+
+}
+
 unsigned gbParseSrcDb(char* srcDbStr)
 /* Parse a src db name (GenBank or RefSeq), or comma seperate list of them
  * into a constant. Case is ignored */
@@ -163,6 +175,17 @@ if (srcDb == GB_GENBANK)
     return "GenBank";
 if (srcDb == GB_REFSEQ)
     return "RefSeq";
+assert(FALSE);
+return NULL;
+}
+
+char* gbSrcDbNameLower(unsigned srcDb)
+/* Get lower case string name for a srcDb */
+{
+if (srcDb == GB_GENBANK)
+    return "genbank";
+if (srcDb == GB_REFSEQ)
+    return "refseq";
 assert(FALSE);
 return NULL;
 }
