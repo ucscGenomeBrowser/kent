@@ -396,7 +396,7 @@ while (s < bam->data + bam->data_len)
     printf(" <B>%c%c</B>:", key[0], key[1]);
     if (type == 'A') { printf("%c", *s); ++s; }
     else if (type == 'C') { printf("%u", *s); ++s; }
-    else if (type == 'c') { printf("%d", *s); ++s; }
+    else if (type == 'c') { printf("%d", *(int8_t*)s); ++s; }
     else if (type == 'S') { printf("%u", *(uint16_t*)s); s += 2; }
     else if (type == 's') { printf("%d", *(int16_t*)s); s += 2; }
     else if (type == 'I') { printf("%u", *(uint32_t*)s); s += 4; }
