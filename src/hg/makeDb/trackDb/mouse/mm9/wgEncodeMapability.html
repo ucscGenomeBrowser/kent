@@ -22,12 +22,12 @@ will tolerate up to 2 mismatches. These tracks are in the form of signals rangin
 <H2>Methods</H2>
 <P>
 The <em>CRG Alignability</em> tracks show how uniquely k-mer sequences align 
-to a region of the genome. To generate the data, the GEM-mapability 
-<A HREF="http://gemlibrary.sourceforge.net" TARGET=_BLANK>program</A> has 
-been employed. The method is equivalent to mapping sliding windows of k-mers 
-(where k has been set to 36, 40, 50, 75 or 100 nts to produce these tracks) 
-back to the genome using the GEM mapper aligner (up to 2 mismatches were 
-allowed in this case). For each window, a mapability score was computed 
+to a region of the genome. 
+By using the <A HREF="http://gemlibrary.sourceforge.net" TARGET=_BLANK>GEM mapper aligner</a>, 
+where up to two mismatches were allowed, the method is equivalent to mapping 
+sliding windows of k-mers back to the genome (where k has been set to 36, 40, 
+50, 75 or 100 nucleotides to produce these tracks).
+For each window, a mapability score was computed 
 (S = 1/(number of matches found in the genome): S=1 means one match in the 
 genome, S=0.5 is two matches in the genome, and so on). The 
 <em>CRG Alignability</em> tracks were 
@@ -36,7 +36,7 @@ generated independently of the ENCODE project, in the framework of the GEM
 
 <h2>Release Notes</h2>
 <p>
-This is release 1 of the mapability. It is a port of the old mapability track into the ENCODE format.
+This is release one of the ENCODE mapability. It is a port of the old mapability track into the ENCODE format.
 There are no new datasets.
 </p>
 
@@ -59,4 +59,4 @@ Data users may freely use ENCODE data, but may not, without prior consent,
 submit publications that use an unpublished ENCODE dataset until nine months 
 following the release of the dataset. This date is listed in the 
 Restricted Until column, above. The full data release policy for ENCODE is available
-<a href="http://hgwdev.cse.ucsc.edu/ENCODE/terms.html" target=_blank>here</a>.
+<a href="http://../ENCODE/terms.html" target=_blank>here</a>.
