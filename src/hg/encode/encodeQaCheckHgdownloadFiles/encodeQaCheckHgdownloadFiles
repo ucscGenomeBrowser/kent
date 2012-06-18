@@ -46,13 +46,14 @@ def main():
 """Example:
 encodeQaCheckHgdownloadFiles hg19 wgEncodeSydhTfbs files.list
 encodeQaCheckHgdownloadFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
+encodeQaCheckHgdownloadFiles hg19 wgEncodeCshlLongRnaSeq checkPushFilesList -s hgdownload-sd
 """
     )
     parser.add_argument('database', help='The database, typically hg19 or mm9')
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('files', help='The list of files')
     parser.add_argument('-d', '--dev', action="store_true", default=0, help='Check for files missing on dev that are present on the RR')
-    parser.add_argument('-s', '--server', default="hgdownload", help="The server to use, like hgdownload.")
+    parser.add_argument('-s', '--server', default="hgdownload", help="The server to use, default: hgdownload.")
 
 
     if len(sys.argv) == 1:
