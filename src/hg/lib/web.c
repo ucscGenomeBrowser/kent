@@ -1034,8 +1034,8 @@ if (scriptName && ip)  /* will not be true from command line execution */
 	    (void) alarm(6);	/* timeout here in 6 seconds */
 #include "versionInfo.h"
 	    char url[1024];
-	    safef(url, sizeof(url), "%s%s",
-	"http://genomewiki.ucsc.edu/cgi-bin/useCount?version=browser.v",
+	    safef(url, sizeof(url), "%s%s%s%s%s%s", "http://",
+	"genomewiki.", "ucsc.edu/", "cgi-bin/useCount?", "version=browser.v",
 		CGI_VERSION);
 
 	    /* 6 second alarm will exit this page fetch if it does not work */

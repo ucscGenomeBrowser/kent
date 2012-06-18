@@ -94,7 +94,7 @@ void outFaClose(struct outFa* outFa)
 {
 if (outFa->fa != NULL)
     {
-    printf("alignFa: %s %s %d %lld\n", outFa->fa->fileName,
+    printf("alignFa\t%s\t%s\t%d\t%lld\n", outFa->fa->fileName,
            gbOrgCatName(outFa->select.orgCats), outFa->numSeqs,
            outFa->numBases);
     gbFaClose(&outFa->fa);
@@ -209,8 +209,8 @@ gbFaClose(&inFa);
 gbVerbLeave(2, "copying from %s", inFasta);
 }
 
-void markAligns(struct gbSelect* select, unsigned orgCat, struct gbAlignInfo *alignInfo)
-/* create a file indicating that sequences either needs aligned or migated for
+void reportAligns(struct gbSelect* select, unsigned orgCat, struct gbAlignInfo *alignInfo)
+/* Report back to drive program that sequences either need aligned or migated for
  * this for this partation.  This is used to determine what needs to be
  * installed after the alignment.  This is needed  because they might be all
  * be migrate, so that fasta can't be the indicator.  If there is nothing
@@ -218,18 +218,24 @@ void markAligns(struct gbSelect* select, unsigned orgCat, struct gbAlignInfo *al
  * done. This is a performance win to prevent gbAlignInstall from parsing
  * indixes again. */
 {
-char path[PATH_LEN];
-FILE* fh;
 unsigned orgCatsHold = select->orgCats;
 select->orgCats = orgCat;
 
 if (gbEntryCntsHaveAny(&alignInfo->migrate, orgCat) || gbEntryCntsHaveAny(&alignInfo->align, orgCat))
-    gbAlignedGetPath(select, "aligns", workDir, path);
+    {
+    printf("partitions\t\%s\t\%s\t\%s\t\%s\t\%s\t%s\t%s\n",
+           gbSrcDbNameLower(select->release->srcDb), select->release->name,
+           select->update->name, gbTypeNameLower(select->type),
+           emptyForNull(select->accPrefix), select->release->genome->database,
+           gbOrgCatName(orgCat));
+    }
 else
+    {
+    char path[PATH_LEN];
     gbAlignedGetIndex(select, path);
-
-fh = gbMustOpenOutput(path);
-gbOutputRename(path, &fh);
+    FILE* fh = gbMustOpenOutput(path);
+    gbOutputRename(path, &fh);
+    }
 
 select->orgCats = orgCatsHold;
 }
@@ -270,11 +276,12 @@ if (alignInfo.align.accTotalCnt > 0)
     copySelectedFasta(select);
     }
 
-/* leave calling cards */
+/* report what partitions need to be aligned or migrate and flat those where
+ * this is nothing to do. */
 if (select->orgCats & GB_NATIVE)
-    markAligns(select, GB_NATIVE, &alignInfo);
+    reportAligns(select, GB_NATIVE, &alignInfo);
 if (select->orgCats & GB_XENO)
-    markAligns(select, GB_XENO, &alignInfo);
+    reportAligns(select, GB_XENO, &alignInfo);
 
 /* print before releasing memory */
 gbVerbLeave(1, "gbAlignGet: %s", gbSelectDesc(select));
@@ -289,7 +296,7 @@ return alignInfo;
 void usage()
 /* print usage and exit */
 {
-errAbort("   gbAlignGet [options] relname update typeAccPrefix db\n"
+errAbort("   gbAlignGet [options] relname update typeAccPrefix db aligningList\n"
          "\n"
          "Get sequences for GenBank alignment step. This creates FASTA\n"
          "files in the aligned work directory for an update to\n"
@@ -318,12 +325,16 @@ errAbort("   gbAlignGet [options] relname update typeAccPrefix db\n"
          "     typeAccPrefix - type and access prefix, e.g. mrna, or\n"
          "       est.aj\n"
          "     db - database for the alignment\n"
+         "     partitionList - the list of partitions that are being aligned\n"
+         "        or migrated is written to this file.  This is used by gbAlignFinish\n"
+         "        to know exactly what to process.  Columns are:\n"
+         "          database release update type accPrefix orgCat\n"
          "\n");
 }
 
 int main(int argc, char* argv[])
 {
-char *relName, *updateName, *typeAccPrefix, *database, *sep;
+char *relName, *updateName, *typeAccPrefix, *database, *sep, *partitionList;
 struct gbIndex* index;
 struct gbSelect select;
 struct gbSelect* prevSelect = NULL;
@@ -343,6 +354,7 @@ relName = argv[1];
 updateName = argv[2];
 typeAccPrefix = argv[3];
 database = argv[4];
+partitionList = argv[5];
 
 /* parse typeAccPrefix */
 sep = strchr(typeAccPrefix, '.');
@@ -376,8 +388,8 @@ fprintf(stderr, "gbAlignGet: %s/%s/%s/%s: align=%d, migrate=%d\n",
         alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
 gbIndexFree(&index);
 
-/* print alignment and migrate count, which is read by the driver program */
-printf("alignCnt: %d %d\n", alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
+/* print information for the driver program (gbAlignSetup) */
+printf("alignCnt\t%d\t%d\n", alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
 return 0;
 }
 /*

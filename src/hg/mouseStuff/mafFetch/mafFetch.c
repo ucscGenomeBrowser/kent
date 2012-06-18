@@ -71,7 +71,6 @@ unsigned extFile = 0;
 unsigned recCnt = 0;
 struct scoredRef *ref;
 struct mafAli *maf;
-
 for (ref = refs; ref != NULL; ref = ref->next)
     {
     if ((maf == NULL) || (extFile != ref->extFile))
@@ -109,6 +108,7 @@ refs = loadMafRefs(conn, table, beds);
 bedFreeList(&beds);
 
 outFh = mustOpen(mafOut, "w");
+mafWriteStart(outFh, NULL);
 copyMafs(db, conn, refs, outFh);
 carefulClose(&outFh);
 
