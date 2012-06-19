@@ -122,7 +122,7 @@ def makeHtml(infoDict, original, plain):
     htmlLines.append("</p>")
     if plain:
         htmlLines = list()
-        htmlLines.append("%s %s %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
+        htmlLines.append("%s %s. %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
