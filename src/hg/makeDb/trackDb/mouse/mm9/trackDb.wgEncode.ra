@@ -4,7 +4,7 @@
 
 # mapability liftover
 include wgEncodeMapability.ra alpha
-include mapability.ra  beta,public
+include mapability.ra beta,public
 
 # Stan/Yale TFBS (wrangler: Venkat) 
 include wgEncodeSydhTfbs.release3.ra
