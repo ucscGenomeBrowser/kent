@@ -46,8 +46,8 @@ def parseInit(id):
         url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
     sys.stderr.write("Accessing %s\n" % url)
     fetch = urllib2.urlopen(url)
-#    sidefetch = urllib2.urlopen(url)
-#    print "%s" % sidefetch.read()
+    #sidefetch = urllib2.urlopen(url)
+    #print "%s" % sidefetch.read()
 
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
@@ -87,7 +87,7 @@ def makeHtml(infoDict, original, plain):
     elif 'Journal' in infoDict:
         journal = infoDict['Journal']
     if 'SO' in infoDict:
-        dateStr = infoDict['SO']
+        dateStr = re.sub(";:", ":", infoDict['SO'])
     else:
         dateStr1 = infoDict['PubDate']
         dateStr = ""
