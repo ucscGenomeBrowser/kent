@@ -14691,17 +14691,6 @@ labPiFull Roderic Guigo
 grantPi Gingeras
 organism human
 
-term CRG-Guigo-m
-tag CRG
-type lab
-label Guigo - CGR, Barcelona
-description Guigo - CGR, Barcelona
-labInst Genome Center for Genomic Regulation, Barcelona
-labPi Guigo
-labPiFull Roderic Guigo
-grantPi Gingeras
-organism human
-
 term GIS-Ruan
 tag GISRUAN
 type lab
@@ -15049,6 +15038,17 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
+organism mouse
+
+term CRG-Guigo-m
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Gingeras
 organism mouse
 
 term UMass-m
