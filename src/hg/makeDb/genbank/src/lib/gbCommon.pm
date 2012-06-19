@@ -269,6 +269,9 @@ sub gbError($) {
 
     # see perlvar man page about why this is needed
     if (defined($^S)) {
+        if ($gbCommon::verbose) {
+            confess();
+        }
         die($msg);
     }
 

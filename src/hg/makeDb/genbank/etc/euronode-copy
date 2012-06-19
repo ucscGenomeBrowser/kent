@@ -5,14 +5,14 @@
 # since the last time files were downloaded.  Remote file access is by rsync.
 
 set -e  # errors terminate
-trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
+trap "echo Error: $(hostname) copy failed >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
 gbRoot=/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
+databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 
 # local location of /gbdb
 gbdb=/data2/gbdb

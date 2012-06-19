@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db latCha1
+clade vertebrate
+genomeCladePriority 82
+scientificName Latimeria chalumnae
+commonName Coelacanth
+assemblyDate Aug. 2011
+assemblyLabel Broad LatCha1
+assemblyShortLabel LatCha1
+orderKey 447
+mitoAcc NC_001804
+fastaFiles /hive/data/genomes/latCha1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/latCha1/ucsc/*.agp.gz
+dbDbSpeciesDir latCha
+photoCreditURL http://en.wikipedia.org/wiki/File:Coelacanth.png
+photoCreditName Robbie Cada
+ncbiGenomeId 3262
+ncbiAssemblyId 303548
+ncbiAssemblyName Broad LatCha1
+ncbiBioProject 56111
+genBankAccessionID GCA_000225785.1
+taxId   7897

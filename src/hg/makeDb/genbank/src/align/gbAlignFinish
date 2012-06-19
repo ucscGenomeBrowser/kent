@@ -24,99 +24,102 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
+#use Data::Dumper qw(Dumper);  # useful for debugging
 
 # globals from command line
 my $gKeep = 0;
 my $gWorkDir = "work/align";
 my $noMigrate = 0;
 
-# get dirs+type+accPrefixes for a work directory
-sub getUpdWorkDirPrefixes($) {
-    my($updWorkDir) = @_;
-    my %dirPrefixes;
-    # use orgCat.aligns files to get prefixes, excluding category.
-    foreach my $aln (glob("$updWorkDir/*.native.aligns"),
-                      glob("$updWorkDir/*.xeno.aligns")) {
-        my $dirPrefix = dirname($aln) . "/"
-            . basename($aln, ("\.native\.aligns", "\.xeno\.aligns"));
-        $dirPrefixes{$dirPrefix} = 1;
+# read partition list
+sub readPartitionList() {
+    my @partitionList;
+    my $partFile = "$gWorkDir/partitions.lst";
+    open(STUPID, $partFile) || die("can't open $partFile");
+    my $line;
+    while ($line = <STUPID>) {
+        chop($line);
+        my @row = split("\t", $line);
+        my $typeAccPrefix = $row[3] . (($row[4] eq "") ? "" : ("." . $row[4]));
+        my $part = {
+            srcDb => lc($row[0]),
+            release => $row[1],
+            update => $row[2],
+            type => $row[3],
+            accPrefix => $row[4],
+            database => $row[5],
+            orgCat => $row[6],
+            typeAccPrefix => $typeAccPrefix,
+            typeAccPrefixOrgCat => $typeAccPrefix . "." . $row[6]
+        };
+        push(@partitionList, $part);
     }
-    return sort(keys(%dirPrefixes));
+    close(STUPID) || die("close failed");
+    return @partitionList;
 }
 
-# Build list of update dirs with type and accPrefixes:
-#    work/align/genbank.132.0/hg13/full/mrna
-#    work/align/genbank.132.0/hg13/full/est.aj
-# result is sorted by update so that full is returned first, followed
-# by sorted dailies.  My return an empty list if none are being aligned
-# for this database.
-sub getDirsPrefixes($) {
-    my($db) = @_;
-    # find based on fasta files used to align
-    my @dirPrefixes = ();
-    # loop over releases and databases
-    for my $relDbWorkDir ((glob("$gWorkDir/genbank.*/$db"),
-                           glob("$gWorkDir/refseq.*/$db"))) {
-        # loop over updates, full first
-        foreach my $updWorkDir ((glob("$relDbWorkDir/full"),
-                                 sort(glob("$relDbWorkDir/daily.*")))) {
-            push(@dirPrefixes, getUpdWorkDirPrefixes($updWorkDir));
+# print a partition record (for debugging)
+sub printPartition($) {
+    my ($p) = @_;
+    print $p->{srcDb}, " ", $p->{release}, " ", $p->{update}, " ", $p->{typeAccPrefix}, " ", $p->{database}, " ", $p->{orgCat}, "\n";
+}
+
+# This is loaded from the partition.lst file create by by gbAlignGet.  This is
+# a mechanism to know what partitions actually have data aligned or migrated.
+# The fact that some partitions might only be migrated but have no new
+# alignments makes this necessary in addition to other mechanisms
+# format of each line is a tab-separated columns of:
+#   srcDb release update type accPrefix database orgCat
+sub loadPartitionList() {
+    my @partitionList = readPartitionList();
+
+    # sort so that full is done first, and then updates to in in assending
+    # order
+    @partitionList = sort {
+        my $d = $a->{database} cmp $b->{database};
+        if ($d == 0) {
+            $d = $a->{srcDb} cmp $b->{srcDb};
         }
-    }
-    return @dirPrefixes;
+        if ($d == 0) {
+            $d = $a->{release} cmp $b->{release};
+        }
+        if ($d == 0) {
+            $d = $a->{update} cmp $b->{update};
+            if ($d != 0) {
+                if ($a->{update} eq "full") {
+                    $d = -1;
+                } elsif ($b->{update} eq "full") {
+                    $d = 1;
+                }
+            }
+        }
+        if ($d == 0) {
+            $d = $a->{type} cmp $b->{type};
+        }
+        if ($d == 0) {
+            $d = $a->{accPrefix} cmp $b->{accPrefix};
+        }
+        if ($d == 0) {
+            $d = $a->{orgCat} cmp $b->{orgCat};
+        }
+        return $d;
+    } @partitionList;
+    return @partitionList;
 }
 
-# Parse an update directory and file prefix (can be work dir or aligned dir)
-#    work/align/genbank.132.0/hg13test/full
-sub parseDirPrefix($) {
-    my($dirPrefix) = @_;
-
-    my $typePrefix = basename($dirPrefix);
-    my $dir = dirname($dirPrefix);
-    my $update = basename($dir);
-    $dir = dirname($dir);
-    my $database = basename($dir);
-    $dir = dirname($dir);
-    my $release = basename($dir);
-
-    my $type = $typePrefix;
-    $type =~ s/\..*$//;
-    return ($release, $database, $update, $type, $typePrefix);
-}
-
-# get the srcDb from a release
-sub getSrcDb($) {
-    my ($release) = @_;
-
-    # parse srcDb from release
-    my @srcDbList = split(/\./, $release);
-    if ($#srcDbList < 1) {
-        die("invalid release: $release");
-    }
-    return  $srcDbList[0];
-}
-
-# get a type and orgCat from a type prefix
-sub getTypeOrgCat($) {
-    my ($typePrefix) = @_;
-    my @typeList = split(/\./, $typePrefix);
-    if ($#typeList < 1) {
-        die("invalid typePrefix: $typePrefix");
-    }
-    my $type = $typeList[0];
-    my $orgCat = ($type eq "est") ? $typeList[2] : $typeList[1];
-    return ($type, $orgCat);
+# get alignment directory for a partition
+sub getAlignDir($) {
+    my ($part) = @_;
+    return "data/aligned/$part->{release}/$part->{database}/$part->{update}";
 }
 
 # Determine pslCDnaFilter parameters to use from config file.  Return undef to
 # skip PSL filtering.
-sub getPslCDnaFilterArgs($$$) {
-    my ($db, $release, $typePrefix) = @_;
+sub getPslCDnaFilterArgs($) {
+    my ($part) = @_;
+    my $db = $part->{database};
 
-    my $srcDb = getSrcDb($release);
-    my($type, $orgCat) = getTypeOrgCat($typePrefix);
-
-    my $args = getDbConf($db, "$srcDb.$type.$orgCat.pslCDnaFilter");
+    my $args = getDbConf($db, "$part->{srcDb}.$part->{type}.$part->{orgCat}.pslCDnaFilter");
     if ($args eq "no") {
         return undef;
     }
@@ -140,8 +143,7 @@ sub getPslCDnaFilterArgs($$$) {
 # twice, we just save the offsets in the output PSL file.  These are used by
 # selectWithPsl to only load a subset of the PSL.
 sub combinePslSet($$$$$$) {
-    my($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl,
-       $pslQueryOffsets) = @_;
+    my($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl, $pslQueryOffsets) = @_;
 
     my $startOff = (-e $outPsl) ? getFileSize($outPsl) : 0;
 
@@ -168,14 +170,14 @@ sub combinePslSet($$$$$$) {
 }
 
 # Combine, removing duplicates, return name of output psl or undef if no PSLs.
-sub combinePsls($$$$$$$@) {
-    my($db, $release, $type, $typePrefix, $updWorkDir, $tmpDir,
-       $pslQueryOffsets, @queryDirs) = @_;
+sub combinePsls($$$$@) {
+    my($part, $updWorkDir, $tmpDir, $pslQueryOffsets, @queryDirs) = @_;
 
-    my $pslCDnaFilterArgs = getPslCDnaFilterArgs($db, $release, $typePrefix);
+    my $pslCDnaFilterArgs = getPslCDnaFilterArgs($part);
+    my $pslPrefix = "$updWorkDir/$part->{typeAccPrefixOrgCat}";
     
     # tmp file for combined PSLs
-    my $outPsl = "$updWorkDir/$typePrefix.psl";
+    my $outPsl = "$pslPrefix.psl";
     if (-e $outPsl) {
         unlink($outPsl) || die("unlink $outPsl");
     }
@@ -184,8 +186,8 @@ sub combinePsls($$$$$$$@) {
     # this is not done for ESTs, as there are so many. Also not done
     # if we are not filterting, as this would be redundant.
     my $outRawPsl;
-    if (($type eq "mrna") && defined($pslCDnaFilterArgs)) {
-        $outRawPsl = "$updWorkDir/$typePrefix.rawPsl";
+    if (($part->{type} eq "mrna") && defined($pslCDnaFilterArgs)) {
+        $outRawPsl = "$pslPrefix.rawPsl";
         if (-e $outRawPsl) {
             unlink($outRawPsl) || die("unlink $outRawPsl");
         }
@@ -195,15 +197,12 @@ sub combinePsls($$$$$$$@) {
     # avoid possible comand line overflow. Sort by qName,qStart,qEnd for
     # pslCDnaFilter.
     foreach my $queryDir (@queryDirs) {
-        combinePslSet($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl,
-                      $pslQueryOffsets);
+        combinePslSet($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl, $pslQueryOffsets);
     }
 
     # return pair of output files, or undef if empty
-    my $outPslResults = (getFileSize($outPsl) > 0)
-        ? $outPsl : undef;
-    my $outRawPslResults = (defined($outRawPsl) && (getFileSize($outPsl) > 0))
-        ? $outRawPsl : undef;
+    my $outPslResults = (getFileSize($outPsl) > 0) ? $outPsl : undef;
+    my $outRawPslResults = (defined($outRawPsl) && (getFileSize($outPsl) > 0)) ? $outRawPsl : undef;
     return ($outPslResults, $outRawPslResults);
 }
 
@@ -242,19 +241,19 @@ sub combineOISet($$$$$) {
 
 # Combine orientation info. Only called if there are PSLs, and hence
 # must be orientInfo files.  This processing parallels combinePsls.
-sub combineOIs($$$$$$@) {
-    my($type, $typePrefix, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
+sub combineOIs($$$$$@) {
+    my($part, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
 
     # Process each query dir in a pipeline, selecting the ones kept
     # by pslCDnaFilter.
-    my $outOI = "$updWorkDir/$typePrefix.oi";
+    my $outOI = "$updWorkDir/$part->{typeAccPrefixOrgCat}.oi";
     if (-e $outOI) {
         unlink($outOI) || die("unlink $outOI");
     }
     # for mRNAs, also save all alignments
     my $outRawOI;
-    if ($type eq "mrna") {
-        $outRawOI = "$updWorkDir/$typePrefix.rawOi";
+    if ($part->{type} eq "mrna") {
+        $outRawOI = "$updWorkDir/$part->{typeAccPrefixOrgCat}.rawOi";
         if (-e $outRawOI) {
             unlink($outRawOI) || die("unlink $outRawOI");
         }
@@ -275,7 +274,7 @@ sub combineOIs($$$$$$@) {
 sub combineIntronPslSet($$$$) {
     my($queryDir, $outPsl, $pslQueryOffsets, $outIntronPsl) = @_;
 
-    my($startOff, $endOff) =  getPslQueryOffsets($queryDir, $pslQueryOffsets);
+    my($startOff, $endOff) = getPslQueryOffsets($queryDir, $pslQueryOffsets);
     if ($startOff == $endOff) {
         return;  # will no PSLs saved
     }
@@ -288,10 +287,9 @@ sub combineIntronPslSet($$$$) {
 # Combine intronPsl files. This processing parallels combinePsls, however
 # intronPsl files only exist for native ESTs and not all EST psl will have
 # intronPsl files.
-sub combineIntronPsls($$$$$$@) {
-    my($db, $typePrefix, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
-
-    my $outIntronPsl = "$updWorkDir/$typePrefix.intronPsl";
+sub combineIntronPsls($$$$$@) {
+    my($part, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
+    my $outIntronPsl = "$updWorkDir/$part->{typeAccPrefixOrgCat}.intronPsl";
     if (-e $outIntronPsl) {
         unlink($outIntronPsl) || die("unlink $outIntronPsl");
     }
@@ -311,81 +309,10 @@ sub combineIntronPsls($$$$$$@) {
     }
 }
 
-# Do work of combining and install PSL, etc for a
-# release+update+typeAccPrefix+orgCat.  Skip if orgCat was not aligned
-# or has already been completed.
-sub finishOrgCatAligns($$$$) {
-    my($db, $dirPrefix, $orgCat, $tmpDir) = @_;
-    my($release, $database, $update, $type, $typeAccPrefix)
-        = parseDirPrefix($dirPrefix);
-    my $typePrefix = "$typeAccPrefix.$orgCat";
-    my $updWorkDir = "$gWorkDir/$release/$database/$update";
-    my $markFile = "$updWorkDir/$typePrefix.aligns";
-    if (! -e $markFile) {
-        return;  # nothing to do
-    }
-    # check if already completed
-    my $alignDir = "data/aligned/$release/$database/$update";
-    my $alidxBase = "$alignDir/$typePrefix";
-
-    if (-e "$alidxBase.alidx") {
-        if ($gbCommon::verbose > 1) {
-            print STDERR "finishAligns: $alidxBase.alidx exists, skipping,\n";
-        }
-        return;
-    }
-
-    my ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl, %pslQueryOffset);
-    my @queryDirs = glob("$updWorkDir/psl/$typePrefix.*");
-    if ($#queryDirs >= 0) {
-        ($outPsl, $outRawPsl)
-            = combinePsls($db, $release, $type, $typePrefix,
-                          $updWorkDir, $tmpDir, \%pslQueryOffset,
-                          @queryDirs);
-        
-        # build orient info and intron psl if we have PSLs and are native.
-        if ((defined($outPsl) || defined($outRawPsl))
-            && ($orgCat eq "native")) {
-            ($outOI, $outRawOI)
-                = combineOIs($type, $typePrefix, $updWorkDir,
-                             $tmpDir, $outPsl, \%pslQueryOffset,
-                             @queryDirs);
-            if ($type eq "est") {
-                $outIntronPsl = combineIntronPsls($db, $typePrefix,
-                                                  $updWorkDir, $tmpDir,
-                                                  $outPsl, \%pslQueryOffset,
-                                                  @queryDirs);
-            }
-        }
-    }
-    
-    # save raw PSLs first, as the index file created by gbAlignInstall
-    # is flag of successful completion
-    if (defined($outRawPsl)) {
-        installRawPsls($outRawPsl, $outRawOI, $alignDir);
-    }
-
-    # copy psl, migrate alignments, and build index.  This is done even
-    # if output files were not produced, as the index lists unaligned seqs.
-    my $cmd = "gbAlignInstall ";
-    if ($noMigrate) {
-        $cmd .= " -noMigrate";
-    }
-    $cmd .= " -workdir=$gWorkDir -orgCats=$orgCat $release $update $typeAccPrefix $database";
-    runProg($cmd);
-
-    if (!$gKeep) {
-        foreach my $f ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl) {
-            if (defined($f)) {
-                unlink($f);
-            }
-        }
-    }
-}
-
 # install raw PSL and OI files
 sub installRawPsls($$$) {
-    my($outRawPsl, $outRawOI, $alignDir) = @_;
+    my($outRawPsl, $outRawOI, $part) = @_;
+    my $alignDir = getAlignDir($part);
     my $instRawPsl = $alignDir . "/" . basename($outRawPsl) . ".gz";
     my $instRawOI;
     if (defined($outRawOI)) {
@@ -404,20 +331,70 @@ sub installRawPsls($$$) {
     }
 }
 
-# Process a release+update+typeAccPrefix, combining cluster-generated files,
+# Do work of combining and install PSL, etc for a partition
+sub finishInstall($$) {
+    my($part, $tmpDir) = @_;
+    my $updWorkDir = "$gWorkDir/$part->{release}/$part->{database}/$part->{update}";
+
+    my ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl, %pslQueryOffsets);
+    my @queryDirs = glob("$updWorkDir/psl/$part->{typeAccPrefixOrgCat}.*");
+    if ($#queryDirs >= 0) {
+        ($outPsl, $outRawPsl)
+            = combinePsls($part, $updWorkDir, $tmpDir, \%pslQueryOffsets, @queryDirs);
+        
+        # build orient info and intron psl if we have PSLs and are native.
+        if ((defined($outPsl) || defined($outRawPsl))
+            && ($part->{orgCat} eq "native")) {
+            ($outOI, $outRawOI) = combineOIs($part, $updWorkDir, $tmpDir, $outPsl, \%pslQueryOffsets, @queryDirs);
+            if ($part->{type} eq "est") {
+                $outIntronPsl = combineIntronPsls($part, $updWorkDir, $tmpDir, $outPsl, \%pslQueryOffsets, @queryDirs);
+            }
+        }
+    }
+    
+    # save raw PSLs first, as the index file created by gbAlignInstall
+    # is flag of successful completion
+    if (defined($outRawPsl)) {
+        installRawPsls($outRawPsl, $outRawOI, $part);
+    }
+
+    # copy psl, migrate alignments, and build index.  This is done even
+    # if output files were not produced, as the index lists unaligned seqs.
+    my $cmd = "gbAlignInstall ";
+    if ($noMigrate) {
+        $cmd .= " -noMigrate";
+    }
+    $cmd .= " -workdir=$gWorkDir -orgCats=$part->{orgCat} $part->{release} $part->{update} $part->{typeAccPrefix} $part->{database}";
+    runProg($cmd);
+
+    if (!$gKeep) {
+        foreach my $f ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl) {
+            if (defined($f)) {
+                unlink($f);
+            }
+        }
+    }
+}
+
+# Process a partation, combining cluster-generated files,
 # migrating alignments, and building the index file.
-sub finishAligns($$) {
-    my($db, $dirPrefix) = @_;
-    my($release, $database, $update, $type, $typePrefix)
-        = parseDirPrefix($dirPrefix);
+sub finishAligns($) {
+    my($part) = @_;
     if ($gbCommon::verbose) {
-        print STDERR "finishAligns: $release $database $update $typePrefix\n";
+        print STDERR "finishAligns: $part->{release}, $part->{database} $part->{update} $part->{typeAccPrefix} $part->{orgCat}\n";
+    }
+    # check if already completed
+    my $alignDir = getAlignDir($part);
+    my $alidxBase = "$alignDir/$part->{typeAccPrefixOrgCat}";
+
+    if (-e "$alidxBase.alidx") {
+        if ($gbCommon::verbose > 1) {
+            print STDERR "finishAligns: $alidxBase.alidx exists, skipping,\n";
+        }
+        return;
     }
     my $tmpDir = getTmpDir("gbAlign");
-    
-    finishOrgCatAligns($db, $dirPrefix, "native", $tmpDir);
-    finishOrgCatAligns($db, $dirPrefix, "xeno", $tmpDir);
-
+    finishInstall($part, $tmpDir);
     if ($gKeep) {
         print STDERR "keeping tmp directory $tmpDir\n";
     } else {
@@ -482,10 +459,9 @@ if (! -e $doneFlag) {
 }
 
 verifyExpectedPsls();
+my @partitionList =  loadPartitionList();
 
 # process each update and type for each database
-foreach my $db (@databases) {
-    foreach my $dirPrefix (getDirsPrefixes($db)) {
-        finishAligns($db, $dirPrefix);
-    }
+foreach my $part (@partitionList) {
+    finishAligns($part);
 }

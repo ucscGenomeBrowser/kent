@@ -564,6 +564,152 @@ tableName wgEncodeSydhHistEse14H3k04me3StdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistEse14H3k09me3StdAlnRep1
+objType file
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdAlnRep1.bam,wgEncodeSydhHistEse14H3k09me3StdAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistEse14H3k09me3StdAlnRep2
+objType file
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdAlnRep2.bam,wgEncodeSydhHistEse14H3k09me3StdAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistEse14H3k09me3StdPk
+objType table
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+tableName wgEncodeSydhHistEse14H3k09me3StdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistEse14H3k09me3StdRawDataRep1
+objType file
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistEse14H3k09me3StdRawDataRep2
+objType file
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistEse14H3k09me3StdSig
+objType table
+age E0
+antibody H3K9me3
+cell ES-E14
+composite wgEncodeSydhHist
+control std
+controlId ES-E14/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodeSydhHistEse14H3k09me3StdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain 129/Ola
+subId 6572
+tableName wgEncodeSydhHistEse14H3k09me3StdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistMelH3k04me1Dm2p5dStdAlnRep1
 objType file
 age immortalized
@@ -714,6 +860,152 @@ strain Unknown
 subId 6582
 tableName wgEncodeSydhHistMelH3k04me1Dm2p5dStdSig
 treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabAlnRep1
+objType file
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabAlnRep1.bam,wgEncodeSydhHistMelH3k04me1IggrabAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 6581
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabAlnRep2
+objType file
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabAlnRep2.bam,wgEncodeSydhHistMelH3k04me1IggrabAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 6581
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabPk
+objType table
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 6581
+tableName wgEncodeSydhHistMelH3k04me1IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabRawDataRep1
+objType file
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 6581
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabRawDataRep2
+objType file
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 6581
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k04me1IggrabSig
+objType table
+age immortalized
+antibody H3K4me1
+cell MEL
+composite wgEncodeSydhHist
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-05-10
+dateUnrestricted 2013-02-10
+fileName wgEncodeSydhHistMelH3k04me1IggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 6581
+tableName wgEncodeSydhHistMelH3k04me1IggrabSig
+treatment None
 view Signal
 
 metaObject wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1
@@ -1839,4 +2131,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 785739450
+# MAGIC: -1110962568

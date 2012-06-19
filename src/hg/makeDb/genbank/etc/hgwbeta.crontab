@@ -3,7 +3,6 @@
 #
 
 SHELL=/bin/sh
-MAILTO=genbank@cse.ucsc.edu
 
 # mon-fri AM, load mRNAs
 # poll every hour 0-6

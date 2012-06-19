@@ -8,7 +8,6 @@
 # userName
 
 #UCSC Genome Browser members
-DROP TABLE IF EXISTS gbMembers;
 CREATE TABLE gbMembers (
     idx int unsigned NOT NULL auto_increment,	# auto-increment unique ID
     userName varchar(255) NOT NULL,	# Name used to login
