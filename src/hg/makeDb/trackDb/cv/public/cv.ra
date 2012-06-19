@@ -14992,6 +14992,17 @@ labPiFull Barbara Wold
 grantPi Hardison
 organism mouse
 
+term CRG-Guigo-m
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Gingeras
+organism mouse
+
 term UMass-m
 tag  UMASSm
 type lab
