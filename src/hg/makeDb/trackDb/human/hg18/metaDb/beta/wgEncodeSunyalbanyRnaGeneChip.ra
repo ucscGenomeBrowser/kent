@@ -1,3 +1,8 @@
+metaObject wgEncodeSunyalbanyRnaGeneChip
+objType composite
+composite wgEncodeSunyalbanyRnaGeneChip
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 objType table
 antibody T7Tag
@@ -7,13 +12,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 350
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Nov_69522
-ripTgtProtein T7Tag
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 view RbpAssocRna
@@ -27,13 +32,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 348
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_5261
-ripTgtProtein ELAVL1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
 view RbpAssocRna
@@ -47,13 +52,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 349
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Sig_P6246
-ripTgtProtein PABPC1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
 view RbpAssocRna
@@ -67,13 +72,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 354
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Nov_69522
-ripTgtProtein T7Tag
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
 view RbpAssocRna
@@ -87,13 +92,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 352
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_21027
-ripTgtProtein IGF2BP1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
 view RbpAssocRna
@@ -107,13 +112,13 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 351
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody SC_5261
-ripTgtProtein ELAVL1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
 view RbpAssocRna
@@ -127,15 +132,15 @@ dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
+expId 353
 fileName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER]
 project wgEncode
 ripAntibody Sig_P6246
-ripTgtProtein PABPC1
 subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 view RbpAssocRna
 
-# MAGIC: -2099872552
+# MAGIC: 826258880

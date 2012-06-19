@@ -1,6 +1,7 @@
 
 track wgEncodeGencodeV7
 compositeTrack on
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V7
 longLabel Gene Annotations from ENCODE/GENCODE Version 7
 group genes
@@ -20,7 +21,7 @@ hgsid on
 # html wgEncodeGencodeV7
 baseColorUseCds given
 baseColorDefault genomicCodons
-subGroup1 view View 1Basic=Basic 2Comp=Comprehensive 3Pseudo=PseudoGenes 42-way=2-way_PseudoGene  5Polya=Polya
+subGroup1 view View aBASIC=Basic bCOMP=Comprehensive cPSEUDO=PseudoGenes d2WAY=2-way_PseudoGene  ePOLYA=Polya
 sortOrder view=+
 wgEncode 1
 wgEncodeGencodeVersion 7
@@ -53,14 +54,14 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
     track wgEncodeGencodeBasicV7
     subTrack wgEncodeGencodeV7
     shortLabel Basic
-    subGroups view=1Basic
+    subGroups view=aBASIC
     longLabel Basic Gene Annotation Set from ENCODE/GENCODE 
     type genePred
     priority 1
 
     track wgEncodeGencodeCompV7
     subTrack wgEncodeGencodeV7 off
-    subGroups view=2Comp
+    subGroups view=bCOMP
     shortLabel Comprehensive
     longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE 
     type genePred
@@ -68,7 +69,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencodePseudoGeneV7
     subTrack wgEncodeGencodeV7 off
-    subGroups view=3Pseudo
+    subGroups view=cPSEUDO
     shortLabel Pseudo
     longLabel Pseudogene Annotation Set from ENCODE/GENCODE 
     type genePred
@@ -77,7 +78,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencode2wayConsPseudoV7
     subTrack wgEncodeGencodeV7 off
-    subGroups view=42-way
+    subGroups view=d2WAY
     shortLabel 2-Way Pseudo
     longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE 
     type genePred
@@ -86,7 +87,7 @@ filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem 
 
     track wgEncodeGencodePolyaV7
     subTrack wgEncodeGencodeV7 off
-    subGroups view=5Polya
+    subGroups view=ePOLYA
     shortLabel PolyA
     longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE 
     type genePred

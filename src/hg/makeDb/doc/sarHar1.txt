@@ -21,6 +21,9 @@ FTP-RELEASE DATE: 20-Jan-2012
 
 # Assembly ID: 32874
 # http://www.ncbi.nlm.nih.gov/genome/assembly/328478/
+ncbiGenomeID=51853
+# http://www.ncbi.nlm.nih.gov/bioproject/51853
+
 
 # WGS Project: AEFK01
 # http://www.ncbi.nlm.nih.gov/nuccore/AEFK00000000.1
@@ -196,15 +199,20 @@ genomeCladePriority 64
 scientificName Sarcophilus harrisii
 commonName Tasmanian devil
 assemblyDate Feb. 2011
-assemblyLabel Wellcome Trust Sanger Institute Devil_ref v7.0 (GCA_000189315.1)
+assemblyLabel WTSI Devil_ref v7.0
 assemblyShortLabel WTSI Devil_ref v7.0
-ncbiAssemblyName Devil_ref v7.0
-ncbiAssemblyId 328478
 orderKey 3590
 mitoAcc none
 fastaFiles /hive/data/genomes/sarHar1/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/sarHar1/ucsc/*.agp.gz
 dbDbSpeciesDir tasmanianDevil
+photoCreditURL http://commons.wikimedia.org/wiki/File:Sarcophilus_harrisii_taranna.jpg
+photoCreditName Courtesy of JJ Harrison and Wikimedia Commons
+ncbiGenomeId 3066
+ncbiAssemblyId 328478
+ncbiAssemblyName Devil_ref v7.0
+ncbiBioProject 51853
+genBankAccessionID GCA_000189315.1
 taxId   9305
 '_EOF_'
     # << happy emacs
@@ -218,7 +226,6 @@ taxId   9305
        -workhorse=hgwdev -noGoldGapSplit sarHar1.config.ra \
         > makeGenomeDb.db.log 2>&1 &
     #	real    21m56.285s
-XXXX TODO - replace *** use actual url for project etc.. in all html files
     #  Per instructions in makeGenomeDb.db.log:
 Search for '***' notes in each file in and make corrections (sometimes the
 files used for a previous assembly might make a better template):
@@ -234,6 +241,16 @@ Then copy these files to your ~/kent/src/hg/makeDb/trackDb/tasmanianDevil/sarHar
  - git pull; git push
  - Run make update DBS=sarHar1 and make alpha when done.
  - (optional) Clean up /cluster/data/sarHar1/TemporaryTrackDbCheckout
+
+    # re-do the description.html (2012-06-11 Chin)
+    cd /hive/data/genomes/sarHar1
+    makeGenomeDb.pl -forceDescription -continue=trackDb sarHar1.config.ra > makeGenomeDb.descrition.log 2>&1 &
+    cp html/description.html ~/kent/src/hg/makeDb/trackDb/tasmanianDevil/sarHar1
+    # check in descrition.html
+    cp sarHar1.config.ra ~/kent/src/hg/utils/automation/configFiles
+    cd ~/kent/src/hg/utils/automation/configFiles
+    git add sarHar1.config.ra
+    git commit -m "Use new description.html format for sarHar1." sarHar1.config.ra
 
 #########################################################################
 # RepeatMasker (DONE 2012-02-02 - Chin)
@@ -447,7 +464,7 @@ close (FH);
 
 
 ########################################################################
-# Create kluster run files (working - 2012-02-08 - Chin)
+# Create kluster run files (DONE - 2012-02-08 - Chin)
     # numerator is sarHar1 gapless bases "real" as reported by: 
     cat sarHar1.2bit.faSize.txt
     # 3174693010 bases (243153308 N's 2931539702 real 1676952423 upper 
