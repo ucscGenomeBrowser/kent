@@ -153,7 +153,8 @@ age E0
 cell EpiSC-5
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep1.bigWig
@@ -166,7 +167,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEpisc5MWaveSignalRep1
 treatment None
 view WaveSignal
@@ -177,7 +178,8 @@ age E0
 cell EpiSC-5
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep2.bigWig
@@ -190,7 +192,7 @@ project wgEncode
 replicate 2
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEpisc5MWaveSignalRep2
 treatment None
 view WaveSignal
@@ -249,7 +251,8 @@ age E0
 cell EpiSC-7
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep1.bigWig
@@ -262,7 +265,7 @@ project wgEncode
 replicate 1
 sex F
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEpisc7FWaveSignalRep1
 treatment None
 view WaveSignal
@@ -273,7 +276,8 @@ age E0
 cell EpiSC-7
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep2.bigWig
@@ -286,7 +290,7 @@ project wgEncode
 replicate 2
 sex F
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEpisc7FWaveSignalRep2
 treatment None
 view WaveSignal
@@ -321,7 +325,8 @@ age E0
 cell ES-46C
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1.bigWig
@@ -334,7 +339,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1
 treatment diffProtF_6d
 view WaveSignal
@@ -369,7 +374,8 @@ age E0
 cell ES-46C
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEs46cMWaveSignalRep1.bigWig
@@ -382,7 +388,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEs46cMWaveSignalRep1
 treatment None
 view WaveSignal
@@ -441,7 +447,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1.bigWig
@@ -454,7 +461,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1
 treatment diffProtE_3d
 view WaveSignal
@@ -465,7 +472,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2.bigWig
@@ -478,7 +486,7 @@ project wgEncode
 replicate 2
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2
 treatment diffProtE_3d
 view WaveSignal
@@ -537,7 +545,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1.bigWig
@@ -550,7 +559,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1
 treatment diffProtE_6d
 view WaveSignal
@@ -561,7 +570,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2.bigWig
@@ -574,7 +584,7 @@ project wgEncode
 replicate 2
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2
 treatment diffProtE_6d
 view WaveSignal
@@ -633,7 +643,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1.bigWig
@@ -646,7 +657,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1
 treatment diffProtE_9d
 view WaveSignal
@@ -657,7 +668,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2.bigWig
@@ -670,9 +682,97 @@ project wgEncode
 replicate 2
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2
 treatment diffProtE_9d
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep1
+objType file
+age E0
+attic auxSup
+cell ES-D3
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep1.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex M
+strain 129S2/SvPas
+subId 7068
+treatment diffProtG_3d
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep2
+objType file
+age E0
+attic auxSup
+cell ES-D3
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep2.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex M
+strain 129S2/SvPas
+subId 7068
+treatment diffProtG_3d
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep1
+objType table
+age E0
+cell ES-D3
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex M
+strain 129S2/SvPas
+subId 7068
+tableName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep1
+treatment diffProtG_3d
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep2
+objType table
+age E0
+cell ES-D3
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex M
+strain 129S2/SvPas
+subId 7068
+tableName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep2
+treatment diffProtG_3d
 view WaveSignal
 
 metaObject wgEncodeFsuRepliChipEsd3MRawDataRep1
@@ -729,7 +829,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep1.bigWig
@@ -742,7 +843,7 @@ project wgEncode
 replicate 1
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MWaveSignalRep1
 treatment None
 view WaveSignal
@@ -753,7 +854,8 @@ age E0
 cell ES-D3
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep2.bigWig
@@ -766,9 +868,185 @@ project wgEncode
 replicate 2
 sex M
 strain 129
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEsd3MWaveSignalRep2
 treatment None
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep1
+objType file
+age E0
+attic auxSup
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep1.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain 129/Ola
+subId 7068
+treatment diffProtH_Sox17-
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep2
+objType file
+age E0
+attic auxSup
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep2.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain 129/Ola
+subId 7068
+treatment diffProtH_Sox17-
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep1
+objType table
+age E0
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain 129/Ola
+subId 7068
+tableName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep1
+treatment diffProtH_Sox17-
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep2
+objType table
+age E0
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain 129/Ola
+subId 7068
+tableName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep2
+treatment diffProtH_Sox17-
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep1
+objType file
+age E0
+attic auxSup
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep1.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain 129/Ola
+subId 7068
+treatment diffProtH_Sox17+
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep2
+objType file
+age E0
+attic auxSup
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep2.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain 129/Ola
+subId 7068
+treatment diffProtH_Sox17+
+view RawData
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep1
+objType table
+age E0
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain 129/Ola
+subId 7068
+tableName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep1
+treatment diffProtH_Sox17+
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep2
+objType table
+age E0
+cell ES-EM5Sox17huCD25
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain 129/Ola
+subId 7068
+tableName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep2
+treatment diffProtH_Sox17+
 view WaveSignal
 
 metaObject wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep1
@@ -825,7 +1103,8 @@ age E0
 cell ES-TT2
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1.bigWig
@@ -838,7 +1117,7 @@ project wgEncode
 replicate 1
 sex M
 strain B6CBAF1/J
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1
 treatment diffProtF_9d
 view WaveSignal
@@ -849,7 +1128,8 @@ age E0
 cell ES-TT2
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2.bigWig
@@ -862,7 +1142,7 @@ project wgEncode
 replicate 2
 sex M
 strain B6CBAF1/J
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2
 treatment diffProtF_9d
 view WaveSignal
@@ -897,7 +1177,8 @@ age E0
 cell ES-TT2
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipEstt2MWaveSignalRep1.bigWig
@@ -910,8 +1191,119 @@ project wgEncode
 replicate 1
 sex M
 strain B6CBAF1/J
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipEstt2MWaveSignalRep1
+treatment None
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipEstt2MWaveSignalRep2
+objType table
+age E0
+cell ES-TT2
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipEstt2MWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU-m
+labExpId ES-TT2_R2
+platform GPL9156
+project wgEncode
+replicate 2
+sex M
+strain B6CBAF1/J
+subId 7068
+tableName wgEncodeFsuRepliChipEstt2MWaveSignalRep2
+treatment None
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipJ185aURawDataRep1
+objType file
+age immortalized
+attic auxSup
+cell J185a
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipJ185aURawDataRep1.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain Unknown
+subId 7068
+treatment None
+view RawData
+
+metaObject wgEncodeFsuRepliChipJ185aURawDataRep2
+objType file
+age immortalized
+attic auxSup
+cell J185a
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipJ185aURawDataRep2.zip.gz
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain Unknown
+subId 7068
+treatment None
+view RawData
+
+metaObject wgEncodeFsuRepliChipJ185aUWaveSignalRep1
+objType table
+age immortalized
+cell J185a
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipJ185aUWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 1
+sex U
+strain Unknown
+subId 7068
+tableName wgEncodeFsuRepliChipJ185aUWaveSignalRep1
+treatment None
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipJ185aUWaveSignalRep2
+objType table
+age immortalized
+cell J185a
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+fileName wgEncodeFsuRepliChipJ185aUWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU-m
+platform GPL9156
+project wgEncode
+replicate 2
+sex U
+strain Unknown
+subId 7068
+tableName wgEncodeFsuRepliChipJ185aUWaveSignalRep2
 treatment None
 view WaveSignal
 
@@ -1041,7 +1433,8 @@ age ageUnknown
 cell MEF
 composite wgEncodeFsuRepliChip
 dataType RepliChip
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
 fileName wgEncodeFsuRepliChipMefMWaveSignalRep1.bigWig
@@ -1054,7 +1447,7 @@ project wgEncode
 replicate 1
 sex M
 strain Unknown
-subId 6809
+subId 7068
 tableName wgEncodeFsuRepliChipMefMWaveSignalRep1
 treatment None
 view WaveSignal
@@ -1155,4 +1548,4 @@ tableName wgEncodeFsuRepliChipMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 1729812798
+# MAGIC: 36146611

@@ -62,7 +62,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	faCount faFrag faOneRecord faPolyASizes faRandomize faSize \
 	faSomeRecords faToNib \
 	faToTwoBit htmlCheck nibFrag paraFetch paraSync sizeof stringify \
-	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
+	textHistogram twoBitDup twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	 featureBits ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
