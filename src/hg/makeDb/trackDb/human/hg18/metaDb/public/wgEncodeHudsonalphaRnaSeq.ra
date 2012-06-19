@@ -1,3 +1,8 @@
+metaObject wgEncodeHudsonalphaRnaSeq
+objType composite
+composite wgEncodeHudsonalphaRnaSeq
+expVars lab,dataType,cell,treatment,rnaExtract
+
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
 objType table
 cell A549
@@ -6,6 +11,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 313
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -29,6 +35,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 314
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -52,6 +59,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+expId 315
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -75,6 +83,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 313
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -98,6 +107,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 314
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -121,6 +131,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+expId 315
 fileName wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25.tagAlign.gz
 grant Myers
 lab HudsonAlpha
@@ -144,6 +155,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 313
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -168,6 +180,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 314
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Etoh02.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -191,6 +204,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+expId 315
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep1JurkatCellPapBow10R1x25.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -214,6 +228,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 313
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Dexa.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -238,6 +253,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-06
+expId 314
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Etoh02.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -261,6 +277,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
 dateUnrestricted 2010-10-15
+expId 315
 fileName wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25.bed12.gz
 grant Myers
 lab HudsonAlpha
@@ -276,4 +293,4 @@ tableName wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
 treatment None
 view RPKM
 
-# MAGIC: -1891417448
+# MAGIC: 1109698725

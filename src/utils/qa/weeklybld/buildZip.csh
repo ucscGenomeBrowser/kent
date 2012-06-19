@@ -15,7 +15,7 @@ endif
 
 set zip = "jksrc.v"$BRANCHNN".zip"
 echo "unzipping $zip. [${0}: `date`]"
-unzip $zip >& unzip.log
+unzip -o $zip >& unzip.log
 set err = $status
 if ( $err ) then
     echo "error unzipping $zip: $err [${0}: `date`]" 
