@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Mapability
 longLabel Mapability or Uniqueness of Reference Genome from ENCODE
 group map
-subGroup1 win Window_Size w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp
+subGroup1 win Window_Size w036=36_bp w040=40_bp w050=50_bp w075=75_bp w100=100_bp
 subGroup2 lab Lab CRG=CRG-Guigo
 #dimensions dimensionX=win
 fileSortOrder grant=PI lab=Lab view=View size=Window_size dccAccession=UCSC_Accession fileSize=Size fileType=File_Type
@@ -14,7 +14,7 @@ priority 0
 type bigWig 0.00 1.00
 viewLimits 0:1
 autoScale off
-windowingFunction mean
+windowingFunction mean+whiskers
 maxHeightPixels 100:32:16
 visibility hide
 wgEncode 1

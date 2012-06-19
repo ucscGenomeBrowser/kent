@@ -29,6 +29,5 @@ wgEncodeUwChIPSeq.ra \
 wgEncodeUwDGF.ra \
 wgEncodeUwDnaseSeq.ra \
 wgEncodeYaleChIPseq.ra \
-wgEncodeYaleRNAseq.ra
 
 include ../../../../makefile.metaDb
