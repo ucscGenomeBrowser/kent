@@ -1024,13 +1024,15 @@ displayAccHelpPage(conn);
 return;
 }
 
-boolean usingNewPassword(struct sqlConnection *conn, char *userName)
+boolean usingNewPassword(struct sqlConnection *conn, char *userName, char *password)
 /* The user is using  requested new password */
 {
 char query[256];
 safef(query,sizeof(query), "select passwordChangeRequired from gbMembers where userName='%s'", userName);
 char *change = sqlQuickString(conn, query);
-if (change && sameString(change, "Y"))
+safef(query,sizeof(query), "select newPassword from gbMembers where userName='%s'", userName);
+char *newPassword = sqlQuickString(conn, query);
+if (change && sameString(change, "Y") && checkPwd(password, newPassword))
     return TRUE;
 else
     return FALSE;
@@ -1133,7 +1135,7 @@ if (checkPwd(password,m->password))
     displayLoginSuccess(userName,userID);
     return;
     } 
-else if (usingNewPassword(conn, userName))
+else if (usingNewPassword(conn, userName, password))
     {
     cartSetString(cart, "hgLogin_changeRequired", "YES");
     changePasswordPage(conn);
