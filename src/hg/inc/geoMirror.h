@@ -3,6 +3,8 @@
 #ifndef GEOMIRROR_H
 #define GEOMIRROR_H
 
+#include "hdb.h"
+
 boolean geoMirrorEnabled();
 // return TRUE if this site has geographic mirroring turned on
 

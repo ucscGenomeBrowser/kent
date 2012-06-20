@@ -4,7 +4,6 @@
 #include "geoMirror.h"
 #include "hgConfig.h"
 #include "internet.h"
-#include "hdb.h"
 
 boolean geoMirrorEnabled()
 {
