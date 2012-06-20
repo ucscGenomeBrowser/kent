@@ -5,13 +5,17 @@
 #include "options.h"
 #include "hdb.h"
 #include "geoMirror.h"
+#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "geoMirrorNode - Maps a list of IPs to their default geoMirror node; output is:\n\n"
-  "ip node domain\n\n"
+  "geoMirrorNode - Maps a list of hosts and/or IPs to their default geoMirror node; tab-delimited output is:\n\n"
+  "host/ip node domain\n\n"
   "usage:\n"
   "   geoMirrorNode files(s)\n"
   );
@@ -57,11 +61,17 @@ sqlFreeResult(&sr);
 for (i=0; i<fileCount; i++)
     {
     struct lineFile *lf = lineFileOpen(files[i], TRUE);
-    char *line;
-    while (lineFileNextReal(lf, &line))
+    char *host;
+    while (lineFileNextReal(lf, &host))
         {
-        int node = defaultNode(centralConn, line);
-        printf("%s\t%d\t%s\n", line, node, nodes[node - 1]);
+        struct hostent *hostent = gethostbyname(host);
+        if(hostent == NULL)
+            errAbort("gethostbyname failed for '%s'; errno: %d (%s)", host, errno, strerror(errno));
+        if(hostent->h_length == 0)
+            errAbort("gethostbyname failed for '%s'; h_length == 0", host);
+        char *ip = inet_ntoa(*((struct in_addr *) hostent->h_addr_list[0]));
+        int node = defaultNode(centralConn, ip);
+        printf("%s\t%d\t%s\n", host, node, nodes[node - 1]);
         }
     lineFileClose(&lf);
     }
