@@ -80,7 +80,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             NULL };
 
 // MERGE_GENE_SUGGEST is used for work on redmine #5933
-// #define MERGE_GENE_SUGGEST
+#define MERGE_GENE_SUGGEST
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4507,7 +4507,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<div style='height:1em;'></div>\n");
+    hWrites("<div style='height:0.3em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -4563,7 +4563,7 @@ if (!hideControls)
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
-	hButtonWithOnClick("hgt.jump", "go", NULL, "imageV2.jumpButtonOnClick()");
+	hButton("hgt.jump", "go");
 	jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
 	if(assemblySupportsGeneSuggest(database))
 	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));

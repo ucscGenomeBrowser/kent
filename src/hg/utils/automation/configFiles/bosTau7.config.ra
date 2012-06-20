@@ -5,7 +5,7 @@ genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
 assemblyDate OCt. 2011
-assemblyLabel Baylor Btau_4.6.1 (GCA_000003205.4)
+assemblyLabel Baylor Btau_4.6.1
 assemblyShortLabel Btau_4.6.1
 orderKey 236
 mitoAcc AY526085
@@ -17,7 +17,7 @@ photoCreditURL http://www.genome.gov/10005141
 photoCreditName NHGRI Press Photos
 ncbiGenomeId 82
 ncbiAssemblyId 313728
-ncbiAssemblyName BGSC Btau_4.6.1
+ncbiAssemblyName Baylor Btau_4.6.1
 ncbiBioProject 12555
 genBankAccessionID GCA_000003205.4
-taxId	9913
+taxId 9913

@@ -29,6 +29,9 @@ url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail:
 release beta,public
 
+#Pulling this out to a file to be included in trackDb.wgEncode.ra
+#Mapability was here
+
 track knownGeneOld4
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
