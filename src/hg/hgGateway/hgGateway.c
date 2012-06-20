@@ -19,7 +19,6 @@
 #include "hPrint.h"
 #include "suggest.h"
 #include "search.h"
-#include "internet.h"
 #include "geoMirror.h"
 
 struct cart *cart = NULL;
@@ -317,37 +316,14 @@ if (thisNodeStr)
         {
         int thisNode = sqlUnsigned(thisNodeStr);
         struct sqlConnection *centralConn = hConnectCentral();
-        char query[1024];
         char *ipStr = cgiRemoteAddr();
-        bits32 ip = 0;
-        internetDottedQuadToIp(ipStr, &ip);
-
-        // We (sort-of) assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient;
-        // we do accomodate a range that is completely contained in another (to accomodate the hgroaming entry for testing);
-        // this is accomplished by "<= ipEnd" in the sql query.
-        safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1", ip, ip);
-        char **row;
-        struct sqlResult *sr = sqlGetResult(centralConn, query);
-        int defaultNode = 1;
-        if ((row = sqlNextRow(sr)) != NULL)
-            {
-            uint ipStart = sqlUnsigned(row[0]);
-            uint ipEnd = sqlUnsigned(row[1]);
-            if (ipStart <= ip && ipEnd >= ip)
-                {
-                defaultNode = sqlSigned(row[2]);
-                }
-            }
-        sqlFreeResult(&sr);
-
-        fprintf(stderr, "GALT thisNodeStr=%s thisNode=%d ipStr=%s ip=%u defaultNode (for user) %d\n", 
-		thisNodeStr, thisNode,
-		ipStr, ip, defaultNode); fflush(stderr); // DEBUG REMOVE
+        int node = defaultNode(centralConn, ipStr);
 
         // get location of redirect node
-        if (thisNode != defaultNode)
+        if (thisNode != node)
             {
-            safef(query, sizeof query, "select domain from gbNode where node = %d", defaultNode);
+            char query[1056];
+            safef(query, sizeof query, "select domain from gbNode where node = %d", node);
             char *newDomain = sqlQuickString(centralConn, query);
             fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
             char *oldDomain = cgiServerName();
