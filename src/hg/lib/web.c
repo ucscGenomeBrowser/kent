@@ -1342,6 +1342,9 @@ for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match)
     }
 if(offset < len)
     dyStringAppend(dy, menuStr + offset);
-
-return dyStringCannibalize(&dy);
+freez(&menuStr);
+menuStr = dyStringCannibalize(&dy);
+if(!loginSystemEnabled())
+    stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
+return menuStr;
 }

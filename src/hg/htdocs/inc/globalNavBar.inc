@@ -40,7 +40,7 @@
 </ul>
 </li>
 <li class="menuparent"><span>My Data</span><ul style="display: none; visibility: hidden;">
-<li class="first"><a href="http://genomewiki.ucsc.edu/index.php?title=Special:UserloginUCSC">Log in/out</a></li>
+<!-- LOGIN_START --><li class="first"><a href="../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">Log in/out</a></li><!-- LOGIN_END -->
 <li><a href="../cgi-bin/hgSession?hgS_doMainPage=1">Session</a></li>
 <li><a href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
 <li class="last"><a href="../cgi-bin/hgCustom">Custom Tracks</a></li>
