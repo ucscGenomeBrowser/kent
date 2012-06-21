@@ -13233,7 +13233,7 @@ type protocol
 label PCR 2-round
 
 term SDS-Page
-tag SDSP/GE
+tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
 label SDS-Page proteomics sample
