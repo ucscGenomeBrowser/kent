@@ -12730,32 +12730,32 @@ label CTCF shRNA knockdown
 
 term DEX_100nM
 tag DEX100NM
-description 1 h with 100 nM Dexmathasone (Myers)
+description 1 h with 100 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100PM
-description 1 h with 100 pM Dexmathasone (Myers)
+description 1 h with 100 pM Dexamethasone (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1NM
-description 1 h with 1 nM Dexmathasone (Myers)
+description 1 h with 1 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50NM
-description 1 h with 50 nM Dexmathasone (Myers)
+description 1 h with 50 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5NM
-description 1 h with 5 nM Dexmathasone (Myers)
+description 1 h with 5 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500PM
-description 1 h with 500 pM Dexmathasone (Myers)
+description 1 h with 500 pM Dexamethasone (Myers)
 type treatment
 
 term diffProtA_2d
@@ -13233,7 +13233,7 @@ type protocol
 label PCR 2-round
 
 term SDS-Page
-tag SDSP/GE
+tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
 label SDS-Page proteomics sample

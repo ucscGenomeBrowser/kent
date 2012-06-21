@@ -13,6 +13,7 @@
      o (in 34x10) Added IP-logging option to gfServer.
      o (in 34x11) Fixed segfault when maxIntron <= 11 and tileSize <= 11.
      o (in 34x12) Fixed segfault when -fine -minIdentity=0 -minScore=0.
+     o (in 34x13) out=sim4: Now filters on -minIdentity, and has alignments output in the right order.
      
 
 34:

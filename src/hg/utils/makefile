@@ -37,7 +37,8 @@ DIRS = \
 	overlapSelect \
 	pslMap \
 	pslUniq \
-	makeTrackIndex
+	makeTrackIndex \
+	geoMirrorNode
 
 TEST_DIRS = \
 	gff3ToGenePred \
