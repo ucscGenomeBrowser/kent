@@ -357,8 +357,8 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 axtBundleFreeList(&aod->bundleList);
 }
 
-static double axtIdRatio(struct axt *axt)
-/* Return matches/total. */
+static int axtMatchCount(struct axt *axt)
+/* Return matches. */
 {
 int matchCount = 0;
 int i;
@@ -367,7 +367,27 @@ for (i=0; i<axt->symCount; ++i)
     if (axt->qSym[i] == axt->tSym[i])
         ++matchCount;
     }
+return matchCount;
+}
+
+static double axtIdRatio(struct axt *axt)
+/* Return matches/total. */
+{
+int matchCount = axtMatchCount(axt);
 return (double)matchCount/(double)axt->symCount;
+}
+
+static double axtListRatio(struct axt *axt)
+/* Return matches/total. */
+{
+int matchCount = 0;
+int symCount = 0;
+for (; axt != NULL; axt = axt->next)
+    {
+    matchCount += axtMatchCount(axt);
+    symCount += axt->symCount;
+    }
+return (double)matchCount/(double)symCount;
 }
 
 static void sim4QueryOut(struct gfOutput *out, FILE *f)
@@ -375,17 +395,22 @@ static void sim4QueryOut(struct gfOutput *out, FILE *f)
 {
 struct axtData *aod = out->data;
 struct axtBundle *gab;
+slReverse(&aod->bundleList);
 
 for (gab = aod->bundleList; gab != NULL; gab = gab->next)
     {
     struct axt *axt = gab->axtList;
+    // check minIdentity of the entire alignment
+    int goodPpt = 1000 * axtListRatio(axt);
+    if (!(goodPpt >= out->minGood))
+	continue; 
     fprintf(f, "\n");
     fprintf(f, "seq1 = %s, %d bp\n", axt->qName, gab->qSize);
     fprintf(f, "seq2 = %s, %d bp\n", axt->tName, gab->tSize);
     fprintf(f, "\n");
     if (axt->qStrand == '-')
 	fprintf(f, "(complement)\n");
-    for (axt = gab->axtList; axt != NULL; axt = axt->next)
+    for (; axt != NULL; axt = axt->next)
 	{
 	fprintf(f, "%d-%d  ", axt->qStart+1, axt->qEnd);
 	fprintf(f, "(%d-%d)   ", axt->tStart+1, axt->tEnd);
