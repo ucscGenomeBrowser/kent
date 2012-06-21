@@ -1015,7 +1015,7 @@ else if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDeta
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     hFreeConn(&conn);
     }
-else if (ct->wiggle)
+else if (ct->wiggle || isBigWigTable(table))
     {
     if ((ct->tdb != NULL) && (ct->tdb != NULL))
         {
@@ -1091,7 +1091,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle || isBamTable(table) || isVcfTable(table))
+if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
