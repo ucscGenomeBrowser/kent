@@ -46,8 +46,8 @@ def parseInit(id):
         url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
     sys.stderr.write("Accessing %s\n" % url)
     fetch = urllib2.urlopen(url)
-#    sidefetch = urllib2.urlopen(url)
-#    print "%s" % sidefetch.read()
+    #sidefetch = urllib2.urlopen(url)
+    #print "%s" % sidefetch.read()
 
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
@@ -87,7 +87,7 @@ def makeHtml(infoDict, original, plain):
     elif 'Journal' in infoDict:
         journal = infoDict['Journal']
     if 'SO' in infoDict:
-        dateStr = infoDict['SO']
+        dateStr = re.sub(";:", ":", infoDict['SO'])
     else:
         dateStr1 = infoDict['PubDate']
         dateStr = ""
@@ -122,7 +122,7 @@ def makeHtml(infoDict, original, plain):
     htmlLines.append("</p>")
     if plain:
         htmlLines = list()
-        htmlLines.append("%s %s %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
+        htmlLines.append("%s %s. %s. %s %s" % (authStr, title, journal, dateStr, infoDict['url']))
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
     sep = "\n"
@@ -137,9 +137,9 @@ def makeHtml(infoDict, original, plain):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog='qaAddTrackReferences',
+        prog='getTrackReferences',
         description='Turns PubMed Ids and PubMedCentral Ids into GB formatted citations in html',
-        epilog='example: qaAddTrackReferences PMC3039671 21347206'
+        epilog='example: getTrackReferences PMC3039671 21347206'
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
     parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link. Currently an experimental feature.")

@@ -6447,7 +6447,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description ES-cells isolated from 129S2/SvPas
-age EO
+age E0
 strain 129S2/SvPas
 vendorName ATCC
 vendorId CRL-1934
@@ -6481,7 +6481,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5 
-age EO
+age E0
 strain 129/Ola
 vendorName Gilbert lab
 vendorId ES-GscgfpSox17huCD25
@@ -12730,32 +12730,32 @@ label CTCF shRNA knockdown
 
 term DEX_100nM
 tag DEX100NM
-description 1 h with 100 nM Dexmathasone (Myers)
+description 1 h with 100 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100PM
-description 1 h with 100 pM Dexmathasone (Myers)
+description 1 h with 100 pM Dexamethasone (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1NM
-description 1 h with 1 nM Dexmathasone (Myers)
+description 1 h with 1 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50NM
-description 1 h with 50 nM Dexmathasone (Myers)
+description 1 h with 50 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5NM
-description 1 h with 5 nM Dexmathasone (Myers)
+description 1 h with 5 nM Dexamethasone (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500PM
-description 1 h with 500 pM Dexmathasone (Myers)
+description 1 h with 500 pM Dexamethasone (Myers)
 type treatment
 
 term diffProtA_2d
@@ -15038,6 +15038,17 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
+organism mouse
+
+term CRG-Guigo-m
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Gingeras
 organism mouse
 
 term UMass-m
