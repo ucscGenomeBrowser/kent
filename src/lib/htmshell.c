@@ -442,10 +442,20 @@ void printBodyTag(FILE *f)
 {
 // print starting BODY tag, including any appropriate attributes (class, background and bgcolor). 
 fprintf(f, "<BODY");
-if (htmlFormClass == NULL )
-    fprintf(f, " CLASS=\"cgi\"");
-else
-    fprintf(f, " CLASS=\"cgi %s\"", htmlFormClass);
+struct slName *classes = NULL;
+
+slNameAddHead(&classes, "cgi");
+char *scriptName = cgiScriptName();
+if(isNotEmpty(scriptName))
+    {
+    char buf[FILENAME_LEN];
+    splitPath(scriptName, NULL, buf, NULL);
+    slNameAddHead(&classes, cloneString(buf));
+}
+if (htmlFormClass != NULL )
+    slNameAddHead(&classes, htmlFormClass);
+fprintf(f, " CLASS=\"%s\"", slNameListToString(classes, ' '));
+
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (gotBgColor)

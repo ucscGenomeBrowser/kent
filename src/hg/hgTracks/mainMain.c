@@ -43,7 +43,6 @@ char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // re
 if (link)
     htmlSetStyle(link);
 
-htmlSetFormClass("hgTracks");
 oldVars = hashNew(10);
 if (hIsGsidServer())
     cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
