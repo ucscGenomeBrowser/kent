@@ -93,8 +93,8 @@ static struct optionSpec options[] = {
 
 #define glKeyField "track"	 /* The field that has the record ID */
 
-struct hash *glTagTypes = NULL;	/* Hash of tagTypes file keyed by tag. */
-char glTagTypeFile[PATH_LEN];	/* File name of tagTypes.tab including dir. */
+struct hash *glTagTypes = NULL; /* Hash of tagTypes file keyed by tag. */
+char glTagTypeFile[PATH_LEN];   /* File name of tagTypes.tab including dir. */
 
 // Specialized wildHash could be added to hash.c, but will be so rarely used.
 // It's purpose here is for wildCard tagTypes (e.g. "*Filter") which get
@@ -122,9 +122,11 @@ while((hel = hashNext(&cookie)) != NULL)
         slPairAdd(&wildList, hel->name, hel);
     }
 if (wildList == NULL)
-    slPairAdd(&wildList, WILD_CARD_HASH_EMPTY, NULL);// Note: adding an "empty" pair will prevent rebulding this list
+    slPairAdd(&wildList, WILD_CARD_HASH_EMPTY, NULL); // Note: adding an "empty" pair will prevent
+                                                      // rebulding this list
 else if (slCount(wildList) > 1)
-    slSort(&wildList,wildExpressionCmp); // sort on length, so the most restrictive wildcard match goes first?
+    slSort(&wildList,wildExpressionCmp); // sort on length, so the most restrictive wildcard match
+                                         // goes first?
 
 hashAdd(hash, WILD_CARD_HASH_BIN, wildList);
 return wildList;
@@ -242,7 +244,7 @@ struct slName *field;
 for (field = rql->fieldList; field != NULL; field = field->next)
     {
     if (!anyWild(field->name))
-	if (!hashLookupEvenInWilds(glTagTypes, field->name))
+        if (!hashLookupEvenInWilds(glTagTypes, field->name))
 	    errAbort("Field %s in query doesn't exist in %s.", field->name, glTagTypeFile);
     }
 struct slName *var;
@@ -250,9 +252,9 @@ for (var = rql->whereVarList; var != NULL; var = var->next)
     {
     if (!hashLookupEvenInWilds(glTagTypes, var->name))
         errAbort(
-	   "Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes around\n"
-	   "a word? Maybe %s is hosed?.",
-	    var->name, glTagTypeFile);
+           "Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes around\n"
+           "a word? Maybe %s is hosed?.",
+            var->name, glTagTypeFile);
     }
 }
 
@@ -527,14 +529,14 @@ for (record = recordList; record != NULL; record = record->next)
 		if (newRelease == NULL && oldRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
-		    	     "at line %d of %s",
+                             "at line %d of %s",
 			     key, oldPos->startLineIx, oldPos->fileName,
 			     newPos->startLineIx, newPos->fileName);
 		    }
 		else if (oldRelease == NULL && newRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
-		    	     "at line %d of %s",
+                             "at line %d of %s",
 			     key, newPos->startLineIx, newPos->fileName,
 			     oldPos->startLineIx, oldPos->fileName);
 		    }
@@ -544,13 +546,13 @@ for (record = recordList; record != NULL; record = record->next)
 			{
 			errAbort("Duplicate tracks %s starting lines %d and %d of %s",
 			    key, oldPos->startLineIx, newPos->startLineIx, oldPos->fileName);
-			}
-		    else
-			errAbort("Duplicate tracks %s starting lines %d of %s and %d of %s",
-			    key, oldPos->startLineIx, oldPos->fileName,
-			    newPos->startLineIx, newPos->fileName);
-		    }
-		}
+                        }
+                    else
+                        errAbort("Duplicate tracks %s starting lines %d of %s and %d of %s",
+                            key, oldPos->startLineIx, oldPos->fileName,
+                            newPos->startLineIx, newPos->fileName);
+                    }
+                }
 	    }
 	hashAdd(uniqHash, key, record);
 	}
@@ -559,7 +561,7 @@ hashFree(&uniqHash);
 }
 
 static void recurseThroughIncludes(char *fileName, struct lm *lm,
-	struct hash *circularHash,  struct tdbRecord **pRecordList,
+        struct hash *circularHash,  struct tdbRecord **pRecordList,
         char *releaseTag)
 /* Recurse through include files. */
 {
@@ -572,13 +574,13 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	{
 	struct tdbField *field;
 	for (field = firstField; field != NULL; field = field->next)
-	    {
-	    if (!sameString(field->name, "include"))
-	       {
-	       errAbort("Non-include tag %s in an include stanza starting line %d of %s",
-		    field->name, tdbRecordLineIx(record), lf->fileName);
-	       }
-	    char dir[PATH_LEN];
+            {
+            if (!sameString(field->name, "include"))
+                {
+                errAbort("Non-include tag %s in an include stanza starting line %d of %s",
+                    field->name, tdbRecordLineIx(record), lf->fileName);
+                }
+            char dir[PATH_LEN];
 	    splitPath(lf->fileName, dir, NULL, NULL);
 	    char includeName[PATH_LEN];
             char *words[5];
@@ -598,17 +600,17 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
                 }
 
             if (subRelease && releaseTag && !sameString(subRelease, releaseTag))
-                errAbort("Include with release %s included from include with release %s at line %d of %s",
-		     subRelease, releaseTag, tdbRecordLineIx(record),
+                errAbort("Include with release %s included from include with release %s at line "
+                         "%d of %s", subRelease, releaseTag, tdbRecordLineIx(record),
                      lf->fileName);
 
-	    safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
+            safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
 	    if (hashLookup(circularHash, includeName))
 		{
-		errAbort("Including file %s in an infinite loop line %d of %s",
+                errAbort("Including file %s in an infinite loop line %d of %s",
 			includeName, tdbRecordLineIx(record), lf->fileName);
 		}
-	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList,
+            recurseThroughIncludes(includeName, lm, circularHash, pRecordList,
                 subRelease);
 	    }
 	}
@@ -678,7 +680,7 @@ return distance;
 }
 
 static struct tdbRecord *findParent(struct tdbRecord *rec,
-	char *parentFieldName, struct hash *hash)
+        char *parentFieldName, struct hash *hash)
 /* Find parent record if possible.  This is a bit complicated by wanting to
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrong release. */
@@ -798,7 +800,7 @@ return recordList;
 }
 
 static void mergeParentRecord(struct tdbRecord *record, struct tdbRecord *parent,
-	struct lm *lm)
+        struct lm *lm)
 /* Merge in parent record.  This only updates fields that are in parent but not record. */
 {
 struct tdbField *parentField;
@@ -864,7 +866,7 @@ else
 }
 
 static void rqlStatementOutput(struct rqlStatement *rql, struct tdbRecord *tdb,
-	char *addFileField, FILE *out)
+        char *addFileField, FILE *out)
 /* Output fields  from tdb to file.  If addFileField is non-null add a new
  * field with this name at end of output. */
 {
@@ -931,7 +933,7 @@ return count;
 }
 
 static struct tdbRecord *closestTdbAboveLevel(struct tdbRecord *tdbList,
-	struct tdbFilePos *childPos, int parentDepth)
+        struct tdbFilePos *childPos, int parentDepth)
 /* Find parent at given depth that comes closest to (but before) childPos. */
 {
 struct tdbRecord *parent, *closestParent = NULL;
@@ -980,10 +982,10 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 	    if (parentFp->startLineIx > childFp->startLineIx)
 	        errAbort("Child before parent in %s\n"
 		         "Child (%s) at line %d, parent (%s) at line %d",
-			 childFp->fileName, child->key, childFp->startLineIx,
+                         childFp->fileName, child->key, childFp->startLineIx,
 			 parent->key, parentFp->startLineIx);
-	    struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp,
-	    	parentDepth);
+            struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp,
+	        parentDepth);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
 	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
@@ -1008,22 +1010,22 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
-	struct slName *typeList = hashFindValEvenInWilds(glTagTypes, field->name);
-	if (typeList == NULL)
-	    {
-	    recordAbort(record,
-	    	"Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
-		"The tag is",
-	    	field->name, glTagTypeFile, field->name);
-	    }
-	if (!matchAnyWild(typeList, type))
-	    {
-	    recordAbort(record,
-	    	"Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
-		"in %s if this is not a mistake.  The tag is",
-	    	field->name, type, glTagTypeFile);
-	    }
-	}
+        struct slName *typeList = hashFindValEvenInWilds(glTagTypes, field->name);
+        if (typeList == NULL)
+            {
+            recordAbort(record,
+                "Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
+                "The tag is",
+                field->name, glTagTypeFile, field->name);
+            }
+        if (!matchAnyWild(typeList, type))
+            {
+            recordAbort(record,
+                "Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
+                "in %s if this is not a mistake.  The tag is",
+                field->name, type, glTagTypeFile);
+            }
+        }
     }
 
 /* Additional child/parent checks. */
@@ -1041,17 +1043,17 @@ if (maxLength != 0)
     {
     // only check leaves 
     if (record->children != NULL)
-	return;
+        return;
     struct tdbField *labelField = tdbRecordField(record, name);
     if (labelField == NULL)
-	recordAbort(record, "missing %s", name);
+        recordAbort(record, "missing %s", name);
     int length = strlen(labelField->val);
     if (length > maxLength)
-	recordWarn(record, "%s is %s which is %d chars, max is %d", 
-	    name, labelField->val,length,maxLength);
+        recordWarn(record, "%s is %s which is %d chars, max is %d", 
+            name, labelField->val,length,maxLength);
     }
 }
-	    
+
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
 {
@@ -1188,7 +1190,7 @@ return list;
 }
 
 void overrideOrWriteSelf(char *orig, char *name, char *val,
-	char *tagName, char *keyVal, struct hash *hash, struct lineFile *lf, FILE *f)
+        char *tagName, char *keyVal, struct hash *hash, struct lineFile *lf, FILE *f)
 /* Write out name/val pair. */
 {
 if (keyVal == NULL)
