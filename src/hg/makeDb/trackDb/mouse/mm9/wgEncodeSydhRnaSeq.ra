@@ -23,7 +23,7 @@ html wgEncodeSydhRnaSeq
 	track wgEncodeSydhRnaSeqViewAlignments
 	shortLabel Alignments
 	view Alignments
-	visibility hide
+	visibility pack
 	subTrack wgEncodeSydhRnaSeq
 	type bam
 	pairEndsByName on
