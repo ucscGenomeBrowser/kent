@@ -116,6 +116,7 @@ labExpId LID20728,LID20729
 labProtocolId 1A,1B
 labVersion iIDR
 localization cell
+md5sum 3bd540ef60b9b2bb13b8b0daef51c802
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -299,6 +300,7 @@ labExpId LID20728,LID20729
 labProtocolId 1A,1B
 labVersion iIDR
 localization cell
+md5sum 7f450ab4538aa6aaf25f5b151ecb1098
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -732,6 +734,7 @@ labExpId LID21040,LID21041
 labProtocolId 14A,14B
 labVersion iIDR
 localization cell
+md5sum 0cb7d1717523b6e0aa131f626ac39970
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -915,6 +918,7 @@ labExpId LID21040,LID21041
 labProtocolId 14A,14B
 labVersion iIDR
 localization cell
+md5sum 9d2699b736cd43c18c62aeab190b8a93
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1348,6 +1352,7 @@ labExpId LID20730,LID20731
 labProtocolId 2A,2B
 labVersion iIDR
 localization cell
+md5sum faeddc99361bb491f2e3593f4eb0bd1f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1531,6 +1536,7 @@ labExpId LID20730,LID20731
 labProtocolId 2A,2B
 labVersion iIDR
 localization cell
+md5sum 9566883f89c209cc0d0e694c876ab5b2
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1964,6 +1970,7 @@ labExpId LID21179,LID21180
 labProtocolId 4A,4B
 labVersion iIDR
 localization cell
+md5sum 17e2a47c03bbb627af0d685e7ccecf3c
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2147,6 +2154,7 @@ labExpId LID21179,LID21180
 labProtocolId 4A,4B
 labVersion iIDR
 localization cell
+md5sum 58122dd434f652157a5949e73a37bd36
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2580,6 +2588,7 @@ labExpId LID20870,LID20871
 labProtocolId 16A,16B
 labVersion iIDR
 localization cell
+md5sum 837fec4e2824a5c18b3ebce81a2f9a57
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2763,6 +2772,7 @@ labExpId LID20870,LID20871
 labProtocolId 16A,16B
 labVersion iIDR
 localization cell
+md5sum 7c9d7a9da96af9c33cc9f712e23f69a0
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3196,6 +3206,7 @@ labExpId LID20872,LID20873
 labProtocolId 17A,17B
 labVersion iIDR
 localization cell
+md5sum 64d717035b50a79435f95616a1b938e6
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3379,6 +3390,7 @@ labExpId LID20872,LID20873
 labProtocolId 17A,17B
 labVersion iIDR
 localization cell
+md5sum 2ee211275bafaf49b2eea4f6f1b641bd
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3812,6 +3824,7 @@ labExpId LID21183,LID21184
 labProtocolId 8A,8B
 labVersion iIDR
 localization cell
+md5sum 88cc1fc5eeef30bdf414cb3a6773be8b
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3995,6 +4008,7 @@ labExpId LID21183,LID21184
 labProtocolId 8A,8B
 labVersion iIDR
 localization cell
+md5sum 1b287e2afda0124af62a98b00e696852
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4428,6 +4442,7 @@ labExpId LID21042,LID21043
 labProtocolId 18A,18B
 labVersion iIDR
 localization cell
+md5sum b31a319baf8845960ee11745b772cfcd
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4611,6 +4626,7 @@ labExpId LID21042,LID21043
 labProtocolId 18A,18B
 labVersion iIDR
 localization cell
+md5sum be7fec77e0d0344a51369b8656e69501
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5044,6 +5060,7 @@ labExpId LID20920,LID20921
 labProtocolId 15A,15B
 labVersion iIDR
 localization cell
+md5sum 86c6c48a5ac6c7d8160210cfeb63e8fc
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5227,6 +5244,7 @@ labExpId LID20920,LID20921
 labProtocolId 15A,15B
 labVersion iIDR
 localization cell
+md5sum 894b190a92b947de51677629b8ac8eff
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5660,6 +5678,7 @@ labExpId LID20924,LID20925
 labProtocolId 22A,22B
 labVersion iIDR
 localization cell
+md5sum 846045da93d6a981757bafd87c4b9694
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5843,6 +5862,7 @@ labExpId LID20924,LID20925
 labProtocolId 22A,22B
 labVersion iIDR
 localization cell
+md5sum ffe0361386079621697475e8904e9ed3
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6276,6 +6296,7 @@ labExpId LID20821,LID20822
 labProtocolId 11A,11B
 labVersion iIDR
 localization cell
+md5sum ffe4cab8766f6d37ac92e3f5a763ae6c
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6459,6 +6480,7 @@ labExpId LID20821,LID20822
 labProtocolId 11A,11B
 labVersion iIDR
 localization cell
+md5sum e0c4bc68571bba0e9e8f7233e33d6370
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6892,6 +6914,7 @@ labExpId LID21181,LID21182
 labProtocolId 5A,5B
 labVersion iIDR
 localization cell
+md5sum 6fc5b76776c35dd7a58d0458d334d53a
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -7075,6 +7098,7 @@ labExpId LID21181,LID21182
 labProtocolId 5A,5B
 labVersion iIDR
 localization cell
+md5sum b0b1a539240fb4b45e78d11b27dedff0
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -7508,6 +7532,7 @@ labExpId LID20819,LID20820
 labProtocolId 9A,9B
 labVersion iIDR
 localization cell
+md5sum ed7feab073dad95eade12f061dcfd7c6
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -7691,6 +7716,7 @@ labExpId LID20819,LID20820
 labProtocolId 9A,9B
 labVersion iIDR
 localization cell
+md5sum 1506ae3284efd477a228ecf4a332e0a5
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -8031,6 +8057,7 @@ labExpId LID21038,LID21039
 labProtocolId 13A,13B
 labVersion iIDR
 localization cell
+md5sum e2c32140921922edab8676e2c9417b08
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -8060,6 +8087,7 @@ labExpId LID21038,LID21039
 labProtocolId 13A,13B
 labVersion iIDR
 localization cell
+md5sum bbcf78802eb4c5e298f99df6fafdc991
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -8740,6 +8768,7 @@ labExpId LID20732,LID20733
 labProtocolId 3A,3B
 labVersion iIDR
 localization cell
+md5sum 705e1b8168dc42cae9b11b13bc34af0a
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -8923,6 +8952,7 @@ labExpId LID20732,LID20733
 labProtocolId 3A,3B
 labVersion iIDR
 localization cell
+md5sum 20ead0412e92554a0248eb8f98d55eb0
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -9356,6 +9386,7 @@ labExpId LID20868,LID20869
 labProtocolId 12A,12B
 labVersion iIDR
 localization cell
+md5sum 138b938c443f040eae10127fa772629e
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -9539,6 +9570,7 @@ labExpId LID20868,LID20869
 labProtocolId 12A,12B
 labVersion iIDR
 localization cell
+md5sum 44fe058fc788510294d8bdbb334e6f08
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -9972,6 +10004,7 @@ labExpId LID20922,LID20923
 labProtocolId 19A,19B
 labVersion iIDR
 localization cell
+md5sum 7b4b0a7b5a8b27777bd7308c3624a5ef
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -10155,6 +10188,7 @@ labExpId LID20922,LID20923
 labProtocolId 19A,19B
 labVersion iIDR
 localization cell
+md5sum 56855351ee6ba54f96b9673a9cfddd70
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -10476,4 +10510,4 @@ strain C57BL/6J
 subId 6343
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -389270544
+# MAGIC: 15856976

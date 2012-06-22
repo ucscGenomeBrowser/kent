@@ -3435,8 +3435,16 @@ for (ki = kiList; ki != NULL; ki = kiNext)
     kiNext = ki->next;
     safef(query,sizeof(query),
 	"select count(*) from pushQ "
-	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
+	"where priority='L' and releaseLog != '' and ("
+	"dbs like '%s' or "
+	"dbs like '%s %%' or "
+	"dbs like '%% %s' or "
+	"dbs like '%% %s %%'"
+        ") %s"
 	"order by qadate desc, qid desc",
+	ki->name,
+	ki->name,
+	ki->name,
 	ki->name,
 	encodeClause
 	);
@@ -3571,8 +3579,16 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 
     safef(query,sizeof(query),
 	"select releaseLog, qadate, releaseLogUrl from pushQ "
-	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
+	"where priority='L' and releaseLog != '' and ("
+	"dbs like '%s' or "
+	"dbs like '%s %%' or "
+	"dbs like '%% %s' or "
+	"dbs like '%% %s %%'"
+        ") %s"
 	"order by qadate desc, qid desc",
+	ki->name,
+	ki->name,
+	ki->name,
 	ki->name,
 	encodeClause
 	);
