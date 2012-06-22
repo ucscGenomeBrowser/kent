@@ -3015,6 +3015,10 @@ $(document).ready(function()
               genomePos.set(position, commify(getSizeFromCoordinates(position)));
          });
 
+    // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
+    // working, which is a major annoyance.
+    // $('#positionInput').focus();
+
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
         var allLinks = $('a');
