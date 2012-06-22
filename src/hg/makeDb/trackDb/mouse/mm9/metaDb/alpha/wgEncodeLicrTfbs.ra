@@ -5009,6 +5009,7 @@ grant Ren
 lab LICR-m
 labVersion 10/11/10 Lane 7
 md5sum 5045cb47701c40c55c8d19404c55f336,c3fc02c7256f2d9604d6ab465ea58211
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5065,6 +5066,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5
 md5sum e09c66c3514107d295af4df361f5b57b,b40744062249c24396a6474e5fa238df
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5152,6 +5154,7 @@ grant Ren
 lab LICR-m
 labVersion 10/11/10 Lane 7
 md5sum adf6c644526af56d74bd7cbdbb851fa4
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5209,6 +5212,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5
 md5sum 4a3ab9bba1e6a50c0e8e6bc013fe2cef
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5295,6 +5299,7 @@ grant Ren
 lab LICR-m
 labVersion 7/14/10 Lane 1
 md5sum abc17c7a6bc591c315657e5361ba7b55,68888583c49eec327be92e7f2b2fe8f1
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5381,6 +5386,7 @@ grant Ren
 lab LICR-m
 labVersion 7/14/10 Lane 1
 md5sum f1d91ae9b2af75fe67704a0aee833308
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5497,6 +5503,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 1
 md5sum 7d49113c3c72e548827f253cc0596a2b,f14d7498dd2c4e594626d484e4e8310e
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5553,6 +5560,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5
 md5sum d64e920a0a1cda1294a66fc4579e3600,1a3a0a88ec4e501089de1e6f2cbca06c
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5640,6 +5648,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 1
 md5sum e62c006a33949a40ce6e986299b70fd7
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5697,6 +5706,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5
 md5sum 542d57861a16f825bd4057a056803ccc
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8739,6 +8749,7 @@ grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 6
 md5sum de4b4799cb97c6770472ec13626c623c
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -9211,6 +9222,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
 md5sum b77efa5375b6efa7a999004598a439e0,54d77776ffb0808c70bbd3daba1c7cc8
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -9300,6 +9312,7 @@ grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8B
 md5sum 4c6ff5977a146dc256ebc4213fc920f8
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -9358,6 +9371,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
 md5sum d0bc2cdce08a0e8bb149e79362fd25f9
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -9538,6 +9552,7 @@ grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
 md5sum dd1ec6ed55ca3eb2e99f1dddd1f12116
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10818,6 +10833,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6
 md5sum efc66927cb9ff851e1a4095d0b669d30,e925bfc5dafdc14cfdee49eb29337142
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -10874,6 +10890,7 @@ grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4
 md5sum f27528710c6f022df3b37b13281103c0,27e9ebfd907cbbb96a4b74c319dd7d6c
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10961,6 +10978,7 @@ grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6
 md5sum bb3e7b838ede6f6a33ffd006d3fb4212
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11018,6 +11036,7 @@ grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4
 md5sum b47ab9d6d19fe1c1ee8d426a9c4f386a
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11104,6 +11123,7 @@ grant Ren
 lab LICR-m
 labVersion 7/28/10 Lane 4
 md5sum 1fddad64aee0fb58a411de1e7fcb3a70,9613cbe80226c22eae05892b66924322
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11190,6 +11210,7 @@ grant Ren
 lab LICR-m
 labVersion 7/28/10 Lane 4
 md5sum 0c51a4533de4b20ebd5105534e051316
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11306,6 +11327,7 @@ grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2
 md5sum e6be6758f5a76d774ec7b5b6f84ba3c4,fcf514fa0f7d15ba478f2329f05248cb
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11362,6 +11384,7 @@ grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
 md5sum f041a99aaf00030eeb85f940a7fdb2e0,c295bae51f0096cabf600a721a1af1fc
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11449,6 +11472,7 @@ grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2
 md5sum 5c9e6455748eaffa8ba4bc29787668a3
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11506,6 +11530,7 @@ grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
 md5sum 516823ac8a64fb0dfa707c88e8f6dd43
+objStatus replaced - Original file was incorrect due to that the original fastq file did not remove the barcode and is replaced by an updated file
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
