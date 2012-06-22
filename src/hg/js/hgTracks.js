@@ -2943,60 +2943,6 @@ var imageV2 = {
 
 }
 
-  ////////////////////////////////////
- //// suggest  (aka gene search) ////
-////////////////////////////////////
-var suggestBox = {
-    lastEntered: null,
-
-    init: function (db)
-    {
-        var ele = $('#positionInput');
-        if(!ele.length) {
-            ele = $('input#suggest');
-        }
-        if(jQuery.fn.autocomplete && ele.length && db) {
-            if(jQuery.fn.Watermark) {
-                var str;
-                if(hgTracks.assemblySupportsGeneSuggest) {
-                     str = "enter new position, gene symbol or annotation search terms";
-                } else {
-                     str = "enter new position or annotation search terms";
-                }
-                $('#positionInput').Watermark(str, '#686868');
-            }
-            ele.autocomplete({
-                delay: 500,
-                minLength: 2,
-                source: ajaxGet(function () {return getDb();}, new Object, true),
-                open: function(event, ui) {
-                    var pos = $(this).offset().top + $(this).height();
-                    if (!isNaN(pos)) {
-                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
-                        var auto = $('.ui-autocomplete');
-                        var curHeight = $(auto).children().length * 21;
-                        if (curHeight > maxHeight)
-                            $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
-                        else
-                            $(auto).css({maxHeight: 'none',overflow:'hidden'});
-                    }
-                },
-                select: function (event, ui) {
-                        genomePos.set(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
-                        vis.makeTrackVisible($("#suggestTrack").val());
-                        suggestBox.lastEntered = ui.item.value;
-                        // jQuery('body').css('cursor', 'wait');
-                        // document.TrackHeaderForm.submit();
-                    }
-            });
-
-            // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
-            // working, which is a major annoyance.
-            // $('input#suggest').focus();
-        }
-    }
-}
-
   //////////////////////
  //// track search ////
 //////////////////////
@@ -3060,7 +3006,14 @@ $(document).ready(function()
     initVars();
 
     var db = getDb();
-    suggestBox.init(db);
+    suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
+         function (position) {
+              genomePos.set(position, commify(getSizeFromCoordinates(position)));
+              vis.makeTrackVisible($("#suggestTrack").val());
+         },
+         function (position) {
+              genomePos.set(position, commify(getSizeFromCoordinates(position)));
+         });
 
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
@@ -3077,18 +3030,6 @@ $(document).ready(function()
                 return postTheForm($(thisForm).attr('name'),this.href);
             }
             return true;
-        });
-    }
-
-    if($("#positionInput").length) {
-        $("#positionInput").change(function(event) {
-            if(!suggestBox.lastEntered || suggestBox.lastEntered != $('#positionInput').val()) {
-                $('#position').val($('#positionInput').val());
-            }
-        });
-        $("#positionDisplay").click(function(event) {
-            genomePos.set($(this).text());
-            $('#positionInput').val($(this).text());
         });
     }
 

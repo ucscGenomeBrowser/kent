@@ -5,10 +5,10 @@
 
 var suggestCache;
 
-function ajaxGet(getDb, cache)
+function ajaxGet(db, cache)
 {
 // Returns jquery.autocomplete.js ajax_get function object
-// getDb should be a function which returns the relevant assembly (e.g. "hg18")
+// db is the relevant assembly (e.g. "hg18")
 // cache is an optional object used as a hash to cache responses from the server.
     suggestCache = cache;
     return function (request, callback) {
@@ -17,7 +17,7 @@ function ajaxGet(getDb, cache)
         {
             $.ajax({
                        url: "../cgi-bin/hgSuggest",
-                       data: "db=" + getDb() + "&prefix=" + key,
+                       data: "db=" + db + "&prefix=" + key,
                        // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
                        trueSuccess: handleSuggest,
                        success: catchErrorOrDispatch,
@@ -76,4 +76,65 @@ function lookupGene(db, gene)
         }
     }
     return null;
+}
+
+/* suggest (aka gene search)
+   Requires three elements on page: positionDisplay (static display), positionInput (input textbox) and position (hidden).
+*/
+
+var suggestBox = {
+    init: function (db, assemblySupportsGeneSuggest, selectCallback, clickCallback)
+    {
+    // selectCallback: called when the user selects a new genomic position from the list
+    // clickCallback: called when the user clicks on positionDisplay
+        var lastEntered = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
+        var str;
+        if(assemblySupportsGeneSuggest) {
+            str = "enter new position, gene symbol or annotation search terms";
+        } else {
+            str = "enter new position or annotation search terms";
+        }
+        $('#positionInput').Watermark(str, '#686868');
+        if(assemblySupportsGeneSuggest) {
+            $('#positionInput').autocomplete({
+                delay: 500,
+                minLength: 2,
+                source: ajaxGet(db, new Object),
+                open: function(event, ui) {
+                    var pos = $(this).offset().top + $(this).height();
+                    if (!isNaN(pos)) {
+                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
+                        var auto = $('.ui-autocomplete');
+                        var curHeight = $(auto).children().length * 21;
+                        if (curHeight > maxHeight)
+                            $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll'});
+                        else
+                            $(auto).css({maxHeight: 'none', overflow:'hidden'});
+                    }
+                },
+                select: function (event, ui) {
+                        selectCallback(ui.item.id);
+                        lastEntered = ui.item.value;
+                        // jQuery('body').css('cursor', 'wait');
+                        // document.TrackHeaderForm.submit();
+                    }
+            });
+        }
+        // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
+        // working, which is a major annoyance.
+        // $('#positionInput').focus();
+
+        $("#positionInput").change(function(event) {
+                                       if(!lastEntered || lastEntered != $('#positionInput').val()) {
+                                           // This handles case where user typed or edited something rather than choosing from a suggest list;
+                                           // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
+                                           $('#position').val($('#positionInput').val());
+                                       }
+                                   });
+        $("#positionDisplay").click(function(event) {
+                                        // this let's the user click on the genomic position (e.g. if they want to edit it)
+                                        clickCallback($(this).text());
+                                        $('#positionInput').val($(this).text());
+                                    });
+    }
 }
