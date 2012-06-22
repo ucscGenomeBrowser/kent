@@ -45,8 +45,8 @@ char *protDbName;               /* Name of proteome database for this genome. */
 
 struct tempName gifTn, gifTn2;  /* gifTn for tracks image and gifTn2 for stamps image */
 boolean hideControls = FALSE;   /* Hide all controls? */
-boolean suppressHtml = FALSE;	/* If doing PostScript output we'll suppress most
-         			 * of HTML output. */
+boolean suppressHtml = FALSE;   /* If doing PostScript output we'll suppress most
+                                 * of HTML output. */
 char *proteinID;
 char *protDisplayID;
 char *mrnaID;
@@ -173,11 +173,11 @@ if (strstr(spDisplayId, proteinID) == NULL)
    hPrintf(" (aka %s", spDisplayId);
    /* don't show 2nd aka if the new and old displayId are the same */
    if (oldSpDisplayId(spDisplayId) != NULL)
-	{
-   	if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
-	    {
-	    hPrintf(" or %s", oldSpDisplayId(spDisplayId));
-	    }
+        {
+        if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+            {
+            hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+            }
 	}
    hPrintf(") ", oldSpDisplayId(spDisplayId));
    }
@@ -321,10 +321,10 @@ doTrackForm(psTn.forCgi, psTn2.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
        "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
-if(pdfFile != NULL)
+if (pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
-	   "the current protein tracks graphic in PDF", pdfFile);
+           "the current protein tracks graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
@@ -332,10 +332,10 @@ else
 printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
        "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
-if(pdfFile != NULL)
+if (pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
-	   "the current protein histograms graphic in PDF", pdfFile);
+           "the current protein histograms graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
@@ -502,8 +502,8 @@ hPrintf("Please try again later.\n");
 char *excludeVars[] = { "submit", "Submit", "pbt.reset",
 			"pbt.in1", "pbt.in2", "pbt.in3", "pbt.inBase",
 			"pbt.out1", "pbt.out2", "pbt.out3",
-			"pbt.left1", "pbt.left2", "pbt.left3",
-			"pbt.right1", "pbt.right2", "pbt.right3",
+                        "pbt.left1", "pbt.left2", "pbt.left3",
+                        "pbt.right1", "pbt.right2", "pbt.right3",
 			"pbt.dinkLL", "pbt.dinkLR", "pbt.dinkRL", "pbt.dinkRR",
 			"pbt.tui", "pbt.hideAll", "pbt.psOutput", "hideControls",
 			NULL };
