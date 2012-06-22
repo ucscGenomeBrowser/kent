@@ -1,8 +1,13 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 body.cgi {
-	margin: 0;
+    margin: 0;
 	padding: 0;
-	/* background: #f5f3ef; */
-	font-family: Arial, Helvetica, sans-serif;
+}
+
+body.hgTracks {
 	background: url("../../images/internal_bg1.jpg") repeat-x scroll left bottom #F9F9F7;
 }
 
