@@ -667,8 +667,10 @@ for (r = tdbFile->recordList; r != NULL; r = r->next)
 		{
 		foundNew = TRUE;
 		char errMsg[1024];
-		safef(errMsg, sizeof errMsg, "Track renaming collision: newTrack %s already exists, unable to rename oldTrack %s to it\n",
-		    newTrack, oldTrack);
+                safef(errMsg, sizeof errMsg, 
+                      "Track renaming collision: newTrack %s already "
+                      "exists, unable to rename oldTrack %s to it\n",
+		      newTrack, oldTrack);
 		if (*warnMsg)
 		    *warnMsg = cloneString(errMsg);
 		}
@@ -765,8 +767,9 @@ for (r = includer->recordList; r != NULL; r = r->next)
 if (!found)
     {
     char errMsg[1024];
-    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n",
-	composite);
+    safef(errMsg, sizeof errMsg, 
+          "Unable to find composite{.something}.ra in includer for composite %s "
+          "in findCompositeInIncluder()\n", composite);
     if (*warnMsg)
 	*warnMsg = cloneString(errMsg);
     }
@@ -826,8 +829,9 @@ if (found)
 else
     {
     char errMsg[1024];
-    safef(errMsg, sizeof errMsg, "Unable to find composite{.something}.ra in includer for composite %s in findCompositeInIncluder()\n",
-	composite);
+    safef(errMsg, sizeof errMsg, 
+          "Unable to find composite{.something}.ra in includer for composite %s "
+          "in findCompositeInIncluder()\n", composite);
     if (*warnMsg)
 	*warnMsg = cloneString(errMsg);
     }
