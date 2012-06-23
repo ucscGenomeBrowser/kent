@@ -749,7 +749,7 @@ if (type == NULL && sameWord(*queryBy,CV_TERM))    // Special case of term becom
     }
 if (type == NULL && !silent)    // Still not type? abort
     errAbort("Error: Required %s=%s ['%s', '%s', '%s', '%s' or '%s'] argument not found\n",
-                    *queryBy,(requested != NULL) ? *requested : "?"),
+                    *queryBy,(requested != NULL) ? *requested : "?",
                     CV_TYPE, CV_TERM, CV_TAG, CV_TARGET, CV_LABEL);
 
 return normalizeType(type);
