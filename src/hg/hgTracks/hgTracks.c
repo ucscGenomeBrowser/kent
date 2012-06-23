@@ -57,7 +57,7 @@
 #include "search.h"
 #include "errCatch.h"
 #include "iupac.h"
-
+#include "botDelay.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -5468,6 +5468,7 @@ cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
+hgBotDelay();
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
