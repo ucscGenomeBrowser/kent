@@ -222,7 +222,8 @@ struct encodeExp *encodeExpGetByMdbVars(char *db, struct mdbVar *vars);
 
 struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar *vars, char *table);
 // Return experiment looked up or created from the mdb var list from the named experiment table.
-#define encodeExpGetOrCreateByMdbVars(db,vars) encodeExpGetOrCreateByMdbVarsFromTable((db),(vars),ENCODE_EXP_TABLE)
+#define encodeExpGetOrCreateByMdbVars(db,vars) \
+        encodeExpGetOrCreateByMdbVarsFromTable((db),(vars),ENCODE_EXP_TABLE)
 
 int encodeExpExists(char *db, struct mdbVar *vars);
 /* Return TRUE if at least one experiment exists for these vars */

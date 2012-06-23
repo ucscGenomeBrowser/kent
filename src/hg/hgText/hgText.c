@@ -628,17 +628,15 @@ if (! hDbIsActive(database))
     organism = hGenome(database);
     }
 
-puts(
-"<CENTER>"
-"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
-"<TR><TD style='font-size:small; text-align:center;'>\n"
-"The UCSC Table Browser was created by the \n"
-"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>. \n"
-"<BR>\n"
-"Software Copyright (c) The Regents of the University of California.\n"
-"All rights reserved.\n"
-"</TD></TR></TABLE></CENTER><P>\n"
-);
+puts("<CENTER>"
+     "<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+     "<TR><TD style='font-size:small; text-align:center;'>\n"
+     "The UCSC Table Browser was created by the \n"
+     "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>. \n"
+     "<BR>\n"
+     "Software Copyright (c) The Regents of the University of California.\n"
+     "All rights reserved.\n"
+     "</TD></TR></TABLE></CENTER><P>\n");
 
 puts("<P>This tool allows you to download portions of the Genome Browser \n"
      "database in several output formats. \n"
@@ -660,26 +658,20 @@ puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
 puts("<CENTER>");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
-puts(
-"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
-"<tr><td>\n"
-"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
-"<tr><td>\n"
-);
+puts("<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
+     "<tr><td>\n"
+     "<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
+     "<tr><td>\n");
 
-puts(
-"<table bgcolor='#FFFEF3' border=0>\n"
-"<tr>\n"
-"<td>\n"
-);
+puts("<table bgcolor='#FFFEF3' border=0>\n"
+     "<tr>\n"
+     "<td>\n");
 cartSaveSession(cart);
-puts(
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"tbDummyEnterButton\" src=\"/images/DOT.gif\">\n"
-"<table><tr>\n"
-"<td align=center valign=baseline>genome</td>\n"
-"<td align=center valign=baseline>assembly</td>\n"
-"</tr>"
-);
+puts("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"tbDummyEnterButton\" src=\"/images/DOT.gif\">\n"
+     "<table><tr>\n"
+     "<td align=center valign=baseline>genome</td>\n"
+     "<td align=center valign=baseline>assembly</td>\n"
+     "</tr>");
 
 puts("<tr><td align=center>\n");
 printGenomeListHtml(database, onChangeOrg);
@@ -689,18 +681,14 @@ puts("<td align=center>\n");
 printAssemblyListHtml(database, "");
 puts("</td><td>");
 cgiMakeButton("submit", "Submit");
-puts(
-"</td></tr></table>\n"
-"</td></tr>\n"
-"</table>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
-);
+puts("</td></tr></table>\n"
+     "</td></tr>\n"
+     "</table>\n"
+     "</td></tr></table>\n"
+     "</td></tr></table>\n");
 cgiMakeHiddenVar("phase", chooseTablePhase);
-puts(
-"</FORM>"
-"</CENTER>\n"
-);
+puts("</FORM>"
+    "</CENTER>\n");
 
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
        "<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
