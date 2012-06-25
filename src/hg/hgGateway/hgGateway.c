@@ -82,13 +82,10 @@ if (gotClade)
     puts("<td align=center valign=baseline>clade</td>");
 puts("<td align=center valign=baseline>genome</td>\n"
      "<td align=center valign=baseline>assembly</td>\n"
-     "<td align=center valign=baseline>position or search term</td>\n");
-if(supportsSuggest)
-    puts("<td align=center valign=baseline><a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a></td>\n");
-puts(
-"<td align=center valign=baseline> &nbsp; </td>\n"
-"</tr>\n<tr>"
-);
+     "<td align=center valign=baseline>position</td>\n"
+     "<td align=center valign=baseline>search term</td>\n"
+     "<td align=center valign=baseline> &nbsp; </td>\n"
+     "</tr>\n<tr>");
 
 if (gotClade)
     {
@@ -111,8 +108,9 @@ puts("</td>\n");
 puts("<td align=center>\n");
 hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(db, position));
 hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", addCommasToPos(db, position));
+puts("</td><td align=center>\n");
 hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
-if(assemblySupportsGeneSuggest(db))
+if(supportsSuggest)
     hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db));
 printf("</td>\n");
 
