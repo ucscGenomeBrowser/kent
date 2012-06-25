@@ -955,7 +955,7 @@ hPrintf("%s",
   "of the controls in this form, the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
   "general information and sample queries, and the OpenHelix Table Browser "
-  "<A HREF=\"http://www.openhelix.com/downloads/ucsc/ucsc_home.shtml\" "
+  "<A HREF=\"http://www.openhelix.com/cgi/tutorialInfo.cgi?id=28\" "
   "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
   "features and usage. "
   "For more complex queries, you may want to use "
