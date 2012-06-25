@@ -426,7 +426,10 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
     }
 
 if (isEmpty(userName))
-    offerLogin();
+    {
+    if (! wikiTrackReadOnly() ) /* read-only option 2012-06-25 */
+        offerLogin();
+    }
 else if (emailVerified(TRUE))  /* prints message when not verified */
     {
     hPrintf("<FORM ID=\"hgg_wikiAddComment\" NAME=\"hgg_wikiAddComment\" "
