@@ -324,6 +324,12 @@ cgiContinueHiddenVar("db");
 }
 #endif
 
+boolean wikiTrackReadOnly()
+/* return TRUE if wiki track is in Read-Only mode, default answer is FALSE */
+{
+return cfgOptionBooleanDefault(CFG_WIKI_TRACK_READ_ONLY, FALSE);
+}
+
 boolean wikiTrackEnabled(char *database, char **wikiUserName)
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 {
@@ -396,9 +402,12 @@ if (validDb && wikiLinkEnabled() &&
 	    if (page)
 		loginExpired = stringIn(LOGIN_EXPIRED, page->fullText);
 	    if (loginExpired == NULL)
-		userName = NULL; /* read-only mode enforced 2012-06-22
-                                  * otherwise we would set wikiUser here
-                                  * to save result for next time */
+                {
+                if (wikiTrackReadOnly())
+                    userName = NULL; /* read-only mode 2012-06-25 */
+                else
+                    userName = wikiUser;
+                }
 	}
     /* see if table exists, create it if it is not yet there */
     struct sqlConnection *wikiConn = wikiConnect();
@@ -413,8 +422,7 @@ if (validDb && wikiLinkEnabled() &&
 	status = TRUE; /* system is enabled */
     }
 if (wikiUserName)
-    *wikiUserName = NULL;  /* read-only mode enforced 2012-06-22
-                            * otherwise we would return userName here */
+    *wikiUserName = userName;  /* returning name indicates logged in */
 
 return status;
 }

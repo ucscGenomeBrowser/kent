@@ -16,8 +16,6 @@
 #include "wikiTrack.h"
 
 
-/* enforce read-only 2012-06-22 */
-#ifdef NOT
 static char *hgGeneUrl()
 {
 static char retBuf[1024];
@@ -52,7 +50,6 @@ printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 freeMem(loginUrl);
 }
-#endif
 
 static struct bed *bedItem(char *chr, int start, int end, char *name,
     int plusCount, int negativeCount)
@@ -430,8 +427,8 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
 
 if (isEmpty(userName))
     {
-    ;  /* enforce read-only 2012-06-22 */
-    /* offerLogin(); */
+    if (! wikiTrackReadOnly() ) /* read-only option 2012-06-25 */
+        offerLogin();
     }
 else if (emailVerified(TRUE))  /* prints message when not verified */
     {

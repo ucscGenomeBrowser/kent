@@ -149,7 +149,8 @@ wikiDisconnect(&wikiConn);
 
 slSort(&lfList, linkedFeaturesCmp);
 
-if (FALSE && wikiTrackEnabled(database, NULL)) /* enforce read-only 2012-06-22*/
+/* read-only option 2012-06-25 */
+if ((! wikiTrackReadOnly()) && wikiTrackEnabled(database, NULL))
     {
     // add special item to allow creation of new entries
     AllocVar(bed);
