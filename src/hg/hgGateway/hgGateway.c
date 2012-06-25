@@ -61,6 +61,7 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("jquery.watermarkinput.js", NULL);
 
 puts(
 "<CENTER style='font-size:small;'>"
@@ -86,8 +87,6 @@ puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
 "<td align=center valign=baseline>position or search term</td>\n");
-if(supportsSuggest)
-    puts("<td align=center valign=baseline><a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a></td>\n");
 puts(
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
@@ -112,17 +111,12 @@ printAssemblyListHtml(db, onChangeDB);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-cgiMakeTextVar("position", addCommasToPos(db, position), 30);
+hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(db, position));
+hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", addCommasToPos(db, position));
+hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+if(assemblySupportsGeneSuggest(db))
+    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db));
 printf("</td>\n");
-
-if(supportsSuggest)
-    {
-    puts("<td align=center>\n");
-    hPrintf("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n"
-            "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db)
-            );
-    printf("</td>\n");
-    }
 
 cartSetString(cart, "position", position);
 cartSetString(cart, "db", db);
@@ -134,10 +128,8 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>");
-if(supportsSuggest)
-    hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
-else
-    cgiMakeButton("Submit", "submit");
+hButton("Submit", "submit");
+
 /* This is a clear submit button that browsers will use by default when enter is pressed in position box. FIXME: This should be done with js onchange event! */
 printf("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>");
 cartSaveSession(cart);  /* Put up hgsid= as hidden variable. */
@@ -202,7 +194,7 @@ puts("</TD>");
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
 if(supportsSuggest)
-    cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
+    cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('positionInput').value='';", "clear position");
 else
     cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
 puts("</TD>");
