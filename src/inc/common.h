@@ -1384,10 +1384,15 @@ __attribute__((format(printf, 1, 2)))
 ;
 
 // SETTING_ON set of macros are frequently used comparisons of string values for boolean questions.
-// Notice the subtle difference between NOT_ON and IS_OFF.  NOT_ON could be NULL but IS_OFF must be explicitly set
-#define SETTING_IS_ON(setting)    (setting && (sameWord(setting,"on") || sameWord(setting,"true") || sameWord(setting,"yes") || sameWord(setting,"enabled") || atoi(setting) != 0))
+// Notice the subtle difference between NOT_ON and IS_OFF.
+//        NOT_ON could be NULL but IS_OFF must be explicitly set
+#define SETTING_IS_ON(setting) (  setting && (sameWord(setting,"on") || sameWord(setting,"true") \
+                               || sameWord(setting,"yes") || sameWord(setting,"enabled") \
+                               || atoi(setting) != 0) )
 #define SETTING_NOT_ON(setting)   (!SETTING_IS_ON(setting))
-#define SETTING_IS_OFF(setting)   (setting && (sameWord(setting,"off") || sameWord(setting,"false") || sameWord(setting,"no") || sameWord(setting,"disabled") || sameWord(setting,"0")))
+#define SETTING_IS_OFF(setting) (  setting && (sameWord(setting,"off") \
+                                || sameWord(setting,"false") || sameWord(setting,"no") \
+                                || sameWord(setting,"disabled") || sameWord(setting,"0")) )
 
 // Standard bit mask macros
 #define BITS_ADD(    flags,bits) ((flags) = ((flags) |  (bits)))
