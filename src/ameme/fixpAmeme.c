@@ -2111,7 +2111,7 @@ printf("background model %s; background data %s;</P>",
 
 printf("<TT><PRE>\n");
 progress("This run would take about %2.1f minutes on a lightly loaded UCSC CSE web server.",
-    calcApproximateTime());
+         calcApproximateTime());
 htmlHorizontalLine();
 
 doTopTiles(numMotifs, tn.forCgi, logFile);
@@ -2254,18 +2254,15 @@ else
     if (isFromWeb && calcApproximateTime() > 5.0)
         {
         errAbort("Sorry, this job is too big for our web server - it would use about "
-               "%2.1f minutes of CPU time. Out of fairness to the other users of this "
-               "machine we limit jobs to 5.0 minutes of CPU time or less.  Please reduce "
-               "the size of your data (now %d sequences of %d bases each), "
-               "the number of motifs you're looking "
-               "for (now %d), or the number of sequences in the initial scan (now %d). "
-               "The most important influence on run time is the maximum size of an individual sequence. "
-               " If you really need "
-               "to run the program on a data set this large contact Jim Kent (kent@biology.ucsc.edu) "
-               "to get a batch version of this program to run on your own machine.", calcApproximateTime(),
-               goodSeqListSize, goodSeqElSize,
-               numMotifs, startScanLimit
-               );
+                 "%2.1f minutes of CPU time. Out of fairness to the other users of this "
+                 "machine we limit jobs to 5.0 minutes of CPU time or less.  Please reduce "
+                 "the size of your data (now %d sequences of %d bases each),  the number of "
+                 "motifs you're looking for (now %d), or the number of sequences in the initial "
+                 "scan (now %d).  The most important influence on run time is the maximum size "
+                 "of an individual sequence.  If you really need to run the program on a data "
+                 "set this large contact Jim Kent (kent@biology.ucsc.edu) to get a batch version "
+                 "of this program to run on your own machine.", calcApproximateTime(),
+                 goodSeqListSize, goodSeqElSize, numMotifs, startScanLimit );
         }
     puts("<P>Improbizer will display the results in parts.  First it will "
          "display the profiles (consensus sequences with the probability of "
