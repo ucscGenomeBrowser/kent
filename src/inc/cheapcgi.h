@@ -114,7 +114,8 @@ enum osType
     osOther=4    // Anything else
     };
 
-enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, char **clientOsQualifier);
+enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, 
+                                  char **clientOsQualifier);
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
 #define cgiBrowser() cgiClientBrowser(NULL,NULL,NULL)
@@ -255,7 +256,8 @@ void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 
-void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, char *classes, char *moreHtml);
+void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, 
+                            char *classes, char *moreHtml);
 /* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled
  * Also makes a shadow hidden variable that supports the 2 boolean states. */
 
@@ -283,27 +285,33 @@ void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
 #define NO_VALUE            -96669
-void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max);
+void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, 
+                          char *min, char *max);
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
    Requires utils.js jQuery.js and inputBox class */
-void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max);
+void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, 
+                             int min, int max);
 void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min);
 void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max);
-#define cgiMakeIntVarNoLimits(varName,initialVal,title,width) cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,NULL)
+#define cgiMakeIntVarNoLimits(varName,initialVal,title,width) \
+        cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,NULL)
 /* All four of these call cgiMakeIntVarInRange() and therefore require utils.js */
 
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
 
-void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max);
+void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, 
+                             char *min, char *max);
 /* Make a floating point control filled with initial value.
    If min and/or max are non-NULL will enforce range
    Requires utils.js jQuery.js and inputBox class */
-void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max);
+void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, 
+                                double min, double max);
 void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int width, double min);
 void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max);
-#define cgiMakeDoubleVarNoLimits(varName,initialVal,title,width) cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,NULL)
+#define cgiMakeDoubleVarNoLimits(varName,initialVal,title,width) \
+        cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,NULL)
 /* All four of these call cgiMakeDoubleVarInRange() and therefore require utils.js */
 
 void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class);
@@ -333,14 +341,23 @@ void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
     int count, char *selected, char *extra);
 /* Make a drop-down list with both text and values. */
 
-char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,char *selected, char *anyAll,char *extraClasses, char *extraHtml);
-// Returns allocated string of HTML defining a drop-down select (if multiple, REQUIRES ui-dropdownchecklist.js)
-// In valsAndLabels, val (pair->name) must be filled in but label (pair->val) may be NULL.
-// selected, if not NULL is a val found in the valsAndLabels (multiple then comma delimited list).  If null and anyAll not NULL, that will be selected
-// anyAll, if not NULL is the string for an initial option.  It can contain val and label, delimited by a comma
-// extraHtml, if not NULL contains id, javascript calls and style.  It does NOT contain class definitions
-#define cgiMakeMultiSelectDropList(name, valsAndLabels, selected, anyAll, extraClasses, extraHtml)  cgiMakeSelectDropList(TRUE, (name), (valsAndLabels), (selected), (anyAll), (extraClasses), (extraHtml))
-#define cgiMakeSingleSelectDropList(name, valsAndLabels, selected, anyAll, extraClasses, extraHtml) cgiMakeSelectDropList(FALSE,(name), (valsAndLabels), (selected), (anyAll), (extraClasses), (extraHtml))
+char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,
+                            char *selected, char *anyAll,char *extraClasses, char *extraHtml);
+// Returns allocated string of HTML defining a drop-down select
+// (if multiple, REQUIRES ui-dropdownchecklist.js)
+// valsAndLabels: val (pair->name) must be filled in but label (pair->val) may be NULL.
+// selected: if not NULL is a val found in the valsAndLabels (multiple then comma delimited list).
+//           If null and anyAll not NULL, that will be selected
+// anyAll: if not NULL is the string for an initial option. It can contain val and label,
+//         delimited by a comma
+// extraHtml: if not NULL contains id, javascript calls and style.
+//            It does NOT contain class definitions
+#define cgiMakeMultiSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,extraHtml) \
+        cgiMakeSelectDropList(TRUE,(name),(valsAndLabels),(selected),(anyAll),\
+                              (extraClasses),(extraHtml))
+#define cgiMakeSingleSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,extraHtml) \
+        cgiMakeSelectDropList(FALSE,(name),(valsAndLabels),(selected),(anyAll),\
+                              (extraClasses),(extraHtml))
 
 void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length);
 /* Make a list of names which can have multiple selections.
