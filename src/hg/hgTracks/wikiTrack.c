@@ -149,7 +149,7 @@ wikiDisconnect(&wikiConn);
 
 slSort(&lfList, linkedFeaturesCmp);
 
-if (wikiTrackEnabled(database, NULL))
+if (FALSE && wikiTrackEnabled(database, NULL)) /* enforce read-only 2012-06-22*/
     {
     // add special item to allow creation of new entries
     AllocVar(bed);

@@ -396,7 +396,9 @@ if (validDb && wikiLinkEnabled() &&
 	    if (page)
 		loginExpired = stringIn(LOGIN_EXPIRED, page->fullText);
 	    if (loginExpired == NULL)
-		userName = wikiUser;	/* save result for next time */
+		userName = NULL; /* read-only mode enforced 2012-06-22
+                                  * otherwise we would set wikiUser here
+                                  * to save result for next time */
 	}
     /* see if table exists, create it if it is not yet there */
     struct sqlConnection *wikiConn = wikiConnect();
@@ -411,7 +413,8 @@ if (validDb && wikiLinkEnabled() &&
 	status = TRUE; /* system is enabled */
     }
 if (wikiUserName)
-    *wikiUserName = userName;  /* returning name indicates logged in */
+    *wikiUserName = NULL;  /* read-only mode enforced 2012-06-22
+                            * otherwise we would return userName here */
 
 return status;
 }
