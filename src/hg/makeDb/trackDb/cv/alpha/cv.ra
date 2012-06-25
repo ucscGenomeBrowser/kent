@@ -13092,6 +13092,7 @@ type treatment
 term lenti-control
 tag LENTICON
 description GM03348 skin fibroblasts (Coriell) were transduced with an induceable lentivirus (pAK111-TRE-3xflag hMyoD-T2A-dsRed) containing get inducible MyoD. Cells were selected in 1ug per ml puro (Sigma catalog P8833) to obtain a pure cell population. Cells were cultured for 10 days (NO DOXYCYCLINE) (Crawford)
+type treatment
 
 term MNaseD
 tag MNASED
