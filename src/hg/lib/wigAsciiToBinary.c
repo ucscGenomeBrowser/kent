@@ -578,7 +578,8 @@ while (lineFileNext(lf, &line, NULL))
 	verbose(2, "first offset: %llu\n", chromStart);
 	}
     else if ((validLines > 1) && (Offset <= previousOffset))
-	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current (offset)", lineCount, BASE_1(previousOffset), BASE_1(Offset));
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu "
+                 "<-current (offset)", lineCount, BASE_1(previousOffset), BASE_1(Offset));
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
