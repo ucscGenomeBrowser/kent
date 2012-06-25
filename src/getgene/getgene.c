@@ -250,15 +250,15 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
 
         if (geneName)
             {
-            printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=m&term=C+elegans+%s&dispmax=50&relentrezdate=No+Limit\">",
-                geneName);
+            printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=m"
+                    "&term=C+elegans+%s&dispmax=50&relentrezdate=No+Limit\">", geneName);
             printf("PubMed search on gene: </A>%s<BR>\n", geneName);
             }
         if (productName)
             {
             char *encoded = cgiEncode(productName);
-            printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=m&term=%s&dispmax=50&relentrezdate=No+Limit\">",
-                encoded);
+            printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=m"
+                    "&term=%s&dispmax=50&relentrezdate=No+Limit\">", encoded);
             printf("PubMed search on product:</A> %s<BR>\n", productName);
             freeMem(encoded);
             }

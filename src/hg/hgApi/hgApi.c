@@ -68,14 +68,16 @@ else if (!strcmp(cmd, "metaDb"))
         else
             errAbort("Missing var parameter");
         boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
-        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE,
+                                                 !fileSearch, fileSearch);
         struct slPair *pair;
         dyStringPrintf(output, "[\n");
         for (pair = pairs; pair != NULL; pair = pair->next)
             {
             if (pair != pairs)
                 dyStringPrintf(output, ",\n");
-            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(mdbPairLabel(pair)), javaScriptLiteralEncode(mdbPairVal(pair)));
+            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(mdbPairLabel(pair)),
+                           javaScriptLiteralEncode(mdbPairVal(pair)));
             }
         dyStringPrintf(output, "\n]\n");
         }
@@ -111,11 +113,13 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
         if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
             {
             boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
-            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
+            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE,
+                                                    !fileSearch, fileSearch);
             if (slCount(pairs) > 0)
                 {
                 char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
-                        name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
+                                name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; "
+                                "font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
                 if (dropDownHtml)
                     {
                     dyStringAppend(output,dropDownHtml);
@@ -126,13 +130,16 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
             }
         else if (searchBy == cvSearchByFreeText)
             {
-            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
-                            name);
+            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' "
+                           "onchange='findTracksMdbValChanged(this);' style='max-width:310px; "
+                           "width:310px; font-size:.9em;'>", name);
             }
         else if (searchBy == cvSearchByWildList)
             {
-            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal wildList' title='enter comma separated list of values' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
-                            name);
+            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal wildList' "
+                           "title='enter comma separated list of values' "
+                           "onchange='findTracksMdbValChanged(this);' style='max-width:310px; "
+                           "width:310px; font-size:.9em;'>", name);
             }
         else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {
@@ -153,7 +160,8 @@ else if (!strcmp(cmd, "tableMetadata"))
     boolean showShortLabel = (NULL != cgiOptionalString("showShortLabel"));
     if (trackName != NULL)
         {
-        struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName); // Doesn't get whole track list
+        // hTrackDbForTrackAndAncestors avoids overhead of getting whole track list!
+        struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName);
         if (tdb != NULL)
             {
             char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel);
@@ -168,8 +176,8 @@ else if (!strcmp(cmd, "tableMetadata"))
         else
             dyStringPrintf(output,"Track %s not found",trackName);
         }
-        else
-            dyStringAppend(output,"No track variable found");
+    else
+        dyStringAppend(output,"No track variable found");
     }
 else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     {

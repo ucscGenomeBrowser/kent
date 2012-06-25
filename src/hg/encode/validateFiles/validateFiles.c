@@ -406,18 +406,19 @@ for ( i = 0; s[i] ; ++i)
     }
 if (i == 0)
     {
-    if(privateData)  // PrivateData means sequence should be empty
+    if (privateData) // PrivateData means sequence should be empty
         return 1;
     if (s==row)
-	reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
+        reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
     else
-	reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
+        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
     return 0;
     }
-else if(privateData) { // PrivateData means sequence should be empty
+else if (privateData)   // PrivateData means sequence should be empty
+    {
     if (s==row)
         reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data"
-	    , lf->fileName, lf->lineIx,name);
+            , lf->fileName, lf->lineIx,name);
     else
         reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]"
 	    , lf->fileName, lf->lineIx,name, row);
@@ -486,8 +487,8 @@ else
 //     T01301010111200210102321210100112312
 
 boolean checkCsSeqName(struct lineFile *lf, char *s)
-// Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[] chars
-// Othewise print warning that seqName is empty and return FALSE
+// Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[]
+// chars.  Othewise print warning that seqName is empty and return FALSE
 {
 char *s0;
 if (s[0] == 0)
@@ -719,7 +720,7 @@ static char bigArr[100 * 1024]; // 100K limit on tagAlign seqLen
 struct dnaSeq ourSeq;
 boolean chrMSizeAjustment=FALSE;
 
-if(privateData)  // No way to check private data
+if (privateData) // No way to check private data
     return TRUE;
 
 if (!genome)
@@ -729,10 +730,10 @@ if (lf->lineIx % mmCheckOneInN != 0)
 if (!isSorted)
     {
     //unsigned end = chromEnd;
-    if(sameString(chrom,"chrM"))
+    if (sameString(chrom,"chrM"))
         {
         unsigned size =  twoBitSeqSize(genome, chrom);
-        if( chromEnd>size)
+        if ( chromEnd>size)
             {
             chrMSizeAjustment=TRUE;
             chromEnd=size;
@@ -767,7 +768,7 @@ if (strand == '-')
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
     reportWarn("Error [file=%s, line=%d]: "
-	"sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+        "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
         lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
         chrom, chromStart, chromEnd, strand);
     return FALSE;
@@ -799,7 +800,7 @@ boolean checkMismatchesSeq1Seq2(struct lineFile *lf, char *chrom, unsigned chrom
 {
 int i, mm1, mm2, len1, len2;
 struct dnaSeq *g1, *g2;
-if(privateData)  // No way to check private data
+if (privateData) // No way to check private data
     return TRUE;
 if (!genome)
     return TRUE; // dont check unless 2bit file specified
@@ -881,7 +882,7 @@ while (lineFileNext(lf, &row, &size))
          && checkStartEnd(lf, row, words[1], words[2], words[0], chromSize, &start, &end)
 	&& checkIntBetween(lf, row, words[4], "score", 0, 1000)
 	&& checkStrand(lf, row, words[5])
-	&& (paired ?
+        && (paired ?
 		(checkString(lf, row, words[3], "name")
 		&& checkSeq(lf, row, words[6], "seq1")
 		&& checkSeq(lf, row, words[7], "seq2")
@@ -930,7 +931,7 @@ while (lineFileNextReal(lf, &row))
     if (! ( checkColumns(lf, row, buf, words, PEAK_WORDS, bedTypeCols[type])
 	&& checkChrom(lf, row, words[0], &chromSize)
          && checkStartEnd(lf, row, words[1], words[2], words[0], chromSize, &start, &end)
-	&& ( type == BED_GRAPH ?
+        && ( type == BED_GRAPH ?
 	      (checkFloat(lf, row, words[3], "value")) // canonical bedGraph has float in 4th column
 	   : // otherwise BROAD_, NARROW_, or GAPPED_PEAK
 	      (checkString(lf, row, words[3], "name")
@@ -1022,11 +1023,11 @@ while (lineFileNextReal(lf, &row))
 
     int rowLen = strlen(row);
     if (bufSize < rowLen)
-	{
-	bufSize += bufSize;
-	freeMem(buf);
-	buf = needMem(bufSize); 
-	}
+        {
+        bufSize += bufSize;
+        freeMem(buf);
+        buf = needMem(bufSize); 
+        }
     safecpy(buf, bufSize, row);
     if (checkColumns(lf, row, buf, words, sizeof words, bedN+bedP)
      && checkChrom(lf, row, words[0], &chromSize))
@@ -1273,18 +1274,18 @@ for(; chroms; chroms = chroms->next)
     unsigned *size;
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
-	{
-	reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
-	    chroms->name);
-	}
+        {
+        reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
+            chroms->name);
+        }
     else
-	{
-	if (*size != chroms->size)
-	    {
-	    reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-		chroms->name, *size, chroms->size);
-	    }
-	}
+        {
+        if (*size != chroms->size)
+            {
+            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+                chroms->name, *size, chroms->size);
+            }
+        }
     }
 
 report("version: %d\n", bbiFile->version);
@@ -1453,7 +1454,7 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
                 squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
             reportWarn("Error [file=%s, line=%d]: "
-	    "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+            "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
                 file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
             }        
         }
@@ -1575,16 +1576,16 @@ for(ii=0; ii < head->n_targets; ii++)
 
     verbose(2,"has chrom %s\n", head->target_name[ii]);
     if ( (size = hashFindVal(chrHash, head->target_name[ii])) == NULL)
-	{
+        {
         reportWarn("BAM contains invalid chromosome name: %s\n", 
             head->target_name[ii]);
-	if (!allowOther)
+        if (!allowOther)
             errs++;
 	}
     else
-	{
-	if (*size != head->target_len[ii])
-	    {
+        {
+        if (*size != head->target_len[ii])
+            {
             reportWarn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
                 head->target_name[ii],
                 *size, head->target_len[ii]);
@@ -1682,7 +1683,7 @@ for (i = 0; i < numFiles ; ++i)
     
     struct lineFile *lf = NULL;
     if (bigBed)
-	lf = lineFileOnBigBed(files[i]);
+        lf = lineFileOnBigBed(files[i]);
     else
 	lf = lineFileOpen(files[i], TRUE);
 

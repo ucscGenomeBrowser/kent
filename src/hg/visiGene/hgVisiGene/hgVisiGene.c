@@ -392,7 +392,8 @@ void doControls(struct sqlConnection *conn)
 {
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 htmlSetBgColor(0xD0FFE0);
-char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+              // resource file link wrapped in html
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); 
 if (link)
     htmlSetStyle(link);
 htmStart(stdout, "do controls");

@@ -271,7 +271,8 @@ row = sqlNextRow(sr);
 
 if (row == NULL)
     {
-    errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>",
+    errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s."
+             "<BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>",
 	     proteinID);
     }
 
@@ -561,7 +562,8 @@ hggEnd   = sqlGetField(database, "knownGene", "txEnd", cond_str);
 if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_prot=%s&hgg_chrom=%s&hgg_start=%s&hgg_end=%s\"",
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_prot=%s&hgg_chrom=%s"
+            "&hgg_start=%s&hgg_end=%s\"",
     	    database, mrnaID, displayId, hggChrom, hggStart, hggEnd);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
@@ -934,8 +936,11 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     oldOrg = strdup("");
     conn3 = sqlConnect(UNIPROT_DB_NAME);
     safef(query3, sizeof(query3),
-     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial",
-     queryID);
+            "select taxon.id, gene.acc, displayId.val, binomial, description.val "
+            "from gene, displayId, accToTaxon,taxon, description "
+            "where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id "
+            "and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial",
+            queryID);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
 
@@ -1026,8 +1031,10 @@ char **row;
 
 conn = sqlConnect(UNIPROT_DB_NAME);
 safef(query, sizeof(query),
-     "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id",
-     queryGeneID);
+            "select count(*) from gene, displayId, accToTaxon,taxon "
+            "where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id "
+            "and accToTaxon.acc=gene.acc order by taxon.id",
+            queryGeneID);
 
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

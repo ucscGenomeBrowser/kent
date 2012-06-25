@@ -576,14 +576,14 @@ replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  );
 replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog);
 replaceInStr(html, sizeof(html) , "<!releaseLogUrl>", ki->releaseLogUrl);
 replaceSelectOptions("importance", " ,B,L,M,H,U"   , ki->importance  );
-
 replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  );
 
 if (isNew)
     {
     replaceInStr(html, sizeof(html), "<!DISABLED>", "");
     replaceInStr(html, sizeof(html), "<!READONLY>", "");
-    replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
+    replaceInStr(html, sizeof(html), "<!submitbutton>",
+                 "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
     replaceInStr(html, sizeof(html), "<!delbutton>", "");
     replaceInStr(html, sizeof(html), "<!pushbutton>", "");
     replaceInStr(html, sizeof(html), "<!clonebutton>", "");
@@ -592,7 +592,8 @@ if (isNew)
     replaceInStr(html, sizeof(html), "<!refreshlink>", "");
     replaceInStr(html, sizeof(html), "<!transferbutton>", "");
 
-    safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState);
+    safef(tempLink, sizeof(tempLink),
+                "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState);
     replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
 
     showSizesJavascript();
@@ -602,75 +603,75 @@ else
     {
     if (myLock)
 	{
-	replaceInStr(html, sizeof(html), "<!DISABLED>", "");
-    	replaceInStr(html, sizeof(html), "<!READONLY>", "");
+        replaceInStr(html, sizeof(html), "<!DISABLED>", "");
+        replaceInStr(html, sizeof(html), "<!READONLY>", "");
 
-        replaceInStr(html, sizeof(html), "<!submitbutton>", "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
-	replaceInStr(html, sizeof(html),
-	    "<!delbutton>" ,
-	    "<input TYPE=SUBMIT NAME=\"delbutton\"  VALUE=\"delete\">&nbsp;&nbsp;"
-	    );
+        replaceInStr(html, sizeof(html), "<!submitbutton>",
+                     "<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\" >&nbsp;&nbsp;");
+        replaceInStr(html, sizeof(html), "<!delbutton>" ,
+            "<input TYPE=SUBMIT NAME=\"delbutton\"  VALUE=\"delete\">&nbsp;&nbsp;"
+            );
 
-	if (ki->priority[0]!='L')
-	    {
-	    replaceInStr(html, sizeof(html),
-		"<!pushbutton>",
-		"<input TYPE=SUBMIT NAME=\"pushbutton\" VALUE=\"push requested\">&nbsp;&nbsp;"
-		);
-	    }
+        if (ki->priority[0]!='L')
+            {
+            replaceInStr(html, sizeof(html),
+                "<!pushbutton>",
+                "<input TYPE=SUBMIT NAME=\"pushbutton\" VALUE=\"push requested\">&nbsp;&nbsp;"
+                );
+            }
 
-	replaceInStr(html, sizeof(html),
-	    "<!clonebutton>",
-	    "<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">&nbsp;&nbsp;"
-	    );
+        replaceInStr(html, sizeof(html),
+            "<!clonebutton>",
+            "<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">&nbsp;&nbsp;"
+            );
 
-	if (ki->priority[0]=='A')
-	    {
-	    replaceInStr(html, sizeof(html),
-		"<!bouncebutton>",
-		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"bounce\">&nbsp;&nbsp;"
-		);
-	    }
-	else
-	    {
-	    replaceInStr(html, sizeof(html),
-		"<!bouncebutton>",
-		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"unbounce\">&nbsp;&nbsp;"
-		);
-	    }
+        if (ki->priority[0]=='A')
+            {
+            replaceInStr(html, sizeof(html),
+                "<!bouncebutton>",
+                "<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"bounce\">&nbsp;&nbsp;"
+                );
+            }
+        else
+            {
+            replaceInStr(html, sizeof(html),
+                "<!bouncebutton>",
+                "<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"unbounce\">&nbsp;&nbsp;"
+                );
+            }
 
-	replaceInStr(html, sizeof(html), "<!lockbutton>", "");
+        replaceInStr(html, sizeof(html), "<!lockbutton>", "");
 
-	replaceInStr(html, sizeof(html), "<!cancellink>",
-	    "<input TYPE=SUBMIT NAME=\"cancelbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;");
+        replaceInStr(html, sizeof(html), "<!cancellink>",
+            "<input TYPE=SUBMIT NAME=\"cancelbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;");
 
-	replaceInStr(html, sizeof(html), "<!refreshlink>", "");
+        replaceInStr(html, sizeof(html), "<!refreshlink>", "");
 
-	replaceInStr(html, sizeof(html),
-	    "<!transferbutton>",
-	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;");
+        replaceInStr(html, sizeof(html),
+            "<!transferbutton>",
+            "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;");
 
-	showSizesJavascript();
-	}
+        showSizesJavascript();
+        }
     else
 	{ /* we don't have a lock yet, disable and readonly */
-	replaceInStr(html, sizeof(html), "<!DISABLED>", "DISABLED");
+        replaceInStr(html, sizeof(html), "<!DISABLED>", "DISABLED");
     	replaceInStr(html, sizeof(html), "<!READONLY>", "READONLY");
-	replaceInStr(html, sizeof(html), "<!submitbutton>", "");
-	replaceInStr(html, sizeof(html), "<!delbutton>", "");
-	replaceInStr(html, sizeof(html), "<!pushbutton>", "");
-	replaceInStr(html, sizeof(html), "<!clonebutton>", "");
-	replaceInStr(html, sizeof(html), "<!bouncebutton>", "");
-	replaceInStr(html, sizeof(html), "<!lockbutton>",
-	    "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Lock\" >&nbsp;&nbsp;");
+        replaceInStr(html, sizeof(html), "<!submitbutton>", "");
+        replaceInStr(html, sizeof(html), "<!delbutton>", "");
+        replaceInStr(html, sizeof(html), "<!pushbutton>", "");
+        replaceInStr(html, sizeof(html), "<!clonebutton>", "");
+        replaceInStr(html, sizeof(html), "<!bouncebutton>", "");
+        replaceInStr(html, sizeof(html), "<!lockbutton>",
+            "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Lock\" >&nbsp;&nbsp;");
 
-	safef(tempLink, sizeof(tempLink),
-	    "<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState);
-	replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
+        safef(tempLink, sizeof(tempLink),
+            "<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState);
+        replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
 
-	safef(tempLink, sizeof(tempLink),
+        safef(tempLink, sizeof(tempLink),
 	    "<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">REFRESH</a>&nbsp;&nbsp;",
-	    ki->qid,newRandState);
+            ki->qid,newRandState);
 	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink );
 
 	replaceInStr(html, sizeof(html), "<!transferbutton>", "");
@@ -685,7 +686,7 @@ else
 		msg, ki->lockUser, ki->qid,ki->lockDateTime );
 	    }
 	safef(msg,sizeof(msg), "%s", tempMsg);
-	}
+        }
     }
 
 replaceInStr(html, sizeof(html) , "<!msg>"         , msg           );
@@ -1188,15 +1189,15 @@ if (sameString(q->lockUser,"") && sameString(q->pushState,"Y"))
     strftime (q->qadate  , sizeof(q->qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
     safef(query, sizeof(query),
-	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' where qid = '%s' ",
-	pushQtbl, q->qadate, q->lastdate, q->qid);
+            "update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' "
+            "where qid = '%s' ", pushQtbl, q->qadate, q->lastdate, q->qid);
     sqlUpdate(conn, query);
 
 
     /* first close the hole where it was */
     safef(query, sizeof(query),
-	"update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
-	pushQtbl, q->priority, q->rank);
+        "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+        pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
 else
@@ -1233,31 +1234,27 @@ q = mustLoadPushQ(newQid);
 if ((q->rank > 1) && (change>0))
     {
     /* swap places with rank-1 */
-    safef(query, sizeof(query),
-    "update %s set rank = rank + 1 where priority ='%s' and rank = %d ",
-    pushQtbl, q->priority, q->rank-1);
+    safef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank = %d ",
+            pushQtbl, q->priority, q->rank-1);
     sqlUpdate(conn, query);
     q->rank--;
-    safef(query, sizeof(query),
-    "update %s set rank = %d where qid ='%s'",
-    pushQtbl, q->rank, q->qid);
+    safef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
+            pushQtbl, q->rank, q->qid);
     sqlUpdate(conn, query);
     }
 
 if (change<0)
     {
     /* swap places with rank+1 */
-    safef(query, sizeof(query),
-    "update %s set rank = rank - 1 where priority ='%s' and rank = %d ",
-    pushQtbl, q->priority, q->rank+1);
+    safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank = %d ",
+            pushQtbl, q->priority, q->rank+1);
     if (sqlUpdateRows(conn, query, NULL)>0)
-	{
-	q->rank++;
-	safef(query, sizeof(query),
-	    "update %s set rank = %d where qid ='%s'",
-	    pushQtbl, q->rank, q->qid);
-	sqlUpdate(conn, query);
-	}
+        {
+        q->rank++;
+        safef(query, sizeof(query), "update %s set rank = %d where qid ='%s'",
+                pushQtbl, q->rank, q->qid);
+        sqlUpdate(conn, query);
+        }
     }
 
 pushQFree(&q);
@@ -1334,15 +1331,13 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query),
-"update %s set rank = rank + 1 where priority ='%s' and rank < %d ",
-pushQtbl, q->priority, q->rank);
+safef(query, sizeof(query), "update %s set rank = rank + 1 where priority ='%s' and rank < %d ",
+        pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = 1;
-safef(query, sizeof(query),
-"update %s set rank = %d where qid = '%s' ",
-pushQtbl, q->rank, q->qid);
+safef(query, sizeof(query), "update %s set rank = %d where qid = '%s' ",
+        pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
 pushQFree(&q);
@@ -1362,15 +1357,13 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
-safef(query, sizeof(query),
-"update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
-pushQtbl, q->priority, q->rank);
+safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+        pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
 q->rank = getNextAvailRank(q->priority);
-safef(query, sizeof(query),
-"update %s set rank = %d where qid = '%s' ",
-pushQtbl, q->rank, q->qid);
+safef(query, sizeof(query)," update %s set rank = %d where qid = '%s' ",
+        pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
 
 pushQFree(&q);
@@ -1440,10 +1433,11 @@ dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
-dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s',importance='%s' "
-	"where qid='%s'",
-	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl, importance,
-	qid
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',"
+        "lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s',importance='%s' "
+        "where qid='%s'",
+        pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl, importance,
+        qid
 	);
 
 sqlUpdate(conn, update->string);
@@ -1568,12 +1562,12 @@ if (!isNew)
      * because some fields like rank are not carried in form
     */
     q = mustLoadPushQ(newQid);
-	/* true means optional, it was asked if we could tolerate this,
-	 *  e.g. delete, then hit back-button
-	* user is trying to use back button to recover deleted rec
-	safef(newQid, sizeof(newQid), "");
-	isNew = TRUE;
-	*/
+        /* true means optional, it was asked if we could tolerate this,
+         *  e.g. delete, then hit back-button
+         * user is trying to use back button to recover deleted rec
+        safef(newQid, sizeof(newQid), "");
+        isNew = TRUE;
+        */
 
     /* check lock status */
 
@@ -1780,9 +1774,8 @@ if (sameString(bouncebutton,"unbounce"))
 if ( (!sameString(newPriority,q->priority)) || (sameString(delbutton,"delete")) )
     {
     /* first close the hole where it was */
-    safef(query, sizeof(query),
-    "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
-    pushQtbl, q->priority, q->rank);
+    safef(query, sizeof(query), "update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+            pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
 
@@ -2160,19 +2153,18 @@ else
 	    { /* bad pwd */
 	    safef(msg,sizeof(msg),"Invalid password. Password must be at least 6 characters long.");
 	    }
-	else
-	    {
-	    encryptNewPWD(userPassword, u.password, sizeof(u.password));
-	    safef(query, sizeof(query),
-		"update %s set password = '%s' where user = '%s' ",
-		tbl, u.password, u.user);
-	    sqlUpdate(conn, query);
-	    loginOK = TRUE;
-	    }
+        else
+            {
+            encryptNewPWD(userPassword, u.password, sizeof(u.password));
+            safef(query, sizeof(query), "update %s set password = '%s' where user = '%s' ",
+                    tbl, u.password, u.user);
+            sqlUpdate(conn, query);
+            loginOK = TRUE;
+            }
 	}
     else
 	{ /* verify password matches db */
-	if (checkPWD(userPassword, u.password))
+        if (checkPWD(userPassword, u.password))
 	    { /* good pwd, save user in cookie */
 	    loginOK = TRUE;
 	    }
@@ -2411,7 +2403,8 @@ printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 
 
 void getIndexes(struct sqlConnection *conn, char *tbl, char *s, int ssize)
-/* Get indexes with show index on table command. Return -1 if err. Will match multiple if "%" used in tbl */
+/* Get indexes with show index on table command. Return -1 if err.
+ * Will match multiple if "%" used in tbl */
 {
 char query[256];
 char **row;
@@ -2492,7 +2485,8 @@ freez(&temp);
 
 
 long long pq_getTableSize(char *rhost, char *db, char *tbl, int *errCount)  /* added extension pq_ to supress name conflict in hdb.c */
-/* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */
+/* Get table size via show table status command. Return -1 if err.
+ * Will match multiple if "%" used in tbl */
 {
 char query[256];
 char **row;
@@ -2942,7 +2936,7 @@ if (!sameString(q->files,""))
 		    { /* wildcards found in name, use listDirX */
 		    printf("<tr><td>expansion for %s<td/></tr>\n",gVal);
 		    found = strrchr(gVal, '/');
-		    if (found == NULL)
+                    if (found == NULL)
 			{
 			filePath[0]=0;
 			safef(fileName,sizeof(fileName),"%s",gVal);
@@ -2961,7 +2955,7 @@ if (!sameString(q->files,""))
 			    char *errStr = htmlEncode(strerror(fi->statErrno));
     			    printf("<tr><td style=\"color:red\">%s<td/>"
 				"<td style=\"color:red\">stat() failed: %s</td></tr>\n"
-				, fi->name
+                                , fi->name
 				, errStr);
 			    freeMem(errStr);
 			    ++errCount;
@@ -2987,13 +2981,12 @@ if (!sameString(q->files,""))
     			    sprintLongWithCommas(nicenumber, fi->size);
     			    printf("<tr><td>%s<td/><td>%s</td></tr>\n",fi->name,nicenumber);
 			    }
-			}
-		    printf("<tr><td>&nbsp;<td/></tr>\n"); /* spacer */
-		    }
-
-		}
-	     }
-	 }
+                        }
+                    printf("<tr><td>&nbsp;<td/></tr>\n"); /* spacer */
+                    }
+                }
+             }
+         }
     printf("</table>");
     }
 
@@ -3434,12 +3427,20 @@ for (ki = kiList; ki != NULL; ki = kiNext)
     {
     kiNext = ki->next;
     safef(query,sizeof(query),
-	"select count(*) from pushQ "
-	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
-	"order by qadate desc, qid desc",
-	ki->name,
-	encodeClause
-	);
+        "select count(*) from pushQ "
+        "where priority='L' and releaseLog != '' and ("
+        "dbs like '%s' or "
+        "dbs like '%s %%' or "
+        "dbs like '%% %s' or "
+        "dbs like '%% %s %%'"
+        ") %s"
+        "order by qadate desc, qid desc",
+        ki->name,
+        ki->name,
+        ki->name,
+        ki->name,
+        encodeClause
+        );
     if (sqlQuickNum(conn, query) > 0)
 	{
     	slAddHead(&newList, ki);
@@ -3544,11 +3545,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	freeDyString(&dbList);
 
 	if (topCount>=10)
-	    {break;}
+            {break;}
 
-	}
-
+        }
     }
+
 sqlFreeResult(&sr);
 printf("</table>\n");
 
@@ -3562,20 +3563,28 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	}
 
     webNewSection("<A NAME=%s></A>%s %s (%s, %s)",
-	ki->name, tempName, ki->description, ki->name, ki->sourceName);
+        ki->name, tempName, ki->description, ki->name, ki->sourceName);
     printf("<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%%;'>\n"
-	"<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
-	"    <TD nowrap><B style='color:#006666;'>Release Date</B>\n"
-	"</TD></TR>\n"
-	);
+        "<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>\n"
+        "    <TD nowrap><B style='color:#006666;'>Release Date</B>\n"
+        "</TD></TR>\n"
+        );
 
     safef(query,sizeof(query),
-	"select releaseLog, qadate, releaseLogUrl from pushQ "
-	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
-	"order by qadate desc, qid desc",
-	ki->name,
-	encodeClause
-	);
+        "select releaseLog, qadate, releaseLogUrl from pushQ "
+        "where priority='L' and releaseLog != '' and ("
+        "dbs like '%s' or "
+        "dbs like '%s %%' or "
+        "dbs like '%% %s' or "
+        "dbs like '%% %s %%'"
+        ") %s"
+        "order by qadate desc, qid desc",
+        ki->name,
+        ki->name,
+        ki->name,
+        ki->name,
+        encodeClause
+        );
 
     //printf("query=%s\n",query);
     sr = sqlGetResult(conn, query);
