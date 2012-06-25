@@ -5,12 +5,12 @@ include wgEncodeSuper.release2.ra
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
+include wgEncodeGencodeV11.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
 include wgEncodeGencodeV7.ra 
 include wgEncodeGencodeV10.ra 
-include wgEncodeGencodeV11.ra 
-include wgEncodeGencodeV12.ra alpha,beta
+include wgEncodeGencodeV12.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -116,8 +116,7 @@ include wgEncodeGisRnaSeq.ra
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.release3.ra
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.ra public
-include wgEncodeCshlLongRnaSeq.release2.ra alpha,beta
+include wgEncodeCshlLongRnaSeq.release2.ra
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale

@@ -198,20 +198,25 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
 /* Home */
-hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>Home</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>"
+        "Home</A></TD>");
 //, orgEnc);
 
 /* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' style='color:#FFFFFF;'>Blat</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' "
+        "style='color:#FFFFFF;'>Blat</A></TD>");
 
 /* Sequence View */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' "
+        "style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
 
 /* Table View */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gsidTable' class='topbar' style='color:#FFFFFF;'>Table View</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gsidTable' class='topbar' "
+        "style='color:#FFFFFF;'>Table View</A></TD>");
 
 /* Help */
-hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#SubjectView' target=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#SubjectView' "
+        "target=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
 
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");

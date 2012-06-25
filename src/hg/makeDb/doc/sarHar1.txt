@@ -715,15 +715,14 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   test it with some sequence
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - ( working 2012-02-16 - Chin)
+# all.joiner update, downloads and in pushQ - (DONE 2012-06-19 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
-    # add hetGla after myoLuc
+    # add sarHar after hetGla1
     joinerCheck -database=sarHar1 -all all.joiner
 
     mkdir /hive/data/genomes/sarHar1/goldenPath
     cd /hive/data/genomes/sarHar1/goldenPath
-XXXX 2012-02-16 TODO: read all the do.log and edit README before push!!
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/sarHar1/pushQ

@@ -161,7 +161,8 @@ void makeTitle(char *title, char *helpName)
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER style='color:#FFFFFF;'><span style='font-size:large;'>%s</span></TD>", title);
+hPrintf("<TD ALIGN=CENTER style='color:#FFFFFF;'><span style='font-size:large;'>%s</span></TD>", 
+        title);
 hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
 	helpName, wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
@@ -1579,8 +1580,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         hPrintf("<TR BGCOLOR=\"#D0FFD0\">");
     else
         hPrintf("<TR>");
-    for (col = colList; col != NULL;
-    		col = col->next)
+    for (col = colList; col != NULL; col = col->next)
         {
 	if (col->on)
 	    {

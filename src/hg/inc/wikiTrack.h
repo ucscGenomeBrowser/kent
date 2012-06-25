@@ -112,6 +112,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define CFG_WIKI_BROWSER "wikiTrack.browser"
 #define CFG_WIKI_EDITORS "wikiTrack.editors"
 #define CFG_WIKI_DB_LIST "wikiTrack.dbList"
+#define CFG_WIKI_TRACK_READ_ONLY "wikiTrack.readOnly"
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
@@ -148,6 +149,9 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define GENE_CLASS "Genes and Gene Prediction Tracks"
 #define LOGIN_EXPIRED \
     "You do not have permission to edit pages, for the following reasons:"
+
+boolean wikiTrackReadOnly();
+/* return TRUE if wiki track is in Read-Only mode, default answer is FALSE */
 
 boolean wikiTrackEnabled(char *database, char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
