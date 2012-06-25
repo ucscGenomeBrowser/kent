@@ -1660,8 +1660,8 @@ void doMainDisplay(struct sqlConnection *conn,
 {
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Sorter", genome);
+cartWebStart(cart, database, buf);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
-makeTitle(buf, "hgNearHelp.html");
 cartSaveSession(cart);
 mainControlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
@@ -1677,6 +1677,7 @@ hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", countVarName,
 	cartUsualString(cart, countVarName, ""));
 cartSaveSession(cart);
 puts("</FORM>");
+cartWebEnd();
 }
 
 struct order *curOrder(struct order *ordList)
@@ -2004,6 +2005,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldVars = hashNew(10);
-cartHtmlShell("Gene Sorter v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
