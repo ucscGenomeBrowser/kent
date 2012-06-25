@@ -216,7 +216,8 @@ hPrintf("<HR>\n");
 
 if (NULL == userName)
     {
-    offerLogin(item->id, "add comments to items on", WIKI_TRACK_TABLE);
+    ;  /* enforce read-only 2012-06-22 */
+    /* offerLogin(item->id, "add comments to items on", WIKI_TRACK_TABLE); */
     }
 else if (emailVerified(TRUE)) /* do print message when not verified */
     {
@@ -288,7 +289,8 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
     cartWebStart(cart, database, "%s", "User Annotation Track: Create new item");
     if (NULL == userName)
 	{
-	offerLogin(0, "add new items to", WIKI_TRACK_TABLE);
+        /* enforce read-only 2012-06-22 */
+	/* offerLogin(0, "add new items to", WIKI_TRACK_TABLE); */
 	//cartHtmlEnd();
 	return;
 	}
