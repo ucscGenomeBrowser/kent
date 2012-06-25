@@ -12,7 +12,8 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-// developer: this include is for an occasionally useful means of getting stack info without crashing
+// developer: this include is for an occasionally useful means of getting stack info without
+// crashing
 // however, it is not supported on cygwin.  Conditionally compile this in when desired.
 //#define BACKTRACE_EXISTS
 #ifdef BACKTRACE_EXISTS
@@ -177,7 +178,7 @@ void noWarnAbort()
 {
 struct perThreadAbortVars *ptav = getThreadVars();
 ptav->abortArray[ptav->abortIx]();
-exit(-1);		/* This is just to make compiler happy.
+exit(-1);               /* This is just to make compiler happy.
                          * We have already exited or longjmped by now. */
 }
 

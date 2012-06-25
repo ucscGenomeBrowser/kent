@@ -12758,6 +12758,16 @@ tag DEX500PM
 description 1 h with 500 pM Dexamethasone (Myers)
 type treatment
 
+term DIFF_4d
+tag DIFF4D
+description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam)
+type treatment
+
+term DIFF_7d
+tag DIFF7D
+description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
+type treatment
+
 term diffProtA_2d
 tag DIFFA2D
 type treatment
@@ -13003,6 +13013,16 @@ tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
 type treatment
 
+term G1_phase
+tag G1PHASE
+description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+type treatment
+
+term G2-M_phase
+tag G2MPHASE
+description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+type treatment
+
 term Genistein_100nM
 tag GEN1H
 description 1 h with 100 nM Genistein   (Myers)
@@ -13017,6 +13037,12 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description 24 h with 1% p02 and 10mM Lactate, pH 6.7 (Crawford)
+type treatment
+
+term Hypoxia_LacAcid_ctrl
+tag HYPOXLACCON
+label Untreated control cells
+description  Untreated cells grown along side Hypoxia LacAcid treated cells (Crawford)
 type treatment
 
 term IFNa30
@@ -13058,21 +13084,21 @@ tag INSLN
 description DMEM with 0.5% BSA supplemented with 100 nM insulin and 10 uM 22-hydroxycholesterol for 6 h. (Snyder)
 type treatment
 
+term lenti-MyoD
+tag LENTIMYOD
+description GM03348 skin fibroblasts (Coriell) were transduced with an induceable lentivirus (pAK111-TRE-3xflag hMyoD-T2A-dsRed) containing get inducible MyoD. Cells were selected in 1ug per ml puro (Sigma catalog P8833) to obtain a pure cell population. Cells were induced for MYOD expression for 10 days with doxycycline and at concentration of 3ug per ml. Standard media was used (and replaced every 2 days) during induction: DMEM, 1% Pen Strep, and 10% FBS. (Crawford)
+type treatment
+
+term lenti-control
+tag LENTICON
+description GM03348 skin fibroblasts (Coriell) were transduced with an induceable lentivirus (pAK111-TRE-3xflag hMyoD-T2A-dsRed) containing get inducible MyoD. Cells were selected in 1ug per ml puro (Sigma catalog P8833) to obtain a pure cell population. Cells were cultured for 10 days (NO DOXYCYCLINE) (Crawford)
+type treatment
+
 term MNaseD
 tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
 label Micrococcal nuclease
-
-term DIFF_4d
-tag DIFF4D
-description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam)
-type treatment
-
-term DIFF_7d
-tag DIFF7D
-description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
-type treatment
 
 term NaBut
 tag NABUT
