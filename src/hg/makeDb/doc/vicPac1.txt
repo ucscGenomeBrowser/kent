@@ -398,4 +398,30 @@ vicPac1.perChromTables = no
     git push
     make etc-update
 
+#####################################################################
+#  SWAP bosTau7 LASTZ (DONE - 2012-06-19 - Chin)
+    #   original alignment done at bosTau7.txt
+    cd /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+    cat fb.bosTau7.chainVicPac1Link.txt
+    #   1259182233 bases of 2804673174 (44.896%) in intersection
+
+    # Create link
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzVicPac1.2012-06-19 lastz.vicPac1
+
+    #   and the swap
+    mkdir /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    717m22.295s
+    cat fb.vicPac1.chainBosTau7Link.txt
+    #  1309266730 bases of 1922910435 (68.088%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
 #########################################################################
