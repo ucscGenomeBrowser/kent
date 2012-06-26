@@ -2878,6 +2878,8 @@ var imageV2 = {
         }
     },
 
+    // XXXX delete obsolete jumpButtonOnClick
+
     jumpButtonOnClick: function () // called from hgTracks.c
     {   // onClick handler for the "jump" button.
         // Handles situation where user types a gene name into the gene box and immediately hits the jump button,
@@ -3006,19 +3008,19 @@ $(document).ready(function()
     initVars();
 
     var db = getDb();
-    suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
-         function (position) {
-              genomePos.set(position, commify(getSizeFromCoordinates(position)));
-              vis.makeTrackVisible($("#suggestTrack").val());
-         },
-         function (position) {
-              genomePos.set(position, commify(getSizeFromCoordinates(position)));
-         });
-
-    // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
-    // working, which is a major annoyance.
-    // $('#positionInput').focus();
-
+    if($('#positionInput').length) {
+        suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
+             function (position) {
+                  genomePos.set(position, commify(getSizeFromCoordinates(position)));
+                  vis.makeTrackVisible($("#suggestTrack").val());
+             },
+             function (position) {
+                  genomePos.set(position, commify(getSizeFromCoordinates(position)));
+             });
+        // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
+        // working, which is a major annoyance.
+        // $('#positionInput').focus();
+    }
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
         var allLinks = $('a');
