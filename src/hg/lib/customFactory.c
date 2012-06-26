@@ -353,12 +353,12 @@ if (wordCount > 7)
      if ((bed->thickStart != 0) &&
 	 ((bed->thickStart < bed->chromStart) ||
 	  (bed->thickStart > bed->chromEnd)))
-	 lineFileAbort(lf,
+        lineFileAbort(lf,
 	     "thickStart out of range (chromStart to chromEnd, or 0 if no CDS)");
      if ((bed->thickEnd != 0) &&
 	 ((bed->thickEnd < bed->chromStart) ||
 	  (bed->thickEnd > bed->chromEnd)))
-	 lineFileAbort(lf,
+        lineFileAbort(lf,
 	     "thickEnd out of range for %s:%d-%d, thick:%d-%d (chromStart to chromEnd, or 0 if no CDS)",
 		       bed->name, bed->chromStart, bed->chromEnd,
 		       bed->thickStart, bed->thickEnd);

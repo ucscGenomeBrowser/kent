@@ -1,4 +1,3 @@
-
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
@@ -33,17 +32,22 @@ if (!ajax)
 printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to %s track settings'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>\n"
+#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' " \
+                       "title='Link to %s track settings'><IMG height=12 " \
+                       "src='../images/ab_up.gif'>%s</A>)</B>\n"
 if (tdbIsComposite(tdb))
     {
     char *encodedTrackName = cgiEncode(tdb->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName,tdb->shortLabel,"Track settings");
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(),
+           cartSessionId(cart), chrom, encodedTrackName,tdb->shortLabel,"Track settings");
     freeMem(encodedTrackName);
     }
 else if (tdb->parent) //Print link for parent track
     {
     char *encodedTrackName = cgiEncode(tdb->parent->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel, tdb->parent->shortLabel);
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(),
+           cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel,
+           tdb->parent->shortLabel);
     freeMem(encodedTrackName);
     }
 
@@ -52,14 +56,16 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     {
     printf("<span id='navDown' style='float:right; display:none;'>");
     // First put up a button to go to File Search
-    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>File Search</A>&nbsp;&nbsp;&nbsp;",db);
+    printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>"
+            "File Search</A>&nbsp;&nbsp;&nbsp;",db);
 
     // Now link to description
     char *downArrow = "&dArr;";
     enum browserType browser = cgiBrowser();
     if (browser == btIE || browser == btFF)
         downArrow = "&darr;";
-    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
+    printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",
+           downArrow);
     printf("</span>");
     }
 puts("<BR>");
@@ -134,7 +140,7 @@ printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", "clearCache", "ajax", NULL,};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "clearCache", "ajax", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */

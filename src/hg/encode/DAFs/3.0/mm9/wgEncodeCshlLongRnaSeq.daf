@@ -86,7 +86,7 @@ required         no
 downloadOnly     yes
 
 view             ExonsDeNovo
-type             gtg
+type             gtf
 hasReplicates    no
 required         no
 downloadOnly     yes

@@ -45,8 +45,8 @@ char *protDbName;               /* Name of proteome database for this genome. */
 
 struct tempName gifTn, gifTn2;  /* gifTn for tracks image and gifTn2 for stamps image */
 boolean hideControls = FALSE;   /* Hide all controls? */
-boolean suppressHtml = FALSE;	/* If doing PostScript output we'll suppress most
-         			 * of HTML output. */
+boolean suppressHtml = FALSE;   /* If doing PostScript output we'll suppress most
+                                 * of HTML output. */
 char *proteinID;
 char *protDisplayID;
 char *mrnaID;
@@ -172,20 +172,20 @@ conn  = sqlConnect(UNIPROT_DB_NAME);
 hPrintf("<br><font size=4>Protein ");
 
 hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n",
-	proteinID, proteinID);
+        proteinID, proteinID);
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
 if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
-	{
-	hPrintf(" (aka %s", spDisplayId);
-	/* show once if the new and old displayId are the same */
- 	oldDisplayId = oldSpDisplayId(spDisplayId);
-	if (oldDisplayId != NULL)
- 	    {
+        {
+        hPrintf(" (aka %s", spDisplayId);
+        /* show once if the new and old displayId are the same */
+        oldDisplayId = oldSpDisplayId(spDisplayId);
+        if (oldDisplayId != NULL)
+            {
             if (!sameWord(spDisplayId, oldDisplayId))
-	    	{
-	    	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
-	    	}
+                {
+                hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	        }
 	    }
 	hPrintf(")\n");
 	}
@@ -319,22 +319,22 @@ if (proteinInSupportedGenome || (blatGbDb != NULL))
 
     /* Show GB links only if the protein belongs to a supported genome */
     if (proteinInSupportedGenome)
-    	{
-    	doGenomeBrowserLink(proteinID, mrnaID, hgsidStr);
-    	doGeneDetailsLink(proteinID, mrnaID, hgsidStr);
-    	}
+        {
+        doGenomeBrowserLink(proteinID, mrnaID, hgsidStr);
+        doGeneDetailsLink(proteinID, mrnaID, hgsidStr);
+        }
 
     /* Show Gene Sorter link only if it is valid for this genome */
     if (hgNearOk(database))
-    	{
-    	doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
-    	}
+        {
+        doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
+        }
 
     /* Show BLAT link if we have UCSC Genome Browser for it */
     if (blatGbDb != NULL)
-    	{
-    	doBlatLink(blatGbDb, sciName, commonName, protSeq);
-    	}
+        {
+        doBlatLink(blatGbDb, sciName, commonName, protSeq);
+        }
 
     hPrintf("</UL><P>");
     }
@@ -414,10 +414,10 @@ doTrackForm(psTn.forCgi, psTn2.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
        "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
-if(pdfFile != NULL)
+if (pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
-	   "the current protein tracks graphic in PDF", pdfFile);
+           "the current protein tracks graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
@@ -425,10 +425,10 @@ else
 printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
        "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
-if(pdfFile != NULL)
+if (pdfFile != NULL)
     {
     printf("<BR><A HREF=\"%s\">Click here to download</A> "
-	   "the current protein histograms graphic in PDF", pdfFile);
+           "the current protein histograms graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
@@ -484,9 +484,9 @@ else
     /* no CGI 'db' variable means it did not come in from GB but from pbGateway */
     /* search existing GB databases to see if this protein can be found */
     protCntInSupportedGenomeDb =
-    	searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
+        searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
     if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
-    	{
+        {
 	/* more than 1 proteins match the query ID, present selection web page */
 	proteinInSupportedGenome = 1;
 	presentProteinSelections(queryID, protCntInSwissByGene, protCntInSupportedGenomeDb);
@@ -513,13 +513,13 @@ else
 		{
 	        hUserAbort(
 		"'%s' does not seem to be a valid UniProtKB protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
-		    	, queryID);
-	    	}
+		        , queryID);
+	        }
 
 	    proteinInSupportedGenome = FALSE;
 	    database = strdup(GLOBAL_PB_DB);
 	    organism = strdup("");
-    	    protDbName = strdup(PROTEOME_DB_NAME);
+            protDbName = strdup(PROTEOME_DB_NAME);
 	    proteinID = strdup(answer);
 	    }
 	}
@@ -534,7 +534,7 @@ else
         answer = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
 
 	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
-    	chromStr    = sqlGetField(database, "knownGene", "chrom", cond_str);
+        chromStr    = sqlGetField(database, "knownGene", "chrom", cond_str);
 	if (chromStr)
 	    {
 	    cdsStartStr = sqlGetField(database, "knownGene", "cdsStart", cond_str);
@@ -601,15 +601,15 @@ else
 if (proteinInSupportedGenome)
     {
     if (kgVersion == KG_III)
-    	{
-    	safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
-    	mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
+        {
+        safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
+        mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
 	}
     else
-    	{
-    	safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
-    	mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
-    	}
+        {
+        safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+        mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
+        }
     }
 else
     {
@@ -665,8 +665,8 @@ hPrintf("Please try again later.\n");
 char *excludeVars[] = { "submit", "Submit", "pbt.reset",
 			"pbt.in1", "pbt.in2", "pbt.in3", "pbt.inBase",
 			"pbt.out1", "pbt.out2", "pbt.out3",
-			"pbt.left1", "pbt.left2", "pbt.left3",
-			"pbt.right1", "pbt.right2", "pbt.right3",
+                        "pbt.left1", "pbt.left2", "pbt.left3",
+                        "pbt.right1", "pbt.right2", "pbt.right3",
 			"pbt.dinkLL", "pbt.dinkLR", "pbt.dinkRL", "pbt.dinkRR",
 			"pbt.tui", "pbt.hideAll", "pbt.psOutput", "hideControls",
 			NULL };

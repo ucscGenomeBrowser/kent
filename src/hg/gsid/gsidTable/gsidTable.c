@@ -238,45 +238,46 @@ for (si = subjList; si != NULL; si = si->next)
 		{
 		special = FALSE;
 
-		if (sameWord(col->type, "integer") || sameWord(col->type, "double"))
-		/* special processing for missing data */
-		if (sameWord(col->name, "SDayLastPTest") 	||
-    		    sameWord(col->name, "SDayLastTrTest") 	||
-    		    sameWord(col->name, "LastPMNNeutral")	||
-    		    sameWord(col->name, "artDaei")		||
-    		    sameWord(col->name, "seqDay")		||
-    		    sameWord(col->name, "firstRNAPosDay")	||
-    		    sameWord(col->name, "lastSeroNegDay")	||
-    		    sameWord(col->name, "LastTrVisit")		||
-    		    sameWord(col->name, "LastPVisit")		||
-    		    sameWord(col->name, "LastPCD4Blk")		||
-    		    sameWord(col->name, "LastTrCD4Blk")		||
-    		    sameWord(col->name, "LastPAntiGP120")	||
-    		    sameWord(col->name, "LastTrAntiGP120")	||
-    		    sameWord(col->name, "LastTrMnNeutral")
-   		   )
-    		    {
-    		    if (sameWord(val, "-1"))
-			{
-			hPrintf("N/A");
-			special = TRUE;
-			}
-    		    if (sameWord(val, "-2"))
-			{
-			hPrintf("N/D");
-			special = TRUE;
-			}
-    		    if (sameWord(val, "-3"))
-    			{
-    			hPrintf("&nbsp");
-			special = TRUE;
-			}
-    		    if (sameWord(val, "-3.000"))
-    			{
-    			hPrintf("&nbsp");
-			special = TRUE;
-			}
-    		    }
+                if (sameWord(col->type, "integer") || sameWord(col->type, "double"))
+                    {
+                    /* special processing for missing data */
+                    if (sameWord(col->name, "SDayLastPTest")
+                    ||  sameWord(col->name, "SDayLastTrTest")
+                    ||  sameWord(col->name, "LastPMNNeutral")
+                    ||  sameWord(col->name, "artDaei")
+                    ||  sameWord(col->name, "seqDay")
+                    ||  sameWord(col->name, "firstRNAPosDay")
+                    ||  sameWord(col->name, "lastSeroNegDay")
+                    ||  sameWord(col->name, "LastTrVisit")
+                    ||  sameWord(col->name, "LastPVisit")
+                    ||  sameWord(col->name, "LastPCD4Blk")
+                    ||  sameWord(col->name, "LastTrCD4Blk")
+                    ||  sameWord(col->name, "LastPAntiGP120")
+                    ||  sameWord(col->name, "LastTrAntiGP120")
+                    ||  sameWord(col->name, "LastTrMnNeutral"))
+                        {
+                        if (sameWord(val, "-1"))
+                            {
+                            hPrintf("N/A");
+                            special = TRUE;
+                            }
+                        if (sameWord(val, "-2"))
+                            {
+                            hPrintf("N/D");
+                            special = TRUE;
+                            }
+                        if (sameWord(val, "-3"))
+                            {
+                            hPrintf("&nbsp");
+                            special = TRUE;
+                            }
+                        if (sameWord(val, "-3.000"))
+                            {
+                            hPrintf("&nbsp");
+                            special = TRUE;
+                            }
+                        }
+                    }
 
 		if (sameWord(col->name, "cd4Count"))
     		    {
@@ -363,27 +364,33 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
 /* Home */
-hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>Home</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>"
+        "Home</A></TD>");
 //, orgEnc);
 
 /* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' style='color:#FFFFFF;'>Blat</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' "
+        "style='color:#FFFFFF;'>Blat</A></TD>");
 
 /* Subject View */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gsidSubj' class='topbar' style='color:#FFFFFF;'>Subject View</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gsidSubj' class='topbar' style='color:#FFFFFF;'>"
+        "Subject View</A></TD>");
 
 /* Sequence View */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' "
+        "style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
 
 /* Help */
 
 if (cartVarExists(cart, advFilterVarName))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#SelectSubject' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#SelectSubject' "
+            "TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#TableView' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gsidTutorial.html#TableView' "
+            "TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 
 hPuts("</TR></TABLE>");
@@ -1000,15 +1007,14 @@ special = FALSE;
 char *s = col->cellVal(col, si, conn);
 hPrintf("<TD align=right>");
 /* special processing for missing data */
-if (sameWord(col->name, "SDayLastPTest") 	||
-    sameWord(col->name, "SDayLastTrTest") 	||
-    sameWord(col->name, "LastPMNNeutral")	||
-    sameWord(col->name, "artDaei")		||
-    sameWord(col->name, "seqDay")		||
-    sameWord(col->name, "firstRNAPosDay")	||
-    sameWord(col->name, "lastSeroNegDay")	||
-    sameWord(col->name, "LastTrMnNeutral")
-   )
+if (sameWord(col->name, "SDayLastPTest")
+||  sameWord(col->name, "SDayLastTrTest")
+||  sameWord(col->name, "LastPMNNeutral")
+||  sameWord(col->name, "artDaei")
+||  sameWord(col->name, "seqDay")
+||  sameWord(col->name, "firstRNAPosDay")
+||  sameWord(col->name, "lastSeroNegDay")
+||  sameWord(col->name, "LastTrMnNeutral"))
     {
     if (sameWord(s, "-1"))
 	{
@@ -1112,10 +1118,10 @@ else
 	    }
 	}
     else
-    if (sameWord(col->name, "LastTrCD4Blk")   ||
-        sameWord(col->name, "LastPCD4Blk")    ||
-        sameWord(col->name, "LastPAntiGP120") ||
-        sameWord(col->name, "LastTrAntiGP120"))
+    if (sameWord(col->name, "LastTrCD4Blk")
+    ||  sameWord(col->name, "LastPCD4Blk")
+    ||  sameWord(col->name, "LastPAntiGP120")
+    ||  sameWord(col->name, "LastTrAntiGP120"))
     	{
     	if (sameWord(s, "-3.000"))
 	   {

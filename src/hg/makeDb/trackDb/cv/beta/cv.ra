@@ -170,7 +170,7 @@ tag HUVEC
 type Cell Line
 organism human
 description umbilical vein endothelial cells
-tissue blood vessel 
+tissue blood vessel
 vendorName Lonza
 vendorId CC-2517
 orderUrl http://www.lonza.com/
@@ -207,7 +207,7 @@ type Cell Line
 organism human
 description neurons derived from H1 embryonic stem cells, newly promoted to tier 2: not in 2011 analysis
 tissue neurons
-vendorName CDI 
+vendorName CDI
 vendorId TBD
 orderUrl TBD
 lineage ectoderm
@@ -523,7 +523,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 label Bladder_BC_01-11002
 
-term BC_Brain_H11058N 
+term BC_Brain_H11058N
 tag BCBRAIN
 type Cell Line
 tier 3
@@ -583,22 +583,22 @@ tag COLONBC
 type Cell Line
 tier 3
 organism human
-description colon, parent cell type to donors BC_01-11002 and BC_H12817N 
+description colon, parent cell type to donors BC_01-11002 and BC_H12817N
 tissue colon
 lineage endoderm
 karyotype normal
 sex B
 vendorName BioChain ; BioChain ; BioChain ; BioChain
-vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053 
+vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC
-# The new terms Colon_BC, Esophagus_BC, Kidney_BC, 
-# Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out 
-# of alphabetical order. This may make them easier 
-# to review, but they should be moved to their 
+# The new terms Colon_BC, Esophagus_BC, Kidney_BC,
+# Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out
+# of alphabetical order. This may make them easier
+# to review, but they should be moved to their
 # correct location after April 2012. ~Jeff
 
 term BC_Colon_01-11002
@@ -644,7 +644,7 @@ tag ESOPHAGUSBC
 type Cell Line
 tier 3
 organism human
-description esophagus, parental cell type to donors 01-11002 and H12817N 
+description esophagus, parental cell type to donors 01-11002 and H12817N
 tissue esophagus
 lineage endoderm
 karyotype normal
@@ -719,7 +719,7 @@ tag KIDNEYBC
 type Cell Line
 tier 3
 organism human
-description kidney, parental cell type to donors 01-11002 and H12817N 
+description kidney, parental cell type to donors 01-11002 and H12817N
 tissue kidney
 lineage mesoderm
 karyotype normal
@@ -830,7 +830,7 @@ tag LUNGBC
 type Cell Line
 tier 3
 organism human
-description lung, parental cell type to donors 01-11002 and H12817N 
+description lung, parental cell type to donors 01-11002 and H12817N
 tissue lung
 lineage endoderm
 karyotype normal
@@ -995,7 +995,7 @@ tag SKELBC
 type Cell Line
 tier 3
 organism human
-description skeletal muscle, parental cell type to donors 01-11002 and H12817N 
+description skeletal muscle, parental cell type to donors 01-11002 and H12817N
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
@@ -1123,7 +1123,7 @@ tag STOMACHBC
 type Cell Line
 tier 3
 organism human
-description stomach, parental cell type to donors 01-11002 and H12817N 
+description stomach, parental cell type to donors 01-11002 and H12817N
 tissue stomach
 lineage endoderm
 karyotype normal
@@ -1747,7 +1747,7 @@ tag GM08714
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo. 
+description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 lineage mesoderm
 sex F
 tissue blood
@@ -2636,7 +2636,7 @@ description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage mesoderm
 karyotype normal
 sex M
-tissue blood vessel 
+tissue blood vessel
 childOf HAoAF
 vendorName PromoCell
 vendorId C-14037
@@ -2674,7 +2674,7 @@ description Aortic Endothelial Cells (thoracic) from two individuals, HAoEC_7071
 lineage mesoderm
 karyotype normal
 sex B
-tissue blood vessel 
+tissue blood vessel
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -4113,7 +4113,7 @@ description Saphenous Vein Endothelial Cells from thigh
 lineage mesoderm
 karyotype normal
 sex M
-tissue blood vessel 
+tissue blood vessel
 childOf HSaVEC
 vendorName PromoCell
 vendorId C-14025
@@ -4180,7 +4180,7 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies 
+description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies
 termId BTO:0000222
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000222
 vendorName Duke/UNC/UT/EBI ENCODE group
@@ -4231,12 +4231,12 @@ tag HSMMTUBEFSHD
 type Cell Line
 tier 3
 organism human
-description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies 
+description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies
 childOf HSMM_FSHD
 termId BTO:0001760
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId HSMMtube_FSHD 
+vendorId HSMMtube_FSHD
 orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
@@ -4633,7 +4633,7 @@ term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
 type Cell Line
 organism human
-description parental cell type to lymphoblastoid cell lines 
+description parental cell type to lymphoblastoid cell lines
 tissue blood
 #tissue haematopoietic
 vendorName Coriell
@@ -4870,12 +4870,12 @@ tag MRTG401
 type Cell Line
 tier 3
 organism human
-description Malignant renal rhabdoid tumor line 
+description Malignant renal rhabdoid tumor line
 karyotype cancer
 lineage missing
 sex M
 tissue kidney
-vendorName ATCC 
+vendorName ATCC
 vendorId CRL-1441
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
 lots 6
@@ -4889,13 +4889,13 @@ tag MRTA204
 type Cell Line
 tier 3
 organism human
-description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma 
+description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma
 karyotype cancer
 lineage missing
 sex F
 tissue muscle
 vendorName ATCC
-vendorId HTB-82 
+vendorId HTB-82
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
 lots 1
 termId BTO:0002062
@@ -4908,18 +4908,18 @@ tag MRTTTC549
 type Cell Line
 tier 3
 organism human
-description Malignant Hepatic Rhabdoid tumor line 
+description Malignant Hepatic Rhabdoid tumor line
 karyotype cancer
 lineage missing
 sex M
 tissue liver
 vendorName ATCC
-vendorId TTC549 
+vendorId TTC549
 orderUrl missing
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
-protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -5733,7 +5733,7 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-term T_cells_CD4+ 
+term T_cells_CD4+
 tag TCELLSCD4
 type Cell Line
 organism human
@@ -5750,7 +5750,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf 
+protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf
 label T_cells_CD4+
 
 term T98G
@@ -6199,7 +6199,7 @@ tissue mammary
 category cellLine
 age immortalized
 strain RIII
-description mammary tumor fibroblast 
+description mammary tumor fibroblast
 vendorName ATCC
 vendorId CRL-1616
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
@@ -6310,7 +6310,7 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System 
+description Central Nervous System
 vendorName CSHL lab
 vendorId CNS
 orderUrl http://gingeraslab.cshl.edu/
@@ -6475,17 +6475,17 @@ color 65,105,225
 sex M
 protocol Stam:ES-E14_Stam_protocol.pdf
 
-term ES-EM5Sox17huCD25 
+term ES-EM5Sox17huCD25
 tag ESEM5S
 type Cell Line
 organism mouse
 category primaryCells
-description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5 
+description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5
 age EO
 strain 129/Ola
 vendorName Gilbert lab
 vendorId ES-GscgfpSox17huCD25
-orderUrl http://gilbertlab.bio.fsu.edu/ 
+orderUrl http://gilbertlab.bio.fsu.edu/
 color 65,105,225
 sex U
 protocol missing
@@ -6719,10 +6719,10 @@ organism mouse
 category cellLine
 age immortalized
 strain Unknown
-description Fetal myoblast Desmin+ 
+description Fetal myoblast Desmin+
 vendorName Gilbert lab
 vendorId J185a
-orderUrl http://gilbertlab.bio.fsu.edu/ 
+orderUrl http://gilbertlab.bio.fsu.edu/
 termId 174
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
 color 139,69,19
@@ -6979,7 +6979,7 @@ age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
-termId GO:0036194 
+termId GO:0036194
 termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
 vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
@@ -12134,7 +12134,7 @@ description Single 25 nt reads
 term 1x30
 tag R1x30
 type readType
-description Single 30 nt read 
+description Single 30 nt read
 
 term 1x32
 tag R1X32
@@ -12660,7 +12660,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description input library was prepared at Harvard. 
+description input library was prepared at Harvard.
 label Harvard Input Control
 
 ### Treatments
@@ -12870,17 +12870,17 @@ type treatment
 
 term diffProtG_3d
 tag DIFFG3D
-description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert) 
+description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert)
 type treatment
 
 term diffProtH_Sox17+
 tag DIFFHSOXP
-description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert) 
+description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert)
 type treatment
 
 term diffProtH_Sox17-
 tag DIFFHSOXM
-description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert) 
+description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert)
 type treatment
 
 term DMSO_0.02pct
@@ -12960,7 +12960,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, hormone treatment (Stam) 
+description 1 h with 100 nM Estradiol, hormone treatment (Stam)
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -13567,7 +13567,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Minus Raw signal 
+label Minus Raw signal
 description Graphs the base-by-base density of tags on the minus strand
 
 term MinusSignal
@@ -14057,7 +14057,7 @@ term RepliChip
 tag REPLICHIP
 type dataType
 label Repli-chip
-description Assessment of DNA Replication Timing 
+description Assessment of DNA Replication Timing
 dataGroup Other
 
 term RepliSeq
@@ -14161,7 +14161,7 @@ label B6D2F1/J
 term B6CBAF1/J
 tag B6CBAF1J
 type strain
-description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J.
 
 term BALB/cAnN
 tag BALBCANN
@@ -15038,6 +15038,17 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
+organism mouse
+
+term CRG-Guigo-m
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Gingeras
 organism mouse
 
 term UMass-m
@@ -16257,5 +16268,6 @@ validate cv
 priority 035
 requiredVars term,tag,type,description,label #Provisional
 optionalVars label,deprecated #Provisional
+
 
 

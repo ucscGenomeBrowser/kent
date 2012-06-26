@@ -77,40 +77,35 @@ char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainFo
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
-puts(
-"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<CENTER>"
-"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
-"<TR><TD style='text-align:center; font-size:small;'>\n"
-"The UCSC Genome Browser was created by the \n"
-"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
-"<BR>"
-"Software Copyright (c) The Regents of the University of California.\n"
-"All rights reserved.\n"
-"</TD></TR></TABLE></CENTER>\n"
-);
+puts("<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
+     "<CENTER>"
+     "<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+     "<TR><TD style='text-align:center; font-size:small;'>\n"
+     "The UCSC Genome Browser was created by the \n"
+     "<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
+     "<BR>"
+     "Software Copyright (c) The Regents of the University of California.\n"
+     "All rights reserved.\n"
+     "</TD></TR></TABLE></CENTER>\n");
 
-puts(
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
-"<CENTER>\n"
-"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
-"<tr><td>\n"
-"<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
-"<tr><td>\n"
-"<table bgcolor='#FFFEF3' border=0>\n"
-"<tr>\n"
-"<td>\n"
-"<table><tr>");
+puts("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
+     "<CENTER>\n"
+     "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
+     "<tr><td>\n"
+     "<table CELLPADDING=0 CELLSPACING=0 style='background-color:#FEFDEF; border-style:none;'>\n"
+     "<tr><td>\n"
+     "<table bgcolor='#FFFEF3' border=0>\n"
+     "<tr>\n"
+     "<td>\n"
+     "<table><tr>");
 if (gotClade)
     puts("<td align=center valign=baseline>clade</td>");
-puts(
-"<td align=center valign=baseline>genome</td>\n"
-"<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position</td>\n"
-"<td align=center valign=baseline>image width</td>\n"
-"<td align=center valign=baseline> &nbsp; </td>\n"
-"</tr>\n<tr>"
-);
+puts("<td align=center valign=baseline>genome</td>\n"
+     "<td align=center valign=baseline>assembly</td>\n"
+     "<td align=center valign=baseline>position</td>\n"
+     "<td align=center valign=baseline>image width</td>\n"
+     "<td align=center valign=baseline> &nbsp; </td>\n"
+     "</tr>\n<tr>");
 
 if (gotClade)
     {
@@ -165,19 +160,16 @@ printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 
-puts(
-"</tr></table>\n"
-"</td></tr><tr><td><CENTER>\n"
-"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
-"</CENTER>\n"
-"</td></tr><tr><td><CENTER>\n"
-);
+puts("</tr></table>\n"
+     "</td></tr><tr><td><CENTER>\n"
+     "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
+     "</CENTER>\n"
+     "</td></tr><tr><td><CENTER>\n");
 cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
 puts("</CENTER>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
-);
+     "</td></tr></table>\n"
+     "</td></tr></table>\n"
+     "</td></tr></table>\n");
 puts("</CENTER>");
 
 hgPositionsHelpHtml(organism, db);
@@ -218,12 +210,12 @@ subChar(ss, '\r',' ');
 while (1)
     {
     if (!(w = nextWord(&s))) break;
-    if(slNameInList(geneNames, w))
-	/* could be optimized, but not expecting large lists for ring */
-	{
-	safef(emsg,sizeof(emsg), "Duplicate gene id (%s) found in list.",w);
+    if (slNameInList(geneNames, w))
+        /* could be optimized, but not expecting large lists for ring */
+        {
+        safef(emsg,sizeof(emsg), "Duplicate gene id (%s) found in list.",w);
 	errMsg = cloneString(emsg);
-	freez(&ss);
+        freez(&ss);
 	return FALSE;
 	}
     slNameAddHead(&geneNames, w);
@@ -292,12 +284,12 @@ while(sn)
     if (startsWith("CG",nm))
 	{
 	dyStringPrintf(query," %s bdgpName='%s'",sep,nm);
-    	sep = "or";
+        sep = "or";
 	}
     else if (!startsWith("FBgn",nm))
 	{
 	dyStringPrintf(query," %s symbol='%s'",sep,nm);
-    	sep = "or";
+        sep = "or";
 	}
     sn = sn->next;
     }
@@ -381,36 +373,28 @@ if (!sameString(errMsg,""))
     printf("<CENTER>%s</CENTER>\n",errMsg);
     }
 
-puts(
-"<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<CENTER>"
-"<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
-"<TR><TD style='text-align:center; font-size:x-small;'>\n"
-"Enter gene list for gene network ring.\n"
-"</TD></TR></TABLE></CENTER>\n"
-);
+puts("<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
+     "<CENTER>"
+     "<TABLE CELLPADDING=1 style='background-color:#FFFEF3; border-style:none;'>\n"
+     "<TR><TD style='text-align:center; font-size:x-small;'>\n"
+     "Enter gene list for gene network ring.\n"
+     "</TD></TR></TABLE></CENTER>\n");
 
-puts(
-"<CENTER>"
-"<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
-"<tr>\n"
-);
+puts("<CENTER>"
+     "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
+     "<tr>\n");
 
 puts("<td align=center>\n");
 cgiMakeTextArea("ring_geneList", geneList, 25, 30);
 printf("</td>\n");
 
-puts(
-"</tr><tr>\n"
-);
+puts("</tr><tr>\n");
 
 printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 
-puts(
-"</tr></table></CENTER>\n"
-);
+puts("</tr></table></CENTER>\n");
 puts("</FORM>\n");
 
 cartSetString(cart, "ring_action", "saveGeneList");
@@ -457,23 +441,15 @@ if (!getGenesAsList())
 
 if (showAll)
     {
-    puts(
-    "<CENTER>"
-    "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
-    "<tr><td>\n"
-    );
-    printf("geneList: %s<br>\n",
-	geneList
-    );
-    puts(
-    "</td></tr><tr><td>"
-    "<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">gene-list</a>\n"
-    "</td></tr><tr><td>"
-    "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
-    );
-    puts(
-    "</td></tr></table></CENTER>\n"
-    );
+    puts("<CENTER>"
+         "<table bgcolor='#CCCC99' border=0 CELLPADDING=1 CELLSPACING=0>\n"
+         "<tr><td>\n");
+    printf("geneList: %s<br>\n", geneList );
+    puts("</td></tr><tr><td>"
+         "<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">gene-list</a>\n"
+         "</td></tr><tr><td>"
+         "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n");
+    puts("</td></tr></table></CENTER>\n");
 
     }
 
@@ -729,13 +705,13 @@ for(i=0;i<ringCount;i++)
 	{
 	if (j==0)
 	    {
-    	    color = MG_BLUE;
-    	    rays = nl->node->xrays;
+            color = MG_BLUE;
+            rays = nl->node->xrays;
 	    }
 	else
 	    {
-    	    color = MG_RED;
-    	    rays = nl->node->nrays;
+            color = MG_RED;
+            rays = nl->node->nrays;
 	    }
 	for(l=rays;l;l=l->next)
 	    {
@@ -852,12 +828,12 @@ else if (sameWord(action,"saveGeneList"))
 else if (sameWord(action,"drawScreen"))
     {
     if (saveGeneList(FALSE))
-    	drawScreen();
+        drawScreen();
     }
 else if (sameWord(action,"drawDetails"))
     {
     if (saveGeneList(FALSE))
-    	drawDetails();
+        drawDetails();
     }
 else if (sameWord(action,"addToRing"))
     {
@@ -931,9 +907,9 @@ if (sameWord(action,"geneFrame"))
     char *position = cartUsualString(cart, "ring_position", "");
     printf(
 	"<frameset rows = \"18%%, *\">"
-    	"  <frame src =\"/cgi-bin/hgGeneRing?ring_action=drawDetails&ring_gene=%s\" />"
+        "  <frame src =\"/cgi-bin/hgGeneRing?ring_action=drawDetails&ring_gene=%s\" />"
 	"  <frame src =\"/cgi-bin/hgTracks?position=%s&db=%s\" />"
-    	"</frameset>",
+        "</frameset>",
 	gene,
 	position,
 	db

@@ -36,7 +36,8 @@ boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTim
 
 //#define USE_TABS
 
-static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, char *group)
+static struct trackDb *tdbFilterBy(struct trackDb **pTdbList, char *name, char *description, 
+                                   char *group)
 // returns tdbs that match supplied criterion, leaving unmatched in list passed in
 {
 // Set the word lists up once
@@ -93,8 +94,8 @@ if (dyStringLen(dyComposites) > 0)
     {
     char *composites = dyStringCannibalize(&dyComposites);
     composites[strlen(composites) - 1] = '\0';  // drop the last ','
-    //warn("Found composites: %s",composites);
-    slPairAdd(pMdbSelects,MDB_VAR_COMPOSITE,composites); // Composite should not already be in the list, because it is only indirectly sortable
+    slPairAdd(pMdbSelects,MDB_VAR_COMPOSITE,composites); 
+    // Composite should not already be in the list, because it is only indirectly sortable
     return TRUE;
     }
 
@@ -110,11 +111,13 @@ static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int 
 struct slRef *foundTdbs = NULL;
 
 struct trixSearchResult *tsList;
-for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
+for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); 
+    tsList != NULL; 
+    tsList = tsList->next)
     {
     struct trackDb *tdb = (struct track *) hashFindVal(trackHash, tsList->itemId);
-    if (track != NULL)  // It is expected that this is NULL (e.g. when the trix references trackDb tracks which have no tables)
-        {
+    if (track != NULL)  // It is expected that this is NULL 
+        {               // (e.g. when the trix references trackDb tracks which have no tables)
         refAdd(&foundTdbs, tdb);
         }
     }
@@ -204,7 +207,8 @@ trix = trixOpen(trixFile);
 
 printf("<div style='max-width:1080px;'>");
 // FIXME: Do we need a form at all?
-printf("<form action='../cgi-bin/hgFileSearch' name='%s' id='%s' method='get'>\n\n", FILE_SEARCH_FORM,FILE_SEARCH_FORM);
+printf("<form action='../cgi-bin/hgFileSearch' name='%s' id='%s' method='get'>\n\n", 
+       FILE_SEARCH_FORM,FILE_SEARCH_FORM);
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
 printf("<input type='hidden' name='db' value='%s'>\n", db);
@@ -212,26 +216,33 @@ printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_DEL_ROW);
 printf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_ADD_ROW);
 
 #ifdef USE_TABS
-printf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", FILE_SEARCH_CURRENT_TAB, currentTab);
+printf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", 
+       FILE_SEARCH_CURRENT_TAB, currentTab);
 printf("<div id='tabs' style='display:none; %s'>\n"
-        "<ul>\n"
-        "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Search</B></a></li>\n"
-        "<li><a href='#filesTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Files</B></a></li>\n"
-        "</ul>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
+       "<ul>\n"
+       "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, "
+       "Helvetica, san-serif;'>Search</B></a></li>\n"
+       "<li><a href='#filesTab'><B style='font-size:.9em;font-family: arial, Geneva, "
+       "Helvetica, san-serif;'>Files</B></a></li>\n"
+       "</ul>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
 // Files tab
 printf("<div id='simpleTab' style='max-width:inherit;'>\n");
 
 printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
-printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
-        TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
+printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
+       "style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
+       TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
 if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
-printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
-printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
+printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n",
+       FILE_SEARCH);
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' "
+       "onclick='findTracks.clear();'>\n");
+printf("<input type='submit' name='submit' value='cancel' class='cancel' "
+       "style='font-size:.8em;'>\n");
 printf("</div>\n");
 #endif///def USE_TABS
 
@@ -245,8 +256,9 @@ printf("<tr><td colspan=3></td>");
 printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracks.searchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
-        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
+printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' "
+       "onkeyup='findTracks.searchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
+       TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
 printf("</td></tr>\n");
 
 // Description contains
@@ -254,8 +266,10 @@ printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
 printf("<td><b style='max-width:100px;'>Description:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracks.searchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
-        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
+printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' "
+       "onkeyup='findTracks.searchButtonsEnable(true);' style='max-width:536px; "
+       "width:536px; font-size:.9em;'>",
+       TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 printf("</td></tr>\n");
 if (selectedTab==filesTab && descSearch)
     searchTermsExist = TRUE;
@@ -281,7 +295,8 @@ printf("<td><b style='max-width:100px;'>Group:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
-cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
+cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, 
+                    "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 printf("</td></tr>\n");
 if (selectedTab==filesTab && groupSearch)
     searchTermsExist = TRUE;
@@ -291,7 +306,8 @@ printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
 printf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,"style='min-width:40%; font-size:.9em;'");
+char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,
+                                          "style='min-width:40%; font-size:.9em;'");
 if (dropDownHtml)
     {
     puts(dropDownHtml);
@@ -307,7 +323,7 @@ if(metaDbExists)
     {
     struct slPair *mdbVars = mdbVarsSearchable(conn,FALSE,TRUE); // Not tables, just files
     mdbSelects = mdbSelectPairs(cart, mdbVars);
-    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,TRUE); // restricted to file search
+    char *output = mdbSelectsHtmlRows(conn,mdbSelects,mdbVars,cols,TRUE); // just for fileSearch
     if (output)
         {
         puts(output);
@@ -317,10 +333,12 @@ if(metaDbExists)
     }
 
 printf("</table>\n");
-printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
-printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
-//printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
+printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", 
+       FILE_SEARCH);
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' "
+       "onclick='findTracks.clear();'>\n");
+printf("<input type='submit' name='submit' value='cancel' class='cancel' "
+       "style='font-size:.8em;'>\n");
 printf("</div>\n");
 
 #ifdef USE_TABS
@@ -382,9 +400,10 @@ if(doSearch)
             if (isNotEmpty(nameSearch) || isNotEmpty(descSearch) || isNotEmpty(groupSearch))
                 {
                 struct trackDb *tdbList = hTrackDb(db);
-                struct trackDb *tdbsMatch = tdbFilterBy(&tdbList, nameSearch, descSearch, groupSearch);
+                struct trackDb *tdbsMatch = tdbFilterBy(&tdbList, nameSearch, descSearch, 
+                                                        groupSearch);
 
-                // Now we have a list of tracks, so we need a unique list of composites to add to mdbSelects
+                // Now we have a list of tracks, so we need a unique list of composites to add
                 doSearch = mdbSelectsAddFoundComposites(&mdbSelects,tdbsMatch);
                 }
             }
@@ -404,8 +423,8 @@ hFreeConn(&conn);
 
 webNewSection("About " FILE_SEARCH_NAME);
 printf("Search for downloadable ENCODE files by entering search terms in "
-        "the Track name or Description fields and/or by making selections with "
-        "the group, data format, and/or ENCODE metadata drop-downs.");
+       "the Track name or Description fields and/or by making selections with "
+       "the group, data format, and/or ENCODE metadata drop-downs.");
 printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a>\n");
 webEndSectionTables();
 }
@@ -423,9 +442,11 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 // QUESTION: Do We need track list ???  trackHash ??? Can't we just get one track and no children
 trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 
-cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", organism, hFreezeFromDb(db));
+cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", 
+             organism, hFreezeFromDb(db));
 
-// This cleverness allows us to have the background image like "Track Search" does, without all the hgTracks overhead
+// This cleverness allows us to have the background image like "Track Search" does, 
+//      without all the hgTracks overhead
 printf("<style type='text/css'>body {background-image:url('%s');}</style>",hBackgroundImage());
 
 webIncludeResourceFile("HGStyle.css");
@@ -438,7 +459,8 @@ jsIncludeFile("utils.js",NULL);
 
 // This line is needed to get the multi-selects initialized
 jsIncludeFile("ddcl.js",NULL);
-printf("<script type='text/javascript'>$(document).ready(function() { findTracks.updateMdbHelp(0); });</script>\n");
+printf("<script type='text/javascript'>$(document).ready(function() "
+        "{ findTracks.updateMdbHelp(0); });</script>\n");
 
 doFileSearch(db,organism,cart,tdbList);
 
@@ -447,7 +469,8 @@ printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", "ajax", "clearCache", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "ajax", "clearCache", 
+                        FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -462,4 +485,5 @@ return 0;
 // 1) Done: Limit to first 1000
 // 2) Work out simple verses advanced tabs
 // 3) work out support for non-encode downloads
-// 4) Make an hgTrackSearch to replace hgTracks track search ??   Simlpler code, but may not be good idea because of composite reshaping in cart vars
+// 4) Make an hgTrackSearch to replace hgTracks track search ??   
+//    Simlpler code, but may not be good idea because of composite reshaping in cart vars

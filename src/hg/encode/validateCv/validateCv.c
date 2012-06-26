@@ -11,18 +11,18 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "validateCv - validates a controlled vocabulary file\n"
-  "usage:\n"
-  "   validateCv [-type={} [-setting={}]] [-level] cv.ra\n"
-  "options:\n"
-  "   -type={type} Type of terms to check, otherwise all types are checked.\n"
-  "          -setting={setting} Check for just a single setting (only valid with -type).\n"
-  "   -level       Level of scrutiny (ignored if -setting is used):\n"
-  "                0 (default) Only must haves.\n"
-  "                1 Must haves and should haves.\n"
-  "                2 Must haves, should haves and the kitchen sink.\n"
-  "   -verbose=2   Will list all errors.  Otherwise just counts errors.\n"
-  );
+    "validateCv - validates a controlled vocabulary file\n"
+    "usage:\n"
+    "   validateCv [-type={} [-setting={}]] [-level] cv.ra\n"
+    "options:\n"
+    "   -type={type} Type of terms to check, otherwise all types are checked.\n"
+    "          -setting={setting} Check for just a single setting (only valid with -type).\n"
+    "   -level       Level of scrutiny (ignored if -setting is used):\n"
+    "                0 (default) Only must haves.\n"
+    "                1 Must haves and should haves.\n"
+    "                2 Must haves, should haves and the kitchen sink.\n"
+    "   -verbose=2   Will list all errors.  Otherwise just counts errors.\n"
+    );
 }
 
 static struct optionSpec options[] = {
@@ -275,7 +275,7 @@ if (type == NULL || sameWord((char *)cvTermNormalized(type),CV_TERM_CELL))
         if (level > 0)
             {
             checkSettings = " " CV_PROTOCOL " " CV_VENDER_NAME " " CV_VENDOR_ID
-                                    " " CV_ORDER_URL " " CV_TERM_ID  " " CV_TERM_URL;
+                            " " CV_ORDER_URL " " CV_TERM_ID  " " CV_TERM_URL;
             dyStringAppend(dySettings,checkSettings);
             if (type != NULL && setting == NULL)
                 verbose(1,"Should haves:%s\n",checkSettings);

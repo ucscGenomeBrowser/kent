@@ -206,7 +206,7 @@ else if (sameString(varBase, "organism"))
     char *org = hOrganism(database);
     if ((org != NULL) && !isAbbrevScientificName(org))
             tolowers(org);
-        else
+    else
             org = valOrDb(org, database);
     dyStringAppend(dest, org);
     freeMem(org);

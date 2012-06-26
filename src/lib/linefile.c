@@ -1122,8 +1122,8 @@ for (;;)
     if (s == NULL || s[0] == 0 || count == arraySize)
         break;
     e = strchr(s, ',');
-    if (e != NULL)
-        *e++ = 0;
+    if (e)
+        *e = 0;
     int res = lineFileCheckAllIntsNoAbort(s, cArray, isSigned, byteCount, typeString, noNeg, errMsg, sizeof errMsg);
     if (res > 0)
 	{
@@ -1133,6 +1133,8 @@ for (;;)
     if (cArray) // NULL means validation only.
 	cArray += byteCount;  
     count++;
+    if (e)  // restore input string
+        *e++ = ',';
     s = e;
     }
 return count;
