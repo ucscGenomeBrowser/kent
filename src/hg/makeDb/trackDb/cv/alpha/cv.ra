@@ -5685,6 +5685,23 @@ sex M
 tier 3
 protocol Farnham:Raji_Farnham_protocol.pdf
 
+term RCC_7860
+tag RCC7860
+type Cell Line
+tier 3
+organism human
+description renal cell adenocarcinmoma
+karyotype cancer
+sex M
+tissue kidney
+vendorName ATCC
+vendorId CRL-1932
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1932&Template=cellBiology
+termId BTO:0000037
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000037&termName=renal%20adenocarcinoma%20cell
+lab Crawford
+protocol Crawford:RCC7860_Crawford_protocol.pdf
+
 term RPMI-7951
 tag RPMI7951
 type Cell Line
