@@ -8433,10 +8433,33 @@ fileName wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1.bam,wgEncodeSydhTfbsGm
 grant Snyder
 lab Stanford
 md5sum 1838fef7f8369fce702a3667990fa2c1,57f15b45f6ef870015464ad05aeb75ab
+objStatus replaced - Replaced by file following correct bam format
 project wgEncode
 replicate 1
 setType exp
 subId 5508
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1V2
+objType file
+antibody TBLR1_(ab24550)
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId wgEncodeEH000706
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1V2.bam,wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -9530,11 +9553,34 @@ fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep1.bam,wgEncodeSydhTfbsGm12878Znf2
 grant Snyder
 lab USC
 md5sum d4aa762d3bdc9bf302233da9b0f8741b,f6ac05e224f1061247c7773666f7a2b5
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 4324
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Znf274StdAlnRep1V2
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control std
+controlId wgEncodeEH000625
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep1V2.bam,wgEncodeSydhTfbsGm12878Znf274StdAlnRep1V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -9556,11 +9602,34 @@ fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep2.bam,wgEncodeSydhTfbsGm12878Znf2
 grant Snyder
 lab USC
 md5sum 9d76429d3ae5ccaf27923182d4f02833,0166efda58331cc706b797a30b741371
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 4324
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878Znf274StdAlnRep2V2
+objType file
+antibody ZNF274
+cell GM12878
+composite wgEncodeSydhTfbs
+control std
+controlId wgEncodeEH000625
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep2V2.bam,wgEncodeSydhTfbsGm12878Znf274StdAlnRep2V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -17816,11 +17885,34 @@ fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1.bam,wgEncodeSydhTfbsH1hescMaxUcdAln
 grant Snyder
 lab USC
 md5sum 9cee26c566dcf355d9a442b2244a3c8d,5c5e78cfe34391d51d9bd3ba78324351
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 1206
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdAlnRep1V2
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH001751
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1V2.bam,wgEncodeSydhTfbsH1hescMaxUcdAlnRep1V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -17841,11 +17933,34 @@ fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2.bam,wgEncodeSydhTfbsH1hescMaxUcdAln
 grant Snyder
 lab USC
 md5sum 04a52da23a3f9768b36d52f2742fec5f,454f7f445839b412c8179500cd4e7073
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 1206
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescMaxUcdAlnRep2V2
+objType file
+antibody Max
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH001751
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2V2.bam,wgEncodeSydhTfbsH1hescMaxUcdAlnRep2V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -38039,11 +38154,34 @@ fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam,wgEncodeSydhTfbsHuvecGata2UcdA
 grant Snyder
 lab USC
 md5sum ff9ed21662b0482598f200334497103c,3521aa909a8c9aae9ea4af1524686dff
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 1204
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdAlnRep1V2
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH001759
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1V2.bam,wgEncodeSydhTfbsHuvecGata2UcdAlnRep1V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -38064,11 +38202,34 @@ fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam,wgEncodeSydhTfbsHuvecGata2UcdA
 grant Snyder
 lab USC
 md5sum 09ee380ec296596c1908c6d2d87573cc,7ed6b57b8517a44cc3c8679499111c7b
+objStatus replaced - Replaced by file following correct bam format
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 1204
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHuvecGata2UcdAlnRep2V2
+objType file
+antibody GATA-2
+cell HUVEC
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH001759
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-25
+fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2V2.bam,wgEncodeSydhTfbsHuvecGata2UcdAlnRep2V2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+subId 7050
+submittedDataVersion V2 - Fixed bam syntax
 treatment None
 view Alignments
 
@@ -61393,4 +61554,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 827944590
+# MAGIC: -1228617863

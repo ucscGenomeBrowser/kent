@@ -205,8 +205,9 @@ int found = 0;
 genericHeader(tdb, NULL);
 
 /* Just get the current item. */
-safef(query, sizeof(query), "select * from %s where name='%s' and chrom='%s' and chromStart=%d and chromEnd=%d", 
-    tdb->track, item, chrom, start, end);
+safef(query, sizeof(query), 
+      "select * from %s where name='%s' and chrom='%s' and chromStart=%d and chromEnd=%d", 
+      tdb->track, item, chrom, start, end);
 sr = sqlGetResult(conn, query);
 
 if (sqlFieldColumn(sr, "bin") == 0)
@@ -249,7 +250,8 @@ if (pos.peptideRepeatCount > 1)
     {
     struct hash *hash = hashNew(8);
     struct peptideMapping anotherPos;
-    safef(query, sizeof(query), "select * from %s where name='%s' and not (chrom='%s' and chromStart=%d and chromEnd=%d)", 
+    safef(query, sizeof(query), 
+          "select * from %s where name='%s' and not (chrom='%s' and chromStart=%d and chromEnd=%d)", 
 	  tdb->track, item, chrom, start, end);
     printf("<BR>\n");
     webPrintLinkTableStart();

@@ -82,8 +82,8 @@ return ret;
 }
 
 struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end,
-	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash)
+        char *chrom, int start, int end,
+        char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash)
 /* Return list of alignments in region from axt external file as a maf. */
 {
 char **row;
@@ -190,11 +190,11 @@ return count;
 
 struct mafAli *hgMafFrag(
 	char *database,     /* Database, must already have hSetDb to this */
-	char *track, 	    /* Name of MAF track */
-	char *chrom, 	    /* Chromosome (in database genome) */
+	char *track,        /* Name of MAF track */
+	char *chrom,        /* Chromosome (in database genome) */
 	int start, int end, /* start/end in chromosome */
-	char strand, 	    /* Chromosome strand. */
-	char *outName, 	    /* Optional name to use in first component */
+	char strand,        /* Chromosome strand. */
+	char *outName,      /* Optional name to use in first component */
 	struct slName *orderList /* Optional order of organisms. */
 	)
 /* mafFrag- Extract maf sequences for a region from database.
@@ -254,12 +254,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     order = 0;
     if (curPos < mcMaster->start)
 	{
-	fillInMissing(nativeOrg, orgList, native, start,
+        fillInMissing(nativeOrg, orgList, native, start,
 		curPos, mcMaster->start);
 	symCount += mcMaster->start - curPos;
 	}
     if (curPos < mcMaster->start + mcMaster->size) /* Prevent worst
-    						    * backtracking */
+                                                    * backtracking */
 	{
 	if (mafNeedSubset(maf, masterSrc, curPos, end))
 	    {
@@ -432,7 +432,7 @@ return (cloneString(option));
 struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table)
 /* Return conservation wig if it is found in the parent. */
 {
-if(parent == NULL || !startsWith("wigMaf", parent->type))
+if (parent == NULL || !startsWith("wigMaf", parent->type))
     return NULL;
 
 struct consWiggle *wig, *wiggles = wigMafWiggles(db, parent);
