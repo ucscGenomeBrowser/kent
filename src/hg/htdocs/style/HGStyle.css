@@ -4,8 +4,9 @@ body {
 }
 
 body.cgi {
-    margin: 0;
+	margin: 0;
 	padding: 0;
+	background: #FFF9D2;
 }
 
 body.hgTracks {
