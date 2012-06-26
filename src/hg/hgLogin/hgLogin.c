@@ -1020,6 +1020,16 @@ if (sameString(helpWith,"username"))
         }
     else 
         {
+        safef(query,sizeof(query),
+            "select password from gbMembers where email='%s'", email);
+        char *password = sqlQuickString(conn, query);
+        if (!password)
+            {
+            freez(&errMsg);
+            errMsg = cloneString("Email address not found.");
+            displayAccHelpPage(conn);
+            return;
+            }
         sendUsername(conn, email);
         return;
         }
