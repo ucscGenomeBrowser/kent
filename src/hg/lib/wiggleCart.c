@@ -14,10 +14,10 @@
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
 #define correctOrder(min,max) if (max < min) \
-	{ double d; d = max; max = min; min = d; }
+        { double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
 
-#if defined(DEBUG)	/*	dbg	*/
+#if defined(DEBUG)      /*      dbg     */
 
 #include "portable.h"
 
@@ -97,31 +97,31 @@ if (isNotEmpty(setting))
     }
 }
 
-static void viewLimitsCompositeOverride(struct trackDb *tdb,char *name,
-                      double *retMin, double *retMax,double *absMin, double *absMax)
+static void viewLimitsCompositeOverride(struct trackDb *tdb,char *name, double *retMin,
+                                        double *retMax,double *absMin, double *absMax)
 /* If aquiring min/max for composite level wig cfg. Look in parents as well as self. */
 {
-if(isNameAtParentLevel(tdb,name))
+if (isNameAtParentLevel(tdb,name))
     {
     char *setting = NULL;
-    if(absMin != NULL && absMax != NULL)
+    if (absMin != NULL && absMax != NULL)
         {
         setting = trackDbSettingByView(tdb,MIN_LIMIT);
-        if(setting != NULL)
+        if (setting != NULL)
             {
-            if(setting[0] != '\0')
+            if (setting[0] != '\0')
                 *absMin = sqlDouble(setting);
             }
         setting = trackDbSettingByView(tdb,MAX_LIMIT);
-        if(setting != NULL)
+        if (setting != NULL)
             {
-            if(setting[0] != '\0')
+            if (setting[0] != '\0')
                 *absMax = sqlDouble(setting);
             }
         else
             {
             setting = trackDbSettingByView(tdb,VIEWLIMITSMAX);  // Legacy
-            if(setting != NULL)
+            if (setting != NULL)
                 {
                 parseColonRange(setting, absMin, absMax);
                 }
@@ -129,7 +129,7 @@ if(isNameAtParentLevel(tdb,name))
         }
 
     setting = trackDbSettingByView(tdb, VIEWLIMITS);
-    if(setting != NULL)
+    if (setting != NULL)
         {
         parseColonRange(setting, retMin, retMax);
         }
@@ -137,8 +137,8 @@ if(isNameAtParentLevel(tdb,name))
 }
 
 void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
-			     double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
-			     int wordCount, char **words)
+                             double *retMin, double *retMax, double *retAbsMin, double *retAbsMax,
+                             int wordCount, char **words)
 /*****************************************************************************
  *	Min, Max Y viewing limits
  *	Absolute limits are defined on the trackDb type line for wiggle,
@@ -260,11 +260,11 @@ if (cartMinStr)
     *retMin = cartMin;
 if (cartMaxStr)
     *retMax = cartMax;
-}	/*	void wigFetchMinMaxYWithCart()	*/
+}       /*      void wigFetchMinMaxYWithCart()  */
 
 void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
-/*	Min, Max, Default Pixel height of track
- *	Limits may be defined in trackDb with the maxHeightPixels string,
+/*      Min, Max, Default Pixel height of track
+ *      Limits may be defined in trackDb with the maxHeightPixels string,
  *	Or user requested limits are defined in the cart.
  *	And default opening display limits may optionally be defined with the
  *		maxHeightPixels declaration from trackDb
@@ -296,14 +296,14 @@ if (sameWord(DEFAULT_HEIGHT_PER,tdbDefault))
 	}
     }
 
-/*	the maxHeightPixels string can be one, two, or three words
- *	separated by :
- *	All three would be: 	max:default:min
- *	When only two: 		max:default
- *	When only one: 		max
- *	(this works too:	min:default:max)
- *	Where min is minimum allowed, default is initial default setting
- *	and max is the maximum allowed
+/*      the maxHeightPixels string can be one, two, or three words
+ *      separated by :
+ *      All three would be:     max:default:min
+ *      When only two:          max:default
+ *      When only one:          max
+ *      (this works too:        min:default:max)
+ *      Where min is minimum allowed, default is initial default setting
+ *      and max is the maximum allowed
  *	If it isn't available, these three have already been set
  *	in their declarations above
  */
@@ -354,11 +354,11 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 *Min = minHeightPixels;
 
 freeMem(tdbDefault);
-}	/* void wigFetchMinMaxPixelsWithCart()	*/
+}       /* void wigFetchMinMaxPixelsWithCart()  */
 
 static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
     char *notDefault, char *tdbString, char *secondTdbString)
-/*	A common operation for binary options (two values possible)
+/*      A common operation for binary options (two values possible)
  *	check for trackDb.ra, then tdb->settings values
  *	return one of the two possibilities if found
  *	(the tdbString and secondTdbString are a result of
@@ -377,7 +377,7 @@ if (sameWord("NONE",tdbDefault) && (secondTdbString != (char *)NULL))
 if (differentWord("NONE",tdbDefault))
     {
     if (differentWord(Default,tdbDefault))
-    	ret = notDefault;
+        ret = notDefault;
     }
 else
     {
@@ -416,7 +416,8 @@ char *transformFunc;
 enum wiggleTransformFuncEnum ret = wiggleTransformFuncNone;
 char * tdbDefault = trackDbSettingClosestToHome(tdb, TRANSFORMFUNC);
 
-transformFunc = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, TRANSFORMFUNC));
+transformFunc = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, 
+                                                            TRANSFORMFUNC));
 
 if ((transformFunc == NULL) && (tdbDefault != NULL))
     transformFunc = cloneString(tdbDefault);
@@ -457,9 +458,9 @@ if (alwaysZero)
 return(ret);
 }
 
-enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name,char **optString)
-/*	horizontalGrid - off by default **********************************/
+enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                                      char *name,char **optString)
+/* horizontalGrid - off by default **********************************/
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
@@ -469,7 +470,7 @@ enum wiggleGridOptEnum ret;
 
 horizontalGrid = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HORIZGRID));
 
-if (!horizontalGrid)	/*	if it is NULL	*/
+if (!horizontalGrid)    /*      if it is NULL   */
     horizontalGrid = wigCheckBinaryOption(tdb,Default,notDefault,GRIDDEFAULT,
 	HORIZGRID);
 
@@ -479,11 +480,11 @@ if (optString)
 ret = wiggleGridStringToEnum(horizontalGrid);
 freeMem(horizontalGrid);
 return(ret);
-}	/*	enum wiggleGridOptEnum wigFetchHorizontalGridWithCart()	*/
+}       /*      enum wiggleGridOptEnum wigFetchHorizontalGridWithCart() */
 
-enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name, char **optString)
-/******	autoScale - off by default ***************************************/
+enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                                  char *name, char **optString)
+/****** autoScale - off by default ***************************************/
 {
 char *autoString = wiggleScaleEnumToString(wiggleScaleAuto);
 char *manualString = wiggleScaleEnumToString(wiggleScaleManual);
@@ -496,9 +497,9 @@ enum wiggleScaleOptEnum ret;
 
 autoScale = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, AUTOSCALE));
 
-if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
+if (!autoScale) /*      if nothing from the Cart, check trackDb/settings */
     {
-    /*	It may be the autoScale=on/off situation from custom tracks */
+    /*  It may be the autoScale=on/off situation from custom tracks */
     char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(autoString);
@@ -522,11 +523,11 @@ if (optString)
 ret = wiggleScaleStringToEnum(autoScale);
 freeMem(autoScale);
 return(ret);
-}	/*	enum wiggleScaleOptEnum wigFetchAutoScaleWithCart()	*/
+}       /*      enum wiggleScaleOptEnum wigFetchAutoScaleWithCart()     */
 
-enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name, char **optString)
-/******	graphType - line(points) or bar graph *****************************/
+enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                                  char *name, char **optString)
+/****** graphType - line(points) or bar graph *****************************/
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
@@ -536,7 +537,7 @@ enum wiggleGraphOptEnum ret;
 
 graphType = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, LINEBAR));
 
-if (!graphType)	/*	if nothing from the Cart, check trackDb/settings */
+if (!graphType) /*      if nothing from the Cart, check trackDb/settings */
     graphType = wigCheckBinaryOption(tdb,Default,notDefault,GRAPHTYPEDEFAULT,
 	GRAPHTYPE);
 
@@ -546,31 +547,32 @@ if (optString)
 ret = wiggleGraphStringToEnum(graphType);
 freeMem(graphType);
 return(ret);
-}	/*	enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()	*/
+}       /*      enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()     */
 
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name, char **optString)
-/******	windowingFunction - Whiskers by default **************************/
+                                                struct trackDb *tdb, char *name, char **optString)
+/****** windowingFunction - Whiskers by default **************************/
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingWhiskers);
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *windowingFunction = NULL;
 enum wiggleWindowingEnum ret;
 
-windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, WINDOWINGFUNCTION));
+windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, 
+                                                                WINDOWINGFUNCTION));
 
-/*	If windowingFunction is a string, it came from the cart, otherwise
- *	see if it is specified in the trackDb option, finally
+/*      If windowingFunction is a string, it came from the cart, otherwise
+ *      see if it is specified in the trackDb option, finally
  *	return the default.
  */
 if (!windowingFunction)
     {
     char * tdbDefault =
-	trackDbSettingClosestToHomeOrDefault(tdb, WINDOWINGFUNCTION, Default);
+        trackDbSettingClosestToHomeOrDefault(tdb, WINDOWINGFUNCTION, Default);
 
     freeMem(windowingFunction);
     if (differentWord(Default,tdbDefault))
-	windowingFunction = cloneString(tdbDefault);
+        windowingFunction = cloneString(tdbDefault);
     else
 	{
 	struct hashEl *hel;
@@ -597,27 +599,28 @@ if (optString)
 ret = wiggleWindowingStringToEnum(windowingFunction);
 freeMem(windowingFunction);
 return(ret);
-}	/*	enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
+}       /*      enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
-enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name, char **optString)
-/******	smoothingWindow - OFF by default **************************/
+enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                                         char *name, char **optString)
+/****** smoothingWindow - OFF by default **************************/
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 char * smoothingWindow = NULL;
 enum wiggleSmoothingEnum ret;
 
-smoothingWindow = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, SMOOTHINGWINDOW));
+smoothingWindow = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, 
+                                                              SMOOTHINGWINDOW));
 
 if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
     char * tdbDefault =
-	trackDbSettingClosestToHomeOrDefault(tdb, SMOOTHINGWINDOW, Default);
+        trackDbSettingClosestToHomeOrDefault(tdb, SMOOTHINGWINDOW, Default);
 
 
     if (differentWord(Default,tdbDefault))
-	smoothingWindow = cloneString(tdbDefault);
+        smoothingWindow = cloneString(tdbDefault);
     else
 	{
 	struct hashEl *hel;
@@ -644,11 +647,11 @@ if (optString)
 ret = wiggleSmoothingStringToEnum(smoothingWindow);
 freeMem(smoothingWindow);
 return(ret);
-}	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart()	*/
+}       /*      enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart()      */
 
-enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart,
-    struct trackDb *tdb, char *name, char **optString)
-/*	yLineMark - off by default **********************************/
+enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                                   char *name, char **optString)
+/*      yLineMark - off by default **********************************/
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
@@ -658,7 +661,7 @@ enum wiggleYLineMarkEnum ret;
 
 yLineMark = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, YLINEONOFF));
 
-if (!yLineMark)	/*	if nothing from the Cart, check trackDb/settings */
+if (!yLineMark) /*      if nothing from the Cart, check trackDb/settings */
     yLineMark = wigCheckBinaryOption(tdb,Default,notDefault,YLINEONOFF,
 	(char *)NULL);
 
@@ -668,11 +671,11 @@ if (optString)
 ret = wiggleYLineMarkStringToEnum(yLineMark);
 freeMem(yLineMark);
 return(ret);
-}	/*	enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart()	*/
+}       /*      enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart()    */
 
 void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, char *name, double *tDbYMark )
-/*	y= marker line value
- *	User requested value is defined in the cart
+/*      y= marker line value
+ *      User requested value is defined in the cart
  *	A Default value can be defined as
  *		yLineMark declaration from trackDb
  *****************************************************************************/
@@ -703,10 +706,10 @@ if (sameWord("NONE",tdbDefault))
 /*	If nothing else, it is zero	*/
 yLineValue = 0.0;
 
-/*	Let's see if a value is available in the cart */
+/*      Let's see if a value is available in the cart */
 yLineMarkValue = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, YLINEMARK);
 
-/*	if yLineMarkValue is non-Null, it is the requested value 	*/
+/*      if yLineMarkValue is non-Null, it is the requested value        */
 if (yLineMarkValue)
     yLineValue = atof(yLineMarkValue);
 else /*    See if a default line is specified in the trackDb.ra file */
@@ -718,7 +721,7 @@ if (tDbYMark)
 	*tDbYMark = yLineValue;
 
 freeMem(tdbDefault);
-}	/*	void wigFetchYLineMarkValueWithCart()	*/
+}       /*      void wigFetchYLineMarkValueWithCart()   */
 
 void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
     double *min, double *max,double *tDbMin, double *tDbMax)
@@ -734,7 +737,7 @@ void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, cha
  *****************************************************************************/
 {
 wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
-}	/*	void wigFetchMinMaxYWithCart()	*/
+}       /*      void wigFetchMinMaxYWithCart()  */
 
 char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb)
 /* Return aggregate value for track. */

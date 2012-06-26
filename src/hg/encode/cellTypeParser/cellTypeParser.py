@@ -190,7 +190,7 @@ soup = BeautifulSoup(thepage)
 # Once you reach the table, process each <td> line until an end of
 # table tag is reached.
 #
-cellTypeTable = soup.findAll("table")[2]
+cellTypeTable = soup.findAll("table")[1]
 skippedHeaderRow = False
 for entry in cellTypeTable.findAll("tr"):
     if not skippedHeaderRow:

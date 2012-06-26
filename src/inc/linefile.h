@@ -56,8 +56,8 @@ struct lineFile
 #endif
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
     struct dyString *rawLines;  // Filled with raw lines used to create the full line
-    boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
-
+    boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get
+                                // already built fullLine
     void *dataForCallBack;                                 // ptr to data needed for callbacks
     void(*checkSupport)(struct lineFile *lf, char *where); // check if operation supported 
     boolean(*nextCallBack)(struct lineFile *lf, char **retStart, int *retSize); // next line callback

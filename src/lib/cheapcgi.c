@@ -123,7 +123,8 @@ char *cgiUserAgent()
 return getenv("HTTP_USER_AGENT");
 }
 
-enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, char **clientOsQualifier)
+enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs,
+                                  char **clientOsQualifier)
 /* Return client browser type determined from (HTTP_USER_AGENT)
    Optionally requuest the additional info about the client */
 {
@@ -316,7 +317,7 @@ for(env=environ; *env; env++)
     if (startsWith("CONTENT_",*env))
 	{
 	//debug
-    	//fprintf(stderr,"%s\n",*env);  //debug
+        //fprintf(stderr,"%s\n",*env);  //debug
 	safef(h,sizeof(h),"%s",*env);
 	s = strchr(h,'_');    /* change env syntax to MIME style header, from _= to -: */
 	if (!s)
@@ -373,8 +374,8 @@ for(mp=mp->multi;mp;mp=mp->next)
 
     //debug
     //fprintf(stderr,"GALT: mp->size[%llu], mp->binary=[%d], mp->fileName=[%s], mp=>data:[%s]\n",
-	//(unsigned long long) mp->size, mp->binary, mp->fileName,
-	//mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
+        //(unsigned long long) mp->size, mp->binary, mp->fileName,
+        //mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
     //fflush(stderr);
 
     /* filename if there is one */
@@ -383,7 +384,7 @@ for(mp=mp->multi;mp;mp=mp->next)
      * path separator characters, e.g.:
      *	 C:\Documents and Settings\tmp\file.txt.gz
      */
-    if(cdFileName)
+    if (cdFileName)
 	{
 	char *lastPathSep = strrchr(cdFileName, (int) '\\');
 	if (!lastPathSep)
@@ -397,18 +398,18 @@ for(mp=mp->multi;mp;mp=mp->next)
 	    el->val = cloneString(lastPathSep+1);
 	else
 	    el->val = cloneString(cdFileName);
-	slAddHead(&list, el);
-	hashAddSaveName(hash, varNameFilename, el, &el->name);
-    	}
+        slAddHead(&list, el);
+        hashAddSaveName(hash, varNameFilename, el, &el->name);
+        }
 
     if (mp->data)
-	{
-	if (mp->binary)
+        {
+        if (mp->binary)
 	    {
 	    char varNameBinary[256];
 	    char addrSizeBuf[40];
 	    safef(varNameBinary,sizeof(varNameBinary),"%s__binary",cdName);
-	    safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu",
+            safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu",
 		(unsigned long)mp->data,
 		(unsigned long long)mp->size);
 	    AllocVar(el);
@@ -423,18 +424,18 @@ for(mp=mp->multi;mp;mp=mp->next)
 	    slAddHead(&list, el);
 	    hashAddSaveName(hash, cdName, el, &el->name);
 	    }
-	}
+        }
     else if (mp->fileName)
 	{
 	char varNameData[256];
 	safef(varNameData, sizeof(varNameData), "%s__data", cdName);
 	AllocVar(el);
-	el->val = mp->fileName;
+        el->val = mp->fileName;
 	slAddHead(&list, el);
 	hashAddSaveName(hash, varNameData, el, &el->name);
 	//debug
-    	//fprintf(stderr,"GALT special: saved varNameData:[%s], mp=>fileName:[%s]\n",el->name,el->val);
-       	//fflush(stderr);
+        //fprintf(stderr,"GALT special: saved varNameData:[%s], mp=>fileName:[%s]\n",el->name,el->val);
+        //fflush(stderr);
 	}
     else if (mp->multi)
 	{
@@ -573,7 +574,7 @@ if (inputString == NULL)
 }
 
 static void cgiParseInputAbort(char *input, struct hash **retHash,
-	struct cgiVar **retList)
+        struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
@@ -623,7 +624,7 @@ longjmp(cgiParseRecover, -1);
 }
 
 boolean cgiParseInput(char *input, struct hash **retHash,
-	struct cgiVar **retList)
+        struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
@@ -670,7 +671,7 @@ switch (sigNum)
     fprintf(stderr, "Received signal %s\n", sig);
     if (dumpStackOnSignal)
         dumpStack("Stack for signal %s\n", sig);
-    raise(SIGKILL);
+raise(SIGKILL);
 }
 
 void initSigHandlers(boolean dumpStack)
@@ -831,7 +832,7 @@ for (i=0; i<inLength;++i)
     else if (c == '%')
 	{
 	int code;
-	if (sscanf(in, "%2x", &code) != 1)
+        if (sscanf(in, "%2x", &code) != 1)
 	    code = '?';
 	in += 2;
 	i += 2;
@@ -1233,7 +1234,8 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled, char *id, char *moreHtml)
+static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled,
+                                 char *id, char *moreHtml)
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, and should NOT be called directly.
  * moreHtml: optional additional html like javascript call or mouseover msg (may be NULL)
@@ -1249,9 +1251,9 @@ else
     idBuf[0] = 0;
 
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
-    (moreHtml ? moreHtml : ""),
-    (checked ? " CHECKED" : ""),
-    (enabled ? "" : " DISABLED"));
+        (moreHtml ? moreHtml : ""),
+        (checked ? " CHECKED" : ""),
+        (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVarWithExtra(buf, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
@@ -1264,7 +1266,7 @@ void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
 {
 char buf[256];
 
-if(msg)
+if (msg)
     safef(buf, sizeof(buf), "TITLE=\"%s\"", msg);
 else
     buf[0] = 0;
@@ -1303,31 +1305,32 @@ void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascr
 cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
 }
 
-void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, char *classes, char *moreHtml)
+void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id,
+                            char *classes, char *moreHtml)
 /* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled)
  * Also makes a shadow hidden variable that supports the 2 boolean states. */
 {
 char shadName[256];
 
 printf("<INPUT TYPE=CHECKBOX NAME='%s'", name);
-if(id)
+if (id)
     printf(" id='%s'", id);
-if(checked)
+if (checked)
     printf(" CHECKED");
-if(!enabled)
+if (!enabled)
     {
     if (findWordByDelimiter("disabled",' ', classes) == NULL) // fauxDisabled ?
         printf(" DISABLED");
     }
-if(classes)
+if (classes)
     printf(" class='%s'",classes);
-if(moreHtml)
+if (moreHtml)
     printf(" %s",moreHtml);
 printf(">");
 
 // The hidden var needs to hold the 4way state
 safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA); // Doesn't need enabled/checked!
+cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 
@@ -1339,7 +1342,7 @@ void cgiMakeHiddenBoolean(char *name, boolean on)
 char buf[256];
 cgiMakeHiddenVar(name, on ? "on" : "off");
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(buf, "1",BOOLSHAD_EXTRA);  // shouldn't this be "0" or "off" ?   Probably any non-"on" will work.
+cgiMakeHiddenVarWithExtra(buf, "1",BOOLSHAD_EXTRA);
 }
 
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount)
@@ -1369,7 +1372,7 @@ if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
 printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName,
-	charSize, initialVal);
+        charSize, initialVal);
 if (isNotEmpty(script))
     printf(" onkeypress=\"%s\"", script);
 printf(">\n");
@@ -1387,17 +1390,17 @@ void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, cha
 {
 if (initialVal == NULL)
     initialVal = "";
-if(width==0)
+if (width==0)
     width=strlen(initialVal)*10;
-if(width==0)
+if (width==0)
     width = 100;
 
-printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"", varName,width, initialVal);
+printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"",
+       varName,width, initialVal);
 if (isNotEmpty(extra))
     printf(" %s",extra);
 printf(">\n");
 }
-
 
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
 /* Make a text control filled with initial value.  */
@@ -1405,22 +1408,23 @@ void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
 if (maxDigits == 0) maxDigits = 4;
 
 printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
-	maxDigits, initialVal);
+        maxDigits, initialVal);
 }
 
-void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width, char *min, char *max)
+void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width,
+                          char *min, char *max)
 /* Make a integer control filled with initial value.
    If min and/or max are non-NULL will enforce range
    Requires utils.js jQuery.js and inputBox class */
 {
-if(width==0)
+if (width==0)
     {
-    if(max)
+    if (max)
         width=strlen(max)*10;
     else
         {
         int sz=initialVal+1000;
-        if(min)
+        if (min)
             sz=atoi(min) + 1000;
         width = 10;
         while(sz/=10)
@@ -1430,46 +1434,52 @@ if(width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%d",varName,width,initialVal);
-printf(" onChange='return validateInt(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
-if(title)
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%d",
+       varName,width,initialVal);
+printf(" onChange='return validateInt(this,%s,%s);'",
+       (min ? min : "\"null\""),(max ? max : "\"null\""));
+if (title)
     printf(" title='%s'",title);
 printf(">\n");
 }
-void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width, int min, int max)
+
+void cgiMakeIntVarWithLimits(char *varName, int initialVal, char *title, int width,
+                             int min, int max)
 {
 char minLimit[20];
 char maxLimit[20];
 char *minStr=NULL;
 char *maxStr=NULL;
-if(min != NO_VALUE)
+if (min != NO_VALUE)
     {
     safef(minLimit,sizeof(minLimit),"%d",min);
     minStr = minLimit;
     }
-if(max != NO_VALUE)
+if (max != NO_VALUE)
     {
     safef(maxLimit,sizeof(maxLimit),"%d",max);
     maxStr = maxLimit;
     }
 cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,maxStr);
 }
+
 void cgiMakeIntVarWithMin(char *varName, int initialVal, char *title, int width, int min)
 {
 char minLimit[20];
 char *minStr=NULL;
-if(min != NO_VALUE)
+if (min != NO_VALUE)
     {
     safef(minLimit,sizeof(minLimit),"%d",min);
     minStr = minLimit;
     }
 cgiMakeIntVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
+
 void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width, int max)
 {
 char maxLimit[20];
 char *maxStr=NULL;
-if(max != NO_VALUE)
+if (max != NO_VALUE)
     {
     safef(maxLimit,sizeof(maxLimit),"%d",max);
     maxStr = maxLimit;
@@ -1483,41 +1493,45 @@ void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
 if (maxDigits == 0) maxDigits = 4;
 
 printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
-	maxDigits, initialVal);
+        maxDigits, initialVal);
 }
 
-void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width, char *min, char *max)
+void cgiMakeDoubleVarInRange(char *varName, double initialVal, char *title, int width,
+                             char *min, char *max)
 /* Make a floating point control filled with initial value.
    If min and/or max are non-NULL will enforce range
    Requires utils.js jQuery.js and inputBox class */
 {
-if(width==0)
+if (width==0)
     {
-    if(max)
+    if (max)
         width=strlen(max)*10;
     }
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%g",varName,width,initialVal);
-printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
-if(title)
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%g",
+       varName,width,initialVal);
+printf(" onChange='return validateFloat(this,%s,%s);'",
+       (min ? min : "\"null\""),(max ? max : "\"null\""));
+if (title)
     printf(" title='%s'",title);
 printf(">\n");
 }
 
-void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width, double min, double max)
+void cgiMakeDoubleVarWithLimits(char *varName, double initialVal, char *title, int width,
+                                double min, double max)
 {
 char minLimit[20];
 char maxLimit[20];
 char *minStr=NULL;
 char *maxStr=NULL;
-if((int)min != NO_VALUE)
+if ((int)min != NO_VALUE)
     {
     safef(minLimit,sizeof(minLimit),"%g",min);
     minStr = minLimit;
     }
-if((int)max != NO_VALUE)
+if ((int)max != NO_VALUE)
     {
     safef(maxLimit,sizeof(maxLimit),"%g",max);
     maxStr = maxLimit;
@@ -1529,18 +1543,19 @@ void cgiMakeDoubleVarWithMin(char *varName, double initialVal, char *title, int 
 {
 char minLimit[20];
 char *minStr=NULL;
-if((int)min != NO_VALUE)
+if ((int)min != NO_VALUE)
     {
     safef(minLimit,sizeof(minLimit),"%g",min);
     minStr = minLimit;
     }
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,NULL);
 }
+
 void cgiMakeDoubleVarWithMax(char *varName, double initialVal, char *title, int width, double max)
 {
 char maxLimit[20];
 char *maxStr=NULL;
-if((int)max != NO_VALUE)
+if ((int)max != NO_VALUE)
     {
     safef(maxLimit,sizeof(maxLimit),"%g",max);
     maxStr = maxLimit;
@@ -1549,7 +1564,7 @@ cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
-    int menuSize, char *checked, char *class, char *style,char *javascript)
+        int menuSize, char *checked, char *class, char *style,char *javascript)
 /* Make a drop-down list with names, text class, style and javascript. */
 {
 int i;
@@ -1577,18 +1592,17 @@ printf("</SELECT>\n");
 }
 
 void cgiMakeDropListClassWithStyle(char *name, char *menu[],
-    int menuSize, char *checked, char *class, char *style)
+                                   int menuSize, char *checked, char *class, char *style)
 /* Make a drop-down list with names, text class and style. */
 {
-    cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,"");
+cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,"");
 }
 
 void cgiMakeDropListClass(char *name, char *menu[],
-	int menuSize, char *checked, char *class)
+	                  int menuSize, char *checked, char *class)
 /* Make a drop-down list with names. */
 {
-    cgiMakeDropListClassWithStyle(name, menu, menuSize, checked,
-                                        class, NULL);
+cgiMakeDropListClassWithStyle(name, menu, menuSize, checked, class, NULL);
 }
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
@@ -1688,12 +1702,17 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
-char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,char *selected, char *anyAll,char *extraClasses, char *extraHtml)
-// Returns allocated string of HTML defining a drop-down select (if multiple, REQUIRES ui-dropdownchecklist.js)
-// In valsAndLabels, val (pair->name) must be filled in but label (pair->val) may be NULL.
-// selected, if not NULL is a val found in the valsAndLabels (multiple then comma delimited list).  If null and anyAll not NULL, that will be selected
-// anyAll, if not NULL is the string for an initial option.  It can contain val and label, delimited by a comma
-// extraHtml, if not NULL contains id, javascript calls and style.  It does NOT contain class definitions
+char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,
+                            char *selected, char *anyAll,char *extraClasses, char *extraHtml)
+// Returns allocated string of HTML defining a drop-down select
+// (if multiple, REQUIRES ui-dropdownchecklist.js)
+// valsAndLabels: val (pair->name) must be filled in but label (pair->val) may be NULL.
+// selected: if not NULL is a val found in the valsAndLabels (multiple then comma delimited list).
+//           If null and anyAll not NULL, that will be selected
+// anyAll: if not NULL is the string for an initial option. It can contain val and label,
+//         delimited by a comma
+// extraHtml: if not NULL contains id, javascript calls and style.
+//            It does NOT contain class definitions
 {
 struct dyString *output = dyStringNew(1024);
 boolean checked = FALSE;
@@ -1702,7 +1721,7 @@ dyStringPrintf(output,"<SELECT name='%s'",name);
 if (multiple)
     dyStringAppend(output," MULTIPLE");
 if (extraClasses != NULL)
-    dyStringPrintf(output," class='%s%s'",extraClasses,(multiple?" filterBy":""));
+    dyStringPrintf(output," class='%s%s'",extraClasses,(multiple ? " filterBy" : ""));
 else if (multiple)
     dyStringAppend(output," class='filterBy'");
 
@@ -1732,7 +1751,7 @@ if (anyAll != NULL)
         else
             checked = sameString(val,selected);
         }
-    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked?" SELECTED":""),
+    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
                    val, javaScriptLiteralEncode(label));
     if (label != val)
         freeMem(val);
@@ -1753,7 +1772,7 @@ for (; valPair != NULL; valPair = valPair->next)
     char *label = valPair->name;
     if (valPair->val != NULL)
         label = valPair->val;
-    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked?" SELECTED":""),
+    dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
                    (char *)valPair->name, javaScriptLiteralEncode(label));
     }
 
@@ -1784,7 +1803,7 @@ printf("</SELECT>\n");
 }
 
 void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
-    int count, char *selected, char *extra)
+                                     int count, char *selected, char *extra)
 /* Make a drop-down list with both text and values. */
 {
 int i;
@@ -1809,12 +1828,11 @@ for (i=0; i<count; ++i)
 printf("</SELECT>\n");
 }
 
-
 void cgiMakeHiddenVarWithExtra(char *varName, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
 printf("<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'", varName, string);
-if(extra)
+if (extra)
     printf(" %s>\n",extra);
 else
     puts(">");
@@ -2086,57 +2104,7 @@ char *commonCssStyles()
 /* Returns a string of common CSS styles */
 {
 // Contents currently is OBSOLETE as these have been moved to HGStyle.css
-// However, don't loose this function call yet, as it may have future uses.
+// TODO: remove all traces (from web.c, hgTracks, hgTables) as this funtion does nothing.
 return "";
-#ifdef OMIT
-static boolean commonStylesWritten = FALSE;
-if(commonStylesWritten)
-    return "";
-commonStylesWritten = TRUE;
-
-struct dyString *style = newDyString(256);
-
-dyStringPrintf(style,"\n<style type='text/css'>\n");
-dyStringPrintf(style,".ghost {background-color:%s;}\n",COLOR_BG_GHOST);
-dyStringPrintf(style,".pale {background-color:%s;}\n",COLOR_BG_PALE);
-
-// These are for dreagReorder: both in imageV2 and in hgTrackUi subtrack list
-dyStringPrintf(style,".trDrag {background-color:%s;}\n",COLOR_LTGREEN);
-dyStringPrintf(style,".dragHandle {cursor: s-resize;}\n");
-
-// These are for imageV2 sideButtons:
-dyStringPrintf(style,".btn  {border-style:outset; background-color:%s; border-color:%s;}\n",COLOR_LTGREY,COLOR_DARKGREY);
-dyStringPrintf(style,".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
-dyStringPrintf(style,".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
-dyStringPrintf(style,".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
-dyStringPrintf(style,".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
-dyStringPrintf(style,".btnBlue {background-color:#91B3E6; border-color:%s;}\n",COLOR_BLUE_BUTTON);
-
-// Common boxes
-dyStringPrintf(style,".inputBox {border: 2px inset %s;}\n",COLOR_LTGREY);
-dyStringPrintf(style,".greenRoof {border-top: 3px groove %s;}\n",COLOR_DARKGREEN);
-//dyStringPrintf(style,".greenFloor {border-bottom: 3px ridge %s;}\n",COLOR_DARKGREEN);      // Unused
-//dyStringPrintf(style,".hiddenRoof {border-top: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT);     // Doesn't work
-//dyStringPrintf(style,".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
-dyStringPrintf(style,".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN); // Matrix
-dyStringPrintf(style,".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);    // cfg box
-dyStringPrintf(style,".redBox {border: 3px ridge %s; background:Beige; padding:10px; margin:10px; text-align:left;}\n",COLOR_RED); // Special alert
-
-// Experiments with squeezing giant matrices
-//dyStringPrintf(style,".slantUp {-moz-transform:rotate(-75deg); -moz-transform-origin: bottom left; -webkit-transform:rotate(-75deg); -webkit-transform-origin: bottom left; white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
-//dyStringPrintf(style,".slantDn {-moz-transform:rotate( 75deg); -moz-transform-origin: top left;    -webkit-transform:rotate( 75deg); -webkit-transform-origin: top left;    white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
-//dyStringPrintf(style,".rotate90 {-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);}\n");
-
-dyStringPrintf(style,".hintCol {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
-dyStringPrintf(style,".hintRow {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
-//dyStringPrintf(style,".halfVis {opacity: 0.5; filters.alpha.opacity=50;}\n");   // not ready for prime time because ff and ie can't agree
-
-// waitMask allows waiting on long running javascript using utils.js::waitOnFunction
-dyStringPrintf(style,".waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%%; width: 100%%; background-color: #fff; opacity: 0;}\n");
-dyStringPrintf(style,".inOutButton {height:24px; width:24px; border-style: outset;}\n"); // A [+][-] button can be toggled by waitOnFunction during long running scripts
-
-dyStringPrintf(style,"</style>\n");
-return dyStringCannibalize(&style);
-#endif///def OMIT
 }
 
