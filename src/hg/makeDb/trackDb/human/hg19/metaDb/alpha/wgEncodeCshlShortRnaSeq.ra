@@ -2031,6 +2031,53 @@ seqPlatform Illumina_HiSeq_2000
 subId 5940
 view RawData
 
+metaObject wgEncodeCshlShortRnaSeqA549CytosolTapContigs
+objType table
+bioRep 087C,088C
+cell A549
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-20
+fileName wgEncodeCshlShortRnaSeqA549CytosolTapContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47041,LID47042
+labVersion iIDR
+localization cytosol
+project wgEncode
+protocol TAP-Only
+readType 1x101
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7109
+tableName wgEncodeCshlShortRnaSeqA549CytosolTapContigs
+view Contigs
+
+metaObject wgEncodeCshlShortRnaSeqA549CytosolTapExonsGencV10
+objType file
+bioRep 087C,088C
+cell A549
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-20
+fileName wgEncodeCshlShortRnaSeqA549CytosolTapExonsGencV10.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47041,LID47042
+labVersion iIDR
+localization cytosol
+project wgEncode
+protocol TAP-Only
+readType 1x101
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7111
+view ExonsGencV10
+
 metaObject wgEncodeCshlShortRnaSeqA549NucleusCiptapContigs
 objType table
 bioRep 087N,088N
@@ -5189,6 +5236,196 @@ seqPlatform Illumina_GA2x
 subId 3307
 view RawData
 
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam,wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47653
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7100
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam,wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47654
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7099
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47653
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7100
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47654
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7099
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47653
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7100
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47654
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7099
+tableName wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep3
+objType file
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47653
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7100
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep4
+objType file
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep4.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47654
+localization nucleolus
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7099
+view RawData
+
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
 attic auxExp
@@ -6353,6 +6590,600 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3343
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam,wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48357
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7095
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam,wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48358
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7101
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam,wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48353
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7094
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam,wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48354
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7096
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48353
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7094
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48354
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7096
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48353
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7094
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48354
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7096
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep1
+objType file
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48353
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7094
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep2
+objType file
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48354
+localization cell
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7096
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48357
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7095
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48358
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7101
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48357
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7095
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48358
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7101
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep1
+objType file
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48357
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7095
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep2
+objType file
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48358
+localization cell
+project wgEncode
+protocol None
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7101
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48355
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7097
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID48356
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7098
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48355
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7097
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48356
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7098
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1
+objType table
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48355
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7097
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2
+objType table
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID48356
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7098
+tableName wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep1
+objType file
+bioRep 095WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48355
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7097
+view RawData
+
+metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep2
+objType file
+bioRep 096WC
+cell H1-neurons
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-19
+dateUnrestricted 2013-03-19
+donorId Cellular Dyn
+fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID48356
+localization cell
+project wgEncode
+protocol TAP-Only
+readType 1x101
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7098
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2
@@ -23953,6 +24784,29 @@ subId 6844
 tableName wgEncodeCshlShortRnaSeqSknshNucleusCiptapContigs
 view Contigs
 
+metaObject wgEncodeCshlShortRnaSeqSknshNucleusCiptapExonsGencV10
+objType file
+bioRep 085N,086N
+cell SK-N-SH
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-20
+dateUnrestricted 2013-03-20
+fileName wgEncodeCshlShortRnaSeqSknshNucleusCiptapExonsGencV10.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID46272,LID46273
+labVersion iIDR
+localization nucleus
+project wgEncode
+protocol CIP-TAP
+readType 1x101
+rnaExtract shortTotal
+seqPlatform Illumina_HiSeq_2000
+subId 7110
+view ExonsGencV10
+
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusContigs
 objType table
 bioRep 085N,086N
@@ -25056,4 +25910,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1350202966
+# MAGIC: 682039393
