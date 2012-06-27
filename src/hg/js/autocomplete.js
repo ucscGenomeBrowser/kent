@@ -1,4 +1,4 @@
-// support stuff for auto-complete using jquery.autocomplete.js
+// support stuff for auto-complete using jQuery UI's autocomplete widget
 //
 // requires ajax.js
 // requires utils.js
@@ -120,6 +120,7 @@ var suggestBox = {
                     }
             });
         }
+
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
         // $('#positionInput').focus();
