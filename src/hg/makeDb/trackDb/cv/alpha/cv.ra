@@ -4745,12 +4745,12 @@ tag LUNGOC
 type Cell Line
 tier 3
 organism human
-description Primary frozen lung tissue from NICHD donor IDs 1104 (Rep B1), 602 (Rep B2), 1442 (Rep B3)
+description Primary frozen lung tissue from NICHD donor IDs 1104 (Rep B1 DNase), 602 (Rep B2 DNase), 1442 (Rep B3 DNase) and CF Center donor IDs DD006I (Rep B1 FAIRE) and DD007I (Rep B2 FAIRE)
 karyotype normal
-sex M
+sex B
 tissue Lung
-vendorName NICHD
-vendorId 1104; 602; 1442
+vendorName NICHD; CF Center
+vendorId 1104; 602; 1442; DD006I; DD007I
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
 lab Crawford
 protocol Crawford:LungOC_Crawford_protocol.pdf
