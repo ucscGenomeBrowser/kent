@@ -350,8 +350,8 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-        padding: 7px; 
-        font-weight: bold;
+        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
 }
 
 .positionInput {
