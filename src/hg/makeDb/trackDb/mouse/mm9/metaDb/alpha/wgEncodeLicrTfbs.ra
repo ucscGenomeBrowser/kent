@@ -168,6 +168,7 @@ fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 06/08/2011 FISH A Lane 4-10
+md5sum 9ef9f1c2ea99564e1c8166a1ea49af0a,5776b2513ad348cf141581306dcf764c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -194,6 +195,7 @@ fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 06/08/2011 FISH A Lane 4-11
+md5sum ec9ff82bf2a1d383dfa1e85887892889,688b9c149e3392bfa898bc04dacd245c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -220,6 +222,7 @@ fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 06/08/2011 FISH A Lane 4-10
+md5sum 0599df783a0c443c353bf1e190c03fb2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -246,6 +249,7 @@ fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 06/08/2011 FISH A Lane 4-11
+md5sum 10f0bc418664a1f660fc061362700e6d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -272,6 +276,7 @@ fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum f2cbab442178f2a8f9426e4e3655ac3a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -2002,6 +2007,7 @@ fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-5
+md5sum 53fe19dc13590d374bc7abaaae8dc064,6d7ab5c97c53cba750c71c503ab7cfb7
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2028,6 +2034,7 @@ fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-6
+md5sum 3b3aff2cb875bc32ea96eeaa69e72536,a0d1e81f455b1392dc6b209b22e91f33
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2054,6 +2061,7 @@ fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-5
+md5sum 63d82fd449f79a29589f9cbd39804546
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2080,6 +2088,7 @@ fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-6
+md5sum 137be8b67e4459a5f3b29413373da7a5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2106,6 +2115,7 @@ fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 8c4671ec882cdead6236d794876f15ac
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -5036,6 +5046,7 @@ fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 10/11/10 Lane 7B
+md5sum ea1db9b6b5e548783834e86919e5a64e,d616e6cf3458d2c2672eab03cd50992b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5093,6 +5104,7 @@ fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5B
+md5sum 308ec776bbeed993133d922d91c54d6d,00fdfac416cce7fc7dbd0b093250bc2b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5181,6 +5193,7 @@ fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/11/10 Lane 7B
+md5sum f9d59cca1ae133f7f6289c5a4951ece5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5239,6 +5252,7 @@ fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5B
+md5sum 8b30aab1e0b73212012690f6b39899a8
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5355,6 +5369,7 @@ fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfb
 grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 7D
+md5sum 949ca02244a4ca6e225975d1797a43d6,dd4dc04b47ac4efd4f2a54b2ca50aa5d
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5443,6 +5458,7 @@ fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 7D
+md5sum 006fcff75a6a2218d44d30c708fac02a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5530,6 +5546,7 @@ fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 1D
+md5sum dcb9d5cf0381a3661c1cf8e13933059a,36f1381b754ee76ae574d0861cbadb21
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5587,6 +5604,7 @@ fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbs
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5A
+md5sum d640afd8347e851e7dee458b2bee3319,16a16e2abe7c5ebd1573f71d07a12b57
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5675,6 +5693,7 @@ fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 1D
+md5sum 65cf38c7ece1bb54efb2f51bb5a6dce8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5733,6 +5752,7 @@ fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5A
+md5sum 3363bb3a2dec3ece411047fa6e36a88e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8776,6 +8796,7 @@ fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 6D
+md5sum fd5bcc1d64b81df01996b75a81a33d1f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -9250,6 +9271,7 @@ fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicr
 grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
+md5sum f17ee9e012d6f5a5e2d8a711c7e49da0,4abb082a03b782555e3c4c411dcf39c9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -9340,6 +9362,7 @@ fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8B
+md5sum 8948a3cedaaaf925cd4fcf3543189c7f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -9399,6 +9422,7 @@ fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
+md5sum 3c7ecddc91aeddb64776ac104667427d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -9580,6 +9604,7 @@ fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
+md5sum 4f456d53ad99a00a30a9c88ec90dd1c9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10860,6 +10885,7 @@ fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTf
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6A
+md5sum b33d542b605c21f22841308ae934f17c,405d9ef1c94193f85ccafaa433b17f4b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -10917,6 +10943,7 @@ fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTf
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4B
+md5sum 027793c56c06df1cfa5c18600263f3ac,c2b217a5c38066cf76ecf87a9a77798c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11005,6 +11032,7 @@ fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6A
+md5sum 9b0813bea40144999f4aba6f2f2b10e2
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11063,6 +11091,7 @@ fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4B
+md5sum dbf811d844e64ec9d460b0bdaa25abac
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11179,6 +11208,7 @@ fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrT
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 2C
+md5sum 9faa26f6d0b45caf7d72eddafd5c276e,320cca31e071aeb4e318479e3aa43c91
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11267,6 +11297,7 @@ fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 2C
+md5sum 20da523d35540e11a59944fdcdbda33a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11354,6 +11385,7 @@ fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTf
 grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2G
+md5sum 478eacde64fc5716e3735c9f31883b86,66a8826b469545ebb8f1346eb86efae3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11411,6 +11443,7 @@ fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTf
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3B
+md5sum 3df2c15c0fbfc7f123078129d8896da7,e320ad88a32fd01358e603f4f1ab5a27
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11499,6 +11532,7 @@ fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2G
+md5sum e31c12d864929dc493483dc7c6f688de
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -11557,6 +11591,7 @@ fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3B
+md5sum a997b11a58c8a7116f3b13569159b463
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -11598,4 +11633,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1643876117
+# MAGIC: -405710294
