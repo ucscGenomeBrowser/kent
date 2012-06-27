@@ -4666,8 +4666,8 @@ description Primary frozen kidney tissue from NICHD donor IDs 1104 (Rep B1 DNase
 karyotype normal
 sex B
 tissue kidney
-vendorName NICHD NCTC
-vendorId 1104; 602; 1442; 1863; 10-0022A
+vendorName NICHD ; NICHD ; NICHD ; NCTC ; NICHD
+vendorId 1104; 602; 1442; 10-0022A; 1863
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
 lab Crawford
 protocol Crawford:KidneyOC_Crawford_protocol.pdf
@@ -4749,7 +4749,7 @@ description Primary frozen lung tissue from NICHD donor IDs 1104 (Rep B1 DNase),
 karyotype normal
 sex B
 tissue Lung
-vendorName NICHD CF Center
+vendorName NICHD ; NICHD ; NICHD ; CF Center ; CF Center
 vendorId 1104; 602; 1442; DD006I; DD007I
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
 lab Crawford
@@ -6416,7 +6416,7 @@ strain Unknown
 description Bone Marrow
 vendorName LICR lab
 vendorId BoneMarrow
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 86,180,233
@@ -6471,7 +6471,7 @@ strain Unknown
 description Cerebellum
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Cerebellum; Cerebellum
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 105,105,105
@@ -6528,7 +6528,7 @@ strain Unknown
 description Colon
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Colon; Colon
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 230,159,0
@@ -6564,7 +6564,7 @@ strain Unknown
 description Cortex
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Cortex;Cortex
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 105,105,105
@@ -6900,7 +6900,7 @@ strain Unknown
 description Heart
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Heart; Heart
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
@@ -7028,7 +7028,7 @@ strain Unknown
 description Limb
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Limb; Limb
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
@@ -7064,7 +7064,7 @@ strain Unknown
 description Lung
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Lung; Lung
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
@@ -7119,7 +7119,7 @@ category primaryCells
 description Mouse Embryonic Fibroblast
 vendorName LICR lab
 vendorId MEF
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 65,105,225
@@ -7270,7 +7270,7 @@ strain Unknown
 description Olfactory Bulb
 vendorName LICR lab
 vendorId Olfactory Bulb
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 105,105,105
@@ -7308,7 +7308,7 @@ category Tissue
 description Pancreas
 vendorName LICR lab
 vendorId Pancreas
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 189,0,157
@@ -7345,7 +7345,7 @@ age ageUnknown
 strain Unknown
 vendorName LICR lab
 vendorId Placenta
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
@@ -7400,7 +7400,7 @@ strain Unknown
 description Small Intestine
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Small Intestine; Small Intestine
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 230,159,0
@@ -7420,7 +7420,7 @@ strain Unknown
 description Spleen
 vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
 vendorId Spleen; Spleen; Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
@@ -7475,7 +7475,7 @@ strain Unknown
 description Testis
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Testis; Testis
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 0,158,115
@@ -7493,7 +7493,7 @@ strain Unknown
 description Thymus
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Thymus; Thymus
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 86,180,233
