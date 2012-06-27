@@ -4749,7 +4749,7 @@ description Primary frozen lung tissue from NICHD donor IDs 1104 (Rep B1 DNase),
 karyotype normal
 sex B
 tissue Lung
-vendorName NICHD; CF Center
+vendorName NICHD CF Center
 vendorId 1104; 602; 1442; DD006I; DD007I
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
 lab Crawford
