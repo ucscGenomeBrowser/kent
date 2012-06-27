@@ -1217,10 +1217,10 @@ void doMiddle(struct cart *theCart)
 {
 struct sqlConnection *conn = hConnectCentral();
 cart = theCart;
-safef(brwName,sizeof(brwName), browserName());
-safef(brwAddr,sizeof(brwAddr), browserAddr());
-safef(signature,sizeof(signature), mailSignature());
-safef(returnAddr,sizeof(returnAddr), mailReturnAddr());
+safecpy(brwName,sizeof(brwName), browserName());
+safecpy(brwAddr,sizeof(brwAddr), browserAddr());
+safecpy(signature,sizeof(signature), mailSignature());
+safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 
 if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
