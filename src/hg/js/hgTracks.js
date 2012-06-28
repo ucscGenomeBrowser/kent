@@ -2896,8 +2896,6 @@ var imageV2 = {
             if(pos) {
                 vis.makeTrackVisible($("#suggestTrack").val());
                 genomePos.set(pos, null);
-                // Following doesn't work b/c we get the hugo symbol from the suggest list, not the known gene id.
-                // $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' name='hgFind.matches' " + "value='" + name + "'>");
             } else {
                 // turn this into a full text search.
                 genomePos.set(gene, null);
@@ -3010,9 +3008,14 @@ $(document).ready(function()
     var db = getDb();
     if($('#positionInput').length) {
         suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
-             function (position) {
-                  genomePos.set(position, commify(getSizeFromCoordinates(position)));
+             function (item) {
+                  genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
                   vis.makeTrackVisible($("#suggestTrack").val());
+// Initial attempt to fix #6330 - however, this does not deal with user editing the search box
+//                  if($('#hgFindMatches').length)
+//                      $('#hgFindMatches').val(item.internalId);
+//                  else
+//                      $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' id='hgFindMatches' name='hgFind.matches' " + "value='" + item.internalId + "'>");
              },
              function (position) {
                   genomePos.set(position, commify(getSizeFromCoordinates(position)));

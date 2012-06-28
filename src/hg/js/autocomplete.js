@@ -85,8 +85,8 @@ function lookupGene(db, gene)
 var suggestBox = {
     init: function (db, assemblySupportsGeneSuggest, selectCallback, clickCallback)
     {
-    // selectCallback: called when the user selects a new genomic position from the list
-    // clickCallback: called when the user clicks on positionDisplay
+    // selectCallback(item): called when the user selects a new genomic position from the list
+    // clickCallback(position): called when the user clicks on positionDisplay
         var lastEntered = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var str;
         if(assemblySupportsGeneSuggest) {
@@ -113,7 +113,7 @@ var suggestBox = {
                     }
                 },
                 select: function (event, ui) {
-                        selectCallback(ui.item.id);
+                        selectCallback(ui.item);
                         lastEntered = ui.item.value;
                         // jQuery('body').css('cursor', 'wait');
                         // document.TrackHeaderForm.submit();

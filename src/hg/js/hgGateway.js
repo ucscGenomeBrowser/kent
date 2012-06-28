@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
     suggestBox.init(document.orgForm.db.value, $('#suggestTrack').length > 0,
-                      function(position) {
-                          $('#positionDisplay').text(position);
-                          $('#position').val(position);
+                      function(item) {
+                          $('#positionDisplay').text(item.id);
+                          $('#position').val(item.id);
                           makeSureSuggestTrackIsVisible();
                       },
                       function(position) {
