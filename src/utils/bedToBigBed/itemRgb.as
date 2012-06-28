@@ -9,5 +9,5 @@ table bed
     char[1] strand;    "+ or -"
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
-    string itemRgb;     "Used as itemRgb as of 2004-11-22"
+    uint reserved;   "Used as itemRgb as of 2004-11-22"
     )

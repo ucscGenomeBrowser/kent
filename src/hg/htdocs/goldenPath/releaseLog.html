@@ -12,8 +12,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
 document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
-function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Error(s):';}
+function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Warning/Error(s):';window.scrollTo(0, 0);}
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
+window.onunload = function(){}; // Trick to avoid FF back button issue.
 </script>
 
 <A NAME="TOP"></A>
@@ -41,7 +42,7 @@ function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.s
 
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>
-      <!--outer table is for border purposes-->
+<div id=firstSection>      <!--outer table is for border purposes-->
       <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
      <div class='subheadingBar'><div class='windowSize' id='sectTtl'>
@@ -80,6 +81,7 @@ Track and Table Releases     </div></div>
 <li><a CLASS="toc" HREF="#equCab1">Horse Jan. 2007 (Broad/equCab1) (equCab1)</a></li>
 <li><a CLASS="toc" HREF="#felCat4">Cat Dec. 2008 (NHGRI/GTB V17e/felCat4) (felCat4)</a></li>
 <li><a CLASS="toc" HREF="#felCat3">Cat Mar. 2006 (Broad/felCat3) (felCat3)</a></li>
+<li><a CLASS="toc" HREF="#canFam3">Dog Sep. 2011 (Broad CanFam3.1/canFam3) (canFam3)</a></li>
 <li><a CLASS="toc" HREF="#canFam2">Dog May 2005 (Broad/canFam2) (canFam2)</a></li>
 <li><a CLASS="toc" HREF="#ailMel1">Panda Dec. 2009 (BGI-Shenzhen 1.0/ailMel1) (ailMel1)</a></li>
 <li><a CLASS="toc" HREF="#myoLuc2">Microbat Jul. 2010 (Broad Institute Myoluc2.0/myoLuc2) (myoLuc2)</a></li>
@@ -148,12 +150,14 @@ Track and Table Releases     </div></div>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 21 Jun 2012. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 28 Jun 2012. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -173,6 +177,46 @@ Track and Table Releases     </div></div>
 <TD nowrap><B style='color:#006666;'>Release Date</B></TD>
 </TR>
 <TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies, GWAS (data update)</a></td>
+<td>hg18 hg19</td>
+<td>27 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+Dog Chain/Net</td>
+<td>mm10</td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhRnaSeq" target=_blank>RNA-seq from ENCODE/Stanford</a></td>
+<td>mm9</td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+Initial canFam3 release (using Broad CanFam3.1 (GCA_000002285.2)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Genscan Genes, CpG Islands, RepeatMasker, Interrupted Repeats, Simple Repeats, WM + SDust, RefSeq Genes, Other RefSeq, Dog mRNAs, Spliced ESTs, Dog ESTs, Other mRNAs, Mouse Chain/Net</td>
+<td>canFam3</td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=hgIkmc" target=_blank>IKMC Genes Mapped (update)</a></td>
+<td>hg19</td>
+<td>22 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=mm9&g=ikmc" target=_blank>IKMC Genes (update)</a></td>
+<td>mm9</td>
+<td>22 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlLongRnaSeq" target=_blank>Long RNA-seq from ENCODE/Cold Spring Harbor Lab (Release 2)</a></td>
+<td>hg19</td>
+<td>21 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV12" target=_blank>Gene Annotations from ENCODE/GENCODE Version 12</a></td>
+<td>hg19</td>
+<td>21 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=tetNig2&g=chainNetFr3" target=_blank>Fugu Chain/Net</a></td>
 <td>tetNig2</td>
 <td>19 Jun 2012</td>
@@ -182,52 +226,14 @@ Track and Table Releases     </div></div>
 <td>oryLat2</td>
 <td>19 Jun 2012</td>
 </tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=gasAcu1&g=chainNetFr3" target=_blank>Fugu Chain/Net</a></td>
-<td>gasAcu1</td>
-<td>19 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=danRer7&g=chainNetFr3 " target=_blank>Fugu Chain/Net</a></td>
-<td>danRer7</td>
-<td>19 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeMapability" target=_blank>Mapability or Uniqueness of Reference Genome from ENCODE</a></td>
-<td>mm9</td>
-<td>19 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhTfbs" target=_blank>Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale (Release 3)</a></td>
-<td>mm9</td>
-<td>15 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeSydhHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard (Release 3)</a></td>
-<td>hg19</td>
-<td>15 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington (Release 5)</a></td>
-<td>hg19</td>
-<td>12 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm10&g=chainNetRn5" target=_blank>Rat Chain/Net</a></td>
-<td>mm10</td>
-<td>11 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm10&g=chainNetGalGal4" target=_blank>Chicken Chain/Net</a></td>
-<td>mm10</td>
-<td>11 Jun 2012</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -244,6 +250,22 @@ Track and Table Releases     </div></div>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies, GWAS (data update)</a></td>
+<td>27 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=hgIkmc" target=_blank>IKMC Genes Mapped (update)</a></td>
+<td>22 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlLongRnaSeq" target=_blank>Long RNA-seq from ENCODE/Cold Spring Harbor Lab (Release 2)</a></td>
+<td>21 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV12" target=_blank>Gene Annotations from ENCODE/GENCODE Version 12</a></td>
+<td>21 Jun 2012</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeSydhHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard (Release 3)</a></td>
 <td>15 Jun 2012</td>
@@ -278,10 +300,6 @@ ISCA update</td>
 <td>02 May 2012</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies, GWAS (data update)</a></td>
 <td>01 May 2012</td>
 </tr>
@@ -311,10 +329,6 @@ ISCA update</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase" target=_blank>Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University) (Release 2)</a></td>
-<td>28 Mar 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=polyASeqSites" target=_blank>PolyA-Seq (initial release)</a></td>
 <td>28 Mar 2012</td>
 </tr>
 <TR valign=top><TD align=left>
@@ -402,10 +416,6 @@ ISCA update</td>
 <td>17 Jan 2012</td>
 </tr>
 <TR valign=top><TD align=left>
-Yale Pseudogenes based on Ensembl Release 60</td>
-<td>17 Jan 2012</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwAffyExonArray" target=_blank>Affymetrix Exon Array from ENCODE/University of Washington (Release 2)</a></td>
 <td>04 Jan 2012</td>
 </tr>
@@ -488,10 +498,6 @@ Ensembl Genes v64</td>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=cosmic" target=_blank>COSMIC: Catalogue Of Somatic Mutations In Cancer</a></td>
 <td>28 Oct 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=genomicSuperDups" target=_blank>Segmental Dups - Duplications of >1000 Bases of Non-RepeatMasked Sequence</a></td>
-<td>21 Oct 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington (Release 3)</a></td>
@@ -590,20 +596,8 @@ Lizard Chain/Net</td>
 <td>11 Jul 2011</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=allHg19RS_BW" target=_blank>Genomic Evolutionary Rate Profiling (GERP) scores for mammalian alignments</a></td>
-<td>07 Jul 2011</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeBroadHmm" target=_blank>Chromatin State Segmentation by HMM from ENCODE/Broad</a></td>
 <td>24 Jun 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-evoFold (update; predicted RNA structure images added to details view)</td>
-<td>17 Jun 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-OMIM AV SNPs, OMIM Genes, and OMIM Loci</td>
-<td>15 Jun 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDukeAffyExon" target=_blank>Affymetrix Exon Array from ENCODE/Duke</a></td>
@@ -697,10 +691,6 @@ hg19 Version 1 (BED files dated Nov 4 2009)</a></td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip" target=_blank>Open Chromatin TFBS by ChIP-seq from ENCODE/Open Chrom(UT Austin)</a></td>
 <td>17 Mar 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=ncbiIncidentDb" target=_blank>NCBI Incident database</a></td>
-<td>10 Mar 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=ensGene" target=_blank>Ensembl gene update, version 61</a></td>
@@ -1020,10 +1010,6 @@ Burge RNA-seq</td>
 <td>27 May 2010</td>
 </tr>
 <TR valign=top><TD align=left>
-tRNA Genes</td>
-<td>18 May 2010</td>
-</tr>
-<TR valign=top><TD align=left>
 Pig Chain/Net</td>
 <td>12 May 2010</td>
 </tr>
@@ -1178,6 +1164,8 @@ Initial hg19 release (using GRCh37 Genome Reference Consortium Human Reference 3
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -1194,6 +1182,10 @@ Initial hg19 release (using GRCh37 Genome Reference Consortium Human Reference 3
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies, GWAS (data update)</a></td>
+<td>27 Jun 2012</td>
+</tr>
 <TR valign=top><TD align=left>
 ISCA update</td>
 <td>05 Jun 2012</td>
@@ -1248,14 +1240,6 @@ EvoFold V2</td>
 <td>24 Jun 2011</td>
 </tr>
 <TR valign=top><TD align=left>
-evoFold (update; predicted RNA structure images added to details view)</td>
-<td>17 Jun 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-OMIM AV SNPs, OMIM Genes, and OMIM Loci</td>
-<td>15 Jun 2011</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg18&g=ceuBcellComposite" target=_blank>B-Cell Transcriptome (RNA-Seq) </a></td>
 <td>14 Jun 2011</td>
 </tr>
@@ -1274,10 +1258,6 @@ OMIM AV SNPs, OMIM Genes, and OMIM Loci</td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies, GWAS (data update)</a></td>
 <td>01 Apr 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV - data update (v10)</td>
-<td>04 Mar 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwDnaseSeq" target=_blank>ENCODE UW DNaseI HS (Release 4): Jurkat (G1 Phase) and HIPEpic replicates have been revoked</a></td>
@@ -1318,10 +1298,6 @@ DGV - data update (v10)</td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?org=human&g=gwasCatalog" target=_blank>NHGRI Catalog of Published Genome-Wide Association Studies (data update)</a></td>
 <td>12 Oct 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV - data update (v9)</td>
-<td>09 Sep 2010</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=darned" target=_blank>Human RNA Editing</a></td>
@@ -1376,10 +1352,6 @@ DECIPHER data</td>
 <td>01 Jun 2010</td>
 </tr>
 <TR valign=top><TD align=left>
-Burge RNA-seq</td>
-<td>27 May 2010</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeGisRnaSeq" target=_blank>ENCODE Genome Institute of Singapore RNA-seq</a></td>
 <td>26 May 2010</td>
 </tr>
@@ -1394,10 +1366,6 @@ Burge RNA-seq</td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeDukeAffyExonArray" target=_blank>ENCODE Duke Affy All-Exon Arrays</a></td>
 <td>24 May 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-tRNA Genes</td>
-<td>18 May 2010</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeUwDGF" target=_blank>ENCODE Univ. Washington Digital DNase Genomic Footprinting</a></td>
@@ -1525,10 +1493,6 @@ lsSnpPdb update: updates Mappings to PDB Protein Structures on SNPs(130) details
 <td>04 Dec 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-Added link to The GeneNetwork from the UCSC Genes details page.</td>
-<td>02 Dec 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeRikenCage" target=_blank>ENCODE RIKEN CAGE Loc: updated download files</a></td>
 <td>30 Nov 2009</td>
 </tr>
@@ -1597,10 +1561,6 @@ sno/miRNA(wgRna)-data update </td>
 <td>11 Sep 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-Vega Genes (build 35 update)</td>
-<td>09 Sep 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipseq" target=_blank>ENCODE HudsonAlpha CHIP-seq (Correction to labels and metadata - TAF1)</a></td>
 <td>13 Aug 2009</td>
 </tr>
@@ -1615,10 +1575,6 @@ Vega Genes (build 35 update)</td>
 <TR valign=top><TD align=left>
 Ensembl gene update to version 54</td>
 <td>07 Aug 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHelicosRnaSeq" target=_blank>ENCODE Helicos RNA-seq (K562)</a></td>
@@ -1675,10 +1631,6 @@ UCSC Genes: update to some secondary tables</td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=hgdpHzy" target=_blank>HGDP Hetrzygsty</a></td>
 <td>30 Apr 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=sestanBrainAtlas" target=_blank>Sestan Brain</a></td>
-<td>29 Apr 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 LiftOver to hg19</td>
@@ -1747,11 +1699,6 @@ Repeating Elements (by RepeatMasker version 3.2.7) & Fragments of Interrupted Re
 <TR valign=top><TD align=left>
 agilentProbes (formerly agilentCgh; 5 new probesets)</td>
 <td>27 Jan 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-agilentProbes update (formerly agilentCgh)
-</td>
-<td>23 Jan 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../ENCODE" target=_blank>ENCODE portal update for production phase</a></td>
@@ -1874,14 +1821,6 @@ C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase (t
 <td>05 Jun 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Vega Genes - Vega Annotations, Vega Annotated Pseudogenes and Immunoglobulin Segments</td>
-<td>04 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Agilent Catalog Oligonucleotide CGH Microarray probesets</td>
-<td>04 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Update of CCDS annotations</td>
 <td>04 Jun 2008</td>
 </tr>
@@ -1978,10 +1917,6 @@ Case Control Consortium track (and Genome Graphs built-in data)</td>
 <td>20 Nov 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-ORegAnno track update</td>
-<td>07 Nov 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Uppsala ChIP</td>
 <td>01 Nov 2007</td>
 </tr>
@@ -2050,24 +1985,12 @@ ENCODE data migration from hg17</td>
 <td>08 Oct 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-Interrupted Rpts</td>
-<td>01 Oct 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 GIS PET RNA and GIS ChIP-PET tracks: lifted from hg17 and moved out of Encode to group Expression and Regulation. 
 Added 3 new subtracks:
 wgEncodeGisChipPetHes3H3K27me3 (belongs to wgEncodeGisChipPetAll)
 wgEncodeGisChipPetHes3H3K4me3 (belongs to wgEncodeGisChipPetAll)
 wgEncodeGisRnaPetHes3 (belongs to wgEncodeGisRnaPet)</td>
 <td>28 Sep 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Swiss Institute of Bioinformatics, SIB Genes initial release</td>
-<td>25 Sep 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Swiss Institute of Bioinformatics Alt-Splicing initial release. </td>
-<td>25 Sep 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Intron Size column for Gene Sorter</td>
@@ -2122,10 +2045,6 @@ HMR Conserved Transcription Factor Binding Sites (data update)</td>
 <td>20 Jul 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Augustus</td>
 <td>09 Jul 2007</td>
 </tr>
@@ -2150,10 +2069,6 @@ Conservation (28 vertebrate alignment)</td>
 <td>25 Jun 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-CGAP SAGE</td>
-<td>15 Jun 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 sno/miRNA(wgRna)-data update</td>
 <td>31 May 2007</td>
 </tr>
@@ -2172,18 +2087,6 @@ Clones from genbank ORFeome collaboration.</td>
 <TR valign=top><TD align=left>
 Exapted Repeats (Conserved non-exonic regions that were deposited by mobile elements)</td>
 <td>30 Apr 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-ORegAnno track update</td>
-<td>30 Apr 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Locus Variants update (new LSDBs added, old ones updated)</td>
-<td>27 Apr 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Update of dmBlastTab tables (to dm2) to coincide with Fly Base v4.3 Genes</td>
-<td>20 Apr 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 ACEScan Alternate exon finder</td>
@@ -2214,14 +2117,6 @@ Added initial hg18 CCDS release, updated hg17 CCDS</td>
 <td>12 Mar 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-synteny-filter update for xxBlastTab for HMR (hg18, hg17, mm8, mm7, rn4)</td>
-<td>27 Feb 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Locus Variants (Jan 2007 snapshot)</td>
-<td>20 Feb 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 sno/miRNA(wgRna)-data update </td>
 <td>13 Feb 2007</td>
 </tr>
@@ -2236,10 +2131,6 @@ Exoniphy</td>
 <TR valign=top><TD align=left>
 AceView Genes (lifted from hg17)</td>
 <td>08 Dec 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-SNP Alignment Display</td>
-<td>01 Dec 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Updated HMR Conserved Transcription Factor Binding Sites</td>
@@ -2258,15 +2149,7 @@ HMR Conserved Transcription Factor Binding Sites</td>
 <td>03 Nov 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Regulatory elements from Open Regulatory Annotation (ORegAnno)</td>
-<td>03 Nov 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 AffyHuEx1.0 (Probe Set locations for Affymetrix Human Exon Genechip)</td>
-<td>24 Oct 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Locus Variants (Sept 2006 snapshot)</td>
 <td>24 Oct 2006</td>
 </tr>
 <TR valign=top><TD align=left>
@@ -2302,16 +2185,8 @@ Segmental Dups</td>
 <td>01 Aug 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Microsatellite Track: Di-nucleotide and Tri-nucleotide Repeats</td>
-<td>01 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Update to BAC End Pairs track, recovering previously filtered BAC Ends</td>
 <td>28 Jul 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-gene prediction peptide tables</td>
-<td>24 Jul 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Rat Ortholog column of Gene Sorter and Known Gene details updated to rn4</td>
@@ -2332,10 +2207,6 @@ Superfamily track</td>
 <TR valign=top><TD align=left>
 Human Chained Self Alignments</td>
 <td>27 Jun 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-regPotential7X data download files for hg18, hg17, mm8, mm7</td>
-<td>26 Jun 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 ESPERR Regulatory Potential (7 species)</td>
@@ -2388,6 +2259,8 @@ Downloads: bigZips, chromosomes, database, liftOvers, multiz, phastCons.</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -2405,44 +2278,12 @@ Downloads: bigZips, chromosomes, database, liftOvers, multiz, phastCons.</td>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
-DGV - data update (v10)</td>
-<td>04 Mar 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV - data update (v9)</td>
-<td>09 Sep 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV - changed color on inversions.  no change in data from 2009-08-12 release.</td>
-<td>05 Nov 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV: Updated to version 8.</td>
-<td>02 Oct 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 liftOver to hg19</td>
 <td>28 Apr 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-DGV: Updated to version 7.</td>
-<td>26 Mar 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV: Removed extraneous thin bars that implied only that there is overlap with another item.</td>
-<td>24 Feb 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-FOX2 adaptor-trimmed CLIPseq reads and density plots</td>
-<td>12 Jan 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Enable isPCR on UCSC Gene set to amplify exons only.</td>
 <td>26 Nov 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV: Updated to version 6.</td>
-<td>19 Nov 2008</td>
 </tr>
 <TR valign=top><TD align=left>
 Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td>
@@ -2473,22 +2314,6 @@ Dropped "NIMH Bipolar" and "Wellcome Trust Case Control Consortium" per new NIH 
 <td>29 Aug 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-DGV: Updated to version 5.</td>
-<td>21 Aug 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-DGV</td>
-<td>23 May 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Affymetrix ENCODE Extension Transcription Sites & Signal</td>
-<td>16 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Adds a link to HuGE database from Known Gene details page.</td>
-<td>06 Mar 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Updated with CCDS genes (as of 2008-02-01) </td>
 <td>12 Feb 2008</td>
 </tr>
@@ -2497,24 +2322,12 @@ HapMap SNPs.  Data correction of chimp orthologous alleles.</td>
 <td>06 Feb 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Link to geneTests database from UCSC Genes page</td>
-<td>08 Jan 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 CCDS update (as of 2007-12-12)</td>
 <td>17 Dec 2007</td>
 </tr>
 <TR valign=top><TD align=left>
  Affy Tx sRNA Sig ( renamed tables and files to fix the missing track )</td>
 <td>11 Dec 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-NIMH Bipolar Disease track (and Genome Graphs built-in data)</td>
-<td>20 Nov 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Case Control Consortium track (and Genome Graphs built-in data)</td>
-<td>20 Nov 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Vista HMR-Conserved Non-coding Human Enhancers from LBNL updated.</td>
@@ -2581,14 +2394,6 @@ ENCOE Yale ChIP-chip Pval - Nov06 batch</td>
 <td>13 Jul 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-SwitchGear Genomics Transcription Start Sites</td>
-<td>27 Jun 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 HapMap SNPs. Data correction.</td>
 <td>25 Jun 2007</td>
 </tr>
@@ -2629,10 +2434,6 @@ ENCODE Gencode Gene Annotations (March 2007)</td>
 <td>04 May 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-Eponine Predicted Transcription Start Sites</td>
-<td>03 May 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Structural Variation: new subtrack for Redon data</td>
 <td>02 May 2007</td>
 </tr>
@@ -2661,20 +2462,12 @@ Vista HMR-Conserved Non-coding Human Enhancers from LBNL</td>
 <td>12 Apr 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-ACEScan Alternate exon finder</td>
-<td>12 Apr 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Augustus Gene Predictions (two subtracks: Hints, and de novo).  This composite track replaces the Augustus ab initio track.</td>
 <td>12 Apr 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Added initial hg18 CCDS release, updated hg17 CCDS</td>
 <td>12 Mar 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-synteny-filter update for xxBlastTab for HMR (hg18, hg17, mm8, mm7, rn4)</td>
-<td>27 Feb 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 ENCODE Yale RFBR (Regulatory Factor Binding Regions)</td>
@@ -2709,10 +2502,6 @@ ENCODE Duke/NHGRI DNase (New Chip method in HepG2, Hela, GM, and CD4+)</td>
 <td>05 Dec 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-SNP Alignment Display</td>
-<td>01 Dec 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 ENCODE UT-Austin STAGE (update to add STAT1 tags)</td>
 <td>29 Nov 2006</td>
 </tr>
@@ -2722,10 +2511,6 @@ Markers greater than 5,000 nt were removed.</td>
 </tr>
 <TR valign=top><TD align=left>
 ENCODE GIS Chip-PET (P53 in HCT116, STAT1 in HeLa, c-Myc in P493)</td>
-<td>07 Nov 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Yale Transcriptionally Active Regions (TARs) (Bertone data)</td>
 <td>07 Nov 2006</td>
 </tr>
 <TR valign=top><TD align=left>
@@ -2809,14 +2594,6 @@ ENCODE UNC FAIRE track (data update)</td>
 <td>21 Aug 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Protein to Protein Interaction Network by Erich Wanker (Gene Sorter column)</td>
-<td>18 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Protein to Protein Interaction Network by Marc Vidal (Gene Sorter column)</td>
-<td>18 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 update CCDS to 2006-08-15 snapshot</td>
 <td>17 Aug 2006</td>
 </tr>
@@ -2825,24 +2602,12 @@ update CCDS to 2006-08-15 snapshot</td>
 <td>17 Aug 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Microsatellite Track: Di-nucleotide and Tri-nucleotide Repeats</td>
-<td>01 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Structural Variation</td>
 <td>28 Jul 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Rat Chain/Net(rn4)</td>
 <td>13 Jul 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-EvoFold (changed documentation on description page)</td>
-<td>29 Jun 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-regPotential7X data download files for hg18, hg17, mm8, mm7</td>
-<td>26 Jun 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 ENCODE University of Uppsala, Sweden ChIP-chip Na-butyrate time series</td>
@@ -2965,10 +2730,6 @@ ENCODE Yale ChIP pVal (data replaced with 5 new transcription factors). Previous
 <td>13 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE EGASP Full (Correction)</td>
-<td>12 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Hgdownloads update: goldenPath/hg17/vs{PanTro1,CanFam1,Fr1,DanRer1,Mm5}/axtNet/{chr5.axt.gz,md5sum.txt}</td>
 <td>12 Jan 2006</td>
 </tr>
@@ -2987,10 +2748,6 @@ Updated hg17 -> mm6 liftOver (Downloads, Batch Coordinate Conversion utility)</t
 <TR valign=top><TD align=left>
 Recomb Rates and Hotspots: from HapMap and Perlegen data</td>
 <td>04 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: fr1, tetNig1, xenTro1, galGal2, bosTau2, rheMac1, panTro1, hg17, rn3 -> mm7; fr1, tetNig1, xenTro1, galGal2, panTro1 -> mm6; galGal2 -> danRer2, mm5, hg17, monDom1, tetNig1, xenTro1; rheMac1 -> hg17; panTro1 -> hg16, hg17</td>
-<td>03 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 ENCODE Uppsala Chip (University of Uppsala, Sweden ChIP-chip coordinate corrections)</td>
@@ -3099,10 +2856,6 @@ ENCODE Gencode Genes (Oct 2005 Freeze)</td>
 <td>07 Nov 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-Gladstone arrays -- track and Gene Sorter columns</td>
-<td>04 Nov 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 sno/miRNA (data update)</td>
 <td>27 Oct 2005</td>
 </tr>
@@ -3132,14 +2885,6 @@ Exon Walk</td>
 </tr>
 <TR valign=top><TD align=left>
 Exoniphy</td>
-<td>14 Oct 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-AffyHuEx1.0 (Probe Set locations for Affymetrix Human Exon Genechip)</td>
-<td>14 Oct 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-NHGRI DNaseI-HS</td>
 <td>14 Oct 2005</td>
 </tr>
 <TR valign=top><TD align=left>
@@ -3353,10 +3098,6 @@ sno/miRNA (data update)</td>
 <td>26 Aug 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-Gene Sorter (updated to pick up Pfam Domains for splice variants in new Known Genes)</td>
-<td>12 Aug 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 Reloaded table for new known genes</td>
 <td>03 Aug 2005</td>
 </tr>
@@ -3393,16 +3134,8 @@ sno/miRNA (data update)</td>
 <td>13 Jul 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-augustus gene predictions</td>
-<td>07 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 hg17ToXenTro1, hg17ToGalGal2, hg17ToMonDom1, hg17ToTetNig1, hg17ToDanRer2 liftOver (Downloads, Batch Coordinate Conversion utility)</td>
 <td>06 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-hg17ToCanFam1 and canFam1ToHg17 liftOver (Downloads, Batch Coordinate Conversion utility)</td>
-<td>05 Jul 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 Known Genes, Gene Sorter, Proteome Browser (data update, new  filtering process)</td>
@@ -3419,10 +3152,6 @@ hg17ToMm6 liftOver (Downloads and browser Batch Coordinate Conversion utility)</
 <TR valign=top><TD align=left>
 hg17ToRn3 liftOver (Downloads and browser Batch Coordinate Conversion utility)</td>
 <td>01 Jun 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Restriction Enzyme mapping (REbase release 505).</td>
-<td>24 May 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 vega and vegaPseudogene</td>
@@ -3443,10 +3172,6 @@ Retroposed Genes</td>
 <TR valign=top><TD align=left>
 add table ccdsKgMap to link ccdsGene to knownGenes</td>
 <td>20 Apr 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Cow BAC Ends</td>
-<td>31 Mar 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 Consensus CDS (X/Y PAR region corrected)</td>
@@ -3662,6 +3387,8 @@ Conservation, Fugu Chain, Fugu Net, Zebrafish Chain, Zebrafish Net, Chicken Chai
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -3740,6 +3467,8 @@ Initial panTro3 release (using CGSC 2.1.3 (GCA_000001515.3)): Assembly, Scaffold
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -3818,10 +3547,6 @@ Ensembl gene update to version 55</td>
 <td>13 Aug 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="http://genomewiki.ucsc.edu/index.php/Hg19_Genome_size_statistics" target=_blank>Primate chains and nets from/to human hg19</a></td>
 <td>21 Jul 2009</td>
 </tr>
@@ -3852,10 +3577,6 @@ TransMap</td>
 <TR valign=top><TD align=left>
 Marmoset Chain/Net/LiftOver (calJac1)</td>
 <td>24 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
 </tr>
 <TR valign=top><TD align=left>
 Mouse (Jul. 2007/mm9) Chained Alignments
@@ -3895,6 +3616,8 @@ Downloads: bigZips, chromosomes, database, lift over files.</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -3925,6 +3648,8 @@ Initial gorGor3 release (using Wellcome Trust Sanger Institute May 2011 (NCBI pr
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4041,6 +3766,8 @@ Opossum Chain & Net, Platypus Chain & Net, Mouse Chain & Net, Rhesus Chain & Net
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4067,6 +3794,8 @@ Initial nomLeu1 release (using GGSC (NCBI project 13975, accession GCA_000146795
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4083,10 +3812,6 @@ Initial nomLeu1 release (using GGSC (NCBI project 13975, accession GCA_000146795
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=polyASeqSites" target=_blank>PolyA-Seq (initial release)</a></td>
-<td>28 Mar 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=rheMac2&g=chainGorGor3" target=_blank>Gorilla Chain/Net</a></td>
 <td>28 Nov 2011</td>
@@ -4145,10 +3870,6 @@ Ensembl gene update to version 55</td>
 <td>13 Aug 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="http://genomewiki.ucsc.edu/index.php/Hg19_Genome_size_statistics" target=_blank>Primate chains and nets from/to human hg19</a></td>
 <td>21 Jul 2009</td>
 </tr>
@@ -4171,14 +3892,6 @@ TransMap</td>
 <TR valign=top><TD align=left>
 Marmoset Chain/Net/LiftOver (calJac1)</td>
 <td>24 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-SGP and Geneid tracks</td>
-<td>02 Jan 2008</td>
 </tr>
 <TR valign=top><TD align=left>
 Mouse (Jul. 2007/mm9) Chained Alignments
@@ -4216,6 +3929,8 @@ Initial rhesus macaque browser release (Macaca mulatta preliminary assembly, Bay
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4288,6 +4003,8 @@ Downloads: bigZips, chromosomes, database, liftOvers, comparatives. </td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4347,6 +4064,8 @@ Initial calJac1 release (using WUSTL 2.0.2):  Assembly, Gap, GC Percent, Other R
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4364,6 +4083,10 @@ Initial calJac1 release (using WUSTL 2.0.2):  Assembly, Gap, GC Percent, Other R
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+Dog Chain/Net</td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm10&g=chainNetRn5" target=_blank>Rat Chain/Net</a></td>
 <td>11 Jun 2012</td>
 </tr>
@@ -4380,10 +4103,6 @@ Initial calJac1 release (using WUSTL 2.0.2):  Assembly, Gap, GC Percent, Other R
 <td>11 Jun 2012</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=orfeomeMrna" target=_blank>ORFEome mouse clone track</a></td>
-<td>07 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
 Naked mole-rat Chain/Net</td>
 <td>16 May 2012</td>
 </tr>
@@ -4397,6 +4116,8 @@ Initial mm10 release (using Genome Reference Consortium Mouse Build 38 (GCA_0000
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -4414,6 +4135,14 @@ Initial mm10 release (using Genome Reference Consortium Mouse Build 38 (GCA_0000
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhRnaSeq" target=_blank>RNA-seq from ENCODE/Stanford</a></td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=mm9&g=ikmc" target=_blank>IKMC Genes (update)</a></td>
+<td>22 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeMapability" target=_blank>Mapability or Uniqueness of Reference Genome from ENCODE</a></td>
 <td>19 Jun 2012</td>
 </tr>
@@ -4422,20 +4151,12 @@ Initial mm10 release (using Genome Reference Consortium Mouse Build 38 (GCA_0000
 <td>15 Jun 2012</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=orfeomeMrna" target=_blank>ORFEome mouse clone track</a></td>
-<td>07 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeCaltechRnaSeq" target=_blank>RNA-seq from ENCODE/Caltech</a></td>
 <td>07 May 2012</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrRnaSeq" target=_blank>RNA-seq from ENCODE/LICR (Release 2)</a></td>
 <td>04 May 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodePsuHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/PSU</a></td>
@@ -4451,10 +4172,6 @@ Initial mm10 release (using Genome Reference Consortium Mouse Build 38 (GCA_0000
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/LICR (Release 2)</a></td>
-<td>28 Mar 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=polyASeqSites" target=_blank>PolyA-Seq (initial release)</a></td>
 <td>28 Mar 2012</td>
 </tr>
 <TR valign=top><TD align=left>
@@ -4492,10 +4209,6 @@ Yale Pseudogenes based on Ensembl Release 60</td>
 <TR valign=top><TD align=left>
 Ensembl Genes v64</td>
 <td>07 Nov 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=genomicSuperDups" target=_blank>Segmental Dups - Duplications of >1000 Bases of Non-RepeatMasked Sequence</a></td>
-<td>21 Oct 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=mm9&g=chainNetAnoCar2" target=_blank>Lizard Chain/Net</a></td>
@@ -4567,10 +4280,6 @@ Sheep Chain/Net</td>
 <td>25 Mar 2011</td>
 </tr>
 <TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=ncbiIncidentDb" target=_blank>NCBI Incident database</a></td>
-<td>10 Mar 2011</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=ensGene" target=_blank>Ensembl gene update, version 61</a></td>
 <td>10 Mar 2011</td>
 </tr>
@@ -4581,10 +4290,6 @@ Sheep Chain/Net</td>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhTfbs" target=_blank>Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale </a></td>
 <td>07 Feb 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=agilentCgh" target=_blank>Agilent CGH</a></td>
-<td>04 Feb 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=genomicSuperDups" target=_blank>Segmental Dups</a></td>
@@ -4621,10 +4326,6 @@ Ensembl gene update, version 58</td>
 <TR valign=top><TD align=left>
 Marmoset Chain/Net</td>
 <td>03 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-tRNA Genes</td>
-<td>18 May 2010</td>
 </tr>
 <TR valign=top><TD align=left>
 Pig Chain/Net</td>
@@ -4676,10 +4377,6 @@ TransMap Alignments update
 <td>17 Dec 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-Added link to The GeneNetwork from the UCSC Genes details page.</td>
-<td>02 Dec 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Chain and Net for Horse/equCab2 on Dog and Mouse</td>
 <td>03 Nov 2009</td>
 </tr>
@@ -4716,10 +4413,6 @@ Ensembl gene update to version 55</td>
 <td>11 Aug 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=igtc" target=_blank>Gene Trap (data update 07-01-2009)</a></td>
 <td>21 Jul 2009</td>
 </tr>
@@ -4744,21 +4437,12 @@ Human Proteins</td>
 <td>14 Apr 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-affyExonTissues (initial release)</td>
-<td>16 Mar 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Gene Trap (data update 03-01-2009)</td>
 <td>12 Mar 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v52</td>
 <td>18 Feb 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-agilentProbes update (formerly agilentCgh)
-</td>
-<td>23 Jan 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 Gene Trap (data update 01-01-2009)</td>
@@ -4857,10 +4541,6 @@ Vega Genes - Vega Annotations, Vega Annotated Pseudogenes and Immunoglobulin Seg
 <td>04 Jun 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Update of CCDS annotations</td>
-<td>04 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 TROMER Transcriptome database, SIB Alt-Splicing</td>
 <td>29 May 2008</td>
 </tr>
@@ -4871,10 +4551,6 @@ Gene Trap (data update 05-01-2008)</td>
 <TR valign=top><TD align=left>
 Marmoset Chain/Net/LiftOver (calJac1)</td>
 <td>24 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
 </tr>
 <TR valign=top><TD align=left>
 Gene Trap (data update 04-01-2008)</td>
@@ -5040,6 +4716,8 @@ Initial mm9 release (using NCBI Build 37): Chromosome Band; STS Markers; Map Con
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5057,40 +4735,8 @@ Initial mm9 release (using NCBI Build 37): Chromosome Band; STS Markers; Map Con
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=igtc" target=_blank>Gene Trap (data update 07-01-2009)</a></td>
-<td>21 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=igtc" target=_blank>Gene Trap (data update 06-01-2009)</a></td>
-<td>15 Jun 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=igtc" target=_blank>Gene Trap (data update 05-01-2009)</a></td>
-<td>20 May 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-affyExonTissues (initial release)</td>
-<td>16 Mar 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 03-01-2009)</td>
-<td>12 Mar 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 01-01-2009)</td>
-<td>21 Jan 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 12-01-2008)</td>
-<td>08 Dec 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Enable isPCR on UCSC Gene set to amplify exons only.</td>
 <td>26 Nov 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 11-01-2008)</td>
-<td>05 Nov 2008</td>
 </tr>
 <TR valign=top><TD align=left>
 Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td>
@@ -5101,10 +4747,6 @@ automated rebuilding of transcription start upstream fasta and MAF files based o
 <td>16 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Gene Trap (data update 10-01-2008)</td>
-<td>13 Oct 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Broad H3 ChIPseq (Initial submission of mouse chromatin mapping tracks)</td>
 <td>23 Sep 2008</td>
 </tr>
@@ -5113,64 +4755,8 @@ Converted MGC track to PSL (to allow for alignment visualization)</td>
 <td>22 Sep 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Gene Trap (data update 09-01-2008)</td>
-<td>04 Sep 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 08-01-2008)</td>
-<td>11 Aug 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 07-01-2008)</td>
-<td>09 Jul 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 06-01-2008)</td>
-<td>13 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Agilent Catalog Oligonucleotide CGH Microarray probesets</td>
-<td>04 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Update of CCDS annotations</td>
-<td>04 Jun 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 05-01-2008)</td>
-<td>07 May 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 04-01-2008)</td>
-<td>10 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 03-01-2008)</td>
-<td>06 Mar 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 02-01-2008)</td>
-<td>14 Feb 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Updated with CCDS genes (as of 2008-02-01) </td>
 <td>12 Feb 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 01-01-2008)</td>
-<td>11 Jan 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-CCDS update (as of 2007-12-12)</td>
-<td>14 Dec 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 12-01-2007)</td>
-<td>04 Dec 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Gene Trap (data update 11-01-2007)</td>
-<td>16 Nov 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Affymetrix Mouse Exon array version 1.0 probes and transcripts</td>
@@ -5181,20 +4767,12 @@ Added CONTRAST gene predictions</td>
 <td>17 Oct 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-Gene Trap (data update 10-01-2007)</td>
-<td>12 Oct 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Swiss Institute of Bioinformatics, SIB Genes initial release</td>
 <td>25 Sep 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Swiss Institute of Bioinformatics Alt-Splicing initial release. </td>
 <td>25 Sep 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-WSSD Coverage</td>
-<td>20 Sep 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Gene Trap (data update 09-01-2007)</td>
@@ -5217,10 +4795,6 @@ Jackson Lab/MGI QTL</td>
 <td>01 Aug 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Gene Trap (data update 07-01-2007)</td>
 <td>09 Jul 2007</td>
 </tr>
@@ -5239,10 +4813,6 @@ miRNA (data update)</td>
 <TR valign=top><TD align=left>
 Gene Trap (data update 05-01-2007)</td>
 <td>07 May 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-Update of dmBlastTab tables (to dm2) to coincide with Fly Base v4.3 Genes</td>
-<td>20 Apr 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 Gene Trap (data update 04-01-2007)</td>
@@ -5265,20 +4835,12 @@ Allen Brain Atlas Probes</td>
 <td>07 Mar 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-synteny-filter update for xxBlastTab for HMR (hg18, hg17, mm8, mm7, rn4)</td>
-<td>27 Feb 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Added NCBI Clone Validation information to details of MGC genes</td>
 <td>12 Jan 2007</td>
 </tr>
 <TR valign=top><TD align=left>
 miRNA data update</td>
 <td>12 Dec 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-SNP Alignment Display</td>
-<td>01 Dec 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Jackson Lab/MGI Representative Transcript, Phenotype and Allele data</td>
@@ -5321,24 +4883,12 @@ SNP build 126</td>
 <td>14 Aug 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Microsatellite Track: Di-nucleotide and Tri-nucleotide Repeats</td>
-<td>01 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-gene prediction peptide tables</td>
-<td>24 Jul 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Rat Ortholog column of Gene Sorter and Known Gene details updated to rn4</td>
 <td>20 Jul 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Ensembl Gene Predictions</td>
 <td>10 Jul 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-regPotential7X data download files for hg18, hg17, mm8, mm7</td>
-<td>26 Jun 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 ESPERR Regulatory Potential (7 species)</td>
@@ -5384,6 +4934,8 @@ Downloads: bigZips, chromosomes, database, liftOvers, multiz17way, phastCons17Sc
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5410,6 +4962,8 @@ Initial rn5 release (using RGSC Rnor_5.0 (GCA_000001895.3)): Assembly, Gap, GC P
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5429,14 +4983,6 @@ Initial rn5 release (using RGSC Rnor_5.0 (GCA_000001895.3)): Assembly, Gap, GC P
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=rn4&g=chainNetBosTau7" target=_blank>Cow Chain/Net</a></td>
 <td>11 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=polyASeqSites" target=_blank>PolyA-Seq (initial release)</a></td>
-<td>28 Mar 2012</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=rn4&g=rgdGene2" target=_blank>RGD Genes for rat (rn4)</a></td>
@@ -5469,10 +5015,6 @@ Ensembl Genes v64</td>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=ensGene" target=_blank>Ensembl gene update, version 61</a></td>
 <td>10 Mar 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=agilentCgh" target=_blank>Agilent CGH</a></td>
-<td>04 Feb 2011</td>
 </tr>
 <TR valign=top><TD align=left>
 Ensembl gene update, version 59</td>
@@ -5512,10 +5054,6 @@ Ensembl gene update to version 56</td>
 <td>30 Oct 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-rn4 <--> mm9 Chains & Nets and LiftOvers (update)</td>
-<td>30 Oct 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="http://genomewiki.ucsc.edu/index.php/Hg19_Genome_size_statistics" target=_blank>Chains and Nets for non-primate mammal species vs Human</a></td>
 <td>16 Sep 2009</td>
 </tr>
@@ -5524,16 +5062,8 @@ Ensembl gene update to version 55</td>
 <td>11 Aug 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 quality score fasta files</td>
 <td>16 Jun 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-affyExonTissues (initial release)</td>
-<td>16 Mar 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v52</td>
@@ -5613,10 +5143,6 @@ removed "e-rows" from the upstream MAF files</td>
 <td>09 Jul 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-Update of dmBlastTab tables (to dm2) to coincide with Fly Base v4.3 Genes</td>
-<td>20 Apr 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Update of hgBlastTab tables (to hg18) to coincide with UCSC Genes</td>
 <td>06 Apr 2007</td>
 </tr>
@@ -5649,14 +5175,6 @@ N-SCAN gene predictions from WUStL, using human as informant.</td>
 <td>03 Oct 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Microsatellite Track: Di-nucleotide and Tri-nucleotide Repeats</td>
-<td>01 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-gene prediction peptide tables</td>
-<td>24 Jul 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Superfamily track, Gene Sorter column</td>
 <td>28 Jun 2006</td>
 </tr>
@@ -5682,6 +5200,8 @@ Initial rn4 release (using Baylor HGSC v3.4): Chromosome Band; RGD QTL; STS Mark
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5708,6 +5228,8 @@ Initial hetGla1 release (using HetGla_1.0 (NCBI project 68323, accession GCA_000
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5799,6 +5321,8 @@ Initial cavPor3 release (using Broad Institute cavPor3)</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5857,6 +5381,8 @@ Initial oryCun2 release (using Broad Institute oryCun2 (NCBI project 12819, AAGW
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5917,6 +5443,8 @@ Downloads: bigZips, chromosomes, database, liftOvers, comparatives. </td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5943,6 +5471,8 @@ oviAri1 Initial release (using ISGC (NCBI project 10709, accession GCA_000005525
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5969,6 +5499,8 @@ Initial bosTau7 release (using Btau_4.6.1 (NCBI project 12555, accession GCA_000
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -5995,6 +5527,8 @@ Initial bosTau6 release (using UMD_3.1 (NCBI project 10708, accession GCA_000003
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6106,6 +5640,8 @@ Initial Bos taurus release (bosTau4; using Baylor Release 4.0). Assembly, Gap, G
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6205,6 +5741,8 @@ Initial equCab2 release (using Broad Institute EquCab2): Assembly; Gap; GC Perce
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6234,10 +5772,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-SGP and Geneid tracks</td>
-<td>02 Jan 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Mouse (Jul. 2007/mm9) Chained Alignments
 Mouse (Jul. 2007/mm9) Alignment Net</td>
 <td>16 Oct 2007</td>
@@ -6252,6 +5786,8 @@ Initial equCab1 release (using Broad Institute equCab1 (1.0)): Assembly; Gap; GC
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6283,6 +5819,8 @@ Initial felCat4 release (using NHGRI/Genome Technology Branch (NCBI project 1070
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6361,10 +5899,6 @@ Ensembl genes, version 49; Ensembl Gene Scaffold</td>
 <td>18 Apr 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-SGP and Geneid tracks</td>
-<td>02 Jan 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Most Conserved</td>
 <td>20 Jun 2007</td>
 </tr>
@@ -6394,6 +5928,36 @@ Initial felCat3 release (using Broad Release 3): Assembly; Gap; GC Percent; Qual
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
+<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
+<BR>
+
+   <!--outer table is for border purposes-->
+   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
+    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
+     <div class='subheadingBar' class='windowSize'>
+<A NAME=canFam3></A>Dog Sep. 2011 (Broad CanFam3.1/canFam3) (canFam3, Broad CanFam3.1 (GCA_000002285.2))     </div>
+     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+     <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+
+<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
+<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
+    <TD nowrap><B style='color:#006666;'>Release Date</B>
+</TD></TR>
+<TR valign=top><TD align=left>
+Initial canFam3 release (using Broad CanFam3.1 (GCA_000002285.2)): Assembly, Gap, GC Percent, Short Match, Restr Enzymes, Genscan Genes, CpG Islands, RepeatMasker, Interrupted Repeats, Simple Repeats, WM + SDust, RefSeq Genes, Other RefSeq, Dog mRNAs, Spliced ESTs, Dog ESTs, Other mRNAs, Mouse Chain/Net</td>
+<td>25 Jun 2012</td>
+</tr>
+</table>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	</TD></TR></TABLE>
+	</TD></TR></TABLE>
+	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6413,10 +5977,6 @@ Initial felCat3 release (using Broad Release 3): Assembly; Gap; GC Percent; Qual
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=canFam2&g=chainNetBosTau7" target=_blank>Cow Chain/Net</a></td>
 <td>11 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=polyASeqSites" target=_blank>PolyA-Seq (initial release)</a></td>
-<td>28 Mar 2012</td>
 </tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=canFam2&g=chainNetBosTau6" target=_blank>Cow Chain/Net</a></td>
@@ -6472,10 +6032,6 @@ TransMap Alignments update
 <td>17 Dec 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-Chain and Net for Horse/equCab2 on Dog and Mouse</td>
-<td>03 Nov 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Opossum Chain/Net and liftOver</td>
 <td>24 Sep 2009</td>
 </tr>
@@ -6486,10 +6042,6 @@ Opossum Chain/Net and liftOver</td>
 <TR valign=top><TD align=left>
 Ensembl gene update to version 55</td>
 <td>13 Aug 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 quality score fasta files</td>
@@ -6516,10 +6068,6 @@ Marmoset Chain/Net/LiftOver (calJac1)</td>
 <td>24 Apr 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Chain track, Net track, and liftOver file to bosTau4</td>
 <td>08 Apr 2008</td>
 </tr>
@@ -6539,10 +6087,6 @@ N-SCAN informant was incorrectly documented as mouse, human was actually used.</
 <TR valign=top><TD align=left>
 Human Proteins</td>
 <td>17 Aug 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Microsatellite Track: Di-nucleotide and Tri-nucleotide Repeats</td>
-<td>01 Aug 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Chimp (panTro2) Chains, Net and LiftOvers</td>
@@ -6575,6 +6119,8 @@ Dog (canFam2, May 2005, Broad Institute v2.0) Initial Release: Assembly, Gap, Qu
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6631,6 +6177,8 @@ Assembly, Gap, GC Percent, Other RefSeq, Panda mRNAs, Other mRNAs, Panda ESTs, R
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6657,6 +6205,8 @@ Initial microbat release (using Broad Institute (NCBI Project ID: 16951, Accessi
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6719,6 +6269,8 @@ Initial loxAfr3 release (using Broad Institute loxAfr3 (NCBI project 12569, AAGU
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6821,10 +6373,6 @@ TransMap Alignments
 <td>17 Dec 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-Chain and Net to Horse (equCab2)</td>
-<td>08 Dec 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Dog Chain & Net, and liftOver</td>
 <td>12 Oct 2009</td>
 </tr>
@@ -6878,6 +6426,8 @@ quality score fasta files</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6947,6 +6497,8 @@ hgdownload files for monDom4</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -6973,6 +6525,8 @@ Initial macEug2 release (using TWGS (NCBI Project ID: 12586, Accession: GCA_0000
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7113,6 +6667,8 @@ Initial ornAna1 release (using WUSTL version 5.0): gold, gap, gc5Base, ensGene, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7139,6 +6695,8 @@ Initial galGal4 release (using ICGSC Gallus_gallus-4.0 (GCA_000002315.2)): Assem
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7286,10 +6844,6 @@ Mouse (Jul. 2007/mm9) Alignment Net</td>
 <td>19 Oct 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Chains Nets and liftOvers to fr2</td>
 <td>11 Apr 2007</td>
 </tr>
@@ -7314,6 +6868,8 @@ Downloads: bigZips, chromosomes, database, liftover files.  </td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7344,6 +6900,8 @@ Initial melGal1 release (using TGC (NCBI Project ID: 10805, Accession: GCA_00014
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7439,6 +6997,8 @@ Initial taeGut1 release (using Washington University taeGut1):  Assembly, Gap, G
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7490,6 +7050,8 @@ Ensembl Gene v62, Stickleback Chain and Net, Platypus Chain and Net, X. Tropical
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7555,6 +7117,8 @@ Initial anoCar1 release (using Broad Institute AnoCar (1.0)): Assembly; Gap; GC 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7581,6 +7145,8 @@ Initial chrPic1 release (using International Painted Turtle Genome Sequencing Co
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7611,6 +7177,8 @@ Initial xenTro3 release (using US DOE Joint Genome Institute (JGI-PGF) (GCA_0000
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7627,10 +7195,6 @@ Initial xenTro3 release (using US DOE Joint Genome Institute (JGI-PGF) (GCA_0000
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=xenTro2&g=chainNetAnoCar2" target=_blank>Lizard Chain/Net</a></td>
 <td>12 Oct 2011</td>
@@ -7734,6 +7298,8 @@ Downloads: bigZips, chromosomes, database, vsDanRer4, vsHg18, vsGalGal2, vsMm8, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7825,6 +7391,8 @@ Restriction Enzymes, RefSeq Genes, Other RefSeq, Zebrafish mRNAs, Spliced ESTs, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7841,10 +7409,6 @@ Restriction Enzymes, RefSeq Genes, Other RefSeq, Zebrafish mRNAs, Spliced ESTs, 
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 Ensembl gene update, version 59</td>
 <td>23 Aug 2010</td>
@@ -7891,6 +7455,8 @@ Initial danRer6 release (using Wellcome Trust Sanger Institute, Zv8 assembly (CA
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7953,6 +7519,8 @@ Initial tetNig2 release (using Genoscope Tetraodon v8.0 (NCBI project 12350, CAA
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -7991,10 +7559,6 @@ TransMap</td>
 <td>17 Jul 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Mouse (Jul. 2007/mm9) Chained Alignments
 Mouse (Jul. 2007/mm9) Alignment Net</td>
 <td>10 Sep 2007</td>
@@ -8010,14 +7574,6 @@ Chains Nets and liftOvers to fr2</td>
 <TR valign=top><TD align=left>
 Zebrafish Chain/Net/LiftOver (danRer3)</td>
 <td>21 Feb 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Keyword search by NCBI contig accession ID added.</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: fr1, tetNig1, xenTro1, galGal2, bosTau2, rheMac1, panTro1, hg17, rn3 -> mm7; fr1, tetNig1, xenTro1, galGal2, panTro1 -> mm6; galGal2 -> danRer2, mm5, hg17, monDom1, tetNig1, xenTro1; rheMac1 -> hg17; panTro1 -> hg16, hg17</td>
-<td>03 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 chain/net tracks to mm6</td>
@@ -8042,10 +7598,6 @@ HOX Genes (removed extensions)</td>
 <TR valign=top><TD align=left>
 Genoscope GAZE (removed extensions)</td>
 <td>10 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 Geneid Gene Predictions</td>
@@ -8078,6 +7630,8 @@ Downloads: bigZips, chromosomes, database, comparatives.</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8098,52 +7652,14 @@ Downloads: bigZips, chromosomes, database, comparatives.</td>
 Initial fr3/Fugu release (using Fugu Genome Sequencing Consortium - FUGU5 (NCBI project 1434, GCA_000180615.2)): Scaffolds, Gap, GC Percent, Short Match, Restr Enzymes, RefSeq Genes, Ensembl Genes (liftover from fr2), Fugu mRNAs, Spliced ESTs, Fugu ESTs, Other mRNAs, Conservation, oreNil1 Chain/Net, Tetraodon Chain/Net, Medaka Chain/Net, Stickleback Chain/Net, Zebradish Chain/Net, RepeatMasker, Interrupted Rpts, WM + SDust, Simple Repeats.</td>
 <td>15 May 2012</td>
 </tr>
-<TR valign=top><TD align=left>
-Ensembl Genes v65</td>
-<td>22 Dec 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=loxAfr3&g=chainNetMonDom5" target=_blank>Opossum Chain/Net</a></td>
-<td>21 Nov 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl Genes v64</td>
-<td>07 Nov 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene" target=_blank>Ensembl gene update, version 63</a></td>
-<td>30 Sep 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene" target=_blank>Ensembl gene update, version 62</a></td>
-<td>12 May 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene" target=_blank>Ensembl gene update, version 61</a></td>
-<td>10 Mar 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl gene update, version 59</td>
-<td>23 Aug 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl gene update, version 58</td>
-<td>21 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-Ensembl gene update, version 57</td>
-<td>20 Apr 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-Initial loxAfr3 release (using Broad Institute loxAfr3 (NCBI project 12569, AAGU03000000)): Assembly, Gap, GC Percent, Quality Scores, RepeatMasker, Interrupted Rpts, Simple Repeats, Human Proteins, Other RefSeq, Elephant mRNAs, Other mRNAs, Human Chain and Net, Elephant Chain and Net, Mouse Chain and Net</td>
-<td>24 Mar 2010</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8235,10 +7751,6 @@ Mouse (Jul. 2007/mm9) Alignment Net</td>
 <td>14 Sep 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Initial fr2 release (using JGI Oct 2004 build): Assembly; Gap; GC Percent; Ensembl Genes; Human Proteins; Repeat Masker; Simple Repeats; Window Masker; Fugu & non-Fugu mRNAs; Fugu ESTs; Spliced ESTs. Conservation; Most Conserved; Chains & Nets: Human, Chicken, Zebrafish, Stickleback, Medaka, Tetraodon.  Downloads: bigZips, chromosomes, database, liftOvers, multiz, phastCons.</td>
 <td>11 Apr 2007</td>
 </tr>
@@ -8248,6 +7760,8 @@ Initial fr2 release (using JGI Oct 2004 build): Assembly; Gap; GC Percent; Ensem
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8359,14 +7873,6 @@ Mouse (Jul. 2007/mm9) Alignment Net</td>
 <td>12 Sep 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-N-SCAN gene predictions from WUStL</td>
-<td>08 Jun 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Chains Nets and liftOvers to fr2</td>
 <td>11 Apr 2007</td>
 </tr>
@@ -8380,6 +7886,8 @@ Initial gasAcu1 release (using Broad Institute gasAcu1 (1.0)):  Assembly, Gap, G
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8399,10 +7907,6 @@ Initial gasAcu1 release (using Broad Institute gasAcu1 (1.0)):  Assembly, Gap, G
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=oryLat2&g=chainNetFr3" target=_blank>Fugu Chain/Net</a></td>
 <td>19 Jun 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
 </tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v64</td>
@@ -8479,6 +7983,8 @@ Initial oryLat2 release (using NIG and Tokyo Univ MEDAKA1) : Assembly, Scaffolds
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8538,6 +8044,8 @@ Initial petMar1 release (using WUSTL v.3.0 (March 2007)): Assembly, Gap, GC Perc
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8564,6 +8072,8 @@ Initial aplCal1 release (using Broad v. Aplcal2.0): Assembly, Gap, GC Percent, Q
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8598,6 +8108,8 @@ Initial braFlo1 release (using JGI v.1.0 (March 2006)): Scaffolds, Gap, GC Perce
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8614,10 +8126,6 @@ Initial braFlo1 release (using JGI v.1.0 (March 2006)): Scaffolds, Gap, GC Perce
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v64</td>
 <td>07 Nov 2011</td>
@@ -8663,10 +8171,6 @@ Ensembl gene update (version 50)</td>
 <td>18 Aug 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Ensembl genes, version 49</td>
-<td>17 Apr 2008</td>
-</tr>
-<TR valign=top><TD align=left>
 Initial ci2 Release (using JGI v2.0, March 2005): Gap, GC Percent, Short Match, Restr. enzymes, RefSeq, Non-Ciona RefSeq, mRNAs, Spliced ESTs, C. intestinalis ESTs, Non-Ciona mRNAs, Repeat Masker, Simple Repeats. Downloads: bigZips, database.</td>
 <td>09 Sep 2005</td>
 </tr>
@@ -8676,6 +8180,8 @@ Initial ci2 Release (using JGI v2.0, March 2005): Gap, GC Percent, Short Match, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8716,6 +8222,8 @@ Downloads: bigZips, database</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8746,6 +8254,8 @@ Initial strPur2 release (using Baylor release 3 Spur 2.1): gap, gold, gc5Base, q
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8780,6 +8290,8 @@ Initial strPur1 release (using Baylor Spur_0.5 whole genome shotgun assembly) As
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8806,6 +8318,8 @@ Initial ce10 release (using Washington University School of Medicine GSC and San
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8822,10 +8336,6 @@ Initial ce10 release (using Washington University School of Medicine GSC and San
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 BlastTab tables rebuild</td>
 <td>23 Aug 2010</td>
@@ -8872,6 +8382,8 @@ Initial ce6 release (using Washington University School of Medicine GSC and Sang
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8918,6 +8430,8 @@ Initial ce4 Release (using WormBase WS170): Assembly; Gap; GC Percent; Short Mat
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8956,6 +8470,8 @@ Initial caePb2 release (using WUSTL Caenorhabditis brenneri (PB2801) 6.0.1):  Sc
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -8990,6 +8506,8 @@ Initial caePb1 release (using WUSTL Caenorhabditis n. sp. PB2801): Scaffolds; Co
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9032,6 +8550,8 @@ Initial cb3 release (using WUSTL cb3): Assembly; Gap; GC Percent; Short Match; R
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9078,6 +8598,8 @@ Initial cb1 Release (using WormBase v. cb25.agp8): Assembly, Gap, GC Percent, Wo
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9116,6 +8638,8 @@ Initial caeRem3 release (using WUSTL C. remanei 15.0.1): Assembly, Contigs, Gap,
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9146,6 +8670,8 @@ Initial caeRem2 release (using WUSTL C. remanei 1.0): Assembly; Contigs; Gap; GC
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9180,6 +8706,8 @@ Initial caeJap1 release (using Washington University School of Medicine GSC C. r
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9218,6 +8746,8 @@ Initial priPac1 release (using WUSTL Pristionchus pacificus 5.0): Assembly; Cont
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9234,10 +8764,6 @@ Initial priPac1 release (using WUSTL Pristionchus pacificus 5.0): Assembly; Cont
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 Ensembl Genes v64</td>
 <td>07 Nov 2011</td>
@@ -9273,10 +8799,6 @@ BlastTab tables rebuild</td>
 <TR valign=top><TD align=left>
 Gene Sorter and UCSC Genes otherOrgs links to yeast sacCer2</td>
 <td>02 Nov 2009</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=dm3&g=bdtnpChipper" target=_blank>Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip</a></td>
-<td>20 Jul 2009</td>
 </tr>
 <TR valign=top><TD align=left>
 Updated to FlyBase version 5.12 annotations.</td>
@@ -9323,16 +8845,8 @@ Updated to FlyBase version 5.3 annotations.</td>
 <td>10 Oct 2007</td>
 </tr>
 <TR valign=top><TD align=left>
-Initial dm3 Regulatory elements from Open Regulatory Annotation (ORegAnno) release; updated hg18 ORegAnno track</td>
-<td>06 Sep 2007</td>
-</tr>
-<TR valign=top><TD align=left>
 Initial dm3 release (using BDGP Release 5): Chromosome Bands, Chromosome Ideogram, Assembly, Gap, BAC Endpairs, GC Percent; RefSeq Genes, Flybase Genes, FB Noncoding; D.melanogaster mRNAs, xenoMrnas, Spliced ESTs, ESTs; Conservation, MostConserved, Chains & Nets: A.gambiae, D.pseudoobscura, D.persimilis, D.ananassae, D.erecta, D.yakuba, D.sechellia, D.simulans;  RepeatMasker, Simple Repeats; Downloads: bigZips, chromosomes, database, liftOvers, comparatives.</td>
 <td>16 Jul 2007</td>
-</tr>
-<TR valign=top><TD align=left>
-removed "e-rows" from the upstream MAF files</td>
-<td>09 Jul 2007</td>
 </tr>
 </table>
 
@@ -9340,6 +8854,8 @@ removed "e-rows" from the upstream MAF files</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9356,18 +8872,6 @@ removed "e-rows" from the upstream MAF files</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=dm3&g=bdtnpChipper" target=_blank>BDTNP ChIP/chip</a></td>
-<td>16 Feb 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=dm3&g=bdtnpDnase" target=_blank>BDTNP DNase Accs</a></td>
-<td>16 Feb 2011</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=dm3&g=bdtnpChipper" target=_blank>Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip</a></td>
-<td>20 Jul 2009</td>
-</tr>
 <TR valign=top><TD align=left>
 LiftOver to: D. pseudoobscura (dp4), D. ananassae (droAna3), D. erecta (droEre2), D. grimshawi (droGri2), D. mojavensis (droMoj3), D. virilis (droVir3), D. willistoni (droWil1), D. yakuba (droYak2)</td>
 <td>10 Nov 2008</td>
@@ -9493,10 +8997,6 @@ N-SCAN Gene Predictions</td>
 <td>07 Oct 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 D. simulans (droSim1) Chain and Net</td>
 <td>08 Aug 2005</td>
 </tr>
@@ -9531,6 +9031,8 @@ Downloads: bigZips, database, comparatives.</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9552,18 +9054,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 Initial Drosophila simulans release (droSim1; Release 1.0 Apr. 2005 from WUSTL): Assembly, Gap, GC Percent, Short Match, Restr. enzymes, RepeatMasker, Simple Repeats, Non D. sim. RefSeq, Genscan Genes, D. sim mRnas, D. sim Spliced ESTs, D. sim ESTs, Non D. sim. mRnas, D. mel Proteins, D. mel Chain, D. mel Net.</td>
 <td>10 Jun 2005</td>
 </tr>
@@ -9573,6 +9063,8 @@ Initial Drosophila simulans release (droSim1; Release 1.0 Apr. 2005 from WUSTL):
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9604,6 +9096,8 @@ Downloads: bigZips, database, liftOver, vsDm2</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9634,6 +9128,8 @@ Initial Drosophila yakuba Release (droYak2, Nov. 2005 using WUSTL):  Assembly, G
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9659,14 +9155,6 @@ D. melanogaster Chain/Net/LiftOver (dm2 update)</td>
 <td>17 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 Fly (dm1) Proteins (data update)</td>
 <td>16 Sep 2004</td>
 </tr>
@@ -9688,6 +9176,8 @@ Initial D. yakuba Release (version 1) - Assembly, Gap, Genscan Genes, D. yakuba 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9709,14 +9199,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Reloaded Gap and loaded Assembly from assembly.links files included with the assemblies.  Previously, Gap was deduced from runs of N's in the sequence.</td>
-<td>25 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Drosophila erecta (droEre1, August 2005) Initial Release: Gap, Short Match, Restr. enzymes, RepeatMasker, Simple Repeats, GC Percent, D. ere. mRNAs, Non-D. ere. mRNAs, Non-D. ere. RefSeq, Genscan Genes, D. mel. (dm2) Chain/Net, D.mel. (dm2) Proteins. Downloads: bigZips, database, vsDm2.</td>
 <td>20 Sep 2005</td>
 </tr>
@@ -9726,6 +9208,8 @@ Drosophila erecta (droEre1, August 2005) Initial Release: Gap, Short Match, Rest
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9747,14 +9231,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Reloaded Gap and loaded Assembly from assembly.links files included with the assemblies.  Previously, Gap was deduced from runs of N's in the sequence.</td>
-<td>25 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Drosophila ananassae (Agencourt Bioscience Corporation, August 2005) Initial Release -- Gap, GC Percent, Other Refseq, Genscan, D. anan. mRNA, Other mRNAs, D. mel. proteins, D. mel. Chain/Net, RepeatMasker, Simple Repeats. Downloads: bigZips, database, vsDm2.</td>
 <td>07 Oct 2005</td>
 </tr>
@@ -9764,6 +9240,8 @@ Drosophila ananassae (Agencourt Bioscience Corporation, August 2005) Initial Rel
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9789,18 +9267,6 @@ D. melanogaster Chain/Net/LiftOver (dm2 update)</td>
 <td>17 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 D. ananassae Browser Initial Release (TIGR 15 July 2004): Gap, GC Percent, Non-D.anan. Refseq, Genscan, D.anan. mRNA, Non D.anan. mRNAs, D. mel. proteins, D. mel. Chain/Net, RepeatMasker, Simple Repeats.  Downloads bigZips, database, vsDm1.</td>
 <td>15 Dec 2004</td>
 </tr>
@@ -9810,6 +9276,8 @@ D. ananassae Browser Initial Release (TIGR 15 July 2004): Gap, GC Percent, Non-D
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9831,18 +9299,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 D. pseudoobscura Initial Release (dp3, based on FlyBase Release 1.03 November 2004): Gap, GC Percent, Short Match, Restr. enzymes, FlyBase, Non-D.pseudo. RefSeq, Twinscan, Genewise, Genscan Genes, D.pseudo. mRNAs, Spliced ESTs, D.pseudo. ESTs, Non-D.pseudo. mRNAs, D.mel. Proteins (dm1), D.mel Chain/Net (dm2), Repeat Masker, Simple Repeats, Downloads: bigZips, database, vsDm2.</td>
 <td>24 Jun 2005</td>
 </tr>
@@ -9852,6 +9308,8 @@ D. pseudoobscura Initial Release (dp3, based on FlyBase Release 1.03 November 20
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9873,10 +9331,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 Initial dp2 release (Baylor freeze 1 August 2003): GC Percent, Xeno RefSeq, Twinscan Genes, Genscan Genes, mRNAs, Xeno mRNAs, D. melanogaster, proteins, D. mel. Chain, D. mel. Net, RepeatMasker, Simple Repeats.
 Downloads: bigZips, chromosomes, database</td>
 <td>01 Sep 2004</td>
@@ -9887,6 +9341,8 @@ Downloads: bigZips, chromosomes, database</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9917,6 +9373,8 @@ Initial droPer1 Release (using Broad Institute):  supporting tables, Assembly, G
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9942,10 +9400,6 @@ Reloaded Gap and loaded Assembly from assembly.links files included with the ass
 <td>25 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Drosophila virilis (droVir2, Month 2005) Initial Release: Gap, Short Match, Restr. enzymes, RepeatMasker, Simple Repeats, GC Percent, D. vir. ESTs, Spliced Ests, D. vir. mRNAs, Non-D. vir. mRNAs, Non-D. vir. RefSeq, Genscan Genes, D. mel. (dm2) Chain/Net, D.mel. (dm2) Proteins. Downloads: bigZips, database, vsDm2.</td>
 <td>20 Sep 2005</td>
 </tr>
@@ -9955,6 +9409,8 @@ Drosophila virilis (droVir2, Month 2005) Initial Release: Gap, Short Match, Rest
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -9980,18 +9436,6 @@ D. melanogaster Chain/Net/LiftOver (dm2 update)</td>
 <td>17 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 D. virilis Browser Initial Release (Agencourt 12 July 2004): Gap, GC Percent, Non-D. vir. Refseq, Genscan, D. vir. mRNA, Non-D. vir. mRNA, D. mel. proteins, D. mel. Chain/Net, RepeatMasker, Simple Repeats</td>
 <td>15 Dec 2004</td>
 </tr>
@@ -10001,6 +9445,8 @@ D. virilis Browser Initial Release (Agencourt 12 July 2004): Gap, GC Percent, No
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10018,20 +9464,8 @@ D. virilis Browser Initial Release (Agencourt 12 July 2004): Gap, GC Percent, No
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
 <TR valign=top><TD align=left>
-LiftOver: droMoj2 <--> droMoj3</td>
-<td>13 Apr 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td>
 <td>27 Oct 2008</td>
-</tr>
-<TR valign=top><TD align=left>
-Reloaded Gap and loaded Assembly from assembly.links files included with the assemblies.  Previously, Gap was deduced from runs of N's in the sequence.</td>
-<td>25 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 Drosophila mojavensis (droMoj2, August 2005) Initial Release: Gap, Short Match, Restr. enzymes, RepeatMasker, Simple Repeats, GC Percent, D. moj. mRNAs, Non-D. moj. mRNAs, Non-D. moj. RefSeq, Genscan Genes, D. mel. (dm2) Chain/Net, D.mel. (dm2) Proteins. Downloads: bigZips, database, vsDm2.</td>
@@ -10043,6 +9477,8 @@ Drosophila mojavensis (droMoj2, August 2005) Initial Release: Gap, Short Match, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10068,16 +9504,8 @@ D. melanogaster Chain/Net/LiftOver (dm2 update)</td>
 <td>17 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Geneid Genes</td>
-<td>21 Sep 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 D.mel. Proteins (data update to dm2)</td>
 <td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 D. mojavensis Browser Initial Release (Agencourt 11 Aug 2004): Gap, GC Percent, Non-D.moj. Refseq, Genscan, D.moj. mRNA, Non D.moj. mRNAs, D. mel. proteins, D. mel. Chain/Net, RepeatMasker, Simple Repeats</td>
@@ -10089,6 +9517,8 @@ D. mojavensis Browser Initial Release (Agencourt 11 Aug 2004): Gap, GC Percent, 
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10110,14 +9540,6 @@ Added alignments of non-coding RNAs (NR_*) to RefSeq and Xeno-RefSeq tracks.</td
 <td>27 Oct 2008</td>
 </tr>
 <TR valign=top><TD align=left>
-Reloaded Gap and loaded Assembly from assembly.links files included with the assemblies.  Previously, Gap was deduced from runs of N's in the sequence.</td>
-<td>25 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-LiftOvers: droGri1, droMoj2, droAna2, droEre1, droSim1, droVir2, dp3 -> dm2</td>
-<td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
 Drosophila grimshawi (droGri1, August 2005) Initial Release: Gap, GC Percent, Short Match, Restr. enzymes, Other RefSeq, Genscan Genes, Other mRNAs, D. melanogaster (dm2) Proteins, D. melanogaster (dm2) Chain/Net, RepeatMasker, Simple Repeats. Downloads: bigZips, database, vsDm2.</td>
 <td>11 Oct 2005</td>
 </tr>
@@ -10127,6 +9549,8 @@ Drosophila grimshawi (droGri1, August 2005) Initial Release: Gap, GC Percent, Sh
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10152,28 +9576,12 @@ Geneid Genes</td>
 <td>21 Sep 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 AnoEST Unique and Non-Unique (TCLAG*: Clustered A. gambiae ESTs)</td>
 <td>08 Jun 2005</td>
 </tr>
 <TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 GC Percent</td>
 <td>22 Oct 2004</td>
-</tr>
-<TR valign=top><TD align=left>
-Fly (dm1) Proteins (data update)</td>
-<td>16 Sep 2004</td>
-</tr>
-<TR valign=top><TD align=left>
-D. mel. Proteins (chained tblastn alignments of D. melanogaster proteins)</td>
-<td>21 Aug 2004</td>
 </tr>
 <TR valign=top><TD align=left>
 Initial anoGam1 release (MOZ2 draft genome sequence Feb. 2003): Assembly, Gap, Ensembl Genes, Genscan Genes, A. gambiae mRNAs, Spliced ESTs, A. gambiae ESTs, Non-A. gambiae mRNAs, Non-A.gambiae ESTs, D. mel Chain, D. mel. Net, RepeatMasker, Simple Repeats
@@ -10187,6 +9595,8 @@ Initial anoGam1 release (MOZ2 draft genome sequence Feb. 2003): Assembly, Gap, E
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10210,10 +9620,6 @@ update to existing dm2 chains and nets</td>
 <TR valign=top><TD align=left>
 D. melanogaster LiftOver (dm2)</td>
 <td>17 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-D.mel. Proteins (data update to dm2)</td>
-<td>27 Jul 2005</td>
 </tr>
 <TR valign=top><TD align=left>
 NCBI Genes (update from NCBI: alternate gene names)</td>
@@ -10253,6 +9659,8 @@ A. mellifera (Honeybee) Browser Jan. 2005 Release (apiMel2, Baylor HGSC Amel_2.0
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10274,10 +9682,6 @@ D. melanogaster Chain/Net/LiftOver (dm2 update)</td>
 <td>17 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
-Genscan (removed extensions)</td>
-<td>07 Jan 2005</td>
-</tr>
-<TR valign=top><TD align=left>
 Honeybee Browser Initial Release (Baylor HGSC Amel_1.2): Assembly, Gap, GC Percent, Genscan, Honeybee mRNA, Spliced ESTs, Honeybee ESTs, Mapped D.melanogaster Proteins, D. melanogaser Chain/Net, RepeatMasker, Simple Repeats</td>
 <td>22 Dec 2004</td>
 </tr>
@@ -10287,6 +9691,8 @@ Honeybee Browser Initial Release (Baylor HGSC Amel_1.2): Assembly, Gap, GC Perce
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10321,6 +9727,8 @@ Initial sacCer3 release (using Saccharomyces cerevisiae S288c assembly from Sacc
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -10337,10 +9745,6 @@ Initial sacCer3 release (using Saccharomyces cerevisiae S288c assembly from Sacc
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=pubs" target=_blank>Publications: Sequences in scientific articles</a></td>
-<td>01 May 2012</td>
-</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene" target=_blank>Ensembl gene update, version 62</a></td>
 <td>12 May 2011</td>
@@ -10379,16 +9783,13 @@ sgdGene.upstream2000.fa.gz
 <a href="../../cgi-bin/hgGateway?org=S.+cerevisiae&db=sacCer2" target=_blank>Initial S. cerevisiae Release (based on sequence in SGD as of June 2008): Assembly, Gap, WashU Clones, GC Percent, Ensembl Genes, SGD Genes, SGD Other, Human Proteins, Yeast mRNAs, Spliced ESTs, Yeast ESTs, Regulatory Code, Reg. CHIP/CHIP, Regulatory Module, ORegAnno, Simple Repeats, Conservation (S. paradoxus; S. mikatae; S. kudriavzevii; S. bayanus; S. castelli; S. kluyveri), Most Conserved. Downloads: bigZips, chromosomes, liftOver, conservation, database.</a></td>
 <td>11 Aug 2009</td>
 </tr>
-<TR valign=top><TD align=left>
-<a href="http://www.nature.com/nmeth/journal/v6/n4/abs/nmeth.1313.html" target=_blank>UW Protein/DNA Interaction Footprints Tracks</a></td>
-<td>24 Apr 2009</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
 </TD></TR></TABLE>
 
 </BODY></HTML>

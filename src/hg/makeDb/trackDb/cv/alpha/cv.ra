@@ -1130,7 +1130,7 @@ karyotype normal
 sex B
 vendorName BioChain; BioChain; BioChain
 vendorId CP-S12-D1234248-05_A808008; CP-S13-D1234248-05_B402070; CP-S10-R1234248-20_B402077
-orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com/biochain/homepage.htm
+orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
 protocol Myers:Myers_BioChain_protocol.pdf
@@ -1276,6 +1276,21 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
+
+term Breast_OC
+tag BREASTOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen breast tissue from NCTC donor IDs 11-0068A (Rep B1) and 11-0067A (Rep B2), both African American
+karyotype normal
+sex F
+tissue breast
+vendorName NCTC
+vendorId 11-0068A; 11-0067A
+orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+lab Crawford
+protocol Crawford:BreastOC_Crawford_protocol.pdf
 
 term CD14+
 tag CD14
@@ -1430,6 +1445,36 @@ sex M
 tier 3
 protocol Stam:Stam_15_protocols.pdf
 
+term Cerebellum_OC
+tag CEREBELLUMOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen cerebellum tissue from NICHD donor IDs 1104 (Rep B1), 602 (Rep B2), 1442 (Rep B3), all Caucasian
+karyotype normal
+sex M
+tissue cerebellum
+vendorName NICHD
+vendorId 1104; 602; 1442
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:CerebellumOC_Crawford_protocol.pdf
+
+term Cerebrum_frontal_OC
+tag CEREBRUMFRONTALOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen frontal cerebrum tissue from NICHD donor IDs 1104 (Rep B1), 602 (Rep B2), 1442 (Rep B3), all Caucasian
+karyotype normal
+sex M
+tissue frontal cerebrum
+vendorName NICHD
+vendorId 1104; 602; 1442
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:CerebrumfrontalOC_Crawford_protocol.pdf
+
 term Chorion
 tag CHORION
 type Cell Line
@@ -1479,6 +1524,21 @@ termId BTO:0000849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
 lab Crawford
 protocol Crawford:Colo829_Crawford_protocol.pdf
+
+term Colon_OC
+tag COLONOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen colon tissue from NCTC donor IDs 10-0005A (Rep B1) and 10-0170A (Rep B2), African American and caucasian
+karyotype normal
+sex B
+tissue colon
+vendorName NCTC
+vendorId 10-0005A; 10-0170A
+orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+lab Crawford
+protocol Crawford:ColonOC_Crawford_protocol.pdf
 
 term Cord_CD4_naive
 tag CORDCD4NAIVE
@@ -1674,6 +1734,21 @@ tier 3
 lab Crawford
 protocol Crawford:FibroP_Crawford_protocol.pdf
 
+term Frontal_cortex_OC
+tag FRONTALCORTEXOC
+type Cell Line
+tier 3
+organism human
+description Primary ventromedial prefrontal cortex, from KPBBB donor IDs 673 (Rep B1) and 913 (Rep B2)
+karyotype normal
+sex F
+tissue frontal cortex
+vendorName Kathleen Price Bryan Brain
+vendorId 673; 913
+orderUrl https://adrc.mc.duke.edu/index.php/research/brain-bank
+lab Crawford
+protocol Crawford:FrontalcortexOC_Crawford_protocol.pdf
+
 term Gliobla
 tag GLIOBLA
 type Cell Line
@@ -1760,46 +1835,42 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Farnham
 protocol Farnham:GM08714_Farnham_protocol.pdf
-#
-#term GM10248
-#tag GM10248
-#type Cell Line
-#tier 3
-#organism human
-#description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12)
-#lineage mesoderm
-#karyotype unknown
-#sex F
-#tissue haematopoietic
-#childOf Lymphoblastoid_cell_line
-#vendorName Coriell
-#vendorId GM10248
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10248&PgId=166
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#lab Crawford
-#protocol Crawford:GM10248_Crawford_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
-#
-#term GM10266
-#tag GM10266
-#type Cell Line
-#tier 3
-#organism human
-#description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12)
-#lineage mesoderm
-#karyotype unknown
-#sex F
-#tissue haematopoietic
-#childOf Lymphoblastoid_cell_line
-#vendorName Coriell
-#vendorId GM10266
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10266&PgId=166
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#lab Crawford
-#protocol Crawford:GM10266_Crawford_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+
+term GM10248
+tag GM10248
+type Cell Line
+tier 3
+organism human
+description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
+lineage mesoderm
+karyotype normal 
+sex F
+tissue blood
+vendorName Coriell
+vendorId GM10248
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10248&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Crawford
+protocol Crawford:GM10248_Crawford_protocol.pdf
+
+term GM10266
+tag GM10266
+type Cell Line
+tier 3
+organism human
+description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
+lineage mesoderm
+karyotype affected 
+sex F
+tissue blood
+vendorName Coriell 
+vendorId GM10266
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10266&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Crawford
+protocol Crawford:GM10266_Crawford_protocol.pdf
 
 term GM10847
 tag GM10847
@@ -2187,46 +2258,42 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Snyder:GM-generalized_Snyder_protocol.pdf
-#
-#term GM13976
-#tag GM13976
-#type Cell Line
-#tier 3
-#organism human
-#description lymphoblastoid cell line, Clinically normal; monozygotic twin sister with Cornelia De Lange syndrome is GM13977
-#lineage mesoderm
-#karyotype unknown
-#sex F
-#tissue haematopoietic
-#childOf Lymphoblastoid_cell_line
-#vendorName Coriell
-#vendorId GM13976
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13976&PgId=166
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#lab Crawford
-#protocol Crawford:GM13976_Crawford_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
-#
-#term GM13977
-#tag GM13977
-#type Cell Line
-#tier 3
-#organism human
-#description lymphoblastoid cell line, Clinically affected; microcephaly; low frontal hairline; synophris; "penciled" arched eyebrows; short nose; crescent shaped mouth; hirsutism; micromelia; short thumbs; mental retardation; clinically normal monozygotic twin sister is GM13976
-#lineage mesoderm
-#karyotype unknown
-#sex F
-#tissue haematopoietic
-#childOf Lymphoblastoid_cell_line
-#vendorName Coriell
-#vendorId GM13977
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13977&PgId=166
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#lab Crawford
-#protocol Crawford:GM13977_Crawford_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+
+term GM13976
+tag GM13976
+type Cell Line
+tier 3
+organism human
+description lymphoblastoid cell line, clinically normal; monozygotic twin sister with Cornelia De Lange syndrome is GM13977 
+lineage mesoderm
+karyotype normal
+sex F
+tissue blood
+vendorName Coriell
+vendorId GM13976
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13976&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Crawford
+protocol Crawford:GM13976_Crawford_protocol.pdf
+
+term GM13977
+tag GM13977
+type Cell Line
+tier 3
+organism human
+description lymphoblastoid cell line, Clinically affected; microcephaly; low frontal hairline; synophris; "penciled" arched eyebrows; short nose; crescent shaped mouth; hirsutism; micromelia; short thumbs; mental retardation; clinically normal monozygotic twin sister is GM13976 
+lineage mesoderm
+karyotype affected 
+sex F
+tissue blood
+vendorName Coriell
+vendorId GM13977
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13977&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Crawford
+protocol Crawford:GM13977_Crawford_protocol.pdf
 
 term GM18505
 tag GM18505
@@ -2389,25 +2456,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Crawford:GM19240_Crawford_protocol.pdf
-#term GM20000
-#tag GM20000
-#type Cell Line
-#tier 3
-#organism human
-#description lymphoblastoid cell line; De Lange phenotype; developmental delay; profound retardation
-#lineage mesoderm
-#karyotype unknown
-#sex F
-#tissue haematopoietic
-#vendorName Coriell
-#childOf Lymphoblastoid_cell_line
-#vendorId GM20000
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM20000&PgId=166
-#termId BTO:0002062
-#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-#lab Crawford
-#protocol Crawford:GM20000_Crawford_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+
+term GM20000
+tag GM20000
+type Cell Line
+tier 3
+organism human
+description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
+lineage mesoderm
+karyotype affected 
+sex F
+tissue blood
+vendorName Coriell 
+vendorId GM20000
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM20000&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Crawford
+protocol Crawford:GM20000_Crawford_protocol.pdf
 
 term H7-hESC
 tag H7ES
@@ -2945,6 +3011,21 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol ENCODE:HCT-116_protocol.pdf Stam:HCT116_Stam_protocol.pdf
+
+term Heart_OC
+tag HEARTOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen heart tissue from NICHD donor IDs 1104 (Rep B1 DNase), 602 (Rep B2 DNase), 1442 (Rep B3 DNase), 1863 (Rep B1 FAIRE), 4548 (Rep B2 FAIRE)
+karyotype normal
+sex B
+tissue heart
+vendorName NICHD
+vendorId 1104; 602; 1442; 1863; 4548
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:HeartOC_Crawford_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -4576,6 +4657,21 @@ sex M
 tier 3
 protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
+term Kidney_OC
+tag KIDNEYOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen kidney tissue from NICHD donor IDs 1104 (Rep B1 DNase), 602 (Rep B2 DNase), 1442 (Rep B3 DNase), 1863 (Rep B3 FAIRE) and NCTC donor ID 10-0022A (Rep B1 FAIRE)
+karyotype normal
+sex B
+tissue kidney
+vendorName NICHD ; NICHD ; NICHD ; NCTC ; NICHD
+vendorId 1104; 602; 1442; 10-0022A; 1863
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:KidneyOC_Crawford_protocol.pdf
+
 term LHSR
 tag LHSR
 type Cell Line
@@ -4592,6 +4688,21 @@ karyotype normal
 sex U
 tier 3
 protocol Crawford:LHSR_Crawford_protocol.pdf
+
+term Liver_OC
+tag LIVEROC
+type Cell Line
+tier 3
+organism human
+description Primary frozen liver tissue from NICHD donor IDs 1104 (Rep B1), 602 (Rep B2), 1442 (Rep B3)
+karyotype normal
+sex M
+tissue liver
+vendorName NICHD
+vendorId 1104; 602; 1442
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:LiverOC_Crawford_protocol.pdf
 
 term LNCaP
 tag LNCAP
@@ -4628,6 +4739,21 @@ orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
 protocol Bernstein:Loucy_Bernstein_protocol.pdf
+
+term Lung_OC
+tag LUNGOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen lung tissue from NICHD donor IDs 1104 (Rep B1 DNase), 602 (Rep B2 DNase), 1442 (Rep B3 DNase) and CF Center donor IDs DD006I (Rep B1 FAIRE) and DD007I (Rep B2 FAIRE)
+karyotype normal
+sex B
+tissue Lung
+vendorName NICHD ; NICHD ; NICHD ; CF Center ; CF Center
+vendorId 1104; 602; 1442; DD006I; DD007I
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:LungOC_Crawford_protocol.pdf
 
 term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
@@ -5315,6 +5441,21 @@ sex M
 tier 3
 protocol Myers:PANC-1_Myers_protocol.pdf Stam:PANC-1_Stam_protocol.pdf
 
+term Pancreas_OC
+tag PANCREASOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen pancreas tissue from NCTC donor IDs 09-0144A (Rep B1) and 10-0021A (Rep B2)
+karyotype normal
+sex M
+tissue pancreas
+vendorName  NCTC
+vendorId 09-0144A; 10-0021A
+orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+lab Crawford
+protocol Crawford:PancreasOC_Crawford_protocol.pdf
+
 term PanIsletD
 tag PANISD
 type Cell Line
@@ -5432,6 +5573,21 @@ sex U
 tier 3
 protocol Crawford:pHTE_Crawford_protocol.pdf
 
+term Pons_OC
+tag PONSOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen pons mid-brain tissue from NICHD donor IDs 1104 (Rep B1), 602 (Rep B2), 1442 (Rep B3)
+karyotype normal
+sex M
+tissue pons mid-brain
+vendorName NICHD
+vendorId 1104; 602; 1442
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:PonsOC_Crawford_protocol.pdf
+
 term PrEC
 tag PREC
 type Cell Line
@@ -5481,6 +5637,36 @@ tier 3
 sex M
 protocol Gingeras:Prostate_Gingeras_protocol.pdf
 
+term Prostate_OC
+tag PROSTATEOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen prostate tissue from NICHD donor IDs 1669 (Rep B1) and 1540 (Rep B2)
+karyotype normal
+sex M
+tissue prostate
+vendorName NICHD
+vendorId 1669; 1540
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:ProstateOC_Crawford_protocol.pdf
+
+term Psoas_muscle_OC
+tag PSOASMUSCLEOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen psoas muscle tissue from NICHD donor IDs 1104 (Rep B1 DNase), 602 (Rep B2 DNase), 1442 (Rep B3 DNase), 1540 (Rep B1), 1863 (Rep B2 FAIRE)
+karyotype normal
+sex B
+tissue psoas muscle
+vendorName NICHD
+vendorId 1104; 602; 1442; 1540; 1863
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:PsoasmuscleOC_Crawford_protocol.pdf
+
 term Raji
 tag RAJI
 type Cell Line
@@ -5498,6 +5684,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Farnham:Raji_Farnham_protocol.pdf
+
+term RCC_7860
+tag RCC7860
+type Cell Line
+tier 3
+organism human
+description renal cell adenocarcinmoma
+karyotype cancer
+sex M
+tissue kidney
+vendorName ATCC
+vendorId CRL-1932
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1932&Template=cellBiology
+termId BTO:0000037
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000037&termName=renal%20adenocarcinoma%20cell
+lab Crawford
+protocol Crawford:RCC7860_Crawford_protocol.pdf
 
 term RPMI-7951
 tag RPMI7951
@@ -5715,6 +5918,36 @@ termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
 protocol Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+
+term Small_intestine_OC
+tag SMALLINTESTINEOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen small intestine tissue from NCTC donor IDs 10-0063A (Rep B1) and 09-0143A (Rep B2)
+karyotype normal
+sex M
+tissue small intestine
+vendorName NCTC
+vendorId 10-0063A; 09-0143A
+orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+lab Crawford
+protocol Crawford:SmallintestineOC_Crawford_protocol.pdf
+
+term Spleen_OC
+tag SPLEENOC
+type Cell Line
+tier 3
+organism human
+description Primary frozen spleen tissue from NICHD donor IDs 1863 (Rep B1) and 4548 (Rep B2)
+karyotype normal
+sex F
+tissue spleen
+vendorName NICHD
+vendorId 1863; 4548
+orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+lab Crawford
+protocol Crawford:SpleenOC_Crawford_protocol.pdf
 
 term Stellate
 tag STELLATE
@@ -6183,7 +6416,7 @@ strain Unknown
 description Bone Marrow
 vendorName LICR lab
 vendorId BoneMarrow
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 86,180,233
@@ -6238,7 +6471,7 @@ strain Unknown
 description Cerebellum
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Cerebellum; Cerebellum
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 105,105,105
@@ -6295,7 +6528,7 @@ strain Unknown
 description Colon
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Colon; Colon
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 230,159,0
@@ -6331,7 +6564,7 @@ strain Unknown
 description Cortex
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Cortex;Cortex
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 105,105,105
@@ -6667,7 +6900,7 @@ strain Unknown
 description Heart
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Heart; Heart
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
@@ -6795,7 +7028,7 @@ strain Unknown
 description Limb
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Limb; Limb
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
@@ -6831,7 +7064,7 @@ strain Unknown
 description Lung
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Lung; Lung
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
@@ -6886,7 +7119,7 @@ category primaryCells
 description Mouse Embryonic Fibroblast
 vendorName LICR lab
 vendorId MEF
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 65,105,225
@@ -7037,7 +7270,7 @@ strain Unknown
 description Olfactory Bulb
 vendorName LICR lab
 vendorId Olfactory Bulb
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 105,105,105
@@ -7075,7 +7308,7 @@ category Tissue
 description Pancreas
 vendorName LICR lab
 vendorId Pancreas
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 189,0,157
@@ -7112,7 +7345,7 @@ age ageUnknown
 strain Unknown
 vendorName LICR lab
 vendorId Placenta
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
@@ -7167,7 +7400,7 @@ strain Unknown
 description Small Intestine
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Small Intestine; Small Intestine
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 230,159,0
@@ -7187,7 +7420,7 @@ strain Unknown
 description Spleen
 vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
 vendorId Spleen; Spleen; Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
@@ -7242,7 +7475,7 @@ strain Unknown
 description Testis
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Testis; Testis
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 0,158,115
@@ -7260,7 +7493,7 @@ strain Unknown
 description Thymus
 vendorName 1)LICR lab; 2)CSHL lab
 vendorId Thymus; Thymus
-orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://gingeraslab.cshl.edu/
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 86,180,233
@@ -12758,6 +12991,16 @@ tag DEX500PM
 description 1 h with 500 pM Dexamethasone (Myers)
 type treatment
 
+term DIFF_4d
+tag DIFF4D
+description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam)
+type treatment
+
+term DIFF_7d
+tag DIFF7D
+description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
+type treatment
+
 term diffProtA_2d
 tag DIFFA2D
 type treatment
@@ -13003,6 +13246,16 @@ tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
 type treatment
 
+term G1_phase
+tag G1PHASE
+description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+type treatment
+
+term G2-M_phase
+tag G2MPHASE
+description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+type treatment
+
 term Genistein_100nM
 tag GEN1H
 description 1 h with 100 nM Genistein   (Myers)
@@ -13017,6 +13270,12 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description 24 h with 1% p02 and 10mM Lactate, pH 6.7 (Crawford)
+type treatment
+
+term Hypoxia_LacAcid_ctrl
+tag HYPOXLACCON
+label Untreated control cells
+description  Untreated cells grown along side Hypoxia LacAcid treated cells (Crawford)
 type treatment
 
 term IFNa30
@@ -13058,21 +13317,21 @@ tag INSLN
 description DMEM with 0.5% BSA supplemented with 100 nM insulin and 10 uM 22-hydroxycholesterol for 6 h. (Snyder)
 type treatment
 
+term lenti-MyoD
+tag LENTIMYOD
+description GM03348 skin fibroblasts (Coriell) were transduced with an induceable lentivirus (pAK111-TRE-3xflag hMyoD-T2A-dsRed) containing get inducible MyoD. Cells were selected in 1ug per ml puro (Sigma catalog P8833) to obtain a pure cell population. Cells were induced for MYOD expression for 10 days with doxycycline and at concentration of 3ug per ml. Standard media was used (and replaced every 2 days) during induction: DMEM, 1% Pen Strep, and 10% FBS. (Crawford)
+type treatment
+
+term lenti-control
+tag LENTICON
+description GM03348 skin fibroblasts (Coriell) were transduced with an induceable lentivirus (pAK111-TRE-3xflag hMyoD-T2A-dsRed) containing get inducible MyoD. Cells were selected in 1ug per ml puro (Sigma catalog P8833) to obtain a pure cell population. Cells were cultured for 10 days (NO DOXYCYCLINE) (Crawford)
+type treatment
+
 term MNaseD
 tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
 label Micrococcal nuclease
-
-term DIFF_4d
-tag DIFF4D
-description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam)
-type treatment
-
-term DIFF_7d
-tag DIFF7D
-description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
-type treatment
 
 term NaBut
 tag NABUT

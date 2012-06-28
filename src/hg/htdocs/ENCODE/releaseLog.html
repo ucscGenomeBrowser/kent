@@ -12,8 +12,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
 document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
-function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Error(s):';}
+function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Warning/Error(s):';window.scrollTo(0, 0);}
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
+window.onunload = function(){}; // Trick to avoid FF back button issue.
 </script>
 
 <A NAME="TOP"></A>
@@ -40,7 +41,7 @@ function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.s
 
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>
-      <!--outer table is for border purposes-->
+<div id=firstSection>      <!--outer table is for border purposes-->
       <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
      <div class='subheadingBar'><div class='windowSize' id='sectTtl'>
@@ -54,21 +55,19 @@ Track and Table Releases     </div></div>
 <li><a CLASS="toc" HREF="#recent" ><b>10 Latest Changes (all assemblies)</b></a></li><li><a CLASS="toc" HREF="#hg19">Human Feb. 2009 (GRCh37/hg19) (hg19)</a></li>
 <li><a CLASS="toc" HREF="#hg18">Human Mar. 2006 (NCBI36/hg18) (hg18)</a></li>
 <li><a CLASS="toc" HREF="#hg17">Human May 2004 (NCBI35/hg17) (hg17)</a></li>
-<li><a CLASS="toc" HREF="#panTro2">Chimp Mar. 2006 (CGSC 2.1/panTro2) (panTro2)</a></li>
-<li><a CLASS="toc" HREF="#rheMac2">Rhesus Jan. 2006 (MGSC Merged 1.0/rheMac2) (rheMac2)</a></li>
 <li><a CLASS="toc" HREF="#mm9">Mouse July 2007 (NCBI37/mm9) (mm9)</a></li>
-<li><a CLASS="toc" HREF="#rn4">Rat Nov. 2004 (Baylor 3.4/rn4) (rn4)</a></li>
 <li><a CLASS="toc" HREF="#bosTau4">Cow Oct. 2007 (Baylor 4.0/bosTau4) (bosTau4)</a></li>
-<li><a CLASS="toc" HREF="#canFam2">Dog May 2005 (Broad/canFam2) (canFam2)</a></li>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 21 Jun 2012. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 28 Jun 2012. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -87,6 +86,21 @@ Track and Table Releases     </div></div>
 <TD nowrap><B style='color:#006666;'>Assembly</B></TD>
 <TD nowrap><B style='color:#006666;'>Release Date</B></TD>
 </TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhRnaSeq" target=_blank>RNA-seq from ENCODE/Stanford</a></td>
+<td>mm9</td>
+<td>25 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlLongRnaSeq" target=_blank>Long RNA-seq from ENCODE/Cold Spring Harbor Lab (Release 2)</a></td>
+<td>hg19</td>
+<td>21 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV12" target=_blank>Gene Annotations from ENCODE/GENCODE Version 12</a></td>
+<td>hg19</td>
+<td>21 Jun 2012</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeMapability" target=_blank>Mapability or Uniqueness of Reference Genome from ENCODE</a></td>
 <td>mm9</td>
@@ -122,27 +136,14 @@ Track and Table Releases     </div></div>
 <td>mm9</td>
 <td>07 May 2012</td>
 </tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrRnaSeq" target=_blank>RNA-seq from ENCODE/LICR (Release 2)</a></td>
-<td>mm9</td>
-<td>04 May 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRikenCage" target=_blank>RNA Subcellular CAGE Localization from ENCODE/RIKEN (Release 3)</a></td>
-<td>hg19</td>
-<td>02 May 2012</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodePsuHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/PSU</a></td>
-<td>mm9</td>
-<td>30 Apr 2012</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -159,6 +160,14 @@ Track and Table Releases     </div></div>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlLongRnaSeq" target=_blank>Long RNA-seq from ENCODE/Cold Spring Harbor Lab (Release 2)</a></td>
+<td>21 Jun 2012</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV12" target=_blank>Gene Annotations from ENCODE/GENCODE Version 12</a></td>
+<td>21 Jun 2012</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeSydhHistone" target=_blank>Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard (Release 3)</a></td>
 <td>15 Jun 2012</td>
@@ -482,6 +491,8 @@ Track and Table Releases     </div></div>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -679,10 +690,6 @@ Fixed corrupt table from ENCODE pilot project: Gencode Gene Annotations (March 2
 <td>11 Aug 2009</td>
 </tr>
 <TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHelicosRnaSeq" target=_blank>ENCODE Helicos RNA-seq (K562)</a></td>
 <td>28 Jul 2009</td>
 </tr>
@@ -760,6 +767,8 @@ ENCODE data migration from hg17</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -776,10 +785,6 @@ ENCODE data migration from hg17</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
-<TR valign=top><TD align=left>
-Affymetrix ENCODE Extension Transcription Sites & Signal</td>
-<td>16 Apr 2008</td>
-</tr>
 <TR valign=top><TD align=left>
 ENCODE TBA SCONE Conservation (Update)</td>
 <td>19 Oct 2007</td>
@@ -971,10 +976,6 @@ ENCODE Yale ChIP Signal (data replaced with 5 new transcription factors). Previo
 <TR valign=top><TD align=left>
 ENCODE Yale ChIP pVal (data replaced with 5 new transcription factors). Previous track Yale ChIP pVal renamed Yale STAT1 pVal.</td>
 <td>13 Jan 2006</td>
-</tr>
-<TR valign=top><TD align=left>
-ENCODE EGASP Full (Correction)</td>
-<td>12 Jan 2006</td>
 </tr>
 <TR valign=top><TD align=left>
 ENCODE EGASP Partial (data correction)</td>
@@ -1232,58 +1233,8 @@ ENCODE Regions</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
-<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
-<BR>
-
-   <!--outer table is for border purposes-->
-   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
-    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
-     <div class='subheadingBar' class='windowSize'>
-<A NAME=panTro2></A>Chimp Mar. 2006 (CGSC 2.1/panTro2) (panTro2, Washington University Build 2 Version 1)     </div>
-     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-     <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-
-<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
-<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
-    <TD nowrap><B style='color:#006666;'>Release Date</B>
-</TD></TR>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-</table>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
-<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
-<BR>
-
-   <!--outer table is for border purposes-->
-   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
-    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
-     <div class='subheadingBar' class='windowSize'>
-<A NAME=rheMac2></A>Rhesus Jan. 2006 (MGSC Merged 1.0/rheMac2) (rheMac2, Venter Inst./Baylor/WashU Merged assembly Jan 2006 v1 edit4)     </div>
-     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-     <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-
-<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
-<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
-    <TD nowrap><B style='color:#006666;'>Release Date</B>
-</TD></TR>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-</table>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -1300,6 +1251,10 @@ ENCODE NHGRI Elnitski Bi-directional Promoters</td>
 <TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
     <TD nowrap><B style='color:#006666;'>Release Date</B>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhRnaSeq" target=_blank>RNA-seq from ENCODE/Stanford</a></td>
+<td>25 Jun 2012</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeMapability" target=_blank>Mapability or Uniqueness of Reference Genome from ENCODE</a></td>
 <td>19 Jun 2012</td>
@@ -1373,42 +1328,14 @@ RNA-seq from ENCODE/LICR</a></td>
 <a href="../../cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhTfbs" target=_blank>Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale </a></td>
 <td>07 Feb 2011</td>
 </tr>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
 </table>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
-<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
-<BR>
-
-   <!--outer table is for border purposes-->
-   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
-    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
-     <div class='subheadingBar' class='windowSize'>
-<A NAME=rn4></A>Rat Nov. 2004 (Baylor 3.4/rn4) (rn4, Baylor HGSC v. 3.4)     </div>
-     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-     <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-
-<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
-<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
-    <TD nowrap><B style='color:#006666;'>Release Date</B>
-</TD></TR>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-</table>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
+</div>
+<div>
 <!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
 <BR>
 
@@ -1435,32 +1362,7 @@ ENCODE NHGRI Elnitski Bi-directional Promoters</td>
 	</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	
-<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->
-<BR>
-
-   <!--outer table is for border purposes-->
-   <TABLE WIDTH='100%' BGCOLOR='#888888' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>
-    <TABLE BGCOLOR='#FFFEE8' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>
-     <div class='subheadingBar' class='windowSize'>
-<A NAME=canFam2></A>Dog May 2005 (Broad/canFam2) (canFam2, Broad Institute v. 2.0)     </div>
-     <TABLE BGCOLOR='#FFFEE8' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-     <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-
-<TABLE CELLPADDING=4 style='border:1px solid #aaaaaa; width:100%;'>
-<TR><TD nowrap><B style='color:#006666;'>Track/Table Name</B></TD>
-    <TD nowrap><B style='color:#006666;'>Release Date</B>
-</TD></TR>
-<TR valign=top><TD align=left>
-ENCODE NHGRI Elnitski Bi-directional Promoters</td>
-<td>30 Jul 2009</td>
-</tr>
-</table>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
+</div>
 </TD></TR></TABLE>
 
 </BODY></HTML>

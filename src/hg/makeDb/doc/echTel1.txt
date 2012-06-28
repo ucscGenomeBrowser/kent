@@ -5,9 +5,38 @@
 #
 
 #	http://www.ncbi.nlm.nih.gov/genome/234
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/229058/
 #	http://www.ncbi.nlm.nih.gov/bioproject/60557
 #	http://www.ncbi.nlm.nih.gov/bioproject/12590 - 2X coverage
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAIY00
+
+#############################################################################
+# /hive/data/genomes/echTel1/echTel1.config.ra created 2012-06-07:
+
+# Config parameters for makeGenomeDb.pl:
+db echTel1
+clade mammal
+scientificName Echinops telfairi
+commonName Tenrec
+assemblyDate Jul. 2005
+assemblyLabel Broad/echTel1
+assemblyShortLabel Broad/echTel1
+orderKey 3370
+mitoAcc none
+fastaFiles /hive/data/genomes/echTel1/echTel1.fa.gz
+agpFiles /hive/data/genomes/echTel1/broad/assembly.agp
+qualFiles /hive/data/genomes/echTel1/broad/scaffolds.qac
+dbDbSpeciesDir tenrec
+photoCreditURL http://www.hobbygarten.com/
+photoCreditName Kathrin Holzer, all rights reserved
+ncbiGenomeId 234
+ncbiAssemblyId 229058
+ncbiAssemblyName echTel1
+ncbiBioProject 12590
+genBankAccessionID GCA_000181355.1
+taxId 9371
+#############################################################################
+
 
 
 # DOWNLOAD SEQUENCE 
@@ -1308,5 +1337,99 @@ searchType bed
 shortCircuit 1
 termRegex GS_[0-9]+(\.[0-9]+)?
 searchPriority 18
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-06-07 - Hiram)
+    cd /hive/data/genomes/echTel1
+    twoBitToFa echTel1.2bit stdout | faSize stdin
+# 3823724728 bases (1712143359 N's 2111581369 real 1540894161 upper
+#       570687208 lower) in 325491 sequences in 1 files
+# Total size: mean 11747.6 sd 25476.7 min 80 (scaffold_153914)
+#       max 739734 (scaffold_324606) median 3912
+# %14.92 masked total, %27.03 masked real
+
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2111581369 / 2897316137 \) \* 1024
+    #   ( 2111581369 / 2897316137 ) * 1024 = 746.297339
+
+    # round up to 800
+
+    cd /hive/data/genomes/echTel1
+    time blat echTel1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/echTel1.11.ooc -repMatch=800
+    #   Wrote 19852 overused 11-mers to jkStuff/echTel1.11.ooc
+    #   real    3m3.527s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" echTel1 | sort | uniq -c
+    #   495481 yes
+#    cd /hive/data/genomes/echTel1/jkStuff
+#    gapToLift echTel1 echTel1.nonBridged.lift -bedFile=echTel1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' echTel1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-06-07 - 2012-06-22 - Hiram)
+    # since the original genbank run was done in 2005 and daily updates
+    #   were never run, start over with an initial run.
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Echinops telfairi       4       0       0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # fixup existing entry:
+# echTel1 (tenrec)
+echTel1.serverGenome = /hive/data/genomes/echTel1/echTel1.2bit
+echTel1.clusterGenome = /scratch/data/echTel1/echTel1.2bit
+echTel1.ooc = /hive/data/genomes/echTel1/jkStuff/echTel1.11.ooc
+echTel1.lift = no
+echTel1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+echTel1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+echTel1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+echTel1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+echTel1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+echTel1.refseq.mrna.native.load = no
+echTel1.refseq.mrna.xeno.load = yes
+echTel1.genbank.mrna.xeno.load = no
+echTel1.genbank.est.native.load = no
+echTel1.genbank.mrna.native.load = no
+echTel1.genbank.mrna.native.loadDesc = no
+echTel1.downloadDir = echTel1
+echTel1.perChromTables = no
+
+    git commit -m "add ooc file for tenrec/echTel1" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S echTel1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial echTel1 &
+    #   var/build/logs/2012.06.22-12:25:58.echTel1.initalign.log
+    #   real    277m20.096s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad echTel1 &
+    #   logFile:  var/dbload/hgwdev/logs/2012.06.26-11:05:28.dbload.log
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add echTel1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added echTel1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
 
 #########################################################################

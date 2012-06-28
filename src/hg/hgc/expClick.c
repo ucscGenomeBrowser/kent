@@ -25,7 +25,7 @@ struct rgbColor color;
 int colorIndex = 0;
 
 /* if log score is -10000 data is missing */
-if(val == -10000)
+if (val == -10000)
     {
     color.g = color.r = color.b = 128;
     return(color);
@@ -85,8 +85,8 @@ return color;
 }
 
 static void msBedPrintTableHeader(struct bed *bedList,
-			   struct hash *erHash, char *itemName,
-			   char **headerNames, int headerCount, char *scoresHeader)
+                           struct hash *erHash, char *itemName,
+                           char **headerNames, int headerCount, char *scoresHeader)
 /* print out a bed with multiple scores header for a table.
    headerNames contain titles of columns up to the scores columns. scoresHeader
    is a single string that will span as many columns as there are beds.*/
@@ -111,7 +111,7 @@ printf("</tr>\n");
 }
 
 static void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash,
-			     char *itemName)
+                             char *itemName)
 /* print out a header with names for each bed with itemName highlighted */
 {
 char *headerNames[] = {"Experiment"};
@@ -168,13 +168,13 @@ else
     {
     if (isCancerGenomicsTrack)
 	{
-    	printf("<td align=left><A HREF=\"../cgi-bin/subjectView?sv_dataset=%s&sv_subjectId=%s\" TARGET=_blank>%s</A></td>\n",
+        printf("<td align=left><A HREF=\"../cgi-bin/subjectView?sv_dataset=%s&sv_subjectId=%s\" TARGET=_blank>%s</A></td>\n",
 	cartString(cart, "g"), er->name, er->name);
-    	}
+        }
     else
 	{
-    	printf("<td align=left> %s</td>\n", er->name);
-    	}
+        printf("<td align=left> %s</td>\n", er->name);
+        }
     }
 for(bed = bedList;bed != NULL; bed = bed->next)
     {

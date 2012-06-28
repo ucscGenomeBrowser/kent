@@ -323,39 +323,46 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
 /* Home */
-hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'>Home</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='/index.html' class='topbar' style='color:#FFFFFF;'"
+        "Home</A></TD>");
 //, orgEnc);
 
 /* Sample View */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidSample' class='topbar' style='color:#FFFFFF;'>Sample View</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidSample' class='topbar' "
+        "style='color:#FFFFFF;'>Sample View</A></TD>");
 
 /* Sequence View */
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgTracks?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View</A></TD>", database);
+    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgTracks?db=%s' class='topbar' "
+            "style='color:#FFFFFF;'>Sequence View</A></TD>", database);
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
+    hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgGateway?db=%s' class='topbar' "
+            "style='color:#FFFFFF;'>Sequence View Gateway</A></TD>", database);
     }
 
 /* select Subjects */
-hPrintf(
-        "<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks' class='topbar' style='color:#FFFFFF;'>%s</A></TD>",
-	    '%', '%', "Select Subjects");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/gisaidTable?gisaidTable.do.advFilter="
+        "filter+%c28now+on%c29&fromProg=hgTracks' class='topbar' "
+        "style='color:#FFFFFF;'>%s</A></TD>", '%', '%', "Select Subjects");
 
 /* Blat */
-hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' style='color:#FFFFFF;'>Blat</A></TD>");
+hPrintf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar' "
+        "style='color:#FFFFFF;'>Blat</A></TD>");
 
 /* Help */
 
 if (cartVarExists(cart, advFilterVarName))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#SelectSubject' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#SelectSubject' "
+            "TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#TableView' TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF='/goldenPath/help/gisaidTutorial.html#TableView' "
+            "TARGET=_blank class='topbar' style='color:#FFFFFF;'>Help</A></TD>");
     }
 
 hPuts("</TR></TABLE>");

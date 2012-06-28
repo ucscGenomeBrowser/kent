@@ -37,11 +37,11 @@
                 a quality metric can be quite different with different experiment types, or 
                 even comparing different features in the same experiment type, such as different 
                 antibodies used in ChIP-seq experiments.  Currently there is no single 
-                measurement that identifies all high quality or low quality samples.  As with 
+                measurement that identifies all high-quality or low-quality samples.  As with 
                 quality control for other types of experiments, multiple assessments (including 
                 manually inspection of tracks) are useful because they may capture different 
                 concerns.  Comparison within an experimental method can be very helpful in 
-                identifying stochastic error in experiments (ie. comparing replicates to 
+                identifying stochastic error in experiments (i.e. comparing replicates to 
                 each other, or comparing values for one antibody in several cell types, or the same 
                 antibody and cell type in different labs).
                 </p>
@@ -63,23 +63,22 @@
             </div>
             <div class="content">
 
-                    <p>Datasets are divided into TF CHIP-seq, Histone ChIP-seq, DNase-seq, FAIRE-seq, 
-                    and ChIP Controls.  The <em>Assays</em>, <em>Cells</em>, and <em>Treatments</em> are defined in the 
+                    <p>Datasets are divided into DNase-seq, FAIRE-seq, TF CHIP-seq, Histone ChIP-seq, 
+                    and ChIP Controls.  The ReadMe worksheet provides a summary description of the metrics (described in more detail below).
+                    The <em>Assays</em>, <em>Cells</em>, and <em>Treatments</em> are defined in the 
                     <a target=_blank href="otherTerms.html">ENCODE Controlled Vocabulary</a> 
                     of registered terms. The <em>Identifiers</em> reference the dataset at UCSC 
                     (via the Table Browser, metaDb table) and the ENCODE analysis site (filenames).
                     </p>
                     <p>
                     <b><em>Download spreadsheets in:</em></b>&nbsp;&nbsp;
-                  <a href='https://docs.google.com/spreadsheet/ccc?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=xls'>
+                  <a href='https://docs.google.com/spreadsheet/pub?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=xls'>
                       Excel format (.xls)</a>&nbsp;&nbsp;
-                  <a href='https://docs.google.com/spreadsheet/ccc?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=ods'>
+                  <a href='https://docs.google.com/spreadsheet/pub?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=ods'>
                       OpenOffice spreadsheet format (.ods)</a>&nbsp;&nbsp;
-                  <a href='https://docs.google.com/spreadsheet/ccc?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=csv'>
-                      Comma-separated format (.csv)</a>
                     </p>
                     <p><iframe width='1450' height='800' frameborder='0' 
-                        src='https://docs.google.com/spreadsheet/ccc?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=html&widget=true'></iframe>
+                        src='https://docs.google.com/spreadsheet/pub?key=0AvQL5qBL6AfEdDVaa1FNZWZSdE8zX1hwT0RiTWR0M0E&output=html&widget=true'></iframe>
                     </p>                	
             </div><!--end content-->
         </div><!--end wrapper-->
@@ -121,7 +120,7 @@
                         A measure of enrichment, analogous to the commonly used 
                         fraction of reads in peaks metric.  SPOT calculates the fraction of reads that fall in 
                         tag-enriched regions identified using the Hotspot program, (Hotspot and SPOT are described 
-                        on the ENCODE Tools page) from a sample of 10 million reads.  Note that because methods of 
+                        on the ENCODE Software Tools page) from a sample of 10 million reads.  Note that because methods of 
                         measuring enrichment based on determining the fraction of reads that fall in peaks are 
                         sensitive to the determination of enriched regions, comparison is possible only when using 
                         the identical peak caller and parameters.  Larger SPOT values indicate higher signal to 
@@ -133,7 +132,7 @@
                         <p><b>PCR Bottleneck Coefficient (PBC):</b><br>
                         A measure of library complexity.  This is the ratio 
                         (non-redundant, uniquely mappable reads)/(all uniquely mappable reads), and is further 
-                        described on the ENCODE Tools page.  Provisionally, 0-0.5 is severe bottlenecking, 0.5-0.8 
+                        described on the ENCODE Software Tools page.  Provisionally, 0-0.5 is severe bottlenecking, 0.5-0.8 
                         is moderate bottlenecking, 0.8-0.9 is mild bottlenecking, while 0.9-1.0 is no bottlenecking.  
                         Very low values can indicate a technical problem, such as PCR bias, or a biological finding, 
                         such as a very rare genomic feature.  Nuclease-based assays (DNase, MNase) detecting features 
@@ -153,7 +152,7 @@
                         strongly correlated (signal), divided by the same ratio at a large read separation (background).  
                         Higher values indicate more enrichment, values less than 1.1 are relatively low NSC scores, and 
                         the minimum possible value is 1 (no enrichment).  This score is sensitive to technical effects; 
-                        for example, high quality antibodies such as H3K4me3 and CTCF score well for all cell types 
+                        for example, high-quality antibodies such as H3K4me3 and CTCF score well for all cell types 
                         and ENCODE production groups, and variation in enrichment in particular IPs is detected as 
                         stochastic variation.  This score is also sensitive to biological effects; narrow marks score 
                         higher than broad marks (H3K4me3 v H3K36me3, H3K27me3) for all cell types and ENCODE production 
@@ -166,7 +165,7 @@
                         The measurement is the peak height at fragment length relative to 
                         background, divided by the peak height at read length relative to background.  The minimum possible 
                         value is 0 (no signal), highly enriched experiments have values greater than 1, and values much 
-                        less than 1 may indicate low quality.
+                        less than 1 may indicate low-quality.
                         </p>
             </div><!--end content-->
         </div><!--end wrapper-->
@@ -177,33 +176,33 @@
                 <h4 class="title">Definitions of ChIP-seq specific quality metrics</h4>
             </div>
             <div class="content">
-                        <p><b>MACS FDR 0.01</b><br>
+                        <p><b>MACS FDR 0.01:</b><br>
                         This is the number of enriched regions identified by MACS using an FDR threshold of 0.01 (1%).</p>
 
-                        <p><b>Under seq</b><br>
+                        <p><b>Under seq:</b><br>
                         If set to 1, this means it was manually annotated that this dataset is likely to be 
                         undersequenced.
                         </p>
                         
-                        <p><b>Diff rep</b><br>
+                        <p><b>Diff rep:</b><br>
                         If set to 1, it means this row is a replicate that is different from the other replicates (based 
                         on self-consistency, NSC, or RSC).  Therefore, this sample should not be used for replicate-based 
                         comparisons such as IDR.
                         </p>
                         
-                        <p><b>Manual low S/N</b><br>
+                        <p><b>Manual low S/N:</b><br>
                         If set to 1 this means it was manually annotated that the data has low signal to noise.  This 
                         could be the result of under-sequencing, poor enrichment during ChIP, poor antibody quality, or 
                         the biological nature of the feature being examined.
                         </p>
                         
-                        <p><b>Auto low S/N</b><br>
+                        <p><b>Auto low S/N:</b><br>
                         If set to 1 this means the data has low signal to noise, scored by NSC &lt; 1.09 and RSC &lt; 0.9.  
                         This could be the result of under-sequencing, poor enrichment during ChIP, poor antibody quality, 
                         or the biological nature of the feature being examined.
                         </p>
                         
-                        <p><b>Revoke flag</b><br>
+                        <p><b>Revoke flag:</b><br>
                         These datasets have been revoked by the production lab.  R = revoked dataset, D = duplicate good 
                         dataset.
                         </p>

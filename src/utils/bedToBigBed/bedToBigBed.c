@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-char *version = "2.0";
+char *version = "2.1";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
