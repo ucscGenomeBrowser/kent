@@ -1413,7 +1413,7 @@ noInherit on
         track wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel 416B A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in 416B cell)
+        longLabel 416B B6D2F1J RNA-seq Alignments Rep 1 from ENCODE/UW
         subGroups view=Alignments age=IMMORTAL cellType=416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
         type bam
         color 86,180,233
@@ -1425,7 +1425,7 @@ noInherit on
         track wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel 416B A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in 416B cell)
+        longLabel 416B B6D2F1J RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=IMMORTAL cellType=416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
         type bam
         color 86,180,233
@@ -1436,7 +1436,7 @@ noInherit on
         track wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel HlessE E11.5 A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in HeadlessEmbryo cell)
+        longLabel HeadlessEmbryo day 11.5 RNA-seq Alignments Rep 1 from ENCODE/UW
         subGroups view=Alignments age=E11HALF cellType=HLEMBRYO localization=CELL rnaExtract=POLYA sex=M strain=CD1 rep=rep1
         type bam
         color 65,105,225
@@ -1446,7 +1446,7 @@ noInherit on
         track wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Kidney 8w A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Kidney cell)
+        longLabel Kidney Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 204,121,167
@@ -1456,7 +1456,7 @@ noInherit on
         #track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep4
         #parent wgEncodeUwRnaSeqViewAlignments off
         #shortLabel Liver cell polyA Aln 4
-        #longLabel ENCODE UW RNA-seq Alignments Replicate 4 (polyA in Liver cell)
+        #longLabel ENCODE UW RNA-seq Alignments Replicate 4 (polyA in Liver)
         #subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep4
         #type bam
         #color 230,159,0
@@ -1466,7 +1466,7 @@ noInherit on
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Lv S_C 8w A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Liver cell)
+        longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 230,159,0
@@ -1475,7 +1475,7 @@ noInherit on
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Lv S_C A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Liver cell)
+        longLabel Liver Embryonic day 14.5 RNA-seq Alignments Rep 1 ENCODE/UW
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 230,159,0
@@ -1484,7 +1484,7 @@ noInherit on
         track wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel A20 A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in A20 cell)
+        longLabel A20 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=A20 localization=CELL rnaExtract=POLYA sex=M strain=BALBCANN rep=rep1
         type bam
         color 86,180,233
@@ -1495,7 +1495,7 @@ noInherit on
         track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Crbellum 8w A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Cerebellum cell)
+        longLabel Cerebellum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=CBELLUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
@@ -1504,7 +1504,7 @@ noInherit on
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Cerebrum 8w A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Cerebrum cell)
+        longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
@@ -1514,7 +1514,7 @@ noInherit on
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Cerebrum 8w A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in Cerebrum cell)
+        longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
@@ -1523,7 +1523,7 @@ noInherit on
         track wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel FatPad 8w A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in FatPad cell)
+        longLabel FatPad Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=FAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 189,0,157
@@ -1532,7 +1532,7 @@ noInherit on
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel MEL A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in MEL cell)
+        longLabel MEL RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
         type bam
         color 86,180,233
@@ -1542,7 +1542,7 @@ noInherit on
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel MEL A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in MEL cell)
+        longLabel MEL RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
         type bam
         color 86,180,233
@@ -1553,7 +1553,7 @@ noInherit on
         track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsAlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel NIH-3T3 A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in NIH-3T3 cell)
+        longLabel NIH-3T3 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=NIH3T3 localization=CELL rnaExtract=POLYA sex=M strain=NIHS rep=rep1
         type bam
         color 86,180,233
@@ -1563,7 +1563,7 @@ noInherit on
         track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsAlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel NIH-3T3 A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in NIH-3T3 cell)
+        longLabel NIH-3T3 RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=IMMORTAL cellType=NIH3T3 localization=CELL rnaExtract=POLYA sex=M strain=NIHS rep=rep2
         type bam
         color 86,180,233
@@ -1573,7 +1573,7 @@ noInherit on
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Lv 8w A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in Liver cell)
+        longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 230,159,0
@@ -1592,7 +1592,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Brain E14.5 A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
+        longLabel Whole Brain Embryonic day 14.5 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
@@ -1602,7 +1602,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Brain E14.5 A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
+        longLabel Whole Brain Embryonic day 14.5 RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
@@ -1612,7 +1612,7 @@ noInherit on
         track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Patski A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Patski cell)
+        longLabel Patski RNA-seq Alignments Rep 1 from ENCODE/UW
         subGroups view=Alignments age=IMMORTAL cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bam
         color 204,121,1677
@@ -1623,7 +1623,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Brain E18.5 A 2
-        longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
+        longLabel Whole Brain Embryonic day 18.5 RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
@@ -1633,7 +1633,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Brain E18.5 A 1
-        longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
+        longLabel Whole Brain Embryonic day 18.5 RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
@@ -1643,7 +1643,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel B_(CD19+) 8w A 1
-        longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 84 #autogenerated
+        longLabel B-cell (CD19+) Adult 8 weeks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 84 #autogenerated
         subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 86,180,233
