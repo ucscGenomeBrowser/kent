@@ -529,7 +529,7 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
- 
+
 # QUERY: Human Hg19
 SEQ2_DIR=/scratch/data/hg19/hg19.2bit
 SEQ2_LEN=/scratch/data/hg19/chrom.sizes
@@ -18582,3 +18582,54 @@ Old length: 49087
 Percent bed overlap with previous version: 99.95%
 Number of deleted IDs: 20
 Number of added IDs: 87571
+
+#########################################################################
+# LASTZ Rat Rn5 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzRn5.2012-06-27
+    cd /hive/data/genomes/hg19/bed/lastzRn5.2012-06-27
+
+    cat << '_EOF_' > DEF
+# human vs rat
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn5
+SEQ2_DIR=/hive/data/genomes/rn5/rn5.2bit
+SEQ2_LEN=/hive/data/genomes/rn5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRn5.2012-06-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    658m53.984s
+    cat fb.hg19.chainRn5Link.txt
+    #   917356917 bases of 2897316137 (31.662%) in intersection
+
+    #	running the swap - DONE - 2012-06-27
+    mkdir /hive/data/genomes/rn5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn5/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzRn5.2012-06-27/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    66m53.095s
+    cat fb.rn5.chainHg19Link.txt
+    #	933922552 bases of 2572853723 (36.299%) in intersection
+
+##############################################################################
