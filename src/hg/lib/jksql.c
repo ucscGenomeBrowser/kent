@@ -1341,11 +1341,8 @@ if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
 sqlFreeResult(&sr);
 
-if (!sameOk(cfgOption("detectMysqlLoadWarnings"), "off"))
-    {
-    /* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
-    numWarnings = sqlWarnCount(conn);
-    }
+/* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
+numWarnings = sqlWarnCount(conn);
 
 if ((numSkipped > 0) || (numWarnings > 0))
     {
