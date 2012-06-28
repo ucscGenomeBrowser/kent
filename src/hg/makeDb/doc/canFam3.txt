@@ -515,3 +515,64 @@ canFam3.upstreamGeneTbl = ensGene
     hgsql qapushq < canFam3.sql
 
 #########################################################################
+# LASTZ Cow BosTau7 (DONE - 2012-06-23 - Chin)
+    screen -S bosTau7CanFam3
+    mkdir /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23
+    cd /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #   number of jobs, 50,000 to something under 100,000
+
+    cat << '_EOF_' > DEF
+# dog vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Dog canFam3
+SEQ1_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ1_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau7
+SEQ2_DIR=/hive/data/genomes/bosTau7/bosTau7.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=2000
+
+BASE=/hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    1528m6.142s
+    cat fb.canFam3.chainBosTau7Link.txt
+    # 1381966556 bases of 2392715236 (57.757%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam3/bed
+    ln -s  lastzBosTau7.2012-06-23 lastz.bosTau7
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      121m44.022s
+    cat fb.bosTau7.chainCanFam3Link.txt
+    # 1456104306 bases of 2804673174 (51.917%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
+
+
+#########################################################################

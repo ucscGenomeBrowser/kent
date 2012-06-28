@@ -46,10 +46,14 @@ $(function () {
     function makeExperimentMatrix(experiments, antibodyTargetExps) {
         // Populate antibodyTarget vs. cellType array with counts of experiments
 
-        var antibody, target, cellType;
+        var antibody, target, cellType, exp;
         var matrix = {};
 
-        $.each(experiments, function (i, exp) {
+        $.each(experiments, function (i, experiment) {
+
+            // adjust experiment as needed for display purposes
+            exp = encodeProject.adjustExperiment(experiment);
+
             // exclude ref genome annotations
             if (exp.cellType === 'None') {
                 return true;
@@ -58,6 +62,7 @@ $(function () {
             if (exp.dataType !== 'ChipSeq') {
                 return true;
             }
+
             // count experiments per target so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
             // so don't need hash for those

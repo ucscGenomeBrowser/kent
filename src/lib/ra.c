@@ -77,22 +77,22 @@ while (lineFileNextFull(lf, &line, &lineLen, pRaw, pRawLen)) // Joins continuati
 
     // Append whatever line was read from file.
     if (dyRecord)
-       {
+        {
         if (raw != NULL)
             dyStringAppendN(dyRecord, raw, rawLen);
-       else
+        else
             dyStringAppendN(dyRecord, line, lineLen);
-       dyStringAppendC(dyRecord,'\n');
-       }
+        dyStringAppendC(dyRecord,'\n');
+        }
 
     // Skip comments
     if (*clippedText == '#')
-       {
-       if (startsWith("#EOF", clippedText))
-           return FALSE;
-       else
-           continue;
-       }
+        {
+        if (startsWith("#EOF", clippedText))
+            return FALSE;
+        else
+            continue;
+        }
     *retTag = nextWord(&line);
     *retVal = trimSpaces(line);
     return TRUE;
@@ -163,7 +163,7 @@ while (lineFileNextFull(lf, &line, &lineLen, &raw, &rawLen)) // Joins continuati
     if (!stanzaStarted && clippedText[0] != 0 && clippedText[0] != '#')
         stanzaStarted = TRUE; // Comments don't start stanzas and may be followed by blanks
 
-    slPairAdd(&pairs, line,(raw != NULL?cloneString(raw):NULL));
+    slPairAdd(&pairs, line,(raw != NULL ? cloneString(raw) : NULL));
     }
 slReverse(&pairs);
 return pairs;
@@ -213,7 +213,7 @@ if (!lineFileNextFullReal(lf, &line))
 word = nextWord(&line);
 if (!sameString(word, "name"))
     errAbort("Expecting 'name' line %d of %s, got %s",
-    	lf->lineIx, lf->fileName, word);
+        lf->lineIx, lf->fileName, word);
 name = nextWord(&line);
 if (name == NULL)
     errAbort("Short name field line %d of %s", lf->lineIx, lf->fileName);
@@ -270,8 +270,8 @@ if (lf != NULL)
     while ((name = raFoldInOneRetName(lf, hashOfHash)) != NULL)
 	{
 	if (hashLookup(uniqHash, name))
-	    errAbort("%s duplicated in record ending line %d of %s", name,
-	    	lf->lineIx, lf->fileName);
+            errAbort("%s duplicated in record ending line %d of %s", name,
+	        lf->lineIx, lf->fileName);
 	hashAdd(uniqHash, name, NULL);
 	}
     lineFileClose(&lf);
@@ -336,7 +336,7 @@ while ((hash = raNextRecord(lf)) != NULL)
             continue;
             }
         }
-        hashAdd(bigHash, key, hash);
+    hashAdd(bigHash, key, hash);
     }
 lineFileClose(&lf);
 if (hashNumEntries(bigHash) == 0)

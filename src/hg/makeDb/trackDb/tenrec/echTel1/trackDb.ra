@@ -1,6 +1,7 @@
 
 track gap override
 html gap
+visibility hide
 
 track blastzBestHg17
 shortLabel Human Best
@@ -21,7 +22,7 @@ track netMm7 override
 priority 178.209
 
 track xenoRefGene override
-visibility pack
+visibility dense 
 
 track ensGene override
 visibility pack

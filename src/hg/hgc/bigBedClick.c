@@ -10,7 +10,7 @@
 #include "hui.h"
 
 static void bigBedClick(char *fileName, struct trackDb *tdb,
-		     char *item, int start, int bedSize)
+                     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
 boolean showUrl = FALSE;
@@ -64,15 +64,15 @@ if (bbMatch != NULL)
     char startBuf[16], endBuf[16];
     char *rest = cloneString(bbMatch->rest);
     int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields,
-					   bedSize+seq1Seq2Fields);
+                                           bedSize+seq1Seq2Fields);
     if (bbFieldCount != bedSize+seq1Seq2Fields)
         {
-	errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)",
+        errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)",
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
     if (showUrl && (bedSize >= 4))
-	printCustomUrl(tdb, item, TRUE);
+        printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
 
     // display seq1 and seq2
@@ -92,7 +92,7 @@ if (bbMatch != NULL)
                 char label[20];
                 safef(label, sizeof(label), "nonBedFieldsLabel");
                 printf("<B>%s&nbsp;</B>",
-                trackDbSettingOrDefault(tdb, label, "Non-BED fields:"));
+                       trackDbSettingOrDefault(tdb, label, "Non-BED fields:"));
                 for (i = restBedFields;  i < restCount;  i++)
                     printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
                 printf("<BR>\n");
@@ -115,7 +115,7 @@ bbiFileClose(&bbi);
 }
 
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
-		     char *item, int start, int bedSize)
+                     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);

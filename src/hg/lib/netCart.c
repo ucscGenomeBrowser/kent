@@ -25,8 +25,7 @@ if (sameWord(TDB_GRAY_SCALE,netColor))
     netColor = GRAY_SCALE;
 /* and then, allow cart to override trackDb */
 ret = netColorStringToEnum(
-        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_COLOR,
-        netColor));
+        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_COLOR, netColor));
 
 return(ret);
 }	/*	enum netColorEnum netFetchColorOption()	*/
@@ -60,8 +59,7 @@ switch(sqlUnsigned(netLevel))
 
 /* allow cart to override trackDb */
 ret = netLevelStringToEnum(
-        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_LEVEL,
-        netLevelEnumToString(ret)));
+        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_LEVEL, netLevelEnumToString(ret)));
 
 return(ret);
 }	/*	enum netLevelEnum netFetchLevelOption()	*/

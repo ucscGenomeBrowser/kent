@@ -1155,5 +1155,32 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/vicPac1/bed
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
+#########################################################################
+#  SWAP canFam3 LASTZ (DONE - 2012-06-23 - Chin)
+    #   original alignment done at canFam3.txt
+    cd /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23
+
+    cat fb.canFam3.chainBosTau7Link.txt
+    # 1381966556 bases of 2392715236 (57.757%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam3/bed
+    ln -s  lastzBosTau7.2012-06-23 lastz.bosTau7
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      121m44.022s
+    cat fb.bosTau7.chainCanFam3Link.txt
+    # 1456104306 bases of 2804673174 (51.917%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
+
+
 ############################################################################
 

@@ -167,7 +167,7 @@ sub getWarnClusters {
     if ($isInput) {
       return @allClusters;
     } else {
-      return ('memk');
+      return ('encodek');
     }
   }
 }
@@ -219,8 +219,7 @@ sub getWorkhorseLoads {
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
   foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
-	`$HgAutomate::runSSH encodek parasol list machines | grep idle`,
-	`$HgAutomate::runSSH memk parasol list machines | grep idle`) {
+	`$HgAutomate::runSSH encodek parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
