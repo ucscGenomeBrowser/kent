@@ -22,7 +22,7 @@ track netMm7 override
 priority 178.209
 
 track xenoRefGene override
-visibility dense 
+visibility pack
 
 track ensGene override
 visibility pack
