@@ -2984,14 +2984,18 @@ $(document).ready(function()
         suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
              function (item) {
                   genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
-                  vis.makeTrackVisible($("#suggestTrack").val());
              },
              function (position) {
                   genomePos.set(position, commify(getSizeFromCoordinates(position)));
              });
-        // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
-        // working, which is a major annoyance.
-        // $('#positionInput').focus();
+             // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
+             if($("#suggestTrack").length) {
+                  $(document.TrackHeaderForm).submit(function(event) {
+                                                  if($('#hgFindMatches').length) {
+                                                      vis.makeTrackVisible($("#suggestTrack").val());
+                                                  }
+                                              });
+             }
     }
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
