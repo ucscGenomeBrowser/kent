@@ -4,7 +4,6 @@ $(document).ready(function()
                       function(item) {
                           $('#positionDisplay').text(item.id);
                           $('#position').val(item.id);
-                          makeSureSuggestTrackIsVisible();
                       },
                       function(position) {
                           $('#positionDisplay').text(position);
@@ -16,13 +15,16 @@ $(document).ready(function()
     if(ele.length && (!ele.val() || ele.val().length == 0)) {
         ele.val(calculateHgTracksWidth());
     }
+
+    // Make sure suggestTrack is visible if user has choosen soemting via gene select.
+    $(document.mainForm).submit(function(event)
+                                {
+                                    if($('#hgFindMatches').length) {
+                                        var track = $("#suggestTrack").val();
+                                        if(track) {
+                                            $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(event.currentTarget));
+                                        }
+                                    }
+                                });
 });
 
-function makeSureSuggestTrackIsVisible()
-{
-// make sure to show knownGene/refGene track in pack mode (redmine #3484).
-    var track = $("#suggestTrack").val();
-    if(track) {
-        $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(document.mainForm));
-    }
-}
