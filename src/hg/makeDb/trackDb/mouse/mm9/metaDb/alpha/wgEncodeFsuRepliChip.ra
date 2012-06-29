@@ -1123,7 +1123,7 @@ fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
-md5sum 5b974c1de640df9eca2c554f1cb1a027
+md5sum de3545e25a393fcc5bb9925f33393e05
 platform GPL9156
 project wgEncode
 replicate 1
@@ -1565,4 +1565,4 @@ tableName wgEncodeFsuRepliChipMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: -1816818690
+# MAGIC: -1165603003
