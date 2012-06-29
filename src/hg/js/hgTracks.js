@@ -3011,11 +3011,6 @@ $(document).ready(function()
              function (item) {
                   genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
                   vis.makeTrackVisible($("#suggestTrack").val());
-// Initial attempt to fix #6330 - however, this does not deal with user editing the search box
-//                  if($('#hgFindMatches').length)
-//                      $('#hgFindMatches').val(item.internalId);
-//                  else
-//                      $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' id='hgFindMatches' name='hgFind.matches' " + "value='" + item.internalId + "'>");
              },
              function (position) {
                   genomePos.set(position, commify(getSizeFromCoordinates(position)));

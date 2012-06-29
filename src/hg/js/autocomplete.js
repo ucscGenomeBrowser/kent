@@ -83,11 +83,27 @@ function lookupGene(db, gene)
 */
 
 var suggestBox = {
+    clearFindMatches: function()
+    {
+        // clear any hgFind.matches set by a previous user selection (e.g. when user directly edits the search box)
+        if($('#hgFindMatches').length)
+            $('#hgFindMatches').remove();
+    },
+
+    updateFindMatches: function(val)
+    {
+        // highlight genes choosen from suggest list (#6330)
+        if($('#hgFindMatches').length)
+            $('#hgFindMatches').val(val);
+        else
+            $('#positionInput').parents('form').append("<input type='hidden' id='hgFindMatches' name='hgFind.matches' " + "value='" + val + "'>");
+    },
+
     init: function (db, assemblySupportsGeneSuggest, selectCallback, clickCallback)
     {
     // selectCallback(item): called when the user selects a new genomic position from the list
     // clickCallback(position): called when the user clicks on positionDisplay
-        var lastEntered = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
+        var lastSelected = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var str;
         if(assemblySupportsGeneSuggest) {
             str = "enter new position, gene symbol or annotation search terms";
@@ -114,7 +130,8 @@ var suggestBox = {
                 },
                 select: function (event, ui) {
                         selectCallback(ui.item);
-                        lastEntered = ui.item.value;
+                        lastSelected = ui.item.value;
+                        suggestBox.updateFindMatches(ui.item.internalId);
                         // jQuery('body').css('cursor', 'wait');
                         // document.TrackHeaderForm.submit();
                     }
@@ -126,16 +143,18 @@ var suggestBox = {
         // $('#positionInput').focus();
 
         $("#positionInput").change(function(event) {
-                                       if(!lastEntered || lastEntered != $('#positionInput').val()) {
+                                       if(!lastSelected || lastSelected != $('#positionInput').val()) {
                                            // This handles case where user typed or edited something rather than choosing from a suggest list;
                                            // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
                                            $('#position').val($('#positionInput').val());
+                                           suggestBox.clearFindMatches();
                                        }
                                    });
         $("#positionDisplay").click(function(event) {
                                         // this let's the user click on the genomic position (e.g. if they want to edit it)
                                         clickCallback($(this).text());
                                         $('#positionInput').val($(this).text());
+                                        suggestBox.clearFindMatches();
                                     });
     }
 }
