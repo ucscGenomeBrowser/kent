@@ -296,7 +296,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD19+) 8w S 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 168799.000000
         color 86,180,233
@@ -358,7 +358,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD43-) 8w S 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60860.000000
         color 86,180,233
@@ -368,7 +368,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD43-) 8w S 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell(CD43-) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 130092.000000
         color 86,180,233
@@ -745,7 +745,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD19+) 8w PR 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 92881.000000
         color 86,180,233
@@ -807,7 +807,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD43-) 8w PR 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Plus Raw signal Rep 2 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Plus Raw signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60777.000000
         color 86,180,233
@@ -817,7 +817,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD43-) 8w PR 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 129927.000000
         color 86,180,233
@@ -1194,7 +1194,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD19+) 8w MR 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 168798.000000
         color 86,180,233
@@ -1256,7 +1256,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD43-) MR 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60848.000000
         color 86,180,233
@@ -1266,7 +1266,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD43-) 8w MR 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 130053.000000
         color 86,180,233
@@ -1699,7 +1699,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel B_(CD43-) 8w A 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW  
         subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 86,180,233
@@ -1708,7 +1708,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel B_(CD43-) 8w A 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW  
         subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 86,180,233
