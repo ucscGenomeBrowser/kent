@@ -31,7 +31,7 @@ shortLabel UW RNA-seq
 longLabel RNA-seq from ENCODE/UW
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=LgIntestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=SkMuscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=Large_Intestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=Whole_Brain
 subGroup3 localization Localization CELL=cell
 subGroup4 rnaExtract RnaExtract POLYA=polyA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
