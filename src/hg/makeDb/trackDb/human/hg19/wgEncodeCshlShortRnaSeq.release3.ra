@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nb
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolus
 subGroup4 rep Rep rep1=1 rep2=2 Pooled=Pooled rep3=A rep4=B
 subGroup5 protocol Protocol TAP=TAP-Only CIPTAP=CIP-TAP NONE=Untreated
-subGroup6 rank Replicate rank1=1 rank2=2 none=Pooled
+subGroup6 rank Replicate_rank  rank1=1st rank2=2nd none=Pooled
 dimensions dimensionY=cellType dimensionX=localization dimensionA=rank dimensionB=protocol
 dimensionAchecked rank1,none
 filterComposite dimA dimB
