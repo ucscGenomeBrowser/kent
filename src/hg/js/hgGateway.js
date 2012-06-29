@@ -10,21 +10,23 @@ $(document).ready(function()
                           $('#position').val(position);
                       }
                    );
-    // default the image width to current browser window width
+
+    // Default the image width to current browser window width (#2633).
     var ele = $('input[name=pix]');
     if(ele.length && (!ele.val() || ele.val().length == 0)) {
         ele.val(calculateHgTracksWidth());
     }
 
-    // Make sure suggestTrack is visible if user has choosen soemting via gene select.
-    $(document.mainForm).submit(function(event)
-                                {
-                                    if($('#hgFindMatches').length) {
-                                        var track = $("#suggestTrack").val();
-                                        if(track) {
-                                            $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(event.currentTarget));
+    if($("#suggestTrack").length) {
+        // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
+        $(document.mainForm).submit(function(event) {
+                                        if($('#hgFindMatches').length) {
+                                            var track = $("#suggestTrack").val();
+                                            if(track) {
+                                                $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(event.currentTarget));
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+    }
 });
 
