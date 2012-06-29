@@ -3,44 +3,39 @@
 <p>This track is produced as part of the mouse ENCODE Project.
 This track shows RNA-seq measured genome-wide in mouse
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType"> tissues and cell lines</A>
-using the RNA-seq methodology &#40;see below&#41;, and DNaseI hypersensitive
+Poly-A selected mRNA was used as source for transcriptome profiling of tissues and cell types 
+that also had corresponding eq methodology &#40;see below&#41;, and DNaseI hypersensitive
 sites.
 </p>
 
 <H2>Display Conventions and Configuration</H2>
 <p>
-This track is a multi-view composite track that contains multiple data types
-(<EM>views</EM>). For each view, there are multiple subtracks that display
-individually on the browser. Instructions for configuring multi-view tracks
-are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
-This track contains the following views:
+This track is a multi-view composite track that contains multiple data types(<EM>views</EM>). 
+For each view, there are multiple subtracks that display individually on the browser. Instructions 
+for configuring multi-view tracks are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
+Color differences among the views are arbitrary and they provide a visual cue for distinguishing
+between the different cell and tissue types.  This track contains the following views:
 <DL>
-<DT><I>Plus</I> and <I>Minus</I> <I>Signals</I>
-<DD>These views display clusters of overlapping read mappings on the
-forward and reverse genomic strands
-<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based
-on processed data.</DD>
-<DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome. <DD>
+<DT><I>Plus</I> and <I>Minus</I> <I>Signals</I><DD>These views display clusters of overlapping read mappings 
+on the forward and reverse genomic strands<DD> 
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on processed data.</DD>
+<DT><I>Alignments</I></DT><DD>Mappings of SE short 50-base reads to the genome. <DD>
 </DL>
 
 <H2>Methods</H2>
 <p>
 Cells were grown according to the approved
 <a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>.
-Fresh tissues were harvested from mice and the nuclei prepared according 
-to the tissue appropriate
-<a href="/ENCODE/protocols/cell/mouse" target="_blank">protocol</a>.
-</p>
-
+Fresh tissues were harvested from mice and stored in xxx till used for preparing total RNA samples.  The total RNA 
+was used as starting material to select poly-A RNA and used for constructing SOLiD libraries according to the 
+protocols supplied by the manufacturer.  All RNA-samples were spiked in wiht NIST standards before libraries were constructed.
+The RNA-seq libraries were sequenced on ABI SOLiD sequencing platform as 50-base reads according to the manufacturer's recommendations.
 <p>
-Reads were aligned to mm9 reference using ABI BioScope software version 1.2.1.
-Colorspace FASTQ format files were created using Heng Li's
-solid2fastq.pl script version 0.1.4, representing 0,1,2,3 color codes
-with the letters A,C,G,T respectively. 
-Signal files were created from the BAM alignments using BEDTools.
+Reads were aligned to the mm9 reference genome using ABI BioScope software version 1.2.1.  Colorspace FASTQ format files were created 
+using Heng Li's solid2fastq.pl script version 0.1.4, representing 0, 1, 2, 3 color codes with the letters A, C, G, T respectively.  
+Signal files were created from the BAM alignments using BEDTools. 
+to the tissue appropriate
 </p>
-
-<H2>Verification</H2>
 
 <H2>Credits</H2>
 
@@ -60,5 +55,5 @@ consent, submit publications that use an unpublished ENCODE dataset until
 nine months following the release of the dataset.  This date is listed in
 the <EM>Restricted Until</EM> column, above.  The full data release policy
 for ENCODE is available
-<A TARGET=_BLANK HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</p>
+<A TARGET=_BLANK HREF="../ENCODE/terms.html" TARGET=_BLANK> here</A>.</p>
 
