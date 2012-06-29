@@ -890,5 +890,34 @@ CREATE TABLE ucscToEnsembl (
     md5sum bosTau6ToBosTau7.over.chain.gz >> md5sum.txt
     popd
 
+
+##############################################################################
+# SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
+
+    #   original alignment done at mm10.txt
+    cd /hive/data/genomes/mm10/bed/lastzBosTau6.2012-06-19
+    cat fb.mm10.chainBosTau6Link.txt
+    #   700039696 bases of 2652783500 (26.389%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzBosTau6.2012-06-19 lastz.bosTau6
+
+    # swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/mm10/bed/lastzBosTau6.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    72m13.925s
+    cat fb.bosTau6.chainMm10Link.txt
+    #   688651806 bases of 2649682029 (25.990%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+
 ############################################################################
 
