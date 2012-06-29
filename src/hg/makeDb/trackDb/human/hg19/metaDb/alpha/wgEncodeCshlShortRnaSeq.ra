@@ -66,11 +66,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002601
+expId 2601
 fileName wgEncodeCshlShortRnaSeqA549CellCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46098
 localization cell
+md5sum de8f2fc2a19529a1118b0a353846c2e5
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -89,11 +92,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002601
+expId 2601
 fileName wgEncodeCshlShortRnaSeqA549CellCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46099
 localization cell
+md5sum 78cc585caec01df9c4176fa2d6af80ea
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -165,11 +171,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002598
+expId 2598
 fileName wgEncodeCshlShortRnaSeqA549CellProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46058
 localization cell
+md5sum 4a90e6b0c09a07ceb0e15f1e7ff0f0a9
 project wgEncode
 protocol None
 readType 1x101
@@ -188,11 +197,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002598
+expId 2598
 fileName wgEncodeCshlShortRnaSeqA549CellProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46059
 localization cell
+md5sum 514dc5805062a403d9cec788d999be02
 project wgEncode
 protocol None
 readType 1x101
@@ -1385,11 +1397,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002599
+expId 2599
 fileName wgEncodeCshlShortRnaSeqA549CytosolCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46102
 localization cytosol
+md5sum 1027db8cd582c491b872c12f1e59959e
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -1408,11 +1423,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002599
+expId 2599
 fileName wgEncodeCshlShortRnaSeqA549CytosolCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46103
 localization cytosol
+md5sum 475f0541e97399099caa20d35e3261af
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -1484,11 +1502,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002597
+expId 2597
 fileName wgEncodeCshlShortRnaSeqA549CytosolProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46062
 localization cytosol
+md5sum 28a28cd8fa996eea01472dee85059afa
 project wgEncode
 protocol None
 readType 1x101
@@ -1507,11 +1528,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002597
+expId 2597
 fileName wgEncodeCshlShortRnaSeqA549CytosolProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46063
 localization cytosol
+md5sum b13d0d94d71d4858c84e3f64a0246f0a
 project wgEncode
 protocol None
 readType 1x101
@@ -2232,6 +2256,7 @@ lab CSHL
 labExpId LID47041,LID47042
 labVersion iIDR
 localization cytosol
+md5sum ee66630f2e6740ba7e9efa2a2c5afcf6
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -2258,6 +2283,7 @@ lab CSHL
 labExpId LID47041,LID47042
 labVersion iIDR
 localization cytosol
+md5sum 120aa3d8354fda7f885d18658ef3bcba
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -2328,11 +2354,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002617
+expId 2617
 fileName wgEncodeCshlShortRnaSeqA549NucleusCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46100
 localization nucleus
+md5sum 86cb47cba59cb5d125976c799f57f619
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -2351,11 +2380,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002617
+expId 2617
 fileName wgEncodeCshlShortRnaSeqA549NucleusCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46101
 localization nucleus
+md5sum 103e1842516822c30d562720e0a297bb
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -2427,11 +2459,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002600
+expId 2600
 fileName wgEncodeCshlShortRnaSeqA549NucleusProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46060
 localization nucleus
+md5sum 0e1b20caf3a00077fc6829c8c2e0fb58
 project wgEncode
 protocol None
 readType 1x101
@@ -2450,11 +2485,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002600
+expId 2600
 fileName wgEncodeCshlShortRnaSeqA549NucleusProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46061
 localization nucleus
+md5sum 9d622ae65f477fee24bef71fa421ab9c
 project wgEncode
 protocol None
 readType 1x101
@@ -3944,6 +3982,7 @@ lab CSHL
 labExpId LID44362
 labProtocolId 041WCs
 localization cell
+md5sum 7921b7d53a0ae7dfbe185a164db6ab61
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3971,6 +4010,7 @@ lab CSHL
 labExpId LID44363
 labProtocolId 042WCs
 localization cell
+md5sum 5916cbc8d78763abcac215f5c2b79e8d
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4353,6 +4393,7 @@ lab CSHL
 labExpId LID46197
 labProtocolId 043WCs
 localization cell
+md5sum 6f3d691b37eaed42306c088403598796
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5087,6 +5128,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47655
 localization chromatin
+md5sum 689b9232a2d71a1dcceda0af5d2a00e6
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5112,6 +5154,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47656
 localization chromatin
+md5sum d4a6455ee8e82a28e3c40e2cae1f6214
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5662,6 +5705,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47653
 localization nucleolus
+md5sum 51abe3d228a461ad0391a657b6ffba04,d54d8dce0e9950f975de5020c01e62b3
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5688,6 +5732,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47654
 localization nucleolus
+md5sum 0e6007a4b6b1413dda5a86bcfb37a8d7,9be2d82c624006d7b227b98241e252f1
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5707,12 +5752,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002942
+expId 2942
 fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID47653,LID47654
 labVersion iIDR
 localization nucleolus
+md5sum 608bdd32269565bd6d249dac37e9fec6
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5731,12 +5779,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002942
+expId 2942
 fileName wgEncodeCshlShortRnaSeqGm12878NucleolusTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47653,LID47654
 labVersion iIDR
 localization nucleolus
+md5sum d19d1c88ad16c7345c05c9cd460854dc
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5761,6 +5812,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47653
 localization nucleolus
+md5sum 41114ab48698b9afbb69eaedf2277f24
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5787,6 +5839,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47654
 localization nucleolus
+md5sum a0f87c2235c287511008ca1dcd28d1ad
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5813,6 +5866,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47653
 localization nucleolus
+md5sum 990a496b275182b40ec019fc33692a90
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5839,6 +5893,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47654
 localization nucleolus
+md5sum c73f244ba51f8888603a4f60ec9a6d2e
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5865,6 +5920,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47653
 localization nucleolus
+md5sum b55eb8e4ab1be95e20a75652620aae17
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5890,6 +5946,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47654
 localization nucleolus
+md5sum eba5d3bb54e9ef94c35d7df6bd8ed0fa
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5915,6 +5972,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47653
 localization nucleolus
+md5sum 1361f9583e0293501e6f594aa6c3e5e8
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -5940,6 +5998,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47654
 localization nucleolus
+md5sum e05f2ffa635f1e7f6f5d9c358039231d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -6937,6 +6996,7 @@ lab CSHL
 labExpId LID20908
 labProtocolId 006Cs
 localization cytosol
+md5sum 7df215d1abe900bdc96ac64206a92811
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7158,6 +7218,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48357
 localization cell
+md5sum 186dad6df2cf586fd39ec72fb3a23a80,41c9c5d2bdf1421a415b645f8ae34860
 project wgEncode
 protocol None
 readType 1x101
@@ -7185,6 +7246,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48358
 localization cell
+md5sum 5b210eacf3b3e6b9dbc97a78665f0b78,bf2a644a65ccf200adc8b1d1674c7dba
 project wgEncode
 protocol None
 readType 1x101
@@ -7212,6 +7274,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48353
 localization cell
+md5sum a25dc20f24f6fb0a8e40c2dbb8c00810,8391871de1e7b10d8a8931ef30e215fb
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7239,6 +7302,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48354
 localization cell
+md5sum 4365f8b78d9f2cf68587e6a36436701b,f80eee22c352398f06a9e238137446a7
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7256,24 +7320,18 @@ cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
-<<<<<<< HEAD:src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeCshlShortRnaSeq.ra
-dateSubmitted 2012-06-19
-dateUnrestricted 2013-03-19
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 dccAccession wgEncodeEH002944
 donorId Cellular Dyn
 expId 2944
-fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1.bigWig
-=======
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
-donorId Cellular Dyn
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapContigs.bedRnaElements.gz
->>>>>>> d54c0a9d8da04200dc3c0b629e2a5126a0d17a87:src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeCshlShortRnaSeq.ra
 grant Gingeras
 lab CSHL
 labExpId LID48353,LID48354
 labVersion iIDR
 localization cell
+md5sum d1fadba2545d2812a0d0330e146c73ba
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7292,13 +7350,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002944
 donorId Cellular Dyn
+expId 2944
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48353,LID48354
 labVersion iIDR
 localization cell
+md5sum aaa59fd966da82dd7005e45e72c9f299
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7316,12 +7377,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
 dateUnrestricted 2013-03-19
+dccAccession wgEncodeEH002944
 donorId Cellular Dyn
+expId 2944
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID48353
 localization cell
+md5sum 015760465a6dd94a8e245a18f7ce489e
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7349,6 +7413,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48354
 localization cell
+md5sum 044feb4f2edd9ee974546c25687d485a
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7376,6 +7441,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48353
 localization cell
+md5sum 0ab8bf5d1a63ff307b65db3a1349f596
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7403,6 +7469,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48354
 localization cell
+md5sum bab18eb63ebbf6564bf831d476aab003
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7422,12 +7489,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002944
 donorId Cellular Dyn
+expId 2944
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48353
 localization cell
+md5sum 65bda0040c5458af67943a01298e6e60
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7446,12 +7516,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002944
 donorId Cellular Dyn
+expId 2944
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellCiptapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48354
 localization cell
+md5sum 968e76b26a9d6c3739bd2751073cbe98
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7478,6 +7551,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48353
 localization cell
+md5sum 967972f80cbae124c875ceff71cf5d3c
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7504,6 +7578,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48354
 localization cell
+md5sum 77f130b7928fdc175adb6944249de82f
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -7522,13 +7597,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002943
 donorId Cellular Dyn
+expId 2943
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID48357,LID48358
 labVersion iIDR
 localization cell
+md5sum d04dd88c373cb994b68252a1b7664c87
 project wgEncode
 protocol None
 readType 1x101
@@ -7547,13 +7625,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002943
 donorId Cellular Dyn
+expId 2943
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48357,LID48358
 labVersion iIDR
 localization cell
+md5sum 51c816c60709490a27f64792b26d882b
 project wgEncode
 protocol None
 readType 1x101
@@ -7579,6 +7660,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48357
 localization cell
+md5sum 057ddc80856e3445ebc77338090a0d3d
 project wgEncode
 protocol None
 readType 1x101
@@ -7606,6 +7688,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48358
 localization cell
+md5sum 79afa7de207a233a7145baa2c269c784
 project wgEncode
 protocol None
 readType 1x101
@@ -7633,6 +7716,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48357
 localization cell
+md5sum 1ff340cdf3d6b430171e96858332cb01
 project wgEncode
 protocol None
 readType 1x101
@@ -7660,6 +7744,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48358
 localization cell
+md5sum bbe97eb61f0dec7b7f2e04095a6e8904
 project wgEncode
 protocol None
 readType 1x101
@@ -7679,12 +7764,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002943
 donorId Cellular Dyn
+expId 2943
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48357
 localization cell
+md5sum 762aca802f6a882dac76ce416b60387a
 project wgEncode
 protocol None
 readType 1x101
@@ -7703,12 +7791,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002943
 donorId Cellular Dyn
+expId 2943
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48358
 localization cell
+md5sum d4f5536006221a75f66d9097169b179d
 project wgEncode
 protocol None
 readType 1x101
@@ -7735,6 +7826,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48357
 localization cell
+md5sum 378a783f4cce53e8da897cd687bcd76c
 project wgEncode
 protocol None
 readType 1x101
@@ -7761,6 +7853,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48358
 localization cell
+md5sum f799a9240826c38dd84ffa591144edfb
 project wgEncode
 protocol None
 readType 1x101
@@ -7787,6 +7880,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48355
 localization cell
+md5sum 9841ef6bcb5650f6d5cf85d175c4e7a8,76e85a27b8b31abc3aab9a1220612dab
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7814,6 +7908,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48356
 localization cell
+md5sum 9317731e3d22e6ca7f150efae42c21a9,68627e4a57d9ddc320e360d3e6e79403
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7833,13 +7928,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002945
 donorId Cellular Dyn
+expId 2945
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID48355,LID48356
 labVersion iIDR
 localization cell
+md5sum bcdf9b0b63382da44cc5558953643808
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7858,13 +7956,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002945
 donorId Cellular Dyn
+expId 2945
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapExonsGencV10.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48355,LID48356
 labVersion iIDR
 localization cell
+md5sum f1b02383fc5901fcd1de27f6c2fb2594
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7890,6 +7991,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48355
 localization cell
+md5sum bf1abc1704bf3d8d1bb209c15e9c9977
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7917,6 +8019,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48356
 localization cell
+md5sum dae67f722f3a25e8fe65da1e4f628f97
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7944,6 +8047,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48355
 localization cell
+md5sum 5a1847b97f2942b317f185911c9ad490
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7971,6 +8075,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48356
 localization cell
+md5sum b26a7e0421746fb472819575bee4e6c2
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -7990,12 +8095,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002945
 donorId Cellular Dyn
+expId 2945
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48355
 localization cell
+md5sum 7ef57e03523952e3ef31f48551ab7db7
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8014,12 +8122,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002945
 donorId Cellular Dyn
+expId 2945
 fileName wgEncodeCshlShortRnaSeqH1neuronsCellTapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID48356
 localization cell
+md5sum 91cef4d9f11d36b457f66a1f28d562f1
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8046,6 +8157,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48355
 localization cell
+md5sum cb3b3b39c37d0d4f3e244350fec3e84a
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8072,6 +8184,7 @@ grant Gingeras
 lab CSHL
 labExpId LID48356
 localization cell
+md5sum 4f5e1b6aace31dc36b2b8a6a1d7f8847
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8375,6 +8488,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47433
 localization cell
+md5sum c28190565b0f0bc3257af251eab7b3a1
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8401,6 +8515,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47434
 localization cell
+md5sum 1c0d521238fdd7d01c2e69eee1cbc4ae
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8704,6 +8819,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47435
 localization cell
+md5sum a27f7fc6442d717a04dc5474b21ed6df
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -8730,6 +8846,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47436
 localization cell
+md5sum 69b7e141988a6a0084ae5059d6c72482
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -9033,6 +9150,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47475
 localization cell
+md5sum 7a4ba688c8d6d8cede9577eb863c7f6b
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -9059,6 +9177,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47476
 localization cell
+md5sum 22f9d61724c1ffd10a772ab775f9647d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -10343,12 +10462,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001741
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44460
 labProtocolId 013WCs
 localization cell
+md5sum e5cdc295767070b1593b29b2b921d309
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10367,12 +10489,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001741
+expId 1741
 fileName wgEncodeCshlShortRnaSeqHepg2CellTapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44461
 labProtocolId 014WCs
 localization cell
+md5sum 0fc16310d4a32dbbe7b46cae821b5922
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10667,12 +10792,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44464
 labProtocolId 013Cs
 localization cytosol
+md5sum 8002ee8c87f453b48c294ace5b81f5e2
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10691,12 +10819,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolTapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44465
 labProtocolId 014Cs
 localization cytosol
+md5sum 564728c6107bda064b91f1a78e9b5d98
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10991,12 +11122,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001742
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44462
 labProtocolId 013Ns
 localization nucleus
+md5sum 0d2ad9c66c84a034e88b596dc4fa7872
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11015,12 +11149,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH001742
+expId 1742
 fileName wgEncodeCshlShortRnaSeqHepg2NucleusTapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44463
 labProtocolId 014Ns
 localization nucleus
+md5sum a897d97347e3a22bb3791ae8fc35fe85
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -11324,6 +11461,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47477
 localization cell
+md5sum a2fb4855c6e2d3ba1c26fe388eb10807
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11350,6 +11488,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47478
 localization cell
+md5sum 37fce0bcd20310d292acff0028042989
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11515,6 +11654,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47657
 localization cell
+md5sum 58c7e3ca8af7f230ac0923f682622c36
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11845,6 +11985,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47479
 localization cell
+md5sum 663f9ece437a2c89a9eded8627b3a1c7
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11871,6 +12012,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47480
 localization cell
+md5sum 70c623f212660b33f6d7ce0bdef8dbf3
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11897,6 +12039,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658
 localization cell
+md5sum e304ea0fdbe323d19de163fcc55c9ca0,70538d6b6d1ec100d496c9d956f17e17
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11924,6 +12067,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47659
 localization cell
+md5sum cd56090877f4686a3abdc29045c787c7,dfa4f063dc4aba3a90e210e34fab5cec
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11951,6 +12095,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658,LID47659
 localization cell
+md5sum ebd747c1326eaec03f95b9cff4eee80d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -11977,6 +12122,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658,LID47659
 localization cell
+md5sum 294d34c955c5ac7cb07600a562caddee
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12002,6 +12148,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658
 localization cell
+md5sum 3aedf8ff8805d9a396f70aca2db10406
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12029,6 +12176,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47659
 localization cell
+md5sum 51b831860d265c370962291b0e2fb300
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12056,6 +12204,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658
 localization cell
+md5sum 5dc388a3016ceb19bfb0f1cd56645088
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12083,6 +12232,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47659
 localization cell
+md5sum 589b3a3e6e27175790f26a26a3b21c95
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12110,6 +12260,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658
 localization cell
+md5sum 4c495841edace5faaddde083c61d684c
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12136,6 +12287,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47659
 localization cell
+md5sum 88c6c3fc33a4dc29b48b93e55cf53aa0
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12162,6 +12314,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47658
 localization cell
+md5sum 4d2f0201d37a4f204aa958953adb1432
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12188,6 +12341,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47659
 localization cell
+md5sum 388de35a26759b5f94fb2ed7ccfeb13e
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12437,6 +12591,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47515
 localization cell
+md5sum 78373963fd5eeee1caa3cd3c202f102d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12463,6 +12618,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47516
 localization cell
+md5sum 78736524f747600644da84c12cd40939
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12654,6 +12810,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47431
 localization cell
+md5sum b097e8ec7155e90b39e393c4fb56c052,8ccfa765ab5abddc8c72ba37ff228586
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12682,7 +12839,7 @@ lab CSHL
 labExpId LID47431,LID47432
 labVersion iIDR
 localization cell
-md5sum a24a2b7d2cab28e715adcfd480afd838
+md5sum d258fc66eea1ed65da45eb556f39771c
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12710,7 +12867,7 @@ lab CSHL
 labExpId LID47431,LID47432
 labVersion iIDR
 localization cell
-md5sum 635d8e8757ac1edf1f899d7d894a997d
+md5sum a79d842de71c9346da58609fe6fdc5b2
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12736,6 +12893,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47431
 localization cell
+md5sum fe9374f1038a2fff34a5389601dc53e7
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12763,6 +12921,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47431
 localization cell
+md5sum 03ba3c025249c1251c30d8edbeb8f49d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12790,6 +12949,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47431
 localization cell
+md5sum 911754e484c7a4c0baa74645f5110b98
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12816,6 +12976,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47432
 localization cell
+md5sum 1d49496764d0745e4bb4dc98c186c40f
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -12842,6 +13003,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47431
 localization cell
+md5sum 018b744a68472ba3fd64250811087886
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13091,6 +13253,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47517
 localization cell
+md5sum 3b1bc97ad5765ada06f1bacc8eb19a10
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13117,6 +13280,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47518
 localization cell
+md5sum fe5f489cc7ddaf6bad2296375defe41d
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13420,6 +13584,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47519
 localization cell
+md5sum b028baafb729d374c33c2273aed6868e
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13446,6 +13611,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47520
 localization cell
+md5sum f2cd5d42023d8f89f2f5abf60c9902d8
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13749,6 +13915,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47615
 localization cell
+md5sum 58cc4d8e31ea3f7e455b7a3e5e1669f8
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -13775,6 +13942,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47616
 localization cell
+md5sum 8ecdb6f5a4b38f049470010abed7b714
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14462,6 +14630,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47243
 localization cell
+md5sum 06b61b3a1cba5d450322ba5cd55d4b1e
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14488,6 +14657,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47244
 localization cell
+md5sum b958c13909a81c1add660e0f64aae385
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14737,6 +14907,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47609
 localization cell
+md5sum f99581aaa9eacb8bb2f705342b5a8748
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -14763,6 +14934,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47610
 localization cell
+md5sum 827deb4cb15be99bc1f34a0587f40303
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -15694,13 +15866,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002619
 donorId 58607680
+expId 2619
 fileName wgEncodeCshlShortRnaSeqImr90CytosolCiptapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID45888,LID45889
 labVersion iIDR
 localization cytosol
+md5sum 9b660146ca9cfda479d7767c18557298
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -15728,7 +15903,7 @@ lab CSHL
 labExpId LID45888,LID45889
 labVersion iIDR
 localization cytosol
-md5sum 474f8f5bf2e719e66f0643d3ec63ab03
+md5sum 3e327fc82282b1a03cf62598b6768a54
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -15746,12 +15921,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002619
 donorId 58607680
+expId 2619
 fileName wgEncodeCshlShortRnaSeqImr90CytosolCiptapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45888
 localization cytosol
+md5sum 00d8d748a111b6ad9e09a99de961516b
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -15770,12 +15948,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002619
 donorId 58607680
+expId 2619
 fileName wgEncodeCshlShortRnaSeqImr90CytosolCiptapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45889
 localization cytosol
+md5sum 3ac829ae1a65460d79717dfd43252b18
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -15849,12 +16030,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002618
 donorId 58607680
+expId 2618
 fileName wgEncodeCshlShortRnaSeqImr90CytosolProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45957
 localization cytosol
+md5sum 95804e5946e2da2222b61be0eb6b2b0b
 project wgEncode
 protocol None
 readType 1x101
@@ -15873,12 +16057,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002618
 donorId 58607680
+expId 2618
 fileName wgEncodeCshlShortRnaSeqImr90CytosolProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45958
 localization cytosol
+md5sum 3966efc09ed69d68689f63bf8390cc18
 project wgEncode
 protocol None
 readType 1x101
@@ -16701,12 +16888,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002605
 donorId 58607680
+expId 2605
 fileName wgEncodeCshlShortRnaSeqImr90NucleusCiptapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45886
 localization nucleus
+md5sum 5c30d76466b6a234c677991e5ac93470
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -16725,12 +16915,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002605
 donorId 58607680
+expId 2605
 fileName wgEncodeCshlShortRnaSeqImr90NucleusCiptapProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45887
 localization nucleus
+md5sum 7a5efa7deb28579d99d83ed0e481f0ea
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -16804,12 +16997,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002606
 donorId 58607680
+expId 2606
 fileName wgEncodeCshlShortRnaSeqImr90NucleusProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45955
 localization nucleus
+md5sum fe2ec42a95d118dc10830528ee7de48f
 project wgEncode
 protocol None
 readType 1x101
@@ -16828,12 +17024,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002606
 donorId 58607680
+expId 2606
 fileName wgEncodeCshlShortRnaSeqImr90NucleusProtocolRep2.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID45956
 localization nucleus
+md5sum 586923976c4c38cd36b0962036908988
 project wgEncode
 protocol None
 readType 1x101
@@ -20469,12 +20668,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002610
+expId 2610
 fileName wgEncodeCshlShortRnaSeqMcf7CellCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46458
 labProtocolId 089WCs
 localization cell
+md5sum 54905e7549b196ec576f559edec328fd
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -20493,12 +20695,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002610
+expId 2610
 fileName wgEncodeCshlShortRnaSeqMcf7CellCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46459
 labProtocolId 090WCs
 localization cell
+md5sum a3fd75b797e2ad4a77512f403a3f759f
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -20570,12 +20775,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002609
+expId 2609
 fileName wgEncodeCshlShortRnaSeqMcf7CellProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46311
 labProtocolId 089WCs
 localization cell
+md5sum 6a165ed11a580a0a47f78bbb2016dce5
 project wgEncode
 protocol None
 readType 1x101
@@ -20594,12 +20802,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002609
+expId 2609
 fileName wgEncodeCshlShortRnaSeqMcf7CellProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46312
 labProtocolId 090WCs
 localization cell
+md5sum ed42c7a201abeaef7c8e61c5bf65ac83
 project wgEncode
 protocol None
 readType 1x101
@@ -21847,12 +22058,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002607
+expId 2607
 fileName wgEncodeCshlShortRnaSeqMcf7CytosolProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46315
 labProtocolId 089Cs
 localization cytosol
+md5sum 8f4cb69f67755e87569dae1e0ecd9de1
 project wgEncode
 protocol None
 readType 1x101
@@ -21871,12 +22085,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002607
+expId 2607
 fileName wgEncodeCshlShortRnaSeqMcf7CytosolProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46316
 labProtocolId 090Cs
 localization cytosol
+md5sum 647c0fe4b393870cedddb6dce02506aa
 project wgEncode
 protocol None
 readType 1x101
@@ -22481,12 +22698,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002608
+expId 2608
 fileName wgEncodeCshlShortRnaSeqMcf7NucleusProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46313
 labProtocolId 089Ns
 localization nucleus
+md5sum 9646851c79eec11c05090d5fa5179c0f
 project wgEncode
 protocol None
 readType 1x101
@@ -22505,12 +22725,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002608
+expId 2608
 fileName wgEncodeCshlShortRnaSeqMcf7NucleusProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46314
 labProtocolId 090Ns
 localization nucleus
+md5sum d3fb758db5183cec7d15d37f9d1f2be2
 project wgEncode
 protocol None
 readType 1x101
@@ -23294,6 +23517,7 @@ lab CSHL
 labExpId LID44360
 labProtocolId 039WCs
 localization cell
+md5sum 0fb1729d6ff88f6a79f35209e720a0ea
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -23321,6 +23545,7 @@ lab CSHL
 labExpId LID44361
 labProtocolId 040WCs
 localization cell
+md5sum a9aff07d7d4ba2b9b6c28929ac5dff72
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -23678,6 +23903,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47241
 localization cell
+md5sum 66c1477c01580b69130d85517dbd30df
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -23704,6 +23930,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47242
 localization cell
+md5sum d6704fa4406e511ca06b7ce200340463
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25001,6 +25228,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47611
 localization cell
+md5sum 583dcf41781cc73a48455117ed66c740
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25027,6 +25255,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47612
 localization cell
+md5sum bccf9ac0dfd043ef782b04b9ac04d5c1
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25330,6 +25559,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47613
 localization cell
+md5sum db7876d96d8040911d022b77ba2c1495
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25356,6 +25586,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47614
 localization cell
+md5sum aebef4ba6f37e20946367d592361eabd
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25852,6 +26083,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47239
 localization cell
+md5sum e626efea26ce639afd8489f29492f84a
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25878,6 +26110,7 @@ grant Gingeras
 lab CSHL
 labExpId LID47240
 localization cell
+md5sum 6481f9edad206a636ec4abc76baa13d9
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -25949,11 +26182,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002616
+expId 2616
 fileName wgEncodeCshlShortRnaSeqSknshCellCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46270
 localization cell
+md5sum 5d02ad62dd51ef04f4c1516ed1546c6a
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -25972,11 +26208,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002616
+expId 2616
 fileName wgEncodeCshlShortRnaSeqSknshCellCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46271
 localization cell
+md5sum a1dd61686c4969fc59e2c9b0a366a7c7
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -26048,11 +26287,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002622
+expId 2622
 fileName wgEncodeCshlShortRnaSeqSknshCellProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46201
 localization cell
+md5sum d6705ee385ac4dc59a6ba11b55087174
 project wgEncode
 protocol None
 readType 1x101
@@ -26071,11 +26313,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002622
+expId 2622
 fileName wgEncodeCshlShortRnaSeqSknshCellProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46202
 localization cell
+md5sum b289a0784487cc99753ee8e45af12df7
 project wgEncode
 protocol None
 readType 1x101
@@ -26894,11 +27139,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002614
+expId 2614
 fileName wgEncodeCshlShortRnaSeqSknshCytosolCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46274
 localization cytosol
+md5sum 8d198c66bc99e068333190188d1eddab
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -26917,11 +27165,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002614
+expId 2614
 fileName wgEncodeCshlShortRnaSeqSknshCytosolCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46275
 localization cytosol
+md5sum 41bf2d876c5e250919385af3f1c5d40c
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -26993,11 +27244,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002612
+expId 2612
 fileName wgEncodeCshlShortRnaSeqSknshCytosolProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46205
 localization cytosol
+md5sum 78446b98251f6fd5c4ed5dd676eb575d
 project wgEncode
 protocol None
 readType 1x101
@@ -27016,11 +27270,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002612
+expId 2612
 fileName wgEncodeCshlShortRnaSeqSknshCytosolProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46206
 localization cytosol
+md5sum 6554c88fc6e5e14eebdcf4eda947cfe3
 project wgEncode
 protocol None
 readType 1x101
@@ -27741,6 +27998,7 @@ grant Gingeras
 lab CSHL
 labExpId LID46958
 localization cytosol
+md5sum b52fdebef426c66d6d9d00d2073c77e2
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -27766,6 +28024,7 @@ grant Gingeras
 lab CSHL
 labExpId LID46959
 localization cytosol
+md5sum d86c8f02730cf013b00cc0f61fe0ae1f
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -27819,6 +28078,7 @@ lab CSHL
 labExpId LID46272,LID46273
 labVersion iIDR
 localization nucleus
+md5sum 071525eb413a18959bbdb3dd2a1bacbc
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -27836,11 +28096,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002615
+expId 2615
 fileName wgEncodeCshlShortRnaSeqSknshNucleusCiptapProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46272
 localization nucleus
+md5sum 2080cadd130b3fcf2bd58acfddc72656
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -27859,11 +28122,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002615
+expId 2615
 fileName wgEncodeCshlShortRnaSeqSknshNucleusCiptapProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46273
 localization nucleus
+md5sum d352ce8eb1506a2f8b45ff40bd4ba46b
 project wgEncode
 protocol CIP-TAP
 readType 1x101
@@ -27935,11 +28201,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002613
+expId 2613
 fileName wgEncodeCshlShortRnaSeqSknshNucleusProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46203
 localization nucleus
+md5sum 399498dec0e2513e01fefc4fbf214aa4
 project wgEncode
 protocol None
 readType 1x101
@@ -27958,11 +28227,14 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002613
+expId 2613
 fileName wgEncodeCshlShortRnaSeqSknshNucleusProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID46204
 localization nucleus
+md5sum 19b6ec4dbdd828598019c9a17d1fd059
 project wgEncode
 protocol None
 readType 1x101
@@ -28675,12 +28947,15 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002469
+expId 2469
 fileName wgEncodeCshlShortRnaSeqSknshNucleusTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID46960,LID46961
 labVersion iIDR
 localization nucleus
+md5sum b1c8fe57efcebca2032ac1c45b261faa
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -28707,7 +28982,7 @@ lab CSHL
 labExpId LID46960,LID46961
 labVersion iIDR
 localization nucleus
-md5sum c70ad85ebc3fb42c84d2a701331f77e5
+md5sum 457ff9c2dfe65e0247f708cfbb278fe2
 project wgEncode
 protocol TAP-Only
 readType 1x101
@@ -29046,4 +29321,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: -1157666169
+# MAGIC: 1518823836
