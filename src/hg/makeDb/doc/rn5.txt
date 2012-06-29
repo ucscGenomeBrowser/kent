@@ -890,3 +890,22 @@ query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 #########################################################################
+# chain/net hg19 (DONE - 2012-06-28 - Hiram)
+    # the original alignment to human:
+    cd /hive/data/genomes/hg19/bed/lastzRn5.2012-06-27
+    cat fb.hg19.chainRn5Link.txt
+    #   917356917 bases of 2897316137 (31.662%) in intersection
+
+    #	running the swap - DONE - 2012-06-28
+    mkdir /hive/data/genomes/rn5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn5/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzRn5.2012-06-27/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    66m53.095s
+    cat fb.rn5.chainHg19Link.txt
+    #	933922552 bases of 2572853723 (36.299%) in intersection
+
+##############################################################################
