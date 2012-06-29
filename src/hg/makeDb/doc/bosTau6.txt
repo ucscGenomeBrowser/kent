@@ -918,6 +918,31 @@ CREATE TABLE ucscToEnsembl (
     cd /hive/data/genomes/bosTau6/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+#########################################################################
+# SWAP dog canFam3 LASTZ  (DONE - 2012-06-24 - Chin)
+    mkdir /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24
+    cd /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24
+
+    cat fb.canFam3.chainBosTau6Link.txt
+    # 1387159926 bases of 2392715236 (57.974%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam3/bed
+    ln -s  lastzBosTau6.2012-06-24 lastz.bosTau6
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      119m54.003s
+    cat fb.bosTau6.chainCanFam3Link.txt
+    #   1399687351 bases of 2649682029 (52.825%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
 
 ############################################################################
 

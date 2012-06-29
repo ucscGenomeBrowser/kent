@@ -1066,7 +1066,7 @@ done
 
 #########################################################################
 #  SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
-    #   original alignment done at mm9.txt
+    #   original alignment done at mm10.txt
     cd /hive/data/genomes/mm10/bed/lastzBosTau7.2012-03-21
     cat fb.mm10.chainBosTau7Link.txt
     # 696498363 bases of 2652783500 (26.255%) in intersection
