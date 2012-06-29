@@ -20,6 +20,17 @@ var encodeProject = (function () {
     var cellTypeTermHash = {};
     var antibodyHash = {}, antibodyTargetHash = {};
 
+    // special handling for small RNA (next gen CV will have dataType for this)
+    var smallRnaDataType = {
+                    "term": "SmallRnaSeq",
+                    "label": "Small RNA-seq",
+                    "dataGroup": "RNA Profiling",
+                    "description": "Small RNAs (<200 nt)"
+                };
+    var smallRnaMatch = /rnaExtract=short/;
+    var smallRnaSearchType = "RnaSeq";
+    var longRnaSearchType = "RnaSeq";
+
     // Functions
 
     return {
@@ -122,6 +133,36 @@ var encodeProject = (function () {
             return undefined;
         },
 
+        adjustExperiment: function (experiment) {
+            // Modify experiment as needed for display purposes
+            if (experiment.expVars.match(smallRnaMatch)) {
+                experiment.dataType = smallRnaDataType.term;
+            }
+            return experiment;
+        },
+
+        adjustMdbSearch: function (args) {
+            // Modify mdb search object list as needed for display purposes
+            // At this time, special handling of RNA to distinguish longs from shorts
+            var i;
+            for (i = 0; i < args.length; i += 1) {
+                if (args[i].mdbVal === smallRnaDataType.term) {
+                    args[i].mdbVal = smallRnaSearchType;
+                    args.push({
+                            "mdbVar": "rnaExtract",
+                            "mdbVal": "shortTotal"
+                            });
+                    break;
+                } else if (args[i].mdbVal === longRnaSearchType) {
+                    args.push({
+                            "mdbVar": "rnaExtract",
+                            "mdbVal": ["total", "longPolyA", "longNonPolyA", "polyA"]
+                            });
+                }
+            }
+            return args;
+        },
+
         getDataGroups: function (dataTypes) {
             // Unpack JSON list of dataTypes
             // Return sorted array of dataGroup objects each having a .label,
@@ -132,6 +173,7 @@ var encodeProject = (function () {
             var dataGroupHash = {},
                 dataGroups = [],
                 otherGroup, group;
+
             $.each(dataTypes, function (i, dataType) {
                 group = dataType.dataGroup;
                 if (!group) {
@@ -148,6 +190,14 @@ var encodeProject = (function () {
                 }
                 dataGroupHash[group].dataTypes.push(dataType.label);
             });
+
+            // add Small RNA dataType (currently only distinguished by expVars), but
+            // should really be highlighted as separate from standard RNA-seq
+            dataTypeTermHash[smallRnaDataType.term] = smallRnaDataType;
+            dataTypeLabelHash[smallRnaDataType.label] = smallRnaDataType;
+            dataGroupHash[smallRnaDataType.dataGroup].dataTypes.push(smallRnaDataType.label);
+
+            // handle catchall 'Other' group at the end
             $.each(dataGroupHash, function (key, item) {
                 if (key === "Other") {
                     otherGroup = item;

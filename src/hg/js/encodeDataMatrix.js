@@ -54,14 +54,16 @@ $(function () {
     function makeExperimentMatrix(experiments, dataTypeExps) {
         // Populate dataType vs. cellType array with counts of experiments
 
-        var dataType, cellType;
+        var dataType, cellType, exp;
         var matrix = {};
 
-        $.each(experiments, function (i, exp) {
+        $.each(experiments, function (i, experiment) {
             // exclude ref genome annotations
-            if (exp.cellType === 'None') {
+            if (experiment.cellType === 'None') {
                 return true;
             }
+            // adjust experiment as needed for display purposes
+            exp = encodeProject.adjustExperiment(experiment);
 
             // count experiments per dataType so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
@@ -166,7 +168,7 @@ $(function () {
                     $td.addClass('todoExperiment');
                     return true;
                 }
-                // this cell represents experiments that
+                // this cell represents experiments
                 // fill in count, mouseover and selection by click
                 $td.addClass('experiment');
                 $td.text(matrix[cellType][dataType]);

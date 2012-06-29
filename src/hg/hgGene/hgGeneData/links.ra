@@ -84,6 +84,13 @@ priority 10
 #url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
+name moped
+shortLabel MOPED
+tables kgXref
+idSql select spId from kgXref where kgID = '%s'
+url http://moped.proteinspire.org/?proteinId=%s
+priority 10
+
 name pubMed
 shortLabel PubMed
 tables kgXref
