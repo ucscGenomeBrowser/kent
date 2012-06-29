@@ -1389,26 +1389,59 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000725
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000725
 protocol Stam:CD34+Mobilized_Stam_protocol.pdf
-#
-#term CD34+_Mobilized_RO01525
-#tag CD34MobRO01525
-#type Cell Line
-#tier 3
-#organism human
-#description Mobilized CD34+ cells from 23 year old donor RO01525
-#lineage blood stem
-#karyotype normal
-#sex M
-#tissue haematopoietic
-#childOf CD34+_Mobilized
-#vendorName missing
-#vendorId missing
-#orderUrl missing
-#termId missing
-#termUrl missing
-#lab Stam
-#protocol Stam:CD34+MobilizedRO01525_Stam_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+
+term CD4+_Naive_Wb11970640
+tag CD4NAIVEWB11970640
+type Cell Line
+tier 3
+organism human
+description CD4+ naive sorted cells, donor is Caucasian, male 26 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb11970640
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
+lab Stam
+protocol Stam:CD4NaiveWb11970640_Stam_protocol.pdf
+
+term CD4+_Naive_Wb78495824
+tag CD4NAIVEWB78495824
+type Cell Line
+tier 3
+organism human
+description CD4+ naive sorted cells,  donor is Causasian, female 35 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex F
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb78495824
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
+lab Stam
+protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
+
+term CD77+_GC_B_cell
+tag CD77GCBCELL
+type Cell Line
+tier 3
+organism human
+description Germinal center B cells (CD77+) isolated from de-identified tonsillectomy
+karyotype normal
+sex U
+tissue tonsil
+vendorName Dr. Yanwen Jiang 
+vendorId GC_B_cell
+orderUrl http://melnicklaboratory.med.cornell.edu/people/yanwenjiang.php
+termId BTO:0003671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003671
+lab Crawford
+protocol Crawford:GCBcell_Crawford_protocol.pdf
 
 term CLL
 tag CLL
@@ -1764,6 +1797,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Crawford:D54_Crawford_protocol.pdf
+
+term GM03348
+tag GM03348
+type Cell Line
+tier 3
+organism human
+description skin fibroblast
+karyotype normal
+sex M
+tissue skin
+vendorName Coriell
+vendorId GM03348
+orderUrl http://ccr.coriell.org/
+termId BTO:0001255
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
+lab Crawford
+protocol Crawford:FibroblGM03348_Crawford_protocol.pdf
 
 term GM04503
 tag GM04503
@@ -2474,6 +2524,24 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Crawford
 protocol Crawford:GM20000_Crawford_protocol.pdf
+
+term H0287
+tag H0287
+type Cell Line
+tier 3
+organism human
+description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a normal healthy male.
+lineage mesoderm
+karyotype normal
+sex Male
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId H0287
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0002807
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002807
+lab Stam
+protocol Stam:H0287_Stam_protocol.pdf
 
 term H7-hESC
 tag H7ES
@@ -5062,6 +5130,23 @@ sex F
 tier 3
 protocol Crawford:Myometr_Crawford_protocol.pdf
 
+term Naive_B_cell
+tag NAIVEBCELL
+type Cell Line
+tier 3
+organism human
+description Naive B cells (IgD+) isolated from de-identified tonsillectomy
+karyotype normal
+sex U
+tissue tonsil
+vendorName Dr. Yanwen Jiang 
+vendorId Naive_B_cell
+orderUrl http://melnicklaboratory.med.cornell.edu/people/yanwenjiang.php
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776
+lab Crawford
+protocol Crawford:NaiveBcell_Crawford_protocol.pdf
+
 term NB4
 tag NB4
 type Cell Line
@@ -5388,6 +5473,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol ENCODE:NT2-D1_protocol.pdf
+
+term Olf_neurosphere
+tag OLFNEUROSPHERE
+type Cell Line
+tier 3
+organism human
+description Human olfactory neurosphere-derived cells from mucosal biopsies
+karyotype normal
+sex U
+tissue Nasal biopsy
+vendorName Alan Mackay-Sim
+vendorId Olf_neurosphere
+orderUrl http://www.griffith.edu.au/professional-page/professor-alan-mackay-sim
+termId termId BTO:0000961
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000961
+lab Crawford
+protocol Crawford:Olfneurosphere_Crawford_protocol.pdf
 
 term Osteobl
 tag OSTEO
@@ -6037,6 +6139,60 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf
 
+term Th1_Wb33676984
+tag TH1WB33676984
+type Cell Line
+tier 3
+organism human
+description Th1 cells in vivo isolation
+lineage mesoderm
+karyotype normal donor is Asian, female 26 year old, primary pheresis of single normal subject
+sex F
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb33676984
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0001678
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
+lab Stam
+protocol Stam:Th1Wb33676984_Stam_protocol.pdf
+
+term Th1_Wb54553204
+tag TH1WB54553204
+type Cell Line
+tier 3
+organism human
+description Th1 cells in vivo isolation, donor is Caucasian, male 33 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb54553204
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0001678
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
+lab Stam
+protocol Stam:Th1Wb54553204_Stam_protocol.pdf
+
+term Th17
+tag TH17
+type Cell Line
+tier 3
+organism human
+description T helper cells expressing IL-17, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex B
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Th17
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0002417
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002417
+lab Stam
+protocol Stam:Th17_Stam_protocol.pdf
+
 term Th2
 tag TH2
 type Cell Line
@@ -6054,6 +6210,42 @@ sex U
 tier 3
 protocol Stam:Th2_Stam_protocol.pdf
 
+term Th2_Wb33676984
+tag TH2WB33676984
+type Cell Line
+tier 3
+organism human
+description Th2 cells in vivo isolation, donor is Asian, female 26 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal 
+sex F
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb33676984
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0001679
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
+lab Stam
+protocol Stam:Th2Wb33676984_Stam_protocol.pdf
+
+term Th2_Wb54553204
+tag TH2WB54553204
+type Cell Line
+tier 3
+organism human
+description Th2 cells in vivo isolation, donor is Caucasian, male 33 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb54553204
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0001679
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
+lab Stam
+protocol Stam:Th2Wb54553204_Stam_protocol.pdf
+
 term T-47D
 tag T47D
 type Cell Line
@@ -6070,6 +6262,60 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Stam_and_Myers:T47D_StamandMyers_protocol.pdf
+
+term TL010
+tag TL010
+type Cell Line
+tier 3
+organism human
+description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
+lineage mesoderm
+karyotype normal
+sex Male
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId TL010
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+lab Stam
+protocol Stam:TL010_Stam_protocol.pdf
+
+term Treg_Wb78495824
+tag TREGWB78495824
+type Cell Line
+tier 3
+organism human
+description T regulatory cells in vivo isolation
+lineage mesoderm
+karyotype normal donor is Causasian, female 35 year old, primary pheresis of single normal subject
+sex F
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb78495824
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0004520
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
+lab Stam
+protocol Stam:TregWb78495824_Stam_protocol.pdf
+
+term Treg_Wb83319432
+tag TREGWB83319432
+type Cell Line
+tier 3
+organism human
+description T regulatory cells in vivo isolation, donor is Caucasian, male 28 year old, primary pheresis of single normal subject
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName John Stamatoyannopoulos
+vendorId Wb83319432
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId BTO:0004520
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
+lab Stam
+protocol Stam:TregWb83319432_Stam_protocol.pdf
 
 term Urothelia
 tag UROTHEL
