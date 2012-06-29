@@ -467,7 +467,7 @@ noInherit on
         track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Patski S 2
-        longLabel Patski immortal cells RNA-seq Signal Rep 2 from ENCODE/UW #too long length = 83 
+        longLabel Patski immortal cells RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep2
         type bigWig 1.000000 74671.000000
         color 204,121,167
