@@ -3,58 +3,49 @@
 // requires ajax.js
 // requires utils.js
 
-var suggestCache;
-
-function ajaxGet(db, cache)
-{
-// Returns jquery.autocomplete.js ajax_get function object
-// db is the relevant assembly (e.g. "hg18")
-// cache is an optional object used as a hash to cache responses from the server.
-    suggestCache = cache;
-    return function (request, callback) {
-        var key = request.term;
-        if(suggestCache == null || suggestCache[key] == null)
-        {
-            $.ajax({
-                       url: "../cgi-bin/hgSuggest",
-                       data: "db=" + db + "&prefix=" + key,
-                       // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
-                       trueSuccess: handleSuggest,
-                       success: catchErrorOrDispatch,
-                       error: function (request, status, errorThrown) {
-                           if (typeof console != "undefined") {
-                               console.dir(request);
-                               console.log(status);
-                           }
-                           var msg = "ajax call failed";
-                           if(status != "error")
-                               msg = msg + "; error: " + status;
-                           warn(msg + "; statusText: " + request.statusText + "; responseText: " + request.responseText);
-                       },
-                       key: key,
-                       cont: callback
-                   });
-        } else {
-            callback(eval(suggestCache[key]));
-        }
-        // warn(request.term);
-    }
-}
-
-function handleSuggest(response, status)
-{
-    // We seem to get a lot of duplicate requests (especially the first letters of words),
-    // so we keep a cache of the suggestions lists we've retreived.
-    if(suggestCache != null)
-        suggestCache[this.key] = response;
-    this.cont(eval(response));
-}
-
 /* suggest (aka gene search)
    Requires three elements on page: positionDisplay (static display), positionInput (input textbox) and position (hidden).
 */
 
 var suggestBox = {
+    ajaxGet: function ajaxGet(db) {
+        // Returns autocomplete source function
+        // db is the relevant assembly (e.g. "hg18")
+        var cache = new Object;   // cache is is used as a hash to cache responses from the server.
+        return function (request, callback) {
+            var key = request.term;
+            if(cache[key] == null) {
+                $.ajax({
+                           url: "../cgi-bin/hgSuggest",
+                           data: "db=" + db + "&prefix=" + key,
+                           // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
+                           trueSuccess: function (response, status) {
+                               // We get a lot of duplicate requests (especially the first letters of words),
+                               // so we keep a cache of the suggestions lists we've retreived.
+                               cache[this.key] = response;
+                               this.cont(eval(response));
+                           },
+                           success: catchErrorOrDispatch,
+                           error: function (request, status, errorThrown) {
+                               if (typeof console != "undefined") {
+                                   console.dir(request);
+                                   console.log(status);
+                               }
+                               var msg = "ajax call failed";
+                               if(status != "error")
+                                   msg = msg + "; error: " + status;
+                               warn(msg + "; statusText: " + request.statusText + "; responseText: " + request.responseText);
+                           },
+                           key: key,
+                           cont: callback
+                       });
+            } else {
+                callback(eval(cache[key]));
+            }
+            // warn(request.term);
+        }
+    },
+
     clearFindMatches: function()
     {
         // clear any hgFind.matches set by a previous user selection (e.g. when user directly edits the search box)
@@ -87,7 +78,7 @@ var suggestBox = {
             $('#positionInput').autocomplete({
                 delay: 500,
                 minLength: 2,
-                source: ajaxGet(db, new Object),
+                source: this.ajaxGet(db),
                 open: function(event, ui) {
                     var pos = $(this).offset().top + $(this).height();
                     if (!isNaN(pos)) {
