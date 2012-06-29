@@ -2878,32 +2878,6 @@ var imageV2 = {
         }
     },
 
-    // XXXX delete obsolete jumpButtonOnClick
-
-    jumpButtonOnClick: function () // called from hgTracks.c
-    {   // onClick handler for the "jump" button.
-        // Handles situation where user types a gene name into the gene box and immediately hits the jump button,
-        // expecting the browser to jump to that gene.
-        var gene = $('#suggest').val();
-        var db = getDb();
-        if(gene
-        && gene.length > 0
-        && gene != "gene"
-        && db
-        && $('#positionDisplay').length == 0
-        && (genomePos.getOriginalPos() == genomePos.get() || genomePos.get().length == 0)) {
-            var pos = lookupGene(db, gene);
-            if(pos) {
-                vis.makeTrackVisible($("#suggestTrack").val());
-                genomePos.set(pos, null);
-            } else {
-                // turn this into a full text search.
-                genomePos.set(gene, null);
-            }
-        }
-        return true;
-    },
-
     navigateInPlace: function (params, disabledEle, keepCurrentTrackVisible)
     {
     // request an hgTracks image, using params
