@@ -42,7 +42,7 @@ dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=strain
 dimensionAchecked rep1
 filterComposite dimA=multi dimB=multi
 sortOrder cellType=+ view=+ rep=+ age=+ strain=+ sex=+
-fileSortOrder cell=Cell_Line view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line strain=strain view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
