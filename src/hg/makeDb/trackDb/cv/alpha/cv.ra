@@ -1426,8 +1426,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
 protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
 
-term CD77+_GC_B_cell
-tag CD77GCBCELL
+term GC_B_cell
+tag GCBCELL
 type Cell Line
 tier 3
 organism human
@@ -2533,7 +2533,7 @@ organism human
 description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a normal healthy male.
 lineage mesoderm
 karyotype normal
-sex Male
+sex M
 tissue blood
 vendorName John Stamatoyannopoulos
 vendorId H0287
@@ -6271,7 +6271,7 @@ organism human
 description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
 lineage mesoderm
 karyotype normal
-sex Male
+sex M
 tissue blood
 vendorName John Stamatoyannopoulos
 vendorId TL010
