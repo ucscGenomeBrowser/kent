@@ -25,6 +25,13 @@ hgsid on
 dbInUrl on
 priority 1
 
+name moped
+shortLabel MOPED
+tables sangerLinks
+idSql select name from sangerGene where name = '%s'
+url http://moped.proteinspire.org/?proteinId=%s
+priority 10
+
 name uniProt
 tables sangerLinks
 idSql select protName from sangerLinks where orfName = '%s'

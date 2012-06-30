@@ -30,8 +30,8 @@ compositeTrack on
 shortLabel UW RNA-seq
 longLabel RNA-seq from ENCODE/UW
 group regulation
-subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=LgIntestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=SkMuscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=WholeBrain
+subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
+subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=Large_Intestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=Whole_Brain
 subGroup3 localization Localization CELL=cell
 subGroup4 rnaExtract RnaExtract POLYA=polyA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
@@ -41,8 +41,8 @@ subGroup8 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=C
 dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=strain
 dimensionAchecked rep1
 filterComposite dimA=multi dimB=multi
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+ age=+ strain=+ sex=+
-fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ view=+ rep=+ age=+ strain=+ sex=+
+fileSortOrder cell=Cell_Line strain=strain view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
@@ -117,7 +117,7 @@ noInherit on
 		#display no
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal
         shortLabel Lv S_C 8w S 1
         longLabel Liver Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -127,7 +127,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6SigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal
         shortLabel Lv S_C E14.5 S 1
         longLabel Liver Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -159,7 +159,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6SigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Cerebrum 8w S 1
         longLabel Cerebrum Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -169,7 +169,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6SigRep2
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Cerebrum 8w S 2
         longLabel Cerebrum Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -189,7 +189,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel MEL S 1
         longLabel MEL immortal cells RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
@@ -199,7 +199,7 @@ noInherit on
         # was wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep1 vsmalladi Wed Mar 28 10:20:19 2012
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel MEL S 2
         longLabel MEL immortal cells RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
@@ -227,7 +227,7 @@ noInherit on
         # subId=6107 dateSubmitted=2012-03-21
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep2
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Lv S_C 8w S 2
         longLabel Liver Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -248,7 +248,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Brain E14.5 S 1
-        longLabel WholeBrain Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Whole Brain Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 29009.000000
         color 105,105,105
@@ -257,7 +257,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Brain E14.5 S 2
-        longLabel WholeBrain Embryonic day 14.5 RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel Whole Brain Embryonic day 14.5 RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 46115.000000
         color 105,105,105
@@ -276,7 +276,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Brain E18.5 S 2
-        longLabel WholeBrain Embryonic day 18.5 RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel Whole Brain Embryonic day 18.5 RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 36131.000000
         color 105,105,105
@@ -286,7 +286,7 @@ noInherit on
         track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Brain E18.5 S 1
-        longLabel WholeBrain Embryonic day 18.5 RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Whole Brain Embryonic day 18.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 177309.000000
         color 105,105,105
@@ -296,7 +296,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD19+) 8w S 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 168799.000000
         color 86,180,233
@@ -336,7 +336,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Heart 8w S 1
         longLabel Heart Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -346,7 +346,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep2
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Heart 8w S 2
         longLabel Heart Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -358,7 +358,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD43-) 8w S 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60860.000000
         color 86,180,233
@@ -368,7 +368,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel B_(CD43-) 8w S 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell(CD43-) Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 130092.000000
         color 86,180,233
@@ -417,7 +417,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel SkMuscle 8w S 1
-        longLabel SkMuscle Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 161097.000000
         color 139,69,19
@@ -427,7 +427,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel SkMuscle 8w S 2
-        longLabel SkMuscle Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 244287.000000
         color 139,69,19
@@ -485,7 +485,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129SigRep1
-        parent wgEncodeUwRnaSeqViewSignal off
+        parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Lv S_S E14.5 S 1
         longLabel Liver Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
@@ -497,7 +497,7 @@ noInherit on
 	track wgEncodeUwRnaSeqViewPlusRawSig
 	shortLabel Signal
 	view PlusRawSignal
-	visibility hide
+	visibility full
 	subTrack wgEncodeUwRnaSeq
 	viewLimits 0:500
 	autoScale on
@@ -561,7 +561,7 @@ noInherit on
 		#display no
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_C 8w PR 1
         longLabel Liver Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -571,7 +571,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_C E14.5 PR 1
         longLabel Liver Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -603,7 +603,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig
         shortLabel Cerebrum 8w PR 1
         longLabel Cerebrum Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -613,7 +613,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep2
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Cerebrum 8w PR 2
         longLabel Cerebrum Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -633,7 +633,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel MEL PR 1
         longLabel MEL immortal cells RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
@@ -644,7 +644,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel MEL PR 2
         longLabel MEL immortal cells RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
@@ -675,7 +675,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep2
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig
         shortLabel Lv S_C 8w PR 2
         longLabel Liver Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -745,7 +745,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD19+) 8w PR 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 92881.000000
         color 86,180,233
@@ -785,7 +785,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Heart 8w PR 1
         longLabel Heart Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -795,7 +795,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep2
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Heart 8w PR 2
         longLabel Heart Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -807,7 +807,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD43-) 8w PR 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Plus Raw signal Rep 2 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Plus Raw signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60777.000000
         color 86,180,233
@@ -817,7 +817,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B_(CD43-) 8w PR 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 129927.000000
         color 86,180,233
@@ -865,7 +865,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel SkMuscle 8w PR 1
-        longLabel SkMuscle Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 161056.000000
         color 139,69,19
@@ -875,7 +875,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel SkMuscle 8w PR 2
-        longLabel SkMuscle Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 244287.000000
         color 139,69,19
@@ -933,7 +933,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129PlusRawRep1
-        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_S E14.5 PR 1
         longLabel Liver Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
@@ -945,7 +945,7 @@ noInherit on
 	track wgEncodeUwRnaSeqViewMinusRawSig
 	shortLabel Signal
 	view MinusRawSignal
-	visibility hide
+	visibility full
 	subTrack wgEncodeUwRnaSeq
 	viewLimits 0:500
 	autoScale on
@@ -1009,7 +1009,7 @@ noInherit on
 		#display no
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C 8w MR 1
         longLabel Liver Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1019,7 +1019,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C E14.5 MR 1
         longLabel Liver Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1051,7 +1051,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Cerebrum 8w MR 1
         longLabel Cerebrum Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1061,7 +1061,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep2
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Cerebrum 8w MR 2
         longLabel Cerebrum Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1081,7 +1081,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel MEL MR 1
         longLabel MEL immortal cells RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
@@ -1092,7 +1092,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel MEL MR 2
         longLabel MEL immortal cells RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
@@ -1123,7 +1123,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep2
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C 8w MR 2
         longLabel Liver Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1194,7 +1194,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD19+) 8w MR 1
-        longLabel B-cell_(CD19+) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD19+) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 168798.000000
         color 86,180,233
@@ -1234,7 +1234,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Heart 8w MR 1
         longLabel Heart Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1244,7 +1244,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep2
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Heart 8w MR 2
         longLabel Heart Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1256,7 +1256,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD43-) MR 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 60848.000000
         color 86,180,233
@@ -1266,7 +1266,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B_(CD43-) 8w MR 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW  
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 130053.000000
         color 86,180,233
@@ -1315,7 +1315,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel SkMuscle 8w MR 1
-        longLabel SkMuscle Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 161096.000000
         color 139,69,19
@@ -1325,7 +1325,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel SkMuscle 8w MR 2
-        longLabel SkMuscle Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 244245.000000
         color 139,69,19
@@ -1383,7 +1383,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129MinusRawRep1
-        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_S E14.5 MR 1
         longLabel Liver Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
@@ -1464,7 +1464,7 @@ noInherit on
 		#display no
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_C 8w A 1
         longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1473,7 +1473,7 @@ noInherit on
         # subId=4426 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_C A 1
         longLabel Liver Embryonic day 14.5 RNA-seq Alignments Rep 1 ENCODE/UW
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1502,7 +1502,7 @@ noInherit on
         # subId=4429 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Cerebrum 8w A 1
         longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1512,7 +1512,7 @@ noInherit on
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Cerebrum 8w A 2
         longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1530,7 +1530,7 @@ noInherit on
         # subId=4432 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel MEL A 1
         longLabel MEL immortal cells RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
@@ -1540,7 +1540,7 @@ noInherit on
         # was wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1 vsmalladi Wed Mar 28 10:20:18 2012
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel MEL A 2
         longLabel MEL immortal cells RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
@@ -1571,7 +1571,7 @@ noInherit on
         # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsAlnRep2 vsmalladi Fri Feb 24 10:40:47 2012
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv 8w A 2
         longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1679,7 +1679,7 @@ noInherit on
         # subId=5325 dateSubmitted=2011-12-22
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Heart 8w A 1
         longLabel Heart Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1688,7 +1688,7 @@ noInherit on
         # subId=5326 dateSubmitted=2011-12-22
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Heart 8w A 2
         longLabel Heart Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1699,7 +1699,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel B_(CD43-) 8w A 2
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW  
         subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 86,180,233
@@ -1708,7 +1708,7 @@ noInherit on
         track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel B_(CD43-) 8w A 1
-        longLabel B-cell_(CD43-) Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW  
+        longLabel B-cell (CD43-) Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW  
         subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 86,180,233
@@ -1754,7 +1754,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel SkMuscle 8w A 1
-        longLabel SkMuscle Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 139,69,19
@@ -1763,7 +1763,7 @@ noInherit on
         track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel SkMuscle 8w A 2
-        longLabel SkMuscle Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
+        longLabel Skeletal Muscle Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 139,69,19
@@ -1816,7 +1816,7 @@ noInherit on
         # subId=5588 dateSubmitted=2012-02-13
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments off
+        parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_S A 1
         longLabel Liver Embryonic day 14.5 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
