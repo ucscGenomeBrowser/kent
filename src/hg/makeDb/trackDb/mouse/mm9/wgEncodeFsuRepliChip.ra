@@ -147,6 +147,15 @@ wgEncode 1
         color 65,105,225
         # subId=7068 dateSubmitted=2012-06-18
 
+        track wgEncodeFsuRepliChipCh12FWaveSignalRep2
+        parent wgEncodeFsuRepliChip
+        shortLabel CH12 Ws 2
+        longLabel CH12 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=CH12 sex=F treatment=NONE rep=rep2
+        type bigWig -1.740197 1.319845
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
         track wgEncodeFsuRepliChipEsd3MWaveSignalRep2
         parent wgEncodeFsuRepliChip off
         shortLabel ES-D3 Ws 2
@@ -291,3 +300,20 @@ wgEncode 1
         color 139,69,19
         # subId=7068 dateSubmitted=2012-06-18
 
+        track wgEncodeFsuRepliChipL1210FWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel L1210 Ws 2
+        longLabel L1210 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=L1210 sex=F treatment=NONE rep=rep2
+        type bigWig -18.702608 6.627410
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipMelMWaveSignalRep2
+        parent wgEncodeFsuRepliChip
+        shortLabel MEL Ws 2
+        longLabel MEL Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=MEL sex=M treatment=NONE rep=rep2
+        type bigWig -2.123494 1.485932
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
