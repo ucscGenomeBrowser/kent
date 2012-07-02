@@ -7,7 +7,7 @@
   How to add/maintain this documentation:
   There are 2 essential parts to trackDb*.html DOCS: I) this LIBRARY and II) the HTML PAGES.
 
-  I) This LIBRARY consists of "DIV"s that contain blurbs descibing settings and types.
+  I) This LIBRARY consists of DIVs that contain "blurbs" describing settings and types.
      Example:
         <DIV class="someSetting"><span class="types bed bigBed"></span>
         <div class="format"><code>someSetting &lt;minVal&gt;</code></div>
@@ -17,34 +17,36 @@
             <P><B>Example:</B></P>
             <pre>   someSetting 100</pre>
         </DIV>
-  - Each "DIV" should have the class=<setting>.  There MUST be only one uniquely classed DIV for
-    each setting or type.  NOTE: use class NOT id so that anchor links work.
-  - Each "setting DIV" must contain a class="types..." SPAN that lists the track types that
-    this blurb/setting is relevant to.
-  - > Each setting DIV MUST contain a class="format" DIV that gives the exact format of the
-      setting, wrapped in <code>.
-  - > The setting DIV should also contain an <B>Example:</B> followed by a preferably real life
+  - Each "blurb" DIV should have the class=<setting>.  There MUST be only one uniquely classed
+    DIV for each setting or type.  NOTE: use class NOT id so that anchor links work.
+    - Each "setting blurb" must contain a class="types..." SPAN that lists the track types that
+      this blurb/setting is relevant to.
+    - Each setting blurb MUST contain a class="format" DIV that gives the exact format of the
+      setting, wrapped in <code> tags.
+    - The setting blurb should also contain an <B>Example:</B> followed by a preferably real life
       example wrapped in <PRE> tags.  Remeber multi-line <PRE> text will include the indents
       found in this file!
-  - > Any setting or code that is not made into a link should be wrapped with <code> tags.
-  - > Some settings may refer to other settings and your blurb should include a link to the other
-      setting, especially if the setting bulrb will appear at some distance in the document.
+    - Some settings may refer to other settings and your blurb should include a link to the other
+      setting, especially if that setting's blurb will appear at some distance in the document.
       Since all settings should have an anchor by the setting name, a "jumpTo" link to
       visibility setting can be accomplished as:
           <A onclick="return jumpTo(this);" HREF="#">visibility</A>
       which is identical to
           <A HREF="#visibility">visibility</A>
-  - "Type setting DIVs" are the same as other setting divs except that, there should be a seperate
-    Examples DIV with class type_example (e.g. <DIV class="bed_example">).
-  - > These "example DIVs" should also have a class=format" DIV but in this case it contains a
+    - Any setting or code that is not made into a <A> link should be wrapped with <code> tags.
+  - "Type setting blurbs" are the same as other setting blurbs except that there should be a
+     seperate "example blurb" DIV with class of type_example (e.g. <DIV class="bed_example">).
+    This will allow a type definition to be followed by multiple type specific settings then
+    be completed by the example that references those settings.
+    - These example blurbs should also have a "class=format" DIV but in this case it contains a
       title to the example:  <div class="format"><B>Examples of item base types:</B></div>.
-  - > Exmples should make use of <PRE> tags and preferrably multiple real live examples.
+    - Exmples should make use of <PRE> tags and preferrably multiple real live examples.
   - Document introductions and section introductions may also be shared by multiple documents
-    and therefore may be included here as "intro DIVs" as: <DIV class="bed_intro">.
-  - > intro DIVs do not contain a class="format" DIV.
-  - Use trackDbTestBurbs.html to test blurbs you add or modify.
+    and therefore may be included here as "intro blurb" DIVs as: <DIV class="bed_intro">.
+    - intro DIVs do not contain a class="format" DIV.
+  - Use trackDbTestBurbs.html to test blurbs you add or modify.  It runs javascript tests.
   HINT: It is the class=<setting> that ties things togther.  If there is a need for multiple
-  descriptions of the same setting, then create multiple DIVs with different classes as:
+  descriptions of the same setting, then create multiple blurb DIVs with different classes as:
     <DIV class="parent"> and and <DIV class="parent_view">.
 
   II) Document HTML PAGES should include this trackDbLibrary.html with server side includes
@@ -56,19 +58,19 @@
         <TR VALIGN=TOP><TD class="someSetting"><A name="someSetting"><IMG class='toggle detail'>
             <div class="format"><code>someSetting</code></div>
         </TD></TR>
-  - - Any setting may be referenced multiple times.  To reference a setting DIV, place it in
+    - Any setting may be referenced multiple times.  To reference a setting blurb, place it in
       a table cell that contains class=<setting> and an "image toggle details" tag.
       When the user clicks on the [+] button toggle image, the library will be read to render
       the <DIV class="<setting>">.
-  - - The table cell should also contain the "format" DIV, so the user knows what they are
+    - The table cell should also contain the "format" DIV, so the user knows what they are
       requesting.  The format containd in the doc will be replaced by the one in the
       library at toggle, so the library has the final word on format.  In the example,
       <code>someSetting</code> is replaced by <code>someSetting &lt;minVal&gt;</code>.
-  - - The first (or best) reference to your library div should contain the one and only
+    - The first (or best) reference to your library blurb should contain the one and only
       "named anchor" for that setting <A name="<setting>">.  This named anchor MUST be at
       the beginning of the cell, before the toggle image. NOTE: the named anchor for a type is
       often put at the start of the table that describes it.
-  - - Related settings can be grouped as a set of related rows by adding the "related" class
+    - Related settings can be grouped as a set of related rows by adding the "related" class
       to the TR.  The first such related row must have class="related1st" as:
           <TR class="related1st" VALIGN=TOP><TD class="directUrl"> ...
           <TR class="related" VALIGN=TOP><TD class="hgsid">
@@ -78,7 +80,7 @@
     Example cell behaves similarly to the setting cells, except the row has a special class:
         <TR class="examples" VALIGN=TOP><TD class="bed_example">
             <A name="bed_Examples"><IMG class='toggle detail'>
-  - Each table should be proceeded headed with an introduction as:
+  - Each table should be headed with an introduction as:
         <THEAD><TR><TD><DIV ID="bed_intro" class="intro"></DIV></TD></TR></THEAD>
     All DIVs of class "intro" will be read from the library (by ID) and rendered when the
     page is first loaded.
@@ -88,12 +90,13 @@
   - The document as a whole should contain a "toggle all" image as:
         <IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
     which will open and close all the table cells.
-  - The document may include a "self-assembling table of contents".  This is table will be built if
-  - - There is an empty table of ID="toc": <TABLE class="settingsTable" id="toc"></TABLE>
-  - - The $(document).ready() event calls: tdbDoc.tocAssemble(<delay>,[<exclude>]);
-  - - - delay (ms) greater than zero will delay the start of the assembly for user responsiveness
-  - - - <exclude> can be a comma separated list of settings (class=<setting>) to exclude
-  - - The table will fill in a header and a row per settingsTable td that contains a "format" div.
+  - The document should include a "self-assembling table of contents".  This is table will be
+    built if
+    - There is an empty table of ID="toc": <TABLE class="settingsTable" id="toc"></TABLE>
+    - The $(document).ready() event calls: tdbDoc.tocAssemble(<delay>,[<exclude>]);
+      - delay (ms) greater than zero will delay the start of the assembly for user responsiveness
+      - <exclude> can be a comma separated list of settings (class=<setting>) to exclude
+    - The table will fill in a header and a row per settingsTable td that contains a "format" div.
       The table will include 3 columns: setting, types that call it (from the "types" span) and
       the ID of the table that includes the setting.  Use this ID to be descriptive:
       ID="Signal_Track_Settings".
@@ -135,16 +138,7 @@
         track myFirstTrack
         type bed 6
         shortLabel Example Data
-        longLabel The data in this track is format "bed 6".
-    </pre>
-
-    <div class="hintBox">
-        <I><B>Inside hint:</B></I><I> The ra file
-        format supports  '<code>\</code>' continuation characters.  If the
-        setting is long or complex, break it into several lines using
-        terminating '<code>\</code>' characters to make it more readable.
-        </I>
-    </div>
+        longLabel The data in this track is format "bed 6".    </pre>
 
     <P>Every track should have
     these four settings.  The key of this track (<code>myFirstTrack</code>)
@@ -169,6 +163,20 @@
     will be mentioned in the appropriate sections to follow.
 </DIV>
 
+<DIV class="lessCommon_intro">
+    <H3>Common, though less frequently used settings</H3>
+    The following settings are available for all or many track types but are more
+    rarely used.  Most are optional, but some may be required for specific track
+    types or in specific situations.<BR><BR>
+    <div class="hintBox">
+        <I><B>Inside hint:</B></I><I> The ra file
+        format supports  '<code>\</code>' continuation characters.  If the
+        setting is long or complex, break it into several lines using
+        terminating '<code>\</code>' characters to make it more readable.
+        </I>
+    </div>
+    <BR>
+</DIV>
 <DIV class="track"><span class="types all"></span>
     <div class="format all"><code>track</code></div>
     <P>Required: <span class="red">Yes</span></P>
@@ -260,22 +268,22 @@
 <div class="format"><code>visibility</code></div>
     <P>Required: No</P>
     <P>Visibility (a.k.a "display mode")
-    is set to 1 of 4 modes that a track will be displayed in, within
+    is set to 1 of 5 modes (including 'hide') that a track will be displayed in, within
     the Browser image.  This setting is almost always dynamically
     customizable by each user.  The exact display for each mode
-    depends upon the track's type and not all types support all 4
+    depends upon the track's type and not all types support all 5
     display modes.</P>
     <P>Possible settings:</P>
     <UL>
     <LI><code>hide</code>: DEFAULT. The track will not be seen until a user
     requests it.</LI>
     <LI><code>dense</code>: the track will be displayed within a single line or
-    ribbon.  Often this means multiple items are summarized and long
-    labels are not seen.</LI>
-    <LI><code>squish</code>: the track's data may be squished into an even
-    thinner ribbon than in dense mode.</LI>
+    ribbon.  Often this means multiple items are summarized or drawn on top of
+    each other and long labels are not seen.</LI>
+    <LI><code>squish</code>: each item is drawn individually, but at half height
+    and without a label.  <i>Not supported for all types.</i></LI>
     <LI><code>pack</code>: items are displayed individually but as much vertical
-    white space as possible is removed.</LI>
+    white space as possible is removed.  <i>Not supported for all types.</i></LI>
     <LI><code>full</code>: each item will be seen as a separate line in the
     Browser image, graphed signals may be seen in varying heights.</LI>
     </UL>
@@ -302,10 +310,11 @@
     sources.</P>
     <P><B>Display Conventions and Configuration</B></P>
     <P class="indent1">A
-    description of what the data itself means, such as how to
-    interpret scores or full signal values.  This section can also be
-    used to describe how the display may be customized by using
-    configuration controls.</P>
+    description of what the display represents. This includes description
+    of conventions for coloring and any special glyphs used in the track.
+    It may describe how to interpret scores or full signal values.  This
+    section can also be used to describe how the display may be customized
+    by using configuration controls.</P>
     <P><B>Methods</B></P>
     <P class="indent1">A
     description of how the data was generated, which may include how
@@ -328,57 +337,56 @@
 
 <DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabIx"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
-    <P><I>Remote data file
-    specific.</I></P>
-    <P>This setting tells
-    the Genome Browser where to look for the bigBed remote data file.
-    It must be either and an internet accessible URL to a file or a
-    relative path to one on your dataHub.  The file must be in one of
+    <P><I>REQUIRED FOR HUBS</I></P>
+    <P>The location of a remote data file containing the bulk of the data for the track.
+    This setting is required for all data tracks in a track hub.  It is seldom used for
+    built-in tracks.</P>
+    <P>The setting is either the full URL including http: or other protocol,
+    or it is relative to the directory containing the trackDb file that contains
+    this setting.  The file must be in one of
     the supported remote data file formats: bam, bigBed, bigWig and
     vcfTabIx.  Note that bam and vcfTabIx types require a separate
     index file that must be named the same as the data file plus a
-    standard suffix (".bai" and ".tbi" respectively).
-    </P>
+    standard suffix (".bai" and ".tbi" respectively).</P>
     <P><B>Example:</B></P>
-    <pre>   bigDatUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
+    <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
     &nbsp;&nbsp;or
-    <pre>   bigDatUrl biBrainH3K4me1.bb</pre>
-    <P><I>TODO: figure out
-    if bigDataUrl can be used locally; figure out where the hub relative path is
-    relative to.</I></P>
+    <pre>   bigDataUrl biBrainH3K4me1.bb</pre>
 </DIV>
 
 <DIV class="boxedCfg"><span class="types all"></span>
 <div class="format"><code>boxedCfg &lt;on/off&gt;</code></div>
+    <!-- <P><I>NOT FOR HUBS</I></P> says Jim, but why not. Already used. -->
     <P>Configuration controls can be placed inside a
     box on the configuration page.  This setting is decorative only,
     but can make a busy page look more cohesive.  Default no.  Not all
-    track types support this feature yet.</P>
+    track types support this feature yet but the most common ones including
+    wig, bigWig, bed, and bigBed do.</P>
     <P><B>Example:</B></P>
     <pre>   boxedCfg on</pre>
 </DIV>
 
 <DIV class="canPack"><span class="types all"></span>
 <div class="format"><code>canPack &lt;off/on&gt;</code></div>
-    <P>Almost tracks should be displayable in the four
+    <P><I>NOT FOR HUBS.  Deprecated.</I></P>
+    <P>Almost tracks can be displayed in the five
     standard visibilities.  However on some track types such as
     wiggles, <code>squish</code> and <code>pack</code> offer no real advantage
     over <code>dense</code> and <code>full</code>. By default, these tracks will
     not offer the less valuable visibilities. Nevertheless, you can make your track offer
     these visibilility choices by turning canPack on.  Note: subtracks
-    of composites will always offer all four choices.</P>
+    of composites will always offer all five choices.</P>
     <P><B>Example:</B></P>
     <pre>   canPack on</pre>
-    <P><I>TODO: loose this entirely?  I vote yes, to
-    decrease complexity.</I></P>
 </DIV>
 
 <DIV class="color"><span class="types all"></span>
 <div class="format"><code>color &lt;red,green,blue&gt;</code></div>
     <P>Many track types allow setting the color of the
-    data as displayed in the image with this setting.  Not all display
-    modes will show this color.  The setting accepts red, green and
-    blue values delimited by commas, and each in the range of 0-255.</P>
+    data as displayed in the image with this setting.  The setting accepts
+    red, green and blue values delimited by commas, and each in the range of
+    0-255.  Though widely supported some types in some display modes, such as
+    the EST tracks in dense mode, ignore it.</P>
     <P><B>Example:</B></P>
     <pre>   color 255,0,0</pre>
     <P>Sets color to red.</P>
@@ -386,11 +394,11 @@
 
 <DIV class="altColor"><span class="types all"></span>
 <div class="format"><code>altColor &lt;red,green,blue&gt;</code></div>
-    <P>Many track types allow setting a color range
-    which will vary from color to altColor.  An example might be a bed
-    type track with scores for each item and the highest scores will
-    receive color, while the lowest receives altColor and the rest of
-    the scores appear along the gradient.</P>
+    <P>Many track types allow setting a color range which will vary from color to
+    altColor.  For instance the CpG Island tracks use the altColor to display the
+    weaker islands, while the stronger ones are rendered in color. If altColor is
+    not specified the system will use a color half way between that specified in
+    the color tag and white instead.</P>
     <P><B>Example:</B></P>
     <pre>   altColor 0,0,255</pre>
     <P>Sets alternate color to blue.</P>
@@ -400,13 +408,16 @@
 <div class="format"><code>chromosomes &lt;chr1,chr2,...&gt;</code></div>
     <P>Some datasets do not contain data for all
     chromosomes of a genome.  When this is true, use this setting as a
-    comma separated list of the chromosomes that are covered.</P>
+    comma separated list of the chromosomes that are covered. The system will
+    display a user visible message that no data is available when browsing
+    uncovered chromosomes.</P>
     <P><B>Example:</B></P>
     <pre>   chromosomes chr1,chr7,chr18,chr19,chr22,chrX,chrM</pre>
 </DIV>
 
 <DIV class="configureByPopup"><span class="types all"></span>
 <div class="format"><code>configureByPopup &lt;on/off&gt;</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Most tracks that can have their display
     configured by a user, can be configured from directly within the
     Browser image by choosing a right-click option.  This will pop-up
@@ -422,13 +433,12 @@
 
 <DIV class="dataVersion"><span class="types all"></span>
 <div class="format"><code>dataVersion &lt;str&gt;</code></div>
-    <P><I>TODO: Jim says
-    DEPRECATE (but it's a very simple, useful setting).</I></P>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Many tracks may have
     multiple revisions over time.  In some cases, the older versions
     are worth keeping around, but even if they are not, it can be
     useful to declare exactly which version the current track is.  Use
-    this setting to put a version statement only the track
+    this setting to put a version statement on the track
     configuration page and item details page of a track.  The string
     will support limited HTML.</P>
     <P><B>Example:</B></P>
@@ -451,10 +461,18 @@
     <LI>%s - track name</LI>
     <LI>%s - database name</LI>
     </UL>
+    <P><I>Not all fields need be present, but those present must be in this
+    order, and if a later field is present, all earlier fields must be used.</I>
+    The URL can either be a full external URL or local to the web site.</P>
+    <P><B>Examples:</B></P>
+    <pre>   directUrl http://mygenes.org/cgi-bin/geneView/%s</pre>
+    &nbsp;&nbsp;or
+    <pre>   directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s</pre>
 </DIV>
 
 <DIV class="hgsid"><span class="types all"></span>
 <div class="format"><code>hgsid on</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>The "cart" is a hidden table
     that contain the persistent selections that user's have
     made in the Genome Browser.  To ensure your directUrl has
@@ -463,11 +481,8 @@
     <P><hr class="example" /><B>Example:</B></P>
     <pre>
     directUrl /cgi-bin/hgGene?hgg_gene=%s&amp;hgg_chrom=%s&amp;hgg_start=%d&amp;hgg_end=%d&amp;hgg_type=%s&amp;db=%s
-    hgsid on
-    </pre>
-    <P>Note that it is possible to only include the
-    first field or first few fields.  The fields must be in the
-    given order if present though.  This URL will have the user's
+    hgsid on    </pre>
+    <P>The URL specified in <code>directUrl</code> will have the user's
     Browser ID appended so that cart settings will be available.</P>
 </DIV>
 
@@ -481,6 +496,7 @@
 
 <DIV class="origAssembly"><span class="types all"></span>
 <div class="format"><code>origAssembly &lt;db&gt;</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>The original assembly that the dataset was
     generated for.  Datasets generated by mapping to one genome
     assembly may prove so useful they are worth seeing mapped to a
@@ -523,15 +539,16 @@
     will always depend upon what other tracks are currently visible.
     Priority is a floating point number.  All tracks in the same group
     or data hub with the same priority will be sorted by short label.
-    By default priority is 0.  Typically this is not set and the order
-    is determined by the short label.</P>
+    By default priority is 0.  Typically this is only set for tracks
+    on by default in order to move them ahead of other track. The order
+    of the rest is determined alphabetically by the short label.</P>
     <P><B>Example:</B></P>
     <pre>   priority 50</pre>
 </DIV>
 
 <DIV class="release"><span class="types all"></span>
 <div class="format"><code>release &lt;alpha/beta/public&gt;[,beta/public]</code></div>
-    <P><I>Not for Data Hubs</I></P>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is the version of the Browser where the
     track will be seen. It can contain any combination of the three
     values:</P>
@@ -551,22 +568,23 @@
 
 <DIV class="table"><span class="types all"></span>
 <div class="format"><code>table &lt;tableName&gt;</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>The track setting of most tracks is the same as
     the table name. However, in some cases it is desirable to
-    reference the same table (or remote file) in more than one track.
+    reference the same table in more than one track.
     An example of this is showing a table as a single signal track and
     as part of a combination overlay track, as described later in this
     document.  For data contained in MySQL tables, if the track
-    setting is not the name of the table then this setting must be.</P>
+    setting is not the name of the table then this setting must be used.</P>
     <P><B>Example:</B></P>
     <pre>
     track mySecondTrack
-    table myFirstTable
-    </pre>
+    table myFirstTable    </pre>
 </DIV>
 
 <DIV class="tableBrowser"><span class="types all"></span>
 <div class="format"><code>tableBrowser &lt;off/on&gt; [table1 ...]</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Some data is restricted from being accessed in
     the Table Browser. The Table Browser typically allows querying and
     downloading some or all of the raw data for a track.  Access to
@@ -614,12 +632,11 @@
         Note that the format of this trackDb setting is a normal C
     language format so that the item will replace the "%s"
     token in the sql statement.</P>
-    <P><B>Examples:</B></P>
+    <P><B>Example:</B></P>
     <pre>
     url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     url2 https://www.affymetrix.com/LinkServlet?probeset=$$
-    idInUrlSql select name from sibTxGraph where id=%s
-    </pre>
+    idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
 
 <DIV class="urlLabel"><span class="types all"></span>
@@ -636,7 +653,7 @@
 
 <DIV class="wgEncode"><span class="types all"></span>
 <div class="format"><code>wgEncode on</code></div>
-    <P><I>Not for Data Hubs</I></P>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>ENCODE tracks have a number of special features
     and behaviors, the most noticeable of which is the special
     thumbnail image that appears before each ENCODE track in the track
@@ -650,7 +667,7 @@
 <!-- - - - - - - - BED/BIGBED settings - - - - - - - -->
 <DIV class="bed_intro">
 <H3>bed/bigBed: Item or region tracks</H3>
-    <P>One of the two most
+    <P>Some of the most
     common track types are those that highlight regions or items of
     varying size in a genome assembly.  There are many variations to the
     "items" track, most of which are specified with a bed or
@@ -716,6 +733,7 @@
 <DIV class="compareGenomeLinks"><span class="types bed"></span>
 <div class="format"><code>compareGenomeLinks &lt;db[.table[.column]]=label&gt;
             [db[.table[.column] =label &hellip;]</code></div>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Sometimes the
     features that a bed track is illuminating in one genome are also
     displayed in tracks of other genomes.  If an item of the same name
@@ -734,8 +752,7 @@
     <pre>
     compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) \
                        mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) \
-                       bosTau4=Cow_(October_2007)
-    </pre>
+                       bosTau4=Cow_(October_2007)    </pre>
     <P>In this example for
     the hg18 ENCODE bi-directional promoter track, each genome has a
     track of the same name and the names are unique within each track.
@@ -784,7 +801,7 @@
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field they are filtering on.  The most
@@ -821,8 +838,7 @@
     <pre>
     pValueFilter 3.0:15.0
     pValueFilterLimits 0.0:15.0
-    pValueFilterByRange o
-    </pre>
+    pValueFilterByRange on    </pre>
     <P>The non-standard bed field of "<code>pValue</code>", which
     is floating-point, will be filtered by range.  The expected data
     range is 0-15 and by default only items with pValues within 3-15
@@ -832,7 +848,7 @@
 <DIV class="filterBy"><span class="types bed genePred psl"></span>
 <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
                             [field2:title=[+]opt2a...]</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Another method of
     filtering items relies upon discrete values.  One or more fields
     such as <code>name</code> or <code>score</code> may contain a limited number
@@ -847,19 +863,19 @@
     <LI> Filters for
     different fields are delimited by white-space, which means any
     white-space in titles and labels should be replaced by the '<code>_</code>'
-    character.</LI>
+    (underscore) character.</LI>
     <LI> The field and
-    option portions of the definition are delimited by '<code>=</code>'.</LI>
+    option portions of the definition are delimited by '<code>=</code>' (equal sign).</LI>
     <LI> The field portion
-    can have a title which is delimited from the field name by '<code>:</code>'.</LI>
+    can have a title which is delimited from the field name by '<code>:</code> (colon)'.</LI>
     <LI> A single field
     filter will have multiple options delimited by commas.</LI>
     <LI> If the options are
     a 1-based index (1,2,3...) then the option list can be preceded
-    with a '<code>+</code>' and the options themselves are only labels.</LI>
+    with a '<code>+</code>' (plus sign) and the options themselves are only labels.</LI>
     <LI> Otherwise, each
-    option will be a value and optional label delimited by '<code>|</code>'.   Note
-    that if one option has a label then all options of that filter
+    option will be a value and optional label delimited by '<code>|</code>' (vertical bar).
+    Note that if one option has a label then all options of that filter
     must have a label.</LI>
     <LI><em>Finally,
     options may have CSS style wrapped in {curly} brackets and
@@ -874,8 +890,7 @@
              option1a[|label1a[{style1a}]],\
              option1b[|label1b[{style1b}]],... \
              [{field2}[:{Title2}]=[+]\
-             option2a[|label2a[{style2a}]],,...]
-    </pre>
+             option2a[|label2a[{style2a}]],,...]    </pre>
     <P><I>It is probable
     that this setting will be redefined at some point, given that it
     is very complicated and ugly. However, this current format will
@@ -884,7 +899,7 @@
         <I class="red">Secret tricks:</I>
         <OL>
         <LI>The titles and
-        labels need to avoid use of the delimiter chars (<code> ,=:|</code>).  But
+        labels need to avoid use of the delimiter chars (<code> ,|:={}</code>).  But
         these characters can be included via HTML codes.  And remember
         that spaces can be included via the '<code>_</code>' character.</LI>
         <LI>The option labels
@@ -917,8 +932,7 @@
              One&amp;#58;_Validated_(all),\
              Two&amp;#58;_DNase_(all),\
              Three&amp;#58;_FAIRE_(all),\
-             Four&amp;#58;_ChIP_(all)
-    </pre>
+             Four&amp;#58;_ChIP_(all)    </pre>
     <P>This setting sets up
     2 filters, one on the field "<code>color</code>" and a second for the
     "<code>ocCode</code>" field.  The color filter is given the title "Validation
@@ -1033,8 +1047,7 @@
     <P><B>Example:</B></P>
     <pre>
     type bed 6 +
-    noScoreFilter on
-    </pre>
+    noScoreFilter on    </pre>
 </DIV>
 
 <DIV class="spectrum"><span class="types all"></span>
@@ -1068,8 +1081,7 @@
     spectrum on
     scoreMin 700
     scoreMax 900
-    color 0,0,255
-    </pre>
+    color 0,0,255    </pre>
     <P>These settings will cause track items to be
     displayed in blue but scores at 700 and below be very light blue,
     while those above 700 will be darker and darker blue until scores
@@ -1123,7 +1135,7 @@
 <div class="format"><I>Related settings:</I><BR>
     <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
                         hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Specifies where
     item sequence can be found (if any) so that item sequence, or
     differences from genomic sequence, can be drawn when viewing a
@@ -1156,7 +1168,7 @@
 
 <DIV class="baseColorUseCds"><span class="types bed genePred psl"></span>
 <div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
     when viewing a sufficiently small region.  If <code>table</code> is
@@ -1167,7 +1179,7 @@
 <DIV class="baseColorDefault"><span class="types all"></span>
 <div class="format"><code>baseColorDefault
                     &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt;</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Specifies the default drawing mode.
     <code>itemBases</code>, <code>itemCodons</code>, <code>diffBases</code> and
     <code>diffCodons</code> are applicable only if the track has sequence
@@ -1180,6 +1192,7 @@
 
 <DIV class="baseColorTickColor"><span class="types bed bigBed"></span>
 <div class="format"><code>baseColorTickColor &lt;lighterShade/contrastingColor&gt;</code></div>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Choose a <code>contrastingColor</code> (this is often
     white) or <code>lighterShade</code> of color (should be the
     same color as would be chosen for the base text if we were
@@ -1188,14 +1201,14 @@
 
 <DIV class="showDiffBasesAllScales"><span class="types all"></span>
 <div class="format"><code>showDiffBasesAllScales on</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Show bases differences for at all zoom
     levels.</P>
 </DIV>
 
 <DIV class="showDiffBasesMaxZoom"><span class="types all"></span>
 <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Only show bases or codon zoomed difference
     annotations for tracks if currently zoomed at no more than
     <code>basesPerPixel</code> (a float).  <code>showDiffBasesAllScales</code>
@@ -1204,13 +1217,13 @@
 
 <DIV class="showCdsAllScales"><span class="types psl"></span>
 <div class="format"><code>showCdsAllScales</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>show CDS for PSL tracks at all zoom levels</P>
 </DIV>
 
 <DIV class="showCdsMaxZoom"><span class="types psl"></span>
 <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>Not Yet supported by bigBeds</I></P>
+    <P><I>NOT FOR HUBS.  Not Yet supported by bigBeds</I></P>
     <P>Use this setting to limit the display of CDS for psl tracks to only
     if zoomed at no more than <code>basesPerPixel</code> (a float).
     <code>showCdsAllScales</code> should be set and <code>showDiffBasesMaxZoom</code>
@@ -1227,8 +1240,7 @@
     baseColorDefault diffCodons
     baseColorTickColor lighterShade
     showDiffBasesAllScales .
-    showCdsAllScales .
-    </pre>
+    showCdsAllScales .    </pre>
     <P><I>TODO: Explain examples, expand option
     explanation</I></P>
 </DIV>
@@ -1281,8 +1293,7 @@
     <P><B>Example</B>:</P>
     <pre>
     itemImagePath images/myTrackImages png
-    itemBigImagePath http://bigImages.com/myTrackImages jpg
-    </pre>
+    itemBigImagePath http://bigImages.com/myTrackImages jpg    </pre>
     <P>When the user clicks
     on a item named fred, then the item details page will show
     the image <code>images/myTrackImages/fred.png</code> and will also
@@ -1292,9 +1303,9 @@
 
 <DIV class="mafTrack"><span class="types bed"></span>
 <div class="format"><code>mafTrack &lt;trackName&gt;</code></div>
-    <P>By pointing to a
-    multiple alignments track, the item details page will illustrate
-    the differences for that item across a number of species.
+    <P><I>NOT FOR HUBS.</I></P>
+    <P>By pointing to a multiple alignments track, the item details page
+    will illustrate the differences for that item across a number of species.
     </P>
     <P><B>Example:</B></P>
     <pre>   mafTrack multiz46way</pre>
@@ -1314,8 +1325,7 @@
     <P><B>Example:</B></P>
     <pre>
     nextExonText ";Next Match"
-    prevExonText "Previous Match"
-    </pre>
+    prevExonText "Previous Match"    </pre>
 </DIV>
 
 <DIV class="showTopScorers"><span class="types bed bed5FloatScoreWithFdr bed5FloatScore"></span>
@@ -1338,14 +1348,13 @@
 
     type bigBed 6 +
     colorByStrand 255,0,0 0,0,255
-      ...
-    </pre>
+      ...    </pre>
     <P>The type setting for
     a bed and a bigBed are nearly identical.  Here, both type settings
     would define a track with the first 6 standard bed fields defined
     (up to <code>strand</code>) and with additional fields defined
     after those 6.  Notice that plus strand items are colored red,
-    while minus strand items are blue.</P>
+    while minus strand items are blue.</P><BR>
 
     <pre>
     type bigBed 8 .
@@ -1357,8 +1366,7 @@
     scoreMax 900
     color 0,0,255
     minGrayLevel   4
-      ...
-    </pre>
+      ...    </pre>
     <P>A bigBed track with
     the first 8 standard bed fields (through <code>thickEnd</code>),
     and no additional fields.  The '<code>.</code>' is required to tell
@@ -1371,32 +1379,28 @@
     score 900 or more are the darkest blue.  Finally the lightest
     shade set to be not too light with the poorly named <code>minGrayLevel</code>
     setting.  No doubt 4 was chosen after experimentation to see how
-    it actually looks in the Browser.</P>
+    it actually looks in the Browser.</P><BR>
     <pre>
-    type bed 3
-    </pre>
+    type bed 3    </pre>
     <P>The simplest bed
     format, with nothing more than a chromosome and the start and stop
-    coordinates for each bed item.  There is nothing to configure.</P>
+    coordinates for each bed item.  There is nothing to configure.</P><BR>
     <pre>
     type broadPeak
     pValueFilter 2.0
-    pValueFilterLimits 0.0:300.0
-    </pre>
+    pValueFilterLimits 0.0:300.0    </pre>
     <P>This track is a
     essentially a bed 6+3 format dataset, but it has been defined with
     special features for ENCODE.  The pValueFilter applies to a field
     named pValue which is one of the 3 additional fields after the
-    standard 6.
-    </P>
+    standard 6.</P>
 </DIV>
 
 
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
 <H3>wig/bigwig/bedGraph/bamWig:  signal graphing tracks </H3>
-    <P>The second of the two
-    most common track types are those that graph a density signal along
+    <P>Another set of common track types are those that graph a density signal along
     the genome. The graph can be a continuously varying density plot or
     one that displays a density signal in only certain regions.  The
     oldest and simplest of these is of <code>wig</code> format but this type has been
@@ -1441,6 +1445,13 @@
     windowing and even defining values down to the base level.  To be
     clear, "<code>type bigWig</code>" tracks are as versatile as "bedGraphs".  It is
     only the "wig" format that suffers from these limitations.</P>
+    <P>On the other hand the storage density of wig, particularly the fixed step
+    variant, is vastly denser than bedGraph, and for cases where the data is solely
+    meant for display, the 256 levels supported by wig more than suffices.  For
+    single-base or even 10-base level resolutions, bedGraph is generally not practical
+    genome-wide.  Note also that wig's converted to bigWigs do not suffer the reduced
+    precision of wigs loaded directly into the database.   A bigWig based on fixedStep
+    wigs is the best way to represent dense graphs over the genome.</P>
     <P>Note that the limits
     of the "bedGraph" signal are not declared in the type, but are
     declared with 2 separate settings.
@@ -1501,7 +1512,7 @@
 
 <DIV class="spanList"><span class="types wig"></span>
 <div class="format"><code>spanList &lt;s1&gt;[,s2&hellip;]</code></div>
-    <P><I>For wig tracks only.</I>
+    <P><I>NOT FOR HUBS.  For wig tracks only.</I></P>
     Sets the data point span to just be the first span in table or list of spans in
     the loaded table you can find the spans by doing:
     "<code>select span from &lt;table&gt; group by span</code>".
@@ -1547,8 +1558,7 @@
     <P><B>Example:</B></P>
     <pre>
     viewLimits 5:20
-    viewLimitsMax0:100
-    </pre>
+    viewLimitsMax0:100    </pre>
     <P>Any data points that are 20 or above will be
     shown as the peak of the graph.  Any data points that are below 5
     will not even be seen.  Even though the full data range is goes to
@@ -1558,7 +1568,7 @@
 
 <DIV class="wigColorBy"><span class="types wig"></span>
 <div class="format"><code>wigColorBy &lt;bedTable&gt;</code></div>
-    <P>wig type only</P>
+    <P><I>NOT FOR HUBS.  For wig tracks only.</I></P>
     <P>Regions of your
     graphed signal may be highlighted by color.  Use a <code>bed</code> type
     table and "<code>color</code>" settings to shade regions of your <code>wig</code>
@@ -1567,8 +1577,7 @@
     <pre>
     wigColorBy myBed
     color 175,150,128
-    altColor 255,128,0
-    </pre>
+    altColor 255,128,0    </pre>
     <P>The bed type table "myBed" is used to highlight
     regions of graphed signal based upon the scores in that table.
     The table may itself be visible track, or could exist only for the
@@ -1617,8 +1626,7 @@
     <pre>
     yLineOnOff on
     yLineMark 2.5
-    gridDefault on
-    </pre>
+    gridDefault on    </pre>
     <P>The signal is graphed with a default solid line
     at zero, suggesting that any gaps in data should be interpreted as
     zero signal.  There will also be a line at signal height of 2.5,
@@ -1636,8 +1644,7 @@
     maxHeightPixels 100:16:8
     spanList 1
     wigColorBy myBed
-      ...
-    </pre>
+      ...  </pre>
     <P>This wiggle track is
     composed of a MySQL table and binary "wib" files that
     are referenced in the table.  Note that the default windowing
@@ -1645,7 +1652,7 @@
     shown.  Also notice that the span of bases covered by each row in
     the table is identical and can be gathered from the first row in
     the table.  Also notice the wiggle has colors supplied by a bed
-    table.</P>
+    table.</P><BR>
     <pre>
     type bigWig -0.25 37.6
     windowingFunction mean+whiskers
@@ -1656,8 +1663,7 @@
     yLineMark 15
     gridDefault on
     color 128,0,128
-      ...
-    </pre>
+      ...  </pre>
     <P>This bigwig format
     signal is held in a data file (which may be remote).  The more
     informative mean+whiskers windowing function is used by default in
@@ -1666,7 +1672,7 @@
     less than zero, that portion of the signal is not available to be
     displayed.  There will be a line at y=0 and another at y=15, which
     may be a threshold value for this signal.  Finally notice the
-    track will be colored purple.</P>
+    track will be colored purple.</P><BR>
     <pre>
     bedGraph 4
     minLimit 0
@@ -1674,8 +1680,7 @@
     viewLimits 5:8
     viewLimitsMax 0:20
     maxHeightPixels 100:16:8
-      ...
-    </pre>
+      ...  </pre>
     <P>This bedGraph style signal track is composed of
     a MySQL table of items, each with a score defined in the 4<SUP>th</SUP>
     column.  While a wiggle track is usually composed of fixed
@@ -1689,6 +1694,7 @@
 <!-- - - - - - - - GENEPRED settings - - - - - - - -->
 <DIV class="genePred_intro">
 <H3>genePred: Gene models and predictions</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>A variation of the
     "item" based tracks is a special case designed for displaying gene
     models.  Gene models can be represented in "<code>bed 12</code>" or "<code>bigBed 12</code>"
@@ -1756,10 +1762,9 @@
     gClass_snRNA 0,0,255
     itemClassTbl rnaTypes
     itemClassNameColumn rnaName
-    itemClassClassColumn rnaType
-    </pre>
+    itemClassClassColumn rnaType    </pre>
     <P>In this genePred type track, RNA gene models
-    are divided into 3 classes and will colored red, grenn or blue.
+    are divided into 3 classes and will colored red, green or blue.
         The association of named gene models in the genePred table
     with the three classes is defined in the "rnaTypes" table.
     That table carries the rna type in the "rnaType" column and the
@@ -1789,8 +1794,7 @@
     filterBy rnaTypes.rnaType:Class=\
              rRNA|Ribosomal_RNA{color:#FF0000},\
              tRNA|Transfer_RNA{color:#00FF00},\
-             snRNA|Small_Nuclear_RNA{color:#0000FF}
-    </pre>
+             snRNA|Small_Nuclear_RNA{color:#0000FF}    </pre>
     <P>When gene models are
     selected from the genePred table, for display in the Browser,
     their class is also selected from the "rnaTypes" table.  Using the
@@ -1844,8 +1848,7 @@
     <P><B>Example:</B></P>
     <pre>
     track knownGenes
-    idXref kgAlias kgID alias
-    </pre>
+    idXref kgAlias kgID alias    </pre>
     <P>The ID in the name column of the knownGenes
     table is related to the alias found in the kgAlias table.</P>
 </DIV>
@@ -1859,8 +1862,7 @@
     <P><B>Example:</B></P>
     <pre>
     track knownGeneOld5
-    oldToNew kg5ToKg6
-    </pre>
+    oldToNew kg5ToKg6    </pre>
     <P>The older version of UCSC Genes references
     changes that are seen in the newer version.</P>
 </DIV>
@@ -1881,16 +1883,14 @@
             coding{color:#0C0C78},\
             nonCoding{color:#009900},\
             pseudo{color:#FF33FF}
-      ...
-    </pre>
+      ...    </pre>
     <P>Gene model track
     with defined classes and the option to filter by the color coded
-    classes.  Note the base level coloring option.</P>
+    classes.  Note the base level coloring option.</P><BR>
     <pre>
     type genePred . mrna
     url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
-    urlLabel AceView Gene Summary:
-    </pre>
+    urlLabel AceView Gene Summary:    </pre>
     <P>This gene prediction
     track has associated representative mRNAs found in  the "mrna"
     table. There is also an "AceView Gene Summary" url
@@ -1904,9 +1904,9 @@
     <P>The bam format is an
     indexed compressed data format for sequence alignments.  It is ideal
     for remote access of high-throughput sequence tags and is a native
-    output format for some HTS aligners.  The format of bam data is data
-    file pairs, with the index in a separate file.  These are frequently
-    remote datasets, not residing at UCSC.  Please refer to
+    output format for some high throughput sequencing (HTS) aligners.
+    The format of bam data is data file pairs, with the index in a separate file.
+    These are frequently remote datasets, not residing at UCSC.  Please refer to
     <A HREF="http://genome.ucsc.edu/goldenPath/help/bam.html">
     http://genome.ucsc.edu/goldenPath/help/bam.html</A>
     and <A HREF="http://samtools.sourceforge.net/">http://samtools.sourceforge.net/</A>
@@ -1927,11 +1927,26 @@
 <div class="format"><I>Related settings:</I><BR>
     <code>bamColorMode &lt;strand/gray/tag/off&gt;</code></div>
     <P>There are numerous ways to color bam tracks
-    to highlight certain aspects if the data.  All of these are
-    user configurable.  By default, mismatched bases are
-    highlighted in bright red, and  alignments to the plus strand
-    are colored dark blue and minus strand are dark red.
-    </P>
+    to highlight certain aspects of the data.  All of these are
+    user configurable.</P>
+    <P>Possible settings:</P>
+    <UL>
+    <LI><code>strand</code> DEFAULT: In "color by strand", mismatched bases are highlighted in
+    <B style="color:#FF0000;">bright red</B>.  Alignments on the reverse strand are
+    colored <B style="color:#880000;">dark red</B>, alignments on the forward strand are
+    colored <B style="color:#000088;">dark blue</B>.</LI>
+    <LI><code>gray</code>: In "grayscale", items are shaded according to the chosen method
+    as specified by <code>bamGrayMode</code>: alignment quality, base qualities, or unpaired
+    ends.</LI>
+    <LI><code>tag</code>: Colors specified in "user-defined tags". SAM/BAM may
+    include user-defined tags, whose names begin with X, Y or Z and include one other letter
+    or number. The user-defined tag named here specifies red, green and blue (RGB) intensities
+    as a zero-terminated string (tag type Z) containing comma-separated triples of numbers
+    from 0-255. For example, if a SAM/BAM record includes the tag YC:Z:255,0,0, then the
+    item is colored red; YC:Z:0,0,255 makes the item blue. By default, the tag is "YC" unless
+    changed using the <code>bamColorTag</code> setting.</LI>
+    <LI><code>off</code>: No additional coloring.</LI>
+    </UL>
 </DIV>
 
 <DIV class="bamGrayMode"><span class="types bam"></span>
@@ -1939,14 +1954,20 @@
     <code>bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
     <code>aliQualRange &lt;min:max&gt;</code><BR>
     <code>baseQualRange &lt;min:max&gt;</code></div>
-    <P>You can set the default coloring to
-    gray-scale instead, and highlight either alignment quality,
-    base quality or whether there are unpaired tags. If
-    highlighting by quality, use the additional settings to declare
-    the most useful range to highlight.  Since coloring is user
-    configurable, defaults for the ranges must be used and are 0:99
-    for alignment and 0:40 for base quality.  Refer to SAM format
-    details for a discussion of these values.</P>
+    <P>If you set <code>bamColorMode</code> to <code>gray</code>, you
+    can highlight either:</P>
+    <UL>
+    <LI><code>aliQual</code> DEFAULT: Items' "alignment qualities" are
+    shaded on a scale of 0 (lightest) to 99 (darkest). Use <code>aliQualRange</code>
+    to provide a default range.</LI>
+    <LI><code>baseQual</code>: "Base qualities" are shaded on a
+    scale of 0 (lightest) to 40 (darkest). Use <code>baseQualRange</code>
+    to provide a default range.</LI>
+    <LI><code>unpaired</code>: When "unpaired ends" is selected, items that
+    were paired in sequencing but whose mate was not mapped are colored gray,
+    while singletons and properly paired items are black.</LI>
+    </UL>
+    <P>Refer to SAM format details for a discussion of these values.</P>
 </DIV>
 
 <DIV class="bamColorTag"><span class="types bam"></span>
@@ -1954,38 +1975,37 @@
     <P>You can also use RGB data associated with
     individual tags within the bam file itself.  Refer to  the SAM
     documentation to understand how the RGB values are included.
-    The <code>bamColorMode</code> value refers to SAM nomenclature and
-    defaults to the standard "<code>YC</code>".
+    When the <code>bamColorMode</code> is set to <code>tag</code> the default
+    tag used is the standard "<code>YC</code>".  You can override that default
+    with this setting.
     </P>
 </DIV>
 
 <DIV class="noColorTag"><span class="types bam"></span>
 <div class="format"><code>noColorTag .</code></div>
-    <P>To prevent the Browser from offering the
-    option to color tags by an embedded RGB value, iclude the
+    <P>These bam coloring options are all user configurable within the browser.  If your
+    bam dataset contains no color tags, that option would make no sense.  To prevent the
+    Browser from offering the option to color tags by an embedded RGB value, include this
     setting to specifically block it.</P>
     <P><hr class="example" /><B>Examples:</B></P>
     <pre>
     bamColorMode strand
-    noColorTag
-    </pre>
+    noColorTag    </pre>
     <P>Sets bam coloring
     to the standard color by strand alignment.  At the same time,
     the bam track will not offer the option to color the tags by
-    RGB values, perhaps because this bam has no RGB values.</P>
+    RGB values, perhaps because this bam has no RGB values.</P><BR>
     <pre>
     bamColorMode gray
     bamGrayMode aliQual
-    aliQualRange 20:80
-    </pre>
+    aliQualRange 20:80    </pre>
     <P>These settings
     will highlight tags by alignment quality score.  If the score
     is at 80 or above, then shade it black, but if it is less than
-    20, then shade it the very lightest gray.</P>
+    20, then shade it the very lightest gray.</P><BR>
     <pre>
     bamColorMode tag
-    bamColorTag YC
-    </pre>
+    bamColorTag YC    </pre>
     <P>The bam file includes RGB values in the YC
     field which will be used to color tags.</P>
 </DIV>
@@ -1995,7 +2015,7 @@
     <P>Any bam tag can be
     displayed in the details page by clicking on it in the Browser
     image.  The details include quality scores by default.  If these
-    scores are not relevant for your particular bam or you may exlude
+    scores are not relevant for your particular bam or you may exclude
     them from the details page with this setting.</P>
     <P><B>Example:</B></P>
     <pre>   bamSkipPrintQualScore .</pre>
@@ -2033,8 +2053,7 @@
     baseColorUseSequence genbank
     indelDoubleInsert on
     indelQueryInsert on
-    indelPolyA on
-    </pre>
+    indelPolyA on    </pre>
 </DIV>
 
 <DIV class="minAliQual"><span class="types bam"></span>
@@ -2067,8 +2086,7 @@
     <P><hr class="example" /><B>Example:</B></P>
     <pre>
     pairedEndsByName .
-    pairSearchRange 5000
-    </pre>
+    pairSearchRange 5000    </pre>
 </DIV>
 
 <DIV class="showNames"><span class="types bam"></span>
@@ -2096,8 +2114,7 @@
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     maxWindowToDraw 10000
-      ...
-    </pre>
+      ...    </pre>
     <P>The bam data is held
     in a local file.  The bigDataUrl could have been an internet
     accessible URL to a remote file.  In addition to the datafile, the
@@ -2109,6 +2126,8 @@
 <!-- - - - - - - - PSL settings - - - - - - - -->
 <DIV class="psl_intro">
 <H3>psl: sequence alignments</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.
+    Will likely add hub support but it could take a year.</I></P>
     <P>Another alignment
     format is PSL lines, which are typically taken from files generated
     by BLAT or psLayout.  For further information about this format
@@ -2145,7 +2164,7 @@
 <DIV class="colorChromDefault"><span class="types psl"></span>
 <div class="format"><code>colorChromDefault off</code></div>
     <P>For psl tracks of
-    sub-type <code>xeno</code>, the alignmens may be colored by the
+    sub-type <code>xeno</code>, the alignments may be colored by the
     location in the other species.  The default of coloring by
     chromosome is on when the other species is named in the <code>type</code>
     setting.  Use this setting to not color by chromosome unless the
@@ -2155,8 +2174,7 @@
     <pre>
     type psl xeno loxAfr1
     otherDb loxAfr1
-    colorChromDefault off
-    </pre>
+    colorChromDefault off    </pre>
 </DIV>
 
 <DIV class="pred"><span class="types psl"></span>
@@ -2171,7 +2189,7 @@
 <DIV class="pslSequence"><span class="types psl"></span>
 <div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
     <P>This setting is for
-    psl tracks that also sequence loaded.  Set pslSequence to <code>all</code>
+    psl tracks that also have sequence loaded.  Set pslSequence to <code>all</code>
     to show nucleotide labels on all bases.  Set this to <code>differences</code>
     to label only base differences and set this to <code>no</code> to
     allow the user to select for themselves between the other two
@@ -2209,8 +2227,7 @@
     transMapGene hgFixed.transMapGeneUcscGenes
     transMapTypeDesc UCSC Gene
     baseColorUseCds table hgFixed.transMapGeneUcscGenes
-    baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes
-    </pre>
+    baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes    </pre>
     <P>Note that several of the named tables are in
     <code>hgFixed</code> which is a database containing tables that
     are shared by multiple species and assemblies.  Also notice that
@@ -2241,31 +2258,28 @@
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-      ...
-    </pre>
+      ...    </pre>
     <P>In this example of
     retroposed genes, mature mRNA has been aligned to the genome.
     Notice there is a ucscRetroInfo table that describes the
     non-transposed gene location.  Also notice the use of the
-    baseColor settings for coloring the coding sequence (CDS).</P>
+    baseColor settings for coloring the coding sequence (CDS).</P><BR>
     <pre>
     track protBlat
     color 0,100,0
     altColor 255,240,200
     type psl protein
-      ...
-    </pre>
+      ...    </pre>
     <P>In this example of
     protein sequence blat results, the color of matching sequence is
     green, while indels (in this case introns) are highlighted with
-    yellow.</P>
+    yellow.</P><BR>
     <pre>
     track rgdEst
     spectrum on
     color 12,12,120
     type psl est
-      ...
-    </pre>
+      ...    </pre>
     <P>This expressed
     sequence tag example will have colored alignments that are graded
     by a score thanks to "<code>spectrum on</code>".  Though psl tracks do not have
@@ -2273,7 +2287,7 @@
     generated based upon matches and mismatches in the alignment.  The
     shading is even more subtle in that the weight given to inserts
     varies depending upon whether the alignment is to the same or a
-    different species.</P>
+    different species.</P><BR>
     <pre>
     track blastzTetNig1
     color 0,0,0
@@ -2281,8 +2295,7 @@
     spectrum on
     type psl xeno tetNig1
     otherDb tetNig1
-      ...
-    </pre>
+      ...    </pre>
     <P>This psl track is for foreign species or "xeno"
     alignments, in this case the sequence reads of a species of fish
     aligned to human.</P>
@@ -2292,6 +2305,7 @@
 <!-- - - - - - - - CHAIN/NETALIGN settings - - - - - - - -->
 <DIV class="chain_intro">
 <H3>chain and netAlign: paired species alignments</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>While "<code>chain</code>" and
     "<code>netAlign</code>" formats are different, they often are paired to show two
     different views of the same data.
@@ -2400,8 +2414,7 @@
     <P><B>Example:</B></P>
     <pre>
     chainNormScoreAvailable yes
-    chainColor Normalized Score
-    </pre>
+    chainColor Normalized Score    </pre>
 </DIV>
 
 <DIV class="matrix"><span class="types chain netAlign bed psl"></span>
@@ -2435,16 +2448,10 @@
     matrix 16 91,-114,-31,-123,\
                  -114,100,-125,-31,\
                  -31,-125,100,-114,\
-                 -123,-31,-114,91
-    </pre>
+                 -123,-31,-114,91    </pre>
     <P>Here the <code>$matrix</code> token found in the
     chainNet.html file will be replaced by the following matrix:</P>
     <!-- Note that this table is within "settingsTable" so CSS must be defined here -->
-    <STYLE TYPE="text/css">
-    TABLE.matrixTable { text-align:RIGHT; width:242px; border-collapse:separate;
-                        border-spacing:0px; empty-cells:show; }
-    TABLE.matrixTable TH { text-align:center; color:black; background-color:#FFFEE8; width:34px; }
-    </STYLE>
     <TABLE BORDER=1 CELLPADDING=7 class="matrixTable">
         <TR><TH></TH><TH>A</TH><TH>C</TH><TH>G</TH><TH>T</TH></TR>
         <TR><TH>A</TH><TD>91</TD><TD>-114</TD><TD>-31</TD><TD>-123</TD></TR>
@@ -2477,8 +2484,7 @@
     chainMinScore 3000
     chainLinearGap medium
     html chainNet
-      ...
-    </pre>
+      ...    </pre>
     <P>Both the chain and netAlign tracks above are
     for alignments of the query species/assembly <code>rheMac2</code>
     against the target species determined by the database this trackDb
@@ -2494,6 +2500,7 @@
 <!-- - - - - - - - WIGMAF settings - - - - - - - -->
 <DIV class="wigMaf_intro">
 <H3>wigMaf: Multiple alignments</H3>
+    <P><I>NOT (currently) FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>Multiple pairwise
     alignments can be displayed with "<code>wigMaf</code>" type tracks.  Tracks of
     this type may actually be composed of multiple tables and data files.
@@ -2510,7 +2517,7 @@
 <div class="format"><code>type wigMaf &lt;minVal&gt; &lt;maxVal&gt;</code></div>
     <P>A wigMaf type track
     is composed both of MAF format alignment (loaded with hgLoadMaf).
-    The track may optionally one or more conservation signals.  The
+    The track may optionally include one or more conservation signals.  The
     signals must be within the same data range defined with the min
     and max values in the type setting.
     </P>
@@ -2520,7 +2527,7 @@
 <DIV class="frames"><span class="types wigMaf"></span>
 <div class="format"><code>frames &lt;table&gt;</code></div>
     <P>A wigMaf track can
-    display gene codon translation the reading frame may differ
+    display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
     viewing the data.</P>
@@ -2571,8 +2578,7 @@
     <P><B>Example:</B></P>
     <pre>
     speciesCodonDefault hg19
-    frames myCodonFrames
-    </pre>
+    frames myCodonFrames    </pre>
 </DIV>
 
 <DIV class="speciesDefaultOff"><span class="types wigMaf"></span>
@@ -2621,8 +2627,7 @@
     speciesGroups Mammal Vertebrate
     sGroup_Mammal mm9 rn4
     sGroup_Vertebrate galGal2 fr1 danRer1
-    speciesUseFile speciesLists/conserved8Way.txt
-    </pre>
+    speciesUseFile speciesLists/conserved8Way.txt    </pre>
     <P>Choose one of these three alternatives to
     display species.</P>
 </DIV>
@@ -2673,8 +2678,7 @@
     <P><B>Example:</B></P>
     <pre>
     wiggle phastCons8wayMammal Mammal Placental_Mammal \
-           phastCons8way Vertebrate Vertebrate
-    </pre>
+           phastCons8way Vertebrate Vertebrate    </pre>
 </DIV>
 
 <DIV class="wigMaf_example"><span class="types wigMaf"></span>
@@ -2692,8 +2696,7 @@
     maxHeightPixels 100:16:8
     viewLimits 0.5:0.9
     viewLimitsMax 0.0:1.0
-      ...
-    </pre>
+      ...    </pre>
     <P>This 8-way
     multi-alignment for the hg17 human assembly is defined to include
     a summary table, tree image and one wiggle table, containing the
@@ -2704,7 +2707,7 @@
     well, which will make for a cleaner display. Since there is a
     conservation wiggle, there are additional settings for that
     signal.
-    </P>
+    </P><BR>
     <pre>
     track multiz46way
     type wigMaf 0.0 1.0
@@ -2719,8 +2722,7 @@
     sGroup_Vertebrate macEug1 monDom5 ornAna1 &hellip;
     speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 &hellip;
     pairwiseHeight 10
-      ...
-    </pre>
+      ...    </pre>
     <P>For this wigMaf
     track, there is no wiggle defined.  This is because, in this real
     world hg19 example, the several conservations signals to be
@@ -2737,6 +2739,7 @@
 <!-- - - - - - - - EXPRATIO settings - - - - - - - -->
 <DIV class="expRatio_intro">
 <H3>expRatio: Microarray expression data</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>Though
     many microarray experiments have been superseded by high-throughput
     sequencing (e.g. ChIP-seq) experiments, plenty of microarray tracks
@@ -2755,6 +2758,8 @@
     for information on how to prepare microarray tracks.  In particular,
     that document describes the format of the groupings.ra file that
     must be associated with an expRatio track.</P>
+    <P>Note: The <code>expRatio</code> data formats are reused for the
+    <code>factorSource</code> type.</P>
 </DIV>
 
 <DIV class="expRatio"><span class="types expRatio"></span>
@@ -2792,8 +2797,7 @@
     <P><B>Example:</B></P>
     <pre>
     expScale 3.0
-    expStep 0.5
-    </pre>
+    expStep 0.5    </pre>
 </DIV>
 
 <DIV class="expTable"><span class="types expRatio bed"></span>
@@ -2801,8 +2805,8 @@
     <P>This setting holds
     the name of a table to be found in the common <code>hgFixed</code>
     database that contains names of experiments, etc.</P>
-    <P><I>TODO: Don't know where this gets read
-    in C code???</I></P>
+    <!-- <P><I>TODO: Don't know where this gets read
+    in C code???</I></P> -->
 </DIV>
 
 <DIV class="groupings"><span class="types expRatio"></span>
@@ -2828,8 +2832,7 @@
     expStep 0.5
     expTable sestanBrainAtlasExps
     groupings sestanBrainAtlasGroups
-      ...
-    </pre>
+      ...    </pre>
     <P>This microarray dataset refers to groupings
     defined in the "<code>gnfHumanAtlas2Groups</code>" stanza of the
     makeDb/hgCgiData/Human/microarrayGroups.ra  file.
@@ -2872,8 +2875,7 @@
     type vcfTabIx
     bigDataUrl http://myorg.edu/mylab/myVcf.gz
     maxWindowToDraw 3000000
-      ...
-    </pre>
+      ...    </pre>
     <P>This VCF track has its data in a remote file
     named "<code>myVcf.gz</code>".  That file is paired with an index named
     "<code>myVcf.gz.tbi</code>" and found in the same remote location.
@@ -2884,6 +2886,7 @@
 <!-- - - - - - - - PGSNP settings - - - - - - - -->
 <DIV class="pgSnp_intro">
 <H3>pgSnp: Personal Genome SNP format</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>This format is for
     displaying SNPs from personal genomes. It is the same as is used for
     the Genome Variants and Population Variants tracks.  Please refer to
@@ -2919,8 +2922,7 @@
     <pre>
     track mySnps
     type pgSnp
-      ...
-    </pre>
+      ...    </pre>
     <P>A Personal Genome SNPs track displayed single
     nucleotide polymorphisms from the reference genome.
     </P>
@@ -2930,6 +2932,7 @@
 <!-- - - - - - - - ALTGRAPHX settings - - - - - - - -->
 <DIV class="altGraphX_intro">
 <H3>altGraphX: Alternate splicing gene model tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Gene models with
     alternate splicing can be displayed in the Browser with this type of
     track.  It supports no trackDb settings beyond the common ones.
@@ -2952,8 +2955,7 @@
     url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&amp;tromer=$$
     urlLabel SIB link:
     idInUrlSql select name from sibTxGraph where id=%s
-      ...
-    </pre>
+      ...    </pre>
     <P>The Swiss Institute of Biology's
     alternative splicing track provides an external link via the <code>url</code>
     setting.  But the actual "tromer" term in the value
@@ -2966,6 +2968,7 @@
 <!-- - - - - - - - BEDDETAIL settings - - - - - - - -->
 <DIV class="bedDetail_intro">
 <H3>bedDetail: Text extended bed track</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is an extension of
     BED format. BED detail uses the first 4 to 12 columns of BED format,
     plus 2 additional fields that are used to enhance the track details
@@ -2994,8 +2997,7 @@
     type bedDetail 14
     itemRgb on
     url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
-      ...
-    </pre>
+      ...    </pre>
     <P>This bedDetail contains details for each item
     formatted for HTML display.  In addition each item has an "id" as
     distinct from the "name" and that id is used in the outside link
@@ -3006,6 +3008,7 @@
 <!-- - - - - - - - CLONEPOS settings - - - - - - - -->
 <DIV class="clonePos_intro">
 <H3>clonePos: Genome coverage tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that is only used for showing the coverage in the human
     genome.  It supports no trackDb settings beyond the common ones.</P>
@@ -3026,8 +3029,7 @@
     longLabel Clone Coverage/Fragment Position
     type clonePos
     altColor 180,180,180
-      ...
-    </pre>
+      ...    </pre>
     <P>The Coverage track for the human genome will
     vary in color between black and light gray, based upon the cloned
     sequence coverage depth.</P>
@@ -3037,6 +3039,7 @@
 <!-- - - - - - - - CTGPOS settings - - - - - - - -->
 <DIV class="ctgPos_intro">
 <H3>ctgPos: Physical map contigs tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that is used for "physical map contigs" on
     the human genome.  It supports no trackDb settings beyond the common
@@ -3057,8 +3060,7 @@
     shortLabel GRC Map Contigs
     type ctgPos
     url none
-      ...
-    </pre>
+      ...    </pre>
     <P>The GCR Map Contigs track would normally
     generate a URL to NCBI, but in this case, the URL has been
     explicitly blocked.</P>
@@ -3068,6 +3070,7 @@
 <!-- - - - - - - - DOWNLOADSONLY settings - - - - - - - -->
 <DIV class="downloadsOnly_intro">
 <H3>downloadsOnly: Specialized track that contains only downloadable files</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>The ENCODE tracks all
     have a special directory and CGI support for downloading files.  This
     can be very helpful for organizing access to the often very large
@@ -3112,8 +3115,7 @@
                 dateSubmitted=Submitted \
                 dateUnrestricted=RESTRICTED&lt;BR&gt;Until
     wgEncode 1
-      ...
-    </pre>
+      ...    </pre>
     <P>The Browser will not provide visualization of
     this track but will provide access to downloading any number of
     files organized into a single group.  The downloads page will
@@ -3128,6 +3130,7 @@
 <!-- - - - - - - - ENCODEFIVEC settings - - - - - - - -->
 <DIV class="encodeFiveC_intro">
 <H3>encodeFiveC: Five C Chromatin interaction track</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that wa used for displaying long distance
     chromatin/chromatin interaction evidence.  Essentially a "<code>bed</code>"
@@ -3166,8 +3169,7 @@
     color 200,100,0
     interTable encodeUw5cGM06990dS9013DhsInter
     interTableKind TSS
-      ...
-    </pre>
+      ...    </pre>
     <P>This Five C interactions track will be
     displayed as colored items.  The associated chromatin regions are
     drawn from a second table.  The kind of associations are
@@ -3178,10 +3180,12 @@
 <!-- - - - - - - - FACTORSOURCE settings - - - - - - - -->
 <DIV class="factorSource_intro">
 <H3>factorSource: Combined items tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Factor source is not a
     group track, but a track that is made from a group of sources, which
     may themselves be Browser tracks.  This is a specialized type of
-    "item" based track of "<code>bed 15</code>" format.  Its purpose is to
+    "item" based track of "<code>bed 15</code>" format, the same format
+    used for type <code>expRatio</code>.  Its purpose is to
     display transcription factors as detected in multiple cell lines,
     though it might be adaptable for any type of item that might pile up
     into overlapping locations and will belong to one of several
@@ -3239,8 +3243,7 @@ type factorSource
 sourceTable myCellLines
 inputTrackTable myCellLineAssociations
 inputTableFieldDisplay cellType treatment lab
-    ...
-</pre>
+    ...</pre>
 <P>This track will show transcription factor (TF)
 binding evidence found in multiple cell lines.  Each item will be
 for a one particlular TF, and also all the cell lines that show
@@ -3256,6 +3259,7 @@ for each cell associated with the particular TF binding location.</P>
 <!-- - - - - - - - RMSK settings - - - - - - - -->
 <DIV class="rmsk_intro">
 <H3>rmsk: Repeat masking tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that is only used for the repeat masking track.  For
     completeness it is being briefly described here.  These tracks are
@@ -3281,8 +3285,7 @@ for each cell associated with the particular TF binding location.</P>
     spectrum on
     type rmsk
     maxWindowToDraw 10000000
-      ...
-    </pre>
+      ...    </pre>
     <P>The repeat masker track will have individual
     repeat items shaded by a measure of how exact a repeated element
     is withing the stretch of repetition. This track is restricted to
@@ -3295,6 +3298,7 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="snake_intro">
 <H3>snake: Self referencing alignment tracks -
     <I>EXPERIMENTAL</I></H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that shows the snaking course of bi-directional and
     overlapping alignments.  This format can help illustrate inversion
@@ -3329,8 +3333,7 @@ for each cell associated with the particular TF binding location.</P>
     color 100,50,0
     altColor 255,240,200
     spectrum on
-      ...
-    </pre>
+      ...    </pre>
     <P>This snake track will illustrate chromosome
     rearrangements that have occurred on the mouse mm9 genome as seen
     when it is aligned to the human genome.
@@ -3341,6 +3344,7 @@ for each cell associated with the particular TF binding location.</P>
 <!-- - - - - - - - GROUP settings - - - - - - - -->
 <DIV class="group_intro">
 <H3>Predefined major track groupings</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>The simplest grouping:</P>
 </DIV>
 
@@ -3361,6 +3365,8 @@ for each cell associated with the particular TF binding location.</P>
     <LI><code>neandertal</code> - "Neandertal Assembly and Analysis"</LI>
     <LI><code>varRep</code> - "Variation and Repeats"</LI>
     </UL>
+    <P>If no group is set for a built-in track, then the track will end up
+    in the Experimental Tracks section at the bottom.</P>
 </DIV>
 
 <DIV class="group_example"><span class="types group"></span>
@@ -3368,8 +3374,7 @@ for each cell associated with the particular TF binding location.</P>
     <pre>
     track myTrack
     group regulation
-      ...
-    </pre>
+      ...    </pre>
 </DIV>
 
 
@@ -3378,10 +3383,15 @@ for each cell associated with the particular TF binding location.</P>
 <H3>Supertracks (AKA Folders)</H3>
     <P>The next level of
     hierarchical groupings is called the superTrack.  Think of the
-    superTrack as a folder that holds other tracks.   Currently only one
-    level of these superTrack folders is allowed.  The children of
-    superTracks inherit only "group" membership from their
-    superTrack parent.</P>
+    superTrack as a folder that holds other tracks.  Currently only one
+    level of these superTrack folders is allowed.  Generally the subtracks
+    of a supertrack are not all of the same type.  If all the children are
+    of the same type, often it is better to use the compositeTrack grouping
+    described below.  If all of the children are wig or bigWig tracks, it may
+    be best to use "<code>container muitiWig</code>."  Supertracks can contain
+    composite tracks and container multiWigs, but not vice versa. With superTracks,
+    compositeTracks, and container multiWigs, children will inherit the settings
+    from their parents, but can override their parent settings in their own stanzas.</P>
 </DIV>
 
 <DIV class="superTrack"><span class="types superTrack"></span>
@@ -3424,8 +3434,7 @@ for each cell associated with the particular TF binding location.</P>
         track mySecondTrack
         parent myFolder
         visibility none
-          ...
-    </pre>
+          ...    </pre>
     <P>The superTrack called "My Folder"
     contains two children.  All will be grouped under the
     "regulation".  Notice that the first track is by
@@ -3441,7 +3450,7 @@ for each cell associated with the particular TF binding location.</P>
     another level of hierarchy and are meant to group very similar tracks
     (called "subtracks") together such that they can all
     share the same configuration settings.  In its simplest form a
-    composite holds tracks all of the same type (such as bigWig).
+    composite holds tracks all of the same type (such as bigBed).
     Initially, the entire set of tracks will be configured the same way.
     Often not all subtracks will be visible by default, however, but all
     that are visible will have the same mode (e.g. <code>dense</code>)
@@ -3494,7 +3503,7 @@ for each cell associated with the particular TF binding location.</P>
 
 <DIV class="centerLabelsDense"><span class="types compositeTrack"></span>
 <div class="format"><code>centerLabelsDense &lt;off/on&gt;</code></div>
-    <P><I>TODO: Should be made obsolete </I>
+    <P><I>TODO: Should be made obsolete, with subtracks always sharing one label.</I>
     </P>
     <P>When a set of subtracks are shown together in
     the Browser dense mode, they will all share a single center label
@@ -3524,7 +3533,7 @@ for each cell associated with the particular TF binding location.</P>
     type bigwig 0 1.0
     viewLevel 0.0:0.2
     allButtonPair on
-    dragAndDrop off
+    dragAndDrop on
       ...
 
         track myFirstSubtrack
@@ -3533,15 +3542,14 @@ for each cell associated with the particular TF binding location.</P>
 
         track mySecondSubtrack
         parent myComposite
-          ...
-    </pre>
+          ...    </pre>
     <P>The composite with two subtracks shown.  All
     subtracks are of type bigwig and all have a default viewLevel of 0
     to 0.2.  Notice the first subtrack is checked by default, but the
     second is not.  But the user will have an easy pair of buttons to
     select all subtracks, or deselect them all and then check the ones
-    desired.  Note that reordering of subtracks by dragging them is
-    not allowed on the composite configuration page.</P>
+    desired.  Reordering of subtracks by dragging them on the composite
+    configuration page is allowed.</P>
 </DIV>
 
 
@@ -3591,7 +3599,7 @@ for each cell associated with the particular TF binding location.</P>
     </P>
     <P>It is recommended that the long subGroups
     setting is declared using the '<code>\</code>' line continuation
-    character for easier reading.</P>
+    character for easier reading, since subgroup settngs often get large.</P>
 </DIV>
 
 <DIV class="subGroups"><span class="types superGroups"></span>
@@ -3650,7 +3658,7 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="controlledVocabulary"><span class="types superGroups"></span>
 <div class="format"><code>controlledVocabulary &lt;pathToFile&gt; &lt;gTag#=mdbVar&gt;
                             [gTag#=mdbVar &hellip;]</code></div>
-    <P><I>Currently ENCODE Only</I></P>
+    <P><I>NOT FOR HUBS. Currently ENCODE Only</I></P>
     <P>In ENCODE, subgroups
     are often metadata terms declared in the metaDb table and defined
     in the "controlled vocabulary" which is currently
@@ -3681,8 +3689,7 @@ for each cell associated with the particular TF binding location.</P>
 
 <DIV class="fileSortOrder"><span class="types superGroups downloadsOnly"></span>
 <div class="format"><code>fileSortOrder &lt;var=val&gt; [var=val ...]</code></div>
-    <P><I>Currently ENCODE
-    Only</I></P>
+    <P><I>NOT FOR HUBS. Currently ENCODE Only</I></P>
     <P>Some composite track sets have their own
     directories of downloadable files and a special CGI for accessing
     those files.  In order to see the CGI interface for the download
@@ -3731,8 +3738,7 @@ for each cell associated with the particular TF binding location.</P>
         track myFirstSubtrack
         parent myComposite on
         subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
-          ...
-    </pre>
+          ...    </pre>
     <P>The composite with
     one subtrack and three subgroups is shown.  Notice that the
     dimensions setting declares X and Y dimensions so those will be in
@@ -3799,8 +3805,8 @@ for each cell associated with the particular TF binding location.</P>
     <P>The "view" (AKA
     "multi-view") organization is typically done when the
     same basic data is stored in multiple formats and granularities.  For
-    example views may include, raw sequence tags (type bam), then signals
-    representing pile ups of aligned tags (type bigWig), then peaks (type
+    example views may include, short read sequence alignments (type bam), then signals
+    representing pile ups of aligned reads (type bigWig), then peaks (type
     bigBed) that are called where the evidence of experimental result is
     deemed significant.  These three "views" of the same
     experimental data can be more informatively seen as a cohesive set
@@ -3924,8 +3930,7 @@ for each cell associated with the particular TF binding location.</P>
             track myFirstSubtrack
             parent myViewPeaks on
             subGroups cell=CD14 ab=H3K04ME3 view=PK
-              ...
-    </pre>
+              ...    </pre>
     <P>The composite has two views, one of which is
     shown, along with a single subtrack belonging to that view.
     Notice that the view does not participate in the dimensions
@@ -4038,8 +4043,7 @@ for each cell associated with the particular TF binding location.</P>
         track myFirstBigWig
         parent myMultiWig
         color 120,235,204
-          ...
-    </pre>
+          ...    </pre>
     <P>This container is for a transparent overlay of
     signal tracks with 2 subtracks shown.  Notice that the tracks are
     of type "<code>bigWig</code>", though the first subtrack is a <code>wig</code>.
@@ -4064,6 +4068,7 @@ for each cell associated with the particular TF binding location.</P>
 <!-- - - - - - - - CUSTOM settings - - - - - - - -->
 <DIV class="customTracks_intro">
 <H3>Custom Tracks</H3>
+    <P><I>NOT FOR HUBS.</I></P>
     <P>Custom tracks are
     tracks that get loaded into the Browser through the hgCustom CGI.
     Unlike locally hosted tracks, or even Data Hub tracks, they do not

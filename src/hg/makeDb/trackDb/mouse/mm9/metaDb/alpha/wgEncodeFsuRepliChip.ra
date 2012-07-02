@@ -13,6 +13,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002962
+expId 2962
 fileName wgEncodeFsuRepliChipCh12FRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -37,6 +39,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002962
+expId 2962
 fileName wgEncodeFsuRepliChipCh12FRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -60,6 +64,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002962
+expId 2962
 fileName wgEncodeFsuRepliChipCh12FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -84,6 +90,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002962
+expId 2962
 fileName wgEncodeFsuRepliChipCh12FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -109,6 +117,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002971
+expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -133,6 +143,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002971
+expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -157,6 +169,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002971
+expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -182,6 +196,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002971
+expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -207,6 +223,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002972
+expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -231,6 +249,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002972
+expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -255,6 +275,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002972
+expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -280,6 +302,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002972
+expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -305,6 +329,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002963
+expId 2963
 fileName wgEncodeFsuRepliChipEs46cMDifff6dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -329,6 +355,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002963
+expId 2963
 fileName wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -354,6 +382,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002964
+expId 2964
 fileName wgEncodeFsuRepliChipEs46cMRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -378,6 +408,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002964
+expId 2964
 fileName wgEncodeFsuRepliChipEs46cMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -403,6 +435,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002965
+expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -427,6 +461,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002965
+expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -451,6 +487,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002965
+expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -476,6 +514,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002965
+expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -501,6 +541,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002966
+expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -525,6 +567,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002966
+expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -549,6 +593,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002966
+expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -574,6 +620,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002966
+expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -599,6 +647,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002967
+expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -623,6 +673,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002967
+expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -647,6 +699,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002967
+expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -672,6 +726,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002967
+expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -697,6 +753,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002976
+expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -720,6 +778,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002976
+expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -742,6 +802,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002976
+expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -765,6 +827,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002976
+expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -789,6 +853,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002968
+expId 2968
 fileName wgEncodeFsuRepliChipEsd3MRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -813,6 +879,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002968
+expId 2968
 fileName wgEncodeFsuRepliChipEsd3MRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -837,6 +905,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002968
+expId 2968
 fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -862,6 +932,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002968
+expId 2968
 fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -887,6 +959,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002977
+expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -910,6 +984,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002977
+expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -932,6 +1008,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002977
+expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -955,6 +1033,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002977
+expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -979,6 +1059,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002978
+expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1002,6 +1084,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002978
+expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1024,6 +1108,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002978
+expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1047,6 +1133,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002978
+expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1071,6 +1159,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002969
+expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1095,6 +1185,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002969
+expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1119,6 +1211,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM002969
+expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1144,6 +1238,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002969
+expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1169,6 +1265,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002970
+expId 2970
 fileName wgEncodeFsuRepliChipEstt2MRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1183,6 +1281,32 @@ subId 6809
 treatment None
 view RawData
 
+metaObject wgEncodeFsuRepliChipEstt2MRawDataRep2
+objType file
+age E0
+attic auxSup
+cell ES-TT2
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-18
+dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002970
+expId 2970
+fileName wgEncodeFsuRepliChipEstt2MRawDataRep2.pair.tar.gz
+grant Gilbert
+lab FSU-m
+labExpId ES-TT2_R2
+md5sum e197504f60bcb0b627eb79467d174ba3
+platform GPL9156
+project wgEncode
+replicate 2
+sex M
+strain B6CBAF1/J
+subId 7307
+treatment None
+view RawData
+
 metaObject wgEncodeFsuRepliChipEstt2MWaveSignalRep1
 objType table
 age E0
@@ -1193,6 +1317,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002970
+expId 2970
 fileName wgEncodeFsuRepliChipEstt2MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1217,6 +1343,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002970
+expId 2970
 fileName wgEncodeFsuRepliChipEstt2MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1242,6 +1370,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002979
+expId 2979
 fileName wgEncodeFsuRepliChipJ185aURawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1265,6 +1395,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002979
+expId 2979
 fileName wgEncodeFsuRepliChipJ185aURawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1287,6 +1419,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002979
+expId 2979
 fileName wgEncodeFsuRepliChipJ185aUWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1310,6 +1444,8 @@ dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-18
 dateUnrestricted 2013-03-18
+dccAccession wgEncodeEM002979
+expId 2979
 fileName wgEncodeFsuRepliChipJ185aUWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1334,6 +1470,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002973
+expId 2973
 fileName wgEncodeFsuRepliChipL1210FRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1358,6 +1496,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002973
+expId 2973
 fileName wgEncodeFsuRepliChipL1210FRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1381,6 +1521,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002973
+expId 2973
 fileName wgEncodeFsuRepliChipL1210FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1405,6 +1547,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002973
+expId 2973
 fileName wgEncodeFsuRepliChipL1210FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1430,6 +1574,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002974
+expId 2974
 fileName wgEncodeFsuRepliChipMefMRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1454,6 +1600,8 @@ dataVersion ENCODE Jul 2012 Freeze
 dateResubmitted 2012-06-18
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002974
+expId 2974
 fileName wgEncodeFsuRepliChipMefMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1479,6 +1627,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002975
+expId 2975
 fileName wgEncodeFsuRepliChipMelMRawDataRep1.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1503,6 +1653,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002975
+expId 2975
 fileName wgEncodeFsuRepliChipMelMRawDataRep2.pair.tar.gz
 grant Gilbert
 lab FSU-m
@@ -1526,6 +1678,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002975
+expId 2975
 fileName wgEncodeFsuRepliChipMelMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
@@ -1550,6 +1704,8 @@ dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
+dccAccession wgEncodeEM002975
+expId 2975
 fileName wgEncodeFsuRepliChipMelMWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
@@ -1565,4 +1721,4 @@ tableName wgEncodeFsuRepliChipMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: -1165603003
+# MAGIC: 1772228380
