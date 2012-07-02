@@ -1613,7 +1613,7 @@ if (sameString(tdb->track, "refGene"))
 
 /* Put up label line  - boxes for gene, accession or maybe OMIM. */
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 if (omimAvail != 0)
     {
