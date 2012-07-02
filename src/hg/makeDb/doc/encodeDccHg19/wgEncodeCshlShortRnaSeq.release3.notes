@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeCshlShortRnaSeq Release 3 vs Release 2
-2012-06-06
+2012-06-29
 
 QA Count Summaries for Release 3:
-Tables: 548
-Files: 1053
-Gbdbs: 628
+Tables: 589
+Files: 1222
+Gbdbs: 672
 Supplemental: 0
-Other: 4
+Other: 3
 
 REVOKED:
 Tables: 16
@@ -15,22 +15,22 @@ Files: 32
 Gbdbs: 16
 
 Sizes of New:
-Table: 531 MB
-Files: 1917576 MB (1.83 TB)
-Gbdbs: 1164300 MB (1.11 TB)
+Table: 575 MB
+Files: 2202876 MB (2.10 TB)
+Gbdbs: 1319524 MB (1.26 TB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 3082408 MB (2.94 TB)
+Total: 3522976 MB (3.36 TB)
 
 
 TABLES:
-New: 374
+New: 415
 Untouched: 174
 Revoked/Replaced/Renamed: 16
-New + Untouched: 548
-Total (New + Untouched + Revoked/Replaced/Renamed): 564
+New + Untouched: 589
+Total (New + Untouched + Revoked/Replaced/Renamed): 605
 
-New Tables (374):
+New Tables (415):
 wgEncodeCshlShortRnaSeqA549CellCiptapContigs
 wgEncodeCshlShortRnaSeqA549CellContigs
 wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3
@@ -72,6 +72,7 @@ wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep3
 wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapMinusRep4
 wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep3
 wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapPlusRep4
+wgEncodeCshlShortRnaSeqA549CytosolTapContigs
 wgEncodeCshlShortRnaSeqA549NucleusCiptapContigs
 wgEncodeCshlShortRnaSeqA549NucleusContigs
 wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep3
@@ -111,6 +112,34 @@ wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep3
 wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4
 wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3
 wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapContigs
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3
+wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4
+wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapContigs
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellContigs
+wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellTapContigs
+wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2
+wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1
+wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2
 wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2
 wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRep2
 wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRep2
@@ -150,6 +179,13 @@ wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2
 wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRep2
 wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRep2
 wgEncodeCshlShortRnaSeqHmscatCellTapContigs
+wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1
+wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2
+wgEncodeCshlShortRnaSeqHmscbmCellTapContigs
+wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep1
+wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep2
+wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep1
+wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep2
 wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1
 wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep2
 wgEncodeCshlShortRnaSeqHmscucCellTapContigs
@@ -160,7 +196,10 @@ wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep2
 wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2
 wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRep2
 wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRep2
+wgEncodeCshlShortRnaSeqHobCellTapAlnRep1
 wgEncodeCshlShortRnaSeqHobCellTapContigs
+wgEncodeCshlShortRnaSeqHobCellTapMinusRawRep1
+wgEncodeCshlShortRnaSeqHobCellTapPlusRawRep1
 wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1
 wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep2
 wgEncodeCshlShortRnaSeqHpcplCellTapContigs
@@ -217,6 +256,7 @@ wgEncodeCshlShortRnaSeqImr90CellShorttotalTapMinusRep2
 wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep1
 wgEncodeCshlShortRnaSeqImr90CellShorttotalTapPlusRep2
 wgEncodeCshlShortRnaSeqImr90CellTapContigs
+wgEncodeCshlShortRnaSeqImr90CytosolCiptapContigs
 wgEncodeCshlShortRnaSeqImr90CytosolContigs
 wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep1
 wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep2
@@ -405,6 +445,7 @@ wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep3
 wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapMinusRep4
 wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep3
 wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapPlusRep4
+wgEncodeCshlShortRnaSeqSknshNucleusTapContigs
 
 Untouched Tables (174):
 wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1
@@ -602,21 +643,25 @@ wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapContigs
 
 
 DOWNLOAD FILES:
-New: 666
+New: 835
 Untouched: 389
 Revoked/Replaced/Renamed: 32
-New + Untouched: 1055
-Total (New + Untouched + Revoked/Replaced/Renamed): 1085
+New + Untouched: 1224
+Total (New + Untouched + Revoked/Replaced/Renamed): 1254
 
 These 2 objects exist in both new and revoked download files:
 wgEncodeCshlShortRnaSeqMcf7CellTapExonsGencV10.gtf.gz
 wgEncodeCshlShortRnaSeqMcf7CellTapContigs.bedRnaElements.gz
 
-New Download Files (666):
+New Download Files (835):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep4.bam
@@ -653,8 +698,12 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CellTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep4.bam
@@ -687,10 +736,16 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapRawDataRep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549CytosolTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep4.bam
@@ -727,6 +782,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqA549NucleusTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20CellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20CellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20CellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20CellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRep2.bigWig
@@ -743,6 +800,7 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd34mobilizedCellTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd34mobilizedCellTapMinusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd34mobilizedCellTapPlusRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd34mobilizedCellTapProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqCd34mobilizedCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep3.bam.bai
@@ -754,8 +812,67 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapRawDataRep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878ChromatinTapRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapProtocolRep4.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqGm12878NucleolusTapRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1hescCytosolTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqH1neuronsCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRep2.bigWig
@@ -768,6 +885,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoaf61113019CellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoafCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoafCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoafCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoafCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoec70717061CellTapMinusRep1.bigWig
@@ -780,6 +899,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoec80611021CellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoecCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoecCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoecCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHaoecCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapMinusRep1.bigWig
@@ -792,6 +913,14 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHchCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHchCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHchCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHchCellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2CellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2CellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2CytosolTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2CytosolTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2NucleusTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHepg2NucleusTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpc01005032CellTapMinusRep2.bigWig
@@ -804,12 +933,15 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpc01027033CellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpcCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpcCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpcCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHfdpcCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapMinusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapPlusRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmepcCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1.bam.bai
@@ -823,6 +955,22 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscat906160112CellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscatCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscatCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscatCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscatCellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscbmCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep2.bam
@@ -833,6 +981,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHmscucCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2.bam
@@ -840,8 +990,15 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapMinusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapProtocolRep2.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHobCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep2.bam
@@ -852,6 +1009,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpcplCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapAlnRep1.bam
@@ -864,6 +1023,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHpiepcCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapAlnRep1.bam
@@ -876,6 +1037,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHsavecCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1.bam
@@ -890,6 +1053,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmfCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmfCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmfCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHvmfCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapAlnRep2.bam
@@ -900,6 +1065,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqHwpCellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CellCiptapContigs.bedRnaElements.gz
@@ -940,9 +1107,14 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CellShorttotalTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolCiptapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolCiptapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep2.bam
@@ -979,8 +1151,12 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90CytosolTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusCiptapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusCiptapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep2.bam
@@ -1017,8 +1193,12 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqImr90NucleusTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep4.bam
@@ -1057,6 +1237,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CellTapExonsGencV10V2.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep4.bam
@@ -1083,6 +1265,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7CytosolTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep4.bam
@@ -1117,6 +1301,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqMonocd14CellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2.bam
@@ -1131,6 +1317,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdfCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdfCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdfCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhdfCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhekNucleusTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhekNucleusTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapAlnRep1.bam
@@ -1143,6 +1331,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemfm2CellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapAlnRep1.bam
@@ -1155,6 +1345,8 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapMinusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapPlusRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqNhemm2CellTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2.bam
@@ -1169,10 +1361,16 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmcCellTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmcCellTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmcCellTapProtocolRep1.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSkmcCellTapProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep4.bam
@@ -1209,8 +1407,12 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCellTapExonsGencV10.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolCiptapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep4.bam
@@ -1243,9 +1445,16 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapRawDataRep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolTapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolTapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshCytosolTapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusCiptapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusCiptapExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusCiptapProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusCiptapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusExonsGencV10.gtf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusProtocolRep3.pdf.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep3.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep4.bam
@@ -1278,6 +1487,7 @@ New Download Files (666):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapRawDataRep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusTapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/wgEncodeCshlShortRnaSeqSknshNucleusTapExonsGencV10.gtf.gz
 
 Untouched Download Files (389):
@@ -1707,13 +1917,13 @@ Revoked/Replaced/Renamed Download Files (32):
 
 
 GBDBS:
-New: 428
+New: 472
 Untouched: 200
 Revoked/Replaced/Renamed: 16
-New + Untouched: 628
-Total (New + Untouched + Revoked/Replaced/Renamed): 644
+New + Untouched: 672
+Total (New + Untouched + Revoked/Replaced/Renamed): 688
 
-New Gbdb Files (428):
+New Gbdb Files (472):
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep4.bam
@@ -1806,6 +2016,38 @@ New Gbdb Files (428):
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878ChromatinTapMinusRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878ChromatinTapPlusRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapMinusRawRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqGm12878NucleolusTapPlusRawRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellCiptapPlusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellPlusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqH1neuronsCellTapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRep2.bigWig
@@ -1850,6 +2092,14 @@ New Gbdb Files (428):
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscbmCellTapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep2.bam
@@ -1862,6 +2112,10 @@ New Gbdb Files (428):
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHobCellTapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHobCellTapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHobCellTapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHobCellTapPlusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep2.bam
@@ -2366,14 +2620,13 @@ Revoked/Replaced/Renamed Gbdb Files (16):
 
 
 OTHER FILES:
-New: 4
+New: 3
 Revoked/Replace: 0
-Total: 4
+Total: 3
 
-New Other Files (4):
+New Other Files (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/md5sum.history.bak
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release3/md5sum.txt
 
 Revoked Other Files (0):
