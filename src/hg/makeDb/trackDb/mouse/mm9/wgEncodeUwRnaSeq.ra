@@ -120,7 +120,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal
         shortLabel Lv S_C 8w S 1
-        longLabel Liver Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 402550.000000
         color 230,159,0
@@ -130,7 +130,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal
         shortLabel Lv S_C E14.5 S 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 194747.000000
         color 230,159,0
@@ -230,7 +230,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Lv S_C 8w S 2
-        longLabel Liver Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 155866.000000
         color 230,159,0
@@ -488,7 +488,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129SigRep1
         parent wgEncodeUwRnaSeqViewSignal 
         shortLabel Lv S_S E14.5 S 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
+        longLabel Liver S129 Embryonic day 14.5 RNA-seq Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
         type bigWig 1.000000 742349.000000
         color 230,159,0
@@ -564,7 +564,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_C 8w PR 1
-        longLabel Liver Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 287434.000000
         color 230,159,0
@@ -574,7 +574,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_C E14.5 PR 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 164985.000000
         color 230,159,0
@@ -678,7 +678,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig
         shortLabel Lv S_C 8w PR 2
-        longLabel Liver Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 96877.000000
         color 230,159,0
@@ -936,7 +936,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig 
         shortLabel Lv S_S E14.5 PR 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver S129 Embryonic day 14.5 RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
         type bigWig 1.000000 742349.000000
         color 230,159,0
@@ -1012,7 +1012,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C 8w MR 1
-        longLabel Liver Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 402549.000000
         color 230,159,0
@@ -1022,7 +1022,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C E14.5 MR 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 194747.000000
         color 230,159,0
@@ -1126,7 +1126,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_C 8w MR 2
-        longLabel Liver Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 155864.000000
         color 230,159,0
@@ -1386,7 +1386,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig 
         shortLabel Lv S_S E14.5 MR 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
+        longLabel Liver S129 Embryonic day 14.5 RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
         type bigWig 1.000000 653623.000000
         color 230,159,0
@@ -1467,7 +1467,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_C 8w A 1
-        longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 230,159,0
@@ -1476,7 +1476,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_C A 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Alignments Rep 1 ENCODE/UW
+        longLabel Liver C57BL6 Embryonic day 14.5 RNA-seq Alignments Rep 1 ENCODE/UW
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 230,159,0
@@ -1515,7 +1515,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Cerebrum 8w A 2
-        longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
+        longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
@@ -1574,7 +1574,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv 8w A 2
-        longLabel Liver Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW
+        longLabel Liver C57BL6 Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 230,159,0
@@ -1819,7 +1819,7 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments 
         shortLabel Lv S_S A 1
-        longLabel Liver Embryonic day 14.5 RNA-seq Alignments Rep 1 from ENCODE/UW 
+        longLabel Liver S129 Embryonic day 14.5 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
         type bam
         color 230,159,0

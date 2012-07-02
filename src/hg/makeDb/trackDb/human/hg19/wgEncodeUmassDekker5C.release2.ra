@@ -5,7 +5,7 @@ shortLabel UMass 5C
 longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
 group regulation
 compositeTrack on
-subGroup1 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1HESC=H1hESC&nbsp;(Tier_1) aK562=K562&nbsp;(Tier_1) bHELAS3=HeLa-S3&nbsp;(Tier_2)
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2)
 subGroup2 region Region NONE=None
 dimensions dimensionX=cellType
 sortOrder cellType=+
@@ -34,7 +34,7 @@ html wgEncodeUmassDekker5C.release2
         parent wgEncodeUmassDekker5C
         shortLabel GM12878 Pk
         longLabel GM12878 5C Peaks from ENCODE/UMass-Dekker
-        subGroups cellType=aGM12878 region=NONE
+        subGroups cellType=t1GM12878 region=NONE
         type bed 12
         color 153,38,0
         # subId=7026 dateSubmitted=2012-06-05
@@ -52,7 +52,7 @@ html wgEncodeUmassDekker5C.release2
         parent wgEncodeUmassDekker5C
         shortLabel H1-hESC Pk
         longLabel H1-hESC 5C Peaks from ENCODE/UMass-Dekker
-        subGroups cellType=aH1HESC region=NONE
+        subGroups cellType=t1H1HESC region=NONE
         type bed 12
         color 0,107,27
         # subId=7026 dateSubmitted=2012-06-05
@@ -70,7 +70,7 @@ html wgEncodeUmassDekker5C.release2
         parent wgEncodeUmassDekker5C
         shortLabel HeLa-S3 Pk
         longLabel HeLa-S3 5C Peaks from ENCODE/UMass-Dekker
-        subGroups cellType=bHELAS3 region=NONE
+        subGroups cellType=t2HELAS3 region=NONE
         type bed 12
         color 0,119,158
         # subId=7026 dateSubmitted=2012-06-05
@@ -88,7 +88,7 @@ html wgEncodeUmassDekker5C.release2
         parent wgEncodeUmassDekker5C
         shortLabel K562 Pk
         longLabel K562 5C Peaks from ENCODE/UMass-Dekker
-        subGroups cellType=aK562 region=NONE
+        subGroups cellType=t1K562 region=NONE
         type bed 12
         color 46,0,184
         # subId=7026 dateSubmitted=2012-06-05
