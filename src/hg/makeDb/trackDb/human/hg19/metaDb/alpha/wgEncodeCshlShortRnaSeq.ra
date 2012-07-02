@@ -648,7 +648,6 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
 objType table
-attic auxValid
 bioRep 021WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -707,7 +706,6 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
 objType table
-attic auxValid
 bioRep 022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -21401,7 +21399,6 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1
 objType table
-attic auxValid
 bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -21460,7 +21457,6 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2
 objType table
-attic auxValid
 bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -29493,4 +29489,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1907169908
+# MAGIC: 1898138604
