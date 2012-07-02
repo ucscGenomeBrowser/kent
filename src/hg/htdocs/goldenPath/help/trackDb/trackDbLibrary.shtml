@@ -113,8 +113,7 @@
 <H1>Track Database Definition</H1>
 <H2>How to declare Dataset Display Settings
                                         in the Genome Browser</H2>
-    <P>This document is
-    intended to describe how to declare dataset display characteristics
+    <P>This document describes how to declare dataset display characteristics
     in the Genome Browser through trackDb settings.   Introducing new
     datasets for display in the Browser requires declaring the location
     and format of the data and defining initial display characteristics.
@@ -157,26 +156,11 @@
 
 <!-- - - - - - - - COMMON settings - - - - - - - -->
 <DIV class="commonSettings_intro">
-    The following trackDb
-    settings are common to all data format types.  Only the settings in
-    this section are required, though some type specific requirements
-    will be mentioned in the appropriate sections to follow.
+    The following settings, which must be defined for each trackDb record, are common to all
+    data format types.  The first four settings re requiredfor all tracks.  Some type-specific
+    requirements will be mentioned in the appropriate sections to follow.
 </DIV>
 
-<DIV class="lessCommon_intro">
-    <H3>Common, though less frequently used settings</H3>
-    The following settings are available for all or many track types but are more
-    rarely used.  Most are optional, but some may be required for specific track
-    types or in specific situations.<BR><BR>
-    <div class="hintBox">
-        <I><B>Inside hint:</B></I><I> The ra file
-        format supports  '<code>\</code>' continuation characters.  If the
-        setting is long or complex, break it into several lines using
-        terminating '<code>\</code>' characters to make it more readable.
-        </I>
-    </div>
-    <BR>
-</DIV>
 <DIV class="track"><span class="types all"></span>
     <div class="format all"><code>track</code></div>
     <P>Required: <span class="red">Yes</span></P>
@@ -195,7 +179,7 @@
     <P>Required: <span class="red">Yes</span></P>
     <P>Declares the format of the data and is used to
     determine display methods and options.</P>
-    <P>Allowed:</P>
+    <P>Valid settings:</P>
     <P>
     <A onclick="return jumpTo(this);" HREF="#">altGraphX</A>,
     <A onclick="return jumpTo(this);" HREF="#">bam</A>,
@@ -230,8 +214,8 @@
     <BR>
     <P>Further description of each type can be found
     below.  In many cases the type setting includes additional
-    parameters to further specify the data format.  Further, some
-    track types have additional setting requirements, to be discussed
+    parameters to further specify the data format.  Some track types
+    have additional setting requirements, to be discussed
     below.</P>
     <P><B>Example:</B>
     </P>
@@ -241,10 +225,10 @@
 <DIV class="shortLabel"><span class="types all"></span>
 <div class="format"><code>shortLabel</code></div>
     <P>Required: <span class="red">Yes</span></P>
-    <P>The "short label" is used in a
+    <P>Specifies the track's "short label", which is used in a
     number of places in the Browser to identify the track.  For
-    example, the short label is seen on the side of the track when it
-    is displayed in the Browser image.  This label must be brief and
+    example, the short label is displayed alongside the track in the Browser image.
+    This label must be brief and
     is limited to 17 printable characters.</P>
     <P><B>Example:</B>
     </P>
@@ -254,10 +238,10 @@
 <DIV class="longLabel"><span class="types all"></span>
 <div class="format"><code>longLabel</code></div>
     <P>Required: <span class="red">Yes</span></P>
-    <P>The "long label" is also used in
+    <P>Specifies the track's "long label", which is also used in
     numerous places in the Browser to identify a track.  For instance,
-    the long label is seen above the track data when it is displayed
-    in the Browser image.  This label should be descriptive enough to
+    the long label is displayed above the track's data in the Browser image.
+    This label should be descriptive enough to
     allow users to uniquely identify the track within the Browser.  It
     is limited to 76 printable characters.</P>
     <P><B>Example:</B></P>
@@ -267,28 +251,27 @@
 <DIV class="visibility"><span class="types all"></span>
 <div class="format"><code>visibility</code></div>
     <P>Required: No</P>
-    <P>Visibility (a.k.a "display mode")
-    is set to 1 of 5 modes (including 'hide') that a track will be displayed in, within
-    the Browser image.  This setting is almost always dynamically
-    customizable by each user.  The exact display for each mode
-    depends upon the track's type and not all types support all 5
-    display modes.</P>
-    <P>Possible settings:</P>
+    <P>Visibility (a.k.a "display mode") specifies which of 5 modes (including 'hide')
+    should be used to display the track within the Browser image.  This setting is
+    almost always dynamically customizable by each user.  The exact configuration of the
+    display for each mode depends upon the track's type, and some modes may not be supported
+    for certain track types.  As always, experiment with this setting to see what it does
+    to your track type..</P>
+    <P>Valid settings:</P>
     <UL>
-    <LI><code>hide</code>: DEFAULT. The track will not be seen until a user
-    requests it.</LI>
-    <LI><code>dense</code>: the track will be displayed within a single line or
-    ribbon.  Often this means multiple items are summarized or drawn on top of
-    each other and long labels are not seen.</LI>
+    <LI><code>hide</code>: DEFAULT. The track is not displayed in the Browser image unless
+    the user changes the display setting..</LI>
+    <LI><code>dense</code>: the track is displayed as a single line or
+    ribbon.  In many cases multiple items are summarized or drawn on top of
+    one another and long labels are not seen.</LI>
     <LI><code>squish</code>: each item is drawn individually, but at half height
     and without a label.  <i>Not supported for all types.</i></LI>
-    <LI><code>pack</code>: items are displayed individually but as much vertical
-    white space as possible is removed.  <i>Not supported for all types.</i></LI>
-    <LI><code>full</code>: each item will be seen as a separate line in the
-    Browser image, graphed signals may be seen in varying heights.</LI>
+    <LI><code>pack</code>: items are displayed individually at full height, but
+    in a much more compact vertical space than in full mode.
+    <i>Not supported for all types.</i></LI>
+    <LI><code>full</code>: each item is displayed as a separate line in the
+    Browser image.  Graphed signals may be displayed in varying heights.</LI>
     </UL>
-    <P>As always, experiment with this setting to see
-    what it does to your track type.</P>
     <P><B>Example:</B>
     </P>
     <pre>   visibility dense</pre>
@@ -297,23 +280,22 @@
 <DIV class="html"><span class="types all"></span>
 <div class="format"><code>html</code></div>
     <P>Required: No</P>
-    <P>The html refers to a file that contains the
+    <P>Specifies a file that contains the
     complete description of a track in html format.  The path of this
     file name is relative to the path of the trackDb file.  The
-    ".html" suffix is implied.  This description should contain
-    several sections:</P>
+    ".html" suffix is implied.</P>
+    <P>To be consisent with standard Genome Browser track descriptions, this description
+    should contain several sections:</P>
     <P><B>Description</B></P>
-    <P class="indent1">One
-    to three sentences describing the contents of the track and what
+    <P class="indent1">A few sentences describing the contents of the track and what
     it attempts to show.  The description can include additional
     paragraphs giving further details and can include links to outside
     sources.</P>
     <P><B>Display Conventions and Configuration</B></P>
-    <P class="indent1">A
-    description of what the display represents. This includes description
-    of conventions for coloring and any special glyphs used in the track.
+    <P class="indent1">A description of what the display represents. This
+    includes description of conventions for coloring and any special glyphs used in the track.
     It may describe how to interpret scores or full signal values.  This
-    section can also be used to describe how the display may be customized
+    section can also be used to describe how to customize the display
     by using configuration controls.</P>
     <P><B>Methods</B></P>
     <P class="indent1">A
@@ -333,6 +315,21 @@
     understood.</P>
     <P><B>Example:</B></P>
     <pre>    html docs/myFirstTrack</pre>
+</DIV>
+
+<DIV class="lessCommon_intro">
+    <H3>Common, though less frequently used settings</H3>
+    The following settings are available for all or many track types but areless frequently used.
+    Most are optional, but some may be required for specific track
+    types or in specific situations.<BR><BR>
+    <div class="hintBox">
+        <I><B>Inside hint:</B></I><I> The ra file
+        format supports  '<code>\</code>' continuation characters.  If the
+        setting is long or complex, break it into several lines using
+        terminating '<code>\</code>' characters to make it more readable.
+        </I>
+    </div>
+    <BR>
 </DIV>
 
 <DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabIx"></span>
@@ -369,11 +366,12 @@
 <DIV class="canPack"><span class="types all"></span>
 <div class="format"><code>canPack &lt;off/on&gt;</code></div>
     <P><I>NOT FOR HUBS.  Deprecated.</I></P>
-    <P>Almost tracks can be displayed in the five
-    standard visibilities.  However on some track types such as
-    wiggles, <code>squish</code> and <code>pack</code> offer no real advantage
-    over <code>dense</code> and <code>full</code>. By default, these tracks will
-    not offer the less valuable visibilities. Nevertheless, you can make your track offer
+    <P>Most tracks can be displayed in all five
+    visibilities modes.  However on some track types such as
+    wiggles, the <code>squish</code> and <code>pack</code> modes offer no real advantage
+    over the <code>dense</code> and <code>full</code> modes. By default, these tracks will
+    not offer the <code>squish</code> and <code>pack</code> vilibility settings.
+    Nevertheless, you can make your track offer
     these visibilility choices by turning canPack on.  Note: subtracks
     of composites will always offer all five choices.</P>
     <P><B>Example:</B></P>
@@ -385,7 +383,7 @@
     <P>Many track types allow setting the color of the
     data as displayed in the image with this setting.  The setting accepts
     red, green and blue values delimited by commas, and each in the range of
-    0-255.  Though widely supported some types in some display modes, such as
+    0-255.  Though widely supported some track types in certain display modes, such as
     the EST tracks in dense mode, ignore it.</P>
     <P><B>Example:</B></P>
     <pre>   color 255,0,0</pre>
@@ -394,11 +392,12 @@
 
 <DIV class="altColor"><span class="types all"></span>
 <div class="format"><code>altColor &lt;red,green,blue&gt;</code></div>
-    <P>Many track types allow setting a color range which will vary from color to
-    altColor.  For instance the CpG Island tracks use the altColor to display the
-    weaker islands, while the stronger ones are rendered in color. If altColor is
-    not specified the system will use a color half way between that specified in
-    the color tag and white instead.</P>
+    <P>Many track types allow setting a color range that varies from <code>color</code> to
+    <code>altColor</code>.  For instance the CpG Island tracks use the <code>altColor</code>
+    setting to display the weaker islands, while the stronger ones are rendered in
+    <code>color</code>.  If <code>altColor</code> is not specified, the system will
+    use a color half way between that specified in the <code>color</code> tag
+    and white instead.</P>
     <P><B>Example:</B></P>
     <pre>   altColor 0,0,255</pre>
     <P>Sets alternate color to blue.</P>
@@ -408,8 +407,8 @@
 <div class="format"><code>chromosomes &lt;chr1,chr2,...&gt;</code></div>
     <P>Some datasets do not contain data for all
     chromosomes of a genome.  When this is true, use this setting as a
-    comma separated list of the chromosomes that are covered. The system will
-    display a user visible message that no data is available when browsing
+    comma separated list of the chromosomes that are covered. The system
+    displays a message that no data is available when the user browses
     uncovered chromosomes.</P>
     <P><B>Example:</B></P>
     <pre>   chromosomes chr1,chr7,chr18,chr19,chr22,chrX,chrM</pre>
@@ -418,14 +417,14 @@
 <DIV class="configureByPopup"><span class="types all"></span>
 <div class="format"><code>configureByPopup &lt;on/off&gt;</code></div>
     <P><I>NOT FOR HUBS.</I></P>
-    <P>Most tracks that can have their display
-    configured by a user, can be configured from directly within the
-    Browser image by choosing a right-click option.  This will pop-up
+    <P>Most track displays that can be configured by a user can also be
+    configured from directly within the
+    Browser image through a right-click option that pops-up
     a configuration dialog.  While this functionality works on the
     majority of track types, some configuration dialogs are too
-    complex or with too much embedded javascript control to reliably
-    configure them with a pop-up.  To turn off right-click configure
-    by pop-up, use this setting.  The user will still be able to
+    complex or have too much embedded javascript control to be reliably
+    configured through a pop-up.  To turn off the ability to right-click
+    configure by pop-up, use this setting.  The user will still be able to
     configure the track on the dedicated configuration page.</P>
     <P><B>Example:</B></P>
     <pre>   configureByPopup off</pre>
@@ -434,11 +433,10 @@
 <DIV class="dataVersion"><span class="types all"></span>
 <div class="format"><code>dataVersion &lt;str&gt;</code></div>
     <P><I>NOT FOR HUBS.</I></P>
-    <P>Many tracks may have
-    multiple revisions over time.  In some cases, the older versions
-    are worth keeping around, but even if they are not, it can be
-    useful to declare exactly which version the current track is.  Use
-    this setting to put a version statement on the track
+    <P>Many tracks undergo multiple revisions over time.  In some cases,
+    the older versions should be retained, but even if they are not, it can be
+    useful to declare the current version of the track.  Use
+    this setting to display a version statement on the track
     configuration page and item details page of a track.  The string
     will support limited HTML.</P>
     <P><B>Example:</B></P>
@@ -448,9 +446,8 @@
 <DIV class="directUrl"><span class="types all"></span>
 <div class="format"><I>Related settings:</I><BR>
     <code>directUrl &lt;url&gt;</code></div>
-    <P>Items shown in the
-    Browser image can be clicked on in order to be taken to a
-    details page giving information about that item.  The link can
+    <P>Items shown in the Browser image can be linked to a details page giving
+    information about that item.  The link can
     instead go to the URL declared here.  The URL is formatted as a
     printf line including the following fields in this order:</P>
     <UL>
@@ -497,10 +494,10 @@
 <DIV class="origAssembly"><span class="types all"></span>
 <div class="format"><code>origAssembly &lt;db&gt;</code></div>
     <P><I>NOT FOR HUBS.</I></P>
-    <P>The original assembly that the dataset was
-    generated for.  Datasets generated by mapping to one genome
-    assembly may prove so useful they are worth seeing mapped to a
-    more recent assembly.  Ideally datasets will be regenerated to map
+    <P>The original assembly for which the dataset was
+    generated.  Datasets generated by mapping to one genome
+    assembly may prove useful enough to map to a more recent assembly.
+    Ideally datasets will be regenerated to map
     to the new assemblies coordinates, but sometimes this is not
     practical or expedient. Therefore, the dataset may have its genome
     coordinates "lifted over" to the more recent assembly.
@@ -514,16 +511,14 @@
 
 <DIV class="pennantIcon"><span class="types all"></span>
 <div class="format"><code>pennantIcon &lt;icon&gt; [html [tip]]</code></div>
-    <P>Certain tracks can be visually flagged in the
-    Browser by use of an icon and a link to a description of what the
-    icon means.  This icon will be seen in the Browser track list next
-    to the track short label and in the track description and
-    configuration page.  This setting has three parts:</P>
+    <P>Certain tracks can be visually flagged in the Browser by use of an icon and
+    a link to a description of the icon's meaning.  This is seen in the Browser track
+    list next to the track short label and in the track description and configuration page.
+    This setting has three parts:</P>
     <UL>
     <LI>icon -  Currently must refer to an icon in the Browser's images directory.</LI>
-    <LI>html - a relative or full html path to a description
-    document explaining what the icon means.  This page will be seen
-    when the user clicks on the icon.</LI>
+    <LI>html - A relative or full html path to a description document explaining the
+    icon's meaning.  This page displays when the user clicks on the icon.</LI>
     <LI>Tip - A "quoted string" tip that will be seen
     when the user's mouse pointer hovers over the icon.</LI>
     </UL>
