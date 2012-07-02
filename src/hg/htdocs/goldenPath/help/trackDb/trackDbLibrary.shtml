@@ -7,7 +7,7 @@
   How to add/maintain this documentation:
   There are 2 essential parts to trackDb*.html DOCS: I) this LIBRARY and II) the HTML PAGES.
 
-  I) This LIBRARY consists of "DIV"s that contain blurbs descibing settings and types.
+  I) This LIBRARY consists of DIVs that contain "blurbs" describing settings and types.
      Example:
         <DIV class="someSetting"><span class="types bed bigBed"></span>
         <div class="format"><code>someSetting &lt;minVal&gt;</code></div>
@@ -17,34 +17,36 @@
             <P><B>Example:</B></P>
             <pre>   someSetting 100</pre>
         </DIV>
-  - Each "DIV" should have the class=<setting>.  There MUST be only one uniquely classed DIV for
-    each setting or type.  NOTE: use class NOT id so that anchor links work.
-  - Each "setting DIV" must contain a class="types..." SPAN that lists the track types that
-    this blurb/setting is relevant to.
-  - > Each setting DIV MUST contain a class="format" DIV that gives the exact format of the
-      setting, wrapped in <code>.
-  - > The setting DIV should also contain an <B>Example:</B> followed by a preferably real life
+  - Each "blurb" DIV should have the class=<setting>.  There MUST be only one uniquely classed
+    DIV for each setting or type.  NOTE: use class NOT id so that anchor links work.
+    - Each "setting blurb" must contain a class="types..." SPAN that lists the track types that
+      this blurb/setting is relevant to.
+    - Each setting blurb MUST contain a class="format" DIV that gives the exact format of the
+      setting, wrapped in <code> tags.
+    - The setting blurb should also contain an <B>Example:</B> followed by a preferably real life
       example wrapped in <PRE> tags.  Remeber multi-line <PRE> text will include the indents
       found in this file!
-  - > Any setting or code that is not made into a link should be wrapped with <code> tags.
-  - > Some settings may refer to other settings and your blurb should include a link to the other
-      setting, especially if the setting bulrb will appear at some distance in the document.
+    - Some settings may refer to other settings and your blurb should include a link to the other
+      setting, especially if that setting's blurb will appear at some distance in the document.
       Since all settings should have an anchor by the setting name, a "jumpTo" link to
       visibility setting can be accomplished as:
           <A onclick="return jumpTo(this);" HREF="#">visibility</A>
       which is identical to
           <A HREF="#visibility">visibility</A>
-  - "Type setting DIVs" are the same as other setting divs except that, there should be a seperate
-    Examples DIV with class type_example (e.g. <DIV class="bed_example">).
-  - > These "example DIVs" should also have a class=format" DIV but in this case it contains a
+    - Any setting or code that is not made into a <A> link should be wrapped with <code> tags.
+  - "Type setting blurbs" are the same as other setting blurbs except that there should be a
+     seperate "example blurb" DIV with class of type_example (e.g. <DIV class="bed_example">).
+    This will allow a type definition to be followed by multiple type specific settings then
+    be completed by the example that references those settings.
+    - These example blurbs should also have a "class=format" DIV but in this case it contains a
       title to the example:  <div class="format"><B>Examples of item base types:</B></div>.
-  - > Exmples should make use of <PRE> tags and preferrably multiple real live examples.
+    - Exmples should make use of <PRE> tags and preferrably multiple real live examples.
   - Document introductions and section introductions may also be shared by multiple documents
-    and therefore may be included here as "intro DIVs" as: <DIV class="bed_intro">.
-  - > intro DIVs do not contain a class="format" DIV.
-  - Use trackDbTestBurbs.html to test blurbs you add or modify.
+    and therefore may be included here as "intro blurb" DIVs as: <DIV class="bed_intro">.
+    - intro DIVs do not contain a class="format" DIV.
+  - Use trackDbTestBurbs.html to test blurbs you add or modify.  It runs javascript tests.
   HINT: It is the class=<setting> that ties things togther.  If there is a need for multiple
-  descriptions of the same setting, then create multiple DIVs with different classes as:
+  descriptions of the same setting, then create multiple blurb DIVs with different classes as:
     <DIV class="parent"> and and <DIV class="parent_view">.
 
   II) Document HTML PAGES should include this trackDbLibrary.html with server side includes
@@ -56,19 +58,19 @@
         <TR VALIGN=TOP><TD class="someSetting"><A name="someSetting"><IMG class='toggle detail'>
             <div class="format"><code>someSetting</code></div>
         </TD></TR>
-  - - Any setting may be referenced multiple times.  To reference a setting DIV, place it in
+    - Any setting may be referenced multiple times.  To reference a setting blurb, place it in
       a table cell that contains class=<setting> and an "image toggle details" tag.
       When the user clicks on the [+] button toggle image, the library will be read to render
       the <DIV class="<setting>">.
-  - - The table cell should also contain the "format" DIV, so the user knows what they are
+    - The table cell should also contain the "format" DIV, so the user knows what they are
       requesting.  The format containd in the doc will be replaced by the one in the
       library at toggle, so the library has the final word on format.  In the example,
       <code>someSetting</code> is replaced by <code>someSetting &lt;minVal&gt;</code>.
-  - - The first (or best) reference to your library div should contain the one and only
+    - The first (or best) reference to your library blurb should contain the one and only
       "named anchor" for that setting <A name="<setting>">.  This named anchor MUST be at
       the beginning of the cell, before the toggle image. NOTE: the named anchor for a type is
       often put at the start of the table that describes it.
-  - - Related settings can be grouped as a set of related rows by adding the "related" class
+    - Related settings can be grouped as a set of related rows by adding the "related" class
       to the TR.  The first such related row must have class="related1st" as:
           <TR class="related1st" VALIGN=TOP><TD class="directUrl"> ...
           <TR class="related" VALIGN=TOP><TD class="hgsid">
@@ -78,7 +80,7 @@
     Example cell behaves similarly to the setting cells, except the row has a special class:
         <TR class="examples" VALIGN=TOP><TD class="bed_example">
             <A name="bed_Examples"><IMG class='toggle detail'>
-  - Each table should be proceeded headed with an introduction as:
+  - Each table should be headed with an introduction as:
         <THEAD><TR><TD><DIV ID="bed_intro" class="intro"></DIV></TD></TR></THEAD>
     All DIVs of class "intro" will be read from the library (by ID) and rendered when the
     page is first loaded.
@@ -88,12 +90,13 @@
   - The document as a whole should contain a "toggle all" image as:
         <IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
     which will open and close all the table cells.
-  - The document may include a "self-assembling table of contents".  This is table will be built if
-  - - There is an empty table of ID="toc": <TABLE class="settingsTable" id="toc"></TABLE>
-  - - The $(document).ready() event calls: tdbDoc.tocAssemble(<delay>,[<exclude>]);
-  - - - delay (ms) greater than zero will delay the start of the assembly for user responsiveness
-  - - - <exclude> can be a comma separated list of settings (class=<setting>) to exclude
-  - - The table will fill in a header and a row per settingsTable td that contains a "format" div.
+  - The document should include a "self-assembling table of contents".  This is table will be
+    built if
+    - There is an empty table of ID="toc": <TABLE class="settingsTable" id="toc"></TABLE>
+    - The $(document).ready() event calls: tdbDoc.tocAssemble(<delay>,[<exclude>]);
+      - delay (ms) greater than zero will delay the start of the assembly for user responsiveness
+      - <exclude> can be a comma separated list of settings (class=<setting>) to exclude
+    - The table will fill in a header and a row per settingsTable td that contains a "format" div.
       The table will include 3 columns: setting, types that call it (from the "types" span) and
       the ID of the table that includes the setting.  Use this ID to be descriptive:
       ID="Signal_Track_Settings".
