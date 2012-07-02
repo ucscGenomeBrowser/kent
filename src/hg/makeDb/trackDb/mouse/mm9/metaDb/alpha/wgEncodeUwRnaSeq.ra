@@ -192,7 +192,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum c1110ad976f1dca3aa63bb59312b5d9f
+md5sum 3e9570e9a861bb2770aba21a66c94932
 project wgEncode
 readType 1x50
 replicate 1
@@ -219,7 +219,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 6f7a78eb5ad91004a46d5f317bd4e6c1
+md5sum bc5b7666811281b0901b8a9247f83a74
 project wgEncode
 readType 1x50
 replicate 2
@@ -503,7 +503,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum a48d88689756fe4f86d2ce15aa7f8a2f
+md5sum 3b9a6fe2a671756274c6bb501a5fd31a
 project wgEncode
 readType 1x50
 replicate 2
@@ -674,7 +674,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum e28135bbfa76c2b15dbc0e1ea2f75d38
+md5sum f022bd1a74239d739470ccfdd3c3b880
 project wgEncode
 readType 1x50
 replicate 1
@@ -902,7 +902,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 3f23860c17af0537680ad4d1716e2725
+md5sum 7a6f34bab13d61815b4d02dff634713b
 project wgEncode
 readType 1x50
 replicate 1
@@ -929,7 +929,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum f847cad878217faab2af426cbcf4ed52
+md5sum 2eea3a199b83b7166faceb3435933940
 project wgEncode
 readType 1x50
 replicate 2
@@ -1186,7 +1186,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum cd98107298ed5b846036ed1f3840251c
+md5sum 189b3caae769a5fd229f29cf7e3c7529
 project wgEncode
 readType 1x50
 replicate 1
@@ -1213,7 +1213,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum d06ee50448f580784772ab2767974fc3
+md5sum c76934550e554f327977e69d1e1b4dea
 project wgEncode
 readType 1x50
 replicate 2
@@ -1470,7 +1470,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum a623d32f1aeaeb182a0de97ee9f3c755
+md5sum c9c43cfb31f4de5e2ecae21b1eb14860
 project wgEncode
 readType 1x50
 replicate 1
@@ -1668,7 +1668,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum cdb9a07101c25d703da34fc2fb9ff2a8
+md5sum ae06b5a5733e02585aa2b8dfb945b44b
 project wgEncode
 readType 1x50
 replicate 1
@@ -1896,7 +1896,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 2f866317ad262c1505ad49e1c2fef3a6
+md5sum 9177afc77a26700df3bcbe9447ce066d
 project wgEncode
 readType 1x50
 replicate 1
@@ -1923,7 +1923,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 9928bc1ee90df12d84ee47b73636a9ee
+md5sum cb390f2388679838be0bc1f00c4fb9ca
 project wgEncode
 readType 1x50
 replicate 2
@@ -2180,7 +2180,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum a32e350c583da0548cefb71b452706e2
+md5sum ab4ec44b4509cff6fb602462343ff414
 project wgEncode
 readType 1x50
 replicate 1
@@ -2207,7 +2207,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 2054c5caf17f4ad3e034d29b6d1098cb
+md5sum 690f251b50ebdb6d689cfc8398180e1d
 project wgEncode
 readType 1x50
 replicate 2
@@ -2520,7 +2520,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 191eb8f5ef34c4083af0b947effd861b
+md5sum 204369e3067f87f871c542f9a7ce1665
 project wgEncode
 readType 1x50
 replicate 1
@@ -2748,7 +2748,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 524d76d68cce5edc7197d67c8d56f612
+md5sum 39bd0ee0e2c6bdb4e4826bbfeee7e633
 project wgEncode
 readType 1x50
 replicate 1
@@ -2775,7 +2775,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum ea77cc7d5649c68298801bf870cde71d
+md5sum 762d768450ed0502ec6587ec53fea317
 project wgEncode
 readType 1x50
 replicate 2
@@ -3210,7 +3210,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 06c78e567651707689625b15c68b2199
+md5sum 0baea348f347ddf99f3cb68ca78f00c7
 project wgEncode
 readType 1x50
 replicate 1
@@ -3293,7 +3293,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum da5cc9e6c4fd3be38c3fba1bdf70c99f
+md5sum 134cfec1ec20bf10978709c118dee034
 project wgEncode
 readType 1x50
 replicate 4
@@ -3524,7 +3524,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum d31204d3b33a57913ffffc6f3b740126
+md5sum 8eeac1eee765e30ce1bee53234246216
 project wgEncode
 readType 1x50
 replicate 1
@@ -3666,7 +3666,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 69d19e3b816599c3f270178ebfbc09b6
+md5sum 620fca788aefb4bf25eb41248be94984
 project wgEncode
 readType 1x50
 replicate 1
@@ -3808,7 +3808,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 6530e4e7013cf73d291f97cfd4243d94
+md5sum 223831bdbf54ae1bbfbc7a6baa950e72
 project wgEncode
 readType 1x50
 replicate 1
@@ -4036,7 +4036,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 9720e46b10ab2335e84b04247eb20e1b
+md5sum 4da6a690c930fd57d8fa3d47d5029d75
 project wgEncode
 readType 1x50
 replicate 1
@@ -4063,7 +4063,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 647184057ce3fd25c50af80af905e99c
+md5sum 4cc1906fdc1558c4ff33b385a28fad85
 project wgEncode
 readType 1x50
 replicate 2
@@ -4631,7 +4631,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum ca23a0a10a9c13f14a5241bc756a09fe
+md5sum 56ad6d69cec1318e34ec8e5c9dd2c3a1
 project wgEncode
 readType 1x50
 replicate 2
@@ -4888,7 +4888,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum e1d653a1c03d34735f834cead45d67d3
+md5sum 7c6717f3897de7769260d0c41c7e994a
 project wgEncode
 readType 1x50
 replicate 1
@@ -4915,7 +4915,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 493878b9d772899c81922615cfade8be
+md5sum b512eff183e5e95f30b2856d20763c08
 project wgEncode
 readType 1x50
 replicate 2
@@ -5086,7 +5086,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 9a0c01fd3e06074f22e7340471143b42
+md5sum 8294b56d551db53af8c207b96cbd8c43
 project wgEncode
 readType 1x50
 replicate 1
@@ -5314,7 +5314,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum fc3f834d6568a5d64ce35508d179c1a4
+md5sum dd4780f63bbe436bb48b110dc7208f36
 project wgEncode
 readType 1x50
 replicate 1
@@ -5341,7 +5341,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum a00fec779cc36208f9bda9b4f1f2aeb8
+md5sum a6fc6f378043e694374249097d954a32
 project wgEncode
 readType 1x50
 replicate 2
@@ -5512,7 +5512,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 1c1cb59ae8dd7e9be869b47427bcba05
+md5sum 51b55c242a25fcf6af69a5e29be1d7b8
 project wgEncode
 readType 1x50
 replicate 1
@@ -5740,7 +5740,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 9ad1d9b25c8e5985567ae878605cc0ee
+md5sum 01768e7211303abfac92e896ee4ee713
 project wgEncode
 readType 1x50
 replicate 1
@@ -5767,7 +5767,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 67c11efe541dfd9e2341fa56bd12b25a
+md5sum 5b0140d090ee1ba4221833887d63b411
 project wgEncode
 readType 1x50
 replicate 2
@@ -6024,7 +6024,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 6b6df7cdae248c85cd2243b5b1a9e968
+md5sum 376f6756a4752f364b405d283889a50d
 project wgEncode
 readType 1x50
 replicate 1
@@ -6051,7 +6051,7 @@ grant Stam
 lab UW-m
 labVersion 1
 localization cell
-md5sum 7bef5dd2bbdd038e3d26bdaf78bc5585
+md5sum dacfa26df16f3b5eb536223c6c82d503
 project wgEncode
 readType 1x50
 replicate 2
@@ -6120,4 +6120,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 1016805858
+# MAGIC: -1699639399
