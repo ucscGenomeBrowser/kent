@@ -1208,9 +1208,9 @@ cell ES-TT2
 composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
-dateResubmitted 2012-06-18
-dateSubmitted 2012-06-28
-dateUnrestricted 2013-03-28
+dateResubmitted 2012-06-28
+dateSubmitted 2012-03-31
+dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002969
 expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1.bigWig
