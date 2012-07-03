@@ -56,7 +56,7 @@ html wgEncodeUwRnaSeq
 	visibility full
 	subTrack wgEncodeUwRnaSeq
 	viewLimits 0:500
-	autoScale on
+	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
@@ -500,7 +500,7 @@ html wgEncodeUwRnaSeq
 	visibility full
 	subTrack wgEncodeUwRnaSeq
 	viewLimits 0:500
-	autoScale on
+	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
@@ -948,7 +948,7 @@ html wgEncodeUwRnaSeq
 	visibility full
 	subTrack wgEncodeUwRnaSeq
 	viewLimits 0:500
-	autoScale on
+	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
