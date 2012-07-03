@@ -31,7 +31,7 @@ shortLabel UW RNA-seq
 longLabel RNA-seq from ENCODE/UW
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal
-subGroup2 cellType Cell_Line Cel416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HLEMBRYO=HeadlessEmbryo HEART=Heart KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung  MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen TNAIVE=T-Naive THYMUS=Thymus WBRAIN=Whole_Brain
+subGroup2 cellType Cell_Line 1ACel416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HLEMBRYO=HeadlessEmbryo HEART=Heart KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung  MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen TNAIVE=T-Naive THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 localization Localization CELL=cell
 subGroup4 rnaExtract RnaExtract POLYA=polyA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
@@ -67,7 +67,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel 416B S 1
         longLabel 416B Immortal Cells RNA-seq Signal Rep 1 from ENCODE/UW 
-        subGroups view=Signal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
         type bigWig 1.000000 74282.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -79,7 +79,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel 416B S 2
         longLabel 416B Immortal Cells RNA-seq Signal Rep 2 from ENCODE/UW 
-        subGroups view=Signal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
+        subGroups view=Signal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
         type bigWig 1.000000 139390.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -511,7 +511,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel 416B PR 1
         longLabel 416B Immortal Cells RNA-seq Plus Raw Signal Rep 1 from ENCODE/UW 
-        subGroups view=PlusRawSignal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
+        subGroups view=PlusRawSignal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
         type bigWig 1.000000 74282.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -522,8 +522,8 @@ html wgEncodeUwRnaSeq
         track wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel 416B PR 2
-        longLabel 416B Immortal Cells RNA-seq Raw signal + Rep 2 from ENCODE/UW 
-        subGroups view=PlusRawSignal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
+        longLabel 416B Immortal Cells RNA-seq Plus Raw Signal Rep 2 from ENCODE/UW 
+        subGroups view=PlusRawSignal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
         type bigWig 1.000000 139390.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -959,7 +959,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel 416B MR 1
         longLabel 416B Immortal Cells RNA-seq Minus Raw Signal Rep 1 from ENCODE/UW 
-        subGroups view=MinusRawSignal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
+        subGroups view=MinusRawSignal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
         type bigWig 1.000000 61560.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -971,7 +971,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel 416B MR 2
         longLabel 416B Immortal Cells RNA-seq Minus Raw Signal Rep 2 from ENCODE/UW 
-        subGroups view=MinusRawSignal age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
+        subGroups view=MinusRawSignal age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
         type bigWig 1.000000 44456.000000
         color 86,180,233
         # subId=6107 dateSubmitted=2012-03-21
@@ -1415,7 +1415,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel 416B A 1
         longLabel 416B Immortal Cells RNA-seq Alignments Rep 1 from ENCODE/UW
-        subGroups view=Alignments age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
+        subGroups view=Alignments age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep1
         type bam
         color 86,180,233
         # subId=4346 dateSubmitted=2011-06-24
@@ -1427,7 +1427,7 @@ html wgEncodeUwRnaSeq
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel 416B A 2
         longLabel 416B Immortal Cells RNA-seq Alignments Rep 2 from ENCODE/UW
-        subGroups view=Alignments age=IMMORTAL cellType=Cel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
+        subGroups view=Alignments age=IMMORTAL cellType=1ACel416B localization=CELL rnaExtract=POLYA sex=M strain=B6D2F1J rep=rep2
         type bam
         color 86,180,233
         # subId=4348 dateSubmitted=2011-06-24
