@@ -979,11 +979,10 @@
 
 <DIV class="maxItems"><span class="types bed bigBed broadPeak psl"></span>
 <div class="format"><code>maxItems &lt;integer&gt;</code></div>
-    <P>Maximum number of
-    items to be displayed individually in full mode.  If there are
-    more items than this they will be drawn on top of each other on
-    the last line.  In packed mode this refers to the number of lines
-    rather than number of items.</P>
+    <P>Maximum number of items to be displayed individually in full mode.  If there are
+    more items than this they will be drawn on top of each other on the last line.
+    In packed mode this refers to the number of lines rather than number of items.
+    The default is 250.</P>
     <P><B>Example:</B>
     </P>
     <pre>   maxItems 25</pre>
@@ -991,30 +990,20 @@
 
 <DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
-    <P>When too many
-    individual bed items are shown in the Browser image, the
+    <P>When too many individual bed items are shown in the Browser image, the
     information is better summarized as when seen in dense mode.  Too
     many bed items is especially likely when a large window on a
     chromosome is viewed. Depending upon the current visibility of the
     bed track and on what other tracks are shown concurrently, the
     data may be automatically reduced to pack or dense mode.  However,
     you can set maxWindowToDraw and force the summarization of data
-    when you know it is unreasonable.  The setting is the number of
-    bases to be seen in a window after which the track will be forced
-    to dense mode.</P>
+    when you know it is unreasonable.  Unlike <code>maxItems</code>, this setting
+    is the number of bases to be seen in a window after which the track will be forced
+    to dense mode.  There is no default for this setting but the
+    <code>maxItems</code> setting will prevent too many items from
+    being displayed in any case.</P>
     <P><B>Example:</B></P>
     <pre>   maxWindowToDraw 200000</pre>
-</DIV>
-
-<DIV class="maxWindowToQuery"><span class="types bed bigWig bedlogR"></span>
-<div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
-    <P>Like with maxWindowToDraw, this setting is used
-    to limit the amount of data seen, when too much data p[resents
-    difficulties.  This setting is used to block attempting to get
-    data when the size of the chromosome viewing window to too large.
-    This can be useful if your track displays short items when zoomed
-    in, but the distribution of those items is irrelevant when zoomed
-    out.</P>
 </DIV>
 
 <DIV class="minGrayLevel"><span class="types bed broadPeak narrowPeak bedLogR bigBed"></span>
@@ -1503,6 +1492,17 @@
     <pre>   maxHeightPixels 100:16:8</pre>
     <P>The user will see the track as 16 pixels high
     but can scale it up to 100 pixels.</P>
+</DIV>
+
+<DIV class="maxWindowToQuery"><span class="types bed bigWig bedlogR"></span>
+<div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
+    <P><I>For bigWigs only.</I></P>
+    <P>When signal data is clicked in the Browser image, the details of the signal
+    in the current viewing window are displayed.  For <code>type bigWig</code> that
+    references remote data, if the current windiow is large, the query can be a very
+    expensive operation.  To avoid over-burdening the Browser, the size of the window to
+    query should be limited.  The value of the setting is the maximum size in bases that
+    should be queried to give the detailed signal numbers.</P>
 </DIV>
 
 <DIV class="spanList"><span class="types wig"></span>
