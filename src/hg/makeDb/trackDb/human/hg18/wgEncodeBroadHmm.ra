@@ -26,7 +26,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel GM12878 ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in GM12878 cells)
-    subGroups cellType=t1GM12878 
+    subGroups cellType=t1GM12878
     type bed 9 .
     #color 153,38,0
     # subId=3446 dateSubmitted=2011-01-21
@@ -35,7 +35,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel H1-hESC ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in H1-hESC cells)
-    subGroups cellType=t1H1HESC 
+    subGroups cellType=t1H1HESC
     type bed 9 .
     #color 0,107,27
     # subId=3446 dateSubmitted=2011-01-21
@@ -44,7 +44,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel K562 ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in K562 cells)
-    subGroups cellType=t1K562 
+    subGroups cellType=t1K562
     type bed 9 .
     #color 46,0,184
     # subId=3446 dateSubmitted=2011-01-21
@@ -53,7 +53,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel HepG2 ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in HepG2 cells)
-    subGroups cellType=t2HEPG2 
+    subGroups cellType=t2HEPG2
     type bed 9 .
     #color 189,0,157
     # subId=3446 dateSubmitted=2011-01-21
@@ -62,7 +62,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel HMEC ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in HMEC cells)
-    subGroups cellType=t3HMEC 
+    subGroups cellType=t3HMEC
     type bed 9 .
     # subId=3446 dateSubmitted=2011-01-21
 
@@ -70,7 +70,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel NHLF ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in NHLF cells)
-    subGroups cellType=t3NHLF 
+    subGroups cellType=t3NHLF
     type bed 9 .
     # subId=3446 dateSubmitted=2011-01-21
 
@@ -78,7 +78,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel NHEK ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in NHEK cells)
-    subGroups cellType=t3NHEK 
+    subGroups cellType=t3NHEK
     type bed 9 .
     #color 179,0,134
     # subId=3446 dateSubmitted=2011-01-21
@@ -87,7 +87,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel HSMM ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in HSMM cells)
-    subGroups cellType=t3HSMM 
+    subGroups cellType=t3HSMM
     type bed 9 .
     # subId=3446 dateSubmitted=2011-01-21
 
@@ -95,7 +95,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     parent wgEncodeBroadHmm
     shortLabel HUVEC ChromHMM
     longLabel ENCODE Broad Chromatin State Segmentation by HMM (in HUVEC cells)
-    subGroups cellType=t2HUVEC 
+    subGroups cellType=t2HUVEC
     type bed 9 .
     #color 224,75,0
     # subId=3446 dateSubmitted=2011-01-21

@@ -4,7 +4,7 @@ shortLabel CSHL Long RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
 group expression
 subGroup1 view Views m1-PlusRawSignal=Plus_Raw_Signal m2-MinusRawSignal=Minus_Raw_Signal m3-AllRawSignal=All_Raw_Signal m4-Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1)
 subGroup3 localization Localization cell=Cell cytosol=Cytosol
 subGroup4 rnaExtract Rna_Extract total=Total_RNA longPolyA=Long_PolyA+
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -34,7 +34,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
         shortLabel GM12 cell to +S1
         longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=m1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m1-PlusRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 580871
         minLimit 0
@@ -46,7 +46,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
         shortLabel GM12 cell to +S2
         longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=m1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m1-PlusRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 898990
         minLimit 0
@@ -58,7 +58,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
         shortLabel K562 cell to +S1
         longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=m1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m1-PlusRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 384266
         minLimit 0
@@ -70,7 +70,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
         shortLabel K562 cell to +S2
         longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=m1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m1-PlusRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 421850
         minLimit 0
@@ -82,7 +82,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
         shortLabel K562 cyto A+ +S1
         longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=m1-PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+        subGroups view=m1-PlusRawSignal cellType=t1K562 localization=cytosol rnaExtract=longPolyA
         type bedGraph 4
         #type bigWig 0 118018
         minLimit 0
@@ -106,7 +106,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
         shortLabel GM12 cell to -S1
         longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=m2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m2-MinusRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         # type bigWig 0 2199965
         minLimit 0
@@ -118,7 +118,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
         shortLabel GM12 cell to -S2
         longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=m2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m2-MinusRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         # type bigWig  0 3756424
         minLimit 0
@@ -130,7 +130,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
         shortLabel K562 cell to -S1
         longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=m2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m2-MinusRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 2180073
         minLimit 0
@@ -142,7 +142,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
         shortLabel K562 cell to -S2
         longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=m2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m2-MinusRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 1769868
         minLimit 0
@@ -154,7 +154,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
         shortLabel K562 cyto A+ -S1
         longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=m2-MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+        subGroups view=m2-MinusRawSignal cellType=t1K562 localization=cytosol rnaExtract=longPolyA
         type bedGraph 4
         #type bigWig 0 318978
         minLimit 0
@@ -178,7 +178,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
         shortLabel GM12 cell to AS1
         longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=m3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m3-AllRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 2689207
         minLimit 0
@@ -190,7 +190,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
         shortLabel GM12 cell to AS2
         longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=m3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m3-AllRawSignal cellType=t1GM12878 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 4860029
         minLimit 0
@@ -202,7 +202,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
         shortLabel K562 cell to AS1
         longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=m3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m3-AllRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 3032883
         minLimit 0
@@ -214,7 +214,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
         shortLabel K562 cell to AS2
         longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=m3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m3-AllRawSignal cellType=t1K562 localization=cell rnaExtract=total
         type bedGraph 4
         #type bigWig 0 2411797
         minLimit 0
@@ -226,7 +226,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
         shortLabel K562 cyto A+ AS1
         longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=m3-AllRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+        subGroups view=m3-AllRawSignal cellType=t1K562 localization=cytosol rnaExtract=longPolyA
         type bedGraph 4
         #type bigWig 0 318978
         minLimit 0
@@ -244,7 +244,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
         shortLabel GM12 cell to Al1
         longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (GM12878 whole cell)
-        subGroups view=m4-Alignments cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m4-Alignments cellType=t1GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
 
@@ -252,7 +252,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
         shortLabel GM12 cell to Al2
         longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (GM12878 whole cell)
-        subGroups view=m4-Alignments cellType=GM12878 localization=cell rnaExtract=total
+        subGroups view=m4-Alignments cellType=t1GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
 
@@ -260,7 +260,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
         shortLabel K562 cell to Al1
         longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (K562 whole cell)
-        subGroups view=m4-Alignments cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m4-Alignments cellType=t1K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
 
@@ -268,7 +268,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
         shortLabel K562 cell to Al2
         longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (K562 whole cell)
-        subGroups view=m4-Alignments cellType=K562 localization=cell rnaExtract=total
+        subGroups view=m4-Alignments cellType=t1K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
 
@@ -276,8 +276,7 @@ noInherit on
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
         shortLabel K562 cyto A+ Al1
         longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (PolyA+ in K562 cytosol)
-        subGroups view=m4-Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
+        subGroups view=m4-Alignments cellType=t1K562 localization=cytosol rnaExtract=longPolyA
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-
 
