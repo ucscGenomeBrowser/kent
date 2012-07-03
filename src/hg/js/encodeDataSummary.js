@@ -47,17 +47,21 @@ $(function () {
 
         var cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
         var refGenomeTypes = [], elementTypes = [], tfbsTypes = [];
-        var antibody, dataType;
+        var antibody, dataType, exp;
 
         encodeMatrix.show($summaryTables);
 
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
         encodeProject.getDataGroups(dataTypes);
 
-        $.each(experiments, function (i, exp) {
-            if (exp.dataType === undefined) {
+        $.each(experiments, function (i, experiment) {
+            if (experiment.dataType === undefined) {
                 return true;
             }
+
+            // adjust experiment as needed for display purposes
+            exp = encodeProject.adjustExperiment(experiment);
+
             // add experiment into the appropriate list(s)
             if (exp.cellType === 'None') {
                 addDataType(exp.dataType, refGenomeExps, false);

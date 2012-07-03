@@ -148,7 +148,8 @@ popWarnHandler();
 if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
     format = "Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.";
 vaWarn(format, args);
-noWarnAbort();
+if(isErrAbortInProgress())
+    noWarnAbort();
 }
 
 static void errAbortHandler(char *format, va_list args)
@@ -162,7 +163,8 @@ else
     popWarnHandler();
     vaWarn(format, args);
     }
-noWarnAbort();
+if(isErrAbortInProgress())
+    noWarnAbort();
 }
 
 static void vaHtmlOpen(char *format, va_list args)

@@ -103,10 +103,11 @@ The sequence of instructions here are similar to the Mirror site
 
 7.  Create hgcentral database and tables.  This is the primary gateway
 	database that allows the browser to find specific organism
-	databases.  See also: scripts/fetchHgCentral.sh
+	databases.  See also: scripts/fetchHgCentral.sh to fetch
+        a current copy of hgcentral.sql
 
 	mysql -u browser -pgenome -e "create database hgcentral;"
-	mysql -u browser -pgenome hgcentral < ex.hgcentral.sql
+	mysql -u browser -pgenome hgcentral < hgcentral.sql
 
 	Please note, it is possible to create alternative hgcentral
 	databases.  For example, for test purposes.  In this
@@ -116,7 +117,7 @@ The sequence of instructions here are similar to the Mirror site
 	of the hgcentral database:
 
 	mysql -u browser -pgenome -e "create database hgcentraltest;"
-	mysql -u browser -pgenome hgcentraltest < ex.hgcentral.sql
+	mysql -u browser -pgenome hgcentraltest < hgcentral.sql
 
 8.  Create the hg.conf file in ${WEBROOT}/cgi-bin/hg.conf
 	to allow the CGI binaries to find the hgcentral database

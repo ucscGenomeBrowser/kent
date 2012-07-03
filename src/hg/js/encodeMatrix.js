@@ -69,8 +69,8 @@ var encodeMatrix = (function () {
             // (cheaper than querying for actual number)
 
             var prog, cartVar, url, i, j;
-            var argsLen = arguments.length;
-            var mdbVals = [];
+            var argsLen;
+            var mdbVals = [], mdbSearch;
 
             if ($('input:radio[name=searchType]:checked').val() === COOKIE_SEARCH_TRACKS) {
                 prog = 'hgTracks';
@@ -82,11 +82,13 @@ var encodeMatrix = (function () {
              url = '/cgi-bin/' + prog + '?db=' + encodeProject.getAssembly() + 
                 '&' + cartVar + '=search' + '&tsCurTab=advancedTab&hgt_tsPage=' +
                 '&tsName=&tsDescr=&tsGroup=Any';
+            mdbSearch = encodeProject.adjustMdbSearch($.makeArray(arguments));
+            argsLen = mdbSearch.length;
             for (i = 0; i < argsLen; i += 1) {
-                url += '&hgt_mdbVar' + (i + 1) + '=' + arguments[i].mdbVar;
+                url += '&hgt_mdbVar' + (i + 1) + '=' + mdbSearch[i].mdbVar;
                 // can pass an array or a single string -- so force to array for uniform handling
                 // Search sees multiple mdbValN= variables for the same mdbVarN as a list of vals
-                mdbVals = [].concat(arguments[i].mdbVal);
+                mdbVals = [].concat(mdbSearch[i].mdbVal);
                 for (j = 0; j < mdbVals.length; j++) {
                     url += '&hgt_mdbVal' + (i + 1) + '=' + encodeURIComponent(mdbVals[j]);
                 }
