@@ -1433,3 +1433,27 @@ echTel1.perChromTables = no
     make etc-update
 
 #########################################################################
+# SWAP LASTZ Human hg19 (DONE - 2012-07-02 - Hiram)
+    # original alignment to hg19:
+    cd /hive/data/genomes/hg19/bed/lastzEchTel1.2012-06-29
+    cat fb.hg19.chainEchTel1Link.txt 
+    #   670299345 bases of 2897316137 (23.135%) in intersection
+
+    #   and for the swap
+
+    mkdir /hive/data/genomes/echTel1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/echTel1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzEchTel1.2012-06-29/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    405m49.935s
+    cat fb.echTel1.chainMm10Link.txt
+    #   659524096 bases of 2111581369 (31.234%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/echTel1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
