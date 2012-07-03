@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel GIS RNA-seq
 longLabel ENCODE Genome Institute of Singapore RNA-seq
 group expression
-subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 5-SplitAlign=Split_Alignments
+subGroup1 view Views m1-PlusRawSignal=1-PlusRawSignal m2-MinusRawSignal=2-MinusRawSignal m3-AllRawSignal=3-AllRawSignal m4-Alignments=4-Alignments m5-SplitAlign=5-SplitAlign
 subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC K562=K562
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
@@ -36,7 +36,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S1
-        subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA rep=rep1
+        subGroups view=m1-PlusRawSignal cellType=K562 rnaExtract=longPolyA rep=rep1
         type bedGraph 4
         #type bigWig 0 175406
         minLimit 0
@@ -48,7 +48,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal off
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ +S2
-        subGroups view=1-PlusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
+        subGroups view=m1-PlusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
         type bedGraph 4
         #type bigWig 0 13556
         minLimit 0
@@ -60,7 +60,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ +S1
-        subGroups view=1-PlusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m1-PlusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 20925
         minLimit 0
@@ -72,7 +72,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
         longLabel ENCODE GIS RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ +S1
-        subGroups view=1-PlusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
+        subGroups view=m1-PlusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 45103
         color 0,107,27
@@ -84,7 +84,7 @@ wgEncode 1
     shortLabel Minus Raw Signal
     view 2-MinusRawSignal
     visibility dense
-        subTrack wgEncodeGisRnaSeq
+    subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
     transformFunc NONE
@@ -95,7 +95,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S1
-        subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig  0 56250
         minLimit 0
@@ -107,7 +107,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal off
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ -S2
-        subGroups view=2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
+        subGroups view=m2-MinusRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
         type bedGraph 4
         #type bigWig 0 10333
         minLimit 0
@@ -119,7 +119,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ -S1
-        subGroups view=2-MinusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m2-MinusRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 13935
         minLimit 0
@@ -131,7 +131,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
         longLabel ENCODE GIS RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ -S1
-        subGroups view=2-MinusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
+        subGroups view=m2-MinusRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 48723
         minLimit 0
@@ -143,7 +143,7 @@ wgEncode 1
     shortLabel All Raw Signal
     view 3-AllRawSignal
     visibility hide
-        subTrack wgEncodeGisRnaSeq
+    subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
     transformFunc NONE
@@ -154,7 +154,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS1
-        subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 175407
         minLimit 0
@@ -166,7 +166,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 2 (PolyA+ RNA in K562 cytosol)
         shortLabel K562 cyto A+ AS2
-        subGroups view=3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
+        subGroups view=m3-AllRawSignal cellType=K562 rnaExtract=longPolyA  rep=rep2
         type bedGraph 4
         #type bigWig 0 13556
         minLimit 0
@@ -178,7 +178,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in GM12878 cytosol)
         shortLabel GM12 cyto A+ AS1
-        subGroups view=3-AllRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m3-AllRawSignal cellType=GM12878 rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         #type bigWig 0 20925
         minLimit 0
@@ -190,7 +190,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
         longLabel ENCODE GIS RNA-seq All Strand Raw Signal Rep 1 (PolyA+ RNA in H1-hESC cell)
         shortLabel hESC cell A+ AS1
-        subGroups view=3-AllRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
+        subGroups view=m3-AllRawSignal cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
         type bedGraph 4
         color 0,107,27
         #type bigWig 0 48723
@@ -202,13 +202,13 @@ wgEncode 1
     shortLabel Alignments
     view 4-Alignments
     visibility hide
-        subTrack wgEncodeGisRnaSeq
+    subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
-        subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m4-Alignments cellType=K562 rnaExtract=longPolyA  rep=rep1
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
         baseColorDefault diffBases
@@ -222,7 +222,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel K562 cyto A+ AL2
         longLabel ENCODE GIS RNA-seq Alignments Rep 2 (PolyA+ RNA in K562 cytosol)
-        subGroups view=4-Alignments cellType=K562 rnaExtract=longPolyA  rep=rep2
+        subGroups view=m4-Alignments cellType=K562 rnaExtract=longPolyA  rep=rep2
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
         color 46,0,184
@@ -236,7 +236,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel GM12 cyto A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in GM12878 cytosol)
-        subGroups view=4-Alignments cellType=GM12878 rnaExtract=longPolyA  rep=rep1
+        subGroups view=m4-Alignments cellType=GM12878 rnaExtract=longPolyA  rep=rep1
         type bigBed 6
         colorByStrand 46,0,184 238,85,34
         baseColorDefault diffBases
@@ -250,7 +250,7 @@ wgEncode 1
         subTrack wgEncodeGisRnaSeqView4-Alignments off
         shortLabel hESC cell A+ AL1
         longLabel ENCODE GIS RNA-seq Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
-        subGroups view=4-Alignments cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
+        subGroups view=m4-Alignments cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
         color 0,107,27
         colorByStrand 46,0,184 238,85,34
         baseColorDefault diffBases
@@ -264,14 +264,14 @@ wgEncode 1
     shortLabel Split Alignments
     view 5-SplitAlign
     visibility hide
-        subTrack wgEncodeGisRnaSeq
+    subTrack wgEncodeGisRnaSeq
 
         track wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel K562 cyto A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in K562 cytosol)
-        subGroups view=5-SplitAlign cellType=K562 rnaExtract=longPolyA  rep=rep1
-    #    type pairedTagAlign
+        subGroups view=m5-SplitAlign cellType=K562 rnaExtract=longPolyA  rep=rep1
+        #    type pairedTagAlign
         colorByStrand 46,0,184 238,85,34
         color 46,0,184
         baseColorDefault diffBases
@@ -279,15 +279,15 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
         type bed 6
 
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
         shortLabel hESC cell A+ SA1
         longLabel ENCODE GIS RNA-seq Split Alignments Rep 1 (PolyA+ RNA in H1-hESC cell)
-        subGroups view=5-SplitAlign cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
-    #    type pairedTagAlign
+        subGroups view=m5-SplitAlign cellType=H1-hESC rnaExtract=longPolyA  rep=rep1
+        #    type pairedTagAlign
         colorByStrand 46,0,184 238,85,34
         color 0,107,27
         baseColorDefault diffBases
@@ -295,7 +295,6 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
         type bed 6
-
 
