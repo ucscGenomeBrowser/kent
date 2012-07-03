@@ -212,7 +212,7 @@ wgEncode 1
 
         track wgEncodeFsuRepliChipEpisc5MWaveSignalRep2
         parent wgEncodeFsuRepliChip off
-        shortLabel EpiSC-5i Ws 2
+        shortLabel EpiSC-5 Ws 2
         longLabel EpiSC-5 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
         subGroups view=WaveSignal cellType=EPISC5 sex=M treatment=NONE rep=rep2
         type bigWig -5.700624 3.277806

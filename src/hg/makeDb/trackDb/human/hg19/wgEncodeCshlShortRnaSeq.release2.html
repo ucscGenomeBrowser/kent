@@ -25,9 +25,6 @@ distinguishing between the different cell types and compartments.</p>
 <dd>The Contigs are BED format files representing blocks of overlapping mapped reads from pooled biological replicates. The corresponding number of mapped reads, the RPKM value, and the non-parametric IDR (npIDR) are reported for each contig.</dd>
 <dt><i>Raw Signal</i></dt>
 <dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).</dd>
-<dt><i>Alignments</i></dt>
-<dd>The Alignments view shows individual reads mapped to the genome and indicates where bases may mismatch. Every mapped read is displayed. The alignments file follows the standard SAM format. See the <a target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf#page=4">SAM Format Specification</a> for more information on the SAM/BAM file format.
-</dd>
 </dl>
 
 <P>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</P>
@@ -36,6 +33,9 @@ distinguishing between the different cell types and compartments.</p>
 The following files can be found on the <a target="_BLANK" href="../cgi-bin/hgFileUi?db=hg19&g=wgEncodeCshlShortRnaSeq">Downloads Page</a>.
 
 <dl>
+<dt><i>Alignments</i></dt>
+<dd>The Alignments contain individual reads mapped to the genome and indicates where bases may mismatch. Every mapped read is displayed. The alignments file follows the standard SAM format. See the <a target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf#page=4">SAM Format Specification</a> for more information on the SAM/BAM file format.
+</dd>
 <dt><i>GENCODE V7</i></dt>
 <dd>For each GENCODE V7 exon, the raw read count on the plus or minus strand, reads per million mapped reads (RPM) and the non-parametric IDR (npIDR) are reported in GFF format.</dd>
 <dt><i>Transfrags</i></dt>
@@ -71,6 +71,9 @@ Reads were trimmed to discard any bases following a quality score less than or e
 </p>
 
 <h2>Release Notes </h2>
+<p>
+Update to Release 2 (July 2012): Alignments are no longer being displayed. They are now available as downloads only.
+</p>
 <p>
 This is Release 2 (February 2012) of CSHL Small RNA-seq with new data from the Gingeras lab. It includes ten new cell lines (A549, AG04450, BJ, H1-hESC, HeLa-S3, HepG2, HUVEC, MCF-7, NHEK, and SK-N-SH_RA), a new displayed view (Contigs), and two new download files (GENCODE Predicted Exons and a Protocol Document).
 </p>
