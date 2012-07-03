@@ -3,9 +3,9 @@ compositeTrack on
 shortLabel CSHL Sm RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Small RNA-seq
 group expression
-subGroup1 view Views m1-Transfrags=1-Transfrags m2-PlusRawSignal=2-PlusRawSignal m3-MinusRawSignal=3-MinusRawSignal m4-Alignments=4-Alignments
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t3PROSTATE=prostate
-subGroup3 localization Localization m0-cell=0-cell m10-polysome=10-polysome m20-cytosol=20-cytosol m30-nucleus=30-nucleus m40-nucleoplasm=40-nucleoplasm m50-chromatin=50-chromatin m60-nucleolus=60-nucleolus
+subGroup1 view Views 1-Transfrags=Transfrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
+subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 dimensions dimensionX=cellType dimensionY=localization
 #fileSortOrder cell=Cell_Line view=View geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ localization=+ view=+
@@ -31,7 +31,7 @@ noInherit on
         shortLabel GM12 cyto tot TF
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 cytosol)
-        subGroups view=m1-Transfrags cellType=t1GM12878 localization=m20-cytosol
+        subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
@@ -39,7 +39,7 @@ noInherit on
         shortLabel GM12 nucl tot TF
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 nucleus)
-        subGroups view=m1-Transfrags cellType=t1GM12878 localization=m30-nucleus
+        subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
@@ -47,7 +47,7 @@ noInherit on
         shortLabel K562 chrm tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 chromatin)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m50-chromatin
+        subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
@@ -55,7 +55,7 @@ noInherit on
         shortLabel K562 cyto tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 cytosol)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m20-cytosol
+        subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
@@ -63,7 +63,7 @@ noInherit on
         shortLabel K562 nucl tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleus)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m30-nucleus
+        subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
@@ -71,7 +71,7 @@ noInherit on
         shortLabel K562 nlos tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleolus)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m60-nucleolus
+        subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
@@ -79,7 +79,7 @@ noInherit on
         shortLabel K562 nplm tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleoplasm)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m40-nucleoplasm
+        subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
@@ -87,7 +87,7 @@ noInherit on
         shortLabel K562 psom tot TF
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 polysome)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m10-polysome
+        subGroups view=1-Transfrags cellType=K562 localization=10-polysome
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
@@ -95,14 +95,14 @@ noInherit on
         shortLabel pros cell tot TF
         color 0,102,136
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
-        subGroups view=m1-Transfrags cellType=t3PROSTATE localization=m0-cell
+        subGroups view=1-Transfrags cellType=prostate localization=0-cell
         type broadPeak
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell)
-        subGroups view=m1-Transfrags cellType=t1GM12878 localization=m0-cell
+        subGroups view=1-Transfrags cellType=GM12878 localization=0-cell
         type broadPeak
         color 153,38,0
 
@@ -110,7 +110,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 cell tot TF
         longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell)
-        subGroups view=m1-Transfrags cellType=t1K562 localization=m0-cell
+        subGroups view=1-Transfrags cellType=K562 localization=0-cell
         type broadPeak
         color 46,0,184
 
@@ -132,7 +132,7 @@ noInherit on
         shortLabel K562 cyto tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 cytosol)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m20-cytosol
+        subGroups view=2-PlusRawSignal cellType=K562 localization=20-cytosol
         # type bigWig 0 3557599
         minLimit 0
         maxLimit 3557599
@@ -144,7 +144,7 @@ noInherit on
         shortLabel K562 chrm tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 chromatin)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m50-chromatin
+        subGroups view=2-PlusRawSignal cellType=K562 localization=50-chromatin
         # type bigWig 0 5055640
         minLimit 0
         maxLimit 5055640
@@ -156,7 +156,7 @@ noInherit on
         shortLabel K562 psom tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 polysome)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m10-polysome
+        subGroups view=2-PlusRawSignal cellType=K562 localization=10-polysome
         # type bigWig 0 25082
         minLimit 0
         maxLimit 25082
@@ -168,7 +168,7 @@ noInherit on
         shortLabel GM12 cyto tot +S
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 cytosol)
-        subGroups view=m2-PlusRawSignal cellType=t1GM12878 localization=m20-cytosol
+        subGroups view=2-PlusRawSignal cellType=GM12878 localization=20-cytosol
         # type bigWig 0 449639
         minLimit 0
         maxLimit 449639
@@ -180,7 +180,7 @@ noInherit on
         shortLabel K562 nplm tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleoplasm)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m40-nucleoplasm
+        subGroups view=2-PlusRawSignal cellType=K562 localization=40-nucleoplasm
         # type bigWig 0 5059134
         minLimit 0
         maxLimit 5059134
@@ -192,7 +192,7 @@ noInherit on
         shortLabel pros cell tot +S
         color 0,102,136
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in prostate cell)
-        subGroups view=m2-PlusRawSignal cellType=t3PROSTATE localization=m0-cell
+        subGroups view=2-PlusRawSignal cellType=prostate localization=0-cell
         # type bigWig 0 1611371
         minLimit 0
         maxLimit 1611371
@@ -204,7 +204,7 @@ noInherit on
         shortLabel GM12 nucl tot +S
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in GM12878 nucleus)
-        subGroups view=m2-PlusRawSignal cellType=t1GM12878 localization=m30-nucleus
+        subGroups view=2-PlusRawSignal cellType=GM12878 localization=30-nucleus
         # type bigWig 0 641103
         minLimit 0
         maxLimit 641103
@@ -216,7 +216,7 @@ noInherit on
         shortLabel K562 nucl tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleus)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m30-nucleus
+        subGroups view=2-PlusRawSignal cellType=K562 localization=30-nucleus
         # type bigWig 0 516729
         minLimit 0
         maxLimit 516729
@@ -228,7 +228,7 @@ noInherit on
         shortLabel K562 nlos tot +S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in K562 nucleolus)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m60-nucleolus
+        subGroups view=2-PlusRawSignal cellType=K562 localization=60-nucleolus
         # type bigWig 0 968064
         minLimit 0
         maxLimit 968064
@@ -239,7 +239,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel GM12 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in GM12878 cell)
-        subGroups view=m2-PlusRawSignal cellType=t1GM12878 localization=m0-cell
+        subGroups view=2-PlusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
 
@@ -247,7 +247,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
         shortLabel K562 cell tot +S
         longLabel ENCODE CSHL RNA-Seq Plus Strand Raw Signal (short in K562 cell)
-        subGroups view=m2-PlusRawSignal cellType=t1K562 localization=m0-cell
+        subGroups view=2-PlusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
 
@@ -269,7 +269,7 @@ noInherit on
         shortLabel K562 cyto tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 cytosol)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m20-cytosol
+        subGroups view=3-MinusRawSignal cellType=K562 localization=20-cytosol
         # type bigWig 0 3557416
         minLimit 0
         maxLimit 3557416
@@ -281,7 +281,7 @@ noInherit on
         shortLabel K562 chrm tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 chromatin)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m50-chromatin
+        subGroups view=3-MinusRawSignal cellType=K562 localization=50-chromatin
         # type bigWig 0 3376353
         minLimit 0
         maxLimit 3376353
@@ -293,7 +293,7 @@ noInherit on
         shortLabel K562 psom tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 polysome)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m10-polysome
+        subGroups view=3-MinusRawSignal cellType=K562 localization=10-polysome
         # type bigWig 0 203241
         minLimit 0
         maxLimit 203241
@@ -305,7 +305,7 @@ noInherit on
         shortLabel GM12 cyto tot -S
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 cytosol)
-        subGroups view=m3-MinusRawSignal cellType=t1GM12878 localization=m20-cytosol
+        subGroups view=3-MinusRawSignal cellType=GM12878 localization=20-cytosol
         # type bigWig 0 333231
         minLimit 0
         maxLimit 333231
@@ -317,7 +317,7 @@ noInherit on
         shortLabel K562 nplm tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleoplasm)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m40-nucleoplasm
+        subGroups view=3-MinusRawSignal cellType=K562 localization=40-nucleoplasm
         # type bigWig 0 1595004
         minLimit 0
         maxLimit 1595004
@@ -329,7 +329,7 @@ noInherit on
         shortLabel pros cell tot -S
         color 0,102,136
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in prostate cell)
-        subGroups view=m3-MinusRawSignal cellType=t3PROSTATE localization=m0-cell
+        subGroups view=3-MinusRawSignal cellType=prostate localization=0-cell
         # type bigWig 0 1611371
         minLimit 0
         maxLimit 1611371
@@ -341,7 +341,7 @@ noInherit on
         shortLabel GM12 nucl tot -S
         color 153,38,0
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in GM12878 nucleus)
-        subGroups view=m3-MinusRawSignal cellType=t1GM12878 localization=m30-nucleus
+        subGroups view=3-MinusRawSignal cellType=GM12878 localization=30-nucleus
         # type bigWig 0 4876484
         minLimit 0
         maxLimit 4876484
@@ -353,7 +353,7 @@ noInherit on
         shortLabel K562 nucl tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleus)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m30-nucleus
+        subGroups view=3-MinusRawSignal cellType=K562 localization=30-nucleus
         # type bigWig 0 768499
         minLimit 0
         maxLimit 768499
@@ -365,7 +365,7 @@ noInherit on
         shortLabel K562 nlos tot -S
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in K562 nucleolus)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m60-nucleolus
+        subGroups view=3-MinusRawSignal cellType=K562 localization=60-nucleolus
         # type bigWig 0 1076632
         minLimit 0
         maxLimit 1076632
@@ -376,7 +376,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel GM12 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in GM12878 cell)
-        subGroups view=m3-MinusRawSignal cellType=t1GM12878 localization=m0-cell
+        subGroups view=3-MinusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
 
@@ -384,7 +384,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
         shortLabel K562 cell tot -S
         longLabel ENCODE CSHL RNA-Seq Minus Strand Raw Signal (short in K562 cell)
-        subGroups view=m3-MinusRawSignal cellType=t1K562 localization=m0-cell
+        subGroups view=3-MinusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
 
@@ -405,7 +405,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 cytosol)
-        subGroups view=m4-Alignments cellType=t1GM12878 localization=m20-cytosol
+        subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
@@ -419,7 +419,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 nucleus)
-        subGroups view=m4-Alignments cellType=t1GM12878 localization=m30-nucleus
+        subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
@@ -433,7 +433,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 chromatin)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m50-chromatin
+        subGroups view=4-Alignments cellType=K562 localization=50-chromatin
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
@@ -447,7 +447,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 cytosol)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m20-cytosol
+        subGroups view=4-Alignments cellType=K562 localization=20-cytosol
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
@@ -461,7 +461,7 @@ noInherit on
         baseColorUseSequence nameIsSequence
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        subGroups view=m4-Alignments cellType=t1K562 localization=m30-nucleus
+        subGroups view=4-Alignments cellType=K562 localization=30-nucleus
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
@@ -475,7 +475,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleolus)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m60-nucleolus
+        subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
@@ -489,7 +489,7 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleoplasm)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m40-nucleoplasm
+        subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
@@ -503,7 +503,7 @@ noInherit on
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 polysome)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m10-polysome
+        subGroups view=4-Alignments cellType=K562 localization=10-polysome
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
@@ -517,14 +517,14 @@ noInherit on
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in prostate cell)
-        subGroups view=m4-Alignments cellType=t3PROSTATE localization=m0-cell
+        subGroups view=4-Alignments cellType=prostate localization=0-cell
         type bigBed 6
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel GM12 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in GM12878 cell)
-        subGroups view=m4-Alignments cellType=t1GM12878 localization=m0-cell
+        subGroups view=4-Alignments cellType=GM12878 localization=0-cell
         type bigBed 6
         color 153,38,0
 
@@ -532,7 +532,8 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
         shortLabel K562 cell tot AL
         longLabel ENCODE CSHL RNA-Seq Tags (short in K562 cell)
-        subGroups view=m4-Alignments cellType=t1K562 localization=m0-cell
+        subGroups view=4-Alignments cellType=K562 localization=0-cell
         type bigBed 6
         color 46,0,184
+
 
