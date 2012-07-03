@@ -18666,10 +18666,11 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Fri Jun 29 10:37:51 PDT 2012
-    #	real    3047m28.723s
+    #   real    411m54.452s
     cat fb.hg19.chainEchTel1Link.txt
-    #	290413150 bases of 2652783500 (10.947%) in intersection
+    cat fb.hg19.chainEchTel1Link.txt 
+    #   670299345 bases of 2897316137 (23.135%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/hg19/bed
     ln -s lastzEchTel1.2012-06-29 lastz.echTel1
@@ -18678,7 +18679,7 @@ XXX - running - Fri Jun 29 10:37:51 PDT 2012
     cd /hive/data/genomes/hg19/bed/lastzEchTel1.2012-06-29
     time doRecipBest.pl hg19 echTel1 -buildDir=`pwd` -workhorse=hgwdev \
 	> best.log 2>&1 &
-    #	real    1201m39.275s
+    #   real    48m11.157s
 
     mkdir /hive/data/genomes/echTel1/bed/blastz.hg19.swap
     cd /hive/data/genomes/echTel1/bed/blastz.hg19.swap
@@ -18687,9 +18688,10 @@ XXX - running - Fri Jun 29 10:37:51 PDT 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    269m52.619s
+    #   real    405m49.935s
     cat fb.echTel1.chainMm10Link.txt
-    #	298082139 bases of 2111581369 (14.117%) in intersection
+    #   659524096 bases of 2111581369 (31.234%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/echTel1/bed
     ln -s blastz.hg19.swap lastz.hg19
