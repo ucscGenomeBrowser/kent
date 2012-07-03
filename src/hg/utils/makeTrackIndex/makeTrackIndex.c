@@ -106,7 +106,7 @@ if(html != NULL)
     }
 printf("\n");
 
-if(tdbIsSuper(tdb->parent))
+if (tdbIsSuper(tdb->parent))
     printTrack(conn, tdb->parent, NULL, grpHash, cvHash, tdbHash, metaDbName);
 if(tdb->subtracks != NULL)
     {

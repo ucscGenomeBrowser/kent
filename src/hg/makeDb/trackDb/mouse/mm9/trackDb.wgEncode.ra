@@ -3,11 +3,10 @@
 #Encode Composite tracks (main wrangler:Venkat)
 
 # mapability liftover
-include wgEncodeMapability.ra alpha
+include wgEncodeMapability.ra
 
 # Stan/Yale TFBS (wrangler: Venkat) 
-include wgEncodeSydhTfbs.ra public
-include wgEncodeSydhTfbs.release3.ra alpha,beta
+include wgEncodeSydhTfbs.release3.ra
 
 # Stan/Yale Histone (wrangler: Venkat)
 include wgEncodeSydhHist.ra beta,public
@@ -33,7 +32,7 @@ include wgEncodeLicrTfbs.release2.ra beta,public
 include wgEncodeLicrTfbs.release3.ra alpha
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.ra
 
 # Licr RNA-Seq (wrangler: Fang)
 include wgEncodeLicrRnaSeq.release2.ra
@@ -52,8 +51,7 @@ include wgEncodeCaltechHist.ra
 include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.ra beta,public
-include wgEncodeCshlLongRnaSeq.release2.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha

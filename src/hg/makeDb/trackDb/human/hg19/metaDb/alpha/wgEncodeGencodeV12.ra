@@ -1,0 +1,295 @@
+metaObject wgEncodeGencode2wayConsPseudoV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencode2wayConsPseudoV12.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion 2-way Pseudogene Annotation Set
+md5sum 6e554c37e6b7cbbb6a8a89b2221c7b3d
+project wgEncode
+subId 7058
+tableName wgEncodeGencode2wayConsPseudoV12
+
+metaObject wgEncodeGencodeAnnotationRemarkV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeAnnotationRemarkV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Annotation Remarks
+md5sum ccbd12a47bf25e64b9780f0b8ff52286
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeAnnotationRemarkV12
+
+metaObject wgEncodeGencodeAttrsV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeAttrsV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Transcript Attributes
+md5sum ef231404169edb47f7fcd53eefa45faa
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeAttrsV12
+
+metaObject wgEncodeGencodeBasicV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeBasicV12.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Basic Gene Annotation Set
+md5sum dbedf21614fd987757e5ec453b1fbab2
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeBasicV12
+
+metaObject wgEncodeGencodeCompV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeCompV12.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Comprehensive Gene Annotation Set
+md5sum f3c46e95cbc372fb9d1b4ab2ee1c6696
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeCompV12
+
+metaObject wgEncodeGencodeExonSupportV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeExonSupportV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Exon Support
+md5sum fa1a753a25d5a5fc593f115b373b3352
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeExonSupportV12
+
+metaObject wgEncodeGencodeGeneSourceV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeGeneSourceV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Source Lab
+md5sum bc138c8f4bf878edea6343b77695d27c
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeGeneSourceV12
+
+metaObject wgEncodeGencodePdbV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodePdbV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion PDB entry mapping
+md5sum 008ce1b916b80694cd619b1610af355c
+project wgEncode
+subId 7058
+tableName wgEncodeGencodePdbV12
+
+metaObject wgEncodeGencodePolyaV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodePolyaV12.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion PolyA Transcript Annotation Set
+md5sum c6c9ecdef0a2455b10c205b5dd56d34d
+project wgEncode
+subId 7058
+tableName wgEncodeGencodePolyaV12
+
+metaObject wgEncodeGencodePseudoGeneV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodePseudoGeneV12.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Pseudogene Annotation Set
+md5sum 4ccccac64ab1df888db50a7a1c1d0a17
+project wgEncode
+subId 7058
+tableName wgEncodeGencodePseudoGeneV12
+
+metaObject wgEncodeGencodePubMedV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodePubMedV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion PubMed ID mapping
+md5sum 7017db76ac316e9cb9931e0edd5c7143
+project wgEncode
+subId 7058
+tableName wgEncodeGencodePubMedV12
+
+metaObject wgEncodeGencodeRefSeqV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeRefSeqV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion RefSeq mapping
+md5sum c920dfbeb284eb507a245bc8f1acd064
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeRefSeqV12
+
+metaObject wgEncodeGencodeTagV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeTagV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Transcript Tags
+md5sum 2077c93e71398f4ccfddb854f728ea53
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeTagV12
+
+metaObject wgEncodeGencodeTranscriptSourceV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeTranscriptSourceV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Transcript Source Lab
+md5sum 9f6a0a64c0b9a39fc2c23c0c1bcfec94
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeTranscriptSourceV12
+
+metaObject wgEncodeGencodeTranscriptSupportV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeTranscriptSupportV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Transcript Support
+md5sum 2214deb9bb6882fb38236689d9928b7e
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeTranscriptSupportV12
+
+metaObject wgEncodeGencodeTranscriptionSupportLevelV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeTranscriptionSupportLevelV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion Transcription Support Level
+md5sum 2a4488c580eb474ed4bb9835ce2dcebe
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeTranscriptionSupportLevelV12
+
+metaObject wgEncodeGencodeUniProtV12
+objType table
+composite wgEncodeGencodeV12
+dataType Gencode
+dateSubmitted 2012-06-01
+dccAccession wgEncodeEH002936
+expId 2936
+fileName wgEncodeGencodeUniProtV12.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V12
+labVersion UniProt ID mapping
+md5sum 1e583234924b5dc4b33084afd3375c11
+project wgEncode
+subId 7058
+tableName wgEncodeGencodeUniProtV12
+
+metaObject wgEncodeGencodeV12
+objType composite
+composite wgEncodeGencodeV12
+expVars lab,dataType,labExpId
+
+# MAGIC: 1705787860

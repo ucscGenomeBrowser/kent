@@ -282,8 +282,12 @@ transProbLookup[aUtr3][aUtr3] = always;
     }
 
     // int ufoo = uglyf(" start %d(%c)\n", curState, aVisStates[curState]);
-    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, aVisStates[curState], parent, aVisStates[parent], newScore);
-    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState, aVisStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore, dyno->prevScores[sourceState],  dyno->transProbLookup[sourceState][destState] + emitScore);
+    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, aVisStates[curState],
+    //       parent, aVisStates[parent], newScore);
+    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState,
+    //       aVisStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore,
+    //       dyno->prevScores[sourceState],
+    //       dyno->transProbLookup[sourceState][destState] + emitScore);
 
 #define source(sourceState, emitScore) \
     if ((oneScore = dyno->transProbLookup[sourceState][destState] + emitScore + dyno->prevScores[sourceState]) > newScore) \
@@ -357,7 +361,7 @@ if (checkInHash != NULL && checkOut != NULL)
     {
     struct mrnaInfo *mi = hashMustFindVal(checkInHash, seq->name);
     fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n",
-    	mi->name, mi->size, mi->cdsStart, mi->cdsEnd,
+        mi->name, mi->size, mi->cdsStart, mi->cdsEnd,
 	cdsStart, cdsEnd);
     }
 if (cdsOut != NULL)

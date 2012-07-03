@@ -67,7 +67,7 @@ def processCellTypeEntry(row, species, downloadsDirectory, noDownload,
                          username, password, wikiBaseUrl):
     cellData = row.findAll("td")
     term = getContents(cellData[0])
-    if re.search("(Example)", term):
+    if re.search("(Example)", term) or term == "missing":
         return((None, False))
     else:
         #
@@ -190,7 +190,7 @@ soup = BeautifulSoup(thepage)
 # Once you reach the table, process each <td> line until an end of
 # table tag is reached.
 #
-cellTypeTable = soup.findAll("table")[2]
+cellTypeTable = soup.findAll("table")[1]
 skippedHeaderRow = False
 for entry in cellTypeTable.findAll("tr"):
     if not skippedHeaderRow:
@@ -202,5 +202,5 @@ for entry in cellTypeTable.findAll("tr"):
                                                   args.username,
                                                   args.password, 
                                                   wikiBaseUrl)
-        if approved or args.forcePrinting:
+        if approved or args.forcePrinting and stanza != None:
             print stanza

@@ -136,12 +136,18 @@ unsigned gbParseType(char* typeStr);
 char* gbTypeName(unsigned type);
 /* convert a type constant to string */
 
+char* gbTypeNameLower(unsigned type);
+/* convert a type constant to lower-case string, as used in file names */
+
 unsigned gbParseSrcDb(char* srcDbStr);
 /* Parse a src db name (GenBank or RefSeq), or comma seperate list of them
  * into a constant. Case is ignored */
 
 char* gbSrcDbName(unsigned srcDb);
 /* Get string name for a srcDb */
+
+char* gbSrcDbNameLower(unsigned srcDb);
+/* Get lower case string name for a srcDb */
 
 unsigned gbGuessSrcDb(char* acc);
 /* Guess the src db from an accession */

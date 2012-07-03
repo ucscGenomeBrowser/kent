@@ -66,6 +66,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002874
 expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdPk.narrowPeak.gz
+geoSampleAccession GSM945858
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -91,6 +92,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002874
 expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM945858
 grant Snyder
 lab USC
 md5sum b25e925194212abbc440c01328ec4bb6
@@ -115,6 +117,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002874
 expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM945858
 grant Snyder
 lab USC
 md5sum 3724674ffbba05fc3f69426df866d204
@@ -139,6 +142,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002874
 expId 2874
 fileName wgEncodeSydhHistoneHct116H3k04me1UcdSig.bigWig
+geoSampleAccession GSM945858
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -212,6 +216,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002873
 expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdPk.narrowPeak.gz
+geoSampleAccession GSM945853
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -237,6 +242,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002873
 expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM945853
 grant Snyder
 lab USC
 md5sum ccd48e55239772788b9b3879a533bf88
@@ -261,6 +267,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002873
 expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM945853
 grant Snyder
 lab USC
 md5sum 6aa7c36b2a339cb649a3fb199fb284b2
@@ -285,6 +292,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002873
 expId 2873
 fileName wgEncodeSydhHistoneHct116H3k27acUcdSig.bigWig
+geoSampleAccession GSM945853
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -334,6 +342,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH000627
 expId 627
 fileName wgEncodeSydhHistoneHct116InputUcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM945855
 grant Snyder
 lab USC
 md5sum e73745c081bca17d237f4576ab2d9afe
@@ -358,6 +367,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH000627
 expId 627
 fileName wgEncodeSydhHistoneHct116InputUcdSig.bigWig
+geoSampleAccession GSM945855
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -1854,6 +1864,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002875
 expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdPk.narrowPeak.gz
+geoSampleAccession GSM945857
 grant Snyder
 lab USC
 labVersion PeakSeq1.0. Spreading mark so standard peak calling does not work well.  Replicates appear to agree regardless.
@@ -1879,6 +1890,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002875
 expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM945857
 grant Snyder
 lab USC
 md5sum 302a812ad49c9fd34b94db33e5299780
@@ -1903,6 +1915,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002875
 expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM945857
 grant Snyder
 lab USC
 md5sum b3012b799e11da1b9ad9c22f41ed8e58
@@ -1927,6 +1940,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002875
 expId 2875
 fileName wgEncodeSydhHistoneMcf7H3k09me3UcdSig.bigWig
+geoSampleAccession GSM945857
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2000,6 +2014,7 @@ dateUnrestricted 2012-10-21
 dccAccession wgEncodeEH002872
 expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdPk.narrowPeak.gz
+geoSampleAccession GSM945854
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2025,6 +2040,7 @@ dateUnrestricted 2012-10-21
 dccAccession wgEncodeEH002872
 expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep1.fastq.gz
+geoSampleAccession GSM945854
 grant Snyder
 lab USC
 md5sum 61e86c6e69c63de33db167d0a3d76e91
@@ -2049,6 +2065,7 @@ dateUnrestricted 2012-10-21
 dccAccession wgEncodeEH002872
 expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdRawDataRep2.fastq.gz
+geoSampleAccession GSM945854
 grant Snyder
 lab USC
 md5sum 856720e867010a62a20d8ce568980cd8
@@ -2073,6 +2090,7 @@ dateUnrestricted 2012-10-21
 dccAccession wgEncodeEH002872
 expId 2872
 fileName wgEncodeSydhHistoneMcf7H3k27acUcdSig.bigWig
+geoSampleAccession GSM945854
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2444,6 +2462,7 @@ dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000762
 expId 762
 fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep1.fastq.gz
+geoSampleAccession GSM945859
 grant Snyder
 lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
@@ -2471,6 +2490,7 @@ dateUnrestricted 2010-10-15
 dccAccession wgEncodeEH000762
 expId 762
 fileName wgEncodeSydhHistoneMcf7InputUcdRawDataRep2.fastq.gz
+geoSampleAccession GSM945859
 grant Snyder
 lab USC
 labVersion MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified,
@@ -2498,6 +2518,7 @@ dateUnrestricted 2011-04-08
 dccAccession wgEncodeEH000762
 expId 762
 fileName wgEncodeSydhHistoneMcf7InputUcdSig.bigWig
+geoSampleAccession GSM945859
 grant Snyder
 lab USC
 md5sum 28127f15e2564c9fbece2adfa80f4394
@@ -3725,6 +3746,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002876
 expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdPk.narrowPeak.gz
+geoSampleAccession GSM945856
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -3750,6 +3772,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002876
 expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM945856
 grant Snyder
 lab USC
 md5sum 8069b6f026c2e361c3a1f1c5dee55c07
@@ -3774,6 +3797,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002876
 expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM945856
 grant Snyder
 lab USC
 md5sum 09c28b9470ff3e8133947a576b2e0bd3
@@ -3798,6 +3822,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH002876
 expId 2876
 fileName wgEncodeSydhHistonePanc1H3k04me3bUcdSig.bigWig
+geoSampleAccession GSM945856
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -5104,4 +5129,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -323693922
+# MAGIC: -2062964295

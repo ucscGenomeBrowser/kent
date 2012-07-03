@@ -107,10 +107,41 @@ if (ip != NULL)
     }
 }
 
+boolean botException()
+/* check if the remote ip address is on the exceptions list */
+{
+char *exceptIps = cfgOption("bottleneck.except");
+if (exceptIps)
+    {
+    char *remoteAddr = getenv("REMOTE_ADDR");
+    if (remoteAddr)
+	{
+	char *s = exceptIps;
+	boolean found = FALSE;
+	while (s && !found)
+	    {
+	    char *e = strchr(s, ' ');
+	    if (e)
+		*e = 0;
+	    if (sameString(remoteAddr, s))
+		found = TRUE;
+	    if (e)
+		*e++ = ' ';
+	    s = e;
+	    }
+	if (found)
+	    return TRUE;
+	}
+    }
+return FALSE;
+}
 void hgBotDelay()
 /* High level bot delay call - looks up bottleneck server
  * in hg.conf. */
 {
+if (botException())
+    return;
+
 char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
 

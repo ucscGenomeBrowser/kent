@@ -8,14 +8,14 @@ ALTER TABLE [dbo].[AccessionRejectionCriteria] ADD
 GO
 
 ALTER TABLE [dbo].[Accessions] ADD 
-	CONSTRAINT [PK_members] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Accessions] PRIMARY KEY  CLUSTERED 
 	(
 		[accession_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Accessions_GroupVersions] ADD 
-	CONSTRAINT [PK_members_groupVersions] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Accessions_GroupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[accession_uid],
 		[group_version_uid]
@@ -23,35 +23,35 @@ ALTER TABLE [dbo].[Accessions_GroupVersions] ADD
 GO
 
 ALTER TABLE [dbo].[CcdsStatusVals] ADD 
-	CONSTRAINT [PK_review_category_vals] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_CcdsStatusVals] PRIMARY KEY  CLUSTERED 
 	(
 		[ccds_status_val_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[CcdsUids] ADD 
-	CONSTRAINT [PK_ccdsIds] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_CcdsUids] PRIMARY KEY  CLUSTERED 
 	(
 		[ccds_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[ChromosomeAccessions] ADD 
-	CONSTRAINT [PK_chromosome_identities] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_ChromosomeAccessions] PRIMARY KEY  CLUSTERED 
 	(
 		[chromosome_accession_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[GroupVersions] ADD 
-	CONSTRAINT [PK_group_versions] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_GroupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[group_version_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] ADD 
-	CONSTRAINT [PK_chromosomes] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_GroupVersions_ChromosomeAccessions] PRIMARY KEY  CLUSTERED 
 	(
 		[group_version_uid],
 		[chromosome_accession_uid]
@@ -59,7 +59,7 @@ ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] ADD
 GO
 
 ALTER TABLE [dbo].[Groups] ADD 
-	CONSTRAINT [PK_cds_groups] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Groups] PRIMARY KEY  CLUSTERED 
 	(
 		[group_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
@@ -73,14 +73,14 @@ ALTER TABLE [dbo].[InterpretationSubtypes] ADD
 GO
 
 ALTER TABLE [dbo].[InterpretationTypes] ADD 
-	CONSTRAINT [PK_interpretationTypeVals] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_interpretationTypes] PRIMARY KEY  CLUSTERED 
 	(
 		[interpretation_type_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Interpretations] ADD 
-	CONSTRAINT [PK_interpretations] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Interpretations] PRIMARY KEY  CLUSTERED 
 	(
 		[interpretation_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
@@ -94,14 +94,14 @@ ALTER TABLE [dbo].[Interpreters] ADD
 GO
 
 ALTER TABLE [dbo].[Locations] ADD 
-	CONSTRAINT [PK_locations] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Locations] PRIMARY KEY  CLUSTERED 
 	(
 		[location_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Locations_GroupVersions] ADD 
-	CONSTRAINT [PK_locations_groupVersions] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Locations_GroupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[location_uid],
 		[group_version_uid],
@@ -110,14 +110,14 @@ ALTER TABLE [dbo].[Locations_GroupVersions] ADD
 GO
 
 ALTER TABLE [dbo].[NextIds] ADD 
-	CONSTRAINT [next_id_table] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_NextIds] PRIMARY KEY  CLUSTERED 
 	(
 		[table_name]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Organizations] ADD 
-	CONSTRAINT [PK_member_type_vals] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_Organizations] PRIMARY KEY  CLUSTERED 
 	(
 		[organization_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
@@ -131,28 +131,28 @@ ALTER TABLE [dbo].[Programs] ADD
 GO
 
 ALTER TABLE [dbo].[StatisticsTypes] ADD
-        CONSTRAINT [PK_statisticsTypeVals] PRIMARY KEY  CLUSTERED
+        CONSTRAINT [PK_StatisticsTypes] PRIMARY KEY  CLUSTERED
         (
                 [statistics_type_uid]
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
 ALTER TABLE [dbo].[CcdsStatistics] ADD
-        CONSTRAINT [PK_ccdsStatistics] PRIMARY KEY  CLUSTERED
+        CONSTRAINT [PK_CcdsStatistics] PRIMARY KEY  CLUSTERED
         (
                 [statistics_uid]
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
 ALTER TABLE [dbo].[Builds] ADD
-        CONSTRAINT [PK_builds] PRIMARY KEY  CLUSTERED
+        CONSTRAINT [PK_Builds] PRIMARY KEY  CLUSTERED
         (
                 [build_uid]
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
 ALTER TABLE [dbo].[BuildQualityTests] ADD
-        CONSTRAINT [PK_buildQualityTests] PRIMARY KEY  CLUSTERED
+        CONSTRAINT [PK_BuildQualityTests] PRIMARY KEY  CLUSTERED
         (
                 [build_uid],
                 [qa_analysis_id]
@@ -166,22 +166,29 @@ ALTER TABLE [dbo].[ProspectiveGroups] ADD
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
+ALTER TABLE [dbo].[ProspectiveAnnotCompare] ADD
+        CONSTRAINT [PK_ProspectiveAnnotCompare] PRIMARY KEY  CLUSTERED
+        (
+                [group_version_uid]
+        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
 ALTER TABLE [dbo].[ReportTypes] ADD
-        CONSTRAINT [PK_reportTypeVals] PRIMARY KEY  CLUSTERED
+        CONSTRAINT [PK_ReportTypes] PRIMARY KEY  CLUSTERED
         (
                 [report_type_uid]
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
 ALTER TABLE [dbo].[ReportQueries] ADD
-        CONSTRAINT [PK_query] PRIMARY KEY CLUSTERED
+        CONSTRAINT [PK_ReportQueries] PRIMARY KEY CLUSTERED
         (
                 [query_uid] ASC
         ) WITH  FILLFACTOR = 90  ON [PRIMARY]
 go
 
 ALTER TABLE [dbo].[ProspectiveStatusVals] ADD 
-	CONSTRAINT [PK_prospectiveStatusVals] PRIMARY KEY  CLUSTERED 
+	CONSTRAINT [PK_ProspectiveStatusVals] PRIMARY KEY  CLUSTERED 
 	(
 		[prospective_status_val_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
@@ -396,6 +403,15 @@ ALTER TABLE [dbo].[BuildQualityTests] ADD
                 [acc_rejection_uid]
         ) REFERENCES [dbo].[AccessionRejectionCriteria] (
                 [acc_rejection_uid]
+        )
+go
+
+ALTER TABLE [dbo].[ProspectiveAnnotCompare] ADD
+        CONSTRAINT [FK_ProspectiveAnnotCompare] FOREIGN KEY
+        (
+                [group_version_uid]
+        ) REFERENCES [dbo].[ProspectiveGroups] (
+                [group_version_uid]
         )
 go
 
