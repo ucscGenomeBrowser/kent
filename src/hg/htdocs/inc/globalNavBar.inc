@@ -33,7 +33,7 @@
 </li>
 <li class="menuparent"><span>Downloads</span><ul style="display: none; visibility: hidden;">
 <li class="first"><a href="../downloads.html">Genome Data</a></li>
-<li><a href="../downloads.html">Source Code</a></li>
+<li><a href="../downloads.html#source_downloads">Source Code</a></li>
 <li><a href="../downloads.html">Utilities</a></li>
 <li class="last"><a href="ftp://hgdownload.cse.ucsc.edu/goldenPath">FTP/MySQL Access</a></li>
 </ul>
