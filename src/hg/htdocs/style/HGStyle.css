@@ -457,4 +457,22 @@ label small {
 /* input[type=submit]:hover,input[type=button]:hover { color: #0000AA; border:2px outset #008800; } */
 /* img[src="../images/add_sm.gif"]:hover,img[src="../images/remove_sm.gif"]:hover { outline:#008800 outset 1px; } */
 
+/* Styles for static pages with the "original" browser look */
+body.oldStaticPage {
+		background-color: rgb(255,249,210); /* #fff9d2 */
+	}
 
+body.oldStaticPage .nav {
+	margin: 2px 0 6px 0;
+}
+
+body.oldStaticPage .section h1 {
+	background-color: rgb(217,228,248); /* #d9e4f8 */
+   	font-size: 1.1em;
+	padding: 3px 14px;
+	margin: 0;
+}
+	
+body.oldStaticPage .sectionContent {
+	padding: 0 14px;
+}
