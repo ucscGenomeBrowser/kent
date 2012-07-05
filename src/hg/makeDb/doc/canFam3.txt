@@ -100,7 +100,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -160,11 +160,11 @@ taxId   9615
 '_EOF_'
     # << happy emacs
 
-    time makeGenomeDb.pl -stop=agp canFam3.config.ra > agp.log 2>&1 
+    time makeGenomeDb.pl -stop=agp canFam3.config.ra > agp.log 2>&1
     # less than two minutes
     # check the end of agp.log to verify it is OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
-	-continue=db canFam3.config.ra > db.log 2>&1 
+	-continue=db canFam3.config.ra > db.log 2>&1
     #	real    18m17.938s
     # verify the end of db.log indicates success
 
@@ -200,7 +200,7 @@ taxId   9615
 	canFam3 > do.log 2>&1 &
     #	real    98m15.932s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	65887025 bases of 2402709449 (2.742%) in intersection
 
     # adding RepeatMasker to get completed masked sequence
@@ -435,7 +435,7 @@ close (FH);
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # of course, canFam3 has plenty of everything
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add canFam3 just after canFam2 and commit to GIT
@@ -636,3 +636,26 @@ TMPDIR=/scratch/tmp
     ln -s blastz.canFam3.swap lastz.canFam3
 
 #########################################################################
+# swap LASTZ from Human hg19 (DONE - 2012-07-04 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzCanFam3.2012-07-03
+    cat fb.hg19.chainCanFam3Link.txt
+    #   1502192631 bases of 2897316137 (51.848%) in intersection
+
+    #   and for the swap
+
+    mkdir /hive/data/genomes/canFam3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCanFam3.2012-07-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    103m14.464s
+    cat fb.canFam3.chainHg19Link.txt
+    #   1455183825 bases of 2392715236 (60.817%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/canFam3/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##############################################################################
