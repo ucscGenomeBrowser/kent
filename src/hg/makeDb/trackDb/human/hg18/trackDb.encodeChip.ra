@@ -18,7 +18,7 @@ shortLabel Affy Strict Sites
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Sites
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
-subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup2 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 group encodeChip
 priority 43.9
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -28,7 +28,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr00
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H3K9K14ac2 time=0h
+    subGroups factor=H3K9K14ac2 time=t0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Sites
     color 225,0,0
