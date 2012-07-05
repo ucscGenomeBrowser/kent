@@ -7420,6 +7420,21 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 #########################################################################
 # construct download files for 60-way (WORKING - 2012-06-27 - Hiram)
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way/maf
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way/alignments
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/glire
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/primate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/placental
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/mm10.60way.phastCons
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/glire
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/primate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/placental
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way.phyloP60way
     mkdir /hive/data/genomes/mm10/bed/multiz60way/downloads
     cd /hive/data/genomes/mm10/bed/multiz60way/downloads
     mkdir multiz60way phastCons60way phyloP60way
@@ -7430,66 +7445,157 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #   real    735m35.723s
     time gzip *.maf
     #   real    700m23.340s
+    md5sum *.maf.gz > md5sum.txt
+    ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way/maf
     cd ..
     du -hsc maf
     #   24G     maf
     du -hsc ../../anno/result/
     #   244G    ../../anno/result/
+    ln -s ../../mm10.60way.nh .
+    ln -s ../../mm10.60way.commonNames.nh .
+    ln -s `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
 
     #####################################################################
     cd /hive/data/genomes/mm10/bed/multiz60way/downloads/phastCons60way
-    mkdir glire primate placental vertebrate
+    mkdir glire primate placental vertebrate mm10.60way.phastCons
     cd glire
     ln -s ../../../cons/glire/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/glire
     #   real    5m50.001s
     cd ../primate
     ln -s ../../../cons/primate/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/primate
     #   real    5m39.288s
     cd ../placental
     ln -s ../../../cons/placental/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/placental
     #   real    5m9.762s
     cd ../vertebrate
+    ln -s ../../../cons/vertebrate/downloads/chr*.gz .
+    time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/vertebrate
+    #   real    0m45.408s
+    cd ../mm10.60way.phastCons
     ln -s ../../../cons/all/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/mm10.60way.phastCons
     #   real    6m11.158s
     cd ..
-    ln -s ../../cons/all/all.mod vertebrate.mod
+    ln -s ../../cons/all/all.mod mm10.60way.phastCons.mod
     ln -s ../../cons/glire/glire.mod glire.mod
     ln -s ../../cons/primate/primate.mod primate.mod
     ln -s ../../cons/placental/placental.mod placental.mod
+    ln -s ../../cons/vertebrate/vertebrate.mod .
+    ln -s ../../cons/all/phastCons60way.bw mm10.60way.phastCons.bw
+    ln -s ../../cons/glire/phastCons60wayGlire.bw \
+        mm10.60way.phastCons60wayGlire.bw
+    ln -s ../../cons/placental/phastCons60wayPlacental.bw \
+        mm10.60way.phastCons60wayPlacental.bw
+    ln -s ../../cons/primate/phastCons60wayPrimate.bw \
+        mm10.60way.phastCons60wayPrimate.bw
+    ln -s ../../cons/vertebrate/phastCons60wayVertebrate.bw \
+        mm10.60way.phastCons60wayVertebrate.bw
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    20m11.260s
+    # obtain the README.txt from hg19/phastCons46way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way
 
     #####################################################################
     cd /hive/data/genomes/mm10/bed/multiz60way/downloads/phyloP60way
-    mkdir glire primate placental vertebrate
+    mkdir glire primate placental vertebrate mm10.60way.phyloP60way
     cd glire
     ln -s ../../../consPhyloP/glire/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/glire
     #   real    6m5.733s
     cd ../primate
     ln -s ../../../consPhyloP/primate/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/primate
     #   real    7m22.623s
     cd ../placental
     ln -s ../../../consPhyloP/placental/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/placental
     #   real    7m39.269s
     cd ../vertebrate
+    ln -s ../../../consPhyloP/vertebrate/downloads/chr*.gz .
+    time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/vertebrate
+    cd ../mm10.60way.phyloP60way
     ln -s ../../../consPhyloP/all/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way.phyloP60way
     #   real    8m5.777s
 
     cd ..
-    ln -s ../../consPhyloP/run.phyloP/all.mod vertebrate.mod
-    ln -s ../../consPhyloP/run.phyloP/glire.mod .
-    ln -s ../../consPhyloP/run.phyloP/placental.mod .
-    ln -s ../../consPhyloP/run.phyloP/primate.mod .
+    ln -s ../../consPhyloP/run.phyloP/all.mod mm10.60way.phyloP60way.mod
+    ln -s ../../consPhyloP/run.phyloP/glire.mod ./mm10.60way.glire.mod
+    ln -s ../../consPhyloP/run.phyloP/placental.mod ./mm10.60way.placental.mod
+    ln -s ../../consPhyloP/run.phyloP/primate.mod ./mm10.60way.primate.mod
+    ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./mm10.60way.vertebrate.mod
 
-    cd /hive/data/genomes/mm10/bed/multiz60way/downloads/multiz60way
-    ln -s ../../mm10.60way.nh .
-    ln -s ../../mm10.60way.commonNames.nh .
+    ln -s ../../consPhyloP/all/phyloP60way.bw mm10.60way.phyloP60way.bw
+    ln -s ../../consPhyloP/glire/phyloP60wayGlire.bw \
+        mm10.60way.phyloP60wayGlire.bw 
+    ln -s ../../consPhyloP/vertebrate/phyloP60wayVertebrate.bw \
+        mm10.60way.phyloP60wayVertebrate.bw
+    ln -s ../../consPhyloP/placental/phyloP60wayPlacental.bw \
+        mm10.60way.phyloP60wayPlacental.bw
+    ln -s ../../consPhyloP/primate/phyloP60wayPrimate.bw \
+        mm10.60way.phyloP60wayPrimate.bw
+
+    time md5sum *.mod *.bw > md5sum.txt &
+    #   real    20m17.082s
+
+    # obtain the README.txt from hg19/phyloP46way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/mm10/bed/multiz60way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits mm10 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags mm10 multiz60way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/mm10/bed/multiz60way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+    #   real    199m45.558s
+
+    md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    27m59.778s
+
+    # obtain the README.txt from hg19/multiz46way and update for this
+    #   situation
+    ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
 
 #########################################################################
 # lastz nile tilapia oreNil2 (DONE - 2012-04-02 - Hiram)
