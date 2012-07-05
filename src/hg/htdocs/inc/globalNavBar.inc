@@ -69,7 +69,8 @@
 <!-- OPTIONAL_VIEW_MENU -->
 
 <li class="menuparent last"><span>Help</span><ul style="display: none; visibility: hidden;">
-<li class="first"><a href="../FAQ/">FAQs</a></li>
+<!-- CONTEXT_SPECIFIC_HELP -->
+<li><a href="../FAQ/">FAQs</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>

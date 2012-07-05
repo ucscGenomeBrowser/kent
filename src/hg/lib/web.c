@@ -1305,6 +1305,9 @@ char *navBarFile = "inc/globalNavBar.inc";
 struct stat statBuf;
 regex_t re;
 regmatch_t match[2];
+char *scriptName = cgiScriptName();
+char *contextSpecificHelp = NULL;
+char *contextSpecificHelpLabel = NULL;
 safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
 if(docRoot == NULL)
@@ -1346,5 +1349,56 @@ freez(&menuStr);
 menuStr = dyStringCannibalize(&dy);
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
+
+if(scriptName)
+    {
+    if (endsWith(scriptName, "hgBlat"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#BLATAlign";
+        contextSpecificHelpLabel = "Help on Blat";
+        }
+    else if (endsWith(scriptName, "hgHubConnect"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgTrackHubHelp.html";
+        contextSpecificHelpLabel = "Help on Track Hubs";
+        }
+    else if (endsWith(scriptName, "hgNear"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgNearHelp.html";
+        contextSpecificHelpLabel = "Help on Gene Sorter";
+        }
+    else if (endsWith(scriptName, "hgTables"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgTablesHelp.html";
+        contextSpecificHelpLabel = "Help on Table Browser";
+        }
+    else if (endsWith(scriptName, "hgGenome"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgGenomeHelp.html";
+        contextSpecificHelpLabel = "Help on Genome Graphs";
+        }
+    else if (endsWith(scriptName, "hgSession"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgSessionHelp.html";
+        contextSpecificHelpLabel = "Help on Sessions";
+        }
+    else if (endsWith(scriptName, "pbGateway"))
+        {
+        contextSpecificHelp = "../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml";
+        contextSpecificHelpLabel = "Help on Proteome Browser";
+        }
+    else if (endsWith(scriptName, "hgVisiGene"))
+        {
+        contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#VisiGeneHelp";
+        contextSpecificHelpLabel = "Help on VisiGene";
+        }
+    }
+if(contextSpecificHelp)
+    {
+    char buf[1024];
+    safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelp, contextSpecificHelpLabel);
+    menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
+    fprintf(stderr, "contextSpecificHelp: %s\n", buf);
+    }
 return menuStr;
 }
