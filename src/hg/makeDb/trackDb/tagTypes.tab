@@ -267,9 +267,9 @@ refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
 sGroup_Chimp wigMaf
-sGroup_Glires wigMaf
+sGroup_Glire wigMaf
 sGroup_Human wigMaf
-sGroup_Placental_Mammal wigMaf
+sGroup_Placental wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
 sGroup_Vertebrate wigMaf
