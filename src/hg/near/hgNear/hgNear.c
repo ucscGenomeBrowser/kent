@@ -159,13 +159,7 @@ while ((c = *s) != 0)
 void makeTitle(char *title, char *helpName)
 /* Make title bar. */
 {
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER style='color:#FFFFFF;'><span style='font-size:large;'>%s</span></TD>", 
-        title);
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
-	helpName, wrapWhiteFont("Help"));
-hPrintf("</TR></TABLE>");
+cartWebStart(cart, database, title);
 }
 
 /* ---- Some helper routines for order methods. ---- */
@@ -1677,7 +1671,6 @@ hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", countVarName,
 	cartUsualString(cart, countVarName, ""));
 cartSaveSession(cart);
 puts("</FORM>");
-cartWebEnd();
 }
 
 struct order *curOrder(struct order *ordList)
@@ -1749,6 +1742,7 @@ else
     if (gp) geneList = getOrderedList(ord, colList, conn, displayCount);
     doMainDisplay(conn, ord, ordList, colList, geneList);
     }
+cartWebEnd();
 }
 
 static struct genePos *curGenePos()
