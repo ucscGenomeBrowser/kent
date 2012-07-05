@@ -55,7 +55,7 @@ html wgEncodeUwRnaSeq
 	view Signal
 	visibility full
 	subTrack wgEncodeUwRnaSeq
-	viewLimits 0:500
+	viewLimits 0:50
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
@@ -499,7 +499,7 @@ html wgEncodeUwRnaSeq
 	view PlusRawSignal
 	visibility full
 	subTrack wgEncodeUwRnaSeq
-	viewLimits 0:500
+	viewLimits 0:50
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
@@ -947,7 +947,7 @@ html wgEncodeUwRnaSeq
 	view MinusRawSignal
 	visibility full
 	subTrack wgEncodeUwRnaSeq
-	viewLimits 0:500
+	viewLimits 0:50
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
@@ -1464,7 +1464,7 @@ html wgEncodeUwRnaSeq
 		#display no
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Lv S_C 8w A 1
         longLabel Liver C57BL6 Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1473,7 +1473,7 @@ html wgEncodeUwRnaSeq
         # subId=4426 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off 
         shortLabel Lv S_C A 1
         longLabel Liver C57BL6 Embryonic day 14.5 RNA-seq Alignments Rep 1 ENCODE/UW
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1502,7 +1502,7 @@ html wgEncodeUwRnaSeq
         # subId=4429 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Cerebrum 8w A 1
         longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1512,7 +1512,7 @@ html wgEncodeUwRnaSeq
 
 
         track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Cerebrum 8w A 2
         longLabel Cerebrum Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=CEREBRUM localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1530,7 +1530,7 @@ html wgEncodeUwRnaSeq
         # subId=4432 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off 
         shortLabel MEL A 1
         longLabel MEL Immortal Cells RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep1
@@ -1540,7 +1540,7 @@ html wgEncodeUwRnaSeq
         # was wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1 vsmalladi Wed Mar 28 10:20:18 2012
 
         track wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off 
         shortLabel MEL A 2
         longLabel MEL Immortal Cells RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=IMMORTAL cellType=MEL localization=CELL rnaExtract=POLYA sex=M strain=UKN rep=rep2
@@ -1571,7 +1571,7 @@ html wgEncodeUwRnaSeq
         # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsAlnRep2 vsmalladi Fri Feb 24 10:40:47 2012
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Lv 8w A 2
         longLabel Liver C57BL6 Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW
         subGroups view=Alignments age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1679,7 +1679,7 @@ html wgEncodeUwRnaSeq
         # subId=5325 dateSubmitted=2011-12-22
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Heart 8w A 1
         longLabel Heart Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=H2EART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
@@ -1688,7 +1688,7 @@ html wgEncodeUwRnaSeq
         # subId=5326 dateSubmitted=2011-12-22
 
         track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep2
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Heart 8w A 2
         longLabel Heart Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/UW 
         subGroups view=Alignments age=ADULT8WKS cellType=H2EART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
@@ -1816,7 +1816,7 @@ html wgEncodeUwRnaSeq
         # subId=5588 dateSubmitted=2012-02-13
 
         track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129AlnRep1
-        parent wgEncodeUwRnaSeqViewAlignments 
+        parent wgEncodeUwRnaSeqViewAlignments off 
         shortLabel Lv S_S A 1
         longLabel Liver S129 Embryonic day 14.5 RNA-seq Alignments Rep 1 from ENCODE/UW 
         subGroups view=Alignments age=E14HALF cellType=LIVER localization=CELL rnaExtract=POLYA sex=M strain=S129 rep=rep1
