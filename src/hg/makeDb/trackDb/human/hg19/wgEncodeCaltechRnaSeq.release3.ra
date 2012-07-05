@@ -10,10 +10,9 @@ subGroup3 readType Read_Type a1R2x75=Paired_75_nt_(200_bp) a1R2x75400=Paired_75_
 subGroup4 insertLength Insert_Length il200=200 il400=400 ilNa=NA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 subGroup6 treatment Treatment aNone=None bDIFF7D=DIFF_7d
-dimensions dimensionX=readType dimensionY=cellType dimensionB=rep
-dimensionBchecked rep1,rep2
+dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
+dimensionAchecked rep1,rep2
 sortOrder cellType=+ readType=+ view=+ rep=+
-#filterComposite dimZ dimA dimB
 fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length treatment=Treatment view=View replicate=Rep labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength treatment=Treatment
 dragAndDrop subTracks
