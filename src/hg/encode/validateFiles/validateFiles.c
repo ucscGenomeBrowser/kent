@@ -76,7 +76,7 @@ void usage()
   "                      See http://samtools.sourceforge.net/SAM1.pdf\n"
   "       bigWig       : Big Wig\n"
   "                      See http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
-  "       bedN[+P]     : BED N or BED N+ or BED N+P\N\n"
+  "       bedN[+P]     : BED N or BED N+ or BED N+P\\N\n"
   "                      where N is a number between 3 and 15 of standard BED columns,\n"
   "                      optional + indicates the presence of additional columns\n"
   "                      and P is the number of addtional columns\n" 
