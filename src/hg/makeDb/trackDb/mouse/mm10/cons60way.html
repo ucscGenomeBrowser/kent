@@ -4,10 +4,10 @@ This track shows multiple alignments of 60 vertebrate
 species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
-PHAST package</A>, for 
+PHAST package</A>, for
 all species (vertebrate) and three subsets (glire, primate and placental mammal).
-The multiple alignments were generated using multiz and 
-other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/"
 TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
@@ -48,110 +48,98 @@ sets of scores will be the same, but in regions in which additional species
 are available, the primate, placental and/or vertebrate scores may differ from
 the glire scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, glires and non-glires, or primates and non-primates. 
+pressures in, say, glires and non-glires, or primates and non-primates.
 </P>
 
 <P>
-The species aligned for this track include the reptile, amphibian, 
-bird, and fish clades, as well as marsupial, monotreme (platypus), 
-and placental mammals. Compared to the previous 44-vertebrate alignment (hg18),
-this track includes 2 new species and 5 species with updated
-sequence assemblies (<B>Table 1</B>). The new species consist of two 
-assemblies: baboon (papHam1) at 5.3X coverage and wallaby (macEug1) at 2X
-coverage.
-The elephant, opossum, rabbit, tetraodon, and zebrafish assemblies
-have been updated from those used in the previous 44-species alignment.
-</P>
-<P>
 UCSC has repeatmasked and aligned the low-coverage genome assemblies, and
-provides the sequence for download; however, we do not construct
-genome browsers for them. Missing sequence in the low-coverage assemblies is
-highlighted in the track display by regions of yellow when zoomed out
-and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
+provides the sequence for download; genome browsers are under construction
+and will be released over time. Missing sequence in the low-coverage
+assemblies is highlighted in the track display by regions of yellow when
+zoomed out and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR><TH COLSPAN=5>glire subset</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm10"    TARGET=_blank>(GRCm38/mm10)</A></TD><TD>reference species</TD></TR>
-<TR ALIGN=left><TD>Guinea pig</TD><TD>Cavia porcellus</TD><TD>Feb. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=cavPor3"    TARGET=_blank>(Broad/cavPor3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Kangaroo rat</TD><TD>Dipodomys ordii</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=dipOrd1"    TARGET=_blank>(Broad/dipOrd1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Naked mole-rat</TD><TD>Heterocephalus glaber</TD><TD>Jan. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=hetGla2"    TARGET=_blank>(Broad HetGla_female_1.0/hetGla2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Pika</TD><TD>Ochotona princeps</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=ochPri2"    TARGET=_blank>(Broad/ochPri2)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Rabbit</TD><TD>Oryctolagus cuniculus</TD><TD>Apr. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryCun2"    TARGET=_blank>(Broad/oryCun2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>Mar. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=rn5"    TARGET=_blank>(RGSC 5.0/rn5)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Squirrel</TD><TD>Spermophilus tridecemlineatus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=speTri2"    TARGET=_blank>(Broad SpeTri2/speTri2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=tupBel1"    TARGET=_blank>(Broad/tupBel1)</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm10"    TARGET=_blank>GRCm38/mm10</A></TD><TD>reference species</TD></TR>
+<TR ALIGN=left><TD>Guinea pig</TD><TD>Cavia porcellus</TD><TD>Feb. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=cavPor3"    TARGET=_blank>Broad/cavPor3</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Kangaroo rat</TD><TD>Dipodomys ordii</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/dipOrd1"    TARGET=_blank>Broad/dipOrd1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Naked mole-rat</TD><TD>Heterocephalus glaber</TD><TD>Jan. 2012</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/hetGla2"    TARGET=_blank>Broad HetGla_female_1.0/hetGla2</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Pika</TD><TD>Ochotona princeps</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/ochPri2"    TARGET=_blank>Broad/ochPri2</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Rabbit</TD><TD>Oryctolagus cuniculus</TD><TD>Apr. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryCun2"    TARGET=_blank>Broad/oryCun2</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>Mar. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=rn5"    TARGET=_blank>RGSC 5.0/rn5</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Squirrel</TD><TD>Spermophilus tridecemlineatus</TD><TD>Nov. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/speTri2"    TARGET=_blank>Broad/speTri2</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tupBel1"    TARGET=_blank>Broad/tupBel1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR><TH COLSPAN=5>primate subset</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD>Baboon</TD><TD>Papio hamadryas</TD><TD>Nov. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=papHam1"    TARGET=_blank>(Baylor 1.0/papHam1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Bushbaby</TD><TD>Otolemur garnettii</TD><TD>Mar. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=otoGar3"    TARGET=_blank>(Broad OtoGar3/otoGar3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>Feb. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=panTro4"    TARGET=_blank>(Pan_troglodytes-2.1.4/panTro4)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Chinese rhesus</TD><TD>Macaca mulatta</TD><TD>Oct. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=rheMac3"    TARGET=_blank>(BGI CR_1.0/rheMac3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Gibbon</TD><TD>Nomascus leucogenys</TD><TD>Jun. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=nomLeu2"    TARGET=_blank>(GGSC Nleu1.1/nomLeu2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Gorilla</TD><TD>Gorilla gorilla gorilla</TD><TD>May 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=gorGor3"    TARGET=_blank>(gorGor3.1/gorGor3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Feb. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19"    TARGET=_blank>(GRCh37/hg19)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>March 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=calJac3"    TARGET=_blank>(WUGSC 3.2/calJac3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Mouse lemur</TD><TD>Microcebus murinus</TD><TD>Jun. 2003</TD><TD><A HREF="../cgi-bin/hgGateway?db=micMur1"    TARGET=_blank>(Broad/micMur1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>July 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"    TARGET=_blank>(WUGSC 2.0.2/ponAbe2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Squirrel monkey</TD><TD>Saimiri boliviensis</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=saiBol1"    TARGET=_blank>(SaiBol1.0/saiBol1)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Tarsier</TD><TD>Tarsius syrichta</TD><TD>Aug. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=tarSyr1"    TARGET=_blank>(Broad/tarSyr1)</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Baboon</TD><TD>Papio hamadryas</TD><TD>Nov. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/papHam1"    TARGET=_blank>Baylor 1.0/papHam1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Bushbaby</TD><TD>Otolemur garnettii</TD><TD>Mar. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/otoGar3"    TARGET=_blank>Broad/otoGar3</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>Feb. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro4"    TARGET=_blank>WUGSC Pan_troglodytes-2.1.4/panTro4</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Chinese rhesus</TD><TD>Macaca mulatta</TD><TD>Oct. 2010</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/rheMac3"    TARGET=_blank>BGI CR_1.0/rheMac3</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Gibbon</TD><TD>Nomascus leucogenys</TD><TD>Jun. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/nomLeu2"    TARGET=_blank>GGSC Nleu1.1/nomLeu2</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Gorilla</TD><TD>Gorilla gorilla gorilla</TD><TD>May 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=gorGor3"    TARGET=_blank>WTSI/gorGor3</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Feb. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19"    TARGET=_blank>GRCh37/hg19</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>Mar. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=calJac3"    TARGET=_blank>WUGSC 3.2/calJac3</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Mouse lemur</TD><TD>Microcebus murinus</TD><TD>Jun. 2003</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/micMur1"    TARGET=_blank>Broad/micMur1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>Jul. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"    TARGET=_blank>WUGSC 2.0.2/ponAbe2</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Squirrel monkey</TD><TD>Saimiri boliviensis</TD><TD>Oct. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/saiBol1"    TARGET=_blank>Broad/saiBol1</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Tarsier</TD><TD>Tarsius syrichta</TD><TD>Aug. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tarSyr1"    TARGET=_blank>Broad/tarSyr1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR><TH COLSPAN=5>placental subset</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD>Alpaca</TD><TD>Vicugna pacos</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=vicPac1"    TARGET=_blank>(Broad/vicPac1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Armadillo</TD><TD>Dasypus novemcinctus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=dasNov3"    TARGET=_blank>(Armadillo/dasNov3)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Cat</TD><TD>Felis catus</TD><TD>Sep. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=felCat5"    TARGET=_blank>(ICGSC Felis_catus 6.2/felCat5)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Cow</TD><TD>Bos taurus</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=bosTau7"    TARGET=_blank>(Baylor Btau_4.6.1/bosTau7)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Dog</TD><TD>Canis lupus familiaris</TD><TD>Sep. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=canFam3"    TARGET=_blank>(Broad CanFam3.1/canFam3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Dolphin</TD><TD>Tursiops truncatus</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=turTru2"    TARGET=_blank>(Baylor Ttru_1.4/turTru2)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Elephant</TD><TD>Loxodonta africana</TD><TD>Jul. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=loxAfr3"    TARGET=_blank>(Broad/loxAfr3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Hedgehog</TD><TD>Erinaceus europaeus</TD><TD>June 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=eriEur1"    TARGET=_blank>(Broad/eriEur1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Horse</TD><TD>Equus caballus</TD><TD>Sep. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=equCab2"    TARGET=_blank>(Broad/equCab2)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Manatee</TD><TD>Trichechus manatus latirostris</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=triMan1"    TARGET=_blank>(BROAD v1.0/triMan1)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Megabat</TD><TD>Pteropus vampyrus</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=pteVam1"    TARGET=_blank>(Broad/pteVam1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Microbat</TD><TD>Myotis lucifugus</TD><TD>Jul. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=myoLuc2"    TARGET=_blank>(Broad Institute Myoluc2.0/myoLuc2)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Panda</TD><TD>Ailuropoda melanoleuca</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=ailMel1"    TARGET=_blank>(BGI-Shenzhen 1.0/ailMel1)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Pig</TD><TD>Sus scrofa</TD><TD>Aug. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=susScr3"    TARGET=_blank>(SGSC Sscrofa10.2/susScr3)</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Rock hyrax</TD><TD>Procavia capensis</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=proCap1"    TARGET=_blank>(Broad/proCap1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Sheep</TD><TD>Ovis aries</TD><TD>Feb. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=oviAri1"    TARGET=_blank>(ISGC Ovis_aries_1.0/oviAri1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Shrew</TD><TD>Sorex araneus</TD><TD>June 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=sorAra1"    TARGET=_blank>(Broad/sorAra1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Sloth</TD><TD>Choloepus hoffmanni</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=choHof1"    TARGET=_blank>(Broad/choHof1)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>Tenrec</TD><TD>Echinops telfairi</TD><TD>July 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=echTel1"    TARGET=_blank>(Broad/echTel1)</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Alpaca</TD><TD>Vicugna pacos</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/vicPac1"    TARGET=_blank>Broad/vicPac1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Armadillo</TD><TD>Dasypus novemcinctus</TD><TD>Dec. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/dasNov3"    TARGET=_blank>Baylor/dasNov3</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Cat</TD><TD>Felis catus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/felCat5"    TARGET=_blank>ICGSC Felis_catus 6.2/felCat5</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Cow</TD><TD>Bos taurus</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=bosTau7"    TARGET=_blank>Baylor Btau_4.6.1/bosTau7</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Dog</TD><TD>Canis lupus familiaris</TD><TD>Sep. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=canFam3"    TARGET=_blank>Broad/canFam3</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Dolphin</TD><TD>Tursiops truncatus</TD><TD>Oct. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/turTru2"    TARGET=_blank>Baylor Ttru_1.4/turTru2</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Elephant</TD><TD>Loxodonta africana</TD><TD>Jul. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=loxAfr3"    TARGET=_blank>Broad/loxAfr3</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Hedgehog</TD><TD>Erinaceus europaeus</TD><TD>Jun. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/eriEur1"    TARGET=_blank>Broad/eriEur1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Horse</TD><TD>Equus caballus</TD><TD>Sep. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=equCab2"    TARGET=_blank>Broad/equCab2</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Manatee</TD><TD>Trichechus manatus latirostris</TD><TD>Oct. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/triMan1"    TARGET=_blank>Broad v1.0/triMan1</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Megabat</TD><TD>Pteropus vampyrus</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/pteVam1"    TARGET=_blank>Broad/pteVam1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Microbat</TD><TD>Myotis lucifugus</TD><TD>Jul. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=myoLuc2"    TARGET=_blank>Broad/myoLuc2</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Panda</TD><TD>Ailuropoda melanoleuca</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=ailMel1"    TARGET=_blank>BGI-Shenzhen 1.0/ailMel1</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Pig</TD><TD>Sus scrofa</TD><TD>Aug. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/susScr3"    TARGET=_blank>SGSC Sscrofa10.2/susScr3</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Rock hyrax</TD><TD>Procavia capensis</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/proCap1"    TARGET=_blank>Broad/proCap1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Sheep</TD><TD>Ovis aries</TD><TD>Feb. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=oviAri1"    TARGET=_blank>ISGC Ovis_aries_1.0/oviAri1</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Shrew</TD><TD>Sorex araneus</TD><TD>Jun. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/sorAra1"    TARGET=_blank>Broad/sorAra1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Sloth</TD><TD>Choloepus hoffmanni</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/choHof1"    TARGET=_blank>Broad/choHof1</A>*</TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Tenrec</TD><TD>Echinops telfairi</TD><TD>Jul. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=echTel1"    TARGET=_blank>Broad/echTel1</A></TD><TD>Reciprocal best net</TD></TR>
 <TR><TH COLSPAN=5>vertebrate subset</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD>Atlantic cod</TD><TD>Gadus morhua</TD><TD>May. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=gadMor1"    TARGET=_blank>(Genofisk GadMor_May2010/gadMor1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=melUnd1"    TARGET=_blank>(WUSTL v6.3/melUnd1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4"    TARGET=_blank>(ICGSC Gallus_gallus-4.0/galGal4)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Coelacanth</TD><TD>Latimeria chalumnae</TD><TD>Aug. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=latCha1"    TARGET=_blank>(LatCha1/latCha1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Fugu</TD><TD>Takifugu rubripes</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=fr3"    TARGET=_blank>(FUGU5/fr3)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Lamprey</TD><TD>Petromyzon marinus</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=petMar1"    TARGET=_blank>(WUGSC 3.0/petMar1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Lizard</TD><TD>Anolis carolinensis</TD><TD>May 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=anoCar2"    TARGET=_blank>(Broad AnoCar2.0/anoCar2)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>Oct. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryLat2"    TARGET=_blank>(NIG/UT MEDAKA1/oryLat2)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Nile tilapia</TD><TD>Oreochromis niloticus</TD><TD>Jan. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=oreNil2"    TARGET=_blank>(Nile tilapia/oreNil2)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Opossum</TD><TD>Monodelphis domestica</TD><TD>Oct. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=monDom5"    TARGET=_blank>(Broad/monDom5)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Painted turtle</TD><TD>Chrysemys picta bellii</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=chrPic1"    TARGET=_blank>(v3.0.1/chrPic1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhynchus anatinus</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ornAna1"    TARGET=_blank>(WUGSC 5.0.1/ornAna1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Stickleback</TD><TD>Gasterosteus aculeatus</TD><TD>Feb. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=gasAcu1"    TARGET=_blank>(Broad/gasAcu1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Tasmanian devil</TD><TD>Sarcophilus harrisii</TD><TD>Feb. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=sarHar1"    TARGET=_blank>(WTSI Devil_ref v7.0/sarHar1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Tetraodon</TD><TD>Tetraodon nigroviridis</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=tetNig2"    TARGET=_blank>(Genoscope 8.0/tetNig2)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Turkey</TD><TD>Meleagris gallopavo</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=melGal1"    TARGET=_blank>(TGC Turkey_2.01/melGal1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Wallaby</TD><TD>Macropus eugenii</TD><TD>Sep. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=macEug2"    TARGET=_blank>(TWGS Meug_1.1/macEug2)</A></TD><TD>Reciprocal best net</TD></TR>
-<TR ALIGN=left><TD>X. tropicalis</TD><TD>Xenopus tropicalis</TD><TD>Nov. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=xenTro3"    TARGET=_blank>(JGI 4.2/xenTro3)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Zebra finch</TD><TD>Taeniopygia guttata</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=taeGut1"    TARGET=_blank>(WUGSC 3.2.4/taeGut1)</A></TD><TD>Net</TD></TR>
-<TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>Jul. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=danRer7"    TARGET=_blank>(Zv9/danRer7)</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Atlantic cod</TD><TD>Gadus morhua</TD><TD>May. 2010</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/gadMor1"    TARGET=_blank>Genofisk GadMor_May2010/gadMor1</A>*</TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/melUnd1"    TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4"    TARGET=_blank>ICGSC Gallus_gallus-4.0/galGal4</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Coelacanth</TD><TD>Latimeria chalumnae</TD><TD>Aug. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/latCha1"    TARGET=_blank>Broad/latCha1</A>*</TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Fugu</TD><TD>Takifugu rubripes</TD><TD>Oct. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=fr3"    TARGET=_blank>FUGU5/fr3</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Lamprey</TD><TD>Petromyzon marinus</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=petMar1"    TARGET=_blank>WUGSC 3.0/petMar1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Lizard</TD><TD>Anolis carolinensis</TD><TD>May 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=anoCar2"    TARGET=_blank>Broad/anoCar2</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>Oct. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryLat2"    TARGET=_blank>NIG/UT MEDAKA1/oryLat2</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Nile tilapia</TD><TD>Oreochromis niloticus</TD><TD>Jan. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oreNil2"    TARGET=_blank>Broad/oreNil2</A>*</TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Opossum</TD><TD>Monodelphis domestica</TD><TD>Oct. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=monDom5"    TARGET=_blank>Broad/monDom5</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Painted turtle</TD><TD>Chrysemys picta bellii</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=chrPic1"    TARGET=_blank>IPTGSC v3.0.1/chrPic1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhynchus anatinus</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ornAna1"    TARGET=_blank>WUGSC 5.0.1/ornAna1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Stickleback</TD><TD>Gasterosteus aculeatus</TD><TD>Feb. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=gasAcu1"    TARGET=_blank>Broad/gasAcu1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Tasmanian devil</TD><TD>Sarcophilus harrisii</TD><TD>Feb. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/sarHar1"    TARGET=_blank>WTSI Devil_ref v7.0/sarHar1</A>*</TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Tetraodon</TD><TD>Tetraodon nigroviridis</TD><TD>Mar. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=tetNig2"    TARGET=_blank>Genoscope 8.0/tetNig2</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Turkey</TD><TD>Meleagris gallopavo</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=melGal1"    TARGET=_blank>TGC Turkey_2.01/melGal1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Wallaby</TD><TD>Macropus eugenii</TD><TD>Sep. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=macEug2"    TARGET=_blank>TWGS Meug_1.1/macEug2</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>X. tropicalis</TD><TD>Xenopus tropicalis</TD><TD>Nov. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=xenTro3"    TARGET=_blank>JGI 4.2/xenTro3</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Zebra finch</TD><TD>Taeniopygia guttata</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=taeGut1"    TARGET=_blank>WUGSC 3.2.4/taeGut1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>Jul. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=danRer7"    TARGET=_blank>WTSI Zv9/danRer7</A></TD><TD>Net</TD></TR>
 </TABLE><BR>
-<B>Table 1.</B> <EM>Genome assemblies included in the 46-way Conservation 
-track.</EM>
-<BR>* Data download only, browser not available.
+<B>Table 1.</B> <EM>Genome assemblies included in the 60-way Conservation track.</EM><BR>
+* Data download only, browser not available.
 </BLOCKQUOTE></P>
 
 Downloads for data in this track are available:
 <UL>
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/">Multiz alignments</A> (MAF format), and phylogenetic trees
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/multiz60way/">Multiz alignments</A> (MAF format), and phylogenetic trees
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phyloP46way/">PhyloP conservation</A> (WIG format)
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/">PhyloP conservation</A> (WIG format)
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/">PhastCons conservation</A> (WIG format)
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/">PhastCons conservation</A> (WIG format)
 </UL>
 
 <H2>Display Conventions and Configuration</H2>
@@ -160,30 +148,26 @@ The track configuration options allow the user to display either
 the vertebrate or placental mammal conservation scores, or both
 simultaneously.
 In full and pack display modes, conservation scores are displayed as a
-<EM>wiggle track</EM> (histogram) in which the height reflects the 
-size of the score. 
-The conservation wiggles can be configured in a variety of ways to 
-highlight different aspects of the displayed information. 
-Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html" 
-TARGET=_blank>Graph configuration help</A> link for an explanation 
+<EM>wiggle track</EM> (histogram) in which the height reflects the
+size of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html"
+TARGET=_blank>Graph configuration help</A> link for an explanation
 of the configuration options.</P>
 <P>
-Pairwise alignments of each species to the $organism genome are 
-displayed below the conservation histogram as a grayscale density plot (in 
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
 pack mode) or as a wiggle (in full mode) that indicates alignment quality.
 In dense display mode, conservation is shown in grayscale using
-darker values to indicate higher levels of overall conservation 
+darker values to indicate higher levels of overall conservation
 as scored by phastCons. </P>
 <P>
 Checkboxes on the track configuration page allow selection of the
-species to include in the pairwise display.  
-Configuration buttons are available to select all of the species (<EM>Set 
-all</EM>), deselect all of the species (<EM>Clear all</EM>), or 
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<EM>Set all</EM>), deselect all of the species (<EM>Clear all</EM>), or
 use the default settings (<EM>Set defaults</EM>).
-By default, the following 11 species are included in the pairwise display:
-rhesus, mouse, dog, horse, 
-armadillo, opossum, platypus, lizard, 
-chicken, <EM>X. tropicalis</EM> (frog), and stickleback.
 Note that excluding species from the pairwise display does not alter the
 the conservation score display.</P>
 <P>
@@ -193,8 +177,8 @@ the alignment.</P>
 
 <H3>Gap Annotation</H3>
 <P>
-The <EM>Display chains between alignments</EM> configuration option 
-enables display of gaps between alignment blocks in the pairwise alignments in 
+The <EM>Display chains between alignments</EM> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
 a manner similar to the Chain track display.  The following
 conventions are used:
 <UL>
@@ -203,24 +187,24 @@ lineage-specific insertion between the aligned blocks in the $organism genome
 or a lineage-specific deletion between the aligned blocks in the aligning
 species.
 <LI><B>Double line:</B> Aligning species has one or more unalignable bases in
-the gap region. Possibly due to excessive evolutionary distance between 
+the gap region. Possibly due to excessive evolutionary distance between
 species or independent indels in the region between the aligned blocks in both
-species. 
+species.
 <LI><B>Pale yellow coloring:</B> Aligning species has Ns in the gap region.
 Reflects uncertainty in the relationship between the DNA of both species, due
-to lack of sequence in relevant portions of the aligning species. 
+to lack of sequence in relevant portions of the aligning species.
 </UL></P>
 
 <H3>Genomic Breaks</H3>
 <P>
 Discontinuities in the genomic context (chromosome, scaffold or region) of the
-aligned DNA in the aligning species are shown as follows: 
+aligned DNA in the aligning species are shown as follows:
 <UL>
 <LI>
 <B>Vertical blue bar:</B> Represents a discontinuity that persists indefinitely
 on either side, <em>e.g.</em> a large region of DNA on either side of the bar
 comes from a different chromosome in the aligned species due to a large scale
-rearrangement. 
+rearrangement.
 <LI>
 <B>Green square brackets:</B> Enclose shorter alignments consisting of DNA from
 one genomic context in the aligned species nested inside a larger chain of
@@ -232,13 +216,13 @@ else in the aligned species, or other similar occurrence.
 
 <H3>Base Level</H3>
 <P>
-When zoomed-in to the base-level display, the track shows the base 
-composition of each alignment, with bases in annotated repetitive 
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment, with bases in annotated repetitive
 elements displayed in lower case. The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those 
-alignment positions relative to the longest non-$organism sequence. 
-If there is sufficient space in the display, the size of the gap is shown. 
-If the space is insufficient and the gap size is a multiple of 3, a 
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
 &quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
 <P>
 Codon translation is available in base-level display mode if the
@@ -247,38 +231,41 @@ select the species for translation from the pull-down menu in the Codon
 Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
-<LI> 
+<LI>
 <B>No codon translation:</B> The gene annotation is not used; the bases are
-displayed without translation. 
+displayed without translation.
 <LI>
-<B>Use default species reading frames for translation:</B> The annotations from the genome
-displayed 
-in the <EM>Default species to establish reading frame</EM> pull-down menu are used to
-translate all the aligned species present in the alignment. 
+<B>Use default species reading frames for translation:</B> The annotations from
+the genome displayed in the <EM>Default species to establish reading frame</EM>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
 <LI>
-<B>Use reading frames for species if available, otherwise no translation:</B> Codon
-translation is performed only for those species where the region is
+<B>Use reading frames for species if available, otherwise no translation:</B>
+Codon translation is performed only for those species where the region is
 annotated as protein coding.
 <LI><B>Use reading frames for species if available, otherwise use default species:</B>
 Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
-species are translated using the default species annotation. 
+species are translated using the default species annotation.
 </UL></P>
 <P>
 Codon translation uses the following gene tracks as the basis for
-translation, depending on the species chosen (<B>Table 2</B>).  
-Species listed in the row labeled &quot;None&quot; do not have 
-species-specific reading frames for gene translation.
+translation, depending on the species chosen (<B>Table 2</B>).
 
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse, rat</TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes v55</TD><TD> alpaca, armadillo, bush baby, cat,
-chicken, chimp, cow, dog, dolphin, fugu, gorilla, guinea pig, hedgehog, horse,
-kangaroo rat, lizard, medaka, megabat, microbat, mouse, mouse lemur, opossum,
-orangutan, pika, platypus, rhesus, rock hyrax, shrew, sloth, squirrel,
-stickleback, tarsier, tenrec, tetraodon, tree shrew, X. tropicalis,
-zebra finch, zebrafish
+<TR ALIGN=left><TD>Known Genes</TD><TD>human</TD></TR>
+<TR ALIGN=left><TD>RefSeq Genes</TD><TD>chicken, cow, mouse, pig, rat, rhesus,
+frog(x. tropicalis), zebrafish</TD></TR>
+<TR ALIGN=left><TD>Ensembl Genes v55</TD><TD>alpaca, chimp, elephant, fugu,
+gorilla, guinea pig, hedgehog, horse, kangaroo rat, lizard, marmoset, medaka,
+megabat, microbat, mouse lemur, opossum, orangutan, panda, pika, platypus,
+rabbit, rock hyrax shrew, sloth, stickleback, tarsier, tenrec, tetraodon,
+tree shrew, turkey, zebra finch</TD></TR>
+<TR ALIGN=left><TD>Xeno RefGene</TD><TD>armadillo, baboon, bushbaby, cat,
+coelacanth, dog, gibbon, lamprey, manatee, naked mole-rat, painted turtle,
+sheep, squirrel, monkey, tasmanian devil, wallaby</TD></TR>
+<TR ALIGN=left><TD>Genscan</TD><TD>atlantic cod, budgerigar, dolphin, nile tilapia, squirrel</TD></TR>
 </TD></TR>
 <TR ALIGN=left><TD>Xeno Ref Genes</TD><TD>baboon, elephant, lamprey, marmoset, rabbit, wallaby</TD></TR>
 </TABLE>
@@ -286,9 +273,9 @@ zebra finch, zebrafish
 </BLOCKQUOTE></P>
 
 <H2>Methods</H2>
-<P> 
-Pairwise alignments with the human genome were generated for 
-each species using blastz from repeat-masked genomic sequence. 
+<P>
+Pairwise alignments with the human genome were generated for
+each species using blastz from repeat-masked genomic sequence.
 Lineage-specific repeats were removed prior to alignment, then reinserted.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
@@ -297,28 +284,28 @@ The scoring matrix and parameters for pairwise alignment and chaining
 were tuned for each species based on phylogenetic distance from the reference.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
-For more information about the chaining and netting process and 
-parameters for each species, see the description pages for the Chain and Net 
+For more information about the chaining and netting process and
+parameters for each species, see the description pages for the Chain and Net
 tracks.</P>
 <P>
-An additional filtering step was introduced in the generation of the 46-way
-conservation track to reduce the number of paralogs and pseudogenes from the 
-high-quality assemblies and the suspect alignments from the low-quality 
+An additional filtering step was introduced in the generation of the 60-way
+conservation track to reduce the number of paralogs and pseudogenes from the
+high-quality assemblies and the suspect alignments from the low-quality
 assemblies:
-the pairwise alignments of high-quality mammalian 
-sequences (placental and marsupial) were filtered based on synteny; 
-those for 2X mammalian genomes were filtered to retain only 
-alignments of best quality in both the target and query (&quot;reciprocal 
+the pairwise alignments of high-quality mammalian
+sequences (placental and marsupial) were filtered based on synteny;
+those for 2X mammalian genomes were filtered to retain only
+alignments of best quality in both the target and query (&quot;reciprocal
 best&quot;).</P>
 <P>
 The resulting best-in-genome pairwise alignments
-were progressively aligned using multiz/autoMZ, 
+were progressively aligned using multiz/autoMZ,
 following the tree topology diagrammed above, to produce multiple alignments.
 The multiple alignments were post-processed to
 add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/multiz60way"
 TARGET=_blank>bulk download</A>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
@@ -328,23 +315,43 @@ visualization of codons in the multiple alignment display.</P>
 
 <h3> Phylogenetic Tree Model</h3>
 <P>
-Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely on a tree
-model containing the tree topology,
-branch lengths representing evolutionary distance at neutrally
-evolving sites, the background distribution of nucleotides, and a substitution
-rate matrix.  
-The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate.mod"
-TARGET=_blank>vertebrate tree model</A> for this track was
-generated using the <em>phyloFit</em> program from the PHAST package  
-(REV model, EM algorithm, medium precision) using multiple alignments of 
-4-fold degenerate sites extracted from the 46way alignment
-(msa_view).  The 4d sites were derived from the RefSeq (Reviewed+Coding) gene set,
-filtered to select single-coverage long transcripts.  The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals.mod" TARGET=_blank >placental mammal tree model</A>
-and 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/primates.mod" TARGET=_blank >primate tree model</A>
-were extracted from the vertebrate model.
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+on a tree model containing the tree topology, branch lengths representing
+evolutionary distance at neutrally evolving sites, the background distribution
+of nucleotides, and a substitution rate matrix.
+The
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.mod"
+TARGET=_blank>all species tree model</A> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package
+(REV model, EM algorithm, medium precision) using multiple alignments of
+4-fold degenerate sites extracted from the 60-way alignment
+(msa_view).  The 4d sites were derived from the RefSeq (Reviewed+Coding) gene
+set, filtered to select single-coverage long transcripts.  The
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.glire.mod"
+TARGET=_blank >glire subset tree model</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.primate.mod"
+TARGET=_blank >primate subset tree model</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.placental.mod"
+TARGET=_blank >placental subset tree model</A> and
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.vertebrate.mod"
+TARGET=_blank >vertebrate subset tree model</A>,
+were extracted from the vertebrate model.  Note, the mouse/mm10 is included in
+each of the tree models since it is the reference species.
+</P>
+<P>
+These same tree models were used in the phyloP calculations, however their
+background frequencies were modfied to maintain reversibility.
+The resulting tree models:
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.60way.mod"
+TARGET=_blank>all species tree model</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.glire.mod"
+TARGET=_blank >glire subset tree model</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.primate.mod"
+TARGET=_blank >primate subset tree model</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.placental.mod"
+TARGET=_blank >placental subset tree model</A> and
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.vertebrate.mod"
+TARGET=_blank >vertebrate subset tree model</A>,
 </P>
 <h3> PhastCons Conservation </h3>
 <P>
@@ -360,18 +367,15 @@ scores reflect the phylogeny (including branch lengths) of the species in
 question, a continuous-time Markov model of the nucleotide substitution
 process, and a tendency for conservation levels to be autocorrelated along
 the genome (i.e., to be similar at adjacent sites).  The general reversible
-(REV) substitution model was used.  Unlike many conservation-scoring programs, 
+(REV) substitution model was used.  Unlike many conservation-scoring programs,
 phastCons does not rely on a sliding window
 of fixed size; therefore, short highly-conserved regions and long moderately
-conserved regions can both obtain high scores.  
+conserved regions can both obtain high scores.
 More information about
-phastCons can be found in Siepel <EM>et al</EM>. 2005.</P> 
-<P> 
-The phastCons parameters were
-tuned to produce 5% conserved elements in the genome for the vertebrate
-conservation measurement.  This parameter set (expected-length=45, 
-target-coverage=.3, rho=.31) was then used to generate the placental
-mammal and primate conservation scoring.</P>
+phastCons can be found in Siepel <EM>et al</EM>. 2005.</P>
+<P>
+The phastCons parameters used were: expected-length=45,
+target-coverage=0.3, rho=0.3.</P>
 
 <h3> PhyloP Conservation </h3>
 <P>
@@ -383,7 +387,7 @@ all branches of the phylogeny rather than a particular subtree or lineage
 (i.e., the --subtree option was not used).  The scores were computed by
 performing a likelihood ratio test at each alignment column (--method LRT),
 and scores for both conservation and acceleration were produced (--mode
-CONACC). 
+CONACC).
 </P>
 <h3> Conserved Elements </h3>
 <P>
@@ -403,23 +407,23 @@ details page or in the browser when the track's display mode is set to
 <H2>Credits</H2>
 <P> This track was created using the following programs:
 <UL>
-<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb 
-Miller of the <A HREF="http://bio.cse.psu.edu/" 
+<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <A HREF="http://bio.cse.psu.edu/"
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
-other programs in PHAST by 
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
+other programs in PHAST by
+<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html"
 TARGET=_blank>Adam Siepel</A> at Cornell University (original development
 done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
 <LI> Tree image generator: phyloGif by Galt Barber, UCSC
-<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle 
+<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
 display), and Brian Raney (gap annotation and codon framing) at UCSC
 </UL>
 </P>
-<P>The phylogenetic tree is based on Murphy <EM>et al</EM>. (2001) and general 
+<P>The phylogenetic tree is based on Murphy <EM>et al</EM>. (2001) and general
 consensus in the vertebrate phylogeny community as of March 2007.
 </P>
 
