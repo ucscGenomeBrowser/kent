@@ -1352,6 +1352,7 @@ if(!loginSystemEnabled())
 
 if(scriptName)
     {
+    // Provide context sensitive help links for some CGIs.
     if (endsWith(scriptName, "hgBlat"))
         {
         contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#BLATAlign";
@@ -1392,13 +1393,17 @@ if(scriptName)
         contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#VisiGeneHelp";
         contextSpecificHelpLabel = "Help on VisiGene";
         }
+    else if (endsWith(scriptName, "hgCustom"))
+        {
+        contextSpecificHelp = "../goldenPath/help/customTrack.html";
+        contextSpecificHelpLabel = "Help on Custom Tracks";
+        }
     }
 if(contextSpecificHelp)
     {
     char buf[1024];
     safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelp, contextSpecificHelpLabel);
     menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
-    fprintf(stderr, "contextSpecificHelp: %s\n", buf);
     }
 return menuStr;
 }
