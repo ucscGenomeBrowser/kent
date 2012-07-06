@@ -1293,6 +1293,17 @@ if (link)
 return FALSE;
 }
 
+// overrides for default context specific help link.
+char *contextSpecificHelpLink = NULL;
+char *contextSpecificHelpLabel = NULL;
+
+void setContextSpecificHelp(char *link, char *label)
+// Override default behavior for the context specific help link
+{
+contextSpecificHelpLink = link;
+contextSpecificHelpLabel = label;
+}
+
 char *menuBar(struct cart *cart)
 // Return HTML for the menu bar (read from a configuration file);
 // we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
@@ -1306,8 +1317,6 @@ struct stat statBuf;
 regex_t re;
 regmatch_t match[2];
 char *scriptName = cgiScriptName();
-char *contextSpecificHelp = NULL;
-char *contextSpecificHelpLabel = NULL;
 safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
 if(docRoot == NULL)
@@ -1353,56 +1362,63 @@ if(!loginSystemEnabled())
 if(scriptName)
     {
     // Provide context sensitive help links for some CGIs.
+    char *link = NULL;
+    char *label = NULL;
     if (endsWith(scriptName, "hgBlat"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#BLATAlign";
-        contextSpecificHelpLabel = "Help on Blat";
+        link = "../goldenPath/help/hgTracksHelp.html#BLATAlign";
+        label = "Help on Blat";
         }
     else if (endsWith(scriptName, "hgHubConnect"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgTrackHubHelp.html";
-        contextSpecificHelpLabel = "Help on Track Hubs";
+        link = "../goldenPath/help/hgTrackHubHelp.html";
+        label = "Help on Track Hubs";
         }
     else if (endsWith(scriptName, "hgNear"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgNearHelp.html";
-        contextSpecificHelpLabel = "Help on Gene Sorter";
+        link = "../goldenPath/help/hgNearHelp.html";
+        label = "Help on Gene Sorter";
         }
     else if (endsWith(scriptName, "hgTables"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgTablesHelp.html";
-        contextSpecificHelpLabel = "Help on Table Browser";
+        link = "../goldenPath/help/hgTablesHelp.html";
+        label = "Help on Table Browser";
         }
     else if (endsWith(scriptName, "hgGenome"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgGenomeHelp.html";
-        contextSpecificHelpLabel = "Help on Genome Graphs";
+        link = "../goldenPath/help/hgGenomeHelp.html";
+        label = "Help on Genome Graphs";
         }
     else if (endsWith(scriptName, "hgSession"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgSessionHelp.html";
-        contextSpecificHelpLabel = "Help on Sessions";
+        link = "../goldenPath/help/hgSessionHelp.html";
+        label = "Help on Sessions";
         }
     else if (endsWith(scriptName, "pbGateway"))
         {
-        contextSpecificHelp = "../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml";
-        contextSpecificHelpLabel = "Help on Proteome Browser";
+        link = "../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml";
+        label = "Help on Proteome Browser";
         }
     else if (endsWith(scriptName, "hgVisiGene"))
         {
-        contextSpecificHelp = "../goldenPath/help/hgTracksHelp.html#VisiGeneHelp";
-        contextSpecificHelpLabel = "Help on VisiGene";
+        link = "../goldenPath/help/hgTracksHelp.html#VisiGeneHelp";
+        label = "Help on VisiGene";
         }
     else if (endsWith(scriptName, "hgCustom"))
         {
-        contextSpecificHelp = "../goldenPath/help/customTrack.html";
-        contextSpecificHelpLabel = "Help on Custom Tracks";
+        link = "../goldenPath/help/customTrack.html";
+        label = "Help on Custom Tracks";
         }
+    // Don't overwrite any previously set defaults
+    if(!contextSpecificHelpLink && link)
+        contextSpecificHelpLink = link;
+    if(!contextSpecificHelpLabel && label)
+        contextSpecificHelpLabel = label;
     }
-if(contextSpecificHelp)
+if(contextSpecificHelpLink)
     {
     char buf[1024];
-    safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelp, contextSpecificHelpLabel);
+    safef(buf, sizeof(buf), "<li><a href='%s'>%s</a></li>", contextSpecificHelpLink, contextSpecificHelpLabel);
     menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
     }
 return menuStr;

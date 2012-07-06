@@ -157,8 +157,11 @@ while ((c = *s) != 0)
 }
 
 void makeTitle(char *title, char *helpName)
-/* Make title bar. */
+/* Print main menu and the title bar. */
 {
+char buf[1024];
+safef(buf, sizeof(buf), "../goldenPath/help/%s", helpName);
+setContextSpecificHelp(buf, NULL);
 cartWebStart(cart, database, title);
 }
 
