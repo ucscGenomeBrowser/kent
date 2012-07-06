@@ -216,6 +216,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 087WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -243,6 +244,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 088WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -270,6 +272,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 087WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -297,6 +300,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 088WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -672,6 +676,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1V2
 objType table
+attic auxValid
 bioRep 087WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -729,6 +734,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2V2
 objType table
+attic auxValid
 bioRep 088WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -1547,6 +1553,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 087C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -1574,6 +1581,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 088C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -1601,6 +1609,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 087C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -1628,6 +1637,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 088C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -1975,6 +1985,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 087C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2002,6 +2013,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549CytosolShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 088C
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2504,6 +2516,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 087N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2531,6 +2544,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 088N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2558,6 +2572,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 087N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2585,6 +2600,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 088N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2932,6 +2948,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 087N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -2959,6 +2976,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqA549NucleusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 088N
 cell A549
 composite wgEncodeCshlShortRnaSeq
@@ -3251,6 +3269,7 @@ view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 017WC
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
@@ -3278,6 +3297,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 018WC
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
@@ -3581,6 +3601,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 037WC
 cell BJ
 composite wgEncodeCshlShortRnaSeq
@@ -3608,6 +3629,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 038WC
 cell BJ
 composite wgEncodeCshlShortRnaSeq
@@ -4022,6 +4044,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 042WC
 cell CD20+
 composite wgEncodeCshlShortRnaSeq
@@ -4133,6 +4156,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 041WC
 cell CD20+
 composite wgEncodeCshlShortRnaSeq
@@ -4244,6 +4268,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqCd34mobilizedCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 043WC
 cell CD34+_Mobilized
 composite wgEncodeCshlShortRnaSeq
@@ -4569,6 +4594,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 003WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -4596,6 +4622,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 004WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -4899,6 +4926,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep3
 objType table
+attic auxValid
 bioRep 091CH
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -4926,6 +4954,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878ChromatinTapAlnRep4
 objType table
+attic auxValid
 bioRep 092CH
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -5361,6 +5390,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 003C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -5388,6 +5418,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 004C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -5691,6 +5722,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep3
 objType table
+attic auxValid
 bioRep 091NL
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -5718,6 +5750,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleolusTapAlnRep4
 objType table
+attic auxValid
 bioRep 092NL
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -6153,6 +6186,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 003N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -6180,6 +6214,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 004N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
@@ -6483,6 +6518,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
@@ -6510,6 +6546,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
@@ -6813,6 +6850,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
@@ -7008,6 +7046,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
@@ -7203,6 +7242,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep1
 objType table
+attic auxValid
 bioRep 095WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -7231,6 +7271,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellAlnRep2
 objType table
+attic auxValid
 bioRep 096WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -7259,6 +7300,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep1
 objType table
+attic auxValid
 bioRep 095WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -7287,6 +7329,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellCiptapAlnRep2
 objType table
+attic auxValid
 bioRep 096WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -7865,6 +7908,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 095WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -7893,6 +7937,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqH1neuronsCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 096WC
 cell H1-neurons
 composite wgEncodeCshlShortRnaSeq
@@ -8196,6 +8241,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 056WC
 cell HAoAF
 composite wgEncodeCshlShortRnaSeq
@@ -8307,6 +8353,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 055WC
 cell HAoAF
 composite wgEncodeCshlShortRnaSeq
@@ -8527,6 +8574,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 057WC
 cell HAoEC
 composite wgEncodeCshlShortRnaSeq
@@ -8638,6 +8686,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 058WC
 cell HAoEC
 composite wgEncodeCshlShortRnaSeq
@@ -8858,6 +8907,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 059WC
 cell HCH
 composite wgEncodeCshlShortRnaSeq
@@ -8969,6 +9019,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 060WC
 cell HCH
 composite wgEncodeCshlShortRnaSeq
@@ -9189,6 +9240,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -9216,6 +9268,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -9519,6 +9572,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -9546,6 +9600,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -9849,6 +9904,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -9876,6 +9932,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
@@ -10179,6 +10236,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 013WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -10206,6 +10264,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -10509,6 +10568,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 013C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -10536,6 +10596,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -10839,6 +10900,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 013N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -10866,6 +10928,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
@@ -11169,6 +11232,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 062WC
 cell HFDPC
 composite wgEncodeCshlShortRnaSeq
@@ -11280,6 +11344,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 061WC
 cell HFDPC
 composite wgEncodeCshlShortRnaSeq
@@ -11500,6 +11565,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHmepcCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 063WC
 cell HMEpC
 composite wgEncodeCshlShortRnaSeq
@@ -11693,6 +11759,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 065WC
 cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
@@ -11804,6 +11871,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 066WC
 cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
@@ -12024,6 +12092,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 067WC
 cell hMSC-BM
 composite wgEncodeCshlShortRnaSeq
@@ -12052,6 +12121,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHmscbmCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 068WC
 cell hMSC-BM
 composite wgEncodeCshlShortRnaSeq
@@ -12353,6 +12423,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 069WC
 cell hMSC-UC
 composite wgEncodeCshlShortRnaSeq
@@ -12381,6 +12452,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHmscucCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 070WC
 cell hMSC-UC
 composite wgEncodeCshlShortRnaSeq
@@ -12684,6 +12756,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 054WC
 cell HOB
 composite wgEncodeCshlShortRnaSeq
@@ -12795,6 +12868,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHobCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 053WC
 cell HOB
 composite wgEncodeCshlShortRnaSeq
@@ -13015,6 +13089,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 071WC
 cell HPC-PL
 composite wgEncodeCshlShortRnaSeq
@@ -13043,6 +13118,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHpcplCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 072WC
 cell HPC-PL
 composite wgEncodeCshlShortRnaSeq
@@ -13346,6 +13422,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 073WC
 cell HPIEpC
 composite wgEncodeCshlShortRnaSeq
@@ -13374,6 +13451,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHpiepcCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 074WC
 cell HPIEpC
 composite wgEncodeCshlShortRnaSeq
@@ -13677,6 +13755,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 093WC
 cell HSaVEC
 composite wgEncodeCshlShortRnaSeq
@@ -13705,6 +13784,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHsavecCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 094WC
 cell HSaVEC
 composite wgEncodeCshlShortRnaSeq
@@ -14008,6 +14088,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 029N
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
@@ -14035,6 +14116,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 030N
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
@@ -14338,6 +14420,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 051WC
 cell HVMF
 composite wgEncodeCshlShortRnaSeq
@@ -14449,6 +14532,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 052WC
 cell HVMF
 composite wgEncodeCshlShortRnaSeq
@@ -14669,6 +14753,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapAlnRep1
 objType table
+attic auxValid
 bioRep 079WC
 cell HWP
 composite wgEncodeCshlShortRnaSeq
@@ -14697,6 +14782,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqHwpCellTapAlnRep2
 objType table
+attic auxValid
 bioRep 080WC
 cell HWP
 composite wgEncodeCshlShortRnaSeq
@@ -15110,6 +15196,7 @@ view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalAlnRep1
 objType table
+attic auxValid
 bioRep 045WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -15137,6 +15224,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalAlnRep2
 objType table
+attic auxValid
 bioRep 046WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -15164,6 +15252,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapAlnRep1
 objType table
+attic auxValid
 bioRep 045WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -15191,6 +15280,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalCiptapAlnRep2
 objType table
+attic auxValid
 bioRep 046WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -15538,6 +15628,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 045WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -15565,6 +15656,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 046WC
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16077,6 +16169,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep1
 objType table
+attic auxValid
 bioRep 045C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16104,6 +16197,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalAlnRep2
 objType table
+attic auxValid
 bioRep 046C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16131,6 +16225,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapAlnRep1
 objType table
+attic auxValid
 bioRep 045C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16158,6 +16253,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalCiptapAlnRep2
 objType table
+attic auxValid
 bioRep 046C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16505,6 +16601,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 045C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -16532,6 +16629,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90CytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 046C
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17044,6 +17142,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep1
 objType table
+attic auxValid
 bioRep 045N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17071,6 +17170,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalAlnRep2
 objType table
+attic auxValid
 bioRep 046N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17098,6 +17198,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapAlnRep1
 objType table
+attic auxValid
 bioRep 045N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17125,6 +17226,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalCiptapAlnRep2
 objType table
+attic auxValid
 bioRep 046N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17472,6 +17574,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 045N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17499,6 +17602,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqImr90NucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 046N
 cell IMR90
 composite wgEncodeCshlShortRnaSeq
@@ -17936,6 +18040,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 001WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -17963,6 +18068,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 002WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -18409,6 +18515,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 025CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -18436,6 +18543,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 026CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -18828,6 +18936,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 001C
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -18855,6 +18964,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 002C
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -19301,6 +19411,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 025NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -19328,6 +19439,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 026NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -19720,6 +19832,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 025NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -19747,6 +19860,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 026NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -20139,6 +20253,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 001N
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -20166,6 +20281,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 002N
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -20469,6 +20585,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortAln
 objType table
+attic auxValid
 bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -20822,6 +20939,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 089WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -20849,6 +20967,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 090WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -20876,6 +20995,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 089WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -20903,6 +21023,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 090WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -21306,6 +21427,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1V2
 objType table
+attic auxValid
 bioRep 089WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -21363,6 +21485,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2V2
 objType table
+attic auxValid
 bioRep 090WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22105,6 +22228,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 089C
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22132,6 +22256,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 090C
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22319,6 +22444,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 089C
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22346,6 +22472,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CytosolShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 090C
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22745,6 +22872,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 089N
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22772,6 +22900,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 090N
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22959,6 +23088,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 089N
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -22986,6 +23116,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMcf7NucleusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 090N
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
@@ -23278,6 +23409,7 @@ view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 039WC
 cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
@@ -23306,6 +23438,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqMonocd14CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 040WC
 cell Monocytes-CD14+
 composite wgEncodeCshlShortRnaSeq
@@ -23611,6 +23744,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 050WC
 cell NHDF
 composite wgEncodeCshlShortRnaSeq
@@ -23722,6 +23856,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 049WC
 cell NHDF
 composite wgEncodeCshlShortRnaSeq
@@ -23942,6 +24077,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 007WC
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -23969,6 +24105,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 008WC
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -24272,6 +24409,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 027C
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -24299,6 +24437,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 028C
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -24602,6 +24741,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 027N
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -24629,6 +24769,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 028N
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
@@ -24990,6 +25131,7 @@ view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 081WC
 cell NHEM.f_M2
 composite wgEncodeCshlShortRnaSeq
@@ -25018,6 +25160,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqNhemfm2CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 082WC
 cell NHEM.f_M2
 composite wgEncodeCshlShortRnaSeq
@@ -25321,6 +25464,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapAlnRep1
 objType table
+attic auxValid
 bioRep 083WC
 cell NHEM_M2
 composite wgEncodeCshlShortRnaSeq
@@ -25349,6 +25493,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqNhemm2CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 084WC
 cell NHEM_M2
 composite wgEncodeCshlShortRnaSeq
@@ -25681,6 +25826,7 @@ view Transfrags
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellTotalAln
 objType table
+attic auxValid
 bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
@@ -25791,6 +25937,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2
 objType table
+attic auxValid
 bioRep 048WC
 cell SkMC
 composite wgEncodeCshlShortRnaSeq
@@ -25902,6 +26049,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 047WC
 cell SkMC
 composite wgEncodeCshlShortRnaSeq
@@ -26332,6 +26480,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 085WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -26359,6 +26508,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 086WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -26386,6 +26536,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 085WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -26413,6 +26564,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 086WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -26760,6 +26912,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 085WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -26787,6 +26940,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCellShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 086WC
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27289,6 +27443,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 085C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27316,6 +27471,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 086C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27343,6 +27499,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 085C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27370,6 +27527,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 086C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27717,6 +27875,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 085C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -27744,6 +27903,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshCytosolShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 086C
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28246,6 +28406,7 @@ view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep3
 objType table
+attic auxValid
 bioRep 085N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28273,6 +28434,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalAlnRep4
 objType table
+attic auxValid
 bioRep 086N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28300,6 +28462,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapAlnRep3
 objType table
+attic auxValid
 bioRep 085N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28327,6 +28490,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalCiptapAlnRep4
 objType table
+attic auxValid
 bioRep 086N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28674,6 +28838,7 @@ view RawData
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapAlnRep3
 objType table
+attic auxValid
 bioRep 085N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28701,6 +28866,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshNucleusShorttotalTapAlnRep4
 objType table
+attic auxValid
 bioRep 086N
 cell SK-N-SH
 composite wgEncodeCshlShortRnaSeq
@@ -28993,6 +29159,7 @@ view ExonsGencV10
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1
 objType table
+attic auxValid
 bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
@@ -29020,6 +29187,7 @@ view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
 objType table
+attic auxValid
 bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
@@ -29321,4 +29489,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1518823836
+# MAGIC: 1898138604

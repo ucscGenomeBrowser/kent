@@ -1873,6 +1873,294 @@ tableName wgEncodeSydhHistMelH3k27acIggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1
+objType file
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1.bam,wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7201
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep2
+objType file
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep2.bam,wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7201
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk
+objType table
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7201
+tableName wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep1
+objType file
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7201
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep2
+objType file
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7201
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig
+objType table
+age immortalized
+antibody H3K27me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7201
+tableName wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig
+treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep1
+objType file
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep1.bam,wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7202
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep2
+objType file
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep2.bam,wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7202
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk
+objType table
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7202
+tableName wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep1
+objType file
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7202
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep2
+objType file
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7202
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig
+objType table
+age immortalized
+antibody H3K36me3B
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7202
+tableName wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig
+treatment DMSO_2.0pct
+view Signal
+
 metaObject wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1
 objType file
 age immortalized
@@ -2131,4 +2419,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -1110962568
+# MAGIC: 2087903626

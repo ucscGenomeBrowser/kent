@@ -1,24 +1,24 @@
 <H2>Description</H2>
 
-<p>This track is produced as part of the mouse ENCODE Project.
+<p>This track was produced as part of the mouse ENCODE Project.
 This track shows RNA-seq measured genome-wide in mouse
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType"> tissues and cell lines</A>.
-Poly-A selected mRNA was used as source for transcriptome profiling of tissues and cell types 
+Poly-A selected mRNA was used as the source for transcriptome profiling of tissues and cell types 
 that also had corresponding DNase I hypersensitive profiles.
 </p>
 
 <H2>Display Conventions and Configuration</H2>
 <p>
-This track is a multi-view composite track that contains multiple data types(<EM>views</EM>). 
+This track is a multi-view composite track that contains multiple data types (<EM>views</EM>). 
 For each view, there are multiple subtracks that display individually on the browser. Instructions 
 for configuring multi-view tracks are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
 Color differences among the views are arbitrary and they provide a visual cue for distinguishing
 between the different cell and tissue types.  This track contains the following views:
 <DL>
 <DT><I>Plus</I> and <I>Minus</I> <I>Signals</I><DD>These views display clusters of overlapping read mappings 
-on the forward and reverse genomic strands<DD> 
+on the forward and reverse genomic strands.<DD> 
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on processed data.</DD>
-<DT><I>Alignments</I></DT><DD>Mappings of short 50-base single end reads to the genome. <DD>
+<DT><I>Alignments</I></DT><DD>Mappings of short 50-base single end reads to the genome.  See the <A HREF="http://samtools.sourceforge.net/SAM1.pdf" TARGET="_BLANK">SAM Format Specification</A> for more information on the SAM/BAM file format. <DD>
 </DL>
 
 <H2>Methods</H2>
@@ -27,7 +27,7 @@ Cells were grown according to the approved
 <a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>.
 Fresh tissues were harvested from mice and stored until used for preparing total RNA samples.  The total RNA 
 was used as starting material to select poly-A RNA and used for constructing SOLiD libraries according to the 
-protocols supplied by the manufacturer.  All RNA-samples were spiked in with NIST standards before libraries were constructed.
+protocols supplied by the manufacturer.  All RNA samples were spiked in with NIST standards before libraries were constructed.
  The RNA-seq libraries were sequenced on ABI SOLiD sequencing platform as 50-base reads according to the manufacturer's recommendations.
 <p>
 Reads were aligned to the mm9 reference genome using ABI BioScope software version 1.2.1.  Colorspace FASTQ format files were created 

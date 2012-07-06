@@ -6094,9 +6094,9 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
-char *tdbShowNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "off");
+char *showNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
-cgiMakeCheckBox(cartVarName, !sameOk(tdbShowNames, "off"));
+cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showNames));
 printf("</TD><TD>Display read names</TD>");
 if (boxed && fileExists(hHelpFile("hgBamTrackHelp")))
     printf("<TD style='text-align:right'><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
@@ -6105,9 +6105,10 @@ printf("</TR>\n");
 boolean canPair = (cartOrTdbString(cart, tdb, BAM_PAIR_ENDS_BY_NAME, NULL) != NULL);
 if (canPair)
     {
+    char *doPairing = cartOrTdbString(cart, tdb, BAM_PAIR_ENDS_BY_NAME, "0");
     printf("<TR><TD>");
     safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
-    cgiMakeCheckBox(cartVarName, TRUE);
+    cgiMakeCheckBox(cartVarName, SETTING_IS_ON(doPairing));
     printf("</TD><TD>Attempt to join paired end reads by name</TD></TR>\n");
     }
 printf("<TR><TD colspan=2>Minimum alignment quality:\n");

@@ -458,7 +458,7 @@ dataVersion ENCODE June 2005 Freeze
 track encodeAffyChIpHl60Pval
 #replaces record encodeAffyChIpHl60Pval in parent dir missing/extra superTrack
 compositeTrack on
-subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup1 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
 shortLabel Affy pVal
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P-Values
@@ -600,7 +600,7 @@ dataVersion ENCODE June 2005 Freeze
 track encodeAffyChIpHl60Sites
 #replaces record encodeAffyChIpHl60Sites in parent dir missing/extra superTrack
 compositeTrack on
-subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup1 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
 shortLabel Affy Sites
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Sites

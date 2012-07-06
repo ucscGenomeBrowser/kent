@@ -57,8 +57,8 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
-include wgEncodeUmassDekker5C.ra beta,public 
-include wgEncodeUmassDekker5C.release2.ra alpha
+include wgEncodeUmassDekker5C.ra public
+include wgEncodeUmassDekker5C.release2.ra alpha,beta
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
@@ -107,8 +107,8 @@ include wgEncodeRikenCage.release3.ra beta,public
 include wgEncodeRikenCage.release4.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.release2.ra beta,public
-include wgEncodeCshlShortRnaSeq.release3.ra alpha
+include wgEncodeCshlShortRnaSeq.release2.ra public
+include wgEncodeCshlShortRnaSeq.release3.ra alpha,beta
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
