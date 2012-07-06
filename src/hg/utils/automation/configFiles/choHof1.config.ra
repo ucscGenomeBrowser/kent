@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db choHof1
+clade mammal
+genomeCladePriority 17
+scientificName Choloepus hoffmanni
+commonName Sloth
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute choHof1
+assemblyShortLabel choHof
+orderKey 3480
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/choHof1/broad/assembly.bases.gz
+agpFiles /cluster/data/choHof1/broad/assembly.agp
+qualFiles /cluster/data/choHof1/broad/choHof1.qual.qac
+dbDbSpeciesDir sloth
+photoCreditURL http://animaldiversity.ummz.umich.edu/site/index.html
+photoCreditName Dr. Tanya Dewey
+ncbiGenomeId 907
+ncbiAssemblyId 199758
+ncbiAssemblyName ASM16478v1
+ncbiBioProject 30809
+genBankAccessionID GCA_000164785.1
+taxId 9358
