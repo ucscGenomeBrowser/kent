@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db micMur1
+clade mammal
+genomeCladePriority 35
+scientificName Microcebus murinus
+commonName Mouse lemur
+assemblyDate Jun. 2003
+assemblyLabel Broad Institute micMur1
+assemblyShortLabel Mouse lemur
+orderKey 460
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/micMur1/broad/assembly.bases.gz
+agpFiles /cluster/data/micMur1/broad/assembly.agp
+qualFiles /cluster/data/micMur1/broad/micMur1.qual.qac
+dbDbSpeciesDir mouseLemur
+photoCreditURL http://pin.primate.wisc.edu/factsheets/image/623
+photoCreditName Verena Behringer, Primate Info Net
+ncbiGenomeId 777
+ncbiAssemblyId 200518
+ncbiAssemblyName ASM16544v1
+ncbiBioProject 19967
+genBankAccessionID GCA_000165445.1
+taxId 30608
