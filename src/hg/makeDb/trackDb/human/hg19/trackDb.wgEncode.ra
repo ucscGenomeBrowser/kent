@@ -151,8 +151,8 @@ include wgEncodeHaibMethylWgbs.ra alpha
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Matt and Venkat)
-#include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra
+include wgEncodeBroadHistone.release3.ra alpha
+include wgEncodeBroadHistone.release2.ra beta,public
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
