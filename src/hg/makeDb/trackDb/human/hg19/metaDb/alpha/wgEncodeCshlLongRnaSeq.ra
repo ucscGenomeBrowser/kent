@@ -8447,6 +8447,340 @@ subId 4553
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
 view TranscriptGencV7
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3.bam,wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4.bam,wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep3
+objType file
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep4
+objType file
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep4.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep3
+objType file
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep4
+objType file
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep4.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalJunctions
+objType table
+bioRep 091NL,092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalJunctions.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963,LID47964
+labProtocolId 091NLt,092NLt
+labVersion iIDR
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7196
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalJunctions
+view Junctions
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep3
+view MinusSignal
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep4.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep4
+view MinusSignal
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep3
+objType table
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep3
+view PlusSignal
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4
+objType table
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4
+view PlusSignal
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3
+objType file
+attic auxSup
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3.spikeins.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7192
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep4
+objType file
+attic auxSup
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep4.spikeins.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7188
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 objType table
 bioRep 003N
@@ -12776,6 +13110,33 @@ spikeInPool Nist13
 subId 5871
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1
+objType table
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+tableName wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalExonsDeNovo
 objType file
 bioRep 056WC
@@ -12829,6 +13190,58 @@ spikeInPool Nist13
 subId 6368
 view ExonsGencV10
 
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd1Rep1
+objType file
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd2Rep1
+objType file
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalGeneGencV10
 objType file
 bioRep 056WC
@@ -12855,6 +13268,87 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6368
 view GeneGencV10
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalJunctions
+objType table
+bioRep 056WC,055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+donorId 6090101.11,6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalJunctions.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47021,LID47020
+labProtocolId 056WCt,055WCt
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7195
+tableName wgEncodeCshlLongRnaSeqHaoafCellTotalJunctions
+view Junctions
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalMinusSignalRep1
+objType table
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalMinusSignalRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+tableName wgEncodeCshlLongRnaSeqHaoafCellTotalMinusSignalRep1
+view MinusSignal
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalPlusSignalRep1
+objType table
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalPlusSignalRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+tableName wgEncodeCshlLongRnaSeqHaoafCellTotalPlusSignalRep1
+view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalProtocolRep2
 objType file
@@ -12883,6 +13377,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6871
 view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalSpikeinsRep1
+objType file
+attic auxSup
+bioRep 055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalSpikeinsRep1.spikeins.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID47020
+labProtocolId 055WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7191
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalTranscriptGencV10
 objType file
@@ -23121,6 +23642,33 @@ subId 6785
 tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2
+objType table
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam,wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
 objType table
 bioRep 077WC
@@ -23147,6 +23695,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6781
 tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2
+objType table
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-04
+dateUnrestricted 2013-04-04
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47807
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7320
+submittedDataVersion V2 - First experiment found to be too shallow
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1
@@ -23176,6 +23751,32 @@ spikeInPool Nist13
 subId 6785
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1V2
+objType file
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1V2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1
 objType file
 bioRep 077WC
@@ -23201,6 +23802,32 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6785
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1V2
+objType file
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1V2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
@@ -23229,6 +23856,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6783
 tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
+view Junctions
+
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctionsV2
+objType table
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-04
+dateUnrestricted 2013-04-04
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctionsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47807
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7320
+submittedDataVersion V2 - First experiment found to be too shallow
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctionsV2
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
@@ -23260,6 +23914,33 @@ subId 6858
 tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
 view MinusSignal
 
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2
+objType table
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2
+view MinusSignal
+
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
 objType table
 bioRep 077WC
@@ -23287,6 +23968,33 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6858
 tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
+view PlusSignal
+
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2
+objType table
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
+tableName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2
 view PlusSignal
 
 metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalProtocolRep1
@@ -23343,6 +24051,33 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6785
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1V2
+objType file
+attic auxSup
+bioRep 077WC
+cell hMNC-PB
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 0082430.9
+fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1V2.spikeins.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID47807
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7189
+submittedDataVersion V2 - The first sequencing had shallowness issues
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1
@@ -53798,4 +54533,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 1961597828
+# MAGIC: -335581651
