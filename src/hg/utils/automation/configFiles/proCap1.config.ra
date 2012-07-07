@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db proCap1
+clade mammal
+genomeCladePriority 35
+scientificName  Procavia capensis
+commonName Rock hyrax
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+assemblyShortLabel ProCap1.0
+orderKey 3350
+# chrM bioProject: 12157
+mitoAcc none
+fastaFiles /cluster/data/proCap1/broad/assembly.bases.gz
+agpFiles /cluster/data/proCap1/broad/assembly.agp
+qualFiles /cluster/data/proCap1/broad/proCap1.qual.qac
+dbDbSpeciesDir rockHyrax
+photoCreditURL http://en.wikipedia.org/wiki/File:Rock_Hyrax_SA.jpg
+photoCreditName Derkarts, Wikipedia Commons
+ncbiGenomeId 2488
+ncbiAssemblyId 175448
+ncbiAssemblyName ASM15222v1
+ncbiBioProject 13972
+genBankAccessionID GCA_000152225.1
+taxId 9813

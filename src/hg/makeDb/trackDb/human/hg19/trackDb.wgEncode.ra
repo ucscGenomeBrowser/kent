@@ -20,8 +20,8 @@ include wgEncodeUncBsuProt.release2.ra alpha
 include wgEncodeUncBsuProtGenc.release1.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.release2.ra beta,public
-include wgEncodeReg.release3.ra alpha
+include wgEncodeReg.release2.ra public
+include wgEncodeReg.release3.ra alpha,beta
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
@@ -57,8 +57,7 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
-include wgEncodeUmassDekker5C.ra beta,public 
-include wgEncodeUmassDekker5C.release2.ra alpha
+include wgEncodeUmassDekker5C.release2.ra
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
@@ -151,8 +150,8 @@ include wgEncodeHaibMethylWgbs.ra alpha
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Matt and Venkat)
-#include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra
+include wgEncodeBroadHistone.release3.ra alpha
+include wgEncodeBroadHistone.release2.ra beta,public
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
