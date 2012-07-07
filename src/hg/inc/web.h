@@ -267,8 +267,8 @@ char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml);
 // NOTE: png, jpg and gif should also be supported but are untested.
 
 char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml);
-// If this is the first call, will
-//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// If this is the first call, will Return full path of timestamped link to the
+ // requested resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
 // NOTE: png, jpg and gif should also be supported but are untested.
 

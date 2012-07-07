@@ -459,8 +459,8 @@ for (generation = tdb; generation != NULL; generation = generation->parent)
             struct slName *one = NULL;
             while ((one = slPopHead(&slFoundHere)) != NULL)
                 {
-                slNameStore(&slFoundVars, one->name); // Will only store if it is not already found!  This means closest to home will work
-                slNameFree(&one);
+                slNameStore(&slFoundVars, one->name); // Will only store if it is not already found!
+                slNameFree(&one);                     // This means closest to home will work
                 }
             }
         }
@@ -706,11 +706,11 @@ else if(sameWord("bed5FloatScore",       type)
     }
 else if(encodePeakHasCfgUi(tdb))
     cType = cfgPeak;
-else if(startsWithWord("genePred",type)
-     && !startsWith("encodeGencodeRaceFrags", tdb->track))  // SPECIAL CASE should be handled in trackDb!
+else if (startsWithWord("genePred",type)
+     && !startsWith("encodeGencodeRaceFrags", tdb->track)) // SPECIAL CASE should fix in trackDb!
     cType = cfgGenePred;
-else if(sameWord("bedLogR",type)
-     || sameWord("peptideMapping", type))
+else if (sameWord("bedLogR",type)
+     ||  sameWord("peptideMapping", type))
     cType = cfgBedScore;
 else if(startsWith("bed ", type) || startsWith("bigBed", type))
     {
@@ -895,9 +895,9 @@ for (;tdb->parent == NULL; tdb = tdb->parent)
 
     if (conn == NULL)
         conn = hAllocConn(db);
-    tdb->parent = hMaybeTrackInfo(conn, parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    // Now there are 2 versions of this child!  And what to do about views?
+    tdb->parent = hMaybeTrackInfo(conn, parentTrack);
     printf("tdbFillInAncestry(%s): has %d children.",parentTrack,slCount(tdb->parent->subtracks));
-    //tdb->parent = tdbFindOrCreate(db,tdb,parentTrack); // Now there are 2 versions of this child!  And what to do about views?
     }
 if (conn != NULL)
     hFreeConn(&conn);
