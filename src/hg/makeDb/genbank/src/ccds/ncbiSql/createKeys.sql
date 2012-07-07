@@ -388,6 +388,15 @@ ALTER TABLE [dbo].[CcdsStatistics] ADD
         )
 go
 
+ALTER TABLE [dbo].[Builds] ADD
+        CONSTRAINT [FK_Builds_prev_build_uid] FOREIGN KEY
+        (
+                [prev_build_uid]
+        ) REFERENCES [dbo].[Builds] (
+                [build_uid]
+        )
+go
+
 ALTER TABLE [dbo].[BuildQualityTests] ADD
         CONSTRAINT [FK_BuildQualityTests_Builds] FOREIGN KEY
         (
