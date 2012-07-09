@@ -3870,7 +3870,7 @@ readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 4433
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
 tissueSourceType None
@@ -3898,7 +3898,7 @@ readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 4434
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
 tissueSourceType None
@@ -3927,7 +3927,7 @@ readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1
 tissueSourceType None
@@ -3956,7 +3956,7 @@ readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2
 tissueSourceType None
@@ -3985,7 +3985,7 @@ readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1
 tissueSourceType None
@@ -4014,7 +4014,7 @@ readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2
 tissueSourceType None
@@ -4042,7 +4042,7 @@ readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 4433
 tissueSourceType None
 view RawData
@@ -4069,7 +4069,7 @@ readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 4434
 tissueSourceType None
 view RawData
@@ -4097,7 +4097,7 @@ readType 1x50
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1
 tissueSourceType None
@@ -4126,7 +4126,7 @@ readType 1x50
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain Unknown
 subId 6107
 tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2
 tissueSourceType None
@@ -6120,4 +6120,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1699639399
+# MAGIC: -1698144779
