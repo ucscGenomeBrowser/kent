@@ -2532,12 +2532,23 @@
 
 <DIV class="irows"><span class="types wigMaf"></span>
 <div class="format"><code>irows off</code></div>
-    <P>By default, gaps in
-    the non-reference species are filled with the placeholder
-    character '<code>=</code>', which can make following columns in stacked
-    alignments easier.  However, this also clutters the display.  The
-    user has the option to remove these placeholders by unchecking the
-    "Display chains between alignments" option.  To
+    <P>By default, gaps in the non-reference species are filled with the placeholder
+    character:
+    <UL>
+    <LI><B>Single Line</B> '<code>-</code>': No bases in the aligned species. Possibly
+    due to a lineage-specific insertion between the aligned blocks in the human genome
+    or a lineage-specific deletion between the aligned blocks in the aligning species.</LI>
+    <LI><B>Double line</B> '<code>=</code>': Aligning species has one or more unalignable
+    bases in the gap region. Possibly due to excessive evolutionary distance between
+    species or independent indels in the region between the aligned blocks in both species.</LI>
+    <LI><B>Pale yellow coloring</B>:
+    Aligning species has Ns in the gap region.
+    Reflects uncertainty in the relationship between the DNA of both species, due
+    to lack of sequence in relevant portions of the aligning species.</LI>
+    </UL>
+    The result makes following columns in stacked alignments easier.
+    However, this also clutters the display.  The user has the option to remove
+    these placeholders by unchecking the "Display chains between alignments" option.  To
     default this option to off, then set <code>irows</code> to "<code>off</code>".
                 </P>
     <P><B>Example:</B></P>
@@ -2580,7 +2591,7 @@
 <div class="format"><code>speciesDefaultOff &lt;species1&gt; [species2 ...]</code></div>
     <P>To control which of
     the stacked pairwise alignments is displayed by default use
-    speciesDefaultOff to list the species alignments that will not be
+    <code>speciesDefaultOff</code> to list the species alignments that will not be
     displayed by default.  Each species is specified as in the MAF
     file Organism names except with embedded dots and/or spaces, these
     are stripped and replaced with underscore (e.g. C. elegans -&gt;
@@ -2592,9 +2603,9 @@
 <DIV class="speciesOrder"><span class="types wigMaf bed"></span>
 <div class="format"><I>Related settings:</I><BR>
     <code>speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
-    <P>Use spiecesOrder to declare the order of the
+    <P>Use <code>speciesOrder</code> to declare the order of the
     stacked alignments.  If there are many species in your track,
-    it may make sense to use the speciesGroups setting instead.</P>
+    it may make sense to use the <code>speciesGroups</code> setting instead.</P>
 </DIV>
 
 <DIV class="speciesGroups"><span class="types wigMaf"></span>
@@ -2603,44 +2614,44 @@
     <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
     <P>You can include a list of "clades"
     to group the species into.   This option is an alternative to
-    speciesOrder, used when there are many species.  Each
-    speciesGroup in the list must have its own setting
+    <code>speciesOrder</code>, used when there are many species.  Each
+    <code>speciesGroup</code> in the list must have its own setting
     (sGroup_&lt;group&gt;), followed by a list of species,
     specified as for speciesOrder.</P>
-</DIV>
-
-<DIV class="speciesUseFile"><span class="types wigMaf"></span>
-<div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
-    <P>Much more rarely used, this setting can
-    replace speciesOrder and speciesGroups.  Set the speciesUseFile
-    to a path relative to the apache cgi-bin.  The file should
-    contain a single species name as the first word of each line.</P>
     <P><hr class="example" /><B>Examples:</B></P>
     <pre>
     speciesOrder panTro1 canFam1 mm5 rn3 \
                  galGal2 fr1 danRer1
     speciesGroups Mammal Vertebrate
     sGroup_Mammal mm9 rn4
-    sGroup_Vertebrate galGal2 fr1 danRer1
-    speciesUseFile speciesLists/conserved8Way.txt    </pre>
-    <P>Choose one of these three alternatives to
-    display species.</P>
+    sGroup_Vertebrate galGal2 fr1 danRer1</pre>
+    <P>Choose one of these two alternatives to display species.</P>
+</DIV>
+
+<DIV class="speciesUseFile"><span class="types wigMaf"></span>
+<div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
+    <P><I>Deprecated</I></P>
+    <P>Much more rarely used, this setting can
+    replace <code>speciesOrder</code> and <code>speciesGroups</code>.
+    Set the <code>speciesUseFile</code> to a path relative to the apache cgi-bin.
+    The file should contain a single species name as the first word of each line.</P>
+    <P><B>Example:</B></P>
+    <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
 </DIV>
 
 <DIV class="summary"><span class="types wigMaf"></span>
 <div class="format"><code>summary &lt;tableName&gt;</code></div>
-    <P>This setting
-    contains table name of maf summary table (used as replacement for
-    "<code>pairwise</code>" tables which should no longer be used).  A
-    summary table is created from a multiple alignment maf file using
-    the utility hgLoadMafSummary.</P>
+    <P>This setting contains table name of maf summary table. The summary
+    view is used when the browser display is zoomed out to contain a million
+    or more basepairs.  A summary table is created from a multiple alignment maf
+    file using the utility <code>hgLoadMafSummary</code>.</P>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>
 
 <DIV class="treeImage"><span class="types wigMaf"></span>
 <div class="format"><code>treeImage &lt;imageFile&gt;</code></div>
-    <P>The phylogenic tree
+    <P>The phylogenetic tree
     can used to show the relations of the species in the multiple
     alignment should be included as an image file.  This path is
     relative to the htdocs images directory (usually /images).</P>
