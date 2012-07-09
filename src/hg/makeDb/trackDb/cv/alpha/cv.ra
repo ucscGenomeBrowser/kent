@@ -4643,6 +4643,42 @@ termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 protocol Crawford:iPS_Crawford_protocol.pdf
 
+term iPS_hFib2_iPS4
+tag IPSHFIB2IPS4
+type Cell Line
+tier 3
+organism human
+description induced pluripotent stem cell derived from skin fibroblast
+lineage missing
+karyotype normal
+sex M
+tissue induced pluripotent cell (iPS)
+vendorName HSCI iPS Cell Core Facitlity
+vendorId hFib2_iPS4
+orderUrl http://www.hsci.harvard.edu/ipscore/node/3
+termId BTO:0000001
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
+lab Gilbert
+protocol missing
+
+term iPS_hFib2_iPS5
+tag IPSHFIB2IPS5
+type Cell Line
+tier 3
+organism human
+description induced pluripotent stem cell derived from skin fibroblast
+lineage missing
+karyotype normal
+sex M
+tissue induced pluripotent cell (iPS)
+vendorName HSCI iPS Cell Core Facility
+vendorId hFIB2_iPS5
+orderUrl http://www.hsci.harvard.edu/ipscore/node/3
+termId BTO:0000001
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
+lab Gilbert
+protocol missing
+
 term iPS_CWRU1
 tag IPSCWRU1
 type Cell Line
