@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db nomLeu2
+clade mammal
+genomeCladePriority 13
+scientificName Nomascus leucogenys
+commonName Gibbon
+assemblyDate Jun. 2011
+assemblyLabel Gibbon Genome Sequencing Consortium Nleu1.1 (GCA_000146795.2, WGS ADFV01)
+assemblyShortLabel GGSC Nleu1.1
+orderKey 329
+mitoAcc none
+fastaFiles /hive/data/genomes/nomLeu2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/nomLeu2/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir gibbon
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=74
+photoCreditName Jim Zuckerman, Gibbon Conservation Center
+ncbiGenomeId 480
+ncbiAssemblyId 313108
+ncbiAssemblyName Nleu1.1
+ncbiBioProject 13975
+genBankAccessionID GCA_000146795.2
+taxId 61853

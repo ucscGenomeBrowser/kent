@@ -141,7 +141,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 // There are 2 ways to look at the metadata: By Obj: obj->[var=val] and By Var: var->[val->[obj]].
 // By Obj: an object has many var/val pairs but only one val for each unique var.  Querying by
 //         object creates a single (2 level) one to many structure.
-// By Var: a variable has many possible values and each value may be defined for more than one object.
+// By Var: a variable has many possible values and each value may be defined for more than one obj
 //         Therefore, querying by var results in a (3 level) one to many to many structure.
 
 struct mdbVar
@@ -242,35 +242,42 @@ char*mdbTableName(struct sqlConnection *conn,boolean mySandBox);
 
 
 // -------------- Updating the DB --------------
-int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean replace,boolean testOnly);
+int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,
+                   boolean replace,boolean testOnly);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
-int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly);
+int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,
+                    boolean testOnly);
 // Adds mdb Objs with minimal error checking
 
 // ------------------ Querys -------------------
 struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj *mdbObj);
-// Query the metadata table by obj and optional vars and vals in mdbObj struct.  If mdbObj is NULL query all.
-// Returns new mdbObj struct fully populated and sorted in obj,var order.
+// Query the metadata table by obj and optional vars and vals in mdbObj struct.
+// If mdbObj NULL query all. Returns new mdbObj struct fully populated and sorted in obj,var order.
 #define mdbObjsQueryAll(conn,table) mdbObjQuery((conn),(table),NULL)
 
 struct mdbObj *mdbObjQueryByObj(struct sqlConnection *conn,char *table,char *obj,char *var);
 // Query a single metadata object and optional var from a table (default mdb).
 
 struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct mdbByVar *mdbByVars);
-// Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
+// Query the metadata table by one or more var=val pairs to find the distinct set of objs
+// that satisfy ANY conditions.
 // Returns new mdbByVar struct fully populated and sorted in var,val,obj order.
 #define mdbByVarsQueryAll(conn,table) mdbByVarsQuery((conn),(table),NULL)
 
 struct mdbByVar *mdbByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val);
-// Query a single metadata variable and optional val from a table (default mdb) for searching val->obj.
+// Query a single metadata variable and optional val from a table (default mdb)
+// for searching val->obj.
 
-struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct mdbByVar *mdbByVars);
-// Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
+struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,
+                                  struct mdbByVar *mdbByVars);
+// Query the metadata table by one or more var=val pairs to find the distinct set of objs
+// that satisfy ALL conditions.
 // Returns new mdbObj struct fully populated and sorted in obj,var order.
 
 struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *tableName,char *varVals);
-// returns mdbObjs matching varVals in form of: [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
+// returns mdbObjs matching varVals in form of:
+//  [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
 //   var2=val2a,val2b: matches asny of comma separated list
 //   var3=v%3        : matches '%' and '?' wild cards.
 //   var4="val 4"    : matches simple double quoted strings.
@@ -278,13 +285,16 @@ struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *table
 //   var6=           : matches that var exists (same as var6=%). var6!= also works.
 #define mdbObjsQueryByVarVals(conn,varVals) mdbObjsQueryByVarValString((conn),NULL,(varVals))
 
-struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,struct slPair *varValPairs);
+struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,
+                                      struct slPair *varValPairs);
 // returns mdbObjs matching varValPairs provided.
 //   The != logic of mdbObjsQueryByVarValString() is not possible, but other cases are supported:
 //   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
-#define mdbObjsQueryByVarValPairs(conn,varValPairs) mdbObjsQueryByVarPairs((conn),NULL,(varValPairs))
+#define mdbObjsQueryByVarValPairs(conn,varValPairs) \
+        mdbObjsQueryByVarPairs((conn),NULL,(varValPairs))
 
-struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,
+                                       struct mdbObj *mdbObj);
 // returns NULL or the composite mdbObj associated with the object passed in.
 #define mdbObjQueryComposite(conn,mdbObj) mdbObjQueryCompositeObj((conn),NULL,(mdbObj))
 
@@ -302,7 +312,8 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file);
 // prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
 
-void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header);
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order,
+                                char *separator, boolean header);
 // prints mdbObjs as a table, but only the vars listed in comma delimited order.
 // Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
 // mdbObjs list will be reordered. Sort fails when vars are missing in objs.
@@ -335,7 +346,8 @@ boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val);
 
 boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, char *val);
 // Returns TRUE if any object in set contains var
-#define mdbObjsContainAtleastOne(mdbObjs, var) mdbObjsContainAltleastOneMatchingVar((mdbObjs),(var),NULL)
+#define mdbObjsContainAtleastOne(mdbObjs, var) \
+        mdbObjsContainAltleastOneMatchingVar((mdbObjs),(var),NULL)
 
 struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs);
 // Returns a new mdbObj with all vars that are contained in every obj passed in.
@@ -351,11 +363,14 @@ void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden);
 // Reorders vars list based upon cv.ra typeOfTerms priority
 
 void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
-// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
-// Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
+// Sorts on var,val pairs vars lists: fwd case-sensitive.
+// Assumes all objs' vars are in identical order.
+// Optionally give list of vars "cell antibody treatment" to sort on
+// (bringing to front of vars lists).
 
 void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
-// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// Sorts on var,val pairs vars lists: fwd case-sensitive.
+// Assumes all objs' vars are in identical order.
 // This method will use mdbObjsSortOnVars()
 
 void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden);
@@ -393,13 +408,18 @@ struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,bool
 // Filters mdb objects to only those that include/exclude vars.  Optionally checks val too.
 // Returns matched or unmatched items objects as requested, maintaining sort order
 
-struct mdbObj *mdbObjsFilterByVars(struct mdbObj **pMdbObjs,char *vars,boolean noneEqualsNotFound,boolean returnMatches);
-// Filters mdb objects to only those that include/exclude var=val pairs (e.g. "var1=val1 var2 var3!=val3 var4=None").
-// Supports != ("var!=" means var not found). Optionally supports var=None equal to var is not found
-// Returns matched or unmatched items objects as requested.  Multiple passes means sort order is destroyed.
+struct mdbObj *mdbObjsFilterByVars(struct mdbObj **pMdbObjs,char *vars,
+                                   boolean noneEqualsNotFound,boolean returnMatches);
+// Filters mdb objects to only those that include/exclude var=val pairs
+// (e.g. "var1=val1 var2 var3!=val3 var4=None").
+// Supports != ("var!=" means var not found).
+// Optionally supports var=None equal to var is not found
+// Returns matched or unmatched items objects as requested.
+// Multiple passes means sort order is destroyed.
 
 struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean table, boolean files);
-// Filters mdb objects to only those that have associated tables or files. Returns removed non-table/file objects
+// Filters mdb objects to only those that have associated tables or files.
+// Returns removed non-table/file objects
 // Note: Since table/file objects overlap, there are 3 possibilites: tables, files, table && files
 
 struct mdbObj *mdbObjIntersection(struct mdbObj **a, struct mdbObj *b);
@@ -425,35 +445,43 @@ boolean mdbObjIsComposite(struct mdbObj *mdbObj);
 // returns TRUE if this is a valid composite object
 
 boolean mdbObjIsCompositeMember(struct mdbObj *mdbObj);
-// returns TRUE if this is a valid member of a composite.  DOES not confirm that composite obj exists
+// returns TRUE if this is valid member of a composite. DOES not confirm that composite obj exists
 
 int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
 // Validates vars and vals against cv.ra.  Returns count of errors found.
 // Full considers vars not defined in cv as invalids
 
-struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj);
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,
+                                                  char *tableName,struct mdbObj *mdbObj);
 // returns NULL or the Experiment Defining Variable names for this composite
-#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) mdbObjFindCompositeNamedEncodeEdvs((conn),NULL,(mdbObj))
+#define mdbObjFindCompositeEncodeEdvs(conn,mdbObj) \
+        mdbObjFindCompositeNamedEncodeEdvs((conn),NULL,(mdbObj))
 
-struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone);
+struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,
+                                        struct mdbObj *mdbObj,boolean includeNone);
 // returns NULL or the Experiment Defining Variables and values for this composite member object
 // If includeNone, then defined variables not found in obj will be included as {var}="None".
-#define mdbObjFindEncodeEdvs(conn,mdbObj,includeNone) mdbObjFindEncodeEdvPairs((conn),NULL,(mdbObj),(includeNone))
+#define mdbObjFindEncodeEdvs(conn,mdbObj,includeNone) \
+        mdbObjFindEncodeEdvPairs((conn),NULL,(mdbObj),(includeNone))
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
-                      struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession);
-// Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,
+                                          char *expTable,struct mdbObj **pMdbObjs,int warn,
+                                          boolean createExpIfNecessary,boolean updateAccession);
+// Organizes objects into experiments and validates experiment IDs.
+// Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
 // createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
-// Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
+// Returns a new set of mdbObjs that is what can (and should)
+//         be used to update the mdb via mdbObjsSetToDb().
 
 boolean mdbObjIsEncode(struct mdbObj *mdbObj);
 // Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
 
 boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
 // Returns TRUE if metaDb object is in specified composite.
-// If composite is NULL, always return true // FIXME: KATE Why return true if composite not defined???
+// If composite is NULL, always return true
+// FIXME: KATE Why return true if composite not defined???
 
 // -- Requested by Kate? --
 //struct encodeExp *encodeExps(char *composite,char *expTable);
@@ -486,32 +514,45 @@ const char *metadataFindValue(struct trackDb *tdb, char *var);
 
 #define MDB_VAL_STD_TRUNCATION 64
 struct mdbObj *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit);
-// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
+// Search the metaDb table for objs by var and val.
+// Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 
-struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,boolean tables,boolean files);
+struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,
+                                    boolean tables,boolean files);
 // Search the metaDb table for objs by var,val pairs.  Uses mdbCvSearchMethod() if available.
 // This method will use mdbObjsQueryByVars()
 
-struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
-// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op,
+                                int limit, boolean tables, boolean files);
+// Search the metaDb table for objs by var and val.
+// Can restrict by op "is" or "like" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName);
-// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit,
+                            boolean hasTableName, boolean hasFileName);
+// Search the metaDb table for vals by var.
+// Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Searchable vars are only for table or file objects.
+// Further restrict to vars associated with tableName, fileName or both.
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName);
-// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
-// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
-// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags,
+                                 boolean hasTableName, boolean hasFileName);
+// Search the metaDb table for vals by var and returns val (as pair->name)
+// and controlled vocabulary (cv) label (if it exists) (as pair->val).
+// Can impose (non-zero) limit on returned string size of name.
+// Searchable vars are only for table or file objects.
+// Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val).
+// If requested, return cv tag instead of mdb val.
 #define mdbPairVal(pair) (pair)->name
 #define mdbPairLabel(pair) (pair)->val
 
-struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName);
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName,
+                                 boolean hasFileName);
 // returns a white list of mdb vars that actually exist in the current DB.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Searchable vars are only for table or file objects.
+// Further restrict to vars associated with tableName, fileName or both.
 
 #endif /* MDB_H */

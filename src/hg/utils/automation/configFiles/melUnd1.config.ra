@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db melUnd1
+clade vertebrate
+genomeCladePriority 60
+scientificName Melopsittacus undulatus
+commonName Budgerigar
+assemblyDate Sep. 2011
+assemblyLabel WUSTL Melopsittacus undulatus Budgerigar Version 6.3
+assemblyShortLabel WUSTL v6.3
+orderKey 4375
+# chrM bioproject: 19105
+mitoAcc NC_009134
+fastaFiles /hive/data/genomes/melUnd1/ucsc/unplaced.fa.gz
+agpFiles /hive/data/genomes/melUnd1/ucsc/unplaced.agp.gz
+dbDbSpeciesDir birds
+photoCreditURL http://www.flickr.com/photos/35597202@N02/
+photoCreditName Jen Smith, Wikimedia Commons
+ncbiGenomeId 10765
+ncbiAssemblyId 325078
+ncbiAssemblyName Melopsittacus_undulatus_6.3
+ncbiBioProject 72527
+genBankAccessionID GCA_000238935.1
+taxId   13146

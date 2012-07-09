@@ -9,10 +9,17 @@ opts="$*"
 otherOpts=""
 
 # initialize
+gbBuildServer=hgwdev.cse.ucsc.edu
+rsyncPort="ssh"
+gbBuildRoot=/hive/data/outside/genbank
 gbRoot=/data2/genbank
 cd $gbRoot
+
+# update the etc, bin, and lib directories
+rsync -ra $gbBuildServer:$gbBuildRoot/etc $gbBuildServer:$gbBuildRoot/bin $gbBuildServer:$gbBuildRoot/lib .
+
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/euronode.dbs`
+databases=`gbGetDatabases etc/rr.dbs`
 
 # workdir is a local dir
 workdir=/data2/tmp/genbank
