@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db dasNov3
+clade mammal
+genomeCladePriority 56
+scientificName Dasypus novemcinctus
+commonName Armadillo
+assemblyDate Dec. 2011
+assemblyLabel Baylor College of Medicine Dasnov3.0 (GCA_000208655.2)
+assemblyShortLabel Armadillo
+orderKey 3459
+# chrM bioproject: 11837
+mitoAcc NC_001821
+fastaFiles /hive/data/genomes/dasNov3/genbank/unplaced.fa.gz
+agpFiles /hive/data/genomes/dasNov3/genbank/unplaced.agp.gz
+dbDbSpeciesDir armadillo
+photoCreditURL http://library.byways.org/view_details.html?MEDIA_OBJECT_ID=64102
+photoCreditName Jerry Segraves
+ncbiGenomeId 235
+ncbiAssemblyId 326198
+ncbiAssemblyName Dasnov3.0
+ncbiBioProject 12594
+genBankAccessionID GCA_000208655.2
+taxId 9361
