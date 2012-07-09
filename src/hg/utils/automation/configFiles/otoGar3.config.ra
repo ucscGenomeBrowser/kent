@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db otoGar3
+clade mammal
+genomeCladePriority 16
+scientificName Otolemur garnettii
+commonName Bushbaby
+assemblyDate Mar. 2011
+assemblyLabel Broad Institute
+assemblyShortLabel Broad OtoGar3
+orderKey 464
+mitoAcc none
+fastaFiles /hive/data/genomes/otoGar3/genbank/unplaced.fa.gz
+agpFiles /hive/data/genomes/otoGar3/genbank/unplaced.agp.gz
+dbDbSpeciesDir bushbaby
+photoCreditURL http://lemur.duke.edu/
+photoCreditName Duke University Primate Center
+ncbiGenomeId 451
+ncbiAssemblyId 249878
+ncbiAssemblyName OtoGar3
+ncbiBioProject 16955
+genBankAccessionID GCA_000181295.3
+taxId   30611
