@@ -2039,10 +2039,6 @@
     for tracks with sequence alignments highlight an apparent valid
     poly-a tail by drawing a vertical green line(<B style="color:green;">|</B>).</LI>
     </UL>
-    <P><I>TODO: I'll be
-    damned if I know how these are coded to affect the image???  But I
-    see the effect.  I also do not see how these are affecting
-    hgTrackUi defaults!</I></P>
     <P><B>Example:</B></P>
     <pre>
     baseColorUseSequence genbank
