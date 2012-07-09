@@ -502,6 +502,11 @@ var loadingImage = function ()
                 imgEle.show();
                 setTimeout(refreshLoadingImg, 1000);
             }
-        }
+        },
+        abort: function() {
+	    imgEle.hide();
+	    msgEle.hide();
+	    jQuery('body').css('cursor', '');
+	}
     }
 }();
