@@ -18,7 +18,7 @@ databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 gbdb=/data2/gbdb
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=hgwdev
+gbBuildServer=hgwdev.cse.ucsc.edu
 rsyncPort="ssh"
 gbBuildRoot=/hive/data/outside/genbank
 
