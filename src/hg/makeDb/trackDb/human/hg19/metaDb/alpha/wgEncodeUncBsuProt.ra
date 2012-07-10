@@ -178,6 +178,7 @@ view Signal
 
 metaObject wgEncodeUncBsuProtK562MembranefractionFaspRaw
 objType file
+attic auxExp
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
@@ -192,12 +193,12 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTol
 localization membraneFraction
 project wgEncode
 protocol FASP
-attic auxExp
 subId 4183
 view RawSignal
 
 metaObject wgEncodeUncBsuProtK562MembranefractionFaspSig
 objType table
+attic auxExp
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
@@ -212,7 +213,6 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTol
 localization membraneFraction
 project wgEncode
 protocol FASP
-attic auxExp
 subId 4175
 tableName wgEncodeUncBsuProtK562MembranefractionFaspSig
 view Signal
@@ -347,4 +347,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -594084856
+# MAGIC: 2111469949
