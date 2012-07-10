@@ -721,8 +721,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # add sarHar after hetGla1
     joinerCheck -database=sarHar1 -all all.joiner
 
-    mkdir /hive/data/genomes/sarHar1/goldenPath
-    cd /hive/data/genomes/sarHar1/goldenPath
+    cd /hive/data/genomes/sarHar1
+    makeDownloads.pl sarHar1 > do.log 2>&1
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/sarHar1/pushQ

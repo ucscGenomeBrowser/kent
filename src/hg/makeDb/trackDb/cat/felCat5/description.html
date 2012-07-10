@@ -1,140 +1,62 @@
 <!-- Display image in righthand corner -->
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
   <TR><TD ALIGN=RIGHT>
-    <A HREF=""http://www.genome.gov/pressDisplay.cfm?photoID=42"
-    TARGET=_blank>
-    <IMG SRC="../images/Felis_catus.jpg" WIDTH=170 HEIGHT=143 ALT="F. catus"></A>
+    <A HREF="http://www.ncbi.nlm.nih.gov/genome/78" TARGET=_blank>
+    <IMG SRC="/images/Felis_catus.jpg" WIDTH=170 HEIGHT=143 ALT="Cat"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Felis catus</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      (NHGRI <A HREF="http://www.genome.gov/pressDisplay.cfm?photoID=42"
-              TARGET=_blank>Press Photos</A>)
+      (<A HREF="http://www.genome.gov/pressDisplay.cfm?photoID=42"
+      TARGET=_blank>Dr. Kristina Narfstrom</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-*** this needs to be updated this assembly.  it's a copy of felCat4 *** 
+<B>UCSC Genome Browser assembly ID:</B> felCat5<BR>
+<B>Sequencing/Assembly provider ID:</B> International Cat Genome Sequencing Consortium Felis_catus-6.2<BR>
+<B>Assembly date:</B> Sep. 2011<BR>
+<B>GenBank accession ID:</B> GCA_000181335.2<BR>
+<B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/78" TARGET="_blank">
+NCBI genome/78 (Felis catus)</A><BR>
+<B>NCBI Assembly information:</B>
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/320798" TARGET="_blank">
+NCBI genome/assembly/320798 (International Cat Genome Sequencing Consortium Felis_catus-6.2)</A><BR>
 
-The Dec. 2008 <em>Felis catus</em> draft assembly, catChrV17e,
-was produced by the NHGRI Genome Technology Branch and NIH Intramural 
-Sequencing Center, Maryland; Agencourt Bioscience Corporation,
-Massachusetts; NCI Laboratory of Genomic Diversity, Maryland;
-and Hill's Pet Nutrition, Inc, Kansas.
-The mitochondrial genome was sequenced by 
-NCI Laboratory of Genomic Diversity.
-For more information about this assembly, see
-<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/3328/" TARGET="_blank">
-catChrV17e</A> in the NCBI Assembly database.
-
-<H3>Sample position queries</H3>
-<P>
-A genome position can be specified by the accession number of a
-sequenced genomic region, an mRNA or EST, a chromosomal coordinate
-range, or keywords from the GenBank description of an mRNA. The
-following list shows examples of valid position queries for the
-cat genome.  See the
-<A HREF="../goldenPath/help/hgTracksHelp.html"
-    TARGET=_blank>User's Guide</A> for more information.
-<P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrA3</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome A3</TD>
-    </TR>
-    <TR><TD VALIGN=Top>chrA3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr A3</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chrA3:1000000+2000</TD>
-       	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr A3 that spans 2000 bases, starting with position 1000000 </TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>GQ247880</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number GQ247880</TD>
-    </TR>
-    <TR><TD VALIGN=Top>CV794675</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		CV794675 on chr A3</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
-    </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
-    </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
-    </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
-    </TR>
-    <TR><TD VALIGN=Top>pathak</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Pathak</TD>
-    </TR>
-    <TR><TD VALIGN=Top>Kapil,S.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author S. Kapil</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Kapil S</em>, internally it
-	uses the format <em>Kapil,S.</em>.</TD>
-    </TR>
-</TABLE>
-
-<HR>
-<H3>Assembly details</H3>
-<P>
-This assembly adds a coverage improvement of 0.9X to the previous 1.9X Cinnamon 
-assembly (UCSC felCat3). The increased coverage was achieved by adding 
-paired-end fosmid ABI 3730 reads obtained from six other breeds and one wild 
-cat. All 2.8X coverage was assembled and mapped using the 
-techniques described for the 1.9X felCat3 assembly. </P>
-<P>
-The felCat4 assembly has 19 chromosomes: chrA1-3, chrB1-4, chrC1-2, 
-chrD1-4, chrE1-3, chrF1-2, and chrX. The mitochondrial
-sequence chrM was obtained from GenBank accession NC_001700.  The total sequence
-length is approximately 2.87 Gb, of which about 1.17 Gb are 'N' bases in gaps,
-resulting in approximately 1.7 Gb of ACGT.
-For more information about the techniques used to produce this assembly,
-see the paper 
-Mullikin, JC <em>et al</em>. 
-<A HREF="http://www.biomedcentral.com/1471-2164/11/406"
-TARGET=_blank>Light whole genome sequence for SNP discovery across domestic 
-cat breeds</A>, <em>BMC Genomics</em> 2010 Jun 24;11:406 and the NCBI Entrez 
-<A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?db=genomeprj&cmd=Retrieve&dopt=Overview&list_uids=32759"
-TARGET=_blank><em>Felis catus</em> 
-genome project</A> web page.  </P>
-<P>
-Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser 
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/felCat4/">FTP
-server</A> or the 
-<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#cat">Downloads</A> page. 
+<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/16726" TARGET="_blank"> NCBI Bioproject: 16726</A>
 </P>
-<P>
-The cat Genome Browser and its annotation tracks were generated by UCSC and 
-collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#cat_credits">Credits</A> 
-page for a detailed list of the organizations and individuals who contributed 
-to this release.  </P>
 <HR>
-<H3>Genbank Pipeline Details</H3>
-For the purposes of the Genbank alignment pipeline, this assembly is considered to be: <B>low-coverage</B>.
+<P>
+<B>Search the assembly:</B>
+<UL>
+<LI>
+<B>By position or search term: </B> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<A HREF="../goldenPath/help/query.html">More information</A>, including sample
+queries.
+<LI>
+<B>By gene name: </B> Type a gene name into the &quot;gene&quot; box to
+go directly to the assembly location associated with a gene.
+<A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
+<LI>
+<B>By track type: </B> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<A HREF="../goldenPath/help/trackSearch.html">More information</A>.
+</UL>
+</P>
+<HR>
+<P>
+<B>Download sequence and annotation data:</B>
+<UL>
+<LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/felCat5/">Using FTP</A>
+(recommended)
+<LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#cat">Using HTML</A>
+<LI><A HREF="../goldenPath/credits.html#cat_credits">Data use conditions and
+restrictions</A>
+<LI><A HREF="../goldenPath/credits.html#cat_credits">Acknowledgments</A>
+</UL>
+</P>

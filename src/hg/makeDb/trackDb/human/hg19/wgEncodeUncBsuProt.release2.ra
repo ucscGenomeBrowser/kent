@@ -30,13 +30,13 @@ visibility hide
     visibility full
     parent wgEncodeUncBsuProt
 
-        track wgEncodeUncBsuProtK562MembranefractionFaspSig
-        parent wgEncodeUncBsuProtViewSignal
-        shortLabel K562
-        longLabel K562 FASP membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-        subGroups view=Signal cellType=t1K562 localization=membraneFraction protocol=FASP
-        type peptideMapping
-        color 46,0,184
+        ##track wgEncodeUncBsuProtK562MembranefractionFaspSig
+        ##parent wgEncodeUncBsuProtViewSignal
+        ##shortLabel K562
+        ##longLabel K562 FASP membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
+        ##subGroups view=Signal cellType=t1K562 localization=membraneFraction protocol=FASP
+        ##type peptideMapping
+        ##color 46,0,184
         # subId=4175 dateSubmitted=2011-06-03
 
         track wgEncodeUncBsuProtGm12878NucleusSig
