@@ -91,7 +91,6 @@ objType table
 cell GM12878
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bigWig
@@ -114,7 +113,6 @@ objType table
 cell H1-hESC
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bigWig
@@ -137,7 +135,6 @@ objType table
 cell HeLa-S3
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
@@ -164,7 +161,6 @@ objType table
 cell HepG2
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
@@ -191,7 +187,6 @@ objType table
 cell HSMM
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bigWig
@@ -214,7 +209,6 @@ objType table
 cell HUVEC
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bigWig
@@ -237,7 +231,6 @@ objType table
 cell K562
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bigWig
@@ -260,7 +253,6 @@ objType table
 cell NHEK
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bigWig
@@ -283,7 +275,6 @@ objType table
 cell NHLF
 composite wgEncodeRegTxn
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled.bigWig
