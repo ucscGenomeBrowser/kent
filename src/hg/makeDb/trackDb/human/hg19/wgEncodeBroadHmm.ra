@@ -6,7 +6,7 @@ superTrack wgEncodeHistoneSuper dense
 shortLabel Broad ChromHMM
 longLabel Chromatin State Segmentation by HMM from ENCODE/Broad
 group regulation
-subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier&nbsp;1) 1H1=H1-hESC&nbsp;(Tier&nbsp;1) 1K562=K562&nbsp;(Tier&nbsp;1) 2HEPG2=HepG2 2HMEC=HMEC 2HSMM=HSMM 2HUVEC=HUVEC 2NHEK=NHEK 2NHLF=NHLF
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3HMEC=HMEC t3HSMM=HSMM t3NHEK=NHEK t3NHLF=NHLF
 dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -25,7 +25,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel GM12878 ChromHMM
     longLabel GM12878 Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=1GM12878
+    subGroups cellType=t1GM12878
     type bed 9 .
     origAssembly hg18
     #color 153,38,0
@@ -35,7 +35,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel H1-hESC ChromHMM
     longLabel H1-hESC Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=1H1
+    subGroups cellType=t1H1HESC
     type bed 9 .
     origAssembly hg18
     #color 0,107,27
@@ -45,7 +45,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel K562 ChromHMM
     longLabel K562 Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=1K562
+    subGroups cellType=t1K562
     type bed 9 .
     origAssembly hg18
     #color 46,0,184
@@ -55,7 +55,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel HepG2 ChromHMM
     longLabel HepG2 Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2HEPG2
+    subGroups cellType=t2HEPG2
     type bed 9 .
     origAssembly hg18
     #color 189,0,157
@@ -65,7 +65,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel HMEC ChromHMM
     longLabel HMEC Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2HMEC
+    subGroups cellType=t3HMEC
     type bed 9 .
     origAssembly hg18
     # subId=3823 dateSubmitted=2011-03-16
@@ -74,7 +74,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel NHLF ChromHMM
     longLabel NHLF Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2NHLF
+    subGroups cellType=t3NHLF
     type bed 9 .
     origAssembly hg18
     # subId=3823 dateSubmitted=2011-03-16
@@ -83,7 +83,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel NHEK ChromHMM
     longLabel NHEK Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2NHEK
+    subGroups cellType=t3NHEK
     type bed 9 .
     origAssembly hg18
     #color 179,0,134
@@ -93,7 +93,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel HSMM ChromHMM
     longLabel HSMM Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2HSMM
+    subGroups cellType=t3HSMM
     type bed 9 .
     origAssembly hg18
     # subId=3823 dateSubmitted=2011-03-16
@@ -102,7 +102,7 @@ filterBy name:State=1_Active_Promoter,2_Weak_Promoter,3_Poised_Promoter,4_Strong
     parent wgEncodeBroadHmm
     shortLabel HUVEC ChromHMM
     longLabel HUVEC Chromatin State Segmentation by HMM from ENCODE/Broad
-    subGroups cellType=2HUVEC
+    subGroups cellType=t2HUVEC
     type bed 9 .
     origAssembly hg18
     #color 224,75,0
