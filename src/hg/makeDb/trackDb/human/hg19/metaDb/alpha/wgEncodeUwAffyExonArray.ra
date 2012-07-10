@@ -2721,6 +2721,326 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayK562SimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId RS17367
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+treatment ZNF_knockout_4C50_C4
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS17335
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+treatment ZNF_knockout_4C50_C4
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep1
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17367
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep1
+treatment ZNF_knockout_4C50_C4
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep2
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17335
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep2
+treatment ZNF_knockout_4C50_C4
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep1.1-C6_E_101115_18_RS17179_W.CEL.gz
+grant Stam
+lab UW
+labExpId RS17179
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+treatment ZNF_knockout_A4.1-C6
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep2.1-C6_E_101115_19_RS17334_W.CEL.gz
+grant Stam
+lab UW
+labExpId RS17334
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+treatment ZNF_knockout_A4.1-C6
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep1
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17179
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep1
+treatment ZNF_knockout_A4.1-C6
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep2
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17334
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep2
+treatment ZNF_knockout_A4.1-C6
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep1.1-B2_E_101115_23_RS17339_W.CEL.gz
+grant Stam
+lab UW
+labExpId RS17339
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+treatment ZNF_knockout_F4.1-B2
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep2.1-B2_E_101115_24_RS17366_W.CEL.gz
+grant Stam
+lab UW
+labExpId RS17366
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+treatment ZNF_knockout_F4.1-B2
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep1
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17339
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep1
+treatment ZNF_knockout_F4.1-B2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep2
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17366
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep2
+treatment ZNF_knockout_F4.1-B2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znfp5RawDataRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfp5RawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId RS17337
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+treatment ZNF_knockout_P5
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znfp5RawDataRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfp5RawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS17338
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+treatment ZNF_knockout_P5
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep1
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17337
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep1
+treatment ZNF_knockout_P5
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep2
+objType table
+cell K562
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-10
+dateUnrestricted 2013-04-09
+fileName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17338
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7341
+tableName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep2
+treatment ZNF_knockout_P5
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayLncapSimpleSignalRep1
 objType table
 cell LNCaP
@@ -3599,4 +3919,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: -1606837810
+# MAGIC: 685937739
