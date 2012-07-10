@@ -2730,10 +2730,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002980
+expId 2980
 fileName wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep1.CEL.gz
 grant Stam
 lab UW
 labExpId RS17367
+md5sum c496d4930c686b4e0193afcae6e99f93
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2750,10 +2753,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002980
+expId 2980
 fileName wgEncodeUwAffyExonArrayK562Znf4c50c4RawDataRep2.CEL.gz
 grant Stam
 lab UW
 labExpId RS17335
+md5sum 1fec4f0a5a16c60b903c0f00fd932b92
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2769,10 +2775,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002980
+expId 2980
 fileName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17367
+md5sum 64982ccfd571276575cb8015bccb6727
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2789,10 +2798,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002980
+expId 2980
 fileName wgEncodeUwAffyExonArrayK562Znf4c50c4SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17335
+md5sum 84e6bf3a2a69fc0b3f51de71b2286424
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2810,10 +2822,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
-fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep1.1-C6_E_101115_18_RS17179_W.CEL.gz
+dccAccession wgEncodeEH002981
+expId 2981
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep1.CEL.gz
 grant Stam
 lab UW
 labExpId RS17179
+md5sum 83a26ff3ef8db932662333f60745ca3d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2830,10 +2845,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
-fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep2.1-C6_E_101115_19_RS17334_W.CEL.gz
+dccAccession wgEncodeEH002981
+expId 2981
+fileName wgEncodeUwAffyExonArrayK562Znfa41c6RawDataRep2.CEL.gz
 grant Stam
 lab UW
 labExpId RS17334
+md5sum 505a6537ab7605cba0a9b6a33627ff91
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2849,10 +2867,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002981
+expId 2981
 fileName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17179
+md5sum aa593ae0a9d17255ad81bd1da318dcc7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2869,10 +2890,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002981
+expId 2981
 fileName wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17334
+md5sum 9fdd4837ac0ae5a552115c25740a16eb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2890,10 +2914,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
-fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep1.1-B2_E_101115_23_RS17339_W.CEL.gz
+dccAccession wgEncodeEH002982
+expId 2982
+fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep1.CEL.gz
 grant Stam
 lab UW
 labExpId RS17339
+md5sum 12ba7c097b733feec210fd0af9490d2f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2910,10 +2937,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
-fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep2.1-B2_E_101115_24_RS17366_W.CEL.gz
+dccAccession wgEncodeEH002982
+expId 2982
+fileName wgEncodeUwAffyExonArrayK562Znff41b2RawDataRep2.CEL.gz
 grant Stam
 lab UW
 labExpId RS17366
+md5sum 18c3b4e8075878d73014018fd6257e39
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2929,10 +2959,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002982
+expId 2982
 fileName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17339
+md5sum e3b1cb61393b1b0f6084caa2c5ced2b8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2949,10 +2982,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002982
+expId 2982
 fileName wgEncodeUwAffyExonArrayK562Znff41b2SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17366
+md5sum dd34f964e1350f478256a42b0f544f4b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2970,10 +3006,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002983
+expId 2983
 fileName wgEncodeUwAffyExonArrayK562Znfp5RawDataRep1.CEL.gz
 grant Stam
 lab UW
 labExpId RS17337
+md5sum e5bb44bd001a011a0f0f8dc47a809b53
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2990,10 +3029,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002983
+expId 2983
 fileName wgEncodeUwAffyExonArrayK562Znfp5RawDataRep2.CEL.gz
 grant Stam
 lab UW
 labExpId RS17338
+md5sum 7e2d2c8be4dff887015e73c055232313
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3009,10 +3051,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002983
+expId 2983
 fileName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17337
+md5sum ceb018c757fe425967829df50fb1d724
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3029,10 +3074,13 @@ dataType AffyExonArray
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-10
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH002983
+expId 2983
 fileName wgEncodeUwAffyExonArrayK562Znfp5SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17338
+md5sum 88f8276c44e54c0ded79ab4e1676210d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3919,4 +3967,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: 685937739
+# MAGIC: -1563088611
