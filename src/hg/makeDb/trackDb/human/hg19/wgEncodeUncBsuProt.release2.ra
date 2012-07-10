@@ -9,7 +9,7 @@ group expression
 subGroup1 view Views Signal=Peptide_Mapping ModifiedPeptideMapping=Modified_Peptide_Mapping
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1)
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
-subGroup4 protocol Protocol FASP=FASP INGEL=In_gel
+subGroup4 protocol Protocol FASP=FASP INGEL=In-gel
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ protocol=+
 fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
