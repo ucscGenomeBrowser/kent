@@ -1,90 +1,6 @@
-metaObject wgEncodeRegDnaseClustered
-objType table
-composite wgEncodeRegDnaseClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegDnaseClustered.bed.gz
-grant Kent
-lab UCSC
-project wgEncode
-subId 2095
-tableName wgEncodeRegDnaseClustered
-
-metaObject wgEncodeRegDnaseClusteredCells
-objType table
-composite wgEncodeRegDnaseClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegDnaseClusteredCells.tab.gz
-grant Kent
-lab UCSC
-project wgEncode
-subId 2095
-tableName wgEncodeRegDnaseClustered
-
-metaObject wgEncodeRegDnaseClusteredInputs
-objType table
-composite wgEncodeRegDnaseClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegDnaseClusteredInputs.tab.gz
-grant Kent
-lab UCSC
-project wgEncode
-subId 2095
-tableName wgEncodeRegDnaseClusteredInputs
-
-metaObject wgEncodeRegTfbsCells
-objType table
-composite wgEncodeRegTfbsClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsClusteredCells.tab.gz
-grant Kent
-lab UCSC
-md5sum 2ecc887c61a8da25a70bea1fc9b45ef7
-project wgEncode
-subId 2095
-tableName wgEncodeRegTfbsCells
-
-metaObject wgEncodeRegTfbsClustered
-objType table
-composite wgEncodeRegTfbsClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsClustered.bed.gz
-grant Kent
-lab UCSC
-md5sum c64194298dc9a45929ae6901d5f6eaa6
-objStatus replaced - new version of processing data in the V2 file version
-project wgEncode
-subId 2095
-tableName wgEncodeRegTfbsClustered
-
-metaObject wgEncodeRegTfbsClusteredInputs
-objType table
-composite wgEncodeRegTfbsClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsClusteredInputs.tab.gz
-grant Kent
-lab UCSC
-md5sum f11d57e65a4a80513eda8b470dc1a810
-project wgEncode
-subId 2095
-tableName wgEncodeRegTfbsClusteredInputs
-
-metaObject wgEncodeRegTfbsClusteredV2
-objType table
-composite wgEncodeRegTfbsClustered
-dataType Cluster
-dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsClusteredV2.bed.gz
-grant Kent
-lab UCSC
-md5sum e0bcc71ab59e21a360d7edda1ac6c082
-project wgEncode
-tableName wgEncodeRegTfbsClusteredV2
+metaObject wgEncodeRegTxn
+objType composite
+composite wgEncodeRegTxn
 
 metaObject wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 objType table
@@ -292,4 +208,4 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
 view Signal
 
-# MAGIC: 100113433
+# MAGIC: -1833931751
