@@ -186,6 +186,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-08
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH001200
+expId 1200
 fileName wgEncodeUncBsuProtK562MembranefractionFaspRaw.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -206,6 +208,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-08
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH001200
+expId 1200
 fileName wgEncodeUncBsuProtK562MembranefractionFaspSig.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -347,4 +351,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: 2111469949
+# MAGIC: 1737458551
