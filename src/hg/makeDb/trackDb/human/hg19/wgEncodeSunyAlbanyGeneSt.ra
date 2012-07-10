@@ -244,7 +244,7 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel H1hESC RIP-Input
-    longLabel H1hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
     subGroups factor=ripInput cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
@@ -255,7 +255,7 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel H1hESC T7Tag
-    longLabel H1hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
     subGroups factor=T7Tag cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
@@ -266,7 +266,7 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt on
     shortLabel H1hESC ELAVL1
-    longLabel H1hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
     subGroups factor=ELAVL1 cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
