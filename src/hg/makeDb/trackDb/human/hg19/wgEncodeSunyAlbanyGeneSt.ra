@@ -4,7 +4,7 @@ superTrack wgEncodeRbpSuper dense
 shortLabel SUNY RIP GeneST
 longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY Albany
 group regulation
-subGroup1 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2)
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2)
 subGroup2 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=RIP-Input
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+
@@ -27,7 +27,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel GM12878 RIP-Input
     longLabel GM12878 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=ripInput
+    subGroups cellType=t1GM12878 factor=ripInput
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -38,7 +38,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel GM12878 T7Tag
     longLabel GM12878 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=T7Tag
+    subGroups cellType=t1GM12878 factor=T7Tag
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -49,7 +49,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel GM12878 PABPC1
     longLabel GM12878 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=PABPC1
+    subGroups cellType=t1GM12878 factor=PABPC1
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -59,7 +59,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel GM12878 SLBP
     longLabel GM12878 SLBP RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=SLBP
+    subGroups cellType=t1GM12878 factor=SLBP
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -69,7 +69,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel GM12878 ELAVL1
     longLabel GM12878 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=ELAVL1
+    subGroups cellType=t1GM12878 factor=ELAVL1
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -79,7 +79,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel GM12878 IGF2BP1
     longLabel GM12878 IGF2BP1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=IGF2BP1
+    subGroups cellType=t1GM12878 factor=IGF2BP1
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -89,7 +89,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel GM12878 CELF1
     longLabel GM12878 CELF1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1GM12878 factor=CELF1
+    subGroups cellType=t1GM12878 factor=CELF1
     origAssembly hg18
     type broadPeak
     color 153,38,0
@@ -99,7 +99,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel K562 RIP-Input
     longLabel K562 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1K562 factor=ripInput
+    subGroups cellType=t1K562 factor=ripInput
     origAssembly hg18
     type broadPeak
     color 46,0,184
@@ -110,7 +110,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel K562 T7Tag
     longLabel K562 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1K562 factor=T7Tag
+    subGroups cellType=t1K562 factor=T7Tag
     origAssembly hg18
     type broadPeak
     color 46,0,184
@@ -121,7 +121,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel K562 PABPC1
     longLabel K562 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1K562 factor=PABPC1
+    subGroups cellType=t1K562 factor=PABPC1
     origAssembly hg18
     type broadPeak
     color 46,0,184
@@ -132,7 +132,7 @@ pValueFilterLimits 0:0.5
     shortLabel K562 SLBP
     longLabel K562 SLBP RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
     origAssembly hg18
-    subGroups cellType=1K562 factor=SLBP
+    subGroups cellType=t1K562 factor=SLBP
     type broadPeak
     color 46,0,184
     # subId=1237 dateSubmitted=2010-06-01
@@ -141,7 +141,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel K562 ELAVL1
     longLabel K562 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1K562 factor=ELAVL1
+    subGroups cellType=t1K562 factor=ELAVL1
     origAssembly hg18
     type broadPeak
     color 46,0,184
@@ -151,7 +151,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HeLa-S3 RIP-Input
     longLabel HeLa-S3 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HELAS3 factor=ripInput
+    subGroups cellType=t2HELAS3 factor=ripInput
     origAssembly hg18
     type broadPeak
     color 0,119,158
@@ -162,7 +162,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HepG2 RIP-Input
     longLabel HepG2 RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HEPG2 factor=ripInput
+    subGroups cellType=t2HEPG2 factor=ripInput
     origAssembly hg18
     type broadPeak
     color 189,0,157
@@ -173,7 +173,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt
     shortLabel K562 CELF1
     longLabel K562 CELF1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=1K562 factor=CELF1
+    subGroups cellType=t1K562 factor=CELF1
     origAssembly hg18
     type broadPeak
     color 46,0,184
@@ -183,7 +183,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HeLa-S3 T7Tag
     longLabel HeLa-S3 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HELAS3 factor=T7Tag
+    subGroups cellType=t2HELAS3 factor=T7Tag
     origAssembly hg18
     type broadPeak
     color 0,119,158
@@ -194,7 +194,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HeLa-S3  PABPC1
     longLabel HeLa-S3 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HELAS3 factor=PABPC1
+    subGroups cellType=t2HELAS3 factor=PABPC1
     origAssembly hg18
     type broadPeak
     color 0,119,158
@@ -204,7 +204,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HeLa-S3 ELAV1
     longLabel HeLa-S3 ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HELAS3 factor=ELAVL1
+    subGroups cellType=t2HELAS3 factor=ELAVL1
     origAssembly hg18
     type broadPeak
     color 0,119,158
@@ -214,7 +214,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HepG2 T7Tag
     longLabel HepG2 T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HEPG2 factor=T7Tag
+    subGroups cellType=t2HEPG2 factor=T7Tag
     origAssembly hg18
     type broadPeak
     color 189,0,157
@@ -225,7 +225,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HepG2 PABPC1
     longLabel HepG2 PABPC1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HEPG2 factor=PABPC1
+    subGroups cellType=t2HEPG2 factor=PABPC1
     origAssembly hg18
     type broadPeak
     color 189,0,157
@@ -235,7 +235,7 @@ pValueFilterLimits 0:0.5
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel HepG2 ELAVL1
     longLabel HepG2 ELAVL1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups cellType=2HEPG2 factor=ELAVL1
+    subGroups cellType=t2HEPG2 factor=ELAVL1
     origAssembly hg18
     type broadPeak
     color 189,0,157
@@ -244,8 +244,8 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel H1hESC RIP-Input
-    longLabel H1hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups factor=ripInput cellType=1H1HESC
+    longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    subGroups factor=ripInput cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
     color 0,107,27
@@ -255,8 +255,8 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt off
     shortLabel H1hESC T7Tag
-    longLabel H1hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups factor=T7Tag cellType=1H1HESC
+    longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    subGroups factor=T7Tag cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
     color 0,107,27
@@ -266,8 +266,8 @@ pValueFilterLimits 0:0.5
     track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
     parent wgEncodeSunyAlbanyGeneSt on
     shortLabel H1hESC ELAVL1
-    longLabel H1hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
-    subGroups factor=ELAVL1 cellType=1H1HESC
+    longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+    subGroups factor=ELAVL1 cellType=t1H1HESC
     origAssembly hg18
     type broadPeak
     color 0,107,27
