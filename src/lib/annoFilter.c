@@ -5,29 +5,50 @@
 
 struct annoFilter *annoFiltersFromAsObject(struct asObject *asObj)
 /* Translate a table's autoSql representation into a list of annoFilters that make
- * sense for the table's set of fields.
- * Callers: do not modify any filter's columnDef! */
+ * sense for the table's set of fields. */
 {
 struct annoFilter *filterList = NULL;
 struct asColumn *def;
-for (def = asObj->columnList;  def != NULL;  def = def->next)
+int ix;
+for (ix = 0, def = asObj->columnList;  def != NULL;  ix++, def = def->next)
     {
     struct annoFilter *newF;
     AllocVar(newF);
-    newF->columnDef = def;
+    newF->columnIx = ix;
+    newF->label = cloneString(def->name);
+    newF->type = def->lowType->type;
     newF->op = afNoFilter;
+    slAddHead(&filterList, newF);
     }
 slReverse(&filterList);
 return filterList;
 }
 
+static void *cloneValues(void *valuesIn, enum asTypes type)
+/* If valuesIn is non-null, return a copy of values according to type. */
+{
+void *valuesOut = NULL;
+if (valuesIn != NULL)
+    {
+    if (asTypesIsFloating(type))
+	valuesOut = cloneMem(valuesIn, 2*sizeof(double));
+    else if (asTypesIsInt(type))
+	valuesOut = cloneMem(valuesIn, 2*sizeof(long long));
+    else
+	valuesOut = cloneString((char *)valuesIn);
+    }
+return valuesOut;
+}
+
 struct annoFilter *annoFilterCloneList(struct annoFilter *list)
-/* Shallow-copy a list of annoFilters.  Callers: do not modify any filter's columnDef! */
+/* Copy a list of annoFilters. */
 {
 struct annoFilter *newList = NULL, *oldF;
 for (oldF = list;  oldF != NULL;  oldF = oldF->next)
     {
     struct annoFilter *newF = CloneVar(oldF);
+    newF->label = cloneString(oldF->label);
+    newF->values = cloneValues(oldF->values, oldF->type);
     slAddHead(&newList, newF);
     }
 slReverse(&newList);
@@ -35,9 +56,19 @@ return newList;
 }
 
 void annoFilterFreeList(struct annoFilter **pList)
-/* Shallow-free a list of annoFilters. */
+/* Free a list of annoFilters. */
 {
-slFreeList(pList);
+if (pList == NULL)
+    return;
+struct annoFilter *filter, *nextFilter;
+for (filter = *pList;  filter != NULL;  filter = nextFilter)
+    {
+    nextFilter = filter->next;
+    freeMem(filter->label);
+    freeMem(filter->values);
+    freeMem(filter);
+    }
+*pList = NULL;
 }
 
 static boolean annoFilterDouble(struct annoFilter *filter, double val)
@@ -68,8 +99,8 @@ else
 	case afGT:
 	    return !(val > threshold);
 	default:
-	    errAbort("annoFilterDouble: unexpected filter->op %d for column %s",
-		     filter->op, filter->columnDef->name);
+	    errAbort("annoFilterDouble: unexpected filter->op %d for %s",
+		     filter->op, filter->label);
 	}
     }
 return FALSE;
@@ -103,32 +134,32 @@ else
 	case afGT:
 	    return !(val > threshold);
 	default:
-	    errAbort("annoFilterLongLong: unexpected filter->op %d for column %s",
-		     filter->op, filter->columnDef->name);
+	    errAbort("annoFilterLongLong: unexpected filter->op %d for %s",
+		     filter->op, filter->label);
 	}
     }
 return FALSE;
 }
 
-static boolean singleFilter(struct annoFilter *filter, char *word)
-/* Apply filter to word, using autoSql column definitions to interpret word.
+static boolean singleFilter(struct annoFilter *filter, char **row, int rowSize)
+/* Apply one filter, using either filterFunc or type-based filter on column value.
  * Return TRUE if isExclude and filter passes, or if !isExclude and filter fails. */
 {
 boolean fail = FALSE;
-if (filter->op == afMatch)
-    fail = !wildMatch((char *)(filter->values), word);
+if (filter->filterFunc != NULL)
+    fail = filter->filterFunc(filter, row, rowSize);
+else if (filter->op == afMatch)
+    fail = !wildMatch((char *)(filter->values), row[filter->columnIx]);
 else if (filter->op == afNotMatch)
-    fail = wildMatch((char *)(filter->values), word);
+    fail = wildMatch((char *)(filter->values), row[filter->columnIx]);
 else
     {
-    // word is a number -- integer or floating point?
-    enum asTypes type = filter->columnDef->lowType->type;
-    if (type == t_double || t_float)
-	fail = annoFilterDouble(filter, sqlDouble(word));
-    else if (type == t_char || type == t_int || type == t_uint || type == t_short ||
-	     type == t_ushort || type == t_byte || type == t_ubyte ||
-	     type == t_off)
-	fail = annoFilterLongLong(filter, sqlLongLong(word));
+    // column is a number -- integer or floating point?
+    enum asTypes type = filter->type;
+    if (asTypesIsFloating(type))
+	fail = annoFilterDouble(filter, sqlDouble(row[filter->columnIx]));
+    else if (asTypesIsInt(type))
+	fail = annoFilterLongLong(filter, sqlLongLong(row[filter->columnIx]));
     else
 	errAbort("annoFilterRowFails: unexpected enum asTypes %d for numeric filter op %d",
 		 type, filter->op);
@@ -150,21 +181,20 @@ if (filterList != NULL && slCount(filterList) != rowSize)
 if (retRightJoin != NULL)
     *retRightJoin = FALSE;
 struct annoFilter *filter;
-int i;
 // First pass: left-join filters (failure means omit this row from output);
-for (i = 0, filter = filterList;  i < rowSize && filter != NULL;  i++, filter = filter->next)
+for (filter = filterList;  filter != NULL;  filter = filter->next)
     {
-    if (filter->op == afNoFilter || filter->rightJoin)
+    if (filter->op == afNoFilter || filter->values == NULL || filter->rightJoin)
 	continue;
-    if (singleFilter(filter, row[i]))
+    if (singleFilter(filter, row, rowSize))
 	return TRUE;
     }
 // Second pass: right-join filters (failure means omit not only this row, but the primary row too)
-for (i = 0, filter = filterList;  i < rowSize && filter != NULL;  i++, filter = filter->next)
+for (filter = filterList;  filter != NULL;  filter = filter->next)
     {
-    if (filter->op == afNoFilter || !filter->rightJoin)
+    if (filter->op == afNoFilter || filter->values == NULL || !filter->rightJoin)
 	continue;
-    if (singleFilter(filter, row[i]))
+    if (singleFilter(filter, row, rowSize))
 	{
 	if (retRightJoin != NULL)
 	    *retRightJoin = TRUE;
@@ -205,4 +235,73 @@ for (filter = filterList; filter != NULL; filter = filter->next)
 	}
     }
 return FALSE;
+}
+
+enum annoFilterOp afOpFromString(char *string)
+/* Translate string (e.g. "afNotEqual") into enum value (e.g. afNotEqual). */
+{
+if (sameString(string, "afNoFilter"))
+    return afNoFilter;
+else if (sameString(string, "afMatch"))
+    return afMatch;
+else if (sameString(string, "afNotMatch"))
+    return afNotMatch;
+else if (sameString(string, "afLT"))
+    return afLT;
+else if (sameString(string, "afLTE"))
+    return afLTE;
+else if (sameString(string, "afEqual"))
+    return afEqual;
+else if (sameString(string, "afNotEqual"))
+    return afNotEqual;
+else if (sameString(string, "afGTE"))
+    return afGTE;
+else if (sameString(string, "afGT"))
+    return afGT;
+else if (sameString(string, "afInRange"))
+    return afInRange;
+else
+    errAbort("afOpFromString: Can't translate \"%s\" into enum annoFilterOp", string);
+// happy compiler, never get here:
+return afNoFilter;
+}
+
+char *stringFromAfOp(enum annoFilterOp op)
+/* Translate op into a string.  Do not free result. */
+{
+char *str = "afNoFilter";
+switch (op)
+    {
+    case afNoFilter:
+	break;
+    case afMatch:
+	str = "afMatch";
+    case afNotMatch:
+	str = "afNotMatch";
+	break;
+    case afLT:
+	str = "afLT";
+	break;
+    case afLTE:
+	str = "afLTE";
+	break;
+    case afEqual:
+	str = "afEqual";
+	break;
+    case afNotEqual:
+	str = "afNotEqual";
+	break;
+    case afGTE:
+	str = "afGTE";
+	break;
+    case afGT:
+	str = "afGT";
+	break;
+    case afInRange:
+	str = "afInRange";
+	break;
+    default:
+	errAbort("stringFromAfOp: unrecognized enum annoFilterOp %d", op);
+    }
+return str;
 }
