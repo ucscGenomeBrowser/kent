@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db hetGla2
+clade mammal
+genomeCladePriority 35
+scientificName Heterocephalus glaber
+commonName Naked Mole Rat
+assemblyDate Jan. 2012
+assemblyLabel Broad Institute HetGla_female_1.0
+assemblyShortLabel Broad HetGla_female_1.0
+orderKey 1649
+# chrM bioproject: 62633
+mitoAcc NC_015112
+fastaFiles /hive/data/genomes/hetGla2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/hetGla2/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir moleRat
+photoCreditURL http://www.cas.vanderbilt.edu/bioimages/contact/baskauf-contact.htm
+photoCreditName &copy; 2003 Steve Baskauf
+ncbiGenomeId 6965
+ncbiAssemblyName HetGla_female_1.0
+ncbiAssemblyId 362148
+ncbiBioProject 72441
+genBankAccessionID GCA_000247695.1
+taxId 10181
