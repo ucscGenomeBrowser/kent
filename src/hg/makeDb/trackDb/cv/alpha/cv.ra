@@ -1687,6 +1687,23 @@ sex F
 tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
+term Endometrium_OC
+tag ENDOMETRIUMOC
+type Cell Line
+tier 3
+organism human
+description Endometrium isolated from uterine lining
+karyotype normal
+sex F
+tissue endometrium
+vendorName Steven Young MD, PhD
+vendorId Endometrium_OC
+orderUrl http://findadoc.unchealthcare.org/directory/profile.asp?dbase=main&setsize=10&last=young&pict_id=0002115
+termId BTO:0001422
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001422
+lab Crawford
+protocol Crawford:EndometriumOC_Crawford_protocol.pdf
+
 term Fibrobl
 tag FIBROBL
 type Cell Line
