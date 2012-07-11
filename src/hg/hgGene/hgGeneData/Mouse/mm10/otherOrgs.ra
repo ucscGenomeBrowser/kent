@@ -1,0 +1,17 @@
+name human
+db hg19
+
+name zebrafish
+db danRer7
+
+name drosophila
+db dm3
+
+name rat
+db rn5
+
+name cElegans
+db ce10
+
+name yeast
+db sacCer3
