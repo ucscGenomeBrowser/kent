@@ -20,6 +20,7 @@ priority 0
 type bed 6 +
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
+html wgEncodeUwAffyExonArray.release3
 
     track wgEncodeUwAffyExonArrayK562Znfa41c6SimpleSignalRep1
     parent wgEncodeUwAffyExonArray off

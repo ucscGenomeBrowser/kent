@@ -359,7 +359,9 @@ cgiTableRowEnd();
 
 /* extra space */
 cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
 cgiDown(0.7);
+cgiTableFieldEnd();
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
@@ -398,7 +400,6 @@ else
     cgiTableFieldEnd();
     cgiTableRowEnd();
     cgiTableEnd();
-    cgiTableFieldEnd();
     }
 cgiTableFieldEnd();
 

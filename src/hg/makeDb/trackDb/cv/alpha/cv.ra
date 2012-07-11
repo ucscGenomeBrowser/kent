@@ -1687,6 +1687,23 @@ sex F
 tier 3
 protocol Myers:ECC1_Myers_protocol.pdf
 
+term Endometrium_OC
+tag ENDOMETRIUMOC
+type Cell Line
+tier 3
+organism human
+description Endometrium isolated from uterine lining
+karyotype normal
+sex F
+tissue endometrium
+vendorName Steven Young MD, PhD
+vendorId Endometrium_OC
+orderUrl http://findadoc.unchealthcare.org/directory/profile.asp?dbase=main&setsize=10&last=young&pict_id=0002115
+termId BTO:0001422
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001422
+lab Crawford
+protocol Crawford:EndometriumOC_Crawford_protocol.pdf
+
 term Fibrobl
 tag FIBROBL
 type Cell Line
@@ -4235,6 +4252,38 @@ sex U
 tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
 
+term bone_marrow_HS27a
+tag HS27A
+type Cell Line
+tier 3
+organism human
+description HS27a Human Marrow Stromal Cells are fibroblastoid cells immortalized with HPV16 E6/E7 genes as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005, insert DNA is LXSN-16 E6E7 packaged in PA31.
+karyotype normal
+sex M
+tissue bone marrow
+vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorId HS27a
+termId BTO:0000141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
+lab Stam
+protocol Stam:HS27a_Stam_protocol.pdf
+
+term bone_marrow_HS5
+tag HS5
+type Cell Line
+tier 3
+organism human
+description HS5 Human Marrow Stromal Cells are fibroblastoid cells immortalized with HPV16 E6/E7 genes as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005, insert DNA is LXSN-16 E6E7 packaged in PA31.
+karyotype normal
+sex M
+tissue bone marrow
+vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorId HS5
+termId BTO:0000141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
+lab Stam
+protocol Stam:HS5_Stam_protocol.pdf
+
 term HSaVEC
 tag HSAVEC
 type Cell Line
@@ -5150,6 +5199,22 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+
+term bone_marrow_MSC
+tag MSC
+type Cell Line
+tier 3
+organism human
+description These cells are primary fibroblastoid cells obtained from human bone marrow of normal donors as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005.
+karyotype normal
+sex M
+tissue bone marrow
+vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorId MSC
+termId BTO:0000141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
+lab Stam
+protocol Stam:MSC_Stam_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -13753,7 +13818,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
-label FASP proteomics
+label FASP 
 
 term In-gel
 tag INGEL
