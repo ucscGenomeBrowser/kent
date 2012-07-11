@@ -13826,6 +13826,12 @@ description In-gel digestion proteomics protocol (Giddings)
 type protocol
 label In-gel digestion
 
+term MudPIT
+tag MUDPIT
+description Multidimensional Protein Identification Technology (MudPIT) proteomics protocol (Giddings)
+type protocol
+label MudPIT
+
 term PCR1x
 tag PCR1X
 description one 15-cycle round of PCR (Myers)
