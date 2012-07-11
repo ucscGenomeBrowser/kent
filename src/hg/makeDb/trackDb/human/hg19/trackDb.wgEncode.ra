@@ -20,14 +20,14 @@ include wgEncodeUncBsuProt.release2.ra alpha
 include wgEncodeUncBsuProtGenc.release1.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.release2.ra beta,public
-include wgEncodeReg.release3.ra alpha
+include wgEncodeReg.release3.ra
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
 
 # FSU Repli-chip track (wrangler: venkat)
-include wgEncodeFsuRepliChip.ra
+include wgEncodeFsuRepliChip.ra beta,public
+include wgEncodeFsuRepliChip.release2.ra alpha
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -57,8 +57,7 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra
 
 # UMass-Dekker 5C (wrangler: Venkat)
-include wgEncodeUmassDekker5C.ra beta,public 
-include wgEncodeUmassDekker5C.release2.ra alpha
+include wgEncodeUmassDekker5C.release2.ra
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
@@ -70,8 +69,8 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra beta,public
-include wgEncodeUwAffyExonArray.release3.ra alpha
+include wgEncodeUwAffyExonArray.ra public
+include wgEncodeUwAffyExonArray.release3.ra alpha,beta
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
@@ -107,8 +106,7 @@ include wgEncodeRikenCage.release3.ra beta,public
 include wgEncodeRikenCage.release4.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.release2.ra beta,public
-include wgEncodeCshlShortRnaSeq.release3.ra alpha
+include wgEncodeCshlShortRnaSeq.release3.ra
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
@@ -123,8 +121,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra
 include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra beta,public
-include wgEncodeHaibRnaSeq.patch.ra alpha
+include wgEncodeHaibRnaSeq.ra 
 
 
 
@@ -151,8 +148,8 @@ include wgEncodeHaibMethylWgbs.ra alpha
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Matt and Venkat)
-#include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra
+include wgEncodeBroadHistone.release3.ra alpha
+include wgEncodeBroadHistone.release2.ra beta,public
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra

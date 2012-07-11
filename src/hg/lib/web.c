@@ -161,9 +161,9 @@ if (withHtmlHeader)
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     else
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+             "\"http://www.w3.org/TR/html4/loose.dtd\">");
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
-    //puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
     puts(
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
@@ -264,33 +264,40 @@ if (withLogo)
 
 if (isGisaid)
     {
-    printf("<TABLE WIDTH='100%%' class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
-    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                           // Home
+    printf("<TABLE WIDTH='100%%' class='topBlueBar' BORDER='0' CELLSPACING='0' "
+           "CELLPADDING='2'><TR>\n");
+    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");
     if (haveBlat)
-        printf("<TD><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");     // Blat
-    printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");          // Subject  View
-    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);  // Sequence View
-    printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");            // Table View
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+        printf("<TD><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");
+    printf("<TD><A HREF='../cgi-bin/gisaidSample' class='topbar'>Sample View</A></TD>\n");
+    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);
+    printf("<TD><A HREF='../cgi-bin/gisaidTable' class='topbar'>Table View</A></TD>\n");
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n");
+    // last column squeezes other columns left
     }
 else if (isGsid)
     {
     printf("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
-    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");                                               // Home
+    printf("<TD><A HREF='../index.html' class='topbar'>Home</A></TD>\n");
     if (haveBlat)
-        printf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' class='topbar'>Blat</A></TD>\n");            // Blat
-    printf("<TD><A HREF='../cgi-bin/gsidSubj' class='topbar'>Subject View</A></TD>\n");                                 // Subject View
-    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);                      // Sequence View
-    printf("<TD><A HREF='../cgi-bin/gsidTable' class='topbar'>Table View</A></TD>\n");                                  // Table View
+        printf("<TD ALIGN=CENTER><A HREF='../cgi-bin/hgBlat?command=start' "
+               "class='topbar'>Blat</A></TD>\n");
+    printf("<TD><A HREF='../cgi-bin/gsidSubj' class='topbar'>Subject View</A></TD>\n");
+    printf("<TD><A HREF='../cgi-bin/hgTracks%s' class='topbar'>Sequence View</A></TD>\n",uiState);
+    printf("<TD><A HREF='../cgi-bin/gsidTable' class='topbar'>Table View</A></TD>\n");
     if (endsWith(scriptName, "hgBlat"))
-        printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank class='topbar'>Help</A></TD>\n");   // Help
+        printf("<TD><A HREF='/goldenPath/help/gsidTutorial.html#BLAT' TARGET=_blank "
+               "class='topbar'>Help</A></TD>\n");
     else
-        printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank class='topbar'>Help</A></TD>\n");    // Help
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+        printf("<TD><A HREF='/goldenPath/help/sequenceViewHelp.html' TARGET=_blank "
+               "class='topbar'>Help</A></TD>\n");
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n");
+    // last column squeezes other columns left
     }
 else if (dbIsFound)
     {
-    puts("<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->\n<TR><TD COLSPAN=3 HEIGHT=40>");
+    puts("<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->\n"
+         "<TR><TD COLSPAN=3 HEIGHT=40>");
     puts("<TABLE class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>");
 
     if (isEncode)
@@ -299,19 +306,23 @@ else if (dbIsFound)
         {
         printf("<TD><A HREF='../index.html%s' class='topbar'>Home</A></TD>\n", uiState);
         if (isGsid)
-            printf("<TD><A HREF='../cgi-bin/gsidSubj%s' class='topbar'>Subject View</A></TD>\n",uiState);
+            printf("<TD><A HREF='../cgi-bin/gsidSubj%s' class='topbar'>Subject View</A></TD>\n",
+                   uiState);
         else
-            printf("<TD><A HREF='../cgi-bin/hgGateway%s' class='topbar'>Genomes</A></TD>\n",uiState);
+            printf("<TD><A HREF='../cgi-bin/hgGateway%s' class='topbar'>Genomes</A></TD>\n",
+                   uiState);
 
         if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
             endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
             endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	    endsWith(scriptName, "hgHubConnect") ||
             endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
-            printf("<TD><A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>Genome Browser</A></TD>\n",uiState,TRACK_SEARCH);
+            printf("<TD><A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' "
+                   "class='topbar'>Genome Browser</A></TD>\n",uiState,TRACK_SEARCH);
 
         if (haveBlat && !endsWith(scriptName, "hgBlat"))
-            printf("<TD><A HREF='../cgi-bin/hgBlat?command=start%s%s' class='topbar'>Blat</A></TD>\n",theCart ? "&" : "", uiState+1 );
+            printf("<TD><A HREF='../cgi-bin/hgBlat?command=start%s%s' "
+                   "class='topbar'>Blat</A></TD>\n",theCart ? "&" : "", uiState+1 );
         }
 
     if (!isGsid && !hIsCgbServer())  // disable TB for both GSID and CGB servers
@@ -326,10 +337,12 @@ else if (dbIsFound)
             {
             struct trackDb *tdb = hTrackDbForTrack(db, table);
             if (tdb != NULL)
-                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s' class='topbar'>",
-                    uiState, tdb->grp, tdb->track, tdb->table);
+                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1&hgta_group=%s"
+                       "&hgta_track=%s&hgta_table=%s' class='topbar'>",
+                       uiState, tdb->grp, tdb->track, tdb->table);
             else
-                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1' class='topbar'>", uiState);
+                printf("<TD><A HREF='../cgi-bin/hgTables%s&hgta_doMainPage=1' class='topbar'>",
+                       uiState);
             trackDbFree(&tdb);
             }
         else
@@ -338,22 +351,27 @@ else if (dbIsFound)
         printf("Tables</A></TD>\n");
         }
 
-    if (!endsWith(scriptName, "hgNear") && db != NULL && hgNearOk(db)) //  possible to make this conditional: if (db != NULL && hgNearOk(db))
+    if (!endsWith(scriptName, "hgNear") && db != NULL && hgNearOk(db))
         {
         if (isGsid)
-            printf("<TD><A HREF='../cgi-bin/gsidTable%s' class='topbar'>Table View</A></TD>\n",uiState);
+            printf("<TD><A HREF='../cgi-bin/gsidTable%s' class='topbar'>Table View</A></TD>\n",
+                   uiState);
         else
-            printf("<TD><A HREF='../cgi-bin/hgNear%s' class='topbar'>Gene Sorter</A></TD>\n",uiState);
+            printf("<TD><A HREF='../cgi-bin/hgNear%s' class='topbar'>Gene Sorter</A></TD>\n",
+                   uiState);
         }
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
         printf("<TD><A HREF='../cgi-bin/hgPcr%s' class='topbar'>PCR</A></TD>\n",uiState);
     if (endsWith(scriptName, "hgGenome"))
-        printf("<TD><A HREF='../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
+        printf("<TD><A HREF='../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on' class='topbar'>"
+               "PDF/PS</A></TD>\n",uiState);
     if (endsWith(scriptName, "hgHeatmap"))
-        printf("<TD><A HREF='../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on' class='topbar'>PDF/PS</A></TD>\n",uiState);
+        printf("<TD><A HREF='../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on' class='topbar'>"
+               "PDF/PS</A></TD>\n",uiState);
 #ifndef GBROWSE
     if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
-        printf("<TD><A HREF='../cgi-bin/hgSession%s%shgS_doMainPage=1' class='topbar'>Session</A></TD>\n",uiState, theCart ? "&" : "?" );
+        printf("<TD><A HREF='../cgi-bin/hgSession%s%shgS_doMainPage=1' class='topbar'>"
+               "Session</A></TD>\n",uiState, theCart ? "&" : "?" );
 #endif /* GBROWSE */
     if (!isGsid)
         printf("<TD><A HREF='../FAQ/' class='topbar'>FAQ</A></TD>");
@@ -382,7 +400,8 @@ else if (dbIsFound)
         printf(" class='topbar'>Help</A></TD>\n");
         }
     }
-    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
+    printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n");
+    // last column squeezes other columns left
     puts("</TD></TR>\n");
 
 #endif
@@ -434,20 +453,23 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
-    puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+    puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
 	 "<div id=firstSection>"
          "      <!--outer table is for border purposes-->\n"
-         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
+                     "CELLPADDING='1'><TR><TD>\n"
+         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
+                     "CELLPADDING='0'><TR><TD>\n"
          "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
          );
     htmlTextOut(textOutBuf);
 
     puts(
          "     </div></div>\n"
-         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+              "<TR><TH HEIGHT=10></TH></TR>\n"
          "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
          );
     };
@@ -553,8 +575,10 @@ puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
 puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
     "<BR>\n\n"
     "   <!--outer table is for border purposes-->\n"
-    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-    "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER
+        "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+    "    <TABLE BGCOLOR='#" HG_COL_INSIDE
+         "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
     "     <div class='subheadingBar' class='windowSize'>"
 );
 
@@ -562,7 +586,8 @@ vprintf(format, args);
 
 puts(
     "     </div>\n"
-    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+         "<TR><TH HEIGHT=10></TH></TR>\n"
     "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
 );
 
@@ -1348,8 +1373,12 @@ char extension[FILEEXT_LEN];
 splitPath(fileName, NULL, baseName, extension);
 boolean js = sameString(".js",extension);
 boolean style = !js && sameString(".css",extension);
-boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
-if(!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
+boolean image = !js
+             && !style
+             && (  sameString(".png",extension)
+                || sameString(".jpg",extension)
+                || sameString(".gif",extension));
+if (!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
     errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
 
 // Build and verify directory
@@ -1362,18 +1391,20 @@ else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
-if(docRoot != NULL)
+if (docRoot != NULL)
     fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
 else
     // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
-if(!fileExists(dyStringContents(fullDirName)))
-    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
+if (!fileExists(dyStringContents(fullDirName)))
+    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n",
+             dyStringContents(fullDirName));
 
 // build and verify real path to file
 struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDirName), fileName);
-if(!fileExists(dyStringContents(realFileName)))
-    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
+if (!fileExists(dyStringContents(realFileName)))
+    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n",
+             dyStringContents(realFileName));
 
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
@@ -1383,7 +1414,7 @@ if(hIsPreviewHost() || hIsPrivateHost())
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
-if(!fileExists(dyStringContents(linkWithTimestamp)))
+if (!fileExists(dyStringContents(linkWithTimestamp)))
     errAbort("Cannot find correct version of file '%s'; this is due to an installation error\n\nError details: %s does not exist",
              fileName, dyStringContents(linkWithTimestamp));
 
@@ -1415,8 +1446,8 @@ return link;
 }
 
 char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml)
-// If this is the first call, will
-//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// If this is the first call, will return full path of timestamped link to the requested
+//   resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
 // NOTE: png, jpg and gif should also be supported but are untested.
 {
@@ -1429,8 +1460,8 @@ if(hashLookup(includedResourceFiles, fileName))
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
 if (link)
-    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
-return link;
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because
+return link;                                         // memory will be freed by caller!!!
 }
 
 boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName)

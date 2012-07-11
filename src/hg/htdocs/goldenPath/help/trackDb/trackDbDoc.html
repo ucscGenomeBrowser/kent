@@ -58,7 +58,7 @@
 
 <DIV ID="trackDbDoc_intro" class="intro"></DIV>
 
-<P>The remainder of this document will be broken into the following sections and should be
+<P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
 
 <OL>
@@ -77,11 +77,16 @@ used as a ready reference.</P>
         <LI><A HREF="#expRatio">expRatio</A>: Microarray expression data</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variable Call Format</LI>
         <LI><A HREF="#pgSnp">pgSnp</A>: Personal Genome SNP tracks</LI>
-        <LI>Specialize or rarely used: <A HREF="#altGraphX">altGraphX</A>,
-            <A HREF="#bedDetail">bedDetail</A>, <A HREF="#clonePos">clonePos</A>,
-            <A HREF="#ctgPos">ctgPos</A>, <A HREF="#downloadsOnly">downloadsOnly</A>,
-            <A HREF="#encodeFiveC">encodeFiveC</A>, <A HREF="#factorSource">factorSource</A>,
-            <A HREF="#rmsk">rmsk</A> and <A HREF="#snake">snake</A>.</LI>
+        <LI><A HREF="#rareTypes">Specialize or rarely used</A>:<BR>
+            <A HREF="#altGraphX">altGraphX</A>,
+            <A HREF="#bedDetail">bedDetail</A>,
+            <A HREF="#clonePos">clonePos</A>,
+            <A HREF="#ctgPos">ctgPos</A>,
+            <A HREF="#downloadsOnly">downloadsOnly</A>,
+            <A HREF="#encodeFiveC">encodeFiveC</A>,
+            <A HREF="#factorSource">factorSource</A>,
+            <A HREF="#rmsk">rmsk</A> and
+            <A HREF="#snake">snake</A>.</LI>
     </UL></LI>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
         &ndash; with examples
@@ -96,10 +101,9 @@ used as a ready reference.</P>
         <LI><A HREF="#aggregate">Aggregate or Overlay Tracks: multiWig</A></LI>
     </UL></LI>
     <LI><A HREF="#customTracks">Special settings for custom tracks</A></LI>
-    <LI><A HREF="#alphabetical">Alphabetical list of all settings</A></LI>
+    <!-- <LI><A HREF="#alphabetical">Alphabetical list of all settings</A></LI> -->
     <LI><A HREF="#loosers">Obscure or special cases</A> &ndash; (aka Rejections)</LI>
-    <LI><A HREF="#toc">Table of Contents (self-assembled)</A> &ndash;
-                                    <I>experimental</i></LI>
+    <LI><A HREF="#toc">Table of Contents (<I>self-assembled</I>)</A></LI>
 </OL>
 <IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
 </div></div>
@@ -135,19 +139,19 @@ used as a ready reference.</P>
         <div class="format"><code>html</code></div>
     </TD></TR>
 </TABLE>
+<BR>
 
+<A name="commonLessFrequent"></A>
 <TABLE class="settingsTable" id="Common_Settings_-_less_frequent">
-    <TR VALIGN=TOP><TH><A name="commonLessFrequent"></A>
-            <IMG class='toggle oneSection' />&nbsp;Common, though less frequently used settings
+    <THEAD><TR><TD><DIV ID="lessCommon_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH>
+            <IMG class='toggle oneSection' />&nbsp;Common Optional Settings
     </TH> </TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><A name="bigDataUrl"></A><IMG class='toggle detail'>
         <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="boxedCfg"><A name="boxedCfg"></A><IMG class='toggle detail'>
         <div class="format"><code>boxedCfg &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="canPack"><A name="canPack"></A><IMG class='toggle detail'>
-        <div class="format"><code>canPack &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="color"><A name="color"></A><IMG class='toggle detail'>
         <div class="format"><code>color &lt;red,green,blue&gt;</code></div>
@@ -312,10 +316,6 @@ are described along with their type specific settings.</P>
         <A name="maxWindowToDraw"></A><IMG class='toggle detail'>
         <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="maxWindowToQuery">
-        <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
-        <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="minGrayLevel"><A name="minGrayLevel"></A><IMG class='toggle detail'>
         <div class="format"><code>minGrayLevel  &lt;1-9&gt;</code></div>
     </TD></TR>
@@ -458,6 +458,10 @@ are described along with their type specific settings.</P>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
         <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToQuery">
+        <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
+        <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="spanList"><A name="spanList"></A><IMG class='toggle detail'>
         <div class="format"><code>spanList &lt;s1&gt;[,s2&hellip;]</code></div>
@@ -806,10 +810,6 @@ are described along with their type specific settings.</P>
             <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
             <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
     </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="speciesUseFile">
-        <A name="speciesUseFile"></A><IMG class='toggle detail setF'>
-        <div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
         <div class="format"><code>summary &lt;tableName&gt;</code></div>
     </TD></TR>
@@ -900,7 +900,10 @@ are described along with their type specific settings.</P>
 </TABLE>
 <BR><BR>
 
+<A name="rareTypes"></A>
 <H2 class="leftAlign">Specialized or rarely used types:</H2>
+    
+<P><I>NONE OF THESE ARE FOR HUBS.  Nor are any of their settings.</I></P>
 
 <A name="altGraphX"></A>
 <TABLE class="settingsTable" id="altGraphX_-_Alternate_Splicing_Track_Settings">
@@ -1360,6 +1363,7 @@ into a single image.</P>
 <!-- Next section -->
 <div class="contentBorder">
 
+<!--
 <A name="alphabetical"></A>
 <div class="lightBlueBar">
     <div class="lightBlueBarTitle">
@@ -1521,9 +1525,7 @@ into a single image.</P>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">canPack</A></TD>
         <TD>all</TD>
-        <TD><A HREF="#commonSettings">Common settings</A> -&gt;
-            <A HREF="#commonLessFrequent">Less Frequent</A>
-        </TD>
+        <TD><A HREF="#miscLosers">Miscellaneous Losers</A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">cdsDrawDefault</A></TD>
@@ -3154,6 +3156,7 @@ into a single image.</P>
         <TD>Special for <A HREF="#encodeOnly">ENCODE</A></TD>
     </TR>
 </TABLE>
+-->
 </div></div>
 
 <!-- Next section -->
@@ -3261,6 +3264,7 @@ bigWig</P>
         </TD>
     </TR>
 </TABLE>
+<BR><BR>
 
 <A name="encodeGencode"></A>
 <H3>Special settings for ENCODE Gencode</H3>
@@ -3364,6 +3368,7 @@ bigWig</P>
         <TD>Special for ENCODE Genecode to generate external URL.</TD>
     </TR>
 </TABLE>
+<BR><BR>
 
 <A name="snpSpecial"></A>
 <H3>Special settings for SNP tracks</H3>
@@ -3450,6 +3455,7 @@ bigWig</P>
         <TD>Special for gwasCatelog and shown in hgc</TD>
     </TR>
 </TABLE>
+<BR><BR>
 
 <A name="miscLosers"></A>
 <H3>List of Miscellaneous Losers or SPECIAL CASE</H3>
@@ -3480,6 +3486,20 @@ bigWig</P>
              This will show an evidence table named in the setting.
         </TD>
     </TR>
+    <TR VALIGN=TOP>
+        <TD class="canPack"><A name="canPack"></A><code>canPack &lt;off/on&gt;</code></div></TD>
+        <TD>all</TD>
+        <TD><I>NOT FOR HUBS.  Deprecated.</I>
+            <P>Almost tracks can be displayed in the five
+            standard visibilities.  However on some track types such as
+            wiggles, <code>squish</code> and <code>pack</code> offer no real advantage
+            over <code>dense</code> and <code>full</code>. By default, these tracks will
+            not offer the less valuable visibilities. Nevertheless, you can make your track offer
+            these visibilility choices by turning canPack on.  Note: subtracks
+            of composites will always offer all five choices.</P>
+            <P><B>Example:</B></P>
+            <pre>   canPack on</pre>
+    </TD></TR>
     <TR VALIGN=TOP>
         <TD class="db"><A name="db"></A><code>db</code></TD>
         <TD>chain, netAlign, genePred, bed 3</TD>
@@ -3816,6 +3836,20 @@ bigWig</P>
             Not in our trackDbs (tdbQuery -strict).
             Specifically ifdef'd out of code with
             <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="speciesUseFile"><A name="speciesUseFile"></A>
+            <code>speciesUseFile &lt;fileName&gt;</code></TD>
+        <TD>wigMaf</TD>
+        <TD>
+            <P><I>Deprecated</I></P>
+            <P>Much more rarely used, this setting can
+            replace <code>speciesOrder</code> and <code>speciesGroups</code>.
+            Set the <code>speciesUseFile</code> to a path relative to the apache cgi-bin.
+            The file should contain a single species name as the first word of each line.</P>
+            <P><B>Example:</B></P>
+            <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
         </TD>
     </TR>
     <TR VALIGN=TOP>

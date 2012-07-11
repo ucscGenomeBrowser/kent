@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-char *version = "2.1";
+char *version = "2.2";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
@@ -108,7 +108,7 @@ for (;;)
 	    if (as == NULL)
 		{
 		if (tabSep)
-		    fieldCount = chopString(line, "\t", NULL, 0);
+		    fieldCount = chopByChar(line, '\t', NULL, 256); // Do not use chopString, see GOTCHA
 		else
 		    fieldCount = chopByWhite(line, NULL, 0);
 		if (bedN == 0)

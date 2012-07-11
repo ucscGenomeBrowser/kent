@@ -27,8 +27,8 @@ canPack On
     allButtonPair on
 
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
-	shortLabel Gm12878
-	longLabel Transcription of Gm12878 cells from ENCODE
+	shortLabel GM12878
+	longLabel Transcription of GM12878 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 1

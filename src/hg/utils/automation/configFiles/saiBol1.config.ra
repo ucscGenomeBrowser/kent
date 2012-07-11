@@ -1,0 +1,26 @@
+# Config parameters for makeGenomeDb.pl:
+db saiBol1
+clade mammal
+genomeCladePriority 16
+scientificName Saimiri boliviensis
+commonName Squirrel monkey
+assemblyDate Oct. 2011
+assemblyLabel Broad SaiBol1.0
+assemblyShortLabel SaiBol1.0
+orderKey 395
+# chrM bioproject: 169636 - NC_018096.1 HQ644339.1
+mitoAcc none
+fastaFiles /hive/data/genomes/saiBol1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/saiBol1/ucsc/*.agp.gz
+dbDbSpeciesDir saiBol
+photoCreditURL http://en.wikipedia.org/wiki/File:Saimiri_boliviensis_2.jpg
+photoCreditName Berichard, Wikipedia Commons
+ncbiGenomeId 6907
+ncbiAssemblyId 316838
+ncbiAssemblyName SaiBol1.0
+# GenBank project: 67945 AGCE00
+ncbiBioProject 67945
+# refSeq project: 169547 Nov 2011
+# ncbiBioProject 169547
+genBankAccessionID GCA_000235385.1
+taxId   39432

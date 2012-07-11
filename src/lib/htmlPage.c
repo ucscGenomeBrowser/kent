@@ -1575,7 +1575,10 @@ for (tag = startTag; tag != NULL; tag = tag->next)
     else if (hashLookup(inHash, type))
         {
 	if (depth <= 0)
-	    tagAbort(page, tag, "%s outside of any of %s", type, outsiders);
+	    {
+	    if (!startsWith("<INPUT TYPE=HIDDEN NAME='db' VALUE='", tag->start))  // one exception hardwired
+		tagAbort(page, tag, "%s outside of any of %s", type, outsiders);
+	    }
 	}
     }
 freeHash(&inHash);
