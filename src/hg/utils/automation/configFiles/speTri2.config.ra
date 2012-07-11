@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db speTri2
+clade mammal 
+genomeCladePriority 35
+scientificName Spermophilus tridecemlineatus
+commonName Squirrel
+assemblyDate Nov. 2011
+assemblyLabel Broad Institute
+assemblyShortLabel Broad SpeTri2.0
+orderKey 1909
+mitoAcc none
+fastaFiles /hive/data/genomes/speTri2/genbank/unplaced.fa.gz
+agpFiles /hive/data/genomes/speTri2/genbank/unplaced.agp.gz
+dbDbSpeciesDir squirrel
+photoCreditURL http://en.wikipedia.org/wiki/File:Thirteen-lined_ground_squirrel.jpg
+photoCreditName Wikipedia user Mnmazur
+ncbiGenomeId 472
+ncbiAssemblyId 317808
+ncbiAssemblyName SpeTri2.0
+ncbiBioProject 61725
+genBankAccessionID GCA_000236235.1
+taxId   43179
