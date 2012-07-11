@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db triMan1
+clade mammal
+genomeCladePriority 57
+scientificName Trichechus manatus latirostris
+commonName Manatee
+assemblyDate Oct. 2011
+assemblyLabel Broad Institute of MIT and Harvard
+assemblyShortLabel Broad TriManLat1.0
+orderKey 3380
+# chrM bioproject: 28669 - already included NC_010302.1 == AM904728.1
+mitoAcc none
+fastaFiles /hive/data/genomes/triMan1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/triMan1/ucsc/*.agp.gz
+dbDbSpeciesDir manatee
+photoCreditURL http://www.cbse.ucsc.edu/
+photoCreditName Photo courtesy of Robert Kuhn, all rights reserved.
+ncbiGenomeId 10467
+ncbiAssemblyId 328638
+ncbiAssemblyName TriManLat1.0
+ncbiBioProject 68243
+genBankAccessionID GCA_000243295.1
+taxId   127582
