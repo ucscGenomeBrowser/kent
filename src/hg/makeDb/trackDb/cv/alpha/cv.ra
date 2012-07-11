@@ -13753,7 +13753,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
-label FASP proteomics
+label FASP 
 
 term In-gel
 tag INGEL
