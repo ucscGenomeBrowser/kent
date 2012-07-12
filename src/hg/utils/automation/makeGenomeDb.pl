@@ -1045,6 +1045,23 @@ _EOF_
   close($fh);
 } # makeDescription
 
+# from Perl Cookbook Recipe 2.17, print out large numbers with comma
+# delimiters:
+sub commify($) {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text
+}
+
+# definition of types in the AGP file
+my %types = (
+'A' => 'active finishing',
+'D' => 'draft sequence',
+'F' => 'finished sequence',
+'O' => 'other sequence',
+'W' => 'whole genome shotgun'
+);
+
 sub makeLocalTrackDbRa {
   # Make an assembly-level trackDb.ra, gap.html and gold.html.
   my @localFiles = qw( trackDb.ra gap.html gold.html );
@@ -1185,13 +1202,19 @@ _EOF_
 <P>
 This track shows the draft assembly ($assemblyDate, $assemblyLabel)
 of the $em\$organism$noEm genome.
-
-  *** Developer: check if this is accurate:
-
-Whole-genome shotgun reads were assembled into contigs.  When possible, 
-contigs were grouped into scaffolds (also known as &quot;supercontigs&quot;).
-The order, orientation and gap sizes between contigs within a scaffold are
-based on paired-end read evidence. </P>
+</P>
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation</A>
+</P>
+<P>
+The definition of this assembly is from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
+</P>
 <P>
 In dense mode, this track depicts the contigs that make up the 
 currently viewed scaffold. 
@@ -1202,10 +1225,35 @@ blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
-All components within this track are of fragment type &quot;W&quot;: 
-Whole Genome Shotgun contig. </P>
+Component types found in this track (with counts of that type in parenthesis):
+<UL>
 _EOF_
     ;
+    open (GL, "hgsql -N -e 'select type from gold;' $db | sort | uniq -c | sort -rn|") or die "can not select type from $db.gold table";
+    while (my $line = <GL>) {
+        chomp $line;
+        $line =~ s/^\s+//;
+        my ($count, $type) = split('\s+', $line);
+        my $singleMessage = "";
+        if ((1 == $count) && (("F" eq $type) || ("O" eq $type))) {
+            my $chr = `hgsql -N -e 'select chrom from gold where type=\"$type\";' $db`;
+            my $frag = `hgsql -N -e 'select frag from gold where type=\"$type\";' $db`;
+            chomp $chr;
+            chomp $frag;
+            $singleMessage = sprintf("(%s/%s)", $chr, $frag);
+        }
+        if (exists ($types{$type}) ) {
+            if (length($singleMessage)) {
+                printf $fh "<LI>%s - one %s %s</LI>\n", $type, $types{$type}, $singleMessage;
+            } else {
+                printf $fh "<LI>%s - %s (%s)</LI>\n", $type, $types{$type}, commify($count);
+            }
+        } else {
+            die "makeLocalTrackDbRa: missing AGP type definition: $type";
+        }
+    }
+    close (GL);
+    printf $fh "</UL></P>\n";
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
