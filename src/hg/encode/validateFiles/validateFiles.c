@@ -16,7 +16,7 @@
 #include "asParse.h"
 #include "bigBed.h"
 
-char *version = "4.4";
+char *version = "4.5";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -979,7 +979,7 @@ void validateBed(struct lineFile *lf, int bedN, int bedP, struct asObject *as)
 // Validate regular bed [3-15] . and  +
 {
 char *row;
-int bufSize = 1024;  // bufSIze is max row length
+int bufSize = 1024;  // bufSize is max row length
 char *buf = needMem(bufSize); 
 char *words[1024];
 unsigned chromSize;
@@ -997,7 +997,10 @@ while (lineFileNextReal(lf, &row))
 	{
 	if (as == NULL)
 	    {
-	    fieldCount = chopByChar(row, '\t', NULL, 0);
+	    if (tab)
+		fieldCount = chopByChar(row, '\t', NULL, 0);
+	    else
+	    	fieldCount = chopByWhite(row, NULL, 0);
 	    char *asText = bedAsDef(bedN, fieldCount);
 	    as = asParseText(asText);
 	    allocedAs = TRUE;
