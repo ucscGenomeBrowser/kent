@@ -535,8 +535,7 @@ if (isPositional)
 	}
     else
 	{
-	sr = hExtendedRangeQuery(conn, table, region->chrom,
-		region->start, region->end,
+	sr = hExtendedRangeQuery(conn, table, region->chrom, region->start, region->end,
 		extraWhere, TRUE, fields, NULL);
 	}
     }
@@ -1174,7 +1173,7 @@ else if (track != NULL)
                     }
                 }
             }
-            joinerPairFreeList(&jpList);
+        joinerPairFreeList(&jpList);
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
