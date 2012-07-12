@@ -13826,6 +13826,12 @@ description In-gel digestion proteomics protocol (Giddings)
 type protocol
 label In-gel digestion
 
+term MudPIT
+tag MUDPIT
+description Multidimensional Protein Identification Technology (MudPIT) proteomics protocol (Giddings)
+type protocol
+label MudPIT
+
 term PCR1x
 tag PCR1X
 description one 15-cycle round of PCR (Myers)
@@ -14790,7 +14796,7 @@ label C57BL/6
 term C57BL/6J
 tag C57BL6J
 type strain
-description C57 black 6, the most common inbred strain of laboratory mouse
+description A substrain of C57BL/6
 label C57BL/6J
 
 term CD-1
@@ -16753,7 +16759,7 @@ term strain
 tag STRAIN
 type typeOfTerm
 label Strain of organism
-description The strain of the doner organism used in an experiment.
+description The strain of the donor organism used in an experiment.
 searchable multiSelect
 cvDefined yes
 validate cv
