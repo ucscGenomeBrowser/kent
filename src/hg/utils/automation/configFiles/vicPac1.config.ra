@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db vicPac1
+clade mammal
+genomeCladePriority 35
+scientificName Vicugna pacos
+commonName Alpaca
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+assemblyShortLabel VicPac1.0
+orderKey 2360
+mitoAcc none
+fastaFiles /cluster/data/vicPac1/broad/assembly.bases.gz
+agpFiles /cluster/data/vicPac1/broad/assembly.agp
+qualFiles /cluster/data/vicPac1/broad/vicPac1.qual.qac
+dbDbSpeciesDir alpaca
+photoCreditURL http://genome.wustl.edu/genomes/view/vicugna_pacos/
+photoCreditName Photo courtesy of the USDA
+ncbiGenomeId 905
+ncbiAssemblyId 199718
+ncbiAssemblyName ASM16484v1
+ncbiBioProject 30567
+genBankAccessionID GCA_000164845.1
+taxId 30538

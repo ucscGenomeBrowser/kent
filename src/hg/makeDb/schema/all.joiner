@@ -3022,6 +3022,8 @@ identifier blastHg18KGPep04Id
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
      ce4.blastHg18KG.qName
+     ce10.blastHg18KG.qName
+     dm3.blastHg18KG.qName
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
@@ -3058,6 +3060,8 @@ identifier blastHg18KGRef04Id
      fr2.blastHg18KG.qName
      mm8.blastHg18KG.qName
      ce4.blastHg18KG.qName
+     ce10.blastHg18KG.qName
+     dm3.blastHg18KG.qName
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
