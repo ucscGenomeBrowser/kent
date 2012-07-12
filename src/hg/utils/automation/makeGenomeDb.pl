@@ -1053,14 +1053,27 @@ sub commify($) {
     return scalar reverse $text
 }
 
-# definition of types in the AGP file
-my %types = (
+# definition of contig types in the AGP file
+my %goldTypes = (
 'A' => 'active finishing',
 'D' => 'draft sequence',
 'F' => 'finished sequence',
 'O' => 'other sequence',
 'W' => 'whole genome shotgun'
 );
+# definition of gap types in the AGP file
+my %gapTypes = (
+'clone' => 'gaps between clones in scaffolds',
+'heterochromatin' => 'heterochromatin gaps',
+'short_arm' => 'short arm gaps',
+'telomere' => 'telomere gaps',
+'centromere' => 'gaps for centromeres are included when they can be reasonably localized',
+'scaffold' => 'gaps between scaffolds in chromosome assemblies',
+'contig' => 'gaps between contigs in scaffolds',
+'other' => 'gaps added at UCSC to annotate strings of <em>N</em>s that were not marked in the AGP file',
+'fragment' => 'gaps between Whole Genome Shotgun contigs'
+);
+
 
 sub makeLocalTrackDbRa {
   # Make an assembly-level trackDb.ra, gap.html and gold.html.
@@ -1086,15 +1099,22 @@ _EOF_
   if ($gotAgp) {
     print $fh <<_EOF_
 <H2>Description</H2>
+<P>
 This track depicts gaps in the draft assembly ($assemblyDate, $assemblyLabel)
 of the $em\$organism$noEm genome.
-
-  *** Developer: remove this statement if no future assemblies are expected:
-
-Many of these gaps &mdash; with the
-exception of intractable heterochromatic gaps &mdash; may be closed during the
-finishing process.
-
+</P>
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation</A>
+</P>
+<P>
+The definition of the gaps in this assembly is from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
+</P>
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
@@ -1104,53 +1124,33 @@ through the black box representing the gap.
 </P>
 <P>This assembly contains the following principal types of gaps:
 <UL>
-
-  *** Developer: make sure this part is accurate.  Here is a WUSTL template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig.  (In this context, a contig is a set of overlapping sequence reads.  
-A supercontig is a set of contigs ordered and oriented during the 
-Whole Genome Shotgun process using paired-end reads.)
-These are represented by varying numbers of <em>N</em>s  in the assembly.  
-Fragment gap sizes are usually taken from read pair data.  
-<LI><B>Clone</B> - gaps between supercontigs linked by the fingerprint map.  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly.
-<LI><B>Contig</B> - gaps between supercontigs not linked by the fingerprint 
-map, but instead by marker data.  (In this context, the &quot;Contig&quot; gap 
-type refers to a map contig, not a sequence contig.)  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly for all 
-chromosomes except chrUn (concatenation of unplaced supercontigs), where 
-gaps of 1,000 <em>N</em>s  are used.  Gaps of other sizes were used when mRNA or 
-other data suggested possible but not confirmed links between supercontigs.
-<LI><B>Centromere</B> - gaps for centromeres were included when they could be 
-reasonably localized.  These are represented by 1,500,000 <em>N</em>s  in the 
-assembly for the macrochromosomes 1-10 and Z, and by 500,000 <em>N</em>s  for 
-all others (microchromosomes).  
-
-  *** Developer: here is a Broad template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig. These are represented by varying numbers of <em>N</em>s in the 
-assembly. In this context, a contig is a set of overlapping sequence reads and  
-a supercontig is a set of contigs ordered and oriented during the 
-Whole Genome Shotgun process using paired-end reads. Fragment gap sizes 
-are usually taken from read pair data.  
-</LI>
-<LI><B>Clone</B> - gaps between supercontigs linked by the physical map.  
-In general, these are represented by 1,000 <em>N</em>s  in the assembly.  
-
-*** Developer: look for this kind of gap placement:
-
-Clone gaps of 3,000,000 have been placed at the end of chrX and at the 
-beginning of all other chromosomes.  
-</LI>
-
-
-</UL></P>
-
-
 _EOF_
     ;
+    open (GL, "hgsql -N -e 'select type from gap;' $db | sort | uniq -c | sort -n|") or die "can not select type from $db.gap table";
+    while (my $line = <GL>) {
+        chomp $line;
+        $line =~ s/^\s+//;
+        my ($count, $type) = split('\s+', $line);
+        my $minSize = `hgsql -N -e 'select min(size) from gap where type="$type";' $db`;
+        chomp $minSize;
+        my $maxSize = `hgsql -N -e 'select max(size) from gap where type="$type";' $db`;
+        chomp $maxSize;
+        my $sizeMessage = "";
+        if ($minSize == $maxSize) {
+            $sizeMessage = sprintf ("all of size %s", commify($minSize));
+        } else {
+            $sizeMessage = sprintf ("size min - max: %s - %s",
+                commify($minSize), commify($maxSize));
+        }
+        if (exists ($gapTypes{$type}) ) {
+            printf $fh "<LI>%s - %s (count: %s) %s</LI>\n", $type, $gapTypes{$type},
+                commify($count), $sizeMessage;
+        } else {
+            die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
+        }
+    }
+    close (GL);
+    print $fh "</UL></P>\n";
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
@@ -1242,14 +1242,14 @@ _EOF_
             chomp $frag;
             $singleMessage = sprintf("(%s/%s)", $chr, $frag);
         }
-        if (exists ($types{$type}) ) {
+        if (exists ($goldTypes{$type}) ) {
             if (length($singleMessage)) {
-                printf $fh "<LI>%s - one %s %s</LI>\n", $type, $types{$type}, $singleMessage;
+                printf $fh "<LI>%s - one %s %s</LI>\n", $type, $goldTypes{$type}, $singleMessage;
             } else {
-                printf $fh "<LI>%s - %s (%s)</LI>\n", $type, $types{$type}, commify($count);
+                printf $fh "<LI>%s - %s (%s)</LI>\n", $type, $goldTypes{$type}, commify($count);
             }
         } else {
-            die "makeLocalTrackDbRa: missing AGP type definition: $type";
+            die "makeLocalTrackDbRa: missing AGP contig type definition: $type";
         }
     }
     close (GL);
