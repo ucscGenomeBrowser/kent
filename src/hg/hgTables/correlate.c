@@ -2338,7 +2338,10 @@ static void tableInfoDebugDisplay(struct trackTable *tableList)
     hPrintf("<TABLE BGCOLOR='#%s'",HG_COL_BORDER);
     hPrintf(" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
-    hPrintf("<TABLE BGCOLOR='#%s' BORDER=1><TR><TH COLSPAN=9>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH><TH>bedColumns</TH></TR>\n", HG_COL_INSIDE);
+    hPrintf("<TABLE BGCOLOR='#%s' BORDER=1><TR><TH COLSPAN=9>debugging information</TH></TR>"
+            "<TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH>"
+            "<TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH>"
+            "<TH>bedColumns</TH></TR>\n", HG_COL_INSIDE);
 
     for (table = tableList; table != NULL; table = table->next)
 	{

@@ -472,48 +472,22 @@ hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
 hPrintf("</TD></TR>\n");
 }
 
-struct outputType otAllFields = { NULL,
-	outPrimaryTable,
-	"all fields from selected table", };
-struct outputType otSelected = { NULL,
-    outSelectedFields,
-    "selected fields from primary and related tables",  };
-struct outputType otSequence = { NULL,
-    outSequence,
-    "sequence", };
-struct outputType otPal = { NULL,
-    outPalOptions,
-    "CDS FASTA alignment from multiple alignment", };
-struct outputType otGff = { NULL,
-    outGff,
-    "GTF - gene transfer format", };
-struct outputType otBed = { NULL,
-    outBed,
-    "BED - browser extensible data", };
-struct outputType otCustomTrack = { NULL,
-    outCustomTrack,
-    "custom track", };
-struct outputType otHyperlinks = { NULL,
-    outHyperlinks,
-    "hyperlinks to Genome Browser", };
-struct outputType otWigData = { NULL,
-     outWigData,
-    "data points", };
-struct outputType otWigBed = { NULL,
-     outWigBed,
-    "bed format", };
-struct outputType otMaf = { NULL,
-     outMaf,
-     "MAF - multiple alignment format", };
-struct outputType otChromGraphData = { NULL,
-     outChromGraphData,
-    "data points", };
-struct outputType otMicroarrayNames = { NULL,
-     outMicroarrayNames,
-    "microarray names", };
-struct outputType otMicroarrayGroupings = { NULL,
-     outMicroarrayGroupings,
-    "microarray groupings", };
+struct outputType otAllFields = { NULL,	outPrimaryTable,"all fields from selected table", };
+struct outputType otSelected =  { NULL, outSelectedFields,
+                                  "selected fields from primary and related tables",  };
+struct outputType otSequence =  { NULL, outSequence,    "sequence", };
+struct outputType otPal =       { NULL, outPalOptions,
+                                  "CDS FASTA alignment from multiple alignment", };
+struct outputType otGff =         { NULL, outGff,         "GTF - gene transfer format", };
+struct outputType otBed =         { NULL, outBed,         "BED - browser extensible data", };
+struct outputType otCustomTrack = { NULL, outCustomTrack, "custom track", };
+struct outputType otHyperlinks =  { NULL, outHyperlinks,  "hyperlinks to Genome Browser", };
+struct outputType otWigData =     { NULL, outWigData,     "data points", };
+struct outputType otWigBed =      { NULL, outWigBed,      "bed format", };
+struct outputType otMaf =         { NULL, outMaf,         "MAF - multiple alignment format", };
+struct outputType otChromGraphData =      { NULL, outChromGraphData,       "data points", };
+struct outputType otMicroarrayNames =     { NULL, outMicroarrayNames,     "microarray names", };
+struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "microarray groupings", };
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
@@ -641,7 +615,7 @@ hPrintf("<TABLE BORDER=0>\n");
             }
         }
     hOnClickButton("document.customTrackForm.submit();return false;",
-        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+                   hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 
     hPrintf(" ");
     if (hubConnectTableExists())

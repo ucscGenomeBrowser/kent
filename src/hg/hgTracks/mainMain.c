@@ -40,7 +40,7 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE);
 if (link)
     htmlSetStyle(link);
 
