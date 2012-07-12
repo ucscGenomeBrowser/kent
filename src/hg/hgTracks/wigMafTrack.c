@@ -190,7 +190,8 @@ if (firstCase != NULL)
 
 #ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 char buffer[128];
-safef(buffer, sizeof(buffer), "%s.vis",track->track); // According to Tim, this makes no sense as "vis"
+// According to Tim, this makes no sense as ".vis"
+safef(buffer, sizeof(buffer), "%s.vis",track->track);
 if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
     useTarg = TRUE;
 else
@@ -781,7 +782,7 @@ for (mi = track->items; mi != NULL; mi = mi->next)
 
 track->height = total;
 if (track->limitedVis == tvDense)
-    track->height=(tl.fontHeight+1)*count; // Evidence that track-height comes in as 9 but should be 10!
+    track->height=(tl.fontHeight+1)*count; // Evidence that track->height is 9 but should be 10!
 return track->height;
 }
 
@@ -928,10 +929,10 @@ return xOff + x1 + w - 1;
 
 static void drawScoreSummary(struct mafSummary *summaryList, int height,
                              int seqStart, int seqEnd,
-                            struct hvGfx *hvg, int xOff, int yOff,
-                            int width, MgFont *font,
-                            Color color, Color altColor,
-                            enum trackVisibility vis, boolean chainBreaks)
+                             struct hvGfx *hvg, int xOff, int yOff,
+                             int width, MgFont *font,
+                             Color color, Color altColor,
+                             enum trackVisibility vis, boolean chainBreaks)
 /* Draw density plot or graph for summary maf scores */
 {
 struct mafSummary *ms;
@@ -1004,12 +1005,12 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 }
 
 static void drawScoreOverviewC(struct sqlConnection *conn,
-			    char *tableName, int height,
-                             int seqStart, int seqEnd,
-                            struct hvGfx *hvg, int xOff, int yOff,
-                            int width, MgFont *font,
-                            Color color, Color altColor,
-                            enum trackVisibility vis)
+                               char *tableName, int height,
+                               int seqStart, int seqEnd,
+                               struct hvGfx *hvg, int xOff, int yOff,
+                               int width, MgFont *font,
+                               Color color, Color altColor,
+                               enum trackVisibility vis)
 /* Draw density plot or graph for overall maf scores rather than computing
  * by sections, for speed.  Don't actually load the mafs -- just
  * the scored refs from the table.
@@ -1033,11 +1034,11 @@ sqlFreeResult(&sr);
 }
 
 static void drawScoreOverview(char *tableName,
-	int height, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff,
-	int width, MgFont *font,
-	Color color, Color altColor,
-	enum trackVisibility vis)
+                              int height, int seqStart, int seqEnd,
+                              struct hvGfx *hvg, int xOff, int yOff,
+                              int width, MgFont *font,
+                              Color color, Color altColor,
+                              enum trackVisibility vis)
 {
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -1048,11 +1049,11 @@ hFreeConn(&conn);
 }
 
 static void drawScoreOverviewCT(char *tableName,
-	int height, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff,
-	int width, MgFont *font,
-	Color color, Color altColor,
-	enum trackVisibility vis)
+                                int height, int seqStart, int seqEnd,
+                                struct hvGfx *hvg, int xOff, int yOff,
+                                int width, MgFont *font,
+                                Color color, Color altColor,
+                                enum trackVisibility vis)
 {
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 
@@ -1236,8 +1237,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	{
 	struct mafPriv *mp = getMafPriv(track);
 	drawScoreOverviewCT(mp->ct->dbTableName, mi->height,
-		seqStart, seqEnd,
-		hvg, xOff, yOff, width, font, color, color, vis);
+                            seqStart, seqEnd,
+                            hvg, xOff, yOff, width, font, color, color, vis);
 	hvGfxUnclip(hvg);
 	}
     else if (vis == tvFull)
@@ -1271,8 +1272,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
                 tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(database, tableName))
                 drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg,
-                                xOff, yOff, width, font, track->ixAltColor,
-                                track->ixAltColor, tvFull);
+                                  xOff, yOff, width, font, track->ixAltColor,
+                                  track->ixAltColor, tvFull);
             hvGfxUnclip(hvg);
             }
         /* need to add extra space between wiggles (for now) */
@@ -1502,10 +1503,10 @@ return retValue;
 }
 
 static void translateCodons(struct sqlConnection *conn,
-    struct sqlConnection *conn2, char *tableName, char *compName,
-    DNA *dna, int start, int length, int frame, char strand,
-    int prevEnd, int nextStart, bool alreadyComplemented,
-    int x, int y, int width, int height, struct hvGfx *hvg, char *mafFile)
+                            struct sqlConnection *conn2, char *tableName, char *compName,
+                            DNA *dna, int start, int length, int frame, char strand,
+                            int prevEnd, int nextStart, bool alreadyComplemented,
+                            int x, int y, int width, int height, struct hvGfx *hvg, char *mafFile)
 {
 int size = length;
 DNA *ptr;
@@ -2183,15 +2184,17 @@ y += mi->height;
 /* draw alternating colors behind base-level alignments */
     {
     int alternateColorBaseCount, alternateColorBaseOffset;
-    alternateColorBaseCount = cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_VAR, 0);
-    alternateColorBaseOffset = cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_OFFSET_VAR, 0);
+    alternateColorBaseCount =
+            cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_VAR, 0);
+    alternateColorBaseOffset =
+            cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_OFFSET_VAR, 0);
     if (alternateColorBaseCount != 0)
         {
         int baseWidth = spreadStringCharWidth(width, winBaseCount);
         int colorX = x + alternateColorBaseOffset * baseWidth;
         alternateBlocksBehindChars(hvg, colorX, y-1, width,
-                mi->height*(lineCount-1), tl.mWidth, winBaseCount,
-                alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
+                                   mi->height*(lineCount-1), tl.mWidth, winBaseCount,
+                                   alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
     }
 
@@ -2276,10 +2279,9 @@ tryagain:
 	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart;
 	    w= end - start;
 
-	    translateCodons(conn2, conn3, tableName, mi->db, line, start ,
-		w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,
-		complementBases, x, y, width, mi->height,  hvg, mafFile);
-
+	    translateCodons(conn2, conn3, tableName, mi->db, line, start,
+                            w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,
+                            complementBases, x, y, width, mi->height,  hvg, mafFile);
 	    }
 	sqlFreeResult(&sr);
 
@@ -2363,8 +2365,8 @@ return y;
 }
 
 static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
+                                struct hvGfx *hvg, int xOff, int yOff, int width,
+                                MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
@@ -2431,8 +2433,8 @@ return yOff;
 
 
 static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
+                       struct hvGfx *hvg, int xOff, int yOff, int width,
+                       MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for wigmaf type tracks */
 {
 int y = yOff;
