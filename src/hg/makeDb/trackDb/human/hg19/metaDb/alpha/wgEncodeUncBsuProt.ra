@@ -1,7 +1,7 @@
 metaObject wgEncodeUncBsuProt
 objType composite
 composite wgEncodeUncBsuProt
-expVars lab,dataType,cell,localization
+expVars lab,dataType,cell,localization,protocol
 
 metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
 objType file
@@ -186,8 +186,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-08
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-dccAccession wgEncodeEH001200
-expId 1200
+dccAccession wgEncodeEH002984
+expId 2984
 fileName wgEncodeUncBsuProtK562MembranefractionFaspRaw.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -208,8 +208,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-08
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
-dccAccession wgEncodeEH001200
-expId 1200
+dccAccession wgEncodeEH002984
+expId 2984
 fileName wgEncodeUncBsuProtK562MembranefractionFaspSig.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -351,4 +351,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: 1714578841
+# MAGIC: 1634394677
