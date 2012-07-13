@@ -1106,7 +1106,9 @@ of the $em\$organism$noEm genome.
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation</A>
+TARGET=_blank>assembly documentation.</A>  This assembly information:
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1206,7 +1208,9 @@ of the $em\$organism$noEm genome.
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation</A>
+TARGET=_blank>assembly documentation.</A>  This assembly information:
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
 </P>
 <P>
 The definition of this assembly is from the
