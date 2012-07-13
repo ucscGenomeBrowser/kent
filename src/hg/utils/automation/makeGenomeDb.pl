@@ -1137,13 +1137,13 @@ _EOF_
         chomp $maxSize;
         my $sizeMessage = "";
         if ($minSize == $maxSize) {
-            $sizeMessage = sprintf ("all of size %s", commify($minSize));
+            $sizeMessage = sprintf ("all of size %s bases", commify($minSize));
         } else {
-            $sizeMessage = sprintf ("size min - max: %s - %s",
+            $sizeMessage = sprintf ("size range: %s - %s bases",
                 commify($minSize), commify($maxSize));
         }
         if (exists ($gapTypes{$type}) ) {
-            printf $fh "<LI>%s - %s (count: %s) %s</LI>\n", $type, $gapTypes{$type},
+            printf $fh "<LI>%s - %s (count: %s, %s)</LI>\n", $type, $gapTypes{$type},
                 commify($count), $sizeMessage;
         } else {
             die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
