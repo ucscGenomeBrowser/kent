@@ -294,7 +294,7 @@ html wgEncodeUchicagoTfbs.release2
     view Signal
     visibility full
     subTrack wgEncodeUchicagoTfbs
-    viewLimits 0:50
+    viewLimits 0:15
     minLimit 0
     maxLimit 12768
     maxHeightPixels 100:32:16
