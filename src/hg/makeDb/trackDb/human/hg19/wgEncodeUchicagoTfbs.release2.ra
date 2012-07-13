@@ -25,13 +25,13 @@ track wgEncodeUchicagoTfbs
 compositeTrack on
 superTrack wgEncodeTfBindingSuper dense
 shortLabel UChicago TFBS
-longLabel Transcription Factor Binding Sites by Epitope-Tag from ENCODE/University of Chicago
+longLabel Transcription Factor Binding Sites by Epitope-Tag from ENCODE/UChicago
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)
-subGroup3 factor Factor BACH1=BACH1 CCNE1=CCNE1 CDKN1B=CDKN1B ELF1=ELF1 ESR=ESR FOS=FOS GATA2=GATA2 HDAC8=HDAC8 ILF2=ILF2 JunB=JunB JunD=JunD MLL5=MLL5 NCOR1=NCOR1 NF90=NF90 NR4A1=NR4A1 STAT1=STAT1 zINPUTBACH1=Input_(<i>BACH1</i>) zINPUTCCNE1=Input_(<i>CCNE1</i>) zINPUTCDKN1B=Input_(<i>CDKN1B</i>) zINPUTELF1=Input_(<i>ELF1</i>) zINPUTESR=Input_(<i>ESR</i>) zINPUTILF2=Input_(<i>ILF2</i>) zINPUTMLL5=Input_(<i>MLL5</i>) zINPUTNCOR1=Input_(<i>NCOR1</i>) zINPUTNF90=Input_(<i>NF90</i>) zINPUTSTAT1=Input_(<i>STAT1</i>)
+subGroup3 factor Factor BACH1=BACH1 CCNE1=CCNE1 CDKN1B=CDKN1B ELF1=ELF1 ESR=ESR FOS=FOS GATA2=GATA2 HDAC8=HDAC8 ILF2=ILF2 JunB=JunB JunD=JunD MLL5=MLL5 NCOR1=NCOR1 NF90=NF90 NR4A1=NR4A1 STAT1=STAT1 
 subGroup4 control Control CONTROLBACH1=Control_eGFP-BACH1 CONTROLCCNE1=Control_eGFP-CCNE1 CONTROLCDKN1B=Control_eGFP-CDKN1B CONTROLELF1=Control_eGFP-E2F1 CONTROLESR=Control_eGFP-ESR ControlFOS=Control_eGFP-FOS ControlGATA2=Control_eGFP-GATA2 ControlHDAC8=Control_eGFP-HDAC8 CONTROLILF2=Control_eGFP-ILF2 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB CONTROLMLL5=Control_eGFP-MLL5 CONTROLNCOR1=Control_eGFP-NCOR1 CONTROLNF90=Control_eGFP-NF90 ControlNR4A1=Control_eGFP-NR4A1 CONTROLSTAT1=Control_eGFP-STAT1
-subGroup5 rep Replicate rep1=1 rep2=2 repPOOLED=Pooled
+subGroup5 rep Replicate rep1=1 rep2=2 repInput=Input repPOOLED=Pooled
 dimensions dimensionX=rep dimensionY=factor
 sortOrder cellType=+ factor=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -358,7 +358,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 BACH1 Input
         longLabel K562 BACH1 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTBACH1 cellType=K562 control=CONTROLBACH1 rep=rep1
+        subGroups view=Signal factor=BACH1 cellType=K562 control=CONTROLBACH1 rep=repInput
         type bigWig 0.000000 3043.977295
         color 46,0,184
         # subId=5795 dateSubmitted=2012-02-16
@@ -403,7 +403,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 CCNE1 Input
         longLabel K562 CCNE1 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTCCNE1 cellType=K562 control=CONTROLCCNE1 rep=rep1
+        subGroups view=Signal factor=CCNE1 cellType=K562 control=CONTROLCCNE1 rep=repInput
         type bigWig 0.000000 2885.748047
         color 46,0,184
         # subId=5853 dateSubmitted=2012-02-20
@@ -430,7 +430,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 STAT1 Input
         longLabel K562 STAT1 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTSTAT1 cellType=K562 control=CONTROLSTAT1 rep=rep1
+        subGroups view=Signal factor=STAT1 cellType=K562 control=CONTROLSTAT1 rep=repInput
         type bigWig 0.000000 4601.861816
         color 46,0,184
         # subId=5854 dateSubmitted=2012-02-20
@@ -457,7 +457,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 CDKN1B Input
         longLabel K562 CDKN1B GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTCDKN1B cellType=K562 control=CONTROLCDKN1B rep=rep1
+        subGroups view=Signal factor=CDKN1B cellType=K562 control=CONTROLCDKN1B rep=repInput
         type bigWig 0.000000 2978.743896
         color 46,0,184
         # subId=5855 dateSubmitted=2012-02-20
@@ -484,7 +484,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 ILF2 Input
         longLabel K562 ILF2 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTILF2 cellType=K562 control=CONTROLILF2 rep=rep1
+        subGroups view=Signal factor=ILF2 cellType=K562 control=CONTROLILF2 rep=repInput
         type bigWig 0.000000 2649.656982
         color 46,0,184
         # subId=5859 dateSubmitted=2012-02-20
@@ -511,7 +511,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 NCOR1 Input
         longLabel K562 NCOR1 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTNCOR1 cellType=K562 control=CONTROLNCOR1 rep=rep1
+        subGroups view=Signal factor=NCOR1 cellType=K562 control=CONTROLNCOR1 rep=repInput
         type bigWig 0.000000 4620.328613
         color 46,0,184
         # subId=5857 dateSubmitted=2012-02-20
@@ -538,7 +538,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 ESR Input
         longLabel K562 ESR GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTESR cellType=K562 control=CONTROLESR rep=rep1
+        subGroups view=Signal factor=ESR cellType=K562 control=CONTROLESR rep=repInput
         type bigWig 0.000000 2649.656982
         color 46,0,184
         # subId=5858 dateSubmitted=2012-02-20
@@ -565,7 +565,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 ELF1 Input
         longLabel K562 ELF1 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTELF1 cellType=K562 control=CONTROLELF1 rep=rep1
+        subGroups view=Signal factor=ELF1 cellType=K562 control=CONTROLELF1 rep=repInput
         type bigWig 0.000000 1307.438721
         color 46,0,184
         # subId=5860 dateSubmitted=2012-02-20
@@ -592,7 +592,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 MLL5 Input
         longLabel K562 MLL5 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTMLL5 cellType=K562 control=CONTROLMLL5 rep=rep1
+        subGroups view=Signal factor=MLL5 cellType=K562 control=CONTROLMLL5 rep=repInput
         type bigWig 0.000000 2649.656982
         color 46,0,184
         # subId=5861 dateSubmitted=2012-02-20
@@ -619,7 +619,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal off
         shortLabel K562 NF90 Input
         longLabel K562 NF90 GFP-tag TFBS Signal Input from ENCODE/UChicago
-        subGroups view=Signal factor=zINPUTNF90 cellType=K562 control=CONTROLNF90 rep=rep1
+        subGroups view=Signal factor=NF90 cellType=K562 control=CONTROLNF90 rep=repInput
         type bigWig 0.000000 2649.656982
         color 46,0,184
         # subId=5862 dateSubmitted=2012-02-20
