@@ -6,8 +6,8 @@
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
 #       - Short Labels:
 #               Template: [cell] [factor]/GFP [view]
-#					- Views: For consistency sake view will be two letters
-#                       - Peaks = Pk
+#					- Views: For consistency sake view will be two letters Pk
+#                       - Peaks = Pk Sg
 #                       - Signal = Sg
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
 #       - Default Tracks on:
@@ -57,7 +57,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EfosControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 FOS/GFP 
+        shortLabel K562 FOS/GFP Pk
         longLabel K562 FOS GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=FOS cellType=K562 control=ControlFOS rep=repPOOLED
         type narrowPeak
@@ -66,7 +66,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Egata2ControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 GATA2/GFP 
+        shortLabel K562 GATA2/GFP Pk
         longLabel K562 GATA2 GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=GATA2 cellType=K562 control=ControlGATA2 rep=repPOOLED
         type narrowPeak
@@ -75,7 +75,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ehdac8ControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 HDAC8/GFP 
+        shortLabel K562 HDAC8/GFP Pk
         longLabel K562 HDAC8 GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=HDAC8 cellType=K562 control=ControlHDAC8 rep=repPOOLED
         type narrowPeak
@@ -84,7 +84,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EjunbControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 JunB/GFP 
+        shortLabel K562 JunB/GFP Pk
         longLabel K562 JunB GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=JunB cellType=K562 control=ControlJunB rep=repPOOLED
         type narrowPeak
@@ -93,7 +93,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EjundControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 JunD/GFP 
+        shortLabel K562 JunD/GFP Pk
         longLabel K562 JunD GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=JunD cellType=K562 control=ControlJunD rep=repPOOLED
         type narrowPeak
@@ -102,7 +102,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Enr4a1ControlPk
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 NR4A1/GFP 
+        shortLabel K562 NR4A1/GFP Pk
         longLabel K562 NR4A1 GFP-tag TFBS Peaks from ENCODE/UChicago
         subGroups view=Peaks factor=NR4A1 cellType=K562 control=ControlNR4A1 rep=repPOOLED
         type narrowPeak
@@ -111,7 +111,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 BACH1 1
+        shortLabel K562 BACH1 1 Pk
         longLabel K562 BACH1 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=BACH1 cellType=K562 control=CONTROLBACH1 rep=rep1
         type narrowPeak
@@ -120,7 +120,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 BACH1 2
+        shortLabel K562 BACH1 2 Pk
         longLabel K562 BACH1 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=BACH1 cellType=K562 control=CONTROLBACH1 rep=rep2
         type narrowPeak
@@ -129,7 +129,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 CCNE1 1
+        shortLabel K562 CCNE1 1 Pk
         longLabel K562 CCNE1 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=CCNE1 cellType=K562 control=CONTROLCCNE1 rep=rep1
         type narrowPeak
@@ -138,7 +138,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 CCNE1 2
+        shortLabel K562 CCNE1 2 Pk
         longLabel K562 CCNE1 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=CCNE1 cellType=K562 control=CONTROLCCNE1 rep=rep2
         type narrowPeak
@@ -147,7 +147,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 STAT1 1
+        shortLabel K562 STAT1 1 Pk
         longLabel K562 STAT1 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=STAT1 cellType=K562 control=CONTROLSTAT1 rep=rep1
         type narrowPeak
@@ -156,7 +156,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 STAT1 2
+        shortLabel K562 STAT1 2 Pk
         longLabel K562 STAT1 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=STAT1 cellType=K562 control=CONTROLSTAT1 rep=rep2
         type narrowPeak
@@ -165,7 +165,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 CDKN1B 1
+        shortLabel K562 CDKN1B 1 Pk
         longLabel K562 CDKN1B GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=CDKN1B cellType=K562 control=CONTROLCDKN1B rep=rep1
         type narrowPeak
@@ -174,7 +174,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 CDKN1B 2
+        shortLabel K562 CDKN1B 2 Pk
         longLabel K562 CDKN1B GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=CDKN1B cellType=K562 control=CONTROLCDKN1B rep=rep2
         type narrowPeak
@@ -183,7 +183,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 ILF2 1
+        shortLabel K562 ILF2 1 Pk
         longLabel K562 ILF2 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=ILF2 cellType=K562 control=CONTROLILF2 rep=rep1
         type narrowPeak
@@ -192,7 +192,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 ILF2 2
+        shortLabel K562 ILF2 2 Pk
         longLabel K562 ILF2 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=ILF2 cellType=K562 control=CONTROLILF2 rep=rep2
         type narrowPeak
@@ -201,7 +201,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 NCOR1 1
+        shortLabel K562 NCOR1 1 Pk
         longLabel K562 NCOR1 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=NCOR1 cellType=K562 control=CONTROLNCOR1 rep=rep1
         type narrowPeak
@@ -210,7 +210,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 NCOR1 2
+        shortLabel K562 NCOR1 2 Pk
         longLabel K562 NCOR1 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=NCOR1 cellType=K562 control=CONTROLNCOR1 rep=rep2
         type narrowPeak
@@ -219,7 +219,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EsrControlesrPkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 ESR 1
+        shortLabel K562 ESR 1 Pk
         longLabel K562 ESR GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=ESR cellType=K562 control=CONTROLESR rep=rep1
         type narrowPeak
@@ -228,7 +228,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EsrControlesrPkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 ESR 2
+        shortLabel K562 ESR 2 Pk
         longLabel K562 ESR GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=ESR cellType=K562 control=CONTROLESR rep=rep2
         type narrowPeak
@@ -237,7 +237,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 ELF1 1
+        shortLabel K562 ELF1 1 Pk
         longLabel K562 ELF1 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=ELF1 cellType=K562 control=CONTROLELF1 rep=rep1
         type narrowPeak
@@ -246,7 +246,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 ELF1 2
+        shortLabel K562 ELF1 2 Pk
         longLabel K562 ELF1 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=ELF1 cellType=K562 control=CONTROLELF1 rep=rep2
         type narrowPeak
@@ -255,7 +255,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 MLL5 1
+        shortLabel K562 MLL5 1 Pk
         longLabel K562 MLL5 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=MLL5 cellType=K562 control=CONTROLMLL5 rep=rep1
         type narrowPeak
@@ -264,7 +264,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 MLL5 2
+        shortLabel K562 MLL5 2 Pk
         longLabel K562 MLL5 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=MLL5 cellType=K562 control=CONTROLMLL5 rep=rep2
         type narrowPeak
@@ -273,7 +273,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep1
         parent wgEncodeUchicagoTfbsPeaks on
-        shortLabel K562 NF90 1
+        shortLabel K562 NF90 1 Pk
         longLabel K562 NF90 GFP-tag TFBS Peaks Rep 1 from ENCODE/UChicago
         subGroups view=Peaks factor=NF90 cellType=K562 control=CONTROLNF90 rep=rep1
         type narrowPeak
@@ -282,7 +282,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep2
         parent wgEncodeUchicagoTfbsPeaks off
-        shortLabel K562 NF90 2
+        shortLabel K562 NF90 2 Pk
         longLabel K562 NF90 GFP-tag TFBS Peaks Rep 2 from ENCODE/UChicago
         subGroups view=Peaks factor=NF90 cellType=K562 control=CONTROLNF90 rep=rep2
         type narrowPeak
@@ -302,7 +302,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EfosControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 FOS/GFP
+        shortLabel K562 FOS/GFP Sg
         longLabel K562 FOS GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=FOS cellType=K562 control=ControlFOS rep=repPOOLED
         type bigWig -19284.970703 7497.709473
@@ -311,7 +311,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Egata2ControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 GATA2/GFP
+        shortLabel K562 GATA2/GFP Sg
         longLabel K562 GATA2 GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=GATA2 cellType=K562 control=ControlGATA2 rep=repPOOLED
         type bigWig -3732.796387 6083.967285
@@ -320,7 +320,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ehdac8ControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 HDAC8/GFP
+        shortLabel K562 HDAC8/GFP Sg
         longLabel K562 HDAC8 GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=HDAC8 cellType=K562 control=ControlHDAC8 rep=repPOOLED
         type bigWig -3635.416016 7391.409180
@@ -329,7 +329,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EjunbControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 JunB/GFP
+        shortLabel K562 JunB/GFP Sg
         longLabel K562 JunB GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=JunB cellType=K562 control=ControlJunB rep=repPOOLED
         type bigWig -11520.261719 17224.816406
@@ -338,7 +338,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EjundControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 JunD/GFP
+        shortLabel K562 JunD/GFP Sg
         longLabel K562 JunD GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=JunD cellType=K562 control=ControlJunD rep=repPOOLED
         type bigWig -4305.450684 19676.619141
@@ -347,7 +347,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Enr4a1ControlSig
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 NR4A1/GFP
+        shortLabel K562 NR4A1/GFP Sg
         longLabel K562 NR4A1 GFP-tag TFBS Signal from ENCODE/UChicago
         subGroups view=Signal factor=NR4A1 cellType=K562 control=ControlNR4A1 rep=repPOOLED
         type bigWig -2001.193604 1318.283081
@@ -365,7 +365,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 BACH1 1
+        shortLabel K562 BACH1 1 Sg
         longLabel K562 BACH1 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=BACH1 cellType=K562 control=CONTROLBACH1 rep=rep1
         type bigWig 0.000000 7300.945312
@@ -374,7 +374,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 BACH1 2
+        shortLabel K562 BACH1 2 Sg
         longLabel K562 BACH1 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=BACH1 cellType=K562 control=CONTROLBACH1 rep=rep2
         type bigWig 0.000000 6902.023926
@@ -383,7 +383,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 CCNE1 1
+        shortLabel K562 CCNE1 1 Sg
         longLabel K562 CCNE1 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=CCNE1 cellType=K562 control=CONTROLCCNE1 rep=rep1
         type bigWig 0.000000 4898.631836
@@ -392,7 +392,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 CCNE1 2
+        shortLabel K562 CCNE1 2 Sg
         longLabel K562 CCNE1 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=CCNE1 cellType=K562 control=CONTROLCCNE1 rep=rep2
         type bigWig 0.000000 1965.051392
@@ -410,7 +410,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 STAT1 1
+        shortLabel K562 STAT1 1 Sg
         longLabel K562 STAT1 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=STAT1 cellType=K562 control=CONTROLSTAT1 rep=rep1
         type bigWig 0.000000 2168.162354
@@ -419,7 +419,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 STAT1 2
+        shortLabel K562 STAT1 2 Sg
         longLabel K562 STAT1 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=STAT1 cellType=K562 control=CONTROLSTAT1 rep=rep2
         type bigWig 0.000000 4112.297363
@@ -437,7 +437,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 CDKN1B 1
+        shortLabel K562 CDKN1B 1 Sg
         longLabel K562 CDKN1B GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=CDKN1B cellType=K562 control=CONTROLCDKN1B rep=rep1
         type bigWig 0.000000 8759.412109
@@ -446,7 +446,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 CDKN1B 2
+        shortLabel K562 CDKN1B 2 Sg
         longLabel K562 CDKN1B GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=CDKN1B cellType=K562 control=CONTROLCDKN1B rep=rep2
         type bigWig 0.000000 4513.652344
@@ -464,7 +464,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 ILF2 1
+        shortLabel K562 ILF2 1 Sg
         longLabel K562 ILF2 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=ILF2 cellType=K562 control=CONTROLILF2 rep=rep1
         type bigWig 0.000000 24315.562500
@@ -473,7 +473,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 ILF2 2
+        shortLabel K562 ILF2 2 Sg
         longLabel K562 ILF2 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=ILF2 cellType=K562 control=CONTROLILF2 rep=rep2
         type bigWig 0.000000 12078.078125
@@ -491,7 +491,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 NCOR1 1
+        shortLabel K562 NCOR1 1 Sg
         longLabel K562 NCOR1 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=NCOR1 cellType=K562 control=CONTROLNCOR1 rep=rep1
         type bigWig 0.000000 4757.939453
@@ -500,7 +500,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 NCOR1 2
+        shortLabel K562 NCOR1 2 Sg
         longLabel K562 NCOR1 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=NCOR1 cellType=K562 control=CONTROLNCOR1 rep=rep2
         type bigWig 0.000000 5353.922363
@@ -518,7 +518,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EsrControlesrSigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 ESR 1
+        shortLabel K562 ESR 1 Sg
         longLabel K562 ESR GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=ESR cellType=K562 control=CONTROLESR rep=rep1
         type bigWig 0.000000 3927.312012
@@ -527,7 +527,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562EsrControlesrSigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 ESR 2
+        shortLabel K562 ESR 2 Sg
         longLabel K562 ESR GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=ESR cellType=K562 control=CONTROLESR rep=rep2
         type bigWig 0.000000 5122.768066
@@ -545,7 +545,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 ELF1 1
+        shortLabel K562 ELF1 1 Sg
         longLabel K562 ELF1 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=ELF1 cellType=K562 control=CONTROLELF1 rep=rep1
         type bigWig 0.000000 4067.161865
@@ -554,7 +554,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 ELF1 2
+        shortLabel K562 ELF1 2 Sg
         longLabel K562 ELF1 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=ELF1 cellType=K562 control=CONTROLELF1 rep=rep2
         type bigWig 0.000000 3796.797363
@@ -572,7 +572,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 MLL5 1
+        shortLabel K562 MLL5 1 Sg
         longLabel K562 MLL5 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=MLL5 cellType=K562 control=CONTROLMLL5 rep=rep1
         type bigWig 0.000000 40862.906250
@@ -581,7 +581,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 MLL5 2
+        shortLabel K562 MLL5 2 Sg
         longLabel K562 MLL5 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=MLL5 cellType=K562 control=CONTROLMLL5 rep=rep2
         type bigWig 0.000000 30561.669922
@@ -599,7 +599,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep1
         parent wgEncodeUchicagoTfbsViewSignal on
-        shortLabel K562 NF90 1
+        shortLabel K562 NF90 1 Sg
         longLabel K562 NF90 GFP-tag TFBS Signal Rep 1 from ENCODE/UChicago
         subGroups view=Signal factor=NF90 cellType=K562 control=CONTROLNF90 rep=rep1
         type bigWig 0.000000 39173.847656
@@ -608,7 +608,7 @@ html wgEncodeUchicagoTfbs.release2
 
         track wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep2
         parent wgEncodeUchicagoTfbsViewSignal off
-        shortLabel K562 NF90 2
+        shortLabel K562 NF90 2 Sg
         longLabel K562 NF90 GFP-tag TFBS Signal Rep 2 from ENCODE/UChicago
         subGroups view=Signal factor=NF90 cellType=K562 control=CONTROLNF90 rep=rep2
         type bigWig 0.000000 245981.375000
