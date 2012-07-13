@@ -1071,7 +1071,7 @@ my %gapTypes = (
 'scaffold' => 'gaps between scaffolds in chromosome assemblies',
 'contig' => 'gaps between contigs in scaffolds',
 'other' => 'gaps added at UCSC to annotate strings of <em>N</em>s that were not marked in the AGP file',
-'fragment' => 'gaps between Whole Genome Shotgun contigs'
+'fragment' => 'gaps between whole genome shotgun contigs'
 );
 
 
@@ -1100,15 +1100,15 @@ _EOF_
     print $fh <<_EOF_
 <H2>Description</H2>
 <P>
-This track depicts gaps in the draft assembly ($assemblyDate, $assemblyLabel)
-of the $em\$organism$noEm genome.
+This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembly.
 </P>
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A>  This assembly information:
+TARGET=_blank>assembly documentation.</A><BR>
+This assembly information at NCBI:
 <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
-TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
+TARGET="_blank">genome/assembly/$ncbiAssemblyId.</A>
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1145,8 +1145,8 @@ _EOF_
                 commify($minSize), commify($maxSize));
         }
         if (exists ($gapTypes{$type}) ) {
-            printf $fh "<LI>%s - %s (count: %s, %s)</LI>\n", $type, $gapTypes{$type},
-                commify($count), $sizeMessage;
+            printf $fh "<LI><B>%s</B> - %s (count: %s; %s)</LI>\n", $type,
+                $gapTypes{$type}, commify($count), $sizeMessage;
         } else {
             die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
         }
@@ -1202,15 +1202,15 @@ _EOF_
     print $fh <<_EOF_
 <H2>Description</H2>
 <P>
-This track shows the draft assembly ($assemblyDate, $assemblyLabel)
-of the $em\$organism$noEm genome.
+This track shows the sequences used in the $assemblyDate $em\$organism$noEm genome assembly.
 </P>
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A>  This assembly information:
+TARGET=_blank>assembly documentation.</A><BR>
+This assembly information at NCBI:
 <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
-TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
+TARGET="_blank">genome/assembly/$ncbiAssemblyId.</A>
 </P>
 <P>
 The definition of this assembly is from the
@@ -1288,7 +1288,7 @@ within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
 All components within this track are of fragment type &quot;W&quot;: 
-Whole Genome Shotgun contig. </P>
+whole genome shotgun contig. </P>
 _EOF_
     ;
   }
