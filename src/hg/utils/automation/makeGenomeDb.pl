@@ -1106,7 +1106,9 @@ of the $em\$organism$noEm genome.
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation</A>
+TARGET=_blank>assembly documentation.</A>  This assembly information:
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1137,13 +1139,13 @@ _EOF_
         chomp $maxSize;
         my $sizeMessage = "";
         if ($minSize == $maxSize) {
-            $sizeMessage = sprintf ("all of size %s", commify($minSize));
+            $sizeMessage = sprintf ("all of size %s bases", commify($minSize));
         } else {
-            $sizeMessage = sprintf ("size min - max: %s - %s",
+            $sizeMessage = sprintf ("size range: %s - %s bases",
                 commify($minSize), commify($maxSize));
         }
         if (exists ($gapTypes{$type}) ) {
-            printf $fh "<LI>%s - %s (count: %s) %s</LI>\n", $type, $gapTypes{$type},
+            printf $fh "<LI>%s - %s (count: %s, %s)</LI>\n", $type, $gapTypes{$type},
                 commify($count), $sizeMessage;
         } else {
             die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
@@ -1206,7 +1208,9 @@ of the $em\$organism$noEm genome.
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation</A>
+TARGET=_blank>assembly documentation.</A>  This assembly information:
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">genome/assembly/$ncbiAssemblyId ($assemblyLabel).</A>
 </P>
 <P>
 The definition of this assembly is from the
