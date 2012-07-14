@@ -584,7 +584,7 @@ puts(
 "<A HREF=\"http://www.informatics.jax.org/expression.shtml\" \n"
 "TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n"
 "<LI>Transcription factors in mouse embryos from the \n"
-"Mahoney Center for Neuro-Oncology</A> \n"
+"Mahoney Center for Neuro-Oncology \n"
 "<LI>Mouse head and brain <em>in situ</em> images from NCBI's  \n"
 "<A HREF=\"http://www.ncbi.nlm.nih.gov/projects/gensat/\" TARGET=_blank>Gene \n"
 "Expression Nervous System Atlas</A> (GENSAT) database \n"
