@@ -1689,6 +1689,13 @@ okChars[':'] = 1;
 okChars['_'] = 1;
 okChars['&'] = 1;
 okChars['+'] = 1;
+okChars['('] = 1;
+okChars[')'] = 1;
+okChars['$'] = 1;
+okChars['!'] = 1;
+okChars['*'] = 1;
+okChars['@'] = 1;
+okChars['\''] = 1;  // apparently the apostrophe itself is ok
 return okChars;
 }
 
