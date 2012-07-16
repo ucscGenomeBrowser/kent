@@ -16143,7 +16143,69 @@ hg19.hapLoc.bed >> altSequence.bed
     #	Loaded 75 elements of size 6
     hgLoadBed hg19 altSeqPatches altSeqPatchesP5.tab
     #	Loaded 41 elements of size 6
-    
+
+##############################################################################
+# NCBI patch 9 (WORKING - 2012-07-16 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch9
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch9
+    wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
+        -nH --ftp-user=anonymous --ftp-password=yourName@domain.edu \
+ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p9/
+    # the scripts from patch5 were modified slightly to update and fix some
+    #	of the new names in this patch9
+    cp ../patch5/gatherNames.pl .
+    ./gatherNames.pl . > ucscNames.patch9.txt
+    # examine the names for sanity:
+    awk '{print $NF}' ucscNames.patch9.txt | sort
+    # and they should not be longer than 31 characters:
+    awk '{print $NF}' ucscNames.patch9.txt | sort | awk '{print length($0)}' \
+        | sort -n | tail
+    cp -p ../patch5/mkTables.pl .
+    ./mkTables.pl  patches.chrom.sizes ucscNames.patch9.txt PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+    # output to stdout is the contents of alt.scaf.agp.gz
+    # constructs files: ctgPos.txt chromInfo.txt gold.txt and gap.txt
+    cp -p ../patch5/mkCtgPos2.pl .
+    ./mkCtgPos2.pl ucscNames.patch9.txt patches.chrom.sizes > ctgPos2.txt
+    cp -p ../patch5/mkHapLocate.pl .
+    ./mkHapLocate.pl ctgPos.txt \
+	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+	> haplotypeLocations.bed
+    cp -p haplotypeLocations.bed altSequence.bed
+    ln -s ../patch2/before.patch2.hapLoc.bed hg19.hapLoc.bed
+    awk '{printf "%s\t%d\t%d\t%s\t500\t+\t%d\t%d\t32,32,190\n", $2,$3,$4,$5,$3,$4}' \
+hg19.hapLoc.bed >> altSequence.bed
+
+    # a new script for patch9
+    cp -p ../patch5/mkFasta.pl .
+    ./mkFasta.pl ucscNames.patch9.txt > hg19.patch9.fa
+    # the build of hg19Patch9 can be seen in hg19Patch9.txt
+
+    egrep -v "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqPatchesP9.tab
+    egrep "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqHaplotypesP9.tab
+    # verify none lost
+    wc -l altSeqPatchesP9.tab altSeqHaplotypesP9.tab
+    #	82 altSeqPatchesP9.tab
+    #	81 altSeqHaplotypesP9.tab
+    #	163 total
+    wc -l altSequence.bed
+    #	163 altSequence.bed
+XXX - ready to see loaded - Mon Jul 16 13:51:51 PDT 2012
+    hgLoadBed hg19 altSeqHaplotypesP9 altSeqHaplotypesP9.tab
+    #	Loaded 75 elements of size 6
+    hgLoadBed hg19 altSeqPatchesP9 altSeqPatchesP9.tab
+    #	Loaded 41 elements of size 6
+
+    # to replace the existing track:
+    hgLoadBed hg19 altSeqHaplotypes altSeqHaplotypesP9.tab
+    #	Loaded 75 elements of size 6
+    hgLoadBed hg19 altSeqPatches altSeqPatchesP9.tab
+    #	Loaded 41 elements of size 6
+ 
+ 
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
     # This human gene set need a lot of work to get the name translation
