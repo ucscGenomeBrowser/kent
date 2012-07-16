@@ -7790,7 +7790,7 @@ termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
 sex U
-protocol Gingeras:Stomach_Gingeras_protocol.pdf Stomach_Ren_protocol.pdf
+protocol Gingeras:Stomach_Gingeras_protocol.pdf Ren:Stomach_Ren_protocol.pdf
 
 term SubcFatPad
 tag SFAT
