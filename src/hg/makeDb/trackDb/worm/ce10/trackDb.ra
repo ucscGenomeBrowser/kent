@@ -118,6 +118,9 @@ visibility hide
 track mrna override
 visibility hide
 
+track blastHg18KG override
+visibility hide
+
 searchTable ensGene
 searchType genePred
 semiShortCircuit 1

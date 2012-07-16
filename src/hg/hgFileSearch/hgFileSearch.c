@@ -426,7 +426,6 @@ printf("Search for downloadable ENCODE files by entering search terms in "
        "the Track name or Description fields and/or by making selections with "
        "the group, data format, and/or ENCODE metadata drop-downs.");
 printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a>\n");
-webEndSectionTables();
 }
 
 void doMiddle(struct cart *cart)
@@ -486,4 +485,4 @@ return 0;
 // 2) Work out simple verses advanced tabs
 // 3) work out support for non-encode downloads
 // 4) Make an hgTrackSearch to replace hgTracks track search ??   
-//    Simlpler code, but may not be good idea because of composite reshaping in cart vars
+//    Simpler code, but may not be good idea because of composite reshaping in cart vars

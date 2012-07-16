@@ -659,4 +659,128 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   cleanup
     rm -fr hardMaskedFa
 
-########################################################################
+#########################################################################
+# LASTZ Human Swap (DONE - 2012-03-15 - Chin)
+    cd /hive/data/genomes/hg19/bed/lastzRheMac3.2012-03-15
+    cat fb.hg19.chainRheMac3Link.txt
+    #   2400694407 bases of 2897316137 (82.859%) in intersection
+
+    #   running the swap - DONE - 20i12-03-16
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzRheMac3.2012-03-15/DEF \
+        -swap \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #    58m38.594s
+    cat fb.rheMac3.chainHg19Link.txt
+    #   2313806886 bases of 2646704109 (87.422%) in intersection
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+##########################################################################
+# LASTZ  Orangutan ponAbe2 (DONE - 2012-04-18 - Chin)
+    screen # use screen to control this job
+    mkdir /hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18
+    cd /hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18
+
+    cat << '_EOF_' > DEF
+# Rhesus vs Orangutan
+BLASTZ_M=50
+
+# TARGET: Rhesus RheMac3
+SEQ1_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ1_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Orangutan ponAbe2
+SEQ2_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+      -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -syntenicNet `pwd`/DEF > do.log 2>&1 &
+    #   real    9679m37.253
+
+    cat fb.rheMac3.chainPonAbe2Link.txt
+    #   2354152230 bases of 2639145830 (89.201%) in intersection
+
+    #   and, for the swap
+    mkdir /hive/data/genomes/ponAbe2/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/ponAbe2/bed/blastz.rheMac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18/DEF \
+       -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium  > swap.log 2>&1 &
+    #   real    289m9.479s
+    cat fb.ponAbe2.chainRheMac3Link.txt
+    #   2565157739 bases of 3093572278 (82.919%) in intersection
+    cd /hive/data/genomes/ponAbe2/bed
+    ln -s blastz.rheMac3.swap lastz.rheMac3
+
+##########################################################################
+# LASTZ Gorilla gorGor3 (DONE - 2012-04-18 - Chin)
+    screen # use screen to control this job
+    mkdir /hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18
+    cd /hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18
+
+    cat << '_EOF_' > DEF
+# Rhesus vs Gorilla
+BLASTZ_M=50
+
+# TARGET: Rhesus RheMac3
+SEQ1_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ1_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor3
+SEQ2_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ2_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+      -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -syntenicNet `pwd`/DEF > do.log 2>&1 &
+    #   real    9670m18.338s
+
+    cat fb.rheMac3.chainGorGor3Link.txt
+    #   2279633399 bases of 2639145830 (86.378%) in intersection
+
+    #   and, for the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.rheMac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18/DEF \
+       -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium  > swap.log 2>&1 &
+    #   real    289m9.479s
+    cat fb.gorGor3.chainRheMac3Link.txt
+    #   2335269818 bases of 2822760080 (82.730%) in intersection
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s blastz.rheMac3.swap lastz.rheMac3
+
+*********************************************************************** 
+* TODOain/net 
+ *** Make sure that goldenPath/ponAbe2/vsRheMac3/README.txt is accurate.
+ *** Add {chain,net}RheMac3 tracks to trackDb.ra if necessary.
+
+***********************************************************************
