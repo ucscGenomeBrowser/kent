@@ -202,6 +202,7 @@ return list;
 
 struct genePred *getPredsFromFile(char *gpFile)
 {
+/* Read the genePreds from a file instead of a table */
 struct genePred *list = NULL;
 
 if (fileExists(gpFile))
@@ -234,6 +235,7 @@ if (geneList != NULL)
 	}
     }
 else if (genePred)
+    /* Read genePreds from a file */
     list = getPredsFromFile(geneTable);
 else if (geneName != NULL)
     list = getPredsForName(geneName, geneTable, dbName);
