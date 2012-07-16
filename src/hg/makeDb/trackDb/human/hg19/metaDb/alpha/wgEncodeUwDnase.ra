@@ -2912,6 +2912,7 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion Bowtie 0.12.7
+md5sum 820770efc5e981d6d0acbd3fb3ec006b,16cc1ae5d626ad71c0a4e8c613860ea5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2932,6 +2933,7 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion Hotspot-v5.2
+md5sum 07d69683c4cdcd1e0e1d12914e77badf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2953,6 +2955,7 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion lmax-v1.0
+md5sum fffba9c9b3045a5f70337ae188974b4c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2973,6 +2976,7 @@ fileName wgEncodeUwDnaseCd4naivewb11970640RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS14108
+md5sum c8f5ea01c83782128bad566d1514a9b9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2993,6 +2997,7 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion WindowDensity-bin20-win+/-75
+md5sum bb2e797086e6d4cafae029166a232f19
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3014,6 +3019,7 @@ grant Stam
 lab UW
 labExpId DS15241
 labVersion Bowtie 0.12.7
+md5sum 1691395b2722578972900be08ec0c67d,9224e8d4d4dc3e56a506d086d87315a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3034,6 +3040,7 @@ grant Stam
 lab UW
 labExpId DS15241
 labVersion Hotspot-v5.2
+md5sum 0c9cfb0b6bc08db4a3c707aa7d04f9a7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3055,6 +3062,7 @@ grant Stam
 lab UW
 labExpId DS15241
 labVersion lmax-v1.0
+md5sum bf73b1b4a7220cc5638e2c03bfd669c1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3075,6 +3083,7 @@ fileName wgEncodeUwDnaseCd4naivewb78495824RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS15241
+md5sum 2f788ab59ed15e7ae102e585b323f4ba
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3095,6 +3104,7 @@ grant Stam
 lab UW
 labExpId DS15241
 labVersion WindowDensity-bin20-win+/-75
+md5sum e79ba7153fd8dcd691a48aa5c6be5b9d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5348,6 +5358,7 @@ grant Stam
 lab UW
 labExpId DS15809
 labVersion Bowtie 0.12.7
+md5sum d999be4dc9182e5a27b252a17cc9e4c2,8aa677677d68ad1ad144d021e1eb52ff
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5368,6 +5379,7 @@ grant Stam
 lab UW
 labExpId DS15809
 labVersion Hotspot-v5.2
+md5sum 0408c1115800627063e5ae2d0af590a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5389,6 +5401,7 @@ grant Stam
 lab UW
 labExpId DS15809
 labVersion lmax-v1.0
+md5sum 92c3679869de1f537f7febb48ec1955f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5409,6 +5422,7 @@ fileName wgEncodeUwDnaseH7esDiffa9dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15809
+md5sum 3d3aa3663b348a38b21a5463781da197
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5429,6 +5443,7 @@ grant Stam
 lab UW
 labExpId DS15809
 labVersion WindowDensity-bin20-win+/-75
+md5sum 179d74608ea136c9281f9d9f25faeff3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15244,6 +15259,7 @@ grant Stam
 lab UW
 labExpId DS16602
 labVersion Bowtie 0.12.7
+md5sum 078fd5ec4d1d9293e522b84f55fe58c9,e670b329440cb6ca9cdd9b80f706bbcd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15264,6 +15280,7 @@ grant Stam
 lab UW
 labExpId DS16602
 labVersion Hotspot-v5.2
+md5sum 88a446a5d5a35b4b89005b0284b71a7d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15285,6 +15302,7 @@ grant Stam
 lab UW
 labExpId DS16602
 labVersion lmax-v1.0
+md5sum 299801a7c5813cdeb7267d569761aeb1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15305,6 +15323,7 @@ fileName wgEncodeUwDnaseHs27aRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16602
+md5sum 156a64ae190a152c2f28d151e26a3314
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15325,6 +15344,7 @@ grant Stam
 lab UW
 labExpId DS16602
 labVersion WindowDensity-bin20-win+/-75
+md5sum e93680a6f489a2cdbaccdeb3f71bd962
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15346,6 +15366,7 @@ grant Stam
 lab UW
 labExpId DS16597
 labVersion Bowtie 0.12.7
+md5sum 7d7b2694fb56c433656b982fb1c5e4f0,03031f1f923c2ea1ccc84e77e3e8f10c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15366,6 +15387,7 @@ grant Stam
 lab UW
 labExpId DS16597
 labVersion Hotspot-v5.2
+md5sum 027fc86e95395186cf039176d64b9401
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15387,6 +15409,7 @@ grant Stam
 lab UW
 labExpId DS16597
 labVersion lmax-v1.0
+md5sum 9b6bde6ab0d9d5be3c66575e296c25d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15407,6 +15430,7 @@ fileName wgEncodeUwDnaseHs5RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16597
+md5sum dea49293bd1142a4aeffcf72c6ec11b7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15427,6 +15451,7 @@ grant Stam
 lab UW
 labExpId DS16597
 labVersion WindowDensity-bin20-win+/-75
+md5sum 2c0f5e99d5c732518a98e0c6503f4ed6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19514,6 +19539,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jAlnRep1.bam,wgEncodeUwDnaseM059jAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -19558,6 +19585,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -19604,6 +19633,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -19650,6 +19681,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -19692,6 +19725,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jRawRep1.bigWig
 grant Stam
 lab UW
@@ -20921,6 +20956,7 @@ grant Stam
 lab UW
 labExpId DS20514
 labVersion Bowtie 0.12.7
+md5sum 42bf4df9712e34be9a85cbf9345429a3,43b2fb24b09f25b874c5485c13b70853
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20941,6 +20977,7 @@ grant Stam
 lab UW
 labExpId DS20518
 labVersion Bowtie 0.12.7
+md5sum da16ac188eeed0e64b4f53bc19dc36a1,ce6715dfefca31a2e1623e86677db604
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20961,6 +20998,7 @@ grant Stam
 lab UW
 labExpId DS20514
 labVersion Hotspot-v5.2
+md5sum 74999548275aed14c747dfdcb76efe55
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20982,6 +21020,7 @@ grant Stam
 lab UW
 labExpId DS20518
 labVersion Hotspot-v5.2
+md5sum c51efb5d08d3b40690a5992c7e5a65ed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21003,6 +21042,7 @@ grant Stam
 lab UW
 labExpId DS20514
 labVersion lmax-v1.0
+md5sum e4c8e56c097e91bd652da8777f3f5f74
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21024,6 +21064,7 @@ grant Stam
 lab UW
 labExpId DS20518
 labVersion lmax-v1.0
+md5sum 62b6f449af370d3d76d2b6cdfcd421ad
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21044,6 +21085,7 @@ fileName wgEncodeUwDnaseMscRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20514
+md5sum 9e7d1496cd69c59aeb27615fbe730bde
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21063,6 +21105,7 @@ fileName wgEncodeUwDnaseMscRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20518
+md5sum ca6e596d170e64edfcf84124e4215adf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21083,6 +21126,7 @@ grant Stam
 lab UW
 labExpId DS20514
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4b05c4b0cb9fb9aa53ec370d5d9cd690
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21104,6 +21148,7 @@ grant Stam
 lab UW
 labExpId DS20518
 labVersion WindowDensity-bin20-win+/-75
+md5sum f4ff2ac443231fe1a897ff457bed607f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25267,6 +25312,7 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion Bowtie 0.12.7
+md5sum a7a99a095449b497d266b1adc7321248,95e83ba79cb1563decb394fac5690767
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25287,6 +25333,7 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion Hotspot-v5.2
+md5sum 13bf6ad34c2b3206031ca9409964ebbb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25308,6 +25355,7 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion lmax-v1.0
+md5sum dc501b2797603d6be6197efb24000a48
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25328,6 +25376,7 @@ fileName wgEncodeUwDnaseTh17RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11039
+md5sum a325007612d3221b7a91f1c34777a7c3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25348,6 +25397,7 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion WindowDensity-bin20-win+/-75
+md5sum 94f48d7e69bdc786112dd5021c1e0f3f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25389,11 +25439,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
 fileName wgEncodeUwDnaseTh1AlnRep2.bam,wgEncodeUwDnaseTh1AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18018
 labVersion Bowtie 0.12.7
+md5sum bee8d7ac6b1f864840c602f234ff30c2,f1bb7a5d33dbd7cfd7f8b4b9c4639f17
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25435,11 +25488,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
 fileName wgEncodeUwDnaseTh1HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS18018
 labVersion Hotspot-v5.2
+md5sum d5614c89bc2aa4ba1a4e812f53d1d559
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25482,11 +25538,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
 fileName wgEncodeUwDnaseTh1PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS18018
 labVersion lmax-v1.0
+md5sum e08f8067620dfc1f38811aa05493a384
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25526,10 +25585,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
 fileName wgEncodeUwDnaseTh1RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18018
+md5sum d00c7823b80cfe0d664982fe5605c3c0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25571,11 +25633,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
 fileName wgEncodeUwDnaseTh1RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS18018
 labVersion WindowDensity-bin20-win+/-75
+md5sum 18fc76bb7a9b2c44a25a5f944f7d8d3e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25597,6 +25662,7 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion Bowtie 0.12.7
+md5sum 443fc1424f7f90e8c7c6e6e061990455,76dfceacc6a0b91b0a7748f46c49ec48
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25617,6 +25683,7 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion Hotspot-v5.2
+md5sum 4452e6e9a0f829891d1868b2efbe0b5d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25638,6 +25705,7 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion lmax-v1.0
+md5sum 0825833ebb0f69edba2616cbdf8a33e9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25658,6 +25726,7 @@ fileName wgEncodeUwDnaseTh1wb33676984RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18015
+md5sum cb8a03c6172f9ac4eedf73b413a82efe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25678,6 +25747,7 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion WindowDensity-bin20-win+/-75
+md5sum dfe9c3e9f7b8f5bf4197c35507862d79
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25699,6 +25769,7 @@ grant Stam
 lab UW
 labExpId DS17593
 labVersion Bowtie 0.12.7
+md5sum ea57034e5bd25b58ddc23661d22c17aa,019ffc1eabc6009c41c22bcb04e350ac
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25719,6 +25790,7 @@ grant Stam
 lab UW
 labExpId DS17592
 labVersion Bowtie 0.12.7
+md5sum 34afebc79b6963e44352d7ba098e164d,ceaa0582c6aa68cbe113e12395ebf8ef
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25739,6 +25811,7 @@ grant Stam
 lab UW
 labExpId DS17593
 labVersion Hotspot-v5.2
+md5sum b842e90d51e4024cec55a483b735d764
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25760,6 +25833,7 @@ grant Stam
 lab UW
 labExpId DS17592
 labVersion Hotspot-v5.2
+md5sum 86f52670730f526234c2f09182b98e9c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25781,6 +25855,7 @@ grant Stam
 lab UW
 labExpId DS17593
 labVersion lmax-v1.0
+md5sum a23dd1f934f540428718cc461bd6cd5e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25802,6 +25877,7 @@ grant Stam
 lab UW
 labExpId DS17592
 labVersion lmax-v1.0
+md5sum af27ea8770b73040e90b0b3bb20c9c2c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25822,6 +25898,7 @@ fileName wgEncodeUwDnaseTh1wb54553204RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17593
+md5sum a8c9d8e3dcca912ae2286b1c416715a5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25841,6 +25918,7 @@ fileName wgEncodeUwDnaseTh1wb54553204RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId DS17592
+md5sum 0e7f2c8683e7e77e5ac284c01b30e200
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25861,6 +25939,7 @@ grant Stam
 lab UW
 labExpId DS17593
 labVersion WindowDensity-bin20-win+/-75
+md5sum e76fac978b98d1858582120b4f95cb0c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25882,6 +25961,7 @@ grant Stam
 lab UW
 labExpId DS17592
 labVersion WindowDensity-bin20-win+/-75
+md5sum e15d45a186854fc583d2ead4e27e87f9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25923,11 +26003,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
 fileName wgEncodeUwDnaseTh2AlnRep2.bam,wgEncodeUwDnaseTh2AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS17603
 labVersion Bowtie 0.12.7
+md5sum 08ce8e52c630b7c57c1ed932abcd6ff8,a244b5d316a474edbff0d4dc9107b753
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25969,11 +26052,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
 fileName wgEncodeUwDnaseTh2HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS17603
 labVersion Hotspot-v5.2
+md5sum 301d8557c804be20b5329a21394d59a6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26016,11 +26102,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
 fileName wgEncodeUwDnaseTh2PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS17603
 labVersion lmax-v1.0
+md5sum 3d1f0e65fb3273f9708224ecf1b960c9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26060,10 +26149,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
 fileName wgEncodeUwDnaseTh2RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17603
+md5sum eb45171a99905b2f2d49955a1755f735
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26105,11 +26197,14 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-07
 dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
 fileName wgEncodeUwDnaseTh2RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS17603
 labVersion WindowDensity-bin20-win+/-75
+md5sum 51aa36fa87e331b112905f04fdc38bfe
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26131,6 +26226,7 @@ grant Stam
 lab UW
 labExpId DS18057
 labVersion Bowtie 0.12.7
+md5sum 6c1b3356b660159ae6d5145316353982,896c4c0f547323051d98a094ec4e0a2b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26151,6 +26247,7 @@ grant Stam
 lab UW
 labExpId DS18057
 labVersion Hotspot-v5.2
+md5sum 5548fd61478c83ec0368a1e06c3a1505
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26172,6 +26269,7 @@ grant Stam
 lab UW
 labExpId DS18057
 labVersion lmax-v1.0
+md5sum d2a1531605040f22eeb9168cdfe57c6c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26192,6 +26290,7 @@ fileName wgEncodeUwDnaseTh2wb33676984RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS18057
+md5sum ad93426a2e417b7e142bfce8dd9ae325
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26212,6 +26311,7 @@ grant Stam
 lab UW
 labExpId DS18057
 labVersion WindowDensity-bin20-win+/-75
+md5sum 61f94a6dc6800200a8603992927d6031
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26233,6 +26333,7 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion Bowtie 0.12.7
+md5sum e3facd27070ec6a8f7f0e0de778d3c9c,75681badf129afda15a08782befe651e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26253,6 +26354,7 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion Hotspot-v5.2
+md5sum 5a528d5e59703a0cf369742721a0e1c5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26274,6 +26376,7 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion lmax-v1.0
+md5sum 5dccba21b2ae7c46400a1ac182d70157
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26294,6 +26397,7 @@ fileName wgEncodeUwDnaseTh2wb54553204RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17597
+md5sum d5e8be8981adc711f54090f0ac7a0110
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26314,6 +26418,7 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion WindowDensity-bin20-win+/-75
+md5sum 2522f7a75701c91f0070aee49b0a013e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26335,6 +26440,7 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion Bowtie 0.12.7
+md5sum bf647fa931001a692eb8187254ef42fb,cec753446f6553f3de1b79f4d0f40f96
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26355,6 +26461,7 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion Hotspot-v5.2
+md5sum 0f9e9d7ededa4c2f154523675fdbf238
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26376,6 +26483,7 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion lmax-v1.0
+md5sum 0f05368536aa42f08b193c19f867ac82
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26396,6 +26504,7 @@ fileName wgEncodeUwDnaseTregwb78495824RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14702
+md5sum 7c22be1b236753e345c2130a0a6373b1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26416,6 +26525,7 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3f99d93440e5a61d31498432ace505e0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26437,6 +26547,7 @@ grant Stam
 lab UW
 labExpId DS17589
 labVersion Bowtie 0.12.7
+md5sum 2726c667e488736ad42726bd265e4e67,af7dbc667f0bd86234ded8c290fd44aa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26457,6 +26568,7 @@ grant Stam
 lab UW
 labExpId DS17589
 labVersion Hotspot-v5.2
+md5sum 12f7db0baf93c07bd3533f694490f1f7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26478,6 +26590,7 @@ grant Stam
 lab UW
 labExpId DS17589
 labVersion lmax-v1.0
+md5sum 7671621929d14c4585c5e0be17529b91
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26498,6 +26611,7 @@ fileName wgEncodeUwDnaseTregwb83319432RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17589
+md5sum 85b679a3c119a97f387fb0aee2d158b0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26518,6 +26632,7 @@ grant Stam
 lab UW
 labExpId DS17589
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1644512084dc310ebd9a293a51682cfb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -27258,4 +27373,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 453800031
+# MAGIC: 1778102826
