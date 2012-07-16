@@ -24,6 +24,7 @@ errAbort(
   "   species.lst    list of species names\n"
   "   output         put output here\n"
   "options:\n"
+  "   -genePred          genePredTable argument is a genePred file name\n"
   "   -geneName=foobar   name of gene as it appears in genePred\n"
   "   -geneList=foolst   name of file with list of genes\n"
   "   -geneBeds=foo.bed  name of bed file with genes and positions\n"
@@ -43,6 +44,7 @@ static struct optionSpec options[] = {
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
    {"noDash", OPTION_BOOLEAN},
+   {"genePred", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -56,6 +58,7 @@ boolean noTrans = TRUE;
 int delay = 0;
 boolean newTableType;
 boolean noDash = FALSE;
+boolean genePred = FALSE;
 
 /* load one or more genePreds from the database */
 struct genePred *getPredsForName(char *name, char *geneTable, char *db)
@@ -197,6 +200,20 @@ if (list != NULL)
 return list;
 }
 
+struct genePred *getPredsFromFile(char *gpFile)
+{
+struct genePred *list = NULL;
+
+if (fileExists(gpFile))
+    list = genePredReaderLoadFile(gpFile, NULL);
+else
+    warn("File %s not found", gpFile);
+
+if (list != NULL)
+    slReverse(&list);
+return list;
+}
+
 void mafGene(char *dbName, char *mafTable, char *geneTable, 
    char *speciesList, char *outName)
 /* mafGene - output protein alignments using maf and genePred. */
@@ -216,6 +233,8 @@ if (geneList != NULL)
 	    slCat(&list, pred);
 	}
     }
+else if (genePred)
+    list = getPredsFromFile(geneTable);
 else if (geneName != NULL)
     list = getPredsForName(geneName, geneTable, dbName);
 else if (geneBeds != NULL)
@@ -250,12 +269,13 @@ onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
+genePred = optionExists("genePred");
 delay = optionInt("delay", delay);
 
 if (((geneName != NULL) && ((geneList != NULL) || geneBeds != NULL)) ||
     ((geneList != NULL) && ((geneName != NULL) || geneBeds != NULL)) ||
     ((geneBeds != NULL) && ((geneList != NULL) || geneName != NULL)))
-    errAbort("must specify only one of geneList, geneName, or geneBeds");
+    errAbort("must specify only one of geneList, geneName, geneBeds");
 
 if ((geneBeds != NULL) && (onlyChrom != NULL))
     errAbort("cannot specify beds and chrom");
