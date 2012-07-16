@@ -31,6 +31,7 @@ errAbort(
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
+  "   -utr	 	 include the UTRs, use only with -noTrans\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
   "   -noDash            don't output lines with all dashes\n"
   );
@@ -45,6 +46,7 @@ static struct optionSpec options[] = {
    {"noTrans", OPTION_BOOLEAN},
    {"noDash", OPTION_BOOLEAN},
    {"genePred", OPTION_BOOLEAN},
+   {"utr", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -59,6 +61,7 @@ int delay = 0;
 boolean newTableType;
 boolean noDash = FALSE;
 boolean genePred = FALSE;
+boolean utr = FALSE;
 
 /* load one or more genePreds from the database */
 struct genePred *getPredsForName(char *name, char *geneTable, char *db)
@@ -115,6 +118,8 @@ if (noTrans)
     options |= MAFGENE_NOTRANS;
 if (!noDash)
     options |= MAFGENE_OUTBLANK;
+if (utr)
+    options |= MAFGENE_UTR;
 
 mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options, 0);
 }
@@ -271,6 +276,7 @@ onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
+utr = optionExists("utr");
 genePred = optionExists("genePred");
 delay = optionInt("delay", delay);
 
@@ -281,6 +287,9 @@ if (((geneName != NULL) && ((geneList != NULL) || geneBeds != NULL)) ||
 
 if ((geneBeds != NULL) && (onlyChrom != NULL))
     errAbort("cannot specify beds and chrom");
+
+if (utr && !noTrans)
+    errAbort("must specify noTrans if utr is selected");
 
 mafGene(argv[1],argv[2],argv[3],argv[4],argv[5]);
 return 0;
