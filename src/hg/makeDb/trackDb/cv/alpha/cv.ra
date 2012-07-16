@@ -7783,9 +7783,9 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Stomach
-vendorName CSHL lab
-vendorId Stomach
-orderUrl http://gingeraslab.cshl.edu/
+vendorName 1)CSHL lab; 2)LICR lab
+vendorId Stomach; Stomach
+orderUrl http://gingeraslab.cshl.edu/; http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
