@@ -1106,9 +1106,9 @@ This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembl
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
 TARGET=_blank>assembly documentation.</A><BR>
-This assembly information at NCBI:
+NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
-TARGET="_blank">genome/assembly/$ncbiAssemblyId.</A>
+TARGET="_blank">specific information about this assembly.</A>
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1208,9 +1208,9 @@ This track shows the sequences used in the $assemblyDate $em\$organism$noEm geno
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
 TARGET=_blank>assembly documentation.</A><BR>
-This assembly information at NCBI:
+NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
-TARGET="_blank">genome/assembly/$ncbiAssemblyId.</A>
+TARGET="_blank">specific information about this assembly.</A>
 </P>
 <P>
 The definition of this assembly is from the
