@@ -7119,7 +7119,7 @@ protocol missing
 
 term ES-WW6
 tag ESWW6
-ype Cell Line
+type Cell Line
 organism mouse
 category primaryCells
 description ES-cells isolated from mix of ~20% C57/B6J, ~75% 129/Sv and ~5% SJL strains #PROVISIONAL
@@ -7135,7 +7135,7 @@ protocol Stam:ES-WW6_Stam_protocol.pdf
 
 term ES-WW6_F1K0
 tag ESWW6K0
-ype Cell Line
+type Cell Line
 organism mouse
 category primaryCells
 description Histone H1c, H1d, H1e triple null mouse embryonic stem cell line derived from ES-WW6 cells. #PROVISIONAL 
