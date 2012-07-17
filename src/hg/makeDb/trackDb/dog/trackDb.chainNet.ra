@@ -21,6 +21,7 @@ priority 220.3
 
 track chainNetBosTau7 override
 priority 250.3
+shortLabel $o_db Chain/Net
 
 track chainNetBosTau6 override
 priority 250.3

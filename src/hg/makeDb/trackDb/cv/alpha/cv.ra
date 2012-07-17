@@ -1289,6 +1289,8 @@ tissue breast
 vendorName NCTC
 vendorId 11-0068A; 11-0067A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+termId BTO:0000149
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000149
 lab Crawford
 protocol Crawford:BreastOC_Crawford_protocol.pdf
 
@@ -1490,6 +1492,8 @@ tissue cerebellum
 vendorName NICHD
 vendorId 1104; 602; 1442
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000232
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000232
 lab Crawford
 protocol Crawford:CerebellumOC_Crawford_protocol.pdf
 
@@ -1505,6 +1509,8 @@ tissue frontal cerebrum
 vendorName NICHD
 vendorId 1104; 602; 1442
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000239
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000239
 lab Crawford
 protocol Crawford:CerebrumfrontalOC_Crawford_protocol.pdf
 
@@ -1570,6 +1576,8 @@ tissue colon
 vendorName NCTC
 vendorId 10-0005A; 10-0170A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 lab Crawford
 protocol Crawford:ColonOC_Crawford_protocol.pdf
 
@@ -1796,6 +1804,8 @@ tissue frontal cortex
 vendorName Kathleen Price Bryan Brain
 vendorId 673; 913
 orderUrl https://adrc.mc.duke.edu/index.php/research/brain-bank
+termId BTO:0000484
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000484
 lab Crawford
 protocol Crawford:FrontalcortexOC_Crawford_protocol.pdf
 
@@ -3109,6 +3119,8 @@ tissue heart
 vendorName NICHD
 vendorId 1104; 602; 1442; 1863; 4548
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000562
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000562
 lab Crawford
 protocol Crawford:HeartOC_Crawford_protocol.pdf
 
@@ -4822,6 +4834,8 @@ tissue kidney
 vendorName NICHD ; NICHD ; NICHD ; NCTC ; NICHD
 vendorId 1104; 602; 1442; 10-0022A; 1863
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 lab Crawford
 protocol Crawford:KidneyOC_Crawford_protocol.pdf
 
@@ -4854,6 +4868,8 @@ tissue liver
 vendorName NICHD
 vendorId 1104; 602; 1442
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 lab Crawford
 protocol Crawford:LiverOC_Crawford_protocol.pdf
 
@@ -4905,6 +4921,8 @@ tissue Lung
 vendorName NICHD ; NICHD ; NICHD ; CF Center ; CF Center
 vendorId 1104; 602; 1442; DD006I; DD007I
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 lab Crawford
 protocol Crawford:LungOC_Crawford_protocol.pdf
 
@@ -5656,6 +5674,8 @@ tissue pancreas
 vendorName  NCTC
 vendorId 09-0144A; 10-0021A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+termId BTO:0000988
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
 lab Crawford
 protocol Crawford:PancreasOC_Crawford_protocol.pdf
 
@@ -5788,6 +5808,8 @@ tissue pons mid-brain
 vendorName NICHD
 vendorId 1104; 602; 1442
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0001101
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001101
 lab Crawford
 protocol Crawford:PonsOC_Crawford_protocol.pdf
 
@@ -5852,6 +5874,8 @@ tissue prostate
 vendorName NICHD
 vendorId 1669; 1540
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 lab Crawford
 protocol Crawford:ProstateOC_Crawford_protocol.pdf
 
@@ -5867,6 +5891,8 @@ tissue psoas muscle
 vendorName NICHD
 vendorId 1104; 602; 1442; 1540; 1863
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0001140
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001140
 lab Crawford
 protocol Crawford:PsoasmuscleOC_Crawford_protocol.pdf
 
@@ -6134,6 +6160,8 @@ tissue small intestine
 vendorName NCTC
 vendorId 10-0063A; 09-0143A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
+termId BTO:0000651
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 lab Crawford
 protocol Crawford:SmallintestineOC_Crawford_protocol.pdf
 
@@ -6149,6 +6177,8 @@ tissue spleen
 vendorName NICHD
 vendorId 1863; 4548
 orderUrl http://medschool.umaryland.edu/btbank/tissue_requests.asp
+termId BTO:0001281
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 lab Crawford
 protocol Crawford:SpleenOC_Crawford_protocol.pdf
 

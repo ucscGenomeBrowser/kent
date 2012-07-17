@@ -280,6 +280,8 @@ wigMafSpeciesTable(cart, maftdb, mafTable, database);
 
 addButtons();
 
+cartSaveSession(cart);
+
 hPrintf("</FORM>\n");
 
 /* Hidden form - for benefit of javascript. */
@@ -298,5 +300,4 @@ hPrintf("</FORM>\n");
     jsCreateHiddenForm(cart, cgiScriptName(), saveVars, varCount);
     }
 
-cartSaveSession(cart);
 }

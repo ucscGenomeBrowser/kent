@@ -595,7 +595,7 @@ va_end(args);
 }
 
 void webEndSectionTables()
-/* Finish with section tables (but don't do /BODY /HTML lik
+/* Finish with section tables (but don't do /BODY /HTML like
  * webEnd does. */
 {
 webEndSection();
