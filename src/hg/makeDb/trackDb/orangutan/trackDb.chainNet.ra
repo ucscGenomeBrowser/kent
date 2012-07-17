@@ -29,6 +29,9 @@ chainMinScore 3000
 track chainNetRheMac2 override
 priority 250.3
 
+track chainNetRheMac3 override
+priority 250.3
+
 track chainNetCalJac3 override
 priority 260.3
 

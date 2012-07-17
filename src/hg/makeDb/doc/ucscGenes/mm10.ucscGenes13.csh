@@ -69,7 +69,7 @@ set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
-set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
+set xdbFa = $genomes/$xdb/bed/ucsc.13/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/blastp/rn5.refGenePep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
@@ -1058,10 +1058,13 @@ ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 
-#if 0 TODO
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-synBlastp.csh $tempDb $ratDb
+
+# TODO:  rat doesn't have knownGene, change this script to use rgdGene ?
+# didn't do this next line....
+# synBlastp.csh $tempDb $ratDb
+# TODO
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1112,8 +1115,6 @@ hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
-#endif
-
 
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
@@ -1358,8 +1359,8 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     mkdir -p $dir/cgap
     cd $dir/cgap
     
-    wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
-    hgCGAP Hs_GeneData.dat
+    wget --timestamping -O Mm_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
+    hgCGAP Mm_GeneData.dat
         
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
     hgLoadSqlTab $tempDb cgapAlias $kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
