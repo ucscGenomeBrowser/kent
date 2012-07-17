@@ -24,12 +24,14 @@ errAbort(
   "   species.lst    list of species names\n"
   "   output         put output here\n"
   "options:\n"
+  "   -genePred          genePredTable argument is a genePred file name\n"
   "   -geneName=foobar   name of gene as it appears in genePred\n"
   "   -geneList=foolst   name of file with list of genes\n"
   "   -geneBeds=foo.bed  name of bed file with genes and positions\n"
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
+  "   -utr	 	 include the UTRs, use only with -noTrans\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
   "   -noDash            don't output lines with all dashes\n"
   );
@@ -43,6 +45,8 @@ static struct optionSpec options[] = {
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
    {"noDash", OPTION_BOOLEAN},
+   {"genePred", OPTION_BOOLEAN},
+   {"utr", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -56,6 +60,8 @@ boolean noTrans = TRUE;
 int delay = 0;
 boolean newTableType;
 boolean noDash = FALSE;
+boolean genePred = FALSE;
+boolean utr = FALSE;
 
 /* load one or more genePreds from the database */
 struct genePred *getPredsForName(char *name, char *geneTable, char *db)
@@ -112,6 +118,8 @@ if (noTrans)
     options |= MAFGENE_NOTRANS;
 if (!noDash)
     options |= MAFGENE_OUTBLANK;
+if (utr)
+    options |= MAFGENE_UTR;
 
 mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options, 0);
 }
@@ -197,6 +205,21 @@ if (list != NULL)
 return list;
 }
 
+struct genePred *getPredsFromFile(char *gpFile)
+{
+/* Read the genePreds from a file instead of a table */
+struct genePred *list = NULL;
+
+if (fileExists(gpFile))
+    list = genePredReaderLoadFile(gpFile, NULL);
+else
+    warn("File %s not found", gpFile);
+
+if (list != NULL)
+    slReverse(&list);
+return list;
+}
+
 void mafGene(char *dbName, char *mafTable, char *geneTable, 
    char *speciesList, char *outName)
 /* mafGene - output protein alignments using maf and genePred. */
@@ -216,6 +239,9 @@ if (geneList != NULL)
 	    slCat(&list, pred);
 	}
     }
+else if (genePred)
+    /* Read genePreds from a file */
+    list = getPredsFromFile(geneTable);
 else if (geneName != NULL)
     list = getPredsForName(geneName, geneTable, dbName);
 else if (geneBeds != NULL)
@@ -250,15 +276,20 @@ onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
+utr = optionExists("utr");
+genePred = optionExists("genePred");
 delay = optionInt("delay", delay);
 
 if (((geneName != NULL) && ((geneList != NULL) || geneBeds != NULL)) ||
     ((geneList != NULL) && ((geneName != NULL) || geneBeds != NULL)) ||
     ((geneBeds != NULL) && ((geneList != NULL) || geneName != NULL)))
-    errAbort("must specify only one of geneList, geneName, or geneBeds");
+    errAbort("must specify only one of geneList, geneName, geneBeds");
 
 if ((geneBeds != NULL) && (onlyChrom != NULL))
     errAbort("cannot specify beds and chrom");
+
+if (utr && !noTrans)
+    errAbort("must specify noTrans if utr is selected");
 
 mafGene(argv[1],argv[2],argv[3],argv[4],argv[5]);
 return 0;

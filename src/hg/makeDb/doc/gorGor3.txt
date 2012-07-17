@@ -2159,4 +2159,23 @@ gorGor3.11way.nh > gorGor3.commonNames.11way.nh
     # edit to bring up to date for gorGor3
     ln -s `pwd`/README.txt $pd/
 
+##########################################################################
+# LASTZ Rhesus rheMac3 Swap (DONE - 2012-04-26 - Chin)
+    cd /hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18
+    cat fb.rheMac3.chainGorGor3Link.txt
+    #   2279633399 bases of 2639145830 (86.378%) in intersection
+
+    #   and, for the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.rheMac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rheMac3/bed/blastzGorGor3.2012-04-18/DEF \
+       -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium  > swap.log 2>&1 &
+    #   real    289m9.479s
+    cat fb.gorGor3.chainRheMac3Link.txt
+    #   2335269818 bases of 2822760080 (82.730%) in intersection
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s blastz.rheMac3.swap lastz.rheMac3
+
 #############################################################################
