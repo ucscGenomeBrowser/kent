@@ -53,9 +53,9 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3CACO2=Caco-2 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4 t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3T47D=T-47D t3TH1=Th1 t3TH2=Th2 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3BONEMARROWHS5=bone_marrow_HS5 t3BONEMARROWHS27A=bone_marrow_HS27a t3BONEMARROWMSC=bone_marrow_MSC t3CACO2=Caco-2 t3CD4NAIVEWB11970640=CD4+_Naive_Wb11970640 t3CD4NAIVEWB78495824=CD4+_Naive_Wb78495824 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4 t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3T47D=T-47D t3TH1=Th1 t3TH1WB33676984=Th1_Wb33676984 t3TH1WB54553204=Th1_Wb54553204 t3TH2=Th2 t3TH2WB33676984=Th2_Wb33676984 t3TH2WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824 t3TREGWB83319432=Treg_Wb83319432 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup3 rep Replicate rep1=1 rep2=2
-subGroup4 treatment Treatment None=None DIFF4D=DIFF_4d DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr EST100NM1H=Estradiol&#95;100nM&#95;1hr ESTCTRL0H=Estradiol&#95;ctrl&#95;0hr ZNF2C10C5=ZNF&#95;knockout&#95;2C10-C5 ZNF4C50C4=ZNF&#95;knockout&#95;4C50-C4 ZNF4G7D3=ZNF&#95;knockout&#95;4G7-D3 ZNFA41C6=ZNF&#95;knockout&#95;A4.1-C6 ZNFB34A8=ZNF&#95;knockout&#95;B3.4-A8 ZNFE103C6=ZNF&#95;knockout&#95;E10.3-C6 ZNFF41B2=ZNF&#95;knockout&#95;F4.1-B2 ZNFG54A11=ZNF&#95;knockout&#95;G5.4-A11 ZNFP5=ZNF&#95;knockout-P5
+subGroup4 treatment Treatment None=None DIFF4D=DIFF_4d DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr EST100NM1H=Estradiol&#95;100nM&#95;1hr ESTCTRL0H=Estradiol&#95;ctrl&#95;0hr ZNF2C10C5=ZNF&#95;knockout&#95;2C10-C5 ZNF4C50C4=ZNF&#95;knockout&#95;4C50-C4 ZNF4G7D3=ZNF&#95;knockout&#95;4G7-D3 ZNFA41C6=ZNF&#95;knockout&#95;A4.1-C6 ZNFB34A8=ZNF&#95;knockout&#95;B3.4-A8 ZNFE103C6=ZNF&#95;knockout&#95;E10.3-C6 ZNFF41B2=ZNF&#95;knockout&#95;F4.1-B2 ZNFG54A11=ZNF&#95;knockout&#95;G5.4-A11 ZNFP5=ZNF&#95;knockout-P5
 dimensions dimensionY=cellType dimensionX=treatment
 sortOrder cellType=+ rep=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -1842,6 +1842,159 @@ wgEncode 1
         origAssembly hg19
         # subId=6531 dateSubmitted=2012-03-28
 
+        track wgEncodeUwDnaseCd4naivewb11970640HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel CD4+_Naive_Wb11970640 1
+        longLabel CD4+ Naive Wb11970640 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7326 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseCd4naivewb78495824HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel CD4+_Naive_Wb78495824 1
+        longLabel CD4+ Naive Wb78495824 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7327 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseH7esDiffa9dHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel H7-hESC 1
+        longLabel H7-hESC diffProtA 9d DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3H7HESC treatment=DIFFA9D rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7328 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb54553204HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th2_Wb54553204 1
+        longLabel Th2 Wb54553204 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH2WB54553204 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7329 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb33676984HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th2_Wb33676984 1
+        longLabel Th2 Wb33676984 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH2WB33676984 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7330 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb33676984HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th1_Wb33676984 1
+        longLabel Th1 Wb33676984 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH1WB33676984 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7331 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th1_Wb54553204 1
+        longLabel Th1 Wb54553204 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7332 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204HotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th1_Wb54553204 2
+        longLabel Th1 Wb54553204 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep2
+        type broadPeak
+        origAssembly hg19
+        # subId=7333 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb78495824HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Treg_Wb78495824 1
+        longLabel Treg Wb78495824 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TREGWB78495824 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7334 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb83319432HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Treg_Wb83319432 1
+        longLabel Treg Wb83319432 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TREGWB83319432 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7335 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh17HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th17 1
+        longLabel Th17 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH17 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7336 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1HotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th1 2
+        longLabel Th1 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH1 treatment=None rep=rep2
+        type broadPeak
+        origAssembly hg19
+        # subId=7337 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2HotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Th2 2
+        longLabel Th2 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3TH2 treatment=None rep=rep2
+        type broadPeak
+        origAssembly hg19
+        # subId=7338 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseMscHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel bone_marrow_MSC 1
+        longLabel bone marrow MSC DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3BONEMARROWMSC treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7357 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseMscHotspotsRep2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel bone_marrow_MSC 2
+        longLabel bone marrow MSC DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3BONEMARROWMSC treatment=None rep=rep2
+        type broadPeak
+        origAssembly hg19
+        # subId=7358 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs27aHotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel bone_marrow_HS27a 1
+        longLabel bone marrow HS27a DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3BONEMARROWHS27A treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7359 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs5HotspotsRep1
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel bone_marrow_HS5 1
+        longLabel bone marrow HS5 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Hot cellType=t3BONEMARROWHS5 treatment=None rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7360 dateSubmitted=2012-07-13
+
     track wgEncodeUwDnaseViewaPeaks
     shortLabel Peaks
     view Peaks
@@ -3616,6 +3769,159 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=6531 dateSubmitted=2012-03-28
+
+        track wgEncodeUwDnaseCd4naivewb11970640PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel CD4+_Naive_Wb11970640 Pk 1
+        longLabel CD4+ Naive Wb11970640 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7326 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseCd4naivewb78495824PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel CD4+_Naive_Wb78495824 Pk 1
+        longLabel CD4+ Naive Wb78495824 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7327 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseH7esDiffa9dPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel H7-hESC Pk 1
+        longLabel H7-hESC diffProtA 9d DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3H7HESC treatment=DIFFA9D rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7328 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb54553204PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th2_Wb54553204 Pk 1
+        longLabel Th2 Wb54553204 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH2WB54553204 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7329 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb33676984PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th2_Wb33676984 Pk 1
+        longLabel Th2 Wb33676984 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH2WB33676984 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7330 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb33676984PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th1_Wb33676984 Pk 1
+        longLabel Th1 Wb33676984 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH1WB33676984 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7331 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th1_Wb54553204 Pk 1
+        longLabel Th1 Wb54553204 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7332 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204PkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th1_Wb54553204 Pk 2
+        longLabel Th1 Wb54553204 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep2
+        type narrowPeak
+        origAssembly hg19
+        # subId=7333 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb78495824PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Treg_Wb78495824 Pk 1
+        longLabel Treg Wb78495824 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TREGWB78495824 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7334 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb83319432PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Treg_Wb83319432 Pk 1
+        longLabel Treg Wb83319432 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TREGWB83319432 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7335 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh17PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th17 Pk 1
+        longLabel Th17 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH17 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7336 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1PkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th1 Pk 2
+        longLabel Th1 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH1 treatment=None rep=rep2
+        type narrowPeak
+        origAssembly hg19
+        # subId=7337 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2PkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Th2 Pk 2
+        longLabel Th2 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3TH2 treatment=None rep=rep2
+        type narrowPeak
+        origAssembly hg19
+        # subId=7338 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseMscPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel bone_marrow_MSC Pk 1
+        longLabel bone marrow MSC DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3BONEMARROWMSC treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7357 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseMscPkRep2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel bone_marrow_MSC Pk 2
+        longLabel bone marrow MSC DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3BONEMARROWMSC treatment=None rep=rep2
+        type narrowPeak
+        origAssembly hg19
+        # subId=7358 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs27aPkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel bone_marrow_HS27a Pk 1
+        longLabel bone marrow HS27a DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3BONEMARROWHS27A treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7359 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs5PkRep1
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel bone_marrow_HS5 Pk 1
+        longLabel bone marrow HS5 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Peaks cellType=t3BONEMARROWHS5 treatment=None rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7360 dateSubmitted=2012-07-13
 
     track wgEncodeUwDnaseViewzRaw
     shortLabel Raw Signal
@@ -5393,4 +5699,157 @@ wgEncode 1
         type bigWig 1.000000 88562.000000
         origAssembly hg19
         # subId=6531 dateSubmitted=2012-03-28
+
+        track wgEncodeUwDnaseCd4naivewb11970640RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel CD4+_Naive_Wb11970640 Raw 1
+        longLabel CD4+ Naive Wb11970640 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
+        type bigWig 1.000000 18598.000000
+        origAssembly hg19
+        # subId=7326 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseCd4naivewb78495824RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel CD4+_Naive_Wb78495824 Raw 1
+        longLabel CD4+ Naive Wb78495824 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
+        type bigWig 1.000000 15924.000000
+        origAssembly hg19
+        # subId=7327 dateSubmitted=2012-07-09
+
+        track wgEncodeUwDnaseH7esDiffa9dRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel H7-hESC Raw 1
+        longLabel H7-hESC diffProtA 9d DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3H7HESC treatment=DIFFA9D rep=rep1
+        type bigWig 1.000000 32231.000000
+        origAssembly hg19
+        # subId=7328 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb54553204RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th2_Wb54553204 Raw 1
+        longLabel Th2 Wb54553204 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH2WB54553204 treatment=None rep=rep1
+        type bigWig 1.000000 28921.000000
+        origAssembly hg19
+        # subId=7329 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2wb33676984RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th2_Wb33676984 Raw 1
+        longLabel Th2 Wb33676984 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH2WB33676984 treatment=None rep=rep1
+        type bigWig 1.000000 20176.000000
+        origAssembly hg19
+        # subId=7330 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb33676984RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th1_Wb33676984 Raw 1
+        longLabel Th1 Wb33676984 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH1WB33676984 treatment=None rep=rep1
+        type bigWig 1.000000 34066.000000
+        origAssembly hg19
+        # subId=7331 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th1_Wb54553204 Raw 1
+        longLabel Th1 Wb54553204 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep1
+        type bigWig 1.000000 62017.000000
+        origAssembly hg19
+        # subId=7332 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1wb54553204RawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th1_Wb54553204 Raw 2
+        longLabel Th1 Wb54553204 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep2
+        type bigWig 1.000000 18797.000000
+        origAssembly hg19
+        # subId=7333 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb78495824RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Treg_Wb78495824 Raw 1
+        longLabel Treg Wb78495824 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TREGWB78495824 treatment=None rep=rep1
+        type bigWig 1.000000 31020.000000
+        origAssembly hg19
+        # subId=7334 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTregwb83319432RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Treg_Wb83319432 Raw 1
+        longLabel Treg Wb83319432 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TREGWB83319432 treatment=None rep=rep1
+        type bigWig 1.000000 73810.000000
+        origAssembly hg19
+        # subId=7335 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh17RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th17 Raw 1
+        longLabel Th17 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH17 treatment=None rep=rep1
+        type bigWig 1.000000 12923.000000
+        origAssembly hg19
+        # subId=7336 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh1RawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th1 Raw 2
+        longLabel Th1 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH1 treatment=None rep=rep2
+        type bigWig 1.000000 62366.000000
+        origAssembly hg19
+        # subId=7337 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseTh2RawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Th2 Raw 2
+        longLabel Th2 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3TH2 treatment=None rep=rep2
+        type bigWig 1.000000 90802.000000
+        origAssembly hg19
+        # subId=7338 dateSubmitted=2012-07-07
+
+        track wgEncodeUwDnaseMscRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel bone_marrow_MSC Raw 1
+        longLabel bone marrow MSC DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3BONEMARROWMSC treatment=None rep=rep1
+        type bigWig 1.000000 18904.000000
+        origAssembly hg19
+        # subId=7357 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseMscRawRep2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel bone_marrow_MSC Raw 2
+        longLabel bone marrow MSC DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3BONEMARROWMSC treatment=None rep=rep2
+        type bigWig 1.000000 13054.000000
+        origAssembly hg19
+        # subId=7358 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs27aRawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel bone_marrow_HS27a Raw 1
+        longLabel bone marrow HS27a DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3BONEMARROWHS27A treatment=None rep=rep1
+        type bigWig 1.000000 51192.000000
+        origAssembly hg19
+        # subId=7359 dateSubmitted=2012-07-13
+
+        track wgEncodeUwDnaseHs5RawRep1
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel bone_marrow_HS5 Raw 1
+        longLabel bone marrow HS5 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=zRSig cellType=t3BONEMARROWHS5 treatment=None rep=rep1
+        type bigWig 1.000000 44822.000000
+        origAssembly hg19
+        # subId=7360 dateSubmitted=2012-07-13
 

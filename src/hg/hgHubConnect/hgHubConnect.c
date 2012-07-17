@@ -91,18 +91,18 @@ static void hgHubConnectUnlisted(struct hubConnectStatus *hubList,
 /* NOTE: Destroys hubList */
 {
 // put out the top of our page
-printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
-    "<table id=\"unlistedHubsTable\"> "
-    "<thead><tr> "
-	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
+printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
+    "<table id=\"unlistedHubsTable\"> \n"
+    "<thead><tr> \n"
+	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> \n"
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
-	    "type=\"text\" size=\"65\"> "
+	    "type=\"text\" size=\"65\"> \n"
 	"<input name=\"hubAddButton\""
 	    "onClick=\"if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
 		"document.addHubForm.submit();return true;} else { return false;}\" "
-		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
-	"</th> "
-    "</tr> ");
+		"class=\"hubField\" type=\"button\" value=\"Add Hub\">\n"
+	"</th> \n"
+    "</tr> \n");
 
 // count up the number of unlisted hubs we currently have
 int unlistedHubCount = 0;
@@ -141,10 +141,8 @@ if (numAssemblies)
 if (unlistedHubCount == 0)
     {
     // nothing to see here
-    printf(
-	"<tr><td>No Unlisted Track Hubs</td></tr>"
-	"</td>");
-    printf("</table></thead></div>");
+    printf("<tr><td>No Unlisted Track Hubs</td></tr>");
+    printf("</thead></table></div>");
     return;
     }
 
@@ -157,7 +155,8 @@ printf(
 	"<th>Assemblies</th> "
 	"<th>URL</th> "
 	"<th>Disconnect</th> "
-    "</tr></thead>\n");
+    "</tr>\n"
+    "</thead>\n");
 
 // start first row
 printf("<tbody><tr>");
@@ -186,7 +185,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	"<input name=\"hubClearButton\""
 	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
 		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"check hub\">"
+		"class=\"hubField\" type=\"button\" value=\"check hub\">\n"
 		, hub->hubUrl);
 	ourCellEnd();
 	}
@@ -197,7 +196,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 
     if (!isEmpty(hub->errorMessage))
 	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>\n", 
 	    hub->errorMessage);
     else if (hub->trackHub != NULL)
 	ourPrintCell(hub->trackHub->longLabel);
@@ -212,7 +211,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     "<input name=\"hubDisconnectButton\""
 	"onClick=\"document.disconnectHubForm.elements['hubId'].value='%d';"
 	    "document.disconnectHubForm.submit();return true;\" "
-	    "class=\"hubField\" type=\"button\" value=\"X\">"
+	    "class=\"hubField\" type=\"button\" value=\"X\">\n"
 	    , hub->id);
     ourCellEnd();
     }

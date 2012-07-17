@@ -192,7 +192,7 @@ if (color)
 	int dir = 0;
 	if (rnaSecStr->strand[0] == '+')
 	    dir = 1;
-	else if(rnaSecStr->strand[0] == '-')
+	else if (rnaSecStr->strand[0] == '-')
 	    dir = -1;
 	if (dir != 0 && w > 2)
 	    {

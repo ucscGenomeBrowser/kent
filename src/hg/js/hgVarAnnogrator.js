@@ -392,6 +392,8 @@ function hgvaUpdateOrder(i, sourceEl)
 	isPrimary.val('0');
 	var options = intersectSel.find('option');
 	options.each(hgvaUpdateOptionText);
+	// IE8 superimposes intersectSel and filter div unless I invoke .height() here. why???:
+	intersectSel.height();
 	intersectSel.show();
     }
 }

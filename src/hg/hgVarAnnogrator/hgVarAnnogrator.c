@@ -905,13 +905,13 @@ if (isEmpty(primaryTrack))
 dyStringPrintf(dy, "<SELECT NAME='intersectSel'%s>\n",
 	       src->isPrimary ? " style='display: none'" : "");
 addOption(dy, "keepAll", src->selIntersect);
-dyStringPrintf(dy, "Keep all %s items whether or not they overlap %s items",
+dyStringPrintf(dy, "Keep all %s items whether or not they overlap %s items</OPTION>\n",
 	       primaryTrack, tdb->shortLabel);
 addOption(dy, "mustOverlap", src->selIntersect);
-dyStringPrintf(dy, "Keep %s items only if they overlap %s items",
+dyStringPrintf(dy, "Keep %s items only if they overlap %s items</OPTION>\n",
 	       primaryTrack, tdb->shortLabel);
 addOption(dy, "mustNotOverlap", src->selIntersect);
-dyStringPrintf(dy, "Keep %s items only if they do not overlap %s items",
+dyStringPrintf(dy, "Keep %s items only if they do not overlap %s items</OPTION>\n",
 	       primaryTrack, tdb->shortLabel);
 dyStringPrintf(dy, "</SELECT>\n");
 }

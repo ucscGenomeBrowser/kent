@@ -38,7 +38,7 @@ include wgEncodeSydhRnaSeq.ra
 include wgEncodeLicrRnaSeq.release2.ra
 
 # Uw RNA-Seq (wrangler: Venkat)
-include wgEncodeUwRnaSeq.ra alpha,beta
+include wgEncodeUwRnaSeq.ra
 
 # Caltech TFBS (wrangler: Venkat)
 include wgEncodeCaltechTfbs.ra beta,public

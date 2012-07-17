@@ -44,7 +44,7 @@ char *visStr = cloneString(
 cartSetString(cart, trackName, visStr);
 struct trackDb *tdb = hTrackDbForTrack(trackName);
 tdbSortPrioritiesFromCart(cart, &tdb);
-if(tdb->subtracks)
+if (tdb->subtracks)
     tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
 struct track *tg = trackFromTrackDb(tdb);
 tg->visibility = hTvFromString(visStr);
@@ -63,7 +63,7 @@ int xOff = 0, yOff = 0;
 MgFont *font = tl.font;
 hvGfxSetClip(hvg, xOff, yOff, insideWidth, tg->height);
 tg->drawItems(tg, winStart, winEnd, hvg, xOff, yOff, insideWidth, font,
-	      hvGfxFindRgb(hvg, &tg->color), tg->limitedVis);
+              hvGfxFindRgb(hvg, &tg->color), tg->limitedVis);
 
 /* MEMORY LEAK -- Freeing items slows hgTracks down unacceptably so we
  * don't do it, and it has become vestigial.  For example, wigFreeItems 

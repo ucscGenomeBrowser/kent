@@ -28,9 +28,9 @@ else
     conn = hAllocConn(database);
     table = tdb->table;
     if (!trackDbSettingOn(tdb, "filterPvalQval"))
-	useScore = TRUE;
+        useScore = TRUE;
     }
-    cgiDown(0.7);
+cgiDown(0.7);
 if (useScore)
     {
     safef(scoreVarName, sizeof(scoreVarName), "%s.%s", trackName, ENCODE_PEAK_SCORE_FILTER_SUFFIX);

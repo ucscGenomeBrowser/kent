@@ -144,7 +144,7 @@ boolean classStringsUsed[MAX_CLASS+2+1];
  * genome.  This is often a flag for a suboptimal alignment or a 
  * flanking sequence with a lot of ambiguous bases near the coded base. */
 
-#define MAX_LOCTYPE 6
+#define MAX_LOCTYPE 7
 char *locTypeStrings[] = {
     "unknown",		/* UCSC addition */
 			/* "code" here means NCBI's LocTypeCode.bcp.gz: */
@@ -154,6 +154,7 @@ char *locTypeStrings[] = {
     "rangeInsertion",	/* code: LongerOnCtg	ASN: range-ins */
     "rangeSubstitution",/* code: EqualOnCtg	ASN: range-exact */
     "rangeDeletion",	/* code: ShorterOnCtg	ASN: range-del */
+    "fuzzy",		/* new as of snp137 (6/2012): observed alleles shorter & longer than ref */
 };
 boolean locTypeStringsUsed[MAX_LOCTYPE+1];
 
@@ -199,7 +200,8 @@ char *functionStrings[] = {
 /*16*/NULL,/*17*/NULL,/*18*/NULL,/*19*/NULL,
 /*20*/NULL,/*21*/NULL,/*22*/NULL,/*23*/NULL,/*24*/NULL,
 /*25*/NULL,/*26*/NULL,/*27*/NULL,/*28*/NULL,/*29*/NULL,
-/*30*/NULL,/*31*/NULL,/*32*/NULL,/*33*/NULL,/*34*/NULL,
+/*30*/ "ncRNA",
+/*31*/NULL,/*32*/NULL,/*33*/NULL,/*34*/NULL,
 /*35*/NULL,/*36*/NULL,/*37*/NULL,/*38*/NULL,/*39*/NULL,
 /* forties: extensions of 4 above (coding-nonsynon): */
 /* 40 */ NULL,
@@ -925,12 +927,16 @@ else
     int i;
     for (i = 0;  i < codeCount;  i++)
 	{
-	if (codes[i] > MAX_FUNC)
+	unsigned code = codes[i];
+	if (code > MAX_FUNC)
 	    lineFileAbort(lf, "Unrecognized function number %d (max is %d).\n"
 			  "If %d is valid now, "UPDATE_CODE,
-			  codes[i], MAX_FUNC, codes[i]);
-	dyStringPrintf(funcList, "%s,", functionStrings[codes[i]]);
-	functionStringsUsed[codes[i]] = TRUE;
+			  code, MAX_FUNC, code);
+	if (functionStrings[code] == NULL)
+	    lineFileAbort(lf, "Unrecognized function number %d.  If that is valid now, "
+			  UPDATE_CODE, code);
+	dyStringPrintf(funcList, "%s,", functionStrings[code]);
+	functionStringsUsed[code] = TRUE;
 	}
     }
 safef(func, funcSize, "%s", funcList->string);
@@ -944,9 +950,12 @@ void processLocType(struct lineFile *lf, int locTypeNum,
 if (locTypeNum < 0)
     locTypeNum = 0;
 if (locTypeNum > MAX_LOCTYPE)
+    {
     lineFileAbort(lf, "Unrecognized locType number %d (max is %d).\n"
 		  "If %d is valid now, "UPDATE_CODE,
 		  locTypeNum, MAX_LOCTYPE, locTypeNum);
+    locTypeNum = 0;
+    }
 safef(locType, locTypeSize, "%s", locTypeStrings[locTypeNum]);
 locTypeStringsUsed[locTypeNum] = TRUE;
 }
@@ -969,10 +978,17 @@ if (err)
  * expand into that number of base.  The regex matches a single part. */
 /* man 3 regex for POSIX lib usage; man 7 regex for regular expression info. */
 const char *expansionUnit = 
-    "^([ACGTN]+)?"	/* Regular bases and/or N, unless line starts with ( */
-     "\\(([ACGTN])\\)"	/* A single base, in parentheses. */
-     "([0-9]+)"		/* A number (how many times to repeat the base). */
-     "([ACGTN]*)";	/* Maybe some regular bases after that. */
+    "^([ACGTN]*)"	/* Regular bases and/or N, if allele doesn't start with ( */
+    "\\(([ACGTN]+)\\)"	/* Repeated sequence: one or more bases, in parentheses. */
+    "([0-9]+)"		/* A number (how many times to repeat). */
+    "([ACGTN]*)";	/* Maybe some regular bases after that. */
+/* And of course b137 has to include a new pattern -- numbers in parentheses.
+ * I'm adding some extra parentheses to the regex so that the array of regmatches
+ * corresponds to the original. */
+const char *altExpansionUnit =
+    "^()([ACGT]+)"	/* (regmatch placeholder and) Repeated sequence */
+    "\\(([0-9]+)\\)"	/* A number (how many times to repeat), in parentheses. */
+    "()$";		/* (regmatch placeholder) */
 
 /* This is 1 (whole match) + number of () atoms above plus 1 extra (should
  * be empty): */
@@ -985,12 +1001,11 @@ int expandUnit(struct lineFile *lf, char *refNcbiEnc,
  * its () sub-expressions, build up the expanded version of refNCBI. 
  * Returns the size of the whole expansionUnit match. */
 {
-char base;
 char numBuf[16];
 int count;
 int j;
 /* matches[0] is the whole expansionUnit match, but we want its 
- * components (left-flanking seq, base, number, right-flanking seq): */
+ * components (left-flanking seq, repeated sequence, number, right-flanking seq): */
 regmatch_t *rm = &(matches[1]);
 /* Do lots of paranoid checks to make sure that the regex is consistent
  * with our expectations and with the actual refNcbiEnc... */
@@ -1006,14 +1021,16 @@ if (rm->rm_so == 0)
     }
 else if (rm->rm_so > 0)
     lineFileAbort(lf, "How can matches[1].rm_so be %d (> 0)?", (int)rm->rm_so);
-/* Get base: */
+/* Get repeated sequence: */
 rm = &(matches[2]);
 if (rm->rm_so < 0)
-    errAbort("Out of sync with matches? Null match for base.");
-if (rm->rm_eo != rm->rm_so + 1)
-    errAbort("Length > 1 for base in ()'s ? %d..%d %s",
+    errAbort("Out of sync with matches? Null match for repeated sequence.");
+if (rm->rm_eo < rm->rm_so + 1)
+    errAbort("Length < 1 for repeated sequence in ()'s ? %d..%d %s",
 	     (int)rm->rm_so, (int)rm->rm_eo, refNcbiEnc + rm->rm_so);
-base = refNcbiEnc[rm->rm_so];
+int repLen = rm->rm_eo - rm->rm_so;
+char repSeq[repLen + 1];
+safencpy(repSeq, repLen+1, refNcbiEnc + rm->rm_so, repLen);
 /* Get number: */
 rm = &(matches[3]);
 if (rm->rm_so < 0)
@@ -1028,7 +1045,7 @@ if (count < 2)
 		  count, refNcbiEnc + rm->rm_so);
 /* Do the expansion: */
 for (j = 0;  j < count; j++)
-    dyStringAppendC(expanded, base);
+    dyStringAppend(expanded, repSeq);
 /* Append tail, if any. */
 rm = &(matches[4]);
 if (rm->rm_so >= 0)
@@ -1045,13 +1062,14 @@ char *processRefAllele(struct lineFile *lf, char *refNcbiEnc, char *locType)
 /* Expand compact notation in refNCBI (ContigLoc.allele).  
  * Do not free the return value! */
 {
-static regex_t eUnit;
+static regex_t eUnit, altPat;
 static struct dyString *expanded = NULL;
 regmatch_t matches[MAX_MATCHES];
 if (expanded == NULL)
     {
     expanded = dyStringNew(1024);
     compileRegex(&eUnit, expansionUnit, 0);
+    compileRegex(&altPat, altExpansionUnit, 0);
     }
 
 dyStringClear(expanded);
@@ -1075,7 +1093,11 @@ if (sameString("exact", locType) || sameString("between", locType))
 
 /* Use the regular expression to parse out the pieces, then piece them
  * together, expanding where necessary. */
-if (regexec(&eUnit, refNcbiEnc, MAX_MATCHES, matches, 0) == 0)
+if (regexec(&altPat, refNcbiEnc, MAX_MATCHES, matches, 0) == 0)
+    {
+    (void) expandUnit(lf, refNcbiEnc, matches, TRUE, expanded);
+    }
+else if (regexec(&eUnit, refNcbiEnc, MAX_MATCHES, matches, 0) == 0)
     {
     int expectedExpansions = chopString(refNcbiEnc, "(", NULL, 0) - 1;
     int expansionCount = 1;
@@ -1098,9 +1120,12 @@ if (regexec(&eUnit, refNcbiEnc, MAX_MATCHES, matches, 0) == 0)
 	verbose(2, "%d expansions: %s --> %s\n",
 		expansionCount, refNcbiEnc, expanded->string);
     }
+else if (strchr(refNcbiEnc, '('))
+    lineFileAbort(lf, "Can't parse this encoded refNcbi (SNPContigLoc.allele): %s", refNcbiEnc);
 else
-    lineFileAbort(lf, "Unrecognized format for refNCBI/allele: \"%s\"",
-		  refNcbiEnc);
+    dyStringAppend(expanded, refNcbiEnc);
+//    lineFileAbort(lf, "Unrecognized format for refNCBI/allele: \"%s\"",
+//		  refNcbiEnc);
 return expanded->string;
 }
 
@@ -1142,9 +1167,9 @@ else if (sameString(locType, "between"))
 	// later error that is just a side-effect of this one.
 	chrEnd++;
 	}
-    else if (! sameString(refNCBI, "-"))
+    else if (! sameString(refNCBI, "-") && strlen(refNCBI) != 2)
 	writeError("Unexpected refNCBI \"%s\" for locType \"%s\" (%d) -- "
-		   "expected \"-\"", refNCBI, locType, locTypeNum);
+		   "expected \"-\" or 2 bases", refNCBI, locType, locTypeNum);
     }
 else if (sameString(locType, "exact"))
     {
@@ -1167,7 +1192,7 @@ else if (sameString(locType, "range"))
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
 		   "expected NCBI's chrEnd > chrStart.", locType, locTypeNum);
     else if (strlen(refNCBI) <= 1)
-	writeError("Expected refNCBI to be single-base for locType \"%s\" "
+	writeError("Expected refNCBI to more than one base for locType \"%s\" "
 		   "(%d) but got \"%s\"", locType, locTypeNum, refNCBI);
     else
 	chrEnd++;
@@ -1428,9 +1453,6 @@ const char *observedNamedFormat =
     "^\\((LARGE(INSERTION|DELETION))|"
     "[0-9]+ ?BP ((INDEL|INSERTION|DELETED))?\\)"
     "\\/-(\\/[ACGT]+)*$";
-const char *observedNamedOddballFormat =
-    "^\\([A-Z0-9_ .:=-]+\\)?(\\/\\([A-Z0-9_ ]+\\))*" /* there's all sorts of stuff in there now */
-    "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)*$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
     "^-\\/[ACGTN]+(\\/["IUPAC"]+)+$";
@@ -1443,7 +1465,7 @@ boolean checkObservedFormat(struct lineFile *lf, char *class, char *observed)
  * If not, abort because there may be something new that the developer 
  * should look into.  If we see a known oddity, write an exception. */
 {
-static regex_t obsIndel, obsHet, obsMicrosat, obsNamed, obsNamedOddball;
+static regex_t obsIndel, obsHet, obsMicrosat, obsNamed;
 static regex_t obsMixed, obsMnp;
 static boolean compiled = FALSE;
 if (! compiled)
@@ -1452,7 +1474,6 @@ if (! compiled)
     compileRegex(&obsHet, observedHetFormat, REG_NOSUB);
     compileRegex(&obsMicrosat, observedMicrosatFormat, REG_NOSUB);
     compileRegex(&obsNamed, observedNamedFormat, REG_NOSUB);
-    compileRegex(&obsNamedOddball, observedNamedOddballFormat, REG_NOSUB);
     compileRegex(&obsMixed, observedMixedFormat, REG_NOSUB);
     compileRegex(&obsMnp, observedMnpFormat, REG_NOSUB);
     compiled = TRUE;
@@ -1520,17 +1541,7 @@ else if (sameString(class, "named"))
 	writeException(ObservedTooLong);
 	return FALSE;
 	}
-    else if (regexec(&obsNamed, observed, 0, NULL, 0) != 0)
-	{
-	if (regexec(&obsNamedOddball, observed, 0, NULL, 0) == 0)
-	    {
-	    /* These formats, while rare, are actually OK. */
-	    }
-	else
-	    lineFileAbort(lf, "Encountered something that doesn't fit "
-			  "observedNamedFormat or observedNamedOddballFormat: "
-			  "%s", observed);
-	}
+    // I used to try regexp's here -- but if class==named, apparently allele can be *anything*.
     }
 else if (sameString(class, "no-var"))
     {
@@ -1870,7 +1881,7 @@ lineFileClose(&lf);
 /* SNP132: 30M items, max ID 121909398 */
 /* SNP134: 62M items, max ID 179363897 */
 /* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
-#define MAX_SNPID 185 * 1024 * 1024
+#define MAX_SNPID 200 * 1024 * 1024
 struct coords
     {
     struct coords *next;

@@ -15,6 +15,7 @@ wgEncodeSydhHist.ra \
 wgEncodeSydhRnaSeq.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwDnase.ra \
+wgEncodeUwRnaSeq.ra \
 
 
 include ../../../../makefile.metaDb
