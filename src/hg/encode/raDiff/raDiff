@@ -13,7 +13,6 @@ def addChange(changelist, obj, change):
 def main():
 
     parser = argparse.ArgumentParser(
-        prog='raDiff',
         description='Describes the differences between the two .ra files',
         epilog='example: raDiff alpha/wgEncodeUwTfbs.ra beta/wgEncodeUwTfbs.ra'
         )
@@ -21,11 +20,11 @@ def main():
     parser.add_argument('RaFileTwo', help='The .ra file to compare to')
 
 
-    if len(sys.argv) == 1:
-        parser.print_help()
-        return
+    #if len(sys.argv) == 1:
+    #    parser.print_help()
+    #    return
 
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
     ra1 = RaFile(args.RaFileOne)
     ra2 = RaFile(args.RaFileTwo)
 
