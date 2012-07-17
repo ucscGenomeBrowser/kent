@@ -113,13 +113,13 @@ html wgEncodePsuTfbs.release2
         # subId=4782 dateSubmitted=2011-08-17
         # was wgEncodePsuTfbsErythroblGata1aBE14halfCd1Pk vsmalladi Thu Nov  3 15:06:54 2011
 
-        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
-        parent wgEncodePsuTfbsViewPeaks
-        shortLabel Megakaryo GATA1
-        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU 
-        subGroups view=Peaks age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
-        type broadPeak
-        color 86,180,233
+        #track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
+        #parent wgEncodePsuTfbsViewPeaks
+        #shortLabel Megakaryo GATA1
+        #longLabel Megakaryocyte GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        #subGroups view=Peaks age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        #type broadPeak
+        #color 86,180,233
         # subId=4791 dateSubmitted=2011-08-18
 
         track wgEncodePsuTfbsG1eTal1ME0S129InputPk
@@ -248,6 +248,15 @@ html wgEncodePsuTfbs.release2
         color 86,180,233
         # subId=6545 dateSubmitted=2012-04-03
 
+        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2
+        parent wgEncodePsuTfbsViewPeaks off
+		shortLabel Megakaryo GATA1
+        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        type broadPeak
+        color 86,180,233
+        # subId=7501 dateSubmitted=2012-07-17
+
 	#####Signal Tracks###########
 	track wgEncodePsuTfbsViewSignal
 	shortLabel Signal
@@ -312,14 +321,14 @@ html wgEncodePsuTfbs.release2
         # subId=4782 dateSubmitted=2011-08-17
         # was wgEncodePsuTfbsErythroblGata1aBE14halfCd1Sig vsmalladi Thu Nov  3 15:06:54 2011
 
-        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
-        parent wgEncodePsuTfbsViewSignal
-        shortLabel Megakaryo GATA1 
-        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Signal from ENCODE/PSU 
-        subGroups view=Signal age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
-        type bigWig 1.000000 142.000000
-        color 86,180,233
-		viewLimits 5:50
+        #track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
+        #parent wgEncodePsuTfbsViewSignal
+        #shortLabel Megakaryo GATA1 
+        #longLabel Megakaryocyte GATA1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        #subGroups view=Signal age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        #type bigWig 1.000000 142.000000
+        #color 86,180,233
+		#viewLimits 5:50
         # subId=4791 dateSubmitted=2011-08-18
 
         track wgEncodePsuTfbsG1eTal1ME0S129InputSig
@@ -514,4 +523,13 @@ html wgEncodePsuTfbs.release2
         type bigWig 1.000000 154.000000
         color 86,180,233
         # subId=6545 dateSubmitted=2012-04-03
+
+        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel Megakaryo GATA1 
+        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Signal from ENCODE/PSU
+		subGroups view=Signal age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 102.000000
+        color 86,180,233
+        # subId=7501 dateSubmitted=2012-07-17
 

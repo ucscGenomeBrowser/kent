@@ -25313,6 +25313,8 @@ else
 
 if (didCartHtmlStart)
     cartHtmlEnd();
+else
+    webEnd();
 }
 
 struct hash *orgDbHash = NULL;
