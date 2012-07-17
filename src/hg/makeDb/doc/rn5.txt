@@ -909,3 +909,18 @@ searchPriority 8
     #	933922552 bases of 2572853723 (36.299%) in intersection
 
 ##############################################################################
+# make refSeq amino acid fasta file for use with mm10 UCSC genes
+#
+#  downloaded rn5.refGenePepProtNames.faa.gz using table browser, selecting
+#  refGene, download sequence, and clicking the "protein" radio button.
+#  This generates a file with the protein id's, whereas as we want the NM_*
+#  id's for the blastp process to work
+
+zcat rn5.refGenePepProtNames.faa.gz | awk '/^>/ {print buf; buf=$1 " "} ! /^>/ {buf=buf $1}' | tr -d '>' | sed 's/\.[0-9] / /' | sort > tmp1
+
+echo "select refGene.name,refLink.protAcc from refGene,refLink where refGene.name=refLink.mrnaAcc and refLink.protAcc != ''" | hgsql rn5 | tail -n +2 | awk '{print $2,$1}' | sort > tmp2
+
+join tmp1 tmp2 | awk '{printf ">%s\n%s\n",$3,$2}' > rn5.refGenePep.faa
+rm tmp1 tmp2
+
+##############################################################################
