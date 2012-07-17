@@ -4944,6 +4944,30 @@ tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 treatment diffProtD_24hr
 view Signal
 
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view Alignments
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1
 objType file
 age E14.5
@@ -5017,6 +5041,7 @@ geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 3b21622ad16e0d1618b6ecaabd19413f
+objStatus replaced - New version of pooled data, which includes replicate 3 of data set
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5024,6 +5049,31 @@ sex B
 strain CD-1
 subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2
+objType table
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7501
+submittedDataVersion V2 - New version of pooled data, which includes replicate 3 of data set
+tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2
 view Peaks
 
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep1
@@ -5138,6 +5188,30 @@ strain CD-1
 subId 4791
 view RepPeaks
 
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep3.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RepPeaks
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep1
 objType file
 age E14.5
@@ -5194,6 +5268,30 @@ strain CD-1
 subId 4791
 view RepSignal
 
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep3.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RepSignal
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
 objType table
 age E14.5
@@ -5213,6 +5311,7 @@ geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 766dd51a7a454c36db5aaa554118c895
+objStatus replaced - New version of pooled data, which includes replicate 3 of data set
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5221,6 +5320,55 @@ strain CD-1
 subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
 view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2
+objType table
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7501
+submittedDataVersion V2 - New version of pooled data, which includes replicate 3 of data set
+tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2
+view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RawData
 
 metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1
 objType file
@@ -6900,4 +7048,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 752254262
+# MAGIC: 284311557
