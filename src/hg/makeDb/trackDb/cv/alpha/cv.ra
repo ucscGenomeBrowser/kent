@@ -7747,6 +7747,25 @@ color 105,105,105
 sex U
 protocol Stam:Retina_Stam_protocol.pdf
 
+term Skin
+tag SKIN
+type Cell Line
+organism mouse
+tissue skin
+category Tissue
+age ageUnkown
+strain Unknown
+description Skin
+vendorName LICR lab
+vendorId Skin
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4556
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4556
+color  204,121,167
+sex U
+Label Skin
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term SkMuscle
 tag SKMUSCLE
 type Cell Line
@@ -7786,6 +7805,25 @@ protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_pr
 label Small Intestine
 #Shortened term
 
+term SpinalCord
+tag SPC
+type Cell Line
+organism mouse
+tissue spinal cord
+category Tissue
+age ageUnknown
+strain Unknown
+description Spinal Cord, part of the CNS
+vendorName LICR lab
+vendorId Spinal Cord
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4521
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4521
+color 105,105,105 
+sex U
+Label Spinal Cord
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term Spleen
 tag SPL
 type Cell Line
@@ -7813,14 +7851,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Stomach
-vendorName CSHL lab
-vendorId Stomach
-orderUrl http://gingeraslab.cshl.edu/
+vendorName 1) CSHL lab; 2) LICR lab
+vendorId Stomach; Stomach
+orderUrl http://gingeraslab.cshl.edu/;  http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
 sex U
-protocol Gingeras:Stomach_Gingeras_protocol.pdf
+protocol Gingeras:Stomach_Gingeras_protocol.pdf Ren:Tissue_Ren_protocol.pdf
 
 term SubcFatPad
 tag SFAT
@@ -7952,6 +7990,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 86,180,233
 sex U
 protocol Stam:TReg_Stam_protocol.pdf
+
+term UpperLegMuscle
+tag ULMUS
+type Cell Line
+organism mouse
+tissue upper leg muscle
+category Tissue
+age ageUnknown
+strain Unkown
+description Upper leg muscle
+vendorName LICR lab
+vendorId Thigh Muscle
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 11033
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=11033
+color 139,69,19 
+sex U
+Label Upper Leg Muscle
+protocol Ren:Tissue_Ren_protocol.pdf
 
 term WholeBrain
 tag WBRAIN
@@ -9310,6 +9367,21 @@ targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 label EZH2 (39875)
+
+tag FLI1SC365
+type Antibody
+antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
+target FLI1
+targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
+vendorName Santa Cruz Biotech
+vendorId sc-365
+orderUrl http://www.scbt.com/datasheet-356-fli-1-c-19-antibody.html
+lab Hardison
+lots E1211
+targetId GeneCard:FLI1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
+validation FLI1_(sc-365)(Western_blot,RNA-seq):mouse_FLI1_sc-365_validation_Hardison.pdf
+label FLI1 (sc-365)
 
 term  FOSL1_(SC-183)
 tag FOSL1
