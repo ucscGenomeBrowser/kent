@@ -7117,6 +7117,38 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 sex M
 protocol missing
 
+term ES-WW6
+tag ESWW6
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells isolated from mix of ~20% C57/B6J, ~75% 129/Sv and ~5% SJL strains #PROVISIONAL
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F4WT
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_Stam_protocol.pdf
+
+term ES-WW6_F1KO
+tag ESWW6KO
+type Cell Line
+organism mouse
+category primaryCells
+description Histone H1c, H1d, H1e triple null mouse embryonic stem cell line derived from ES-WW6 cells. #PROVISIONAL 
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F1KO
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_F1K0_Stam_protocol.pdf
+
 term Erythrobl
 tag ERYTHROBL
 type Cell Line
@@ -7755,7 +7787,7 @@ tissue skin
 category Tissue
 age ageUnkown
 strain Unknown
-description Skin
+description Skin #PROVISIONAL
 vendorName LICR lab
 vendorId Skin
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
@@ -7813,7 +7845,7 @@ tissue spinal cord
 category Tissue
 age ageUnknown
 strain Unknown
-description Spinal Cord, part of the CNS
+description Spinal Cord, part of the CNS #PROVISIONAL
 vendorName LICR lab
 vendorId Spinal Cord
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
@@ -7999,7 +8031,7 @@ tissue upper leg muscle
 category Tissue
 age ageUnknown
 strain Unkown
-description Upper leg muscle
+description Upper leg muscle #PROVISIONAL
 vendorName LICR lab
 vendorId Thigh Muscle
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
