@@ -16145,7 +16145,7 @@ hg19.hapLoc.bed >> altSequence.bed
     #	Loaded 41 elements of size 6
 
 ##############################################################################
-# NCBI patch 9 (WORKING - 2012-07-16 - Hiram)
+# NCBI patch 9 (DONE - 2012-07-16 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch9
     cd /hive/data/genomes/hg19/bed/additionalSequence/patch9
     wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
@@ -16193,18 +16193,20 @@ hg19.hapLoc.bed >> altSequence.bed
     #	163 total
     wc -l altSequence.bed
     #	163 altSequence.bed
-XXX - ready to see loaded - Mon Jul 16 13:51:51 PDT 2012
     hgLoadBed hg19 altSeqHaplotypesP9 altSeqHaplotypesP9.tab
     #	Loaded 75 elements of size 6
+    # do not need the chrM_rCRS item:
+    hgsql -e 'delete from altSeqHaplotypesP9 where chrom="chrM_rCRS";' hg19
     hgLoadBed hg19 altSeqPatchesP9 altSeqPatchesP9.tab
     #	Loaded 41 elements of size 6
 
+XXX - may not need to do this
+    #    these tables are part of human/hg19/altSeqComposite9.ra
     # to replace the existing track:
     hgLoadBed hg19 altSeqHaplotypes altSeqHaplotypesP9.tab
     #	Loaded 75 elements of size 6
     hgLoadBed hg19 altSeqPatches altSeqPatchesP9.tab
     #	Loaded 41 elements of size 6
- 
  
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
