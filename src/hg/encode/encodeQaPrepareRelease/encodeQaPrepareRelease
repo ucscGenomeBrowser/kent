@@ -56,7 +56,7 @@ def parseTrackDb(c, args):
     f = open(trackDbInclude, "r")
     includeLines = f.readlines()
     f.close()
-    p = re.compile("include (%s.*)" % args.composite)
+    p = re.compile("include (%s\..*)" % args.composite)
     p2 = re.compile("^#")
     compositeLines = list()
     for i in includeLines:
@@ -144,6 +144,7 @@ def main():
         print "TrackDb to be staged on %s: %s" % (args.stage, m.group())
 
     includeLines, compositeLines, trackDbInclude = parseTrackDb(c, args)
+
 
     if len(compositeLines) > 2:
         print "There are 3 include lines for composite %s, this must currently be resolved manually" % args.composite
