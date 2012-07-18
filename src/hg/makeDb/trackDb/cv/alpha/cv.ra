@@ -1921,7 +1921,7 @@ organism human
 description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype normal 
-sex F
+sex M
 tissue blood
 vendorName Coriell
 vendorId GM10248
@@ -1939,7 +1939,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM10266
@@ -2542,7 +2542,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM20000
