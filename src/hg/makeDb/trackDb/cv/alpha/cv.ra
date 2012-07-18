@@ -9400,21 +9400,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 label EZH2 (39875)
 
-term FLI1_(sc-365)
+term FLI1_(sc-356)
 tag FLI1SC365
 type Antibody
 antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
 target FLI1
 targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
 vendorName Santa Cruz Biotech
-vendorId sc-365
+vendorId sc-356
 orderUrl http://www.scbt.com/datasheet-356-fli-1-c-19-antibody.html
 lab Hardison
 lots E1211
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation FLI1_(sc-365)(Western_blot,RNA-seq):mouse_FLI1_sc-365_validation_Hardison.pdf
-label FLI1 (sc-365)
+validation FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+label FLI1 (sc-356)
 
 term  FOSL1_(SC-183)
 tag FOSL1
