@@ -16200,13 +16200,13 @@ hg19.hapLoc.bed >> altSequence.bed
     hgLoadBed hg19 altSeqPatchesP9 altSeqPatchesP9.tab
     #	Loaded 41 elements of size 6
 
-XXX - may not need to do this
     #    these tables are part of human/hg19/altSeqComposite9.ra
     # to replace the existing track:
-    hgLoadBed hg19 altSeqHaplotypes altSeqHaplotypesP9.tab
-    #	Loaded 75 elements of size 6
+    grep -v "^chrM_rCRS" altSeqHaplotypesP9.tab \
+        | hgLoadBed hg19 altSeqHaplotypes stdin
+    #   Read 80 elements of size 6 from stdin
     hgLoadBed hg19 altSeqPatches altSeqPatchesP9.tab
-    #	Loaded 41 elements of size 6
+    #   Read 82 elements of size 6 from altSeqPatchesP9.tab
  
 ##############################################################################
 #  hg19 - Human - Ensembl Genes version 62  (DONE - 2011-04-22 - hiram)
