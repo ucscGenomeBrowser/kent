@@ -13,8 +13,7 @@ include wgEncodeGencodeV10.ra
 include wgEncodeGencodeV12.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
-include wgEncodeUncBsuProt.ra public
-include wgEncodeUncBsuProt.release2.ra alpha,beta
+include wgEncodeUncBsuProt.release2.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProtGenc.release1.ra alpha
@@ -87,8 +86,8 @@ include wgEncodeOpenChromDnase.release2.ra beta,public
 include wgEncodeOpenChromDnase.release3.ra alpha
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release5.ra beta,public
-include wgEncodeUwDnase.release6.ra alpha
+include wgEncodeUwDnase.release5.ra public
+include wgEncodeUwDnase.release6.ra alpha,beta
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra beta,public
@@ -114,7 +113,8 @@ include wgEncodeGisRnaSeq.ra
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.release3.ra
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra
+include wgEncodeCshlLongRnaSeq.release2.ra beta,public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -135,8 +135,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.release3.ra alpha
+include wgEncodeHaibMethylRrbs.ra public
+include wgEncodeHaibMethylRrbs.release3.ra alpha,beta
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 
@@ -164,8 +164,7 @@ include wgEncodeSydhHistone.release3.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra beta,public
-include wgEncodeUwTfbs.release4.ra alpha
+include wgEncodeUwTfbs.release4.ra
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
