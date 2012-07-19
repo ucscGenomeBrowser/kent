@@ -4944,6 +4944,246 @@ tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 treatment diffProtD_24hr
 view Signal
 
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1.bam,wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2.bam,wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk
+objType table
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+tableName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig
+objType table
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+tableName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RawData
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3
 objType file
 age E14.5
@@ -7072,4 +7312,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -692237057
+# MAGIC: 1476372391
