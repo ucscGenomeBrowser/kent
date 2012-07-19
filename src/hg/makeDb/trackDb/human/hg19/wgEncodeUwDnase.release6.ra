@@ -62,7 +62,7 @@ fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAss
 dragAndDrop subTracks
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
-html wgEncodeUwDnase.release5
+html wgEncodeUwDnase.release6
 priority 4
 type bed 3 +
 wgEncode 1
@@ -167,8 +167,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC Ht 1
-        longLabel SKMC DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel SkMC Ht 1
+        longLabel SkMC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3SKMC rep=rep1 treatment=None
         type broadPeak
         # subId=1573 dateSubmitted=2010-06-17
@@ -624,8 +624,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC Ht 2
-        longLabel SKMC DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel SkMC Ht 2
+        longLabel SkMC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3SKMC rep=rep2 treatment=None
         type broadPeak
         # subId=1642 dateSubmitted=2010-06-19
@@ -666,7 +666,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-Ad Ht 1
+        shortLabel NHDFAd Ht 1
         longLabel NHDF-Ad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3NHDFAD rep=rep1 treatment=None
         type broadPeak
@@ -674,7 +674,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-Ad Ht 2
+        shortLabel NHDFAd Ht 2
         longLabel NHDF-Ad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3NHDFAD rep=rep2 treatment=None
         type broadPeak
@@ -914,7 +914,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCT116 Ht 1
+        shortLabel HCT-116 Ht 1
         longLabel HCT-116 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3HCT116 rep=rep1 treatment=None
         type broadPeak
@@ -922,7 +922,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCT116 Ht 2
+        shortLabel HCT-116 Ht 2
         longLabel HCT-116 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3HCT116 rep=rep2 treatment=None
         type broadPeak
@@ -954,7 +954,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHA Ht 2
+        shortLabel NH-A Ht 2
         longLabel NH-A DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3NHA rep=rep2 treatment=None
         type broadPeak
@@ -970,7 +970,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHA Ht 1
+        shortLabel NH-A Ht 1
         longLabel NH-A DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3NHA rep=rep1 treatment=None
         type broadPeak
@@ -1166,7 +1166,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WERIRb1 Ht 2
+        shortLabel WERI-Rb-1 Ht 2
         longLabel WERI-Rb-1 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3WERIRB1 rep=rep2 treatment=None
         type broadPeak
@@ -1174,7 +1174,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WERIRb1 Ht 1
+        shortLabel WERI-Rb-1 Ht 1
         longLabel WERI-Rb-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3WERIRB1 rep=rep1 treatment=None
         type broadPeak
@@ -1270,7 +1270,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI38 Ht 1
+        shortLabel WI-38 Ht 1
         longLabel WI-38 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3WI38 rep=rep1 treatment=None
         type broadPeak
@@ -1278,7 +1278,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI38 Ht 2
+        shortLabel WI-38 Ht 2
         longLabel WI-38 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3WI38 rep=rep2 treatment=None
         type broadPeak
@@ -1286,7 +1286,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI38 OHTM Ht 1
+        shortLabel WI-38 OHTM Ht 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3WI38 treatment=OHTAM rep=rep1
         type broadPeak
@@ -1294,7 +1294,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WI38 OHTM Ht 2
+        shortLabel WI-38 OHTM Ht 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3WI38 treatment=OHTAM rep=rep2
         type broadPeak
@@ -1371,8 +1371,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PReC Ht 2
-        longLabel PReC DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel PrEC Ht 2
+        longLabel PrEC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3PREC rep=rep2 treatment=None
         type broadPeak
         # subId=4408 dateSubmitted=2011-06-25
@@ -1395,8 +1395,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PReC Ht 1
-        longLabel PReC DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel PrEC Ht 1
+        longLabel PrEC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3PREC rep=rep1 treatment=None
         type broadPeak
         # subId=4409 dateSubmitted=2011-06-25
@@ -1538,7 +1538,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel T47D Ht 2
+        shortLabel T-47D Ht 2
         longLabel T-47D DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3T47D rep=rep2 treatment=None
         type broadPeak
@@ -1547,7 +1547,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel T47D Ht 1
+        shortLabel T-47D Ht 1
         longLabel T-47D DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3T47D rep=rep1 treatment=None
         type broadPeak
@@ -1844,8 +1844,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb11970640HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel CD4+_Naive_Wb11970640 1
-        longLabel CD4+ Naive Wb11970640 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb640 Ht 1
+        longLabel CD4+ Naive_Wb11970640 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1853,8 +1853,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb78495824HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel CD4+_Naive_Wb78495824 1
-        longLabel CD4+ Naive Wb78495824 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb824 Ht 1
+        longLabel CD4+ Naive_Wb78495824 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1862,8 +1862,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseH7esDiffa9dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel H7-hESC 1
-        longLabel H7-hESC diffProtA 9d DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel H7h difPA9 Ht 1
+        longLabel H7-hESC diffProtA 9d DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3H7HESC treatment=DIFFA9D rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1871,8 +1871,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb54553204HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th2_Wb54553204 1
-        longLabel Th2 Wb54553204 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb204 Ht 1
+        longLabel Th2 Wb54553204 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TH2WB54553204 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1880,8 +1880,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb33676984HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th2_Wb33676984 1
-        longLabel Th2 Wb33676984 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb984 Ht 1
+        longLabel Th2 Wb33676984 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TH2WB33676984 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1889,8 +1889,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb33676984HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1_Wb33676984 1
-        longLabel Th1 Wb33676984 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb984 Ht 1
+        longLabel Th1 Wb33676984 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TH1WB33676984 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1898,8 +1898,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1_Wb54553204 1
-        longLabel Th1 Wb54553204 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Ht 1
+        longLabel Th1 Wb54553204 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1907,8 +1907,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1_Wb54553204 2
-        longLabel Th1 Wb54553204 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Ht 2
+        longLabel Th1 Wb54553204 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1916,8 +1916,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb78495824HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Treg_Wb78495824 1
-        longLabel Treg Wb78495824 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb824 Ht 1
+        longLabel Treg Wb78495824 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TREGWB78495824 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1925,8 +1925,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb83319432HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Treg_Wb83319432 1
-        longLabel Treg Wb83319432 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb432 Ht 1
+        longLabel Treg Wb83319432 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TREGWB83319432 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1934,8 +1934,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh17HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th17 1
-        longLabel Th17 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th17 Ht 1
+        longLabel Th17 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3TH17 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1943,8 +1943,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1 2
-        longLabel Th1 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th1 Ht 2
+        longLabel Th1 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3TH1 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1952,8 +1952,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th2 2
-        longLabel Th2 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th2 Ht 2
+        longLabel Th2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3TH2 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1961,8 +1961,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel bone_marrow_MSC 1
-        longLabel bone marrow MSC DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Ht 1
+        longLabel bone marrow_MSC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3BONEMARROWMSC treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1970,8 +1970,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel bone_marrow_MSC 2
-        longLabel bone marrow MSC DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Ht 2
+        longLabel bone marrow_MSC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t3BONEMARROWMSC treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1979,8 +1979,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs27aHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel bone_marrow_HS27a 1
-        longLabel bone marrow HS27a DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS27a Ht 1
+        longLabel bone marrow_HS27a DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3BONEMARROWHS27A treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1988,8 +1988,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs5HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel bone_marrow_HS5 1
-        longLabel bone marrow HS5 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS5 Ht 1
+        longLabel bone marrow_HS5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t3BONEMARROWHS5 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -2087,8 +2087,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SKMC Pk 1
-        longLabel SKMC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel SkMC Pk 1
+        longLabel SkMC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3SKMC rep=rep1 treatment=None
         type narrowPeak
         # subId=1573 dateSubmitted=2010-06-17
@@ -2487,8 +2487,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SKMC Pk 2
-        longLabel SKMC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel SkMC Pk 2
+        longLabel SkMC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3SKMC rep=rep2 treatment=None
         type narrowPeak
         # subId=1642 dateSubmitted=2010-06-19
@@ -2529,7 +2529,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHDF-Ad Pk 1
+        shortLabel NHDFAd Pk 1
         longLabel NHDF-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3NHDFAD rep=rep1 treatment=None
         type narrowPeak
@@ -2537,7 +2537,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHDF-Ad Pk 2
+        shortLabel NHDFAd Pk 2
         longLabel NHDF-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3NHDFAD rep=rep2 treatment=None
         type narrowPeak
@@ -2777,7 +2777,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCT116 Pk 1
+        shortLabel HCT-116 Pk 1
         longLabel HCT-116 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3HCT116 rep=rep1 treatment=None
         type narrowPeak
@@ -2785,7 +2785,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCT116 Pk 2
+        shortLabel HCT-116 Pk 2
         longLabel HCT-116 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3HCT116 rep=rep2 treatment=None
         type narrowPeak
@@ -2817,7 +2817,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHA Pk 2
+        shortLabel NH-A Pk 2
         longLabel NH-A DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3NHA rep=rep2 treatment=None
         type narrowPeak
@@ -2833,7 +2833,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHA Pk 1
+        shortLabel NH-A Pk 1
         longLabel NH-A DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3NHA rep=rep1 treatment=None
         type narrowPeak
@@ -3029,7 +3029,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WERIRb1 Pk 2
+        shortLabel WERI-Rb-1 Pk 2
         longLabel WERI-Rb-1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3WERIRB1 rep=rep2 treatment=None
         type narrowPeak
@@ -3037,7 +3037,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WERIRb1 Pk 1
+        shortLabel WERI-Rb-1 Pk 1
         longLabel WERI-Rb-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3WERIRB1 rep=rep1 treatment=None
         type narrowPeak
@@ -3133,7 +3133,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI38 Pk 1
+        shortLabel WI-38 Pk 1
         longLabel WI-38 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3WI38 rep=rep1 treatment=None
         type narrowPeak
@@ -3141,7 +3141,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI38 Pk 2
+        shortLabel WI-38 Pk 2
         longLabel WI-38 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3WI38 rep=rep2 treatment=None
         type narrowPeak
@@ -3149,7 +3149,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI38 OHTM Pk 1
+        shortLabel WI-38 OHTM Pk 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3WI38 treatment=OHTAM rep=rep1
         type narrowPeak
@@ -3157,7 +3157,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WI38 OHTM Pk 2
+        shortLabel WI-38 OHTM Pk 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3WI38 treatment=OHTAM rep=rep2
         type narrowPeak
@@ -3299,8 +3299,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel PReC Pk 2
-        longLabel PReC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel PrEC Pk 2
+        longLabel PrEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3PREC rep=rep2 treatment=None
         type narrowPeak
         # subId=4408 dateSubmitted=2011-06-25
@@ -3323,8 +3323,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel PReC Pk 1
-        longLabel PReC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel PrEC Pk 1
+        longLabel PrEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3PREC rep=rep1 treatment=None
         type narrowPeak
         # subId=4409 dateSubmitted=2011-06-25
@@ -3466,7 +3466,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel T47D Pk 2
+        shortLabel T-47D Pk 2
         longLabel T-47D DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3T47D rep=rep2 treatment=None
         type narrowPeak
@@ -3475,7 +3475,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel T47D Pk 1
+        shortLabel T-47D Pk 1
         longLabel T-47D DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3T47D rep=rep1 treatment=None
         type narrowPeak
@@ -3772,8 +3772,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb11970640PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel CD4+_Naive_Wb11970640 Pk 1
-        longLabel CD4+ Naive Wb11970640 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb640 Pk 1
+        longLabel CD4+ Naive_Wb11970640 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3781,8 +3781,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb78495824PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel CD4+_Naive_Wb78495824 Pk 1
-        longLabel CD4+ Naive Wb78495824 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb824 Pk 1
+        longLabel CD4+ Naive_Wb78495824 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3790,8 +3790,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseH7esDiffa9dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel H7-hESC Pk 1
-        longLabel H7-hESC diffProtA 9d DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel H7h difPA9 Pk 1
+        longLabel H7-hESC diffProtA 9d DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3H7HESC treatment=DIFFA9D rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3799,8 +3799,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb54553204PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th2_Wb54553204 Pk 1
-        longLabel Th2 Wb54553204 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb204 Pk 1
+        longLabel Th2 Wb54553204 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH2WB54553204 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3808,8 +3808,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb33676984PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th2_Wb33676984 Pk 1
-        longLabel Th2 Wb33676984 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb984 Pk 1
+        longLabel Th2 Wb33676984 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH2WB33676984 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3817,8 +3817,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb33676984PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th1_Wb33676984 Pk 1
-        longLabel Th1 Wb33676984 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb984 Pk 1
+        longLabel Th1 Wb33676984 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH1WB33676984 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3826,8 +3826,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th1_Wb54553204 Pk 1
-        longLabel Th1 Wb54553204 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Pk 1
+        longLabel Th1 Wb54553204 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3835,8 +3835,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th1_Wb54553204 Pk 2
-        longLabel Th1 Wb54553204 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Pk 2
+        longLabel Th1 Wb54553204 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3844,8 +3844,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb78495824PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Treg_Wb78495824 Pk 1
-        longLabel Treg Wb78495824 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb824 Pk 1
+        longLabel Treg Wb78495824 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TREGWB78495824 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3853,8 +3853,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb83319432PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Treg_Wb83319432 Pk 1
-        longLabel Treg Wb83319432 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb432 Pk 1
+        longLabel Treg Wb83319432 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TREGWB83319432 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3863,7 +3863,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh17PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th17 Pk 1
-        longLabel Th17 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel Th17 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH17 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3872,7 +3872,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Pk 2
-        longLabel Th1 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel Th1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH1 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3881,7 +3881,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Pk 2
-        longLabel Th2 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel Th2 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH2 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3889,8 +3889,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel bone_marrow_MSC Pk 1
-        longLabel bone marrow MSC DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Pk 1
+        longLabel bone marrow_MSC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3BONEMARROWMSC treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3898,8 +3898,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel bone_marrow_MSC Pk 2
-        longLabel bone marrow MSC DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Pk 2
+        longLabel bone marrow_MSC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t3BONEMARROWMSC treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3907,8 +3907,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs27aPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel bone_marrow_HS27a Pk 1
-        longLabel bone marrow HS27a DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS27a Pk 1
+        longLabel bone marrow_HS27a DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3BONEMARROWHS27A treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3916,8 +3916,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs5PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel bone_marrow_HS5 Pk 1
-        longLabel bone marrow HS5 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS5 Pk 1
+        longLabel bone marrow_HS5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3BONEMARROWHS5 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -4025,8 +4025,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SKMC Sg 1
-        longLabel SKMC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        shortLabel SkMC Sg 1
+        longLabel SkMC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3SKMC rep=rep1 treatment=None
         type bigWig 1.000000 9371.000000
         # subId=1573 dateSubmitted=2010-06-17
@@ -4482,8 +4482,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseSkmcRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SKMC Sg 2
-        longLabel SKMC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        shortLabel SkMC Sg 2
+        longLabel SkMC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3SKMC rep=rep2 treatment=None
         type bigWig 1.000000 12057.000000
         # subId=1642 dateSubmitted=2010-06-19
@@ -4524,7 +4524,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHDF-Ad Sg 1
+        shortLabel NHDFAd Sg 1
         longLabel NHDF-Ad DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3NHDFAD rep=rep1 treatment=None
         type bigWig 1.000000 16582.000000
@@ -4532,7 +4532,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhdfadRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHDF-Ad Sg 2
+        shortLabel NHDFAd Sg 2
         longLabel NHDF-Ad DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3NHDFAD rep=rep2 treatment=None
         type bigWig 1.000000 17499.000000
@@ -4772,7 +4772,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCT116 Sg 1
+        shortLabel HCT-116 Sg 1
         longLabel HCT-116 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3HCT116 rep=rep1 treatment=None
         type bigWig 1.000000 66499.000000
@@ -4780,7 +4780,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHct116RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCT116 Sg 2
+        shortLabel HCT-116 Sg 2
         longLabel HCT-116 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3HCT116 rep=rep2 treatment=None
         type bigWig 1.000000 56421.000000
@@ -4812,7 +4812,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHA Sg 2
+        shortLabel NH-A Sg 2
         longLabel NH-A DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3NHA rep=rep2 treatment=None
         type bigWig 1.000000 18410.000000
@@ -4828,7 +4828,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseNhaRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHA Sg 1
+        shortLabel NH-A Sg 1
         longLabel NH-A DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3NHA rep=rep1 treatment=None
         type bigWig 1.000000 28967.000000
@@ -5024,7 +5024,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WERIRb1 Sg 2
+        shortLabel WERI-Rb-1 Sg 2
         longLabel WERI-Rb-1 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3WERIRB1 rep=rep2 treatment=None
         type bigWig 1.000000 38425.000000
@@ -5032,7 +5032,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WERIRb1 Sg 1
+        shortLabel WERI-Rb-1 Sg 1
         longLabel WERI-Rb-1 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3WERIRB1 rep=rep1 treatment=None
         type bigWig 1.000000 22121.000000
@@ -5128,7 +5128,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI38 Sg 1
+        shortLabel WI-38 Sg 1
         longLabel WI-38 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3WI38 rep=rep1 treatment=None
         type bigWig 1.000000 38786.000000
@@ -5136,7 +5136,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI38 Sg 2
+        shortLabel WI-38 Sg 2
         longLabel WI-38 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3WI38 rep=rep2 treatment=None
         type bigWig 1.000000 34718.000000
@@ -5144,7 +5144,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI38 OHTM Sg 1
+        shortLabel WI-38 OHTM Sg 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3WI38 treatment=OHTAM rep=rep1
         type bigWig 1.000000 21917.000000
@@ -5152,7 +5152,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWi38OhtamRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WI38 OHTM Sg 2
+        shortLabel WI-38 OHTM Sg 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3WI38 treatment=OHTAM rep=rep2
         type bigWig 1.000000 24297.000000
@@ -5229,8 +5229,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel PReC Sg 2
-        longLabel PReC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        shortLabel PrEC Sg 2
+        longLabel PrEC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3PREC rep=rep2 treatment=None
         type bigWig 1.000000 17986.000000
         # subId=4408 dateSubmitted=2011-06-25
@@ -5253,8 +5253,8 @@ wgEncode 1
 
         track wgEncodeUwDnasePrecRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel PReC Sg 1
-        longLabel PReC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        shortLabel PrEC Sg 1
+        longLabel PrEC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3PREC rep=rep1 treatment=None
         type bigWig 1.000000 17665.000000
         # subId=4409 dateSubmitted=2011-06-25
@@ -5396,7 +5396,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel T47D Sg 2
+        shortLabel T-47D Sg 2
         longLabel T-47D DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3T47D rep=rep2 treatment=None
         type bigWig 1.000000 107581.000000
@@ -5405,7 +5405,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseT47dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel T47D Sg 1
+        shortLabel T-47D Sg 1
         longLabel T-47D DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3T47D rep=rep1 treatment=None
         type bigWig 1.000000 75983.000000
@@ -5702,8 +5702,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb11970640RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel CD4+_Naive_Wb11970640 Raw 1
-        longLabel CD4+ Naive Wb11970640 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb640 Sg 1
+        longLabel CD4+ Naive_Wb11970640 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3CD4NAIVEWB11970640 treatment=None rep=rep1
         type bigWig 1.000000 18598.000000
         origAssembly hg19
@@ -5711,8 +5711,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd4naivewb78495824RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel CD4+_Naive_Wb78495824 Raw 1
-        longLabel CD4+ Naive Wb78495824 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel CD4 NveWb824 Sg 1
+        longLabel CD4+ Naive_Wb78495824 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3CD4NAIVEWB78495824 treatment=None rep=rep1
         type bigWig 1.000000 15924.000000
         origAssembly hg19
@@ -5720,8 +5720,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseH7esDiffa9dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel H7-hESC Raw 1
-        longLabel H7-hESC diffProtA 9d DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel H7h difPA9 Sg 1
+        longLabel H7-hESC diffProtA 9d DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3H7HESC treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 32231.000000
         origAssembly hg19
@@ -5729,8 +5729,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb54553204RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th2_Wb54553204 Raw 1
-        longLabel Th2 Wb54553204 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb204 Sg 1
+        longLabel Th2 Wb54553204 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH2WB54553204 treatment=None rep=rep1
         type bigWig 1.000000 28921.000000
         origAssembly hg19
@@ -5738,8 +5738,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2wb33676984RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th2_Wb33676984 Raw 1
-        longLabel Th2 Wb33676984 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th2 Wb984 Sg 1
+        longLabel Th2 Wb33676984 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH2WB33676984 treatment=None rep=rep1
         type bigWig 1.000000 20176.000000
         origAssembly hg19
@@ -5747,8 +5747,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb33676984RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th1_Wb33676984 Raw 1
-        longLabel Th1 Wb33676984 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb984 Sg 1
+        longLabel Th1 Wb33676984 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH1WB33676984 treatment=None rep=rep1
         type bigWig 1.000000 34066.000000
         origAssembly hg19
@@ -5756,8 +5756,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th1_Wb54553204 Raw 1
-        longLabel Th1 Wb54553204 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Sg 1
+        longLabel Th1 Wb54553204 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep1
         type bigWig 1.000000 62017.000000
         origAssembly hg19
@@ -5765,8 +5765,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1wb54553204RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th1_Wb54553204 Raw 2
-        longLabel Th1 Wb54553204 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th1 Wb204 Sg 2
+        longLabel Th1 Wb54553204 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep2
         type bigWig 1.000000 18797.000000
         origAssembly hg19
@@ -5774,8 +5774,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb78495824RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Treg_Wb78495824 Raw 1
-        longLabel Treg Wb78495824 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb824 Sg 1
+        longLabel Treg Wb78495824 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TREGWB78495824 treatment=None rep=rep1
         type bigWig 1.000000 31020.000000
         origAssembly hg19
@@ -5783,8 +5783,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTregwb83319432RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Treg_Wb83319432 Raw 1
-        longLabel Treg Wb83319432 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Treg Wb432 Sg 1
+        longLabel Treg Wb83319432 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TREGWB83319432 treatment=None rep=rep1
         type bigWig 1.000000 73810.000000
         origAssembly hg19
@@ -5792,8 +5792,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh17RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th17 Raw 1
-        longLabel Th17 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel Th17 Sg 1
+        longLabel Th17 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH17 treatment=None rep=rep1
         type bigWig 1.000000 12923.000000
         origAssembly hg19
@@ -5801,8 +5801,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh1RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th1 Raw 2
-        longLabel Th1 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th1 Sg 2
+        longLabel Th1 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH1 treatment=None rep=rep2
         type bigWig 1.000000 62366.000000
         origAssembly hg19
@@ -5810,8 +5810,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseTh2RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th2 Raw 2
-        longLabel Th2 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        shortLabel Th2 Sg 2
+        longLabel Th2 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3TH2 treatment=None rep=rep2
         type bigWig 1.000000 90802.000000
         origAssembly hg19
@@ -5819,8 +5819,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel bone_marrow_MSC Raw 1
-        longLabel bone marrow MSC DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Sg 1
+        longLabel bone marrow_MSC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3BONEMARROWMSC treatment=None rep=rep1
         type bigWig 1.000000 18904.000000
         origAssembly hg19
@@ -5828,8 +5828,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseMscRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel bone_marrow_MSC Raw 2
-        longLabel bone marrow MSC DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        shortLabel bon marMSC Sg 2
+        longLabel bone marrow_MSC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t3BONEMARROWMSC treatment=None rep=rep2
         type bigWig 1.000000 13054.000000
         origAssembly hg19
@@ -5837,8 +5837,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs27aRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel bone_marrow_HS27a Raw 1
-        longLabel bone marrow HS27a DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS27a Sg 1
+        longLabel bone marrow_HS27a DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3BONEMARROWHS27A treatment=None rep=rep1
         type bigWig 1.000000 51192.000000
         origAssembly hg19
@@ -5846,8 +5846,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHs5RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel bone_marrow_HS5 Raw 1
-        longLabel bone marrow HS5 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        shortLabel bon marHS5 Sg 1
+        longLabel bone marrow_HS5 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t3BONEMARROWHS5 treatment=None rep=rep1
         type bigWig 1.000000 44822.000000
         origAssembly hg19
