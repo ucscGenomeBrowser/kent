@@ -3878,7 +3878,7 @@ html wgEncodeUwHistone.release4
 
         track wgEncodeUwHistoneAg04450H3k27me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG50 H3K27me3 Pk 1
+        shortLabel AG50 H3K27m3 Pk 1
         longLabel AG04450 H3K27me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=t3AG04450 treatment=zNone rep=rep1
         type narrowPeak
