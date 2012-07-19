@@ -659,6 +659,26 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   cleanup
     rm -fr hardMaskedFa
 
+##############################################################################
+# LASTZ Mouse mm10 Swap (DONE - 2012-03-08 - Hiram)
+    cd /hive/data/genomes/mm10/bed/lastzRheMac3.2012-03-08
+    cat fb.mm10.chainRheMac3Link.txt
+    #   900117108 bases of 2652783500 (33.931%) in intersection
+
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/mm10/bed/lastzRheMac3.2012-03-08/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    69m5.839s
+    cat fb.rheMac3.chainMm10Link.txt
+    #   883164992 bases of 2639145830 (33.464%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
 #########################################################################
 # LASTZ Human Swap (DONE - 2012-03-15 - Chin)
     cd /hive/data/genomes/hg19/bed/lastzRheMac3.2012-03-15
@@ -777,6 +797,27 @@ TMPDIR=/scratch/tmp
     #   2335269818 bases of 2822760080 (82.730%) in intersection
     cd /hive/data/genomes/gorGor3/bed
     ln -s blastz.rheMac3.swap lastz.rheMac3
+
+
+#########################################################################
+# LASTZ Rat rn5 Swap (DONE - 2012-07-10 - Chin)
+    cd /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10
+    cat fb.rn5.chainRheMac3Link.txt
+    # 896256761 bases of 2572853723 (34.835%) in intersection
+
+    # then swap
+    mkdir /cluster/data/rheMac3/bed/blastz.rn5.swap
+    cd /cluster/data/rheMac3/bed/blastz.rn5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10/DEF \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \      
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -syntenicNet > swap.log 2>&1 &
+    #   real    69m12.752s
+    cat fb.rheMac3.chainRn5Link.txt
+    # 858153767 bases of 2639145830 (32.516%) in intersection
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.rn5.swap lastz.rn5
 
 *********************************************************************** 
 * TODOain/net 
