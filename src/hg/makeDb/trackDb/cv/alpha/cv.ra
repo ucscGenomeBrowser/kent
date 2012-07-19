@@ -7149,6 +7149,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F4WT
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -7165,6 +7166,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F1KO
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -15181,7 +15183,7 @@ description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
 
 term E3.5
-tage E3HALF
+tag E3HALF
 type age
 stage Embryonic
 description Embryonic day 3.5 #PROVISIONAL
