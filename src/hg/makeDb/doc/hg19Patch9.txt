@@ -81,7 +81,6 @@ done >> hg19Patch9.agp
 
 ###########################################################################
 # Build the browser (DONE - 2012-07-17 - Hiram)
-XXX - ready for this
     cd /hive/data/genomes/hg19Patch9
     cat << '_EOF_' > hg19Patch9.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -148,7 +147,6 @@ taxId   9606
     cat fb.simpleRepeat 
 # 2867144 bases of 85220093 (3.364%) in intersection
 
-XXX - ready for masking after RM - Tue Jul 17 15:14:40 PDT 2012
     cd /hive/data/genomes/hg19Patch9
     twoBitMask hg19Patch9.rmsk.2bit \
         -add bed/simpleRepeat/trfMask.bed hg19Patch9.2bit
@@ -578,7 +576,6 @@ done
 
     # load this PSL track
     hgLoadPsl hg19 -table=altSeqLiftOverPslP9 fixup.hg19.hg19Patch9.over.psl
-XXX - may not need to do this
     # to replace this table in the current track:
     hgLoadPsl hg19 -table=altSeqLiftOverPsl fixup.hg19.hg19Patch9.over.psl
 
