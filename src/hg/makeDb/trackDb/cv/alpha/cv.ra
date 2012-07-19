@@ -1921,7 +1921,7 @@ organism human
 description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype normal 
-sex F
+sex M
 tissue blood
 vendorName Coriell
 vendorId GM10248
@@ -1939,7 +1939,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM10266
@@ -2542,7 +2542,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM20000
@@ -8576,6 +8576,38 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation Human_-_:missing Mouse_-_:missing
 label c-Myc (sc-764)
 
+term CBX2
+tag CBX2
+type Antibody
+target CBX2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Chromobox protein homolog 2 is a component of the polycomb group (PcG) multiprotein PRC1 complex, a complex required to maintain the transcriptionally repressive state of many genes, including Hox genes, throughout development. [taken from the Universal Protein Resource (UniProt) www.uniprot.org/uniprot/P19474]
+vendorName Bethyl
+vendorId A302-524A
+orderUrl http://www.bethyl.com/product/A302-524A
+lab Epstein
+lots A302-524A-1
+targetId GeneCard:CBX2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
+validation Human_-_CBX2_(A302-524A)(ChIP,WesternBlot):human_CBX2_validation_Epstein.pdf
+label CBX2 (A302-524A)
+
+term CBX8
+tag CBX8
+type Antibody
+target CBX8
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription CBX8 is part of the polycomb group of proteins that are important in embryogenesis and human tumorigenesis and regulates a number of genes involved in cell growth and survival. There are at least 5 CBX proteins in mammals. CBX proteins associate with the core polycomb repressive complex 1 (PRC1) that functions to maintain the transcriptionally repressive state of genes during development.
+vendorName Bethyl
+vendorId A300-882A
+orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
+lab Epstein
+lots A300-882A-1
+targetId GeneCard:CBX8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
+validation Human_-_CBX8_(A300-882A)(ChIP,WesternBlot):human_CBX8_validation_Epstein.pdf
+label CBX8 (A300-882A)
+
 term CCNT2
 tag CCNT2
 type Antibody
@@ -8719,6 +8751,22 @@ targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation Human_-_:missing Mouse_-_:missing
 label CHD2 (ab68301)
+
+term CHD4_Mi2
+tag CHD4MI2
+type Antibody
+target CHD4_Mi2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
+vendorName Bethyl
+vendorId A301-081A
+orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
+lab Epstein
+lots A301-081A-1
+targetId GeneCard:CHD4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
+validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
+label CHD4 (A301-081A)
 
 term CREB1_(06-863)
 tag CREB106863
@@ -10461,6 +10509,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation Human_-_LEF1_(SC-8592)(Immunoprecipitation-Western_blot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 label LEF1 (sc-8592)
 
+term LSD1
+tag LSD1
+type Antibody
+target LSD1
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
+vendorName Bethyl
+vendorId A300-215A
+orderUrl http://www.bethyl.com/product/A300-215A/
+lab Epstein
+lots A300-215A-1
+targetId GeneCard:KDM1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
+validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+label LSD1_KDM1A (A300-215A)
+
 term MafF_(M8194)
 tag MAFF
 type Antibody
@@ -10699,6 +10763,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation Human_-_NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 label NANOG (sc-33759)
 
+term NCoR
+tag NCOR
+type Antibody
+target NCoR
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors.  NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
+vendorName Bethyl
+vendorId A301-145A
+orderUrl http://www.bethyl.com/product/A301-145A/
+lab Epstein
+lots A301-145A-1
+targetId GeneCard:NCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
+validation Human_-_NCoR_(A301-145A)(ChIP,WesternBlot):human_NCoR_validation_Epstein.pdf
+label NCoR (A301-145A)
+
 term NELFe
 tag NELFE
 type Antibody
@@ -10899,6 +10979,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
 label P300 (sc-585)
 
+term P300_KAT3B
+tag P300KAT3B
+type Antibody
+target P300_KAT3B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
+vendorName Bethyl
+vendorId A300-358A
+orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
+lab Epstein
+lots A300-358A-1
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
+validation Human_-_P300_KAT3B_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
+label P300_KAT3B (A300-358A)
+
 term p300_(SC-584)
 tag P300b
 type Antibody
@@ -10988,6 +11084,22 @@ targetId GeneCard:PBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
 validation Human_-_:missing
 label PBX3 (sc-891)
+
+term PCAF
+tag PCAF
+type Antibody
+target PCAF_KAT2B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
+vendorName Bethyl
+vendorId A301-666A
+orderUrl http://www.bethyl.com/product/A301-666A/PCAF_Antibody?referrer=search_default
+lab Epstein
+lots A301-666A-1
+targetId GeneCard:KAT2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
+validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+label PCAF_KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -11239,20 +11351,37 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
 validation Human_-_RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
 label RBBP5 (A300-109A)
 
-term RPC155
-tag RPC155
+term REST
+tag REST
 type Antibody
-target RPC155
-antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
-targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
-vendorId 1900
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
-lab Struhl
-targetId GeneCard:POLR3A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
-label RPC155 (1900)
+target GST fusion amino acids 801-1097 of human REST
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes.
+vendorName Millipore
+vendorId 17-641
+orderUrl http://www.millipore.com/catalogue/item/17-641
+lab Esptein
+lots JH1786670
+targetId GeneCard:REST
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
+validation Human_-_REST_(17-641)(ChIP,WesternBlot):human_REST_validation_Epstein.pdf
+label REST (17-641)
+
+term RNF2
+tag RNF2
+type Antibody
+target RNF2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Ring finger protein 2 (RNF2) is a polycomb group (PcG) protein. RNF2 has been shown to interact with, and suppress the activity of, transcription factor CP2 (TFCP2/CP2).
+vendorName Bethyl
+vendorId A302-869A
+orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
+lab Epstein
+lots A302-869A-1
+targetId GeneCard:RNF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
+validation Human_-_RNF2_(A302-869A)(ChIP,WesternBlot):human_RNF2_validation_Epstein.pdf
+label RNF2 (A302-869A)
 
 term RFX5_(200-401-194)
 tag RFX5
@@ -11268,6 +11397,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_validation_Snyder.pdf
 label RFX5 (200-401-194)
+
+term RPC155
+tag RPC155
+type Antibody
+target RPC155
+antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
+targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 1900
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetId GeneCard:POLR3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
+validation Human_-_:missing
+label RPC155 (1900)
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
