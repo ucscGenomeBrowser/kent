@@ -9217,6 +9217,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -9238,6 +9239,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
+attic auxExp
 objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs

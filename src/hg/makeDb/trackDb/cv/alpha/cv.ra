@@ -9449,7 +9449,7 @@ validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bern
 label EZH2 (39875)
 
 term FLI1_(sc-356)
-tag FLI1SC365
+tag FLI1SC356
 type Antibody
 antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
 target FLI1
