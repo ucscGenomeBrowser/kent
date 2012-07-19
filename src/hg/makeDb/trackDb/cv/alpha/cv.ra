@@ -7103,6 +7103,25 @@ color 65,105,225
 sex U
 protocol missing
 
+term ES-neurons
+tag ESNEURON
+type Cell Line
+organism mouse
+tissue nerve
+category primaryCells
+description neurons derived from mouse embryonic stem cells by treatment of retinoic acid #PROVISIONAL
+age E3.5
+strain 129S4/SvJae
+vendorName LICR lab
+vendorId mESC-neurons
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 15148
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
+color 105,105,105
+sex M
+label ES-neurons
+protocol Ren:ES-neurons_Ren_protocol.pdf 
+
 term ES-TT2
 tag ESTT2
 type Cell Line
@@ -15126,6 +15145,11 @@ tag 129S2
 type strain
 description The mice have white (or light)-bellied agouti.
 
+term 129S4/SvJae
+tag 129S4
+type strain
+description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines #PROVISIONAL 
+
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
@@ -15155,6 +15179,12 @@ type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
+
+term E3.5
+tage E3HALF
+stage Embryonic
+description Embryonic day 3.5 #PROVISIONAL
+label Embryonic day 3.5
 
 term E11.5
 tag E11HALF
