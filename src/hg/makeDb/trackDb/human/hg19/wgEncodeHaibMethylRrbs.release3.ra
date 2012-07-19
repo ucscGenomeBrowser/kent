@@ -651,7 +651,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapUwSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP UW 1
-    longLabel LNCaP Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel LNCaP UW Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=UW treatment=zNone rep=rep1
     type bed 9 +
     color 0,119,158
@@ -660,7 +660,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapUwSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP UW 2
-    longLabel LNCaP Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel LNCaP UW Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=UW treatment=zNone rep=rep2
     type bed 9 +
     color 0,119,158
@@ -670,7 +670,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP Duke 1
-    longLabel LNCaP Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel LNCaP Duke Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=DUKE treatment=zNone rep=rep1
     type bed 9 +
     color 0,119,158
@@ -680,7 +680,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP Duke 2
-    longLabel LNCaP Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel LNCaP Duke Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=DUKE treatment=zNone rep=rep2
     type bed 9 +
     color 0,119,158
@@ -1488,19 +1488,21 @@ html wgEncodeHaibMethylRrbs.release3
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
-    track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
-    parent wgEncodeHaibMethylRrbs off
-    shortLabel MCF-7 2
-    longLabel MCF-7 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep2
+    #ATTIC
+    #track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
+    #parent wgEncodeHaibMethylRrbs off
+    #shortLabel MCF-7 2
+    #longLabel MCF-7 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    #subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep2
     type bed 9 +
     # subId=2348 dateSubmitted=2010-09-22
 
-    track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-    parent wgEncodeHaibMethylRrbs off
-    shortLabel MCF-7 1
-    longLabel MCF-7 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep1
+    #ATTIC
+    #track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
+    #parent wgEncodeHaibMethylRrbs off
+    #shortLabel MCF-7 1
+    #longLabel MCF-7 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    #subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep1
     type bed 9 +
     #        # subId=2348 dateSubmitted=2010-09-22
 
