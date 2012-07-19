@@ -15181,7 +15181,7 @@ description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
 
 term E3.5
-tage E3HALF
+tag E3HALF
 type age
 stage Embryonic
 description Embryonic day 3.5 #PROVISIONAL
