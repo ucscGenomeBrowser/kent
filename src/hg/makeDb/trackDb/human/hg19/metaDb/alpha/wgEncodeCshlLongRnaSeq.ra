@@ -9288,6 +9288,32 @@ subId 7188
 tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalContigs
+objType table
+bioRep 091NL,092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-28
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963,LID47964
+labProtocolId 091NLt,092NLt
+labVersion iIDR
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7194
+tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalContigs
+view Contigs
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep3
 objType file
 bioRep 091NL
@@ -14349,6 +14375,33 @@ spikeInPool Nist13
 subId 7191
 tableName wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalContigs
+objType table
+bioRep 056WC,055WC
+cell HAoAF
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+donorId 6090101.11,6111301.9
+fileName wgEncodeCshlLongRnaSeqHaoafCellTotalContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID47021,LID47020
+labProtocolId 056WCt,055WCt
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7193
+tableName wgEncodeCshlLongRnaSeqHaoafCellTotalContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalExonsDeNovo
 objType file
@@ -59389,4 +59442,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 155830847
+# MAGIC: -1348776937
