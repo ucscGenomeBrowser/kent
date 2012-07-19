@@ -750,6 +750,7 @@ grant Stam
 lab UW
 labExpId DS21482
 labVersion Bowtie 0.12.7
+md5sum 776186ba5d1c3cc13801d8f44dc904a4,eec8d89e433df302a432541d2ee4a4e4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -774,6 +775,7 @@ grant Stam
 lab UW
 labExpId DS21481
 labVersion Bowtie 0.12.7
+md5sum 4616adbae7a3d5c5d9a25867f529542d,b8a702a53033ba4acb31c7ee9c7fd0ec
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -798,6 +800,7 @@ grant Stam
 lab UW
 labExpId DS21482
 labVersion Hotspot-v5.2
+md5sum ac4469f37137097a0323bc48070efb20
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -823,6 +826,7 @@ grant Stam
 lab UW
 labExpId DS21481
 labVersion Hotspot-v5.2
+md5sum 15cf2df66350cede18531dce0ddacaa6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -848,6 +852,7 @@ grant Stam
 lab UW
 labExpId DS21482
 labVersion lmax-v1.0
+md5sum 6b1e3ba1946b08dd6f514d7cbbb05f1c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -873,6 +878,7 @@ grant Stam
 lab UW
 labExpId DS21481
 labVersion lmax-v1.0
+md5sum 6fd3876691de445a2118332cb20d86b4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -897,6 +903,7 @@ fileName wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS21482
+md5sum a26043466a91479090137c208316cad0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -920,6 +927,7 @@ fileName wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS21481
+md5sum 2c93347479ac8cd0d1c441a5444c4a74
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -944,6 +952,7 @@ grant Stam
 lab UW
 labExpId DS21482
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4418aba27ebc437cd508c67595ca50ac
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -969,6 +978,7 @@ grant Stam
 lab UW
 labExpId DS21481
 labVersion WindowDensity-bin20-win+/-75
+md5sum f4878886f42f5ec891d6e67bfd5f7731
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -994,6 +1004,7 @@ grant Stam
 lab UW
 labExpId DS21479
 labVersion Bowtie 0.12.7
+md5sum fca68f6bf9db808dc8c40de9f9501444,1b847f90b93c2677b32b1aceaa81c87c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1018,6 +1029,7 @@ grant Stam
 lab UW
 labExpId DS21479
 labVersion Hotspot-v5.2
+md5sum b341d42e90ede97e610df5a582314bfe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1043,6 +1055,7 @@ grant Stam
 lab UW
 labExpId DS21479
 labVersion lmax-v1.0
+md5sum c6a7656bda4030e2c2ca6c5643450f14
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1067,6 +1080,7 @@ fileName wgEncodeUwHistoneAg04450H3k27acStdRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS21479
+md5sum 539780c5e3177cf4866232afc384ca51
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1091,6 +1105,7 @@ grant Stam
 lab UW
 labExpId DS21479
 labVersion WindowDensity-bin20-win+/-75
+md5sum 6bca529fc0c31427b032f521cecbafc0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1116,6 +1131,7 @@ grant Stam
 lab UW
 labExpId DS21480
 labVersion Bowtie 0.12.7
+md5sum 62631123dd8ce67485e936bebb504c51,4a1ee0a2d0e39515038ee5fd92ed8249
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1140,6 +1156,7 @@ grant Stam
 lab UW
 labExpId DS21480
 labVersion Hotspot-v5.2
+md5sum 8e858375c21dc78a3d56a6e731489e33
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1165,6 +1182,7 @@ grant Stam
 lab UW
 labExpId DS21480
 labVersion lmax-v1.0
+md5sum 1f88fc9b9cd080dfb9654dd535c0579c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1189,6 +1207,7 @@ fileName wgEncodeUwHistoneAg04450H3k27me3StdRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS21480
+md5sum 3af3e9a2f688cb0b6ae1cb620ab77ddf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1213,6 +1232,7 @@ grant Stam
 lab UW
 labExpId DS21480
 labVersion WindowDensity-bin20-win+/-75
+md5sum 463a67eae4f31d7ef6dcea9917d17e45
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7197,6 +7217,7 @@ geoSampleAccession GSM945238
 grant Stam
 lab UW
 labExpId DS13587
+md5sum 5ed6aeaed2e1351760725b5923492909
 origAssembly hg19
 project wgEncode
 setType input
@@ -7561,6 +7582,7 @@ geoSampleAccession GSM945234
 grant Stam
 lab UW
 labExpId DS13590
+md5sum a4584b9b606b53db99941d3f80fe3578
 origAssembly hg19
 project wgEncode
 setType input
@@ -7928,6 +7950,7 @@ geoSampleAccession GSM945260
 grant Stam
 lab UW
 labExpId DS13589
+md5sum 5fe19918722a925046a2f49c67b4da2a
 origAssembly hg19
 project wgEncode
 setType input
@@ -33873,6 +33896,7 @@ geoSampleAccession GSM945318
 grant Stam
 lab UW
 labExpId DS11888
+md5sum 53c7ea6b9c71eb07f9928792f7e0b43d
 origAssembly hg19
 project wgEncode
 setType input
@@ -34639,4 +34663,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 278459402
+# MAGIC: 995102990
