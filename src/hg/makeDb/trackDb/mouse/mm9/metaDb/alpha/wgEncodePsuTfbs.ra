@@ -6051,7 +6051,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view Alignments
 
@@ -6079,7 +6079,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view Alignments
 
@@ -6107,7 +6107,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
 view Peaks
@@ -6137,7 +6137,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RawData
 
@@ -6166,7 +6166,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RawData
 
@@ -6195,7 +6195,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepPeaks
 
@@ -6224,7 +6224,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepPeaks
 
@@ -6253,7 +6253,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepSignal
 
@@ -6282,7 +6282,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepSignal
 
@@ -6310,7 +6310,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
 view Signal
@@ -6339,7 +6339,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view Alignments
 
@@ -6367,7 +6367,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view Alignments
 
@@ -6396,7 +6396,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RawData
 
@@ -6425,7 +6425,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RawData
 
@@ -6454,7 +6454,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RepSignal
 
@@ -6483,7 +6483,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RepSignal
 
@@ -6511,7 +6511,7 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 tableName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig
 view Signal
@@ -6539,7 +6539,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view Alignments
 
@@ -6566,7 +6566,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view Alignments
 
@@ -6593,7 +6593,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk
 view Peaks
@@ -6622,7 +6622,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RawData
 
@@ -6650,7 +6650,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RawData
 
@@ -6678,7 +6678,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepPeaks
 
@@ -6706,7 +6706,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepPeaks
 
@@ -6734,7 +6734,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepSignal
 
@@ -6762,7 +6762,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepSignal
 
@@ -6789,7 +6789,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig
 view Signal
@@ -6817,7 +6817,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view Alignments
 
@@ -6844,7 +6844,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view Alignments
 
@@ -6871,7 +6871,7 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk
 view Peaks
@@ -6900,7 +6900,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RawData
 
@@ -6928,7 +6928,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RawData
 
@@ -6956,7 +6956,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepPeaks
 
@@ -6984,7 +6984,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepPeaks
 
@@ -7012,7 +7012,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepSignal
 
@@ -7040,7 +7040,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepSignal
 
@@ -7067,9 +7067,9 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -697767151
+# MAGIC: -692237057
