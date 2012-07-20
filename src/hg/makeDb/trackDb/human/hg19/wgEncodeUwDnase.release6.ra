@@ -52,10 +52,10 @@ superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
-subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3BONEMARROWHS5=Bone_Marrow_HS5 t3BONEMARROWHS27A=Bone_Marrow_HS27a t3BONEMARROWMSC=Bone_Marrow_MSC t3CACO2=Caco-2 t3CD04NAIVEWB11970640=CD4+_Naive_Wb11970640 t3CD04NAIVEWB78495824=CD4+_Naive_Wb78495824 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAAH=HA-h t3HAASP=HA-sp t3HAEPIC=HAEpiC t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4  t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3SKZMC=SkMC t3T47D=T-47D t3TH1=Th1 t3TH1WB33676984=Th1_Wb33676984 t3TH1WB54553204=Th1_Wb54553204 t3TH2=Th2 t3TH2WB33676984=Th2_Wb33676984 t3TH2WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824 t3TREGWB83319432=Treg_Wb83319432 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
+subGroup1 view Views Hot=HotSpots Peaks=Peaks zRSig=Raw_Signal
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3BONEMARROWHS5=Bone_Marrow_HS5 t3BONEMARROWHS27A=Bone_Marrow_HS27a t3BONEMARROWMSC=Bone_Marrow_MSC t3CACO2=Caco-2 t3CD04NAIVEWB11970640=CD4+_Naive_Wb11970640 t3CD04NAIVEWB78495824=CD4+_Naive_Wb78495824 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAAH=HA-h t3HAASP=HA-sp t3HAC=HAc t3HAEPIC=HAEpiC t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4  t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3SKZMC=SkMC t3T47D=T-47D t3TH01=Th1 t3TH01WB33676984=Th1_Wb33676984 t3TH01WB54553204=Th1_Wb54553204 t3TH02=Th2 t3TH02WB33676984=Th2_Wb33676984 t3TH02WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824 t3TREGWB83319432=Treg_Wb83319432 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup3 rep Replicate rep1=1 rep2=2
-subGroup4 treatment Treatment None=None 4OHTAM=4-OHTAM_20nM_72_hr DIFF4D=DIFF_4_d DIFFA2D=diffProtA_2_d DIFFA5D=diffProtA_5_d DIFFA9D=diffProtA_9_d DIFFA14D=diffProtA_14_d EST100NM1H=Estradiol&#95;100nM&#95;1hr ESTCTRL0H=Estradiol&#95;ctrl&#95;0_hr
+subGroup4 treatment Treatment None=None 4OHTAM=4-OHTAM_20_nM_72_hr DIFF4D=DIFF<br>4_d DIFFA2D=diffProtA_2_d DIFFA5D=diffProtA_5_d DIFFA9D=diffProtA_9_d DIFFA14D=diffProtA_14_d EST100NM1H=Estradiol_100_nM<br>1_hr ESTCTRL0H=Estradiol_control<br>0_hr
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 sortOrder cellType=+ rep=+ view=+
 filterComposite dimZ
@@ -360,7 +360,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1 Ht 1
         longLabel Th1 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH1 rep=rep1 treatment=None
+        subGroups view=Hot cellType=t3TH01 rep=rep1 treatment=None
         type broadPeak
         # subId=1641 dateSubmitted=2010-06-19
 
@@ -393,7 +393,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th2 Ht 1
         longLabel Th2 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH2 rep=rep1 treatment=None
+        subGroups view=Hot cellType=t3TH02 rep=rep1 treatment=None
         type broadPeak
         # subId=1677 dateSubmitted=2010-06-19
 
@@ -1336,7 +1336,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+ Ht 2
-        longLabel B cells CD20+ (RO01778) DNaseI HS HotSpots Rep 2 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS HotSpots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t2BCELLSCD20RO01778 rep=rep2 treatment=None
         type broadPeak
         # subId=4400 dateSubmitted=2011-06-25
@@ -1356,7 +1356,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD14+ Mono Ht 2
-        longLabel Monocytes CD14+ DNaseI HS HotSpots Rep 2 from ENCODE/UW
+        longLabel Monocytes CD14+ RO01746 DNaseI HS HotSpots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t2MONOCYTESCD14RO01746 rep=rep2 treatment=None
         type broadPeak
         # subId=4399 dateSubmitted=2011-06-25
@@ -1405,7 +1405,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+ Ht 1
-        longLabel B cells CD20+ (RO01778) DNaseI HS HotSpots Rep 1 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS HotSpots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t2BCELLSCD20RO01778 rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1627,28 +1627,10 @@ wgEncode 1
         origAssembly hg19
         # subId=6114 dateSubmitted=2012-03-21
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         track wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF7 EstCtrl Ht 2
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS HotSpots Rep 2 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS HotSpots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=t2MCF7 treatment=ESTCTRL0H rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1657,7 +1639,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF7 EstCtrl Ht 1
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS HotSpots Rep 1 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS HotSpots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=t2MCF7 treatment=ESTCTRL0H rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1712,7 +1694,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th2 Wb204 Ht 1
         longLabel Th2 Wb54553204 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH2WB54553204 treatment=None rep=rep1
+        subGroups view=Hot cellType=t3TH02WB54553204 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
         # subId=7329 dateSubmitted=2012-07-07
@@ -1721,7 +1703,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th2 Wb984 Ht 1
         longLabel Th2 Wb33676984 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH2WB33676984 treatment=None rep=rep1
+        subGroups view=Hot cellType=t3TH02WB33676984 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
         # subId=7330 dateSubmitted=2012-07-07
@@ -1730,7 +1712,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1 Wb984 Ht 1
         longLabel Th1 Wb33676984 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH1WB33676984 treatment=None rep=rep1
+        subGroups view=Hot cellType=t3TH01WB33676984 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
         # subId=7331 dateSubmitted=2012-07-07
@@ -1739,7 +1721,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1 Wb204 Ht 1
         longLabel Th1 Wb54553204 DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep1
+        subGroups view=Hot cellType=t3TH01WB54553204 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
         # subId=7332 dateSubmitted=2012-07-07
@@ -1748,7 +1730,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1 Wb204 Ht 2
         longLabel Th1 Wb54553204 DNaseI HS HotSpots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH1WB54553204 treatment=None rep=rep2
+        subGroups view=Hot cellType=t3TH01WB54553204 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
         # subId=7333 dateSubmitted=2012-07-07
@@ -1784,7 +1766,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1 Ht 2
         longLabel Th1 DNaseI HS HotSpots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH1 treatment=None rep=rep2
+        subGroups view=Hot cellType=t3TH01 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
         # subId=7337 dateSubmitted=2012-07-07
@@ -1793,7 +1775,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th2 Ht 2
         longLabel Th2 DNaseI HS HotSpots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t3TH2 treatment=None rep=rep2
+        subGroups view=Hot cellType=t3TH02 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
         # subId=7338 dateSubmitted=2012-07-07
@@ -2085,7 +2067,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Pk 1
         longLabel Th1 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1 rep=rep1 treatment=None
+        subGroups view=Peaks cellType=t3TH01 rep=rep1 treatment=None
         type narrowPeak
         # subId=1641 dateSubmitted=2010-06-19
 
@@ -2118,7 +2100,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Pk 1
         longLabel Th2 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH2 rep=rep1 treatment=None
+        subGroups view=Peaks cellType=t3TH02 rep=rep1 treatment=None
         type narrowPeak
         # subId=1677 dateSubmitted=2010-06-19
 
@@ -3102,7 +3084,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 2
-        longLabel B cells CD20+ (RO01778) DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t2BCELLSCD20RO01778 rep=rep2 treatment=None
         type narrowPeak
         # subId=4400 dateSubmitted=2011-06-25
@@ -3122,7 +3104,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD14+ Mono Pk 2
-        longLabel Monocytes CD14+ DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel Monocytes CD14+ RO01746 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t2MONOCYTESCD14RO01746 rep=rep2 treatment=None
         type narrowPeak
         # subId=4399 dateSubmitted=2011-06-25
@@ -3171,7 +3153,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 1
-        longLabel B cells CD20+ (RO01778) DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t2BCELLSCD20RO01778 rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3414,7 +3396,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF7 EstCtrl Pk 2
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=t2MCF7 treatment=ESTCTRL0H rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3423,7 +3405,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF7 EstCtrl Pk 1
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t2MCF7 treatment=ESTCTRL0H rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3478,7 +3460,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Wb204 Pk 1
         longLabel Th2 Wb54553204 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH2WB54553204 treatment=None rep=rep1
+        subGroups view=Peaks cellType=t3TH02WB54553204 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
         # subId=7329 dateSubmitted=2012-07-07
@@ -3487,7 +3469,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Wb984 Pk 1
         longLabel Th2 Wb33676984 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH2WB33676984 treatment=None rep=rep1
+        subGroups view=Peaks cellType=t3TH02WB33676984 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
         # subId=7330 dateSubmitted=2012-07-07
@@ -3496,7 +3478,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Wb984 Pk 1
         longLabel Th1 Wb33676984 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1WB33676984 treatment=None rep=rep1
+        subGroups view=Peaks cellType=t3TH01WB33676984 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
         # subId=7331 dateSubmitted=2012-07-07
@@ -3505,7 +3487,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Wb204 Pk 1
         longLabel Th1 Wb54553204 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep1
+        subGroups view=Peaks cellType=t3TH01WB54553204 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
         # subId=7332 dateSubmitted=2012-07-07
@@ -3514,7 +3496,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Wb204 Pk 2
         longLabel Th1 Wb54553204 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1WB54553204 treatment=None rep=rep2
+        subGroups view=Peaks cellType=t3TH01WB54553204 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
         # subId=7333 dateSubmitted=2012-07-07
@@ -3550,7 +3532,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Pk 2
         longLabel Th1 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1 treatment=None rep=rep2
+        subGroups view=Peaks cellType=t3TH01 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
         # subId=7337 dateSubmitted=2012-07-07
@@ -3559,7 +3541,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Pk 2
         longLabel Th2 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH2 treatment=None rep=rep2
+        subGroups view=Peaks cellType=t3TH02 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
         # subId=7338 dateSubmitted=2012-07-07
@@ -3894,7 +3876,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 Sg 1
         longLabel Th1 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH1 rep=rep1 treatment=None
+        subGroups view=zRSig cellType=t3TH01 rep=rep1 treatment=None
         type bigWig 1.000000 10572.000000
         # subId=1641 dateSubmitted=2010-06-19
 
@@ -3927,7 +3909,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2 Sg 1
         longLabel Th2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH2 rep=rep1 treatment=None
+        subGroups view=zRSig cellType=t3TH02 rep=rep1 treatment=None
         type bigWig 1.000000 11480.000000
         # subId=1677 dateSubmitted=2010-06-19
 
@@ -4870,7 +4852,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+ Sg 2
-        longLabel B cells CD20+ (RO01778) DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t2BCELLSCD20RO01778 rep=rep2 treatment=None
         type bigWig 1.000000 31470.000000
         # subId=4400 dateSubmitted=2011-06-25
@@ -4890,7 +4872,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD14+ Mono Sg 2
-        longLabel Monocytes CD14+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel Monocytes CD14+ RO01746 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t2MONOCYTESCD14RO01746 rep=rep2 treatment=None
         type bigWig 1.000000 36131.000000
         # subId=4399 dateSubmitted=2011-06-25
@@ -4939,7 +4921,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+ Sg 1
-        longLabel B cells CD20+ (RO01778) DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t2BCELLSCD20RO01778 rep=rep1 treatment=None
         type bigWig 1.000000 17468.000000
         origAssembly hg19
@@ -5182,7 +5164,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF7 EstCtrl Sg 2
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=t2MCF7 treatment=ESTCTRL0H rep=rep2
         type bigWig 1.000000 138143.000000
         origAssembly hg19
@@ -5191,7 +5173,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF7 EstCtrl Sg 1
-        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 Estradiol control 0 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=t2MCF7 treatment=ESTCTRL0H rep=rep1
         type bigWig 1.000000 60405.000000
         origAssembly hg19
@@ -5246,7 +5228,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2 Wb204 Sg 1
         longLabel Th2 Wb54553204 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH2WB54553204 treatment=None rep=rep1
+        subGroups view=zRSig cellType=t3TH02WB54553204 treatment=None rep=rep1
         type bigWig 1.000000 28921.000000
         origAssembly hg19
         # subId=7329 dateSubmitted=2012-07-07
@@ -5255,7 +5237,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2 Wb984 Sg 1
         longLabel Th2 Wb33676984 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH2WB33676984 treatment=None rep=rep1
+        subGroups view=zRSig cellType=t3TH02WB33676984 treatment=None rep=rep1
         type bigWig 1.000000 20176.000000
         origAssembly hg19
         # subId=7330 dateSubmitted=2012-07-07
@@ -5264,7 +5246,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 Wb984 Sg 1
         longLabel Th1 Wb33676984 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH1WB33676984 treatment=None rep=rep1
+        subGroups view=zRSig cellType=t3TH01WB33676984 treatment=None rep=rep1
         type bigWig 1.000000 34066.000000
         origAssembly hg19
         # subId=7331 dateSubmitted=2012-07-07
@@ -5273,7 +5255,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 Wb204 Sg 1
         longLabel Th1 Wb54553204 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep1
+        subGroups view=zRSig cellType=t3TH01WB54553204 treatment=None rep=rep1
         type bigWig 1.000000 62017.000000
         origAssembly hg19
         # subId=7332 dateSubmitted=2012-07-07
@@ -5282,7 +5264,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 Wb204 Sg 2
         longLabel Th1 Wb54553204 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH1WB54553204 treatment=None rep=rep2
+        subGroups view=zRSig cellType=t3TH01WB54553204 treatment=None rep=rep2
         type bigWig 1.000000 18797.000000
         origAssembly hg19
         # subId=7333 dateSubmitted=2012-07-07
@@ -5318,7 +5300,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 Sg 2
         longLabel Th1 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH1 treatment=None rep=rep2
+        subGroups view=zRSig cellType=t3TH01 treatment=None rep=rep2
         type bigWig 1.000000 62366.000000
         origAssembly hg19
         # subId=7337 dateSubmitted=2012-07-07
@@ -5327,7 +5309,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2 Sg 2
         longLabel Th2 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t3TH2 treatment=None rep=rep2
+        subGroups view=zRSig cellType=t3TH02 treatment=None rep=rep2
         type bigWig 1.000000 90802.000000
         origAssembly hg19
         # subId=7338 dateSubmitted=2012-07-07
