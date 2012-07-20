@@ -1,7 +1,7 @@
 metaObject wgEncodeUncBsuProtGenc
 objType composite
 composite wgEncodeUncBsuProtGenc
-expVars lab,dataType,cell,localization
+expVars lab,dataType,cell,localization,protocol
 
 metaObject wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
 objType table
