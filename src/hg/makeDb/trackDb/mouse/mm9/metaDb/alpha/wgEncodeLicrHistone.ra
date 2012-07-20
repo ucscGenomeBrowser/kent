@@ -16123,7 +16123,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5957
 view Alignments
 
@@ -16152,7 +16152,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5957
 view Alignments
 
@@ -16181,7 +16181,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5957
 view RawData
 
@@ -16210,7 +16210,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5957
 view RawData
 
@@ -16238,7 +16238,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain Unknown
 subId 5957
 tableName wgEncodeLicrHistoneMelInputMImmortalC57bl6StdSig
 view Signal
@@ -23266,4 +23266,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1747191766
+# MAGIC: -1746444456
