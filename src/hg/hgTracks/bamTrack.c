@@ -767,7 +767,7 @@ boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
 char *tdbShowNames = trackDbSetting(track->tdb, BAM_SHOW_NAMES);
 boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
-						  BAM_SHOW_NAMES, !sameOk(tdbShowNames, "off"));
+						  BAM_SHOW_NAMES, SETTING_IS_ON(tdbShowNames));
 char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *userTag = cartOrTdbString(cart, track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
