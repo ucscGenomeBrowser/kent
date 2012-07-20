@@ -11381,7 +11381,7 @@ targetDescription A transcriptional repressor which represses neuronal genes in 
 vendorName Millipore
 vendorId 17-641
 orderUrl http://www.millipore.com/catalogue/item/17-641
-lab Esptein
+lab Epstein
 lots JH1786670
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
@@ -15076,6 +15076,11 @@ term B6CBAF1/J
 tag B6CBAF1J
 type strain
 description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
+
+term BALB/cJ
+tag BALBCJ
+type strain
+description A common inbred strain of laboratory mouse. #PROVISIONAL
 
 term BALB/cAnN
 tag BALBCANN
