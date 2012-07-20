@@ -49,8 +49,8 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line m3134=3134 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 ESE14=ES-E14 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung MEL=MEL MESODERM=Mesoderm MGER=mG/ER NIH3T3=NIH-3T3 PATSKI=Patski RETINA=Retina SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
-subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII S129=129 129OLA=129/Ola 129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
+subGroup2 cellType Cell_Line a3134=3134 a416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 ESE14=ES-E14 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung MEL=MEL MESODERM=Mesoderm MGER=mG/ER NIH3T3=NIH-3T3 PATSKI=Patski RETINA=Retina SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
+subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII a129=129 a129OLA=129/Ola a129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 sex Sex M=M
 subGroup5 age Age ADULT1WKS=adult-1wks ADULT8WKS=adult-8wks E0=E0 E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5 IMMORTAL=immortalized NEW1DAYS=newborn-1days
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10 rep11=11 rep12=12 rep13=13 rep14=14
@@ -91,7 +91,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel 416B Hspt 2
 		longLabel 416B DNaseI HS Hotspots Rep 2 from ENCODE/UW
-		subGroups view=Hotspots age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+		subGroups view=Hotspots age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
 		type broadPeak
 		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
@@ -100,7 +100,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel 416B Hspt 1
 		longLabel 416B DNaseI HS Hotspots Rep 1 from ENCODE/UW
-		subGroups view=Hotspots age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+		subGroups view=Hotspots age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
 		type broadPeak
 		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
@@ -118,7 +118,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel ES-CJ7 Hspt 2
 		longLabel ES-CJ7 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-		subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep2 treatment=zNONE
+		subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
 		type broadPeak
 		color 65,105,225
 		# subId=2003 dateSubmitted=2010-07-28
@@ -127,7 +127,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots 
 		shortLabel ES-CJ7 Hspt 1
 		longLabel ES-CJ7 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-		subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep1 treatment=zNONE
+		subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
 		type broadPeak
 		color 65,105,225
 		# subId=2004 dateSubmitted=2010-07-28
@@ -376,7 +376,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots
 		shortLabel 3134 Hspt 1
 		longLabel 3134 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-		subGroups view=Hotspots age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+		subGroups view=Hotspots age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep1 treatment=zNONE
 		type broadPeak
 		color 0,158,115
 		# subId=2016 dateSubmitted=2010-07-24
@@ -456,7 +456,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel ZhBTc4 Hspt 1
 		longLabel ZhBTc4 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-		subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep1 treatment=zNONE
+		subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
 		type broadPeak
 		color 65,105,225
 		# subId=3896 dateSubmitted=2011-05-06
@@ -465,7 +465,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel ZhBTc4 Hspt 2
 		longLabel ZhBTc4 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-		subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep2 treatment=zNONE
+		subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
 		type broadPeak
 		color 65,105,225
 		# subId=3897 dateSubmitted=2011-05-06
@@ -519,7 +519,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewHotspots off
 		shortLabel 3134 Hspt 2
 		longLabel 3134 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-		subGroups view=Hotspots age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+		subGroups view=Hotspots age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep2 treatment=zNONE
 		type broadPeak
 		color 0,158,115
 		# subId=3895 dateSubmitted=2011-05-10
@@ -892,7 +892,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-E14 2
         longLabel ES-E14 E0 129/Ola DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep2
+        subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type broadPeak
         color 65,105,225
         # subId=5894 dateSubmitted=2012-02-27
@@ -956,7 +956,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ZhBTc4 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type broadPeak
         color 65,105,225
         # subId=5596 dateSubmitted=2012-02-29
@@ -965,7 +965,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ZhBTc4 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep2
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type broadPeak
         color 65,105,225
         # subId=5597 dateSubmitted=2012-02-29
@@ -974,7 +974,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ZhBTc4 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type broadPeak
         color 65,105,225
         # subId=5598 dateSubmitted=2012-02-29
@@ -983,7 +983,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ZhBTc4 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep2
+        subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type broadPeak
         color 65,105,225
         # subId=5599 dateSubmitted=2012-02-29
@@ -1028,7 +1028,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-E14 1
         longLabel ES-E14 E0 129/Ola DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep1
+        subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
         # subId=6918 dateSubmitted=2012-05-01
@@ -1127,7 +1127,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel 416B Pk 2
 		longLabel 416B DNaseI HS Peaks Rep 2 from ENCODE/UW
-		subGroups view=Peaks age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+		subGroups view=Peaks age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
 		type narrowPeak
 		color 86,180,233
 		# subId=1997 dateSubmitted=2010-07-22
@@ -1136,7 +1136,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel 416B Pk 1
 		longLabel 416B DNaseI HS Peaks Rep 1 from ENCODE/UW
-		subGroups view=Peaks age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+		subGroups view=Peaks age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
 		type narrowPeak
 		color 86,180,233
 		# subId=2000 dateSubmitted=2010-07-23
@@ -1154,7 +1154,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel ES-CJ7 Pk 2
 		longLabel ES-CJ7 DNaseI HS Peaks Rep 2 from ENCODE/UW
-		subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep2 treatment=zNONE
+		subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
 		type narrowPeak
 		color 65,105,225
 		# subId=2003 dateSubmitted=2010-07-28
@@ -1163,7 +1163,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks 
 		shortLabel ES-CJ7 Pk 1
 		longLabel ES-CJ7 DNaseI HS Peaks Rep 1 from ENCODE/UW
-		subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep1 treatment=zNONE
+		subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
 		type narrowPeak
 		color 65,105,225
 		# subId=2004 dateSubmitted=2010-07-28
@@ -1412,7 +1412,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks
 		shortLabel 3134 Pk 1
 		longLabel 3134 DNaseI HS Peaks Rep 1 from ENCODE/UW
-		subGroups view=Peaks age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+		subGroups view=Peaks age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep1 treatment=zNONE
 		type narrowPeak
 		color 0,158,115
 		# subId=2016 dateSubmitted=2010-07-24
@@ -1492,7 +1492,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel ZhBTc4 Pk 1
 		longLabel ZhBTc4 DNaseI HS Peaks Rep 1 from ENCODE/UW
-		subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep1 treatment=zNONE
+		subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
 		type narrowPeak
 		color 65,105,225
 		# subId=3896 dateSubmitted=2011-05-06
@@ -1501,7 +1501,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel ZhBTc4 Pk 2
 		longLabel ZhBTc4 DNaseI HS Peaks Rep 2 from ENCODE/UW
-		subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep2 treatment=zNONE
+		subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
 		type narrowPeak
 		color 65,105,225
 		# subId=3897 dateSubmitted=2011-05-06
@@ -1555,7 +1555,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewPeaks off
 		shortLabel 3134 Pk 2
 		longLabel 3134 DNaseI HS Peaks Rep 2 from ENCODE/UW
-		subGroups view=Peaks age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+		subGroups view=Peaks age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep2 treatment=zNONE
 		type narrowPeak
 		color 0,158,115
 		# subId=3895 dateSubmitted=2011-05-10
@@ -1927,7 +1927,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-E14 Pk 2
         longLabel ES-E14 E0 129/Ola DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep2
+        subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type narrowPeak
         color 65,105,225
         # subId=5894 dateSubmitted=2012-02-27
@@ -1991,7 +1991,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ZhBTc4 Pk 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep1
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=5596 dateSubmitted=2012-02-29
@@ -2000,7 +2000,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ZhBTc4 Pk 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep2
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type narrowPeak
         color 65,105,225
         # subId=5597 dateSubmitted=2012-02-29
@@ -2009,7 +2009,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ZhBTc4 Pk 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=5598 dateSubmitted=2012-02-29
@@ -2018,7 +2018,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ZhBTc4 Pk 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep2
+        subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type narrowPeak
         color 65,105,225
         # subId=5599 dateSubmitted=2012-02-29
@@ -2063,7 +2063,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-E14 Pk 1
         longLabel ES-E14 E0 129/Ola DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep1
+        subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
         # subId=6918 dateSubmitted=2012-05-01
@@ -2164,7 +2164,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B Sg 2
         longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type bigWig 1.000000 74554.000000
         color 86,180,233
         # subId=1997 dateSubmitted=2010-07-22
@@ -2174,7 +2174,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B Sg 1
         longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=a416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type bigWig 1.000000 109673.000000
         color 86,180,233
         # subId=2000 dateSubmitted=2010-07-23
@@ -2194,7 +2194,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel ES-CJ7 Sg 2
 		longLabel ES-CJ7 DNaseI HS Signal Rep 2 from ENCODE/UW
-		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep2 treatment=zNONE
+		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
 		type bigWig 1.000000 85510.000000
 		color 65,105,225
 		# subId=2003 dateSubmitted=2010-07-28
@@ -2204,7 +2204,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewRawSignal 
 		shortLabel ES-CJ7 Sg 1
 		longLabel ES-CJ7 DNaseI HS Signal Rep 1 from ENCODE/UW
-		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=129S1 rep=rep1 treatment=zNONE
+		subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
 		type bigWig 1.000000 74881.000000
 		color 65,105,225
 		# subId=2004 dateSubmitted=2010-07-28
@@ -2479,7 +2479,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal
         shortLabel 3134 Sg 1
         longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type bigWig 1.000000 53562.000000
         color 0,158,115
         # subId=2016 dateSubmitted=2010-07-24
@@ -2568,7 +2568,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel ZhBTc4 Sg 1
 		longLabel ZhBTc4 DNaseI HS Signal Rep 1 from ENCODE/UW
-		subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep1 treatment=zNONE
+		subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
 		type bigWig 1.000000 87655.000000
 		color 65,105,225
 		# subId=3896 dateSubmitted=2011-05-06
@@ -2578,7 +2578,7 @@ html wgEncodeUwDnase.release2
 		parent wgEncodeUwDnaseViewRawSignal off
 		shortLabel ZhBTc4 Sg 2
 		longLabel ZhBTc4 DNaseI HS Signal Rep 2 from ENCODE/UW
-		subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA rep=rep2 treatment=zNONE
+		subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
 		type bigWig 1.000000 94703.000000
 		color 65,105,225
 		# subId=3897 dateSubmitted=2011-05-06
@@ -2638,7 +2638,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 3134 Sg 2
         longLabel 3134 DNaseI HS Signal Rep 2 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=m3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=a3134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type bigWig 1.000000 42784.000000
         color 0,158,115
         # subId=3895 dateSubmitted=2011-05-10
@@ -3021,7 +3021,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-E14 Sig 2
         longLabel ES-E14 E0 129/Ola DNase-seq Signal Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep2
+        subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type bigWig 1.000000 124940.000000
         color 65,105,225
         # subId=5894 dateSubmitted=2012-02-27
@@ -3085,7 +3085,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Sig 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Signal Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep1
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type bigWig 1.000000 72892.000000
         color 65,105,225
         # subId=5596 dateSubmitted=2012-02-29
@@ -3094,7 +3094,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Sig 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 6hr DNase-seq Signal Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB6H rep=rep2
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type bigWig 1.000000 97170.000000
         color 65,105,225
         # subId=5597 dateSubmitted=2012-02-29
@@ -3103,7 +3103,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Sig 1
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Signal Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep1
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 81535.000000
         color 65,105,225
         # subId=5598 dateSubmitted=2012-02-29
@@ -3112,7 +3112,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ZhBTc4 Sig 2
         longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-seq Signal Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=129OLA treatment=DIFFB24H rep=rep2
+        subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type bigWig 1.000000 66813.000000
         color 65,105,225
         # subId=5599 dateSubmitted=2012-02-29
@@ -3157,7 +3157,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-E14 Sig 1
         longLabel ES-E14 E0 129/Ola DNase-seq Signal Rep 1 from ENCODE/UW #autogenerated
-        subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=129OLA treatment=zNONE rep=rep1
+        subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type bigWig 1.000000 192503.000000
         color 65,105,225
         # subId=6918 dateSubmitted=2012-05-01
