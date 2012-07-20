@@ -568,8 +568,7 @@ int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 int w = x2-x1;
 int midY = y + (heightPer>>1);
 char *exonArrowsDense = trackDbSettingClosestToHome(tg->tdb, "exonArrowsDense");
-boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
-				   !sameWord(exonArrowsDense, "off"));
+boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL && SETTING_IS_ON(exonArrowsDense));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
 struct dnaSeq *mrnaSeq = NULL;
@@ -767,7 +766,7 @@ boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
 char *tdbShowNames = trackDbSetting(track->tdb, BAM_SHOW_NAMES);
 boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
-						  BAM_SHOW_NAMES, !sameOk(tdbShowNames, "off"));
+						  BAM_SHOW_NAMES, SETTING_IS_ON(tdbShowNames));
 char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *userTag = cartOrTdbString(cart, track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
 if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
@@ -803,7 +802,7 @@ if (!showNames)
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
-if (differentString(colorMode, "off"))
+if (differentString(colorMode, BAM_COLOR_MODE_OFF))
     track->colorShades = shadesOfGray;
 }
 
