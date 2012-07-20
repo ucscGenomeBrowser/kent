@@ -568,8 +568,7 @@ int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 int w = x2-x1;
 int midY = y + (heightPer>>1);
 char *exonArrowsDense = trackDbSettingClosestToHome(tg->tdb, "exonArrowsDense");
-boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
-				   !sameWord(exonArrowsDense, "off"));
+boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL && SETTING_IS_ON(exonArrowsDense));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
 struct dnaSeq *mrnaSeq = NULL;
@@ -803,7 +802,7 @@ if (!showNames)
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
-if (differentString(colorMode, "off"))
+if (differentString(colorMode, BAM_COLOR_MODE_OFF))
     track->colorShades = shadesOfGray;
 }
 
