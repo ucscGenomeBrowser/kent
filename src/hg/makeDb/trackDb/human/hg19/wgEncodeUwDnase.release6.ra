@@ -56,8 +56,9 @@ subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3BONEMARROWHS5=bone_marrow_HS5 t3BONEMARROWHS27A=bone_marrow_HS27a t3BONEMARROWMSC=bone_marrow_MSC t3CACO2=Caco-2 t3CD4NAIVEWB11970640=CD4+_Naive_Wb11970640 t3CD4NAIVEWB78495824=CD4+_Naive_Wb78495824 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4 t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3T47D=T-47D t3TH1=Th1 t3TH1WB33676984=Th1_Wb33676984 t3TH1WB54553204=Th1_Wb54553204 t3TH2=Th2 t3TH2WB33676984=Th2_Wb33676984 t3TH2WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824 t3TREGWB83319432=Treg_Wb83319432 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 treatment Treatment None=None DIFF4D=DIFF_4d DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr EST100NM1H=Estradiol&#95;100nM&#95;1hr ESTCTRL0H=Estradiol&#95;ctrl&#95;0hr ZNF2C10C5=ZNF&#95;knockout&#95;2C10-C5 ZNF4C50C4=ZNF&#95;knockout&#95;4C50-C4 ZNF4G7D3=ZNF&#95;knockout&#95;4G7-D3 ZNFA41C6=ZNF&#95;knockout&#95;A4.1-C6 ZNFB34A8=ZNF&#95;knockout&#95;B3.4-A8 ZNFE103C6=ZNF&#95;knockout&#95;E10.3-C6 ZNFF41B2=ZNF&#95;knockout&#95;F4.1-B2 ZNFG54A11=ZNF&#95;knockout&#95;G5.4-A11 ZNFP5=ZNF&#95;knockout-P5
-dimensions dimensionY=cellType dimensionX=treatment
+dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 sortOrder cellType=+ rep=+ view=+
+filterComposite dimZ
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 noInherit on
@@ -1626,185 +1627,23 @@ wgEncode 1
         origAssembly hg19
         # subId=6114 dateSubmitted=2012-03-21
 
-        track wgEncodeUwDnaseK562Znff41b2HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFF41 Ht 2
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6197 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znff41b2HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFF41 Ht 1
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6198 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFG54 Ht 2
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFG54A11 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6199 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFP5 Ht 1
-        longLabel K562 ZNF knockout-P5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6200 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF2C10 Ht 1
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6201 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF2C10 Ht 2
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6202 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF4C50 Ht 1
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6203 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF4C50 Ht 2
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6204 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF4G7 Ht 1
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF4G7D3 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6205 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNF4G7 Ht 2
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNF4G7D3 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6206 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFA41 Ht 1
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6207 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFA41 Ht 2
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6208 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFB34 Ht 1
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFB34A8 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6209 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFB34 Ht 2
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFB34A8 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6210 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFE103 Ht 1
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFE103C6 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6211 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11HotspotsRep1
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFG54 Ht 1
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFG54A11 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6213 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFP5 Ht 2
-        longLabel K562 ZNF knockout-P5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6214 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6HotspotsRep2
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel K562 ZNFE103 Ht 2
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t1K562 treatment=ZNFE103C6 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6232 dateSubmitted=2012-03-23
 
         track wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
@@ -3554,185 +3393,23 @@ wgEncode 1
         origAssembly hg19
         # subId=6114 dateSubmitted=2012-03-21
 
-        track wgEncodeUwDnaseK562Znff41b2PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFF41 Pk 2
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6197 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znff41b2PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFF41 Pk 1
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6198 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFG54 Pk 2
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFG54A11 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6199 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFP5 Pk 1
-        longLabel K562 ZNF knockout-P5 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6200 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF2C10 Pk 1
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6201 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF2C10 Pk 2
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6202 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF4C50 Pk 1
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6203 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF4C50 Pk 2
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6204 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF4G7 Pk 1
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF4G7D3 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6205 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNF4G7 Pk 2
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNF4G7D3 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6206 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFA41 Pk 1
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6207 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFA41 Pk 2
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6208 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFB34 Pk 1
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFB34A8 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6209 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFB34 Pk 2
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFB34A8 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6210 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFE103 Pk 1
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFE103C6 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6211 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFG54 Pk 1
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFG54A11 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6213 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFP5 Pk 2
-        longLabel K562 ZNF knockout-P5 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6214 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6PkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel K562 ZNFE103 Pk 2
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFE103C6 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6232 dateSubmitted=2012-03-23
 
         track wgEncodeUwDnaseMcf7Estctrl0hPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
@@ -5484,185 +5161,23 @@ wgEncode 1
         origAssembly hg19
         # subId=6114 dateSubmitted=2012-03-21
 
-        track wgEncodeUwDnaseK562Znff41b2RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFF41 Sg 2
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type bigWig 1.000000 159021.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6197 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znff41b2RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFF41 Sg 1
-        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type bigWig 1.000000 217621.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6198 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFG54 Sg 2
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFG54A11 rep=rep2
-        type bigWig 1.000000 117664.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6199 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFP5 Sg 1
-        longLabel K562 ZNF knockout-P5 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type bigWig 1.000000 50373.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6200 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF2C10 Sg 1
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type bigWig 1.000000 386011.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6201 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf2c10c5RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF2C10 Sg 2
-        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type bigWig 1.000000 425180.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6202 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF4C50 Sg 1
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type bigWig 1.000000 55348.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6203 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4c50c4RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF4C50 Sg 2
-        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type bigWig 1.000000 61222.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6204 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF4G7 Sg 1
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF4G7D3 rep=rep1
-        type bigWig 1.000000 81631.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6205 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znf4g7d3RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNF4G7 Sg 2
-        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNF4G7D3 rep=rep2
-        type bigWig 1.000000 85504.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6206 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFA41 Sg 1
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type bigWig 1.000000 101358.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6207 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfa41c6RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFA41 Sg 2
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type bigWig 1.000000 110727.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6208 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFB34 Sg 1
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFB34A8 rep=rep1
-        type bigWig 1.000000 140934.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6209 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfb34a8RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFB34 Sg 2
-        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFB34A8 rep=rep2
-        type bigWig 1.000000 133824.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6210 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFE103 Sg 1
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFE103C6 rep=rep1
-        type bigWig 1.000000 88193.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6211 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfg54a11RawRep1
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFG54 Sg 1
-        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFG54A11 rep=rep1
-        type bigWig 1.000000 45489.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6213 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfp5RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFP5 Sg 2
-        longLabel K562 ZNF knockout-P5 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type bigWig 1.000000 89488.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6214 dateSubmitted=2012-03-23
 
-        track wgEncodeUwDnaseK562Znfe103c6RawRep2
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel K562 ZNFE103 Sg 2
-        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t1K562 treatment=ZNFE103C6 rep=rep2
-        type bigWig 1.000000 53196.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6232 dateSubmitted=2012-03-23
 
         track wgEncodeUwDnaseMcf7Estctrl0hRawRep2
         parent wgEncodeUwDnaseViewzRaw off
