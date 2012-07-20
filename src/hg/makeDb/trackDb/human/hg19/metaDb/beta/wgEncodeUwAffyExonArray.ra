@@ -2737,6 +2737,7 @@ grant Stam
 lab UW
 labExpId RS17367
 md5sum c496d4930c686b4e0193afcae6e99f93
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2760,6 +2761,7 @@ grant Stam
 lab UW
 labExpId RS17335
 md5sum 1fec4f0a5a16c60b903c0f00fd932b92
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2782,6 +2784,7 @@ grant Stam
 lab UW
 labExpId RS17367
 md5sum 64982ccfd571276575cb8015bccb6727
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2805,6 +2808,7 @@ grant Stam
 lab UW
 labExpId RS17335
 md5sum 84e6bf3a2a69fc0b3f51de71b2286424
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2829,6 +2833,7 @@ grant Stam
 lab UW
 labExpId RS17179
 md5sum 83a26ff3ef8db932662333f60745ca3d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2852,6 +2857,7 @@ grant Stam
 lab UW
 labExpId RS17334
 md5sum 505a6537ab7605cba0a9b6a33627ff91
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2874,6 +2880,7 @@ grant Stam
 lab UW
 labExpId RS17179
 md5sum aa593ae0a9d17255ad81bd1da318dcc7
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2897,6 +2904,7 @@ grant Stam
 lab UW
 labExpId RS17334
 md5sum 9fdd4837ac0ae5a552115c25740a16eb
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2921,6 +2929,7 @@ grant Stam
 lab UW
 labExpId RS17339
 md5sum 12ba7c097b733feec210fd0af9490d2f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2944,6 +2953,7 @@ grant Stam
 lab UW
 labExpId RS17366
 md5sum 18c3b4e8075878d73014018fd6257e39
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2966,6 +2976,7 @@ grant Stam
 lab UW
 labExpId RS17339
 md5sum e3b1cb61393b1b0f6084caa2c5ced2b8
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2989,6 +3000,7 @@ grant Stam
 lab UW
 labExpId RS17366
 md5sum dd34f964e1350f478256a42b0f544f4b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3013,6 +3025,7 @@ grant Stam
 lab UW
 labExpId RS17337
 md5sum e5bb44bd001a011a0f0f8dc47a809b53
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3036,6 +3049,7 @@ grant Stam
 lab UW
 labExpId RS17338
 md5sum 7e2d2c8be4dff887015e73c055232313
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3058,6 +3072,7 @@ grant Stam
 lab UW
 labExpId RS17337
 md5sum ceb018c757fe425967829df50fb1d724
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3081,6 +3096,7 @@ grant Stam
 lab UW
 labExpId RS17338
 md5sum 88f8276c44e54c0ded79ab4e1676210d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3967,4 +3983,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: -1563088611
+# MAGIC: 402655197

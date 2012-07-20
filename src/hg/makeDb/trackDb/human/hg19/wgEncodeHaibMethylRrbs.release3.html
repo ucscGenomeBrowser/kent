@@ -56,8 +56,9 @@ provided by more than one lab, the data from only one lab are available for imme
 However, the data for every cell type from every lab is available from the
 <a href="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeHaibMethylRrbs" target="_blank">Downloads</a> page.
 RRBS was also performed on genomic DNA from tissue samples provided by BioChain. The replicates
-for the BioChain tissues are technical beginning at the bisulfite treatment step. RRBS was carried
-out by the Myers production group at the HudsonAlpha Institute for Biotechnology.
+for the BioChain tissues are technical replicates (rather than biological replicates) beginning
+at the bisulfite treatment step. RRBS was carried out by the Myers production group at the
+HudsonAlpha Institute for Biotechnology.
 </p>
 
 <h3>Isolation of Genomic DNA</h3>
@@ -94,12 +95,12 @@ Analyzer IIx according to the manufacturer's recommendations.  The full RRBS pro
 
 <p>
 To analyze the sequence data, a reference genome was created that contained only the 36 base pairs
-adjacent to every MspI site and in which every C in those sequences was changed to a T. A converted
-sequence read file was then created by changing each C in the original sequence reads to a T. The
-converted sequence reads were aligned to the converted reference genome and only reads that mapped
-uniquely to the reference genome were kept. Once the reads were aligned, the percent methylation
-was calculated for each CpG using the original sequence reads. The percent methylation and number
-of reads were reported for each CpG.
+adjacent to every MspI site and in which every C was changed to a T. A converted sequence read file
+was then created by changing each C in the original sequence reads to a T. The converted sequence
+reads were aligned to the converted reference genome and only reads that mapped uniquely to the
+reference genome were kept. Once the reads were aligned, the percent methylation was calculated for
+each CpG using the original sequence reads. The percent methylation and number of reads were reported
+for each CpG.
 </p>
 
 <h2>Release Notes</h2>

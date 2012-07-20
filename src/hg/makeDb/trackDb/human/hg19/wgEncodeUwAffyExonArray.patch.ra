@@ -20,7 +20,7 @@ priority 0
 type bed 6 +
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
-html wgEncodeUwAffyExonArray.release3
+html wgEncodeUwAffyExonArray.patch
 
  
  

@@ -28,7 +28,7 @@ longLabel DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/Hu
 group regulation
 subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3ADRENALGLANDBCH12803N=Adrenal_Gland_BC_H12803N t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOSMC=AoSMC t3BE2C=BE2_C t3BJ=BJ t3BRAINBCH11058N=Brain_BC_H11058N t3BREASTBC0203015=Breast_BC_02-03015 t3CACO2=Caco-2 t3CMK=CMK t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3GM06990=GM06990 t3GM12878XIMAT=GM12878-XiMat t3GM12891=GM12891 t3GM12892=GM12892 t3GM19239=GM19239 t3GM19240=GM19240 t3HAEPIC=HAEpiC t3HCF=HCF t3HCM=HCM t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HEPATOCYTES=Hepatocytes t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HNPCEPIC=HNPCEpiC t3HPAEPIC=HPAEpiC t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HSMMTUBEFSHD=HSMMtube_FSHD t3HTR8SVN=HTR8svn t3JURKAT=Jurkat t3KIDNEYBC0111002=Kidney_BC_01-11002 t3LEFTVENTRICLEBCN41=Left_Ventricle_BC_N41 t3LEUKOCYTEBCUHN00204=Leukocyte_BC_UHN00204 t3LIVERBC0111002=Liver_BC_01-11002 t3LNCAP=LNCaP t3LUNGBC0111002=Lung_BC_01-11002 t3MCF7SHRNA=MCF-7_<i>shRNA</i> t3MCF10AERSRC=MCF10A-Er-Src t3MELANO=Melano t3MYOMETR=Myometr t3NB4=NB4 t3NHA=NH-A t3NHBE=NHBE t3NHDFNEO=NHDF-neo t3NT2D1=NT2-D1 t3OSTEOBLASTS=Osteoblasts t3OVCAR3=Ovcar-3 t3PANC1=PANC-1 t3PANCREASBCH12817N=Pancreas_BC_H12817N t3PANISLETS=PanIslets t3PERICARDIUMBCH12529N=Pericardium_BC_H12529N t3PFSK1=PFSK-1 t3PLACENTABCUHN00189=Placenta_BC_UHN00189 t3PREC=PrEC t3PROGFIB=ProgFib t3RPTEC=RPTEC t3SAEC=SAEC t3SKnMC=SK-N-MC t3SKnSHRA=SK-N-SH_RA t3SKELETALMUSCLEH12817N=Skeletal_Muscle_BC_H12817N t3SKELETALMUSCLEBC0111002=Skeletal_Muscle_BC_01-11002 t3SKINBC0111002=Skin_BC_01-11002 t3SKMC=SkMC t3STOMACHBC0111002=Stomach_BC_01-11002 t3T47D=T-47D t3TESTISBCN30=Testis_BC_N30 t3U87=U87 t3UCH1=UCH-1 t3UTERUSBCBN0765=Uterus_BC_BN0765
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
-subGroup3 treatment Treatment zNone=None ANDRO=Androgen DM002P24H=DMSO_0.02%_24h DM002P7D=DMSO_0.02%_7d EST10NM24H=Estradiol SHRNACONT=shRNA_Control SHRNACTCF=shRNA_CTCF TAM=Tamoxifen 
+subGroup3 treatment Treatment zNone=None ANDRO=Androgen DM002P24H=DMSO_0.02%_24_h DM002P7D=DMSO_0.02%_7_d EST10NM24H=Estradiol SHRNACONT=shRNA_Control SHRNACTCF=shRNA_CTCF TAM=Tamoxifen 
 subGroup4 obtainedBy Source BioChain=BioChain DUKE=Duke HAIB=Hudson_Alpha Stanford=Stanford UNC=UNC UW=UW Yale=Yale
 dimensions dimensionX=rep dimensionY=cellType dimensionC=obtainedBy
 filterComposite dimensionC=all
@@ -1803,7 +1803,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel Osteobl 1
-    longLabel Osteobl Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel Osteoblasts Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3OSTEOBLASTS obtainedBy=DUKE treatment=zNone rep=rep1
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15
@@ -1811,7 +1811,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel Osteobl 2
-    longLabel Osteobl Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel Osteoblasts Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3OSTEOBLASTS obtainedBy=DUKE treatment=zNone rep=rep2
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15
