@@ -225,6 +225,154 @@ protocol FASP
 subId 6542
 view pepMapGcUnFt
 
+metaObject wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt
+objType table
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7512
+tableName wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcUnFt
+objType file
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7512
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt
+objType table
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7512
+tableName wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcUnFt
+objType file
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7512
+view pepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt
+objType table
+cell H1-neurons
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7513
+tableName wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcUnFt
+objType file
+cell H1-neurons
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7513
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt
+objType table
+cell H1-neurons
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7513
+tableName wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcUnFt
+objType file
+cell H1-neurons
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=50ppm
+localization cell
+project wgEncode
+protocol MudPIT
+subId 7513
+view pepMapGcUnFt
+
 metaObject wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
 objType table
 cell K562
@@ -299,4 +447,4 @@ protocol In-gel
 subId 6544
 view pepMapGcUnFt
 
-# MAGIC: -1332424230
+# MAGIC: 152370118
