@@ -7,7 +7,7 @@ Tables: 621
 Files: 1242
 Gbdbs: 207
 Supplemental: 0
-Other: 4
+Other: 3
 
 REVOKED:
 Tables: 63
@@ -2349,12 +2349,11 @@ Revoked/Replaced/Renamed Gbdb Files (21):
 
 
 OTHER FILES:
-New: 4
+New: 3
 Revoked/Replace: 0
-Total: 4
+Total: 3
 
-New Other Files (4):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release6/,
+New Other Files (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release6/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release6/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release6/md5sum.txt
