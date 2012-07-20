@@ -4412,6 +4412,7 @@ lab UW
 labExpId DS15363
 labVersion Bowtie 0.12.7
 md5sum 2a722201bbd5d4b535710390affb676d,b85f6e9574e9b022a3f278e11a8a73d2
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4433,6 +4434,7 @@ lab UW
 labExpId DS15363
 labVersion Hotspot-v5.2
 md5sum aae8243d79d69f84c4ba886cf80f5b8e
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4455,6 +4457,7 @@ lab UW
 labExpId DS15363
 labVersion lmax-v1.0
 md5sum 552ce2d58ce3a93024d28b388784d1e8
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4477,6 +4480,7 @@ lab UW
 labExpId DS15363
 labVersion WindowDensity-bin20-win+/-75
 md5sum 9758eed4e2746e1e884a4a454a6f27d3
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4498,6 +4502,7 @@ grant Stam
 lab UW
 labExpId DS15363
 md5sum 475e6905b005bf70c8f92ce6db1a9c12
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4518,6 +4523,7 @@ grant Stam
 lab UW
 labExpId DS15363
 md5sum 81c5d14b69155f9a8144aba929ce00d1
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4540,6 +4546,7 @@ lab UW
 labExpId DS16924
 labVersion Bowtie 0.12.7
 md5sum ea61bd278181c3a8e913d34a4caff552,9df384ec398f31da8cd810125c5df1f8
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4561,6 +4568,7 @@ lab UW
 labExpId DS16924
 labVersion Hotspot-v5.2
 md5sum 65d7873975a57f637d6d367952cb49e6
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4583,6 +4591,7 @@ lab UW
 labExpId DS16924
 labVersion lmax-v1.0
 md5sum 11ae74a5be6b4dad8155f7228558d2ad
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4605,6 +4614,7 @@ lab UW
 labExpId DS16924
 labVersion WindowDensity-bin20-win+/-75
 md5sum e0216f1e389bd472552396c7cec099c1
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4626,6 +4636,7 @@ grant Stam
 lab UW
 labExpId DS16924
 md5sum efd75f9fff2de89a45eefb88da254201
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4646,6 +4657,7 @@ grant Stam
 lab UW
 labExpId DS16924
 md5sum 36a67826a78bbe189739f098adf39728
+objStatus revoked - reason unknown
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -6506,4 +6518,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1446177637
+# MAGIC: 218019681
