@@ -3,31 +3,31 @@ hg19 wgEncodeUwHistone Release 5 vs Release 4
 2012-07-19
 
 QA Count Summaries for Release 5:
-Tables: 675
-Files: 1482
-Gbdbs: 267
+Tables: 645
+Files: 1422
+Gbdbs: 257
 Supplemental: 0
 Other: 3
 
 REVOKED:
-Tables: 6
-Files: 12
-Gbdbs: 2
+Tables: 36
+Files: 72
+Gbdbs: 12
 
 Sizes of New:
-Table: 2875 MB (3 GB)
+Table: 2761 MB (3 GB)
 Files: 9575 MB (9 GB)
 Gbdbs: 405 MB
 Supplemental: 0 MB
 Other: 1 MB
-Total: 12856 MB (13 GB)
+Total: 12742 MB (12 GB)
 
 
 TABLES:
 New: 12
-Untouched: 663
-Revoked/Replaced/Renamed: 6
-New + Untouched: 675
+Untouched: 633
+Revoked/Replaced/Renamed: 36
+New + Untouched: 645
 Total (New + Untouched + Revoked/Replaced/Renamed): 681
 
 New Tables (12):
@@ -44,7 +44,7 @@ wgEncodeUwHistoneAg04450H3k27me3StdHotspotsRep1
 wgEncodeUwHistoneAg04450H3k27me3StdPkRep1
 wgEncodeUwHistoneAg04450H3k27me3StdRawRep1
 
-Untouched Tables (663):
+Untouched Tables (633):
 wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
 wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
 wgEncodeUwHistoneA549H3k04me3StdPkRep1
@@ -514,36 +514,6 @@ wgEncodeUwHistoneJurkatH3k4me3StdPkRep2
 wgEncodeUwHistoneJurkatH3k4me3StdRawRep1
 wgEncodeUwHistoneJurkatH3k4me3StdRawRep2
 wgEncodeUwHistoneJurkatInputStdRawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep2
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep2
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep2
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep2
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep1
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep2
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep1
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep2
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep2
-wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1
-wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2
 wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1
 wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2
 wgEncodeUwHistoneK562H3k27me3StdPkRep1
@@ -709,20 +679,50 @@ wgEncodeUwHistoneWi38H3k04me3StdRawRep2
 wgEncodeUwHistoneWi38InputOhtamStdRawRep1
 wgEncodeUwHistoneWi38InputStdRawRep1
 
-Revoked/Replaced/Renamed Tables (6):
+Revoked/Replaced/Renamed Tables (36):
 wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1
 wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2
 wgEncodeUwHistoneH7esH3k04me3StdPkRep1
 wgEncodeUwHistoneH7esH3k04me3StdPkRep2
 wgEncodeUwHistoneH7esH3k04me3StdRawRep1
 wgEncodeUwHistoneH7esH3k04me3StdRawRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep2
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1
+wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep1
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep2
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep1
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep2
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1
+wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep2
+wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1
+wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2
 
 
 DOWNLOAD FILES:
 New: 28
-Untouched: 1454
-Revoked/Replaced/Renamed: 12
-New + Untouched: 1482
+Untouched: 1394
+Revoked/Replaced/Renamed: 72
+New + Untouched: 1422
 Total (New + Untouched + Revoked/Replaced/Renamed): 1494
 
 New Download Files (28):
@@ -755,7 +755,7 @@ New Download Files (28):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneGm12875InputStdRawData.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneWerirb1InputStdRawData.fastq.gz
 
-Untouched Download Files (1454):
+Untouched Download Files (1394):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam
@@ -1789,66 +1789,6 @@ Untouched Download Files (1454):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneJurkatInputStdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneJurkatInputStdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneJurkatInputStdRawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep2.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep2.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep1.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep2.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep2.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep2.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep2.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep2.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep2.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep2.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep2.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
@@ -2211,7 +2151,7 @@ Untouched Download Files (1454):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneWi38InputStdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
 
-Revoked/Replaced/Renamed Download Files (12):
+Revoked/Replaced/Renamed Download Files (72):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam
@@ -2224,13 +2164,73 @@ Revoked/Replaced/Renamed Download Files (12):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneH7esH3k04me3StdRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release5/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2.bigWig
 
 
 GBDBS:
 New: 4
-Untouched: 263
-Revoked/Replaced/Renamed: 2
-New + Untouched: 267
+Untouched: 253
+Revoked/Replaced/Renamed: 12
+New + Untouched: 257
 Total (New + Untouched + Revoked/Replaced/Renamed): 269
 
 New Gbdb Files (4):
@@ -2239,7 +2239,7 @@ New Gbdb Files (4):
 /gbdb/hg19/bbi/wgEncodeUwHistoneAg04450H3k27acStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneAg04450H3k27me3StdRawRep1.bigWig
 
-Untouched Gbdb Files (263):
+Untouched Gbdb Files (253):
 /gbdb/hg19/bbi/wgEncodeUwHistoneA549H3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneA549H3k04me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneA549InputStdRawRep1.bigWig
@@ -2427,16 +2427,6 @@ Untouched Gbdb Files (263):
 /gbdb/hg19/bbi/wgEncodeUwHistoneJurkatH3k4me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneJurkatH3k4me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneJurkatInputStdRawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k27me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k27me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k36me3StdRawRep1.bigWig
@@ -2504,9 +2494,19 @@ Untouched Gbdb Files (263):
 /gbdb/hg19/bbi/wgEncodeUwHistoneWi38InputOhtamStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
 
-Revoked/Replaced/Renamed Gbdb Files (2):
+Revoked/Replaced/Renamed Gbdb Files (12):
 /gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2.bigWig
 
 
 
