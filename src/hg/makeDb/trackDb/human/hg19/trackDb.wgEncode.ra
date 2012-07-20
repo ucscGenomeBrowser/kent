@@ -68,7 +68,8 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.release3.ra
+include wgEncodeUwAffyExonArray.release3.ra beta,public
+include wgEncodeUwAffyExonArray.patch.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
@@ -155,8 +156,8 @@ include wgEncodeBroadHistone.release2.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release4.ra beta,public
-include wgEncodeUwHistone.release5.ra alpha
+include wgEncodeUwHistone.release4.ra public
+include wgEncodeUwHistone.release5.ra alpha,beta
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.release3.ra

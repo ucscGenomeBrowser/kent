@@ -400,16 +400,6 @@ wgEncode 1
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
-        track wgEncodeUwDgfK562Znfp5Hotspots
-        parent wgEncodeUwDgfViewHotspots
-        shortLabel K562 ZNFP5 Hot
-        longLabel K562 ZNF knockout P5 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t1K562 treatment=ZNFP5
-        type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6420 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfLhcnm2Diff4dHotspots
         parent wgEncodeUwDgfViewHotspots off
@@ -441,16 +431,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
-        track wgEncodeUwDgfK562Znfa41c6Hotspots
-        parent wgEncodeUwDgfViewHotspots
-        shortLabel K562 ZNFA41C6 Hot
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t1K562 treatment=ZNFA41C6
-        type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6419 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfA549Hotspots
         parent wgEncodeUwDgfViewHotspots off
@@ -867,16 +847,6 @@ wgEncode 1
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
-        track wgEncodeUwDgfK562Znfp5Pk
-        parent wgEncodeUwDgfViewPeaks
-        shortLabel K562 ZNFP5 Pk
-        longLabel K562 ZNF knockout P5 DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFP5
-        type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6420 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfLhcnm2Diff4dPk
         parent wgEncodeUwDgfViewPeaks off
@@ -908,16 +878,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
-        track wgEncodeUwDgfK562Znfa41c6Pk
-        parent wgEncodeUwDgfViewPeaks
-        shortLabel K562 ZNFA41C6 Pk
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t1K562 treatment=ZNFA41C6
-        type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6419 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfA549Pk
         parent wgEncodeUwDgfViewPeaks off
@@ -1327,16 +1287,6 @@ wgEncode 1
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
-        track wgEncodeUwDgfK562Znfp5Sig
-        parent wgEncodeUwDgfViewSignal
-        shortLabel K562 ZNFP5 Sig
-        longLabel K562 ZNF knockout P5 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t1K562 treatment=ZNFP5
-        type bigWig 1.000000 99569.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6420 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfLhcnm2Diff4dSig
         parent wgEncodeUwDgfViewSignal off
@@ -1368,16 +1318,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
-        track wgEncodeUwDgfK562Znfa41c6Sig
-        parent wgEncodeUwDgfViewSignal
-        shortLabel K562 ZNFA41C6 Sig
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t1K562 treatment=ZNFA41C6
-        type bigWig 1.000000 222442.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6419 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfA549Sig
         parent wgEncodeUwDgfViewSignal off
@@ -1787,16 +1727,6 @@ wgEncode 1
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
-        track wgEncodeUwDgfK562Znfp5Raw
-        parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 ZNFP5 Raw
-        longLabel K562 ZNF knockout P5 DNaseI DGF Raw signal from ENCODE/UW
-        subGroups view=zRaw cellType=t1K562 treatment=ZNFP5
-        type bigWig 1.000000 525236.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6420 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfLhcnm2Diff4dRaw
         parent wgEncodeUwDgfViewzRaw off
@@ -1828,16 +1758,6 @@ wgEncode 1
         origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
-        track wgEncodeUwDgfK562Znfa41c6Raw
-        parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 ZNFA41C6 Raw
-        longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Raw signal from ENCODE/UW
-        subGroups view=zRaw cellType=t1K562 treatment=ZNFA41C6
-        type bigWig 1.000000 712971.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
-        color 46,0,184
-        # subId=6419 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfA549Raw
         parent wgEncodeUwDgfViewzRaw off
