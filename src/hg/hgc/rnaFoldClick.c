@@ -155,11 +155,11 @@ char *hDbOrganism(char *databaseIn)
 struct sqlConnection *connCentral = hConnectCentral();
 char buf[256];
 char query[256];
-char *res;
+char *res = NULL;
 char *database;
 char *chp;
 
-database = strdup(databaseIn);
+database = cloneString(databaseIn);
 
 // process special case like "hg19.chr21"
 chp = strstr(database, ".");
@@ -169,8 +169,13 @@ if (chp != NULL)
     }
 
 safef(query, sizeof(query), "select organism from dbDb where name = '%s'", database);
-res = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
+if(sqlQuickQuery(connCentral, query, buf, sizeof(buf)) == NULL)
+    // this can happen in mirrors (see #8490).
+    errAbort("organism '%s' not found in dbDb", database);
+else
+    res = cloneString(buf);
 hDisconnectCentral(&connCentral);
+freez(&database);
 return res;
 }
 

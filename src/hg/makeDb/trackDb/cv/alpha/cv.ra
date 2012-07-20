@@ -7103,6 +7103,25 @@ color 65,105,225
 sex U
 protocol missing
 
+term ES-neurons
+tag ESNEURON
+type Cell Line
+organism mouse
+tissue nerve
+category primaryCells
+description neurons derived from mouse embryonic stem cells by treatment of retinoic acid #PROVISIONAL
+age E3.5
+strain 129S4/SvJae
+vendorName LICR lab
+vendorId mESC-neurons
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 15148
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
+color 105,105,105
+sex M
+label ES-neurons
+protocol Ren:ES-neurons_Ren_protocol.pdf 
+
 term ES-TT2
 tag ESTT2
 type Cell Line
@@ -7130,6 +7149,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F4WT
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -7146,6 +7166,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F1KO
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -9449,7 +9470,7 @@ validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bern
 label EZH2 (39875)
 
 term FLI1_(sc-356)
-tag FLI1SC365
+tag FLI1SC356
 type Antibody
 antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
 target FLI1
@@ -15056,6 +15077,11 @@ tag B6CBAF1J
 type strain
 description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
+term BALB/cJ
+tag BALBCJ
+type strain
+description A common inbred strain of laboratory mouse. #PROVISIONAL
+
 term BALB/cAnN
 tag BALBCANN
 type strain
@@ -15126,6 +15152,11 @@ tag 129S2
 type strain
 description The mice have white (or light)-bellied agouti.
 
+term 129S4/SvJae
+tag 129S4
+type strain
+description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines #PROVISIONAL 
+
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
@@ -15155,6 +15186,13 @@ type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
+
+term E3.5
+tag E3HALF
+type age
+stage Embryonic
+description Embryonic day 3.5 #PROVISIONAL
+label Embryonic day 3.5
 
 term E11.5
 tag E11HALF

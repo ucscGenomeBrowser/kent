@@ -68,7 +68,8 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.release3.ra
+include wgEncodeUwAffyExonArray.release3.ra beta,public
+include wgEncodeUwAffyExonArray.patch.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
@@ -113,7 +114,8 @@ include wgEncodeGisRnaSeq.ra
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.release3.ra
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra
+include wgEncodeCshlLongRnaSeq.release2.ra beta,public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -134,8 +136,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.release3.ra alpha
+include wgEncodeHaibMethylRrbs.ra public
+include wgEncodeHaibMethylRrbs.release3.ra alpha,beta
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 
@@ -154,8 +156,8 @@ include wgEncodeBroadHistone.release2.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release4.ra beta,public
-include wgEncodeUwHistone.release5.ra alpha
+include wgEncodeUwHistone.release4.ra public
+include wgEncodeUwHistone.release5.ra alpha,beta
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.release3.ra
@@ -163,8 +165,7 @@ include wgEncodeSydhHistone.release3.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra beta,public
-include wgEncodeUwTfbs.release4.ra alpha
+include wgEncodeUwTfbs.release4.ra
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
