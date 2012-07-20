@@ -15077,6 +15077,11 @@ tag B6CBAF1J
 type strain
 description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
+term BALB/cJ
+tag BALBCJ
+type strain
+description A common inbred strain of laboratory mouse. #PROVISIONAL
+
 term BALB/cAnN
 tag BALBCANN
 type strain
