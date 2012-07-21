@@ -909,3 +909,72 @@ searchPriority 8
     #	933922552 bases of 2572853723 (36.299%) in intersection
 
 ##############################################################################
+# make refSeq amino acid fasta file for use with mm10 UCSC genes
+#
+#  downloaded rn5.refGenePepProtNames.faa.gz using table browser, selecting
+#  refGene, download sequence, and clicking the "protein" radio button.
+#  This generates a file with the protein id's, whereas as we want the NM_*
+#  id's for the blastp process to work
+
+zcat rn5.refGenePepProtNames.faa.gz | awk '/^>/ {print buf; buf=$1 " "} ! /^>/ {buf=buf $1}' | tr -d '>' | sed 's/\.[0-9] / /' | sort > tmp1
+
+echo "select refGene.name,refLink.protAcc from refGene,refLink where refGene.name=refLink.mrnaAcc and refLink.protAcc != ''" | hgsql rn5 | tail -n +2 | awk '{print $2,$1}' | sort > tmp2
+
+join tmp1 tmp2 | awk '{printf ">%s\n%s\n",$3,$2}' > rn5.refGenePep.faa
+rm tmp1 tmp2
+
+#########################################################################
+# LASTZ Macaca rheMac3 (DONE - 2012-07-10 - Chin)
+    screen -S rheMac3-rn5
+    mkdir /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10
+    cd /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #   number of jobs, 50,000 to something under 100,000
+
+    cat << '_EOF_' > DEF
+# rat vs. macacque
+BLASTZ_M=254
+
+# TARGET: Rat Rn5
+SEQ1_DIR=/cluster/data/rn5/rn5.2bit
+SEQ1_LEN=/cluster/data/rn5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Macaca Mulatta RheMac3
+SEQ2_DIR=/cluster/data/rheMac3/rheMac3.2bit
+SEQ2_LEN=/cluster/data/rheMac3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+
+BASE=/cluster/data/rn5/bed/lastz.rheMac3.2012-07-10
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+      -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -syntenicNet `pwd`/DEF > do.log 2>&1 &
+    #   real    1526m4.274s
+    cat fb.rn5.chainRheMac3Link.txt
+    # 896256761 bases of 2572853723 (34.835%) in intersection
+    cd /hive/data/genomes/rn5/bed
+    ln -s lastz.rheMac3.2012-07-10 lastz.rheMac3
+
+    # then swap
+    mkdir /cluster/data/rheMac3/bed/blastz.rn5.swap
+    cd /cluster/data/rheMac3/bed/blastz.rn5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10/DEF \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -syntenicNet > swap.log 2>&1 &
+    #   real    69m12.752s
+    cat fb.rheMac3.chainRn5Link.txt
+    # 858153767 bases of 2639145830 (32.516%) in intersection
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.rn5.swap lastz.rn5
+
+##############################################################################

@@ -28,7 +28,7 @@
 
 include ../../../inc/common.mk
 
-DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
+DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	venter1 \
 	panTro1 panTro2 panTro3 panTro4 \
 	gorGor1 gorGor2 gorGor3 \
@@ -36,7 +36,6 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	ponAbe2 \
 	rheMac2,rheMac3 \
 	papHam1 \
-    papAnu1 \
 	macEug1 macEug2 \
 	calJac1 calJac3 \
 	otoGar1 otoGar3 tupBel1\

@@ -4944,6 +4944,271 @@ tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 treatment diffProtD_24hr
 view Signal
 
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1.bam,wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2.bam,wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1AlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk
+objType table
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+tableName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig
+objType table
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+tableName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep1
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep2
+objType file
+age E14.5
+antibody FLI1_(sc-356)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-18
+fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7497
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep3.bam.bai
+grant Hardison
+lab PSU-m
+md5sum c045f4508e9b3a92889887d6f56f8552,b5cfedeecc078182394dfbab46f15044
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view Alignments
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1
 objType file
 age E14.5
@@ -5017,6 +5282,7 @@ geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 3b21622ad16e0d1618b6ecaabd19413f
+objStatus replaced - New version of pooled data, which includes replicate 3 of data set
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5024,6 +5290,32 @@ sex B
 strain CD-1
 subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2
+objType table
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 927f35850aa29214979ad808c93b5239
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7501
+submittedDataVersion V2 - New version of pooled data, which includes replicate 3 of data set
+tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2
 view Peaks
 
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep1
@@ -5138,6 +5430,31 @@ strain CD-1
 subId 4791
 view RepPeaks
 
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep3.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 89d33336c5739f474e80d1e20d8ba2dd
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RepPeaks
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep1
 objType file
 age E14.5
@@ -5194,6 +5511,31 @@ strain CD-1
 subId 4791
 view RepSignal
 
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep3.bigWig
+grant Hardison
+lab PSU-m
+md5sum e7c0cc440ced9256e57133d3591dc5cd
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RepSignal
+
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
 objType table
 age E14.5
@@ -5213,6 +5555,7 @@ geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 766dd51a7a454c36db5aaa554118c895
+objStatus replaced - New version of pooled data, which includes replicate 3 of data set
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5221,6 +5564,57 @@ strain CD-1
 subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
 view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2
+objType table
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 3ea8cb21860c568f58aae39336d13163
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7501
+submittedDataVersion V2 - New version of pooled data, which includes replicate 3 of data set
+tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2
+view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep3
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-17
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 3a75f406f665c722d94b844fe066015d
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 7499
+view RawData
 
 metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1
 objType file
@@ -5438,6 +5832,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 9253385fc8d686a273cd1aa877b8429f,ac9b5d27be311b61e338c5a55aed8d90
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5462,6 +5857,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 1f981b0244270831753544d61a8ace8c,1cd885325fd1f2f99cafffbb28c7b81f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5486,6 +5882,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep3.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep3.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 06887208e2905733ded0a434e4b60eda,89c94b2876ee5721ce22e5a1339b80a0
 project wgEncode
 replicate 3
 seqPlatform Illumina_HiSeq_2000
@@ -5510,6 +5907,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep4.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep4.bam.bai
 grant Hardison
 lab PSU-m
+md5sum e47d76948c37098ee39eed00b3c40a9c,4c763e355f780d3e75d99cb16be5bf2f
 project wgEncode
 replicate 4
 seqPlatform Illumina_HiSeq_2000
@@ -5534,6 +5932,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 3794744ceb668ba1cb24bbddbeb5f818
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5558,6 +5957,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 9101d7b287d08b91fe7a2914cc9246da
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5582,6 +5982,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 90922c1d48a6749802f792f35a42a2b3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5606,6 +6007,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep3.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum f3cf3f69dab547acfe0b4632f1b207d6
 project wgEncode
 replicate 3
 seqPlatform Illumina_HiSeq_2000
@@ -5630,6 +6032,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep4.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 66c20c812b50f1bdca3489b48df92c50
 project wgEncode
 replicate 4
 seqPlatform Illumina_HiSeq_2000
@@ -5654,6 +6057,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 8c2a71b0c3084177cb5bcc25eecc6ee1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5678,6 +6082,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5f9741f3d40d0664d8940cd29aae327f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5702,6 +6107,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep3.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum e41644f7b384f22f21e67cf2c09d055b
 project wgEncode
 replicate 3
 seqPlatform Illumina_HiSeq_2000
@@ -5726,6 +6132,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep4.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 76918c95111ba9a7c4b1dad35727844e
 project wgEncode
 replicate 4
 seqPlatform Illumina_HiSeq_2000
@@ -5750,6 +6157,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 934178034a803071c2c3134e12d38e7c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5774,6 +6182,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 0185ebf148aef9a8137c1d2a2c04561c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5798,6 +6207,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep3.bigWig
 grant Hardison
 lab PSU-m
+md5sum 83d5a198c4b830d225f8ab24530df4c3
 project wgEncode
 replicate 3
 seqPlatform Illumina_HiSeq_2000
@@ -5822,6 +6232,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep4.bigWig
 grant Hardison
 lab PSU-m
+md5sum 5c874ad97f06bd67fa5ae4fd8c3ffcf4
 project wgEncode
 replicate 4
 seqPlatform Illumina_HiSeq_2000
@@ -5846,6 +6257,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 5bf91408e36dd4b4547eb2ed19e1889a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5879,7 +6291,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view Alignments
 
@@ -5907,7 +6319,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view Alignments
 
@@ -5935,7 +6347,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
 view Peaks
@@ -5965,7 +6377,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RawData
 
@@ -5994,7 +6406,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RawData
 
@@ -6023,7 +6435,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepPeaks
 
@@ -6052,7 +6464,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepPeaks
 
@@ -6081,7 +6493,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepSignal
 
@@ -6110,7 +6522,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 view RepSignal
 
@@ -6138,7 +6550,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex M
-strain C57BL/6
+strain Unknown
 subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
 view Signal
@@ -6167,7 +6579,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view Alignments
 
@@ -6195,7 +6607,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view Alignments
 
@@ -6224,7 +6636,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RawData
 
@@ -6253,7 +6665,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RawData
 
@@ -6282,7 +6694,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RepSignal
 
@@ -6311,7 +6723,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 view RepSignal
 
@@ -6339,7 +6751,7 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5144
 tableName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig
 view Signal
@@ -6367,7 +6779,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view Alignments
 
@@ -6394,7 +6806,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view Alignments
 
@@ -6421,7 +6833,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk
 view Peaks
@@ -6450,7 +6862,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RawData
 
@@ -6478,7 +6890,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RawData
 
@@ -6506,7 +6918,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepPeaks
 
@@ -6534,7 +6946,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepPeaks
 
@@ -6562,7 +6974,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepSignal
 
@@ -6590,7 +7002,7 @@ replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 view RepSignal
 
@@ -6617,7 +7029,7 @@ project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig
 view Signal
@@ -6645,7 +7057,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view Alignments
 
@@ -6672,7 +7084,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view Alignments
 
@@ -6699,7 +7111,7 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk
 view Peaks
@@ -6728,7 +7140,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RawData
 
@@ -6756,7 +7168,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RawData
 
@@ -6784,7 +7196,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepPeaks
 
@@ -6812,7 +7224,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepPeaks
 
@@ -6840,7 +7252,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepSignal
 
@@ -6868,7 +7280,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 view RepSignal
 
@@ -6895,9 +7307,9 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex U
-strain C57BL/6
+strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 752254262
+# MAGIC: 1476372391

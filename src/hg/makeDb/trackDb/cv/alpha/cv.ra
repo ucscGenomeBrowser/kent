@@ -1921,7 +1921,7 @@ organism human
 description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype normal 
-sex F
+sex M
 tissue blood
 vendorName Coriell
 vendorId GM10248
@@ -1939,7 +1939,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM10266
@@ -2542,7 +2542,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM20000
@@ -4275,6 +4275,7 @@ sex M
 tissue bone marrow
 vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
 vendorId HS27a
+orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
@@ -4291,10 +4292,28 @@ sex M
 tissue bone marrow
 vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
 vendorId HS5
+orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 protocol Stam:HS5_Stam_protocol.pdf
+
+term bone_marrow_MSC
+tag MSC
+type Cell Line
+tier 3
+organism human
+description These cells are primary fibroblastoid cells obtained from human bone marrow of normal donors as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005.
+karyotype normal
+sex M
+tissue bone marrow
+vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorId MSC
+orderUrl http://cceh.fhcrc.org/
+termId BTO:0000141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
+lab Stam
+protocol Stam:MSC_Stam_protocol.pdf
 
 term HSaVEC
 tag HSAVEC
@@ -5218,22 +5237,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 lab Crawford
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
 
-term bone_marrow_MSC
-tag MSC
-type Cell Line
-tier 3
-organism human
-description These cells are primary fibroblastoid cells obtained from human bone marrow of normal donors as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005.
-karyotype normal
-sex M
-tissue bone marrow
-vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
-vendorId MSC
-termId BTO:0000141
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
-lab Stam
-protocol Stam:MSC_Stam_protocol.pdf
-
 term Myometr
 tag MYOMETR
 type Cell Line
@@ -5671,7 +5674,7 @@ description Primary frozen pancreas tissue from NCTC donor IDs 09-0144A (Rep B1)
 karyotype normal
 sex M
 tissue pancreas
-vendorName  NCTC
+vendorName NCTC
 vendorId 09-0144A; 10-0021A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
 termId BTO:0000988
@@ -7100,6 +7103,25 @@ color 65,105,225
 sex U
 protocol missing
 
+term ES-neurons
+tag ESNEURON
+type Cell Line
+organism mouse
+tissue nerve
+category primaryCells
+description neurons derived from mouse embryonic stem cells by treatment of retinoic acid #PROVISIONAL
+age E3.5
+strain 129S4/SvJae
+vendorName LICR lab
+vendorId mESC-neurons
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 15148
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
+color 105,105,105
+sex M
+label ES-neurons
+protocol Ren:ES-neurons_Ren_protocol.pdf 
+
 term ES-TT2
 tag ESTT2
 type Cell Line
@@ -7116,6 +7138,40 @@ termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 sex M
 protocol missing
+
+term ES-WW6
+tag ESWW6
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells isolated from mix of ~20% C57/B6J, ~75% 129/Sv and ~5% SJL strains
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F4WT
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_Stam_protocol.pdf
+
+term ES-WW6_F1KO
+tag ESWW6KO
+type Cell Line
+organism mouse
+category primaryCells
+description Histone H1c, H1d, H1e triple null mouse embryonic stem cell line derived from ES-WW6 cells.
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F1KO
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_F1K0_Stam_protocol.pdf
 
 term Erythrobl
 tag ERYTHROBL
@@ -7200,7 +7256,7 @@ tissue frontal lobe
 category Tissue
 age ageUnknown
 strain Unknown
-description Frontal Lobe PROVSIONAL
+description Frontal Lobe #PROVISIONAL
 vendorName CSHL lab
 vendorId Frontal Lobe
 orderUrl  http://gingeraslab.cshl.edu/
@@ -7210,6 +7266,44 @@ color 105,105,105
 sex U
 protocol Gingeras:FrontalLobe_Gingeras_protocol.pdf
 label Frontal Lobe
+
+term FVLstem
+tag FVLS
+type Cell Line
+organism mouse
+tissue spleen
+category primaryCells
+age ageUnknown
+strain Unknown
+description Friend virus infected murine CD34+,CD133+,Kit+,Sca1+ Leukemia stem cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+vendorName Paulson Lab
+vendorId FVLstem
+orderUrl http://vbs.psu.edu/research/labs/paulson
+color 153,38,0
+termId 15212
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+sex U
+protocol Hardison:FVLstem_Hardison_protocol.pdf
+label FVL-stem
+
+term FVprogenitor
+tag FVP
+type Cell Line
+organism mouse
+tissue spleen
+category primaryCells
+age ageUnknown
+strain Unknown
+description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+vendorName Paulson Lab
+vendorId FVprogenitor
+orderUrl http://vbs.psu.edu/research/labs/paulson
+color 153,38,0
+termId 15212
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+sex U
+protocol Hardison:FVprogenitor_Hardison_protocol.pdf
+label FV-progenitor
 
 term G1E
 tag G1E
@@ -7747,6 +7841,24 @@ color 105,105,105
 sex U
 protocol Stam:Retina_Stam_protocol.pdf
 
+term Skin
+tag SKIN
+type Cell Line
+organism mouse
+tissue skin
+category Tissue
+age ageUnkown
+strain Unknown
+description Skin
+vendorName LICR lab
+vendorId Skin
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4556
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4556
+color  204,121,167
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term SkMuscle
 tag SKMUSCLE
 type Cell Line
@@ -7786,6 +7898,24 @@ protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_pr
 label Small Intestine
 #Shortened term
 
+term SpinalCord
+tag SPC
+type Cell Line
+organism mouse
+tissue spinal cord
+category Tissue
+age ageUnknown
+strain Unknown
+description Spinal Cord, part of the CNS
+vendorName LICR lab
+vendorId Spinal Cord
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4521
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4521
+color 105,105,105 
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term Spleen
 tag SPL
 type Cell Line
@@ -7813,14 +7943,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Stomach
-vendorName CSHL lab
-vendorId Stomach
-orderUrl http://gingeraslab.cshl.edu/
+vendorName 1) CSHL lab; 2) LICR lab
+vendorId Stomach; Stomach
+orderUrl http://gingeraslab.cshl.edu/;  http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
 sex U
-protocol Gingeras:Stomach_Gingeras_protocol.pdf
+protocol Gingeras:Stomach_Gingeras_protocol.pdf Ren:Tissue_Ren_protocol.pdf
 
 term SubcFatPad
 tag SFAT
@@ -7952,6 +8082,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 86,180,233
 sex U
 protocol Stam:TReg_Stam_protocol.pdf
+
+term UpperLegMuscle
+tag ULMUS
+type Cell Line
+organism mouse
+tissue muscle
+category Tissue
+age ageUnknown
+strain Unkown
+description Upper leg muscle
+vendorName LICR lab
+vendorId Thigh Muscle
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 11033
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=11033
+color 139,69,19 
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
 
 term WholeBrain
 tag WBRAIN
@@ -8487,6 +8635,38 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation Human_-_:missing Mouse_-_:missing
 label c-Myc (sc-764)
 
+term CBX2
+tag CBX2
+type Antibody
+target CBX2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Chromobox protein homolog 2 is a component of the polycomb group (PcG) multiprotein PRC1 complex, a complex required to maintain the transcriptionally repressive state of many genes, including Hox genes, throughout development. [taken from the Universal Protein Resource (UniProt) www.uniprot.org/uniprot/P19474]
+vendorName Bethyl
+vendorId A302-524A
+orderUrl http://www.bethyl.com/product/A302-524A
+lab Epstein
+lots A302-524A-1
+targetId GeneCard:CBX2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
+validation Human_-_CBX2_(A302-524A)(ChIP,WesternBlot):human_CBX2_validation_Epstein.pdf
+label CBX2 (A302-524A)
+
+term CBX8
+tag CBX8
+type Antibody
+target CBX8
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription CBX8 is part of the polycomb group of proteins that are important in embryogenesis and human tumorigenesis and regulates a number of genes involved in cell growth and survival. There are at least 5 CBX proteins in mammals. CBX proteins associate with the core polycomb repressive complex 1 (PRC1) that functions to maintain the transcriptionally repressive state of genes during development.
+vendorName Bethyl
+vendorId A300-882A
+orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
+lab Epstein
+lots A300-882A-1
+targetId GeneCard:CBX8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
+validation Human_-_CBX8_(A300-882A)(ChIP,WesternBlot):human_CBX8_validation_Epstein.pdf
+label CBX8 (A300-882A)
+
 term CCNT2
 tag CCNT2
 type Antibody
@@ -8630,6 +8810,22 @@ targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation Human_-_:missing Mouse_-_:missing
 label CHD2 (ab68301)
+
+term CHD4_Mi2
+tag CHD4MI2
+type Antibody
+target CHD4_Mi2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
+vendorName Bethyl
+vendorId A301-081A
+orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
+lab Epstein
+lots A301-081A-1
+targetId GeneCard:CHD4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
+validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
+label CHD4 (A301-081A)
 
 term CREB1_(06-863)
 tag CREB106863
@@ -9310,6 +9506,22 @@ targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 label EZH2 (39875)
+
+term FLI1_(sc-356)
+tag FLI1SC356
+type Antibody
+antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
+target FLI1
+targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
+vendorName Santa Cruz Biotech
+vendorId sc-356
+orderUrl http://www.scbt.com/datasheet-356-fli-1-c-19-antibody.html
+lab Hardison
+lots E1211
+targetId GeneCard:FLI1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
+validation FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+label FLI1 (sc-356)
 
 term  FOSL1_(SC-183)
 tag FOSL1
@@ -10356,6 +10568,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation Human_-_LEF1_(SC-8592)(Immunoprecipitation-Western_blot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 label LEF1 (sc-8592)
 
+term LSD1
+tag LSD1
+type Antibody
+target LSD1
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
+vendorName Bethyl
+vendorId A300-215A
+orderUrl http://www.bethyl.com/product/A300-215A/
+lab Epstein
+lots A300-215A-1
+targetId GeneCard:KDM1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
+validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+label LSD1_KDM1A (A300-215A)
+
 term MafF_(M8194)
 tag MAFF
 type Antibody
@@ -10594,6 +10822,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation Human_-_NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 label NANOG (sc-33759)
 
+term NCoR
+tag NCOR
+type Antibody
+target NCoR
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors.  NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
+vendorName Bethyl
+vendorId A301-145A
+orderUrl http://www.bethyl.com/product/A301-145A/
+lab Epstein
+lots A301-145A-1
+targetId GeneCard:NCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
+validation Human_-_NCoR_(A301-145A)(ChIP,WesternBlot):human_NCoR_validation_Epstein.pdf
+label NCoR (A301-145A)
+
 term NELFe
 tag NELFE
 type Antibody
@@ -10794,6 +11038,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
 label P300 (sc-585)
 
+term P300_KAT3B
+tag P300KAT3B
+type Antibody
+target P300_KAT3B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
+vendorName Bethyl
+vendorId A300-358A
+orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
+lab Epstein
+lots A300-358A-1
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
+validation Human_-_P300_KAT3B_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
+label P300_KAT3B (A300-358A)
+
 term p300_(SC-584)
 tag P300b
 type Antibody
@@ -10883,6 +11143,22 @@ targetId GeneCard:PBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
 validation Human_-_:missing
 label PBX3 (sc-891)
+
+term PCAF
+tag PCAF
+type Antibody
+target PCAF_KAT2B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
+vendorName Bethyl
+vendorId A301-666A
+orderUrl http://www.bethyl.com/product/A301-666A/PCAF_Antibody?referrer=search_default
+lab Epstein
+lots A301-666A-1
+targetId GeneCard:KAT2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
+validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+label PCAF_KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -11134,20 +11410,37 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
 validation Human_-_RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
 label RBBP5 (A300-109A)
 
-term RPC155
-tag RPC155
+term REST
+tag REST
 type Antibody
-target RPC155
-antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
-targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
-vendorId 1900
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
-lab Struhl
-targetId GeneCard:POLR3A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
-label RPC155 (1900)
+target GST fusion amino acids 801-1097 of human REST
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes.
+vendorName Millipore
+vendorId 17-641
+orderUrl http://www.millipore.com/catalogue/item/17-641
+lab Epstein
+lots JH1786670
+targetId GeneCard:REST
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
+validation Human_-_REST_(17-641)(ChIP,WesternBlot):human_REST_validation_Epstein.pdf
+label REST (17-641)
+
+term RNF2
+tag RNF2
+type Antibody
+target RNF2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Ring finger protein 2 (RNF2) is a polycomb group (PcG) protein. RNF2 has been shown to interact with, and suppress the activity of, transcription factor CP2 (TFCP2/CP2).
+vendorName Bethyl
+vendorId A302-869A
+orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
+lab Epstein
+lots A302-869A-1
+targetId GeneCard:RNF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
+validation Human_-_RNF2_(A302-869A)(ChIP,WesternBlot):human_RNF2_validation_Epstein.pdf
+label RNF2 (A302-869A)
 
 term RFX5_(200-401-194)
 tag RFX5
@@ -11163,6 +11456,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_validation_Snyder.pdf
 label RFX5 (200-401-194)
+
+term RPC155
+tag RPC155
+type Antibody
+target RPC155
+antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
+targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 1900
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetId GeneCard:POLR3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
+validation Human_-_:missing
+label RPC155 (1900)
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -13625,13 +13933,15 @@ type treatment
 
 term G1_phase
 tag G1PHASE
-description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+description Cells were synchronized and subjected to FACS sorting based on DNA content with the peak of the single DNA content peak taken as G1 cells. The intermediate DNA content cells between G2-M and G1 phases were excluded. (Crawford)
 type treatment
+#Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content
 
 term G2-M_phase
 tag G2MPHASE
-description Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells and the single DNA content peak taken as G1 cells. The intermediate DNA content cells were excluded. (Crawford)
+description Cells were synchronized and subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells. The intermediate DNA content cells between G2-M and G1 phases were excluded. (Crawford)
 type treatment
+#Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content
 
 term Genistein_100nM
 tag GEN1H
@@ -13736,6 +14046,18 @@ term Randomized_shRNA_control
 tag RANDSHRNA
 label Randomized shRNA control
 description Cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
+type treatment
+
+term SAHA_1uM_72hr
+tag SAHA1U72HR
+label SAHA 1uM 72hr
+description Cells grown with 1 uM suberoylanilide hydroxamic acid (SAHA) dissolved in DMSO supplementing RPMI1640 + 10% FBS media for 72 hours (SAHA vehicle volume is ~ .05% of the total media volume). SAHA was provided by Cayman Chemical, item # 10009929.
+type treatment
+
+term SAHA_ctrl
+tag SAHACTRL
+label SAHA control
+description Cells grown with DMSO supplementing RPMI1640 + 10% FBS media for 72 hours (DMSO volume is ~ .05% of the total media volume). This is an untreated control.
 type treatment
 
 term serum_free_media
@@ -14805,6 +15127,11 @@ tag B6CBAF1J
 type strain
 description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
+term BALB/cJ
+tag BALBCJ
+type strain
+description A common inbred strain of laboratory mouse. #PROVISIONAL
+
 term BALB/cAnN
 tag BALBCANN
 type strain
@@ -14875,6 +15202,11 @@ tag 129S2
 type strain
 description The mice have white (or light)-bellied agouti.
 
+term 129S4/SvJae
+tag 129S4
+type strain
+description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines #PROVISIONAL 
+
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
@@ -14904,6 +15236,13 @@ type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
+
+term E3.5
+tag E3HALF
+type age
+stage Embryonic
+description Embryonic day 3.5 #PROVISIONAL
+label Embryonic day 3.5
 
 term E11.5
 tag E11HALF
@@ -14981,6 +15320,13 @@ type age
 stage Adult
 description Adult 8 weeks
 label Adult 8 weeks
+
+term adult-10-12wks
+tag ADULT810WKS
+type age
+stage Adult
+description Adult between 8-10 weeks #PROVISIONAL
+label Adult 8-10 weeks
 
 term adult-24wks
 tag ADULT24WKS
@@ -16005,8 +16351,8 @@ cvDefined yes
 validate cv
 hidden yes
 priority 500
-requiredVars term,tag,type,description,searchable,cvDefined,validate,priority #Provisional
-optionalVars label,hidden,requiredVars,optionalVars,deprecated #Provisional
+requiredVars term,tag,type,description,searchable,cvDefined,validate,priority
+optionalVars label,hidden,requiredVars,optionalVars,deprecated
 
 term accession
 tag ACCESSION
@@ -16019,8 +16365,8 @@ hidden yes
 validate regex: ^GS[M,E][0-9]*$
 priority 500
 # Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term age
 tag AGE
@@ -16031,8 +16377,8 @@ searchable multiSelect
 cvDefined yes
 priority 140
 validate cv
-requiredVars term,tag,type,description,stage #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description,stage
+optionalVars label,deprecated
 
 term annotation
 tag ANNOTATION
@@ -16044,8 +16390,8 @@ cvDefined no
 priority 590
 validate list: manual,automatic
 deprecated No longer neede by GENCODE
-requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab #Provisional
-optionalVars label,validation,targetUrl,lots,displayName,deprecated #Provisional
+requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
+optionalVars label,validation,targetUrl,lots,displayName,deprecated
 
 term Antibody
 tag ANTIBODY
@@ -16056,8 +16402,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or control
 priority 190
-requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab #Provisional
-optionalVars label,validation,targetUrl,lots,deprecated #Provisional
+requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
+optionalVars label,validation,targetUrl,lots,deprecated
 
 term attic
 tag ATTIC
@@ -16070,8 +16416,8 @@ validate cv
 priority 190
 hidden yes
 #It probably should be cv defined, but Venkat will need to define the terms
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term bioRep
 tag BIOREP
@@ -16082,8 +16428,8 @@ searchable no
 cvDefined no
 validate none
 priority 415
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term category
 tag CATEGORY
@@ -16095,8 +16441,8 @@ cvDefined yes
 hidden yes
 validate cv
 priority 470
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term cellType
 tag CELLTYPE
@@ -16113,8 +16459,8 @@ priority 110
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.
 ### (11/18/10)
-requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier,termId #Provisional
-optionalVars label,tissue,vendorId,karyotype,lineage,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
+requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier,termId
+optionalVars label,tissue,vendorId,karyotype,lineage,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf
 
 term composite
 tag COMPOSITE
@@ -16128,8 +16474,8 @@ priority 025
 # Are composites used by the browser in the same way?
 # This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
 # Should be cvDefined
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term control
 tag CONTROLi
@@ -16140,8 +16486,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 230
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term controlId
 tag CONTROLID
@@ -16153,9 +16499,9 @@ cvDefined no
 validate none
 priority 355
 #label Control ID - Specific dataset used as the control
-#This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+#This is difficult to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dataGroup
 tag DATAGROUP
@@ -16166,8 +16512,8 @@ searchable no
 cvDefined no
 validate none
 priority 030
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dataType
 tag DATATYPE
@@ -16178,8 +16524,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 030
-requiredVars term,tag,type,description,label,dataGroup #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description,label,dataGroup
+optionalVars label,deprecated
 
 term dataVersion
 tag DATAVERSION
@@ -16191,8 +16537,8 @@ cvDefined no
 priority 310
 validate none
 # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dateResubmitted
 tag DATERESUBMITTED
@@ -16204,8 +16550,8 @@ cvDefined no
 priority 320
 validate date
 # later than dateSubmitted
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dateSubmitted
 tag DATESUBMITTED
@@ -16217,8 +16563,8 @@ cvDefined no
 priority 315
 validate date
 # nine months less than dateUnrestricted
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dateUnrestricted
 tag DATEUNRESTRICTED
@@ -16230,8 +16576,8 @@ cvDefined no
 priority 325
 validate date
 # nine months more than dateSubmitted
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dccAccession
 tag DCCACCESSION
@@ -16242,8 +16588,8 @@ searchable wildList
 cvDefined no
 validate regex: ^wgEncodeE[H,M][0-9]*$
 priority 312
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dccInternalNotes
 tag DCCINTERNALNOTES
@@ -16255,8 +16601,8 @@ cvDefined no
 validate none
 hidden yes
 priority 910
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term dccRep
 tag DCCREP
@@ -16268,8 +16614,8 @@ cvDefined no
 validate integer
 hidden no
 priority 241
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term donorId
 tag DONOR
@@ -16292,8 +16638,8 @@ cvDefined no
 hidden beta,public
 validate integer
 priority 100
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term expVars
 tag EXPVARS
@@ -16307,8 +16653,8 @@ priority 500
 validate none
 # Perhaps could add a validte option to restrict/require this var for objType=composite
 # Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term fileName
 tag FILENAME
@@ -16319,8 +16665,8 @@ searchable no
 cvDefined no
 validate exists
 priority 980
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term files
 tag FILES
@@ -16345,8 +16691,8 @@ priority 590
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
 # Venkat (4/5/2011): fragLength will be used only for hg18 at the moment, term is retired for hg19, mm9
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term fragSize
 tag FRAGSIZE
@@ -16358,8 +16704,8 @@ cvDefined yes
 validate regex: ^[0-9]*k$
 priority 590
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term geoSampleAccession
 tag GEOSAMPLE
@@ -16370,8 +16716,8 @@ searchable wildList
 cvDefined no
 validate regex: ^GSM[0-9]*$
 priority 345
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term geoSeriesAccession
 tag GEOSERIES
@@ -16382,8 +16728,8 @@ searchable wildList
 cvDefined no
 validate regex: ^GSE[0-9]*$
 priority 340
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term grant
 tag GRANT
@@ -16394,8 +16740,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 015
-requiredVars term,tag,type,description,grantInst,projectName #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description,grantInst,projectName
+optionalVars label,deprecated
 
 term insertLength
 tag INSERTLENGTH
@@ -16407,8 +16753,8 @@ cvDefined yes
 validate cv or None
 priority 166
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term lab
 tag LAB
@@ -16419,8 +16765,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 020
-requiredVars term,tag,type,description,organism,labPi #Provisional
-optionalVars label,labInst,labPiFull,grantPi,deprecated #Provisional
+requiredVars term,tag,type,description,organism,labPi
+optionalVars label,labInst,labPiFull,grantPi,deprecated
 
 term labExpId
 tag LABEXPID
@@ -16431,8 +16777,8 @@ searchable wildList
 cvDefined no
 validate none
 priority 410
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term labProtocolId
 tag LABPROTOCOLID
@@ -16443,8 +16789,8 @@ searchable no
 cvDefined no
 validate none
 priority 420
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term labVersion
 tag LABVERSION
@@ -16455,8 +16801,8 @@ searchable freeText
 cvDefined no
 validate none
 priority 430
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term level
 tag LEVEL
@@ -16468,8 +16814,8 @@ cvDefined no
 validate list: 1,2,3,1-2
 priority 590
 deprecated no longer needed by GENCODE
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term localization
 tag LOCALIZATION
@@ -16480,8 +16826,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 150
-requiredVars term,tag,type,description,termId,termUrl #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description,termId,termUrl
+optionalVars label,deprecated
 
 term mapAlgorithm
 tag MAPALGORITHM
@@ -16493,8 +16839,8 @@ cvDefined yes
 validate cv
 priority 430
 # This is Caltech only and possibly should be retired.  (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term md5sum
 tag MD5SUM
@@ -16507,8 +16853,8 @@ validate regex: ^\([0-9a-f]\{32\},\)*[0-9a-f]\{32\}$
 priority 999
 #This can either be a valid md5sum 920afe925b7f7b4d7617ef538160579c with 32 digits
 #in the case of bam files, it can be a pair bam=2aac07f3f113b5bd708915081eb1a11d,bai=0da3b2adf4f21d5bb50e7cae31b91f2c
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term objStatus
 tag OBJSTAT
@@ -16520,8 +16866,8 @@ hidden no
 cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term obtainedBy
 tag OBTAINEDBY
@@ -16533,8 +16879,8 @@ cvDefined no
 validate none
 priority 500
 #(Defined by lab)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term organism
 tag ORGANISM
@@ -16546,8 +16892,8 @@ cvDefined yes
 validate cv
 priority 500
 #(Defined by lab)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term origAssembly
 tag ORIGASSEMBLY
@@ -16559,8 +16905,8 @@ cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
 # Could be cv.ra term
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term phase
 tag PHASE
@@ -16573,8 +16919,8 @@ validate cv or None
 priority 170
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 # We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term platform
 tag PLATFORM
@@ -16585,8 +16931,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 430
-requiredVars term,tag,type,description #Provisional
-optionalVars label,geoPlatformName,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,geoPlatformName,deprecated
 
 term project
 tag PROJECT
@@ -16598,20 +16944,20 @@ cvDefined no
 validate list: wgEncode
 priority 010
 # Only one so far: all encode is under single project='wgEncode' (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term promoter
 tag PROMOTER
 type typeOfTerm
 label Promoter
-description Target Promoter PROVISIONAL
+description Target Promoter
 searchable no
 cvDefined yes
 validate cv
 priority 500
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term protocol
 tag PROTOCOL
@@ -16623,8 +16969,8 @@ cvDefined yes
 validate cv or None
 priority 200
 # Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term rank
 tag RANK
@@ -16636,8 +16982,8 @@ cvDefined no
 validate list: 1st,2nd,3rd
 priority 242
 # Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term readType
 tag READTYPE
@@ -16649,8 +16995,8 @@ cvDefined yes
 validate cv
 priority 165
 #description Length of single or paired-end reads in a high-throughput sequencing experiment.
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term region
 tag REGION
@@ -16661,8 +17007,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 500
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term replicate
 tag REPLICATE
@@ -16673,8 +17019,8 @@ searchable multiSelect
 cvDefined no
 validate integer
 priority 240
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term restrictionEnzyme
 tag RESTRICTIONENZYME
@@ -16685,8 +17031,8 @@ searchable no
 cvDefined yes
 validate cv or None
 priority 220
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term rnaExtract
 tag RNAEXTRACT
@@ -16697,8 +17043,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 160
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term seqPlatform
 tag SEQPLATFORM
@@ -16709,8 +17055,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 430
-requiredVars term,tag,type,description #Provisional
-optionalVars label,geoPlatformName,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,geoPlatformName,deprecated
 
 term setType
 tag SETTYPE
@@ -16721,8 +17067,8 @@ searchable multiSelect
 cvDefined no
 priority 350
 validate list: exp,input,control
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term sex
 tag SEX
@@ -16733,8 +17079,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 130
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term size
 tag SIZE
@@ -16746,8 +17092,8 @@ cvDefined no
 validate regex: ^[0-9]*mer$
 priority 500
 # Used in hg19 mappability only (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term softwareVersion
 tag SOFTWAREVERSION
@@ -16758,8 +17104,8 @@ searchable freeText
 cvDefined no
 validate none
 priority 440
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term sourceObj
 tag SOURCEOBJ
@@ -16770,8 +17116,8 @@ searchable no
 cvDefined no
 validate none
 priority 921
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term spikeInPool
 tag SPIKEINPOOL
@@ -16782,8 +17128,8 @@ searchable no
 cvDefined no
 validate none
 priority 430
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term strain
 tag STRAIN
@@ -16794,8 +17140,8 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 120
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term subId
 tag SUBID
@@ -16806,8 +17152,8 @@ searchable no
 cvDefined no
 validate integer
 priority 335
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term submittedDataVersion
 tag SUBMITTEDDATAVERSION
@@ -16819,8 +17165,8 @@ cvDefined no
 validate regex: ^V[2-9]\+ \- .*$
 priority 250
 # Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term tableName
 tag TABLENAME
@@ -16834,8 +17180,8 @@ priority 970
 # This should be metaDb variable only for file objects. A table object will have an object name that is the table name.  In fact, the object name of the file shouuld also be the table name, so this field could be obsoleted.
 # Only one case has been found where tableName != objName:
 #  select * from hg18.metaDb where var = "tableName" and obj != val; # wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya  wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term treatment
 tag TREATMENT
@@ -16846,8 +17192,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 180
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term tier
 tag TIER
@@ -16858,8 +17204,8 @@ cvDefined no
 validate integer
 priority 999
 searchable no
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term tissueSourceType
 tag TISSUESOURCETYPE
@@ -16870,8 +17216,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 470
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term type
 tag TYPE
@@ -16882,8 +17228,8 @@ searchable no
 cvDefined no
 validate none
 priority 985
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term uniqueness
 tag UNIQUENESS
@@ -16896,8 +17242,8 @@ validate none
 priority 590
 # Used in hg19 mappability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
-requiredVars term,tag,type,description #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description
+optionalVars label,deprecated
 
 term view
 tag VIEW
@@ -16908,7 +17254,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
-requiredVars term,tag,type,description,label #Provisional
-optionalVars label,deprecated #Provisional
+requiredVars term,tag,type,description,label
+optionalVars label,deprecated
 
 
