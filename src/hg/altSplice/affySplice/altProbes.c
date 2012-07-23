@@ -1059,7 +1059,7 @@ if(validVertex(splice, path->upV, verts[0]) &&
     if(chromStart >= vPos[path->upV] && chromEnd <= vPos[verts[0]])
         return TRUE;
     else if (!allBases && rangeIntersection(chromStart, chromEnd,
-                                           vPos[path->upV], vPos[verts[0]]) > 0)
+                                            vPos[path->upV], vPos[verts[0]]) > 0)
         return TRUE;
     }
 
@@ -1072,7 +1072,7 @@ if(validVertex(splice, verts[path->vCount -1], path->downV) &&
         return TRUE;
     else if (!allBases &&
              rangeIntersection(chromStart, chromEnd,
-                              vPos[verts[path->vCount - 1]], vPos[path->downV])  > 0)
+                               vPos[verts[path->vCount - 1]], vPos[path->downV])  > 0)
         return TRUE;
     }
 
@@ -1085,7 +1085,7 @@ for(i = 0; i < path->vCount - 1; i++)
         if (chromStart >= vPos[verts[i]] && chromEnd <= vPos[verts[i+1]])
             return TRUE;
         else if (!allBases && rangeIntersection(chromStart, chromEnd,
-                                               vPos[verts[i]], vPos[verts[i+1]]) > 0)
+                                                vPos[verts[i]], vPos[verts[i+1]]) > 0)
             return TRUE;
         }
     }
@@ -1563,7 +1563,7 @@ return notExpressed;
 }
 
 boolean tissueNotExpressed(struct altEvent *event, struct altPath *altPath,
-                        int probeIx, int tissueIx)
+                           int probeIx, int tissueIx)
 /* Return TRUE if the probeIx in tissueIx is above minimum
    pVal, FALSE otherwise. */
 {
@@ -1989,8 +1989,8 @@ return FALSE;
 }
 
 boolean tissueSpecific(struct altEvent *event, int pathIx, int targetTissue,
-                      int **expressed, int **notExpressed,
-                      int pathCount, struct dMatrix *probM)
+                       int **expressed, int **notExpressed,
+                       int pathCount, struct dMatrix *probM)
 /* Output the event if it is alt-expressed and brain
    specific. */
 {
@@ -2424,7 +2424,7 @@ for (altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
             "<a target=\"plots\" href=\"http://%s/cgi-bin/spliceProbeVis?skipPName=%s&pdf=on%s\">[pdf]</a>",
             browserName, namePath->beds[0]->name, muscleOn ? "&muscle=on" : "");
     fprintf(brainSpTableHtmlOut,
-           "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:%d:%d.%s\">[f]</a>",
+            "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:%d:%d.%s\">[f]</a>",
             brainDiffDir,
             splice->name, refSeqForPSet(namePath->beds[0]->name),
             nameForType(splice->type), namePath->beds[0]->name,
@@ -2491,7 +2491,8 @@ return cons;
 }
 
 void fillInStatsForEvent(struct valuesMat *vm, char *name, char *chrom, int intStart,
-                         int exonStart, int exonEnd, int intEnd, char strand, enum altSpliceType type)
+                         int exonStart, int exonEnd, int intEnd, char strand,
+                         enum altSpliceType type)
 /* Fill in stats for the exon specified by intStart->exonStart->exonEnd->intEnd. */
 {
 char *skipPSet = NULL;
@@ -3252,7 +3253,7 @@ else if(event->geneProbeCount > 0)
     gene1Path = altPathStubForGeneSet(event, 0);
     for (incPath = event->altPathList; incPath != NULL; incPath = incPath->next)
         {
-        if(incPath->probeCount == 0)
+        if (incPath->probeCount == 0)
             continue;
 	skipPath = gene1Path;
 	namePath = incPath;
@@ -3295,7 +3296,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     if(altPath->probeCount > 0)
         withProbes++;
     if (altPathExpressed(event, altPath, intenM, probM,
-                        expressed, notExpressed, expression, pathIx))
+                         expressed, notExpressed, expression, pathIx))
         pathExpCount++;
 
     /* Output the probabilities. */
@@ -4216,7 +4217,7 @@ carefulClose(&brainSpPathBedOut);
 }
 
 boolean unitTestFunct(struct unitTest *test, boolean passed,
-                         struct dyString *error, char *errorMsg)
+                      struct dyString *error, char *errorMsg)
 /* Wrapper around printing things to the error. */
 {
 assert(error);
@@ -4547,7 +4548,7 @@ for(i = 0; i < pathCount; i++)
 for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     {
     if (altPathExpressed(event, altPath, intenM, probM,
-                        expressed, notExpressed, expression, pathIx))
+                         expressed, notExpressed, expression, pathIx))
         pathExpCount++;
     pathIx++;
     }
