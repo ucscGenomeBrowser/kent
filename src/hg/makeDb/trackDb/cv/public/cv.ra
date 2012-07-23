@@ -1553,7 +1553,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb11970640_Stam_protocol.pdf
+protocol missing
 
 term CD4+_Naive_Wb78495824
 tag CD4NAIVEWB78495824
@@ -1571,7 +1571,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
+protocol missing
 
 term GC_B_cell
 tag GCBCELL
@@ -2659,7 +2659,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002807
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002807
 lab Stam
-protocol Stam:H0287_Stam_protocol.pdf
+protocol missing
 
 term H7-hESC
 tag H7ES
@@ -4359,7 +4359,7 @@ vendorId HS27a
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
-protocol Stam:HS27a_Stam_protocol.pdf
+protocol missing 
 
 term bone_marrow_HS5
 tag HS5
@@ -4375,7 +4375,7 @@ vendorId HS5
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
-protocol Stam:HS5_Stam_protocol.pdf
+protocol missing
 
 term HSaVEC
 tag HSAVEC
@@ -5309,7 +5309,7 @@ vendorId MSC
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
-protocol Stam:MSC_Stam_protocol.pdf
+protocol missing
 
 term Myometr
 tag MYOMETR

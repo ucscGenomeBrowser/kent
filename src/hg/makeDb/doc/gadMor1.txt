@@ -483,3 +483,22 @@ gadMor1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="HE567617:3931-7549" where name="gadMor1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/gadMor1/pushQ
+    cd /hive/data/genomes/gadMor1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl gadMor1 2> stderr.txt | grep -v transMap > gadMor1.sql
+    #   real    3m56.143s
+
+    scp -p gadMor1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < gadMor1.sql
+
+############################################################################
