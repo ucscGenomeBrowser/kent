@@ -710,3 +710,22 @@ felCat5.refseq.mrna.xeno.loadDesc  = yes
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chrA2:53225502-53231571" where name="felCat5";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/felCat5/pushQ
+    cd /hive/data/genomes/felCat5/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl felCat5 2> stderr.txt | grep -v transMap > felCat5.sql
+    #   real    3m42.309s
+
+    scp -p felCat5.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < felCat5.sql
+
+############################################################################
