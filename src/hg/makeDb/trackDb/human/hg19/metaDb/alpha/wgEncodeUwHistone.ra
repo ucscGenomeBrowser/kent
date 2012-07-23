@@ -734,6 +734,554 @@ tableName wgEncodeUwHistoneAg04449InputStdRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdAlnRep1
+objType file
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdAlnRep1.bam,wgEncodeUwHistoneAg04450H3k09me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS21482
+labVersion Bowtie 0.12.7
+md5sum 776186ba5d1c3cc13801d8f44dc904a4,eec8d89e433df302a432541d2ee4a4e4
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7505
+treatment None
+view Alignments
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdAlnRep2
+objType file
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdAlnRep2.bam,wgEncodeUwHistoneAg04450H3k09me3StdAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS21481
+labVersion Bowtie 0.12.7
+md5sum 4616adbae7a3d5c5d9a25867f529542d,b8a702a53033ba4acb31c7ee9c7fd0ec
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 7504
+treatment None
+view Alignments
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep1
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS21482
+labVersion Hotspot-v5.2
+md5sum ac4469f37137097a0323bc48070efb20
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7505
+tableName wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep2
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS21481
+labVersion Hotspot-v5.2
+md5sum 15cf2df66350cede18531dce0ddacaa6
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 7504
+tableName wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdPkRep1
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS21482
+labVersion lmax-v1.0
+md5sum 6b1e3ba1946b08dd6f514d7cbbb05f1c
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7505
+tableName wgEncodeUwHistoneAg04450H3k09me3StdPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdPkRep2
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS21481
+labVersion lmax-v1.0
+md5sum 6fd3876691de445a2118332cb20d86b4
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 7504
+tableName wgEncodeUwHistoneAg04450H3k09me3StdPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep1
+objType file
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS21482
+md5sum a26043466a91479090137c208316cad0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7505
+treatment None
+view RawData
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep2
+objType file
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS21481
+md5sum 2c93347479ac8cd0d1c441a5444c4a74
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 7504
+treatment None
+view RawData
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdRawRep1
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS21482
+labVersion WindowDensity-bin20-win+/-75
+md5sum 4418aba27ebc437cd508c67595ca50ac
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7505
+tableName wgEncodeUwHistoneAg04450H3k09me3StdRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwHistoneAg04450H3k09me3StdRawRep2
+objType table
+antibody H3K9me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003037
+expId 3037
+fileName wgEncodeUwHistoneAg04450H3k09me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS21481
+labVersion WindowDensity-bin20-win+/-75
+md5sum f4878886f42f5ec891d6e67bfd5f7731
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 7504
+tableName wgEncodeUwHistoneAg04450H3k09me3StdRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwHistoneAg04450H3k27acStdAlnRep1
+objType file
+antibody H3K27ac
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003035
+expId 3035
+fileName wgEncodeUwHistoneAg04450H3k27acStdAlnRep1.bam,wgEncodeUwHistoneAg04450H3k27acStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS21479
+labVersion Bowtie 0.12.7
+md5sum fca68f6bf9db808dc8c40de9f9501444,1b847f90b93c2677b32b1aceaa81c87c
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7502
+treatment None
+view Alignments
+
+metaObject wgEncodeUwHistoneAg04450H3k27acStdHotspotsRep1
+objType table
+antibody H3K27ac
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003035
+expId 3035
+fileName wgEncodeUwHistoneAg04450H3k27acStdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS21479
+labVersion Hotspot-v5.2
+md5sum b341d42e90ede97e610df5a582314bfe
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7502
+tableName wgEncodeUwHistoneAg04450H3k27acStdHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwHistoneAg04450H3k27acStdPkRep1
+objType table
+antibody H3K27ac
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003035
+expId 3035
+fileName wgEncodeUwHistoneAg04450H3k27acStdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS21479
+labVersion lmax-v1.0
+md5sum c6a7656bda4030e2c2ca6c5643450f14
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7502
+tableName wgEncodeUwHistoneAg04450H3k27acStdPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwHistoneAg04450H3k27acStdRawDataRep1
+objType file
+antibody H3K27ac
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003035
+expId 3035
+fileName wgEncodeUwHistoneAg04450H3k27acStdRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS21479
+md5sum 539780c5e3177cf4866232afc384ca51
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7502
+treatment None
+view RawData
+
+metaObject wgEncodeUwHistoneAg04450H3k27acStdRawRep1
+objType table
+antibody H3K27ac
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003035
+expId 3035
+fileName wgEncodeUwHistoneAg04450H3k27acStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS21479
+labVersion WindowDensity-bin20-win+/-75
+md5sum 6bca529fc0c31427b032f521cecbafc0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7502
+tableName wgEncodeUwHistoneAg04450H3k27acStdRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwHistoneAg04450H3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003036
+expId 3036
+fileName wgEncodeUwHistoneAg04450H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneAg04450H3k27me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS21480
+labVersion Bowtie 0.12.7
+md5sum 62631123dd8ce67485e936bebb504c51,4a1ee0a2d0e39515038ee5fd92ed8249
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7503
+treatment None
+view Alignments
+
+metaObject wgEncodeUwHistoneAg04450H3k27me3StdHotspotsRep1
+objType table
+antibody H3K27me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003036
+expId 3036
+fileName wgEncodeUwHistoneAg04450H3k27me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS21480
+labVersion Hotspot-v5.2
+md5sum 8e858375c21dc78a3d56a6e731489e33
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7503
+tableName wgEncodeUwHistoneAg04450H3k27me3StdHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwHistoneAg04450H3k27me3StdPkRep1
+objType table
+antibody H3K27me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003036
+expId 3036
+fileName wgEncodeUwHistoneAg04450H3k27me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS21480
+labVersion lmax-v1.0
+md5sum 1f88fc9b9cd080dfb9654dd535c0579c
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7503
+tableName wgEncodeUwHistoneAg04450H3k27me3StdPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwHistoneAg04450H3k27me3StdRawDataRep1
+objType file
+antibody H3K27me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003036
+expId 3036
+fileName wgEncodeUwHistoneAg04450H3k27me3StdRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS21480
+md5sum 3af3e9a2f688cb0b6ae1cb620ab77ddf
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7503
+treatment None
+view RawData
+
+metaObject wgEncodeUwHistoneAg04450H3k27me3StdRawRep1
+objType table
+antibody H3K27me3
+cell AG04450
+composite wgEncodeUwHistone
+control std
+controlId AG04450/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-18
+dateUnrestricted 2013-04-17
+dccAccession wgEncodeEH003036
+expId 3036
+fileName wgEncodeUwHistoneAg04450H3k27me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS21480
+labVersion WindowDensity-bin20-win+/-75
+md5sum 463a67eae4f31d7ef6dcea9917d17e45
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 7503
+tableName wgEncodeUwHistoneAg04450H3k27me3StdRawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -6709,6 +7257,7 @@ geoSampleAccession GSM945238
 grant Stam
 lab UW
 labExpId DS13587
+md5sum 5ed6aeaed2e1351760725b5923492909
 origAssembly hg19
 project wgEncode
 setType input
@@ -7073,6 +7622,7 @@ geoSampleAccession GSM945234
 grant Stam
 lab UW
 labExpId DS13590
+md5sum a4584b9b606b53db99941d3f80fe3578
 origAssembly hg19
 project wgEncode
 setType input
@@ -7440,6 +7990,7 @@ geoSampleAccession GSM945260
 grant Stam
 lab UW
 labExpId DS13589
+md5sum 5fe19918722a925046a2f49c67b4da2a
 origAssembly hg19
 project wgEncode
 setType input
@@ -24345,6 +24896,7 @@ lab UW
 labExpId DS16263
 labVersion Bowtie 0.12.7
 md5sum b1b69c80f8901816ce4d2df6e55b25b6,80186918830095a43883f069f87f7ccc
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24372,6 +24924,7 @@ lab UW
 labExpId DS17357
 labVersion Bowtie 0.12.7
 md5sum d913d13a2bb86930c30a02e8a7271d23,e01e3069a31c2643e7eb528e4b89df6a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24400,6 +24953,7 @@ lab UW
 labExpId DS16263
 labVersion Hotspot-v5.2
 md5sum 4a05614fe762f0e6c08d16b2265aacb8
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24429,6 +24983,7 @@ lab UW
 labExpId DS17357
 labVersion Hotspot-v5.2
 md5sum f71931abaf1c0dee70a7931613d8129d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24458,6 +25013,7 @@ lab UW
 labExpId DS16263
 labVersion lmax-v1.0
 md5sum 2a60dc81bbd43695f005faa61a26e7d2
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24487,6 +25043,7 @@ lab UW
 labExpId DS17357
 labVersion lmax-v1.0
 md5sum 79c60447565e5897d65b0d34681c5431
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24515,6 +25072,7 @@ grant Stam
 lab UW
 labExpId DS16263
 md5sum 00b3d23aac235ce354f119b1ae152aa0
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24542,6 +25100,7 @@ grant Stam
 lab UW
 labExpId DS17357
 md5sum ac12b8986944c7b4edfb49dccac16a43
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24570,6 +25129,7 @@ lab UW
 labExpId DS16263
 labVersion WindowDensity-bin20-win+/-75
 md5sum 42dc9a77a6e541fc5bf9bc0af987bb3d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24599,6 +25159,7 @@ lab UW
 labExpId DS17357
 labVersion WindowDensity-bin20-win+/-75
 md5sum 4c4aa9830ece52709aac09b24892c4c6
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24627,6 +25188,7 @@ lab UW
 labExpId DS16261
 labVersion Bowtie 0.12.7
 md5sum c11a7c8df65b011931cee3d33df2029a,c07b5ca15a8cff0a66cf3116da8e3867
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24654,6 +25216,7 @@ lab UW
 labExpId DS17354
 labVersion Bowtie 0.12.7
 md5sum 66d2e2f912122d8806e2292d992107ae,f0f8bd3810663deb82ae7b465e398c09
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24682,6 +25245,7 @@ lab UW
 labExpId DS16261
 labVersion Hotspot-v5.2
 md5sum 704852a0d85d42dcef95df001b313195
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24711,6 +25275,7 @@ lab UW
 labExpId DS17354
 labVersion Hotspot-v5.2
 md5sum bef3c5265dac7ae38fa0ea087d3b9e73
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24740,6 +25305,7 @@ lab UW
 labExpId DS16261
 labVersion lmax-v1.0
 md5sum ec57aee896798f8037331628e2feb6b3
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24769,6 +25335,7 @@ lab UW
 labExpId DS17354
 labVersion lmax-v1.0
 md5sum 5c1cd200f32e886a8257e464cc3f3552
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24797,6 +25364,7 @@ grant Stam
 lab UW
 labExpId DS16261
 md5sum 31d167bdab05df06a328c64b40ad52a3
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24824,6 +25392,7 @@ grant Stam
 lab UW
 labExpId DS17354
 md5sum 5616dfe33f895f0133f2fd589aac7cff
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24852,6 +25421,7 @@ lab UW
 labExpId DS16261
 labVersion WindowDensity-bin20-win+/-75
 md5sum 064795eab7d2f24ed1ae824d6ce77f6a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24881,6 +25451,7 @@ lab UW
 labExpId DS17354
 labVersion WindowDensity-bin20-win+/-75
 md5sum 3fc6ef7b6c0e007b01f25599cf0c7436
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24909,6 +25480,7 @@ lab UW
 labExpId DS15834
 labVersion Bowtie 0.12.7
 md5sum 45e20c1b0bf7831c1f748ff0840fd725,73c2e4bb6ff2f1c313ec9ad60271c5ca
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24936,6 +25508,7 @@ lab UW
 labExpId DS17349
 labVersion Bowtie 0.12.7
 md5sum fcd4a3f05ae4f0107d133ccc6fa1bace,fcc1d1837c589bce1f27ab650a70b204
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24964,6 +25537,7 @@ lab UW
 labExpId DS15834
 labVersion Hotspot-v5.2
 md5sum bc9e6d8b9e3a49ffbdeb3880374d76b8
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24993,6 +25567,7 @@ lab UW
 labExpId DS17349
 labVersion Hotspot-v5.2
 md5sum d78c7e8c82526e358ddf63862e3b950f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25022,6 +25597,7 @@ lab UW
 labExpId DS15834
 labVersion lmax-v1.0
 md5sum 798666bb8e1f6affdf2119381073c2ba
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25051,6 +25627,7 @@ lab UW
 labExpId DS17349
 labVersion lmax-v1.0
 md5sum b492329d139e8bb3227ac9cf40e6e498
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25079,6 +25656,7 @@ grant Stam
 lab UW
 labExpId DS15834
 md5sum 05df7b20b8f6b86b7388a74a556fdf4d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25106,6 +25684,7 @@ grant Stam
 lab UW
 labExpId DS17349
 md5sum d5361e1371c509881459e2a06b8fbd60
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25134,6 +25713,7 @@ lab UW
 labExpId DS15834
 labVersion WindowDensity-bin20-win+/-75
 md5sum 574db527143d8c4a1b3eb549e227a37f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25163,6 +25743,7 @@ lab UW
 labExpId DS17349
 labVersion WindowDensity-bin20-win+/-75
 md5sum ad1c5e351295f490ee2ce9c7deb15a51
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25191,6 +25772,7 @@ lab UW
 labExpId DS16129
 labVersion Bowtie 0.12.7
 md5sum 506013571f162f68b80d360e95ada21f,7f5c885afd4c11ec22d43b942308a360
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25218,6 +25800,7 @@ lab UW
 labExpId DS17352
 labVersion Bowtie 0.12.7
 md5sum 8c1da1688093a8d9a3cb4eec0e86a4c1,3d8bc04d68ac21b73037fdb97c30928c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25246,6 +25829,7 @@ lab UW
 labExpId DS16129
 labVersion Hotspot-v5.2
 md5sum 67b4befa578097f695de1a907c5e176b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25275,6 +25859,7 @@ lab UW
 labExpId DS17352
 labVersion Hotspot-v5.2
 md5sum 79a8b2625e74a920d38e80e76c9b2c44
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25304,6 +25889,7 @@ lab UW
 labExpId DS16129
 labVersion lmax-v1.0
 md5sum 7d611c6ae394464581bb970f83093a3c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25333,6 +25919,7 @@ lab UW
 labExpId DS17352
 labVersion lmax-v1.0
 md5sum b9fcb7a70bb225eb644d4113c7904931
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25361,6 +25948,7 @@ grant Stam
 lab UW
 labExpId DS16129
 md5sum fead9f0735d735d9ccb63167c5ac2a88
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25388,6 +25976,7 @@ grant Stam
 lab UW
 labExpId DS17352
 md5sum 04c38e651a44654d207badd4817a069e
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25416,6 +26005,7 @@ lab UW
 labExpId DS16129
 labVersion WindowDensity-bin20-win+/-75
 md5sum 9d1315a4dcf5b529fae8a158c76e8b60
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25445,6 +26035,7 @@ lab UW
 labExpId DS17352
 labVersion WindowDensity-bin20-win+/-75
 md5sum f22c39eb36ea1e5a0b03a711f078acea
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25473,6 +26064,7 @@ lab UW
 labExpId DS17490
 labVersion Bowtie 0.12.7
 md5sum f21e43f5b33dd1afabdbe9196a655bc3,6adbfbfa7548372abb49f5ae91b24357
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25500,6 +26092,7 @@ lab UW
 labExpId DS17489
 labVersion Bowtie 0.12.7
 md5sum 4418affb519c0fe994586437dc00a9f1,ecfae1635c6004bdfacd7a347c7b52e0
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25528,6 +26121,7 @@ lab UW
 labExpId DS17490
 labVersion Hotspot-v5.2
 md5sum 56a0cb5976def76fd285c4ac7994ac99
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25557,6 +26151,7 @@ lab UW
 labExpId DS17489
 labVersion Hotspot-v5.2
 md5sum 473e991aa7b39583c9c08bcabc455c5d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25586,6 +26181,7 @@ lab UW
 labExpId DS17490
 labVersion lmax-v1.0
 md5sum 61a62a2dc0fb4e3039399bd580fadf13
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25615,6 +26211,7 @@ lab UW
 labExpId DS17489
 labVersion lmax-v1.0
 md5sum 181ad6b2f4e54e7e403e201a90baea8b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25643,6 +26240,7 @@ grant Stam
 lab UW
 labExpId DS17490
 md5sum 73f10ccd469da6648ae498709e180227
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25670,6 +26268,7 @@ grant Stam
 lab UW
 labExpId DS17489
 md5sum 571298442635fc8d226a996458371098
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25698,6 +26297,7 @@ lab UW
 labExpId DS17490
 labVersion WindowDensity-bin20-win+/-75
 md5sum 867adbed0a127643c0e8716262cdd70a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25727,6 +26327,7 @@ lab UW
 labExpId DS17489
 labVersion WindowDensity-bin20-win+/-75
 md5sum c26a9d2927d18f6cfcf1b3dc9f771976
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -33385,6 +33986,7 @@ geoSampleAccession GSM945318
 grant Stam
 lab UW
 labExpId DS11888
+md5sum 53c7ea6b9c71eb07f9928792f7e0b43d
 origAssembly hg19
 project wgEncode
 setType input
@@ -34151,4 +34753,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -313437822
+# MAGIC: -360153034

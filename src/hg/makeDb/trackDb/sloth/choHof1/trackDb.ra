@@ -1,1 +1,26 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
 
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility dense
+html gap
+
+track mrna override
+visibility hide
+
+track ensemblGeneScaffold override
+visibility pack
+
+track ensGene override
+visibility pack
+
+track xenoRefGene override
+visibility pack
+
+track chainNetMm10 override
+visibility full
+
+track rmsk override
+visibility dense

@@ -404,7 +404,7 @@ else
         }
 
     boolean resort = FALSE;
-    while(orVars != NULL)
+    while (orVars != NULL)
         {
         char *vars = orVars;
         orVars = strstr(vars," || ");

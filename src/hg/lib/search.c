@@ -56,7 +56,7 @@ char *nicerTypes[] =
 
 struct slPair *fileTypes = NULL;
 int ix = 0, count = sizeof(crudeTypes)/sizeof(char *);
-for(ix=0;ix<count;ix++)
+for (ix=0;ix<count;ix++)
     slPairAdd(&fileTypes, crudeTypes[ix],cloneString(nicerTypes[ix]));
 return fileTypes;
 }
@@ -86,7 +86,7 @@ if (mdbVars == NULL)
     return 0;
 
 // Get the current number of rows in the table of mdb selects
-for(;;)
+for (;;)
     {
     char buf[256];
     safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
@@ -109,7 +109,7 @@ if (numMetadataSelects)
     {
     int ix;
     char buf[256];
-    for(ix = 0; ix < numMetadataSelects; ix++)
+    for (ix = 0; ix < numMetadataSelects; ix++)
         {
         int offset;   // used to handle additions/deletions
         if (addSearchSelect > 0 && ix >= addSearchSelect)
@@ -185,7 +185,7 @@ dyStringPrintf(output,"<tr><td colspan='%d' align='right' class='lineOnTop' styl
 
 struct slPair *mdbSelect = mdbSelects;
 int row = 0;
-for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
+for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     {
     char buf[256];
     char *dropDownHtml = NULL;
@@ -312,7 +312,7 @@ if (tdb->shortLabel == NULL || tdb->longLabel == NULL)
     return (wordList != NULL);
 
 struct slName *word = wordList;
-for(; word != NULL; word = word->next)
+for (; word != NULL; word = word->next)
     {
     if (!searchMatchToken(tdb->shortLabel,word->name)
     &&  !searchMatchToken(tdb->longLabel, word->name))
@@ -335,7 +335,7 @@ if (strchr(tdb->html,'\n'))           // DANGER: don't own memory.
     strSwapChar(tdb->html,'\n',' ');  //  However, this CGI will use html for no other purpose
 
 struct slName *word = wordList;
-for(; word != NULL; word = word->next)
+for (; word != NULL; word = word->next)
     {
     if (!searchMatchToken(tdb->html,word->name))
         return FALSE;

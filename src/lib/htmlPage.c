@@ -1576,7 +1576,7 @@ for (tag = startTag; tag != NULL; tag = tag->next)
         {
 	if (depth <= 0)
 	    {
-	    if (!startsWith("<INPUT TYPE=HIDDEN NAME='db' VALUE='", tag->start))  // one exception hardwired
+	    if (!startsWith("<INPUT TYPE=HIDDEN NAME=", tag->start))  // one exception hardwired
 		tagAbort(page, tag, "%s outside of any of %s", type, outsiders);
 	    }
 	}

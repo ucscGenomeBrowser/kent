@@ -27,6 +27,10 @@ priority 210.3
 track chainNetCavPor3 override
 priority 230.3
 
+track chainNetRheMac3 override
+priority 330.3 
+shortLabel $o_db Chain/Net
+
 track chainNetRheMac2 override
 priority 330.3
 

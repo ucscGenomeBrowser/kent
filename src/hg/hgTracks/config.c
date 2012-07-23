@@ -77,7 +77,7 @@ changeTrackVis(groupList, groupTarget, changeVis);
 if (changeVis != -2)
     {
     if (groupTarget == NULL ||
-    	(groupList != NULL && sameString(groupTarget, groupList->name)))
+        (groupList != NULL && sameString(groupTarget, groupList->name)))
 	{
 	if (changeVis == -1)
 	    rulerMode = tvFull;
@@ -125,19 +125,19 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("</td><td style='text-align:right;'>\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	    "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
             "title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	    "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
             "title='Show all tracks in this groups'>",
 	    configShowAll, "show all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	    "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
             "title='Show default tracks in this group'>",
 	    configDefaultAll, "default", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
@@ -157,7 +157,7 @@ for (group = groupList; group != NULL; group = group->next)
                 differentString(group->name, "user"))
 	{
         showedRuler = TRUE;
-	hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
+        hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
 	hPrintf("<TD>");
         hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
@@ -220,12 +220,12 @@ for (group = groupList; group != NULL; group = group->next)
     /* Loop through this group and display */
     int rowCount=1;
     for (tr = group->trackList; tr != NULL; tr = tr->next)
-	{
-	struct track *track = tr->track;
+        {
+        struct track *track = tr->track;
         struct trackDb *tdb = track->tdb;
 
-	hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
-	hPrintf("<TD NOWRAP>");
+        hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
+        hPrintf("<TD NOWRAP>");
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -234,7 +234,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintPennantIcon(tdb);
 
         if (track->hasUi)
-	    hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
+            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
                     tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
                     hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
@@ -270,11 +270,11 @@ for (group = groupList; group != NULL; group = group->next)
                                         trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
-	else
+        else
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");
 	hPrintf("<TD NOWRAP>");
-	hPrintf("%s", tdb->longLabel);
+        hPrintf("%s", tdb->longLabel);
 	hPrintf("</TD>");
 	hPrintf("</TR>\n");
 	}
@@ -291,7 +291,7 @@ struct track *track = NULL;
 struct group *group = NULL;
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *tdb = tdbList;
-for(;tdb != NULL; tdb = tdb->next)
+for (;tdb != NULL; tdb = tdb->next)
     {
     if (!tdbIsDownloadsOnly(tdb)
     || tdbIsFolderContent(tdb)

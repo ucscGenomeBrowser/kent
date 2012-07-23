@@ -317,3 +317,21 @@ eriEur1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_373857:3457-13237" where name="eriEur1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/eriEur1/pushQ
+    cd /hive/data/genomes/eriEur1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl eriEur1 2> stderr.txt | grep -v transMap > eriEur1.sql
+
+    scp -p eriEur1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < eriEur1.sql
+
+############################################################################

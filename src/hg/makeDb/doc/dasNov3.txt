@@ -423,3 +423,21 @@ dasNov3.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to OPN5 gene displays  (DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH564832:1503619-1555676" where name="dasNov3";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/dasNov3/pushQ
+    cd /hive/data/genomes/dasNov3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl dasNov3 2> stderr.txt | grep -v transMap > dasNov3.sql
+
+    scp -p dasNov3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < dasNov3.sql
+
+############################################################################
