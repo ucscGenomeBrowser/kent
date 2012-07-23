@@ -96,7 +96,7 @@ FILE *fd = NULL;
 if ((fd = fopen(buFile.forCgi, "w")) != NULL)
     {
     struct fileDb *oneFile = fileList;
-    for(;oneFile != NULL;oneFile=oneFile->next)
+    for (;oneFile != NULL;oneFile=oneFile->next)
         {
         char buf[1024];
         safef(buf,sizeof buf,"%s %ld %s\n",oneFile->fileName,oneFile->fileSize,oneFile->fileDate);
@@ -150,7 +150,7 @@ if (foundFiles == NULL
                   server, db, dir, subDir);
 
         scriptOutput = popen(cmd, "r");
-        while(fgets(buf, sizeof(buf), scriptOutput))
+        while (fgets(buf, sizeof(buf), scriptOutput))
             {
             eraseTrailingSpaces(buf);
             if (!endsWith(buf,".md5sum")) // Just ignore these
@@ -201,7 +201,7 @@ if (foundFiles == NULL
 // special code that only gets called in debug mode
 if (sameString(fileName,"listAll"))
     {
-    for(oneFile=foundFiles;oneFile;oneFile=oneFile->next)
+    for (oneFile=foundFiles;oneFile;oneFile=oneFile->next)
         warn("%s",oneFile->fileName);
     return NULL;
     }
@@ -259,7 +259,7 @@ else
         struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
         // common vars are already in cv defined order, searchable is also sortable
         struct mdbVar *var = commonVars->vars;
-        for( ;var != NULL; var = var->next)
+        for (;var != NULL; var = var->next)
             {
             if (differentWord(var->var,MDB_VAR_LAB_VERSION)     // Exclude certain vars
             &&  differentWord(var->var,MDB_VAR_SOFTWARE_VERSION)
@@ -296,7 +296,7 @@ if (parentTdb)
     sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
     safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.%s",
           parentTdb->track,FILE_SORT_ORDER);
-    if(cart != NULL)
+    if (cart != NULL)
         sortOrder->sortOrder = cloneString(cartOptionalString(cart, sortOrder->htmlId));
     }
 
@@ -325,11 +325,11 @@ for (ix = 0; ix<sortOrder->count; ix++)
         {
         // find tdb substr in cart current order string
         char *pos = stringIn(sortOrder->column[ix], sortOrder->sortOrder);
-        if(pos != NULL && pos[strlen(sortOrder->column[ix])] == '=')
+        if (pos != NULL && pos[strlen(sortOrder->column[ix])] == '=')
             {
             int ord=1;
             char* pos2 = sortOrder->sortOrder;
-            for(;*pos2 && pos2 < pos;pos2++)
+            for (;*pos2 && pos2 < pos;pos2++)
                 {
                 if (*pos2 == '=') // Discovering sort order in cart
                     ord++;
@@ -353,7 +353,7 @@ char **fieldsA = a->sortFields;
 char **fieldsB = b->sortFields;
 int ix=0;
 int compared = 0;
-while(fieldsA[ix] != NULL && fieldsB[ix] != NULL)
+while (fieldsA[ix] != NULL && fieldsB[ix] != NULL)
     {
     compared = strcmp(fieldsA[ix], fieldsB[ix]);
     if (compared != 0)
@@ -373,12 +373,12 @@ static void fileDbSortList(struct fileDb **fileList, sortOrder_t *sortOrder)
 if (sortOrder && fileList)
     {
     struct fileDb *oneFile = NULL;
-    for(oneFile = *fileList;oneFile != NULL;oneFile=oneFile->next)
+    for (oneFile = *fileList;oneFile != NULL;oneFile=oneFile->next)
         {                                                                // + 1 Null terminated
         oneFile->sortFields = needMem(sizeof(char *)    * (sortOrder->count + 1));
         oneFile->reverse    = needMem(sizeof(boolean *) *  sortOrder->count);
         int ix;
-        for(ix=0;ix<sortOrder->count;ix++)
+        for (ix=0;ix<sortOrder->count;ix++)
             {
             char *field = NULL;
             if (sameString("fileSize",sortOrder->column[ix]))
@@ -421,11 +421,11 @@ if (sortOrder != NULL)
     struct dyString *dyCommon = dyStringNew(256);
     char *commonTerms[] = { "grant", "lab", "dataType", "control", "setType" };
     int tIx=0,sIx = 0;
-    for(;tIx<ArraySize(commonTerms);tIx++)
+    for (;tIx<ArraySize(commonTerms);tIx++)
         {
-        for(sIx = 0;
-            sIx<sortOrder->count && differentString(commonTerms[tIx],sortOrder->column[sIx]);
-            sIx++) ;
+        for (sIx = 0;
+             sIx<sortOrder->count && differentString(commonTerms[tIx],sortOrder->column[sIx]);
+             sIx++) ;
         if (sIx<sortOrder->count) // Found in sort Order so leave it in mdbObjs
             continue;
 
@@ -466,7 +466,7 @@ else
     {
     dyStringPrintf(dyLink,"<A HREF='hgEncodeVocab?%s=",tagsNotVals?"tag":"term");
     struct slPair *oneVal = valsAndLabels;
-    for(;oneVal!=NULL;oneVal=oneVal->next)
+    for (;oneVal!=NULL;oneVal=oneVal->next)
         {
         if (oneVal != valsAndLabels)
             dyStringAppendC(dyLink,',');
@@ -487,7 +487,7 @@ if (sortOrder != NULL)
     {
     struct dyString *dyFilters = dyStringNew(256);
     int sIx=0;
-    for(sIx = 0;sIx<sortOrder->count;sIx++)
+    for (sIx = 0;sIx<sortOrder->count;sIx++)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
@@ -513,7 +513,7 @@ if (sortOrder != NULL)
                 }
             }
         struct slPair *tagLabelPairs = NULL;
-        while(vals != NULL)
+        while (vals != NULL)
             {
             char buf[256];
             struct slName *term = slPopHead(&vals);
@@ -671,7 +671,7 @@ int curOrder = 0,ix=0;
 if (sortOrder)
     {
     curOrder = sortOrder->count;
-    for(ix=0;ix<sortOrder->count;ix++)
+    for (ix=0;ix<sortOrder->count;ix++)
         {
         char *align = (sameString("labVersion",sortOrder->column[ix])
                     || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":"");
@@ -708,7 +708,7 @@ struct fileDb *oneFile = fileList;
 printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys
 if (timeIt)                                   // the list till the table is initialized.
     uglyTime("Finished column headers");
-for( ;oneFile!= NULL;oneFile=oneFile->next)
+for (;oneFile!= NULL;oneFile=oneFile->next)
     {
     oneFile->mdb->next = NULL; // mdbs were in list for generating sortOrder,
     char *field = NULL;        // but list no longer needed
@@ -740,7 +740,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     // Each of the pulled out mdb vars
     if (sortOrder)
         {
-        for(ix=0;ix<sortOrder->count;ix++)
+        for (ix=0;ix<sortOrder->count;ix++)
             {
             if (sameString("fileSize",sortOrder->column[ix]))
                 {
@@ -832,7 +832,7 @@ printf("<TR valign='top'>");
 if (restrictedColumn == 1)
     printf("<TH colspan=%d><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>"
            "Restriction Policy</A></TH>", (columnCount - restrictedColumn),
-                                           ENCODE_DATA_RELEASE_POLICY);
+           ENCODE_DATA_RELEASE_POLICY);
 
 printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",
        (restrictedColumn > 1 ? (restrictedColumn - 1) : columnCount));
