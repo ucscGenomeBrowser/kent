@@ -18599,7 +18599,9 @@ do
 done
 
 #############################################################################
-# 1000 GENOMES PHASE 1 VARIANT CALLS (DONE 5/21/12 angie)
+# 1000 GENOMES PHASE 1 VARIANT CALLS (UPDATE DONE 7/20/12 angie)
+# Autosomes and chrX loaded 5/21/12; chrY (and chrM but it's rCRS of course)
+# became available in July '12.
     # This is a lot of data.  Use aspera (ascp) instead of ftp, run in a screen.
     screen -S phase1
     mkdir -p /hive/data/genomes/hg19/bed/1000Genomes/phase1
@@ -18634,6 +18636,21 @@ done
       echo "/gbdb/hg19/1000Genomes/$file\tchr$c" >> tgpPhase1.txt
     end
     hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
+
+    # 7/20/12: add chrY. (would be nice to add chrM but we don't have liftOver for VCF, hmmm...)
+    cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
+    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.genome_strip_hq.20101123.svs.low_coverage.genotypes.vcf.gz{,.tbi}
+    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi}
+    # I wondered why they didn't merge the two chrY call sets (SNPs and SVs) --
+    # the SVS file has 456 individs and the SNPs file has 526.  At least the
+    # 456 are a subset of the 526... but for now I will just use the SNPs file.
+    ln -s `pwd`/ALL.chrY.*vcf.gz* /gbdb/hg19/1000Genomes/
+    echo "/gbdb/hg19/1000Genomes/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz\tchrY" \
+      >> tgpPhase1.txt
+    hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
+    # Make a chromosomes line for trackDb:
+    use hg19 -NBe 'select seqName from tgpPhase1' | xargs echo | sed -e 's/ /,/g'
+#chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 
 ############################################################################
