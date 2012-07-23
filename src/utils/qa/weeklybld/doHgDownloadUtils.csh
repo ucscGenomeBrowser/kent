@@ -33,7 +33,7 @@ echo "Build 32-BIT userApps complete  [${0}: START=${ScriptStart} END=`date`]"
 
 
 echo
-echo "hgdownload userApps utils scp'd to hgdownload"
+echo "hgdownload userApps utils scp'd to hgdownload and hgdownload-sd"
 #
 exit 0
 

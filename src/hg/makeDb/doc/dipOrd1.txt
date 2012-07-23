@@ -276,3 +276,21 @@ dipOrd1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to OPN5 gene displays  (DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_7358:2,192-33,995" where name="dipOrd1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/dipOrd1/pushQ
+    cd /hive/data/genomes/dipOrd1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl dipOrd1 2> stderr.txt | grep -v transMap > dipOrd1.sql
+
+    scp -p dipOrd1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < dipOrd1.sql
+
+############################################################################

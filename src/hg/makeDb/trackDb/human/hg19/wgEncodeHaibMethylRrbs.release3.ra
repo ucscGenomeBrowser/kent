@@ -26,10 +26,10 @@ superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl RRBS
 longLabel DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/HudsonAlpha
 group regulation
-subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3ADRENALGLANDBCH12803N=Adrenal_Gland_BC_H12803N t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOSMC=AoSMC t3BE2C=BE2_C t3BJ=BJ t3BRAINBCH11058N=Brain_BC_H11058N t3BREASTBC0203015=Breast_BC_02-03015 t3CACO2=Caco-2 t3CMK=CMK t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3GM06990=GM06990 t3GM12878XIMAT=GM12878-XiMat t3GM12891=GM12891 t3GM12892=GM12892 t3GM19239=GM19239 t3GM19240=GM19240 t3HAEPIC=HAEpiC t3HCF=HCF t3HCM=HCM t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HEPATOCYTES=Hepatocytes t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HNPCEPIC=HNPCEpiC t3HPAEPIC=HPAEpiC t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HSMMTUBEFSHD=HSMMtube_FSHD t3HTR8SVN=HTR8svn t3JURKAT=Jurkat t3KIDNEYBC0111002=Kidney_BC_01-11002 t3LEFTVENTRICLEBCN41=Left_Ventricle_BC_N41 t3LEUKOCYTEBCUHN00204=Leukocyte_BC_UHN00204 t3LIVERBC0111002=Liver_BC_01-11002 t3LNCAP=LNCaP t3LUNGBC0111002=Lung_BC_01-11002 t3MCF7SHRNA=MCF-7_<i>shRNA</i> t3MCF10AERSRC=MCF10A-Er-Src t3MELANO=Melano t3MYOMETR=Myometr t3NB4=NB4 t3NHA=NH-A t3NHBE=NHBE t3NHDFNEO=NHDF-neo t3NT2D1=NT2-D1 t3OSTEOBLASTS=Osteoblasts t3OVCAR3=ovcar-3 t3PANC1=PANC-1 t3PANCREASBCH12817N=Pancreas_BC_H12817N t3PANISLETS=PanIslets t3PERICARDIUMBCH12529N=Pericardium_BC_H12529N t3PFSK1=PFSK-1 t3PLACENTABCUHN00189=Placenta_BC_UHN00189 t3PREC=PrEC t3PROGFIB=ProgFib t3RPTEC=RPTEC t3SAEC=SAEC t3SKELETALMUSCLEH12817N=Skeletal_Muscle_BC_H12817N t3SKELETALMUSCLEBC0111002=Skeletal_Muscle_BC_01-11002 t3SKINBC0111002=Skin_BC_01-11002 t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3STOMACHBC0111002=Stomach_BC_01-11002 t3T47D=T-47D t3TESTISBCN30=Testis_BC_N30 t3U87=U87 t3UCH1=UCH-1 t3UTERUSBCBN0765=Uterus_BC_BN0765
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3ADRENALGLANDBCH12803N=Adrenal_Gland_BC_H12803N t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOSMC=AoSMC t3BE2C=BE2_C t3BJ=BJ t3BRAINBCH11058N=Brain_BC_H11058N t3BREASTBC0203015=Breast_BC_02-03015 t3CACO2=Caco-2 t3CMK=CMK t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3GM06990=GM06990 t3GM12878XIMAT=GM12878-XiMat t3GM12891=GM12891 t3GM12892=GM12892 t3GM19239=GM19239 t3GM19240=GM19240 t3HAEPIC=HAEpiC t3HCF=HCF t3HCM=HCM t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HEPATOCYTES=Hepatocytes t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HNPCEPIC=HNPCEpiC t3HPAEPIC=HPAEpiC t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HSMMTUBEFSHD=HSMMtube_FSHD t3HTR8SVN=HTR8svn t3JURKAT=Jurkat t3KIDNEYBC0111002=Kidney_BC_01-11002 t3LEFTVENTRICLEBCN41=Left_Ventricle_BC_N41 t3LEUKOCYTEBCUHN00204=Leukocyte_BC_UHN00204 t3LIVERBC0111002=Liver_BC_01-11002 t3LNCAP=LNCaP t3LUNGBC0111002=Lung_BC_01-11002 t3MCF7SHRNA=MCF-7_<i>shRNA</i> t3MCF10AERSRC=MCF10A-Er-Src t3MELANO=Melano t3MYOMETR=Myometr t3NB4=NB4 t3NHA=NH-A t3NHBE=NHBE t3NHDFNEO=NHDF-neo t3NT2D1=NT2-D1 t3OSTEOBLASTS=Osteoblasts t3OVCAR3=Ovcar-3 t3PANC1=PANC-1 t3PANCREASBCH12817N=Pancreas_BC_H12817N t3PANISLETS=PanIslets t3PERICARDIUMBCH12529N=Pericardium_BC_H12529N t3PFSK1=PFSK-1 t3PLACENTABCUHN00189=Placenta_BC_UHN00189 t3PREC=PrEC t3PROGFIB=ProgFib t3RPTEC=RPTEC t3SAEC=SAEC t3SKnMC=SK-N-MC t3SKnSHRA=SK-N-SH_RA t3SKELETALMUSCLEH12817N=Skeletal_Muscle_BC_H12817N t3SKELETALMUSCLEBC0111002=Skeletal_Muscle_BC_01-11002 t3SKINBC0111002=Skin_BC_01-11002 t3SKMC=SkMC t3STOMACHBC0111002=Stomach_BC_01-11002 t3T47D=T-47D t3TESTISBCN30=Testis_BC_N30 t3U87=U87 t3UCH1=UCH-1 t3UTERUSBCBN0765=Uterus_BC_BN0765
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
-subGroup3 treatment Treatment zNone=None ANDRO=Androgen TAM=Tamoxifen DM002P24H=DMSO_.02%_24h DM002P7D=DMSO_.02%_7d EST10NM24H=Estradiol RANDSHRNA=shRNA_Control CTCFSHRNA=shRNA_CTCF
-subGroup4 obtainedBy Source UW=UW HAIB=Hudson_Alpha Stanford=Stanford DUKE=Duke BioChain=BioChain UNC=UNC Yale=Yale
+subGroup3 treatment Treatment zNone=None ANDRO=Androgen DM002P24H=DMSO_0.02%_24_h DM002P7D=DMSO_0.02%_7_d EST10NM24H=Estradiol SHRNACONT=shRNA_Control SHRNACTCF=shRNA_CTCF TAM=Tamoxifen 
+subGroup4 obtainedBy Source BioChain=BioChain DUKE=Duke HAIB=Hudson_Alpha Stanford=Stanford UNC=UNC UW=UW Yale=Yale
 dimensions dimensionX=rep dimensionY=cellType dimensionC=obtainedBy
 filterComposite dimensionC=all
 sortOrder cellType=+ rep=+ treatment=+ obtainedBy=+
@@ -50,32 +50,32 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF-7 CTCF 1
-    longLabel MCF-7 CTCF shRNA knockdown Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=CTCFSHRNA rep=rep1
+    longLabel MCF-7 shRNA CTCF knockdown Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
+    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=SHRNACTCF rep=rep1
     type bed 9 +
     # subId=7347 dateSubmitted=2012-07-11
 
     track wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF-7 CTCF 2
-    longLabel MCF-7 CTCF shRNA knockdown Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=CTCFSHRNA rep=rep2
+    longLabel MCF-7 shRNA CTCF knockdown Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
+    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=SHRNACTCF rep=rep2
     type bed 9 +
     # subId=7347 dateSubmitted=2012-07-11
 
     track wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF-7 Cont 1
-    longLabel MCF-7 shRNA control Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=RANDSHRNA rep=rep1
+    longLabel MCF-7 shRNA Control Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
+    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=SHRNACONT rep=rep1
     type bed 9 +
     # subId=7347 dateSubmitted=2012-07-11
 
     track wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF-7 Cont 2
-    longLabel MCF-7 shRNA control Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=RANDSHRNA rep=rep2
+    longLabel MCF-7 shRNA Control Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
+    subGroups cellType=t3MCF7SHRNA obtainedBy=DUKE treatment=SHRNACONT rep=rep2
     type bed 9 +
     # subId=7347 dateSubmitted=2012-07-11
 
@@ -131,7 +131,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel A549 1
-    longLabel A549 DMSO 0.02pct 7d Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel A549 DMSO 0.02% 7 d Methyl RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups  cellType=t2A549 obtainedBy=HAIB treatment=DM002P7D rep=rep1
     type bed 9 +
     # subId=4812 dateSubmitted=2011-08-31
@@ -139,7 +139,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel A549 2
-    longLabel A549 DMSO 0.02pct 7d Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel A549 DMSO 0.02% 7 d Methyl RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups  cellType=t2A549 obtainedBy=HAIB treatment=DM002P7D rep=rep2
     type bed 9 +
     # subId=4812 dateSubmitted=2011-08-31
@@ -288,176 +288,176 @@ html wgEncodeHaibMethylRrbs.release3
 
     track wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Adrenal 1
-    longLabel Adrenal_Gland_H12803N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Adrenal_BC 1
+    longLabel Adrenal Gland BC H12803N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3ADRENALGLANDBCH12803N obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcadrenalglandh12803nBiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Adrenal 2
-    longLabel Adrenal_Gland_H12803N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Adrenal_BC 2
+    longLabel Adrenal Gland BC H12803N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3ADRENALGLANDBCH12803N obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Brain 1
-    longLabel Brain_H11058N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Brain_BC 1
+    longLabel Brain BC H11058N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3BRAINBCH11058N obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcbrainh11058nBiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Brain 2
-    longLabel Brain_H11058N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Brain_BC 2
+    longLabel Brain BC H11058N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3BRAINBCH11058N obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Breast 1
-    longLabel Breast_02-03015 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Breast_BC 1
+    longLabel Breast BC 02-03015 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3BREASTBC0203015 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcbreast0203015BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Breast 2
-    longLabel Breast_02-03015 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Breast BC 2
+    longLabel Breast BC 02-03015 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3BREASTBC0203015 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Kidney 1
-    longLabel Kidney_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Kidney_BC 1
+    longLabel Kidney BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3KIDNEYBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBckidney0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Kidney 2
-    longLabel Kidney_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Kidney_BC 2
+    longLabel Kidney BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3KIDNEYBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Ventricle 1
-    longLabel Left_Ventricle_N41 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Ventricle 1
+    longLabel Left Ventricle BC N41 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LEFTVENTRICLEBCN41 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcleftventriclen41BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Ventricle 2
-    longLabel Left_Ventricle_N41 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Ventricle_BC 2
+    longLabel Left Ventricle BC N41 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LEFTVENTRICLEBCN41 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Leukocyte 1
-    longLabel Leukocyte_UHN00204 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Leukocyte_BC 1
+    longLabel Leukocyte BC UHN00204 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LEUKOCYTEBCUHN00204 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcleukocyteuhn00204BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Leukocyte 2
-    longLabel Leukocyte_UHN00204 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Leukocyte_BC 2
+    longLabel Leukocyte BC UHN00204 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LEUKOCYTEBCUHN00204 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Liver 1
-    longLabel Liver_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Liver BC 1
+    longLabel Liver BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LIVERBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcliver0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Liver 2
-    longLabel Liver_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Liver_BC 2
+    longLabel Liver BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LIVERBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Lung 1
-    longLabel Lung_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Lung BC 1
+    longLabel Lung BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LUNGBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBclung0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Lung 2
-    longLabel Lung_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Lung BC 2
+    longLabel Lung BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LUNGBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Pancreas 1
-    longLabel Pancreas_H12817N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Pancreas_BC 1
+    longLabel Pancreas BC H12817N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3PANCREASBCH12817N obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcpancreash12817nBiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Pancreas 2
-    longLabel Pancreas_H12817N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Pancreas_BC 2
+    longLabel Pancreas BC H12817N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3PANCREASBCH12817N obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Pericardium 1
-    longLabel Pericardium_H12529N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Pericardium_BC 1
+    longLabel Pericardium BC H12529N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3PERICARDIUMBCH12529N obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcpericardiumh12529nBiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Pericardium 2
-    longLabel Pericardium_H12529N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Pericardium_BC 2
+    longLabel Pericardium BC H12529N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3PERICARDIUMBCH12529N obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Placenta 1
-    longLabel Placenta_UHN00189 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Placenta_BC 1
+    longLabel Placenta BC UHN00189 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3PLACENTABCUHN00189 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcplacentauhn00189BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Placenta 2
-    longLabel Placenta_UHN00189 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Placenta_BC 2
+    longLabel Placenta BC UHN00189 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3PLACENTABCUHN00189 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -465,7 +465,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel Skeletal_02 1
-    longLabel Skeletal_Muscle_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel Skeletal Muscle BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKELETALMUSCLEBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -473,7 +473,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBcskeletalmuscle0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel Skeletal_02 2
-    longLabel Skeletal_Muscle_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel Skeletal Muscle BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKELETALMUSCLEBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -481,7 +481,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel Skeletal_7N 1
-    longLabel Skeletal_Muscle_H12817N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel Skeletal Muscle BC H12817N Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKELETALMUSCLEH12817N obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -489,71 +489,71 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel Skeletal_7N 2
-    longLabel Skeletal_Muscle_H12817N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel Skeletal Muscle BC H12817N Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKELETALMUSCLEH12817N obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Skin 1
-    longLabel Skin_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Skin BC 1
+    longLabel Skin BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKINBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcskin0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Skin 2
-    longLabel Skin_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Skin BC 2
+    longLabel Skin BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3SKINBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Stomach 1
-    longLabel Stomach_01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Stomach_BC 1
+    longLabel Stomach BC 01-11002 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3STOMACHBC0111002 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcstomach0111002BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Stomach 2
-    longLabel Stomach_01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Stomach_BC 2
+    longLabel Stomach BC 01-11002 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3STOMACHBC0111002 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Testis 1
-    longLabel Testis_N30 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Testis_BC  1
+    longLabel Testis BC N30 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3TESTISBCN30 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBctestisn30BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Testis 2
-    longLabel Testis_N30 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Testis_BC 2
+    longLabel Testis BC N30 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3TESTISBCN30 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep1
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Uterus 1
-    longLabel Uterus_BN0765 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    shortLabel Uterus_BC 1
+    longLabel Uterus BC BN0765 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3UTERUSBCBN0765 obtainedBy=BioChain treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsBcuterusbn0765BiochainSitesRep2
     parent wgEncodeHaibMethylRrbs off
-    shortLabel BC_Uterus 2
-    longLabel Uterus_BN0765 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    shortLabel Uterus_BC 2
+    longLabel Uterus BC BN0765 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3UTERUSBCBN0765 obtainedBy=BioChain treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -561,7 +561,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBe2cHaibSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel BE2_C 1
-    longLabel BE2_C Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel BE2 C Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3BE2C obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -569,7 +569,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsBe2cHaibSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel BE2_C 2
-    longLabel BE2_C Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel BE2 C Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3BE2C obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -651,7 +651,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapUwSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP UW 1
-    longLabel LNCaP Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel LNCaP UW Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=UW treatment=zNone rep=rep1
     type bed 9 +
     color 0,119,158
@@ -660,7 +660,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapUwSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP UW 2
-    longLabel LNCaP Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel LNCaP UW Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=UW treatment=zNone rep=rep2
     type bed 9 +
     color 0,119,158
@@ -670,7 +670,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP Duke 1
-    longLabel LNCaP Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel LNCaP Duke Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=DUKE treatment=zNone rep=rep1
     type bed 9 +
     color 0,119,158
@@ -680,7 +680,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsLncapDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel LNCaP Duke 2
-    longLabel LNCaP Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel LNCaP Duke Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3LNCAP obtainedBy=DUKE treatment=zNone rep=rep2
     type bed 9 +
     color 0,119,158
@@ -779,7 +779,7 @@ html wgEncodeHaibMethylRrbs.release3
     parent wgEncodeHaibMethylRrbs off
     shortLabel SK-N-MC 1
     longLabel SK-N-MC Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t3SKNMC obtainedBy=HAIB treatment=zNone rep=rep1
+    subGroups cellType=t3SKnMC obtainedBy=HAIB treatment=zNone rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
@@ -787,14 +787,14 @@ html wgEncodeHaibMethylRrbs.release3
     parent wgEncodeHaibMethylRrbs off
     shortLabel SK-N-MC 2
     longLabel SK-N-MC Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t3SKNMC obtainedBy=HAIB treatment=zNone rep=rep2
+    subGroups cellType=t3SKnMC obtainedBy=HAIB treatment=zNone rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
 
     track wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel T-47D DMSO 1
-    longLabel T-47D(DMSO) Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel T-47D DMSO 0.02% 24 h Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3T47D obtainedBy=HAIB treatment=DM002P24H rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -803,7 +803,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsT47dDm002p24hHaibSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel T-47D DMSO 2
-    longLabel T-47D(DMSO) Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel T-47D DMSO 0.02% 24 h Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3T47D obtainedBy=HAIB treatment=DM002P24H rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -812,7 +812,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel T-47D Estra 1
-    longLabel T-47D(estra) Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel T-47D Estradiol Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3T47D obtainedBy=HAIB treatment=EST10NM24H rep=rep1
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -820,7 +820,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsT47dEstradia24hhHaibSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel T-47D Estra 2
-    longLabel T-47D(estra) Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel T-47D Estradiol Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3T47D obtainedBy=HAIB treatment=EST10NM24H rep=rep2
     type bed 9 +
     # subId=3159 dateSubmitted=2011-01-06
@@ -1488,19 +1488,21 @@ html wgEncodeHaibMethylRrbs.release3
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2 cricket Mon Apr 18 11:24:38 2011
 
-    track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
-    parent wgEncodeHaibMethylRrbs off
-    shortLabel MCF-7 2
-    longLabel MCF-7 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep2
+    #ATTIC
+    #track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
+    #parent wgEncodeHaibMethylRrbs off
+    #shortLabel MCF-7 2
+    #longLabel MCF-7 Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    #subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep2
     type bed 9 +
     # subId=2348 dateSubmitted=2010-09-22
 
-    track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-    parent wgEncodeHaibMethylRrbs off
-    shortLabel MCF-7 1
-    longLabel MCF-7 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep1
+    #ATTIC
+    #track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
+    #parent wgEncodeHaibMethylRrbs off
+    #shortLabel MCF-7 1
+    #longLabel MCF-7 Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    #subGroups cellType=t2MCF7 obtainedBy=Stanford treatment=zNone rep=rep1
     type bed 9 +
     #        # subId=2348 dateSubmitted=2010-09-22
 
@@ -1561,8 +1563,8 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsSknshraUwSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel SK-N-SH_RA 2
-    longLabel SK-N-SH_RA Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
-    subGroups cellType=t3SKNSHRA obtainedBy=UW treatment=zNone rep=rep2
+    longLabel SK-N-SH BC RA Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    subGroups cellType=t3SKnSHRA obtainedBy=UW treatment=zNone rep=rep2
     type bed 9 +
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2 cricket Mon Apr 18 11:24:39 2011
@@ -1570,8 +1572,8 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsSknshraUwSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel SK-N-SH_RA 1
-    longLabel SK-N-SH_RA Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
-    subGroups cellType=t3SKNSHRA obtainedBy=UW treatment=zNone rep=rep1
+    longLabel SK-N-SH BC RA Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    subGroups cellType=t3SKnSHRA obtainedBy=UW treatment=zNone rep=rep1
     type bed 9 +
     # subId=2348 dateSubmitted=2010-09-22
     # was wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1 cricket Mon Apr 18 11:24:39 2011
@@ -1734,7 +1736,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF10A Tam 2
-    longLabel MCF10A Tam Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel MCF10A Tamoxifen Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3MCF10AERSRC obtainedBy=Stanford treatment=TAM rep=rep2
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15
@@ -1742,7 +1744,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel MCF10A Tam 1
-    longLabel MCF10A Tam Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel MCF10A Tamoxifen Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3MCF10AERSRC obtainedBy=Stanford treatment=TAM rep=rep1
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15
@@ -1801,7 +1803,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsOsteoblDukeSitesRep1
     parent wgEncodeHaibMethylRrbs off
     shortLabel Osteobl 1
-    longLabel Osteobl Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
+    longLabel Osteoblasts Methyl-RRBS Rep 1 from ENCODE/HudsonAlpha
     subGroups cellType=t3OSTEOBLASTS obtainedBy=DUKE treatment=zNone rep=rep1
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15
@@ -1809,7 +1811,7 @@ html wgEncodeHaibMethylRrbs.release3
     track wgEncodeHaibMethylRrbsOsteoblDukeSitesRep2
     parent wgEncodeHaibMethylRrbs off
     shortLabel Osteobl 2
-    longLabel Osteobl Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
+    longLabel Osteoblasts Methyl-RRBS Rep 2 from ENCODE/HudsonAlpha
     subGroups cellType=t3OSTEOBLASTS obtainedBy=DUKE treatment=zNone rep=rep2
     type bed 9 +
     # subId=2395 dateSubmitted=2010-11-15

@@ -313,10 +313,9 @@ if (ra == NULL)
 
 char *label = hashFindVal(ra, CV_LABEL);
 
-puts("<TR>");
 struct dyString *dyDefinition = dyStringNew(256);
 if (inTable)
-    dyStringPrintf(dyDefinition,"  <td colspan=%d style='background:%s; color:%s;'>&nbsp;",
+    dyStringPrintf(dyDefinition,"<tr><td colspan=%d style='background:%s; color:%s;'>&nbsp;",
                    TABLE_COLS_AVAILABLE(0),COLOR_LTGREEN,COLOR_DARKBLUE);
 else
     dyStringPrintf(dyDefinition,"<div style='max-width:900px;'>");
@@ -334,13 +333,12 @@ char *val = getDescription(ra,NULL);
 dyStringPrintf(dyDefinition,"%s",val);
 freeMem(val);
 if (inTable)
-    dyStringAppend(dyDefinition,"&nbsp;</td>");
+    dyStringAppend(dyDefinition,"&nbsp;</td></tr>");
 else
     dyStringPrintf(dyDefinition,"</div>");
 printf("%s\n",dyStringContents(dyDefinition));
 dyStringFree(&dyDefinition);
 
-puts("</TR>");
 return TRUE;
 }
 

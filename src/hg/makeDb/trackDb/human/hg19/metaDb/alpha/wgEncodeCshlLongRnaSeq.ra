@@ -317,6 +317,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000184
+expId 184
 fileName wgEncodeCshlLongRnaSeqA549CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -396,6 +398,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000184
+expId 184
 fileName wgEncodeCshlLongRnaSeqA549CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -560,6 +564,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000184
+expId 184
 fileName wgEncodeCshlLongRnaSeqA549CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -699,6 +705,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000143
+expId 143
 fileName wgEncodeCshlLongRnaSeqA549CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -886,6 +894,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000143
+expId 143
 fileName wgEncodeCshlLongRnaSeqA549CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -1216,6 +1226,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000143
+expId 143
 fileName wgEncodeCshlLongRnaSeqA549CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1352,6 +1364,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002624
+expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -1507,6 +1521,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002624
+expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -1799,6 +1815,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002624
+expId 2624
 fileName wgEncodeCshlLongRnaSeqA549CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -1933,6 +1951,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002625
+expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -2088,6 +2108,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002625
+expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -2380,6 +2402,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002625
+expId 2625
 fileName wgEncodeCshlLongRnaSeqA549NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -2737,6 +2761,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000179
+expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -2816,6 +2842,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000179
+expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -2980,6 +3008,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000179
+expId 179
 fileName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3119,6 +3149,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000144
+expId 144
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -3306,6 +3338,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000144
+expId 144
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -3636,6 +3670,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000144
+expId 144
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -3995,6 +4031,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000185
+expId 185
 fileName wgEncodeCshlLongRnaSeqBjCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -4074,6 +4112,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000185
+expId 185
 fileName wgEncodeCshlLongRnaSeqBjCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -4238,6 +4278,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000185
+expId 185
 fileName wgEncodeCshlLongRnaSeqBjCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -4377,6 +4419,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000145
+expId 145
 fileName wgEncodeCshlLongRnaSeqBjCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -4564,6 +4608,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000145
+expId 145
 fileName wgEncodeCshlLongRnaSeqBjCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -4894,6 +4940,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000145
+expId 145
 fileName wgEncodeCshlLongRnaSeqBjCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5033,7 +5081,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002666
 donorId RO01778,RO01794
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -5194,7 +5244,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002666
 donorId RO01778,RO01794
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -5441,7 +5493,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002666
 donorId RO01778,RO01794
+expId 2666
 fileName wgEncodeCshlLongRnaSeqCd20CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -5580,7 +5634,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002665
 donorId RO01778,RO01794
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -5741,7 +5797,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002665
 donorId RO01778,RO01794
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -5988,7 +6046,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002665
 donorId RO01778,RO01794
+expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6097,6 +6157,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002670
+expId 2670
 fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -6200,6 +6262,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002670
+expId 2670
 fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -6358,6 +6422,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002670
+expId 2670
 fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -6715,6 +6781,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000148
+expId 148
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -6794,6 +6862,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000148
+expId 148
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -7012,6 +7082,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000148
+expId 148
 fileName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -7151,6 +7223,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000146
+expId 146
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -7338,6 +7412,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000146
+expId 146
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -7668,6 +7744,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000146
+expId 146
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8237,6 +8315,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000186
+expId 186
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -8316,6 +8396,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000186
+expId 186
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -8534,6 +8616,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000186
+expId 186
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -8673,6 +8757,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000147
+expId 147
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -8860,6 +8946,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000147
+expId 147
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -9190,6 +9278,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000147
+expId 147
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -9245,6 +9335,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3.bam,wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
@@ -9271,6 +9363,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4.bam,wgEncodeCshlLongRnaSeqGm12878NucleolusTotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
@@ -9297,6 +9391,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9323,6 +9419,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
@@ -9348,6 +9446,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
@@ -9373,6 +9473,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
@@ -9398,6 +9500,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
@@ -9423,6 +9527,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -9449,6 +9555,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep3.bigWig
 grant Gingeras
 lab CSHL
@@ -9475,6 +9583,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalMinusSignalRep4.bigWig
 grant Gingeras
 lab CSHL
@@ -9501,6 +9611,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep3.bigWig
 grant Gingeras
 lab CSHL
@@ -9527,6 +9639,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4.bigWig
 grant Gingeras
 lab CSHL
@@ -9554,6 +9668,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -9580,6 +9696,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-28
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep4.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -9909,6 +10027,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000187
+expId 187
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -9988,6 +10108,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000187
+expId 187
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -10206,6 +10328,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000187
+expId 187
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -10345,6 +10469,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000170
+expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -10532,6 +10658,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000170
+expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -10862,6 +10990,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000170
+expId 170
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11221,6 +11351,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000149
+expId 149
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -11300,6 +11432,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000149
+expId 149
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -11518,6 +11652,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000149
+expId 149
 fileName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -11657,6 +11793,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000150
+expId 150
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -11844,6 +11982,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000150
+expId 150
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -12174,6 +12314,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000150
+expId 150
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12423,6 +12565,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000198
+expId 198
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -12502,6 +12646,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000198
+expId 198
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -12665,6 +12811,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000198
+expId 198
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -12804,6 +12952,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000151
+expId 151
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -12937,6 +13087,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000151
+expId 151
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -13156,6 +13308,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000151
+expId 151
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13405,6 +13559,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000199
+expId 199
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -13484,6 +13640,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000199
+expId 199
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -13647,6 +13805,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000199
+expId 199
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -13786,6 +13946,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000152
+expId 152
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -13919,6 +14081,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000152
+expId 152
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -14138,6 +14302,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000152
+expId 152
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14358,7 +14524,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -14385,7 +14553,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6090101.11,6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14412,7 +14582,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002679
 donorId 6090101.11
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -14465,7 +14637,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -14491,7 +14665,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -14517,7 +14693,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002679
 donorId 6090101.11
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -14570,7 +14748,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEH002679
 donorId 6090101.11,6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -14597,7 +14777,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalMinusSignalRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -14624,7 +14806,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalPlusSignalRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -14680,7 +14864,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002679
 donorId 6111301.9
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -14706,7 +14892,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002679
 donorId 6090101.11
+expId 2679
 fileName wgEncodeCshlLongRnaSeqHaoafCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -14982,7 +15170,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002680
 donorId 8061102.1,7071706.1
+expId 2680
 fileName wgEncodeCshlLongRnaSeqHaoecCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -15089,7 +15279,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002680
 donorId 8061102.1,7071706.1
+expId 2680
 fileName wgEncodeCshlLongRnaSeqHaoecCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -15309,7 +15501,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002680
 donorId 8061102.1,7071706.1
+expId 2680
 fileName wgEncodeCshlLongRnaSeqHaoecCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -15722,7 +15916,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002674
 donorId 8100808.2,0011308.2P
+expId 2674
 fileName wgEncodeCshlLongRnaSeqHchCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -15775,7 +15971,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002674
 donorId 8100808.2,0011308.2P
+expId 2674
 fileName wgEncodeCshlLongRnaSeqHchCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -15912,7 +16110,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002674
 donorId 8100808.2,0011308.2P
+expId 2674
 fileName wgEncodeCshlLongRnaSeqHchCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16271,6 +16471,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000191
+expId 191
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -16350,6 +16552,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000191
+expId 191
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -16568,6 +16772,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000191
+expId 191
 fileName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -16707,6 +16913,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000173
+expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -16894,6 +17102,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000173
+expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -17224,6 +17434,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000173
+expId 173
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -17776,6 +17988,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000171
+expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -17963,6 +18177,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000171
+expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -18293,6 +18509,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000171
+expId 171
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -18652,6 +18870,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000190
+expId 190
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -18731,6 +18951,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000190
+expId 190
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -18949,6 +19171,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000190
+expId 190
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19088,6 +19312,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000172
+expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -19275,6 +19501,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000172
+expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -19605,6 +19833,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000172
+expId 172
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -19964,6 +20194,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000159
+expId 159
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -20043,6 +20275,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000159
+expId 159
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -20261,6 +20495,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000159
+expId 159
 fileName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -20400,6 +20636,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000160
+expId 160
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -20587,6 +20825,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000160
+expId 160
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -20917,6 +21157,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000160
+expId 160
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21276,6 +21518,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000202
+expId 202
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -21355,6 +21599,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000202
+expId 202
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -21573,6 +21819,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000202
+expId 202
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -21712,6 +21960,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000161
+expId 161
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -21899,6 +22149,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000161
+expId 161
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -22229,6 +22481,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000161
+expId 161
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -22588,6 +22842,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000192
+expId 192
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -22667,6 +22923,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000192
+expId 192
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -22885,6 +23143,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000192
+expId 192
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23024,6 +23284,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000158
+expId 158
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -23211,6 +23473,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000158
+expId 158
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -23541,6 +23805,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000158
+expId 158
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -23954,7 +24220,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002671
 donorId 0102703.3,0100503.2
+expId 2671
 fileName wgEncodeCshlLongRnaSeqHfdpcCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -24007,7 +24275,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002671
 donorId 0102703.3,0100503.2
+expId 2671
 fileName wgEncodeCshlLongRnaSeqHfdpcCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -24143,7 +24413,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002671
 donorId 0102703.3,0100503.2
+expId 2671
 fileName wgEncodeCshlLongRnaSeqHfdpcCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24391,6 +24663,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000176
+expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -24470,6 +24744,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000176
+expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -24633,6 +24909,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000176
+expId 176
 fileName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -24772,6 +25050,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000153
+expId 153
 fileName wgEncodeCshlLongRnaSeqHmecCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -24905,6 +25185,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000153
+expId 153
 fileName wgEncodeCshlLongRnaSeqHmecCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -25124,6 +25406,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000153
+expId 153
 fileName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -25235,7 +25519,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002683
 donorId 6022801.3
+expId 2683
 fileName wgEncodeCshlLongRnaSeqHmepcCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -25342,7 +25628,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002683
 donorId 6022801.3
+expId 2683
 fileName wgEncodeCshlLongRnaSeqHmepcCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -25533,7 +25821,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002683
 donorId 6022801.3
+expId 2683
 fileName wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -25596,6 +25886,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 2b685272da0c4bea68b0f241e14d622e,bd8173ba702ac9d2f117cf88d6e06983
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25625,6 +25916,7 @@ labExpId LID47806
 labVersion iIDR
 localization cell
 md5sum 0b864dee46f128a1395ff3ba2b4ad0bd
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -25652,6 +25944,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum cdfa7553246eaae61f377724467ea9f6
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25679,6 +25972,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 4bf61d3b0e8bc70276d9d0cfb36b2ec2
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25707,6 +26001,7 @@ labExpId LID47806
 labVersion iIDR
 localization cell
 md5sum dc573687a01be67bdf4efcba21463a16
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -25734,6 +26029,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 25900ef8f5bd43d545a76d03e15a6ac8
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -25763,6 +26059,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum a39147e1499318a8a76f2323126fa4b4
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -25792,6 +26089,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum e18387851efe91612a8bb548f8621c47
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -25821,6 +26119,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum f51586b30956d388e36d319e2dd9bc00
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25867,7 +26166,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam,wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam.bai
 grant Gingeras
 lab CSHL
@@ -25922,7 +26223,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
 dateUnrestricted 2013-04-04
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -25976,7 +26279,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1V2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -26029,7 +26334,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1V2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -26083,7 +26390,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
 dateUnrestricted 2013-04-04
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctionsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
@@ -26139,7 +26448,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2.bigWig
 grant Gingeras
 lab CSHL
@@ -26195,7 +26506,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2.bigWig
 grant Gingeras
 lab CSHL
@@ -26279,7 +26592,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-29
+dccAccession wgEncodeEH002878
 donorId 0082430.9
+expId 2878
 fileName wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1V2.spikeins.bam.gz
 grant Gingeras
 lab CSHL
@@ -26663,7 +26978,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002669
 donorId 0102604.12,9061601.12
+expId 2669
 fileName wgEncodeCshlLongRnaSeqHmscatCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -26716,7 +27033,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002669
 donorId 0102604.12,9061601.12
+expId 2669
 fileName wgEncodeCshlLongRnaSeqHmscatCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -26852,7 +27171,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002669
 donorId 0102604.12,9061601.12
+expId 2669
 fileName wgEncodeCshlLongRnaSeqHmscatCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -27264,7 +27585,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002673
 donorId 0051105.11,0050602.11
+expId 2673
 fileName wgEncodeCshlLongRnaSeqHmscbmCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -27317,7 +27640,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002673
 donorId 0051105.11,0050602.11
+expId 2673
 fileName wgEncodeCshlLongRnaSeqHmscbmCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -27453,7 +27778,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002673
 donorId 0051105.11,0050602.11
+expId 2673
 fileName wgEncodeCshlLongRnaSeqHmscbmCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -27865,7 +28192,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002684
 donorId 0052501.7,0081101.7
+expId 2684
 fileName wgEncodeCshlLongRnaSeqHmscucCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -27917,7 +28246,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002684
 donorId 0052501.7,0081101.7
+expId 2684
 fileName wgEncodeCshlLongRnaSeqHmscucCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -27996,7 +28327,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002684
 donorId 0052501.7,0081101.7
+expId 2684
 fileName wgEncodeCshlLongRnaSeqHmscucCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -28407,7 +28740,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002675
 donorId 0091301,0090202.1
+expId 2675
 fileName wgEncodeCshlLongRnaSeqHobCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -28460,7 +28795,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002675
 donorId 0091301,0090202.1
+expId 2675
 fileName wgEncodeCshlLongRnaSeqHobCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -28596,7 +28933,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002675
 donorId 0091301,0090202.1
+expId 2675
 fileName wgEncodeCshlLongRnaSeqHobCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -28734,7 +29073,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -28895,7 +29236,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -29169,7 +29512,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH002667
 donorId 0032601.13,0101504.13
+expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -29307,7 +29652,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -29468,7 +29815,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -29770,7 +30119,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002685
 donorId 9041503.2,9012801.2
+expId 2685
 fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -29908,7 +30259,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002676
 donorId 9100101.15,0022202.16
+expId 2676
 fileName wgEncodeCshlLongRnaSeqHsavecCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -30069,7 +30422,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002676
 donorId 9100101.15,0022202.16
+expId 2676
 fileName wgEncodeCshlLongRnaSeqHsavecCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -30371,7 +30726,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002676
 donorId 9100101.15,0022202.16
+expId 2676
 fileName wgEncodeCshlLongRnaSeqHsavecCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -30729,6 +31086,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000177
+expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -30808,6 +31167,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000177
+expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -31026,6 +31387,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000177
+expId 177
 fileName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -31165,6 +31528,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000154
+expId 154
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -31352,6 +31717,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000154
+expId 154
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -31682,6 +32049,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000154
+expId 154
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -32041,7 +32410,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000188
 donorId 7F3771
+expId 188
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -32121,7 +32492,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000188
 donorId 7F3771
+expId 188
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -32340,7 +32713,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000188
 donorId 7F3771
+expId 188
 fileName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -32480,7 +32855,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000155
 donorId 7F3771
+expId 155
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -32668,7 +33045,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000155
 donorId 7F3771
+expId 155
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -32999,7 +33378,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000155
 donorId 7F3771
+expId 155
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -33249,7 +33630,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000200
 donorId 7F3771
+expId 200
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -33329,7 +33712,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000200
 donorId 7F3771
+expId 200
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -33493,7 +33878,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000200
 donorId 7F3771
+expId 200
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -33633,7 +34020,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000156
 donorId 7F3771
+expId 156
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -33821,7 +34210,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000156
 donorId 7F3771
+expId 156
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -34152,7 +34543,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000156
 donorId 7F3771
+expId 156
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -34512,7 +34905,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000189
 donorId 7F3771
+expId 189
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -34592,7 +34987,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000189
 donorId 7F3771
+expId 189
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -34811,7 +35208,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000189
 donorId 7F3771
+expId 189
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -34951,7 +35350,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000157
 donorId 7F3771
+expId 157
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -35139,7 +35540,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000157
 donorId 7F3771
+expId 157
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -35470,7 +35873,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000157
 donorId 7F3771
+expId 157
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -35885,7 +36290,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002681
 donorId 6091203.3,6100401.3
+expId 2681
 fileName wgEncodeCshlLongRnaSeqHvmfCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -35938,7 +36345,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002681
 donorId 6091203.3,6100401.3
+expId 2681
 fileName wgEncodeCshlLongRnaSeqHvmfCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -36074,7 +36483,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002681
 donorId 6091203.3,6100401.3
+expId 2681
 fileName wgEncodeCshlLongRnaSeqHvmfCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -36486,7 +36897,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002682
 donorId 0092205,8120201.5
+expId 2682
 fileName wgEncodeCshlLongRnaSeqHwpCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -36539,7 +36952,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002682
 donorId 0092205,8120201.5
+expId 2682
 fileName wgEncodeCshlLongRnaSeqHwpCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -36675,7 +37090,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002682
 donorId 0092205,8120201.5
+expId 2682
 fileName wgEncodeCshlLongRnaSeqHwpCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -36811,7 +37228,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002629
 donorId 58607680
+expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -36968,7 +37387,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002629
 donorId 58607680
+expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -37209,7 +37630,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002629
 donorId 58607680
+expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -37346,7 +37769,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002623
 donorId 58607680
+expId 2623
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -37503,7 +37928,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002623
 donorId 58607680
+expId 2623
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -37744,7 +38171,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002623
 donorId 58607680
+expId 2623
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -37881,7 +38310,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002626
 donorId 58607680
+expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -38038,7 +38469,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002626
 donorId 58607680
+expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -38279,7 +38712,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002626
 donorId 58607680
+expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -38416,7 +38851,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002628
 donorId 58607680
+expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -38573,7 +39010,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002628
 donorId 58607680
+expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -38814,7 +39253,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002628
 donorId 58607680
+expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -39173,6 +39614,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000162
+expId 162
 fileName wgEncodeCshlLongRnaSeqK562CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -39252,6 +39695,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000162
+expId 162
 fileName wgEncodeCshlLongRnaSeqK562CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -39470,6 +39915,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000162
+expId 162
 fileName wgEncodeCshlLongRnaSeqK562CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -39609,6 +40056,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000163
+expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -39796,6 +40245,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000163
+expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -40126,6 +40577,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000163
+expId 163
 fileName wgEncodeCshlLongRnaSeqK562CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -40475,6 +40928,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000180
+expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -40662,6 +41117,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000180
+expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -40938,6 +41395,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000180
+expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -41297,6 +41756,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000193
+expId 193
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -41376,6 +41837,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000193
+expId 193
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -41594,6 +42057,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000193
+expId 193
 fileName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -41731,6 +42196,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000140
+expId 140
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -41918,6 +42385,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000140
+expId 140
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -42246,6 +42715,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000140
+expId 140
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -42385,6 +42856,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000181
+expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -42572,6 +43045,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000181
+expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -42848,6 +43323,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000181
+expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -42987,6 +43464,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000182
+expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -43174,6 +43653,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000182
+expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -43450,6 +43931,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000182
+expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -43809,6 +44292,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000194
+expId 194
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -43888,6 +44373,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000194
+expId 194
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -44106,6 +44593,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000194
+expId 194
 fileName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -44245,6 +44734,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000174
+expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -44432,6 +44923,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000174
+expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -44762,6 +45255,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000174
+expId 174
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -45121,6 +45616,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000183
+expId 183
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -45200,6 +45697,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000183
+expId 183
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -45418,6 +45917,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000183
+expId 183
 fileName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -45557,6 +46058,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000175
+expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -45744,6 +46247,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000175
+expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -46074,6 +46579,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000175
+expId 175
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -46210,6 +46717,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002633
+expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -46364,6 +46873,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002633
+expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -46656,6 +47167,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002633
+expId 2633
 fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -46790,6 +47303,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002627
+expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -46945,6 +47460,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002627
+expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -47237,6 +47754,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002627
+expId 2627
 fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -47374,7 +47893,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -47535,7 +48056,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -47782,7 +48305,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002668
 donorId RO01746
+expId 2668
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPamTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -47921,7 +48446,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -48082,7 +48609,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -48329,7 +48858,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002672
 donorId RO01746
+expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -48742,7 +49273,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002677
 donorId 0060801.3,7071701.2
+expId 2677
 fileName wgEncodeCshlLongRnaSeqNhdfCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -48795,7 +49328,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002677
 donorId 0060801.3,7071701.2
+expId 2677
 fileName wgEncodeCshlLongRnaSeqNhdfCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -48931,7 +49466,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002677
 donorId 0060801.3,7071701.2
+expId 2677
 fileName wgEncodeCshlLongRnaSeqNhdfCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -49460,7 +49997,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000164
 donorId 4F1155J
+expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -49488,6 +50027,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000164
+expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamExonsDeNovoRep5.gff.gz
 grant Gingeras
 lab CSHL
@@ -50073,7 +50614,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000167
 donorId 4F1155J
+expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -50101,6 +50644,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000167
+expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapExonsDeNovoRep5.gff.gz
 grant Gingeras
 lab CSHL
@@ -51072,7 +51617,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000195
 donorId 4F1155J
+expId 195
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -51153,7 +51700,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000195
 donorId 4F1155J
+expId 195
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -51291,7 +51840,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000195
 donorId 4F1155J
+expId 195
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -51432,7 +51983,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000166
 donorId 4F1155J
+expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -51621,7 +52174,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000166
 donorId 4F1155J
+expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -51953,7 +52508,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000166
 donorId 4F1155J
+expId 166
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -52314,7 +52871,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000196
 donorId 4F1155J
+expId 196
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -52395,7 +52954,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000196
 donorId 4F1155J
+expId 196
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -52615,7 +53176,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000196
 donorId 4F1155J
+expId 196
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -52757,7 +53320,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000165
 donorId 4F1155J
+expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -52946,7 +53511,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000165
 donorId 4F1155J
+expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -53278,7 +53845,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000165
 donorId 4F1155J
+expId 165
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -53693,7 +54262,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002686
 donorId 6022001,5071302.2
+expId 2686
 fileName wgEncodeCshlLongRnaSeqNhemfm2CellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -53746,7 +54317,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002686
 donorId 6022001,5071302.2
+expId 2686
 fileName wgEncodeCshlLongRnaSeqNhemfm2CellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -53882,7 +54455,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002686
 donorId 6022001,5071302.2
+expId 2686
 fileName wgEncodeCshlLongRnaSeqNhemfm2CellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -54294,7 +54869,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002687
 donorId 7012303,7011001.2
+expId 2687
 fileName wgEncodeCshlLongRnaSeqNhemm2CellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -54347,7 +54924,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002687
 donorId 7012303,7011001.2
+expId 2687
 fileName wgEncodeCshlLongRnaSeqNhemm2CellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -54483,7 +55062,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002687
 donorId 7012303,7011001.2
+expId 2687
 fileName wgEncodeCshlLongRnaSeqNhemm2CellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -54841,6 +55422,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000178
+expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -54920,6 +55503,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000178
+expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -55138,6 +55723,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000178
+expId 178
 fileName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -55277,6 +55864,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000168
+expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -55464,6 +56053,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000168
+expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -55794,6 +56385,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000168
+expId 168
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -56207,7 +56800,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002678
 donorId 9011302,8121902.17
+expId 2678
 fileName wgEncodeCshlLongRnaSeqSkmcCellTotalExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -56260,7 +56855,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002678
 donorId 9011302,8121902.17
+expId 2678
 fileName wgEncodeCshlLongRnaSeqSkmcCellTotalGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -56396,7 +56993,9 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002678
 donorId 9011302,8121902.17
+expId 2678
 fileName wgEncodeCshlLongRnaSeqSkmcCellTotalTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -56531,6 +57130,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002632
+expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -56686,6 +57287,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002632
+expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -56978,6 +57581,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002632
+expId 2632
 fileName wgEncodeCshlLongRnaSeqSknshCellPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -57112,6 +57717,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002630
+expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -57267,6 +57874,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002630
+expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -57559,6 +58168,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002630
+expId 2630
 fileName wgEncodeCshlLongRnaSeqSknshCytosolPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -57693,6 +58304,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH002631
+expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -57848,6 +58461,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002631
+expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapGeneDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -58140,6 +58755,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH002631
+expId 2631
 fileName wgEncodeCshlLongRnaSeqSknshNucleusPapTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL
@@ -58497,6 +59114,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000197
+expId 197
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -58576,6 +59195,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000197
+expId 197
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -58740,6 +59361,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000197
+expId 197
 fileName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -58879,6 +59502,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-30
 dateUnrestricted 2013-03-02
+dccAccession wgEncodeEH000169
+expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapExonsDeNovo.gff.gz
 grant Gingeras
 lab CSHL
@@ -59066,6 +59691,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000169
+expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapGeneDeNovoV2.gff.gz
 grant Gingeras
 lab CSHL
@@ -59396,6 +60023,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH000169
+expId 169
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovoV2.gtf.gz
 grant Gingeras
 lab CSHL
@@ -59442,4 +60071,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1348776937
+# MAGIC: -2142223786
