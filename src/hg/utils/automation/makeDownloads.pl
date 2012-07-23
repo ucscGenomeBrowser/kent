@@ -325,7 +325,7 @@ sub printAssemblyUsage {
   if (&isBaylor($assemblyLabel)) {
     print $fh <<_EOF_
 For conditions of use regarding the $Organism genome sequence data, see
-http://www.hgsc.bcm.tmc.edu/projects/conditions_for_use.html .
+http://www.hgsc.bcm.edu/content/conditions-use
 
 _EOF_
     ;

@@ -25886,6 +25886,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 2b685272da0c4bea68b0f241e14d622e,bd8173ba702ac9d2f117cf88d6e06983
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25915,6 +25916,7 @@ labExpId LID47806
 labVersion iIDR
 localization cell
 md5sum 0b864dee46f128a1395ff3ba2b4ad0bd
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -25942,6 +25944,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum cdfa7553246eaae61f377724467ea9f6
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25969,6 +25972,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 4bf61d3b0e8bc70276d9d0cfb36b2ec2
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -25997,6 +26001,7 @@ labExpId LID47806
 labVersion iIDR
 localization cell
 md5sum dc573687a01be67bdf4efcba21463a16
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26024,6 +26029,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum 25900ef8f5bd43d545a76d03e15a6ac8
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -26053,6 +26059,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum a39147e1499318a8a76f2323126fa4b4
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -26082,6 +26089,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum e18387851efe91612a8bb548f8621c47
+objStatus revoked - DNA present in sample
 project wgEncode
 protocol None
 readType 2x101D
@@ -26111,6 +26119,7 @@ lab CSHL
 labExpId LID47806
 localization cell
 md5sum f51586b30956d388e36d319e2dd9bc00
+objStatus revoked - DNA present in sample
 project wgEncode
 readType 2x101D
 replicate 2
@@ -60062,4 +60071,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 808473193
+# MAGIC: -2142223786

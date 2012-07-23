@@ -68,8 +68,7 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.release3.ra beta,public
-include wgEncodeUwAffyExonArray.patch.ra alpha
+include wgEncodeUwAffyExonArray.patch.ra
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
@@ -87,8 +86,7 @@ include wgEncodeOpenChromDnase.release2.ra beta,public
 include wgEncodeOpenChromDnase.release3.ra alpha
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release5.ra public
-include wgEncodeUwDnase.release6.ra alpha,beta
+include wgEncodeUwDnase.release6.ra
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra beta,public

@@ -66,10 +66,14 @@ if ("$HOST" == "hgwbeta") then
 	case ${DESTDIR}${BINDIR}/gfServer:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    breaksw
 	default:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    breaksw
     endsw
   end
@@ -79,9 +83,11 @@ endif
 if ("$HOST" == "$BOX32") then
   ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
   scp -p ${DESTDIR}${BINDIR}/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
+  ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
+  scp -p ${DESTDIR}${BINDIR}/liftOver qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
 endif
 
-echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload [${0}: START=${ScriptStart} END=`date`]"
+echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload and hgdownload-sd [${0}: START=${ScriptStart} END=`date`]"
 
 exit 0
 
