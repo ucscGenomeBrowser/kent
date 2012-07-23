@@ -76,7 +76,7 @@ int notYetOrdered = 0, toBeTopHighest=0; // Keep track of those to be reordered,
 
 // First determine what if anything needs to be rearranged.
 struct flatTracks *oneTrack = *flatTracks;
-for(;oneTrack!=NULL;oneTrack = oneTrack->next)
+for (;oneTrack!=NULL;oneTrack = oneTrack->next)
     {
     if (oneTrack->order <= IMG_ORDERTOP)
         {
@@ -111,7 +111,7 @@ if (haveBeenOrderd > 0 && notYetOrdered > 0)
         }
     // This difference should be removed from any with IMG_ORDEREND
     int gapFromOrderedToEnd = (IMG_ORDEREND - imgOrdHighest);
-    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
+    for (oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
         {
         if (oneTrack->order <= IMG_FIXEDPOS)
             ;  // Untouchables
@@ -147,7 +147,7 @@ void flatTracksFree(struct flatTracks **flatTracks)
 if (flatTracks && *flatTracks)
     {
     struct flatTracks *flatTrack;
-    while((flatTrack = slPopHead(flatTracks)) != NULL)
+    while ((flatTrack = slPopHead(flatTracks)) != NULL)
         freeMem(flatTrack);
     }
 }
@@ -318,7 +318,7 @@ struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,
 // Find a single mapItem based upon coordinates (within a pixel)
 {
 struct mapItem *item;
-for(item=map->items;item!=NULL;item=item->next)
+for (item=map->items;item!=NULL;item=item->next)
     {
     if ((abs(item->topLeftX     - topLeftX)     < 2)
     &&  (abs(item->topLeftY     - topLeftY)     < 2)
@@ -447,7 +447,7 @@ else
     dyStringAppend(myDy,"<br>");
 dyStringAppend(myDy,"<code>");
 int times = indent;
-for(;times>0;times--)
+for (;times>0;times--)
     dyStringAppend(myDy,"&nbsp;");
 return myDy;
 }
@@ -544,7 +544,7 @@ if (pMap != NULL && *pMap != NULL)
     {
     struct mapSet *map = *pMap;
     struct mapItem *item = NULL;
-    while((item = slPopHead(&(map->items))) != NULL )
+    while ((item = slPopHead(&(map->items))) != NULL )
         mapItemFree(&item);
     freeMem(map->name);
     // Don't free parentImg, as it should be freed independently
@@ -981,7 +981,7 @@ struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType
 // Expected are types: stData, stButton, stSide and stCenter
 {
 struct imgSlice *slice;
-for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
+for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
     {
     if (slice->type == type)
         return slice;
@@ -1034,7 +1034,7 @@ if (imgTrack->tdb == NULL || differentStringNullOk(id, imgTrack->tdb->track))
     neededId = id;
 
 int count = 0;
-for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
+for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
     {
     if (slice->type == stButton) // Buttons don't have maps.  Overlap will be ignored!
         continue;
@@ -1106,7 +1106,7 @@ if (imgTrack)
 
     indent++;
     struct imgSlice *slice = imgTrack->slices;
-    for(; slice != NULL; slice = slice->next )
+    for (; slice != NULL; slice = slice->next )
         sliceShow(dy,slice,indent);
 
     if (dy != NULL)
@@ -1176,7 +1176,7 @@ if (imgTrack->slices && imgTrack->slices->type == stData)
     slReverse(&imgTrack->slices);
 boolean found[stMaxSliceTypes] = { FALSE,FALSE,FALSE,FALSE};
 struct imgSlice *slice = imgTrack->slices;
-for(; slice != NULL; slice = slice->next )
+for (; slice != NULL; slice = slice->next )
     {
     if (found[slice->type])
         {
@@ -1213,7 +1213,7 @@ if (pImgTrack != NULL && *pImgTrack != NULL)
     {
     struct imgTrack *imgTrack = *pImgTrack;
     struct imgSlice *slice;
-    while((slice = slPopHead(&(imgTrack->slices))) != NULL )
+    while ((slice = slPopHead(&(imgTrack->slices))) != NULL )
         sliceFree(&slice);
     freeMem(imgTrack->name);
     freeMem(imgTrack);
@@ -1486,7 +1486,7 @@ if (imgBox)
                         imgBox->portalStart,imgBox->portalEnd,imgBox->portalWidth);
     indent++;
     struct image *img;
-    for(img=imgBox->images;img!=NULL;img=img->next)
+    for (img=imgBox->images;img!=NULL;img=img->next)
         imgShow(&myDy,img,"data ",indent);
     if (imgBox->bgImg)
         imgShow(&myDy,imgBox->bgImg,"bgnd ",indent);
@@ -1509,7 +1509,7 @@ int imgBoxDropEmpties(struct imgBox *imgBox)
 if (imgBox == NULL)
     return 0;
 struct imgTrack *imgTrack = imgBox->imgTracks;
-while(imgTrack != NULL)
+while (imgTrack != NULL)
     {
     if (imgTrack->slices == NULL)
         {
@@ -1579,7 +1579,7 @@ if (imgBox->imgTracks == NULL)
     return FALSE;
     }
 struct imgTrack *imgTrack = imgBox->imgTracks;
-while(imgTrack != NULL)
+while (imgTrack != NULL)
     {
     if (!imgTrackIsComplete(imgTrack,verbose))
         {
@@ -1629,10 +1629,10 @@ if (pImgBox != NULL && *pImgBox != NULL)
     {
     struct imgBox *imgBox = *pImgBox;
     struct imgTrack *imgTrack = NULL;
-    while((imgTrack = slPopHead(&(imgBox->imgTracks))) != NULL )
+    while ((imgTrack = slPopHead(&(imgBox->imgTracks))) != NULL )
         imgTrackFree(&imgTrack);
     struct image *img = NULL;
-    while((img = slPopHead(&(imgBox->images))) != NULL )
+    while ((img = slPopHead(&(imgBox->images))) != NULL )
         imgFree(&img);
     imgFree(&(imgBox->bgImg));
     freeMem(imgBox->db);
@@ -1656,7 +1656,7 @@ slReverse(&(map->items)); // These must be reversed so that they are
                           // printed in the same order as created!
 hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
-for(;item!=NULL;item=item->next)
+for (;item!=NULL;item=item->next)
     {
     hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
             item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
@@ -1679,9 +1679,9 @@ for(;item!=NULL;item=item->next)
         if (skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
         else if (startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
-             hPrintf(" HREF='..%s'",item->linkVar);            // FIXME: Chin should get rid
-         else                                                  // of this special case!
-             hPrintf(" HREF='%s'",item->linkVar);
+            hPrintf(" HREF='..%s'",item->linkVar);             // FIXME: Chin should get rid
+        else                                                   // of this special case!
+            hPrintf(" HREF='%s'",item->linkVar);
         hPrintf(" class='area'");
         }
     else
@@ -1916,7 +1916,7 @@ jsonTdbSettingsInit(jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
-for(;imgTrack!=NULL;imgTrack=imgTrack->next)
+for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
     struct track *track = hashFindVal(trackHash, trackName);

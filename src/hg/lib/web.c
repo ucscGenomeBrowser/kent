@@ -192,7 +192,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
     if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
-	printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
+        printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
     else
         webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
@@ -223,7 +223,7 @@ if (withLogo)
 	puts("<IMG SRC=\"../images/title.jpg\">");
 	}
     puts("</TH></TR>" "\n"
-    	 "" "\n" );
+         "" "\n" );
     }
 
 /* Put up the hot links bar. */
@@ -456,7 +456,7 @@ if(!skipSectionHeader)
     puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
-	 "<div id=firstSection>"
+         "<div id=firstSection>"
          "      <!--outer table is for border purposes-->\n"
          "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
                      "CELLPADDING='1'><TR><TD>\n"
@@ -526,7 +526,7 @@ void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args,
 	/* output a CGI and HTML header with the given title in printf format */
 {
 webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
-			     withLogo, FALSE);
+                             withLogo, FALSE);
 }
 
 void webStart(struct cart *theCart, char *db, char *format, ...)
@@ -684,11 +684,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	defaultLabel = clades[numClades];
     numClades++;
     if (numClades >= ArraySize(clades))
-	internalErr();
+        internalErr();
     }
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
-		    defaultLabel, onChangeText);
+                    defaultLabel, onChangeText);
 }
 
 static void printSomeGenomeListHtmlNamedMaybeCheck(char *customOrgCgiName,
@@ -1159,8 +1159,8 @@ if (oldVars)
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
     if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
-	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
-	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
+        (!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+        (!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
@@ -1452,10 +1452,10 @@ char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml
 // NOTE: png, jpg and gif should also be supported but are untested.
 {
 static struct hash *includedResourceFiles = NULL;
-if(!includedResourceFiles)
+if (!includedResourceFiles)
     includedResourceFiles = newHash(0);
 
-if(hashLookup(includedResourceFiles, fileName))
+if (hashLookup(includedResourceFiles, fileName))
     return NULL;
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);

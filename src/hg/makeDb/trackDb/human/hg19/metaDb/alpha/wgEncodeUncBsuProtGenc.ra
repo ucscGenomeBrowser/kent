@@ -11,6 +11,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003038
+expId 3038
 fileName wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -30,6 +32,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003038
+expId 3038
 fileName wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -48,6 +52,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003038
+expId 3038
 fileName wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -67,6 +73,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003038
+expId 3038
 fileName wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -85,6 +93,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003039
+expId 3039
 fileName wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -104,6 +114,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003039
+expId 3039
 fileName wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -122,6 +134,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003039
+expId 3039
 fileName wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -141,6 +155,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003039
+expId 3039
 fileName wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -159,6 +175,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003040
+expId 3040
 fileName wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -178,6 +196,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003040
+expId 3040
 fileName wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -196,6 +216,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003040
+expId 3040
 fileName wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -215,6 +237,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003040
+expId 3040
 fileName wgEncodeUncBsuProtGencH1hescCellFasppepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -233,6 +257,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003042
+expId 3042
 fileName wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -252,6 +278,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003042
+expId 3042
 fileName wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -270,6 +298,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003042
+expId 3042
 fileName wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -289,6 +319,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003042
+expId 3042
 fileName wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -307,6 +339,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003043
+expId 3043
 fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -326,6 +360,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003043
+expId 3043
 fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -344,6 +380,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003043
+expId 3043
 fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -363,6 +401,8 @@ dataType Proteogenomics
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003043
+expId 3043
 fileName wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -381,6 +421,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003041
+expId 3041
 fileName wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -400,6 +442,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003041
+expId 3041
 fileName wgEncodeUncBsuProtGencK562CellIngelmPepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -418,6 +462,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003041
+expId 3041
 fileName wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -437,6 +483,8 @@ dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003041
+expId 3041
 fileName wgEncodeUncBsuProtGencK562CellIngelpepMapGcUnFt.bigBed
 grant Giddings
 lab UNC/BSU
@@ -447,4 +495,4 @@ protocol In-gel
 subId 6544
 view pepMapGcUnFt
 
-# MAGIC: 72185026
+# MAGIC: -120978598

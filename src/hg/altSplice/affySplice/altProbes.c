@@ -1082,7 +1082,7 @@ for(i = 0; i < path->vCount - 1; i++)
     if(validVertex(splice, verts[i], verts[i+1]) &&
        pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggExon)
         {
-        if(chromStart >= vPos[verts[i]] && chromEnd <= vPos[verts[i+1]])
+        if (chromStart >= vPos[verts[i]] && chromEnd <= vPos[verts[i+1]])
             return TRUE;
         else if (!allBases && rangeIntersection(chromStart, chromEnd,
                                                vPos[verts[i]], vPos[verts[i+1]]) > 0)
@@ -1642,7 +1642,7 @@ char *words[2];
 int wordCount = ArraySize(words);
 assert(fileName);
 lf = lineFileOpen(fileName, TRUE);
-while(lineFileChopNext(lf, words, wordCount))
+while (lineFileChopNext(lf, words, wordCount))
     {
     hashAdd(hash, words[0], cloneString(words[1]));
     }
@@ -2316,7 +2316,7 @@ boolean muscleOn = optionExists("muscleOn");
 if(splice->paths == NULL || splice->type == altControl)
     return;
 
-for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
+for (altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     {
     struct bed *bed = NULL;
     double score = event->flipScore;
@@ -2436,20 +2436,20 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     if (altPath->motifUpCounts != NULL)
         {
         fprintf(brainSpTableHtmlOut, "[");
-        for(i = 0; i < bindSiteCount; i++)
-	    fprintf(brainSpTableHtmlOut, " %d", altPath->motifUpCounts[i]);
-	fprintf(brainSpTableHtmlOut, "] ");
+        for (i = 0; i < bindSiteCount; i++)
+            fprintf(brainSpTableHtmlOut, " %d", altPath->motifUpCounts[i]);
+        fprintf(brainSpTableHtmlOut, "] ");
 
-	fprintf(brainSpTableHtmlOut, "[");
-        for(i = 0; i < bindSiteCount; i++)
-	    fprintf(brainSpTableHtmlOut, " %d", altPath->motifInsideCounts[i]);
-	fprintf(brainSpTableHtmlOut, "] ");
+        fprintf(brainSpTableHtmlOut, "[");
+        for (i = 0; i < bindSiteCount; i++)
+            fprintf(brainSpTableHtmlOut, " %d", altPath->motifInsideCounts[i]);
+        fprintf(brainSpTableHtmlOut, "] ");
 
-	fprintf(brainSpTableHtmlOut, "[");
-        for(i = 0; i < bindSiteCount; i++)
-	    fprintf(brainSpTableHtmlOut, " %d", altPath->motifDownCounts[i]);
-	fprintf(brainSpTableHtmlOut, "] ");
-	}
+        fprintf(brainSpTableHtmlOut, "[");
+        for (i = 0; i < bindSiteCount; i++)
+            fprintf(brainSpTableHtmlOut, " %d", altPath->motifDownCounts[i]);
+        fprintf(brainSpTableHtmlOut, "] ");
+        }
     fprintf(brainSpTableHtmlOut, "</font>\n");
     fprintf(brainSpTableHtmlOut, " </td>");
     fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", score);
@@ -2951,7 +2951,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     &&  event->flipScore <= optionFloat("maxFlip", 200000) 
     &&  event->percentUltra >= optionFloat("minIntCons", 0.0))
         {
-	struct bed *endsBed = NULL;
+        struct bed *endsBed = NULL;
 	struct bed *upExonBed = NULL, *downExonBed = NULL;
 	struct dyString *dna = newDyString(2*upSeq->size+5);
 	char *tmp = NULL;
@@ -3166,15 +3166,15 @@ if(brainSpPSetOut != NULL)
     fprintf(brainSpPSetOut, "%s\t", refSeqForPSet(skipPSet));
     fprintf(brainSpPSetOut, "%s\t", skipPSet);
     fprintf(brainSpPSetOut, "%d\t", incPath->probeCount);
-    for(i = 0; i < incPath->probeCount; i++)
-	{
-	fprintf(brainSpPSetOut, "%s,", incPath->beds[i]->name);
-	}
+    for (i = 0; i < incPath->probeCount; i++)
+        {
+        fprintf(brainSpPSetOut, "%s,", incPath->beds[i]->name);
+        }
     fprintf(brainSpPSetOut, "\t%d\t", event->geneProbeCount);
-    for(i = 0; i < event->geneProbeCount; i++)
-	{
-	fprintf(brainSpPSetOut, "%s,", event->geneBeds[i]->name);
-	}
+    for (i = 0; i < event->geneProbeCount; i++)
+        {
+        fprintf(brainSpPSetOut, "%s,", event->geneBeds[i]->name);
+        }
     fprintf(brainSpPSetOut, "\n");
     }
 
@@ -3250,10 +3250,10 @@ else if(event->geneProbeCount > 0)
     struct altPath *gene1Path = NULL, *gene2Path = NULL;
     presThresh = absThresh;
     gene1Path = altPathStubForGeneSet(event, 0);
-    for(incPath = event->altPathList; incPath != NULL; incPath = incPath->next)
-	{
-	if(incPath->probeCount == 0)
-	    continue;
+    for (incPath = event->altPathList; incPath != NULL; incPath = incPath->next)
+        {
+        if(incPath->probeCount == 0)
+            continue;
 	skipPath = gene1Path;
 	namePath = incPath;
 	outputRatioStatsForPaths(event, incPath, skipPath, namePath, probM, intenM);
@@ -3300,7 +3300,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
 
     /* Output the probabilities. */
     if(pathProbabilitiesOut != NULL && event->splice->type != altOther)
-	{
+        {
         outputPathProbabilities(event, altPath, intenM, probM,
 				expressed, notExpressed, expression, pathIx);
 	}
