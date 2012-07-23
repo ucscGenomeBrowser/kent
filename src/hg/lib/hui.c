@@ -2219,8 +2219,8 @@ if (hierarchy && *hierarchy)
 //#define FOUR_STATE_UNCHECKED         0
 //#define FOUR_STATE_CHECKED           1
 //#define FOUR_STATE_CHECKED_DISABLED  -1
-#define FOUR_STATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
-#define FOUR_STATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
+#define FOUR_STATE_DISABLE(val)      {while ((val) >= 0) (val) -= 2;}
+#define FOUR_STATE_ENABLE(val)       {while ((val) < 0) (val) += 2;}
 
 int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 // Returns the four state checked state of the subtrack
@@ -2385,7 +2385,7 @@ int subgroupCount(struct trackDb *parentTdb)
 {
 int ix;
 int count = 0;
-for(ix=1;ix<=SUBGROUP_MAX;ix++)
+for (ix=1;ix<=SUBGROUP_MAX;ix++)
     {
     char subGrp[16];
     safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
@@ -2406,17 +2406,17 @@ for (ancestor = parentTdb; ancestor != NULL; ancestor = ancestor->parent)
     if (startsWith("subGroup",groupNameOrTag))
 	{
 	setting = trackDbSetting(ancestor, groupNameOrTag);
-	if (setting != NULL)
-	    return setting;
-	}
-    for(ix=1;ix<=SUBGROUP_MAX;ix++)
-	{
-	char subGrp[16];
-	safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
+        if (setting != NULL)
+            return setting;
+        }
+    for (ix=1;ix<=SUBGROUP_MAX;ix++)
+        {
+        char subGrp[16];
+        safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
 	setting = trackDbSetting(ancestor, subGrp);
-	if (setting != NULL)  // Doesn't require consecutive subgroups
+        if (setting != NULL)  // Doesn't require consecutive subgroups
 	    {
-	    if (startsWithWord(groupNameOrTag,setting))
+            if (startsWithWord(groupNameOrTag,setting))
 		return setting;
 	    }
 	}
@@ -2470,7 +2470,7 @@ static int membersSubGroupIx(members_t* members, char *tag)
 // Returns the index of the subgroup within the members struct (or -1)
 {
 int ix = 0;
-for(ix=0;ix<members->count;ix++)
+for (ix=0;ix<members->count;ix++)
     {
     if (members->tags[ix] != NULL && sameString(members->tags[ix],tag))
         return ix;
@@ -2525,7 +2525,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 // Now weed out empty subgroup tags.  Can do this in place since new count <= old count
 // NOTE: Don't I wish I had made these as an slList ages ago! (tim)
 int ixOut=0;
-for(ixIn=ixOut;ixIn<members->count;ixIn++)
+for (ixIn=ixOut;ixIn<members->count;ixIn++)
     {
     if (members->subtrackCount[ixIn] > 0)
         {
@@ -2608,7 +2608,7 @@ if (options != NULL)
         assert(options != NULL);
         }
     struct slName *option;
-    for(option=options;option!=NULL;option=option->next)
+    for (option=options;option!=NULL;option=option->next)
         {
         mIx = membersSubGroupIx(members, option->name);
         if (mIx >= 0)
@@ -2630,7 +2630,7 @@ if (dimCheckedDefaults != NULL
     for (;dIx < defaultCount;dIx++)
         checkedDefaults[dIx] = tagEncode(checkedDefaults[dIx]); // encode these before compare!
     }                                                      // Will leak, but this is a tiny amount
-for(mIx=0;mIx<members->count;mIx++)
+for (mIx=0;mIx<members->count;mIx++)
     {
     safef(settingName, sizeof(settingName), "%s.mat_%s_dim%c_cb",
           parentTdb->track,members->tags[mIx],letter);
@@ -2671,7 +2671,7 @@ if (membersForAll->members[dimY] != NULL)
 
 // Handle the ABC dimensions
 int ixIn,ixOut=dimA;
-for(ixIn=ixOut;ixIn<membersForAll->dimMax;ixIn++)
+for (ixIn=ixOut;ixIn<membersForAll->dimMax;ixIn++)
     {
     if (membersForAll->members[ixIn] != NULL)
         membersForAll->members[ixIn] =
@@ -2711,7 +2711,7 @@ membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
 if (membersForAll->dimensions != NULL)
     {
-    for(ix=0;ix<membersForAll->dimensions->count;ix++)
+    for (ix=0;ix<membersForAll->dimensions->count;ix++)
         {
         char letter = lastChar(membersForAll->dimensions->names[ix]);
         if (letter != 'X' && letter != 'Y')
@@ -2776,7 +2776,7 @@ if (filtering && !sameWord(filtering,"off"))
 
     membersForAll->filters = TRUE;
     // Default all to multi
-    for(ix=dimA;ix<membersForAll->dimMax;ix++)
+    for (ix=dimA;ix<membersForAll->dimMax;ix++)
         {
         if (membersForAll->members[ix] != NULL)
             membersForAll->members[ix]->fcType = fctMulti;
@@ -2788,7 +2788,7 @@ if (filtering && !sameWord(filtering,"off"))
         // FIXME: do we even support anything but multi???
         char *filterGroups[27];
         int count = chopLine(filtering,filterGroups);
-        for(ix=0;ix<count;ix++)
+        for (ix=0;ix<count;ix++)
             {
             char *dim = cloneNextWordByDelimiter(&filterGroups[ix],'=');
             char letter = lastChar(dim);
@@ -2815,7 +2815,7 @@ return membersForAll;
 static int membersForAllFindSubGroupIx(membersForAll_t* membersForAll, char *tag)
 { // Returns the index of the subgroups member struct within membersForAll (or -1)
 int ix = 0;
-for(ix=0;ix<membersForAll->dimMax;ix++)
+for (ix=0;ix<membersForAll->dimMax;ix++)
     {
     if (membersForAll->members[ix] != NULL && sameString(membersForAll->members[ix]->groupTag,tag))
         return ix;
@@ -2851,7 +2851,7 @@ if (membersForAllPtr && *membersForAllPtr)
     subgroupMembersFree(&(membersForAll->members[dimY]));
     subgroupMembersFree(&(membersForAll->members[dimV]));
     int ix;
-    for(ix=dimA;ix<membersForAll->dimMax;ix++)
+    for (ix=dimA;ix<membersForAll->dimMax;ix++)
         {
         //ASSERT(membersForAll->members[ix] != NULL);
         subgroupMembersFree(&(membersForAll->members[ix]));
@@ -2956,7 +2956,7 @@ for (aIx = dimA; aIx < membersForAll->dimMax; aIx++)  // for each ABC subGroup
         {
         if (membersForAll->members[aIx]->selected[mIx])  // The particular subgroup tag is selected
             {
-            for(tIx=0;tIx<membership->count;tIx++)  // what we are members of
+            for (tIx=0;tIx<membership->count;tIx++)  // what we are members of
                 {
                 // subTrack belongs to subGroup and tags match
                 if (sameString(membersForAll->members[aIx]->groupTag, membership->subgroups[tIx])
@@ -3026,7 +3026,7 @@ membership_t *membership = subgroupMembershipGet(childTdb);
 if (membership != NULL)
     {
     int ix;
-    for(ix=0;ix<membership->count;ix++)
+    for (ix=0;ix<membership->count;ix++)
         {
         if (sameString(name,membership->subgroups[ix]))
             {
@@ -3142,7 +3142,7 @@ for (ix = 0; ix<sortOrder->count; ix++)
         {
         int ord=1;
         char* pos2 = sortOrder->sortOrder;
-        for(;*pos2 && pos2 < pos;pos2++)
+        for (;*pos2 && pos2 < pos;pos2++)
             {
             if (*pos2 == '=') // Discovering sort order in cart
                 ord++;
@@ -3167,7 +3167,7 @@ void sortOrderFree(sortOrder_t **sortOrder)
 if (sortOrder && *sortOrder)
     {
     int ix;
-    for(ix=0;ix<(*sortOrder)->count;ix++) { subgroupFree(&((*sortOrder)->title[ix])); }
+    for (ix=0;ix<(*sortOrder)->count;ix++) { subgroupFree(&((*sortOrder)->title[ix])); }
     freeMem((*sortOrder)->sortOrder);
     freeMem((*sortOrder)->htmlId);
     freeMem((*sortOrder)->column);
@@ -3191,7 +3191,7 @@ item->tdb = tdbChild;
 if (sortOrder != NULL)   // Add some sort buttons
     {
     int sIx=0;
-    for(sIx=sortOrder->count - 1;sIx>=0;sIx--) // walk backwards to ensure sort order in columns
+    for (sIx=sortOrder->count - 1;sIx>=0;sIx--) // walk backwards to ensure sort order in columns
         {
         sortColumn *column = NULL;
         AllocVar(column);
@@ -3353,7 +3353,7 @@ char *filters[10];
 // multiple filterBys are delimited by space but spaces inside filter can be protected "by quotes"
 int filterCount = chopByWhiteRespectDoubleQuotes(setting, filters, ArraySize(filters));
 int ix;
-for(ix=0;ix<filterCount;ix++)
+for (ix=0;ix<filterCount;ix++)
     {
     char *filter = cloneString(filters[ix]);
     filterBy_t *filterBy;
@@ -3385,7 +3385,7 @@ for(ix=0;ix<filterCount;ix++)
     stripString(filter, "\"");  // Remove any double quotes now and chop by commmas
     filterBy->slValues = slNameListFromComma(filter);
     struct slName *val = filterBy->slValues;
-    for(;val!=NULL;val=val->next)
+    for (;val!=NULL;val=val->next)
         {
         // chip the style off the end of value or value|label
         char *chipper = strrchr(val->name,'{');
@@ -3460,7 +3460,7 @@ void filterBySetFree(filterBy_t **filterBySet)
 {
 if (filterBySet != NULL)
     {
-    while(*filterBySet != NULL)
+    while (*filterBySet != NULL)
         {
         filterBy_t *filterBy = slPopHead(filterBySet);
         if (filterBy->slValues != NULL)
@@ -3488,7 +3488,7 @@ else
 
 struct slName *slChoice = NULL;
 boolean first = TRUE;
-for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
+for (slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
     {
     if (!first)
         dyStringAppend(dyClause, ",");
@@ -3533,7 +3533,7 @@ if (filterBySet== NULL)
     return extraWhere;
 
 filterBy_t *filterBy = filterBySet;
-for(;filterBy != NULL; filterBy = filterBy->next)
+for (;filterBy != NULL; filterBy = filterBy->next)
     {
     if (column != NULL && differentString(column,filterBy->column))
         continue;
@@ -3559,7 +3559,7 @@ struct dyString *dyClause = newDyString(256);
 boolean notFirst = FALSE;
 filterBy_t *filterBy = NULL;
 
-for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     char *clause = filterByClause(filterBy);
     if (clause != NULL)
@@ -3603,7 +3603,7 @@ if (cartOptionalString(cart, "ajax") == NULL)
     }
 
 int ix=0;
-for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
     if (count == 1)
@@ -3624,7 +3624,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     struct slName *slValue;
 
     int ix=1;
-    for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
+    for (slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
         {
         char varName[32];
         char *label = NULL;
@@ -3700,7 +3700,7 @@ if (dividers)
     if (lastDivide != NULL)
         {
         int ix;
-        for(ix=0;ix<dividers->count;ix++)
+        for (ix=0;ix<dividers->count;ix++)
             {
             int sIx = stringArrayIx(dividers->subgroups[ix],membership->subgroups,
                                     membership->count);
@@ -3728,7 +3728,7 @@ int indent = 0;
 if (hierarchy && hierarchy->count>0)
     {
     int ix;
-    for(ix=0;ix<membership->count;ix++)
+    for (ix=0;ix<membership->count;ix++)
         {
         int iIx = stringArrayIx(membership->membership[ix], hierarchy->membership,
                                 hierarchy->count);
@@ -3739,7 +3739,7 @@ if (hierarchy && hierarchy->count>0)
             }
         }
     }
-for(;indent>0;indent--)
+for (;indent>0;indent--)
     puts("&nbsp;&nbsp;&nbsp;");
 }
 
@@ -3915,7 +3915,7 @@ hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
 int dimCount=0,di;
-for(di=0;di<membersForAll->dimMax;di++)
+for (di=0;di<membersForAll->dimMax;di++)
     {
     if (membersForAll->members[di])
         dimCount++;
@@ -4056,7 +4056,7 @@ if (sortOrder != NULL)
         }
     // Columns in tdb order (unchanging), sort in cart order (changed by user action)
     int sIx=0;
-    for(sIx=0;sIx<sortOrder->count;sIx++)
+    for (sIx=0;sIx<sortOrder->count;sIx++)
         {
         if (sameString(SORT_ON_TRACK_NAME,sortOrder->column[sIx]))
             break; // All wrangler requested sort orders have been done.
@@ -4201,7 +4201,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     dyStringAppend(dyHtml, "subCB"); // always first
     if (membersForAll->dimensions)
         {
-        for(di=dimX;di<membersForAll->dimMax;di++)
+        for (di=dimX;di<membersForAll->dimMax;di++)
             {
             if (membersForAll->members[di] && -1 !=
                                 (ix = stringArrayIx(membersForAll->members[di]->groupTag,
@@ -4211,7 +4211,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     else if (membersForAll->abcCount) // "dimensions" don't exist but may be subgroups anyway
         {
-        for(di=dimA;di<membersForAll->dimMax;di++)
+        for (di=dimA;di<membersForAll->dimMax;di++)
             {
             if (membersForAll->members[di] && -1 !=
                                 (ix = stringArrayIx(membersForAll->members[di]->groupTag,
@@ -4279,7 +4279,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if (sortOrder != NULL)
         {
         int sIx=0;
-        for(sIx=0;sIx<sortOrder->count;sIx++)
+        for (sIx=0;sIx<sortOrder->count;sIx++)
             {
             ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
                                 // TODO: Sort needs to expand from subGroups to labels as well
@@ -6137,7 +6137,7 @@ else
     {
     /* Codon highlighting does not apply to wigMafProt type */
     if (!strstr(tdb->type, "wigMafProt"))
-	{
+        {
         puts("<P><B>Codon highlighting:</B><BR>" );
 
 #ifdef GENE_FRAMING
@@ -6152,7 +6152,7 @@ else
 
         /* Use gene pred */
         cgiMakeRadioButton(option, MAF_FRAME_GENE,
-			   sameString(MAF_FRAME_GENE, currentCodonMode));
+                           sameString(MAF_FRAME_GENE, currentCodonMode));
         puts("CDS-annotated frame based on");
         safef(option, sizeof(option), "%s.%s", name, MAF_GENEPRED_VAR);
         genePredDropDown(cart, makeTrackHash(db, chromosome), NULL, option);
@@ -6438,7 +6438,7 @@ if (makeCfgRows)
                 printf(" style=\"display:none\"");
             printf("><TD width=10>&nbsp;</TD>");
             int ix2=ix;
-            while(0 < ix2--)
+            while (0 < ix2--)
                 printf("<TD width=100>&nbsp;</TD>");
             printf("<TD colspan=%d>",membersOfView->count+1);
             if (configurable[ix] != cfgNone)
@@ -6473,7 +6473,7 @@ if ((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
 char *suffix=NULL;
 char *rootLabel = labelRoot(label,&suffix);
 
-for(ix=1;ix<count && !found;ix++)
+for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag
         {                               // so all labels are linked
@@ -6756,7 +6756,7 @@ static int displayABCdimensions(char *db,struct cart *cart, struct trackDb *pare
 //       Also expected number should be passed in
 {
 int count=0,ix;
-for(ix=dimA;ix<membersForAll->dimMax;ix++)
+for (ix=dimA;ix<membersForAll->dimMax;ix++)
     {
     if (membersForAll->members[ix]==NULL)
         continue;
@@ -6769,7 +6769,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
     printf("<TR><TH valign=top align='right'>&nbsp;&nbsp;<B><EM>%s</EM></B>:</TH>",
            membersForAll->members[ix]->groupTitle);
     int aIx;
-    for(aIx=0;aIx<membersForAll->members[ix]->count;aIx++)
+    for (aIx=0;aIx<membersForAll->members[ix]->count;aIx++)
         {
         if (membersForAll->members[ix]->tags[aIx] != NULL)
             {
@@ -6831,7 +6831,7 @@ if ((count = chopByWhite(vocab, words,15)) <= 1) // vocab now contains just the 
 char *mdbVar = NULL;
 
 // Find mdb var to look up based upon the groupTag and cv setting
-for(ix=1;ix<count && !found;ix++)
+for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(members->groupTag,words[ix])) // controlledVocabulary setting matches tag
         {                                       // so all labels are linked
@@ -6857,7 +6857,7 @@ struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab,
 
 // Now build the comma delimited string of mdb vals (all have same mdb var)
 boolean first = TRUE;
-for(ix=0;ix<members->count;ix++)
+for (ix=0;ix<members->count;ix++)
     {
     if (members->subtrackList[ix] != NULL && members->subtrackList[ix]->val != NULL)
         {
@@ -6920,7 +6920,7 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
 
 // Now make a filterComp box for each ABC dimension
 int dimIx=dimA;
-for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
+for (dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
     {
     printf("<TD align='left'><B>%s:</B><BR>\n",
            labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
@@ -6939,7 +6939,7 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
                (sameWord("All",membersForAll->checkedTags[dimIx])?" SELECTED":"") );
 
     int ix=0;
-    for(ix=0;ix<membersForAll->members[dimIx]->count; ix++)
+    for (ix=0;ix<membersForAll->members[dimIx]->count; ix++)
         {
         boolean alreadySet = membersForAll->members[dimIx]->selected[ix];
         printf("<OPTION%s value=%s>%s</OPTION>\n",(alreadySet?" SELECTED":""),
@@ -7777,7 +7777,7 @@ if (fields == NULL)
 char *field = NULL;
 struct extraField *extras = NULL;
 struct extraField *extra = NULL;
-while(NULL != (field  = cloneNextWord(&fields)))
+while (NULL != (field  = cloneNextWord(&fields)))
     {
     AllocVar(extra);
     extra->name = field;
@@ -7829,7 +7829,7 @@ void extraFieldsFree(struct extraField **pExtras)
 if (pExtras != NULL)
     {
     struct extraField *extra = NULL;
-    while(NULL != (extra  = slPopHead(pExtras)))
+    while (NULL != (extra  = slPopHead(pExtras)))
         {
         freeMem(extra->name);
         freeMem(extra->label);

@@ -25,14 +25,15 @@ static boolean clStrict = FALSE;	/* If set only return tracks with actual tables
 static char *release = "alpha";
 static unsigned releaseBit = RELEASE_ALPHA;
 
-static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
-static char *clRewrite = NULL;		/* Rewrite to given directory. */
-static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
+static boolean clNoBlank = FALSE;       /* If set suppress blank lines in output. */
+static boolean clOneLine = FALSE;       /* If set then print record on single pipe-separated line. */
+static char *clRewrite = NULL;          /* Rewrite to given directory. */
+static boolean clNoCompSub = FALSE;     /* If set don't do subtrack inheritence of fields. */
 
-static int shortLabelLength;		
+static int shortLabelLength;            
 /* if non-zero check that short labels are no longer than this */
 
-static int longLabelLength;		
+static int longLabelLength;             
 /* if non-zero check that long labels are no longer than this */
 
 void usage()
@@ -68,6 +69,8 @@ errAbort(
 "Include trackDb entries with this release tag only. Default is alpha.\n"
 "   -noBlank\n"
 "Don't print out blank lines separating records\n"
+"   -oneLine\n"
+"Print single ('|') pipe-separated line per record\n"
 "   -noCompSub\n"
 "Subtracks don't inherit fields from parents\n"
 "   -shortLabelLength=N\n"
@@ -84,6 +87,7 @@ static struct optionSpec options[] = {
    {"strict", OPTION_BOOLEAN},
    {"release", OPTION_STRING},
    {"noBlank", OPTION_BOOLEAN},
+   {"oneLine", OPTION_BOOLEAN},
    {"rewrite", OPTION_STRING},
    {"noCompSub", OPTION_BOOLEAN},
    {"shortLabelLength", OPTION_INT},
@@ -116,17 +120,15 @@ struct slPair *wildHashMakeList(struct hash *hash)
 struct slPair *wildList = NULL;
 struct hashEl* hel = NULL;
 struct hashCookie cookie = hashFirst(hash);
-while((hel = hashNext(&cookie)) != NULL)
+while ((hel = hashNext(&cookie)) != NULL)
     {
     if (strchr(hel->name,'*') != NULL || strchr(hel->name,'?') != NULL)
         slPairAdd(&wildList, hel->name, hel);
     }
 if (wildList == NULL)
-    slPairAdd(&wildList, WILD_CARD_HASH_EMPTY, NULL); // Note: adding an "empty" pair will prevent
-                                                      // rebulding this list
+    slPairAdd(&wildList, WILD_CARD_HASH_EMPTY, NULL);// Note: adding an "empty" pair will prevent rebulding this list
 else if (slCount(wildList) > 1)
-    slSort(&wildList,wildExpressionCmp); // sort on length, so the most restrictive wildcard match
-                                         // goes first?
+    slSort(&wildList,wildExpressionCmp); // sort on length, so the most restrictive wildcard match goes first?
 
 hashAdd(hash, WILD_CARD_HASH_BIN, wildList);
 return wildList;
@@ -244,7 +246,7 @@ struct slName *field;
 for (field = rql->fieldList; field != NULL; field = field->next)
     {
     if (!anyWild(field->name))
-        if (!hashLookupEvenInWilds(glTagTypes, field->name))
+	if (!hashLookupEvenInWilds(glTagTypes, field->name))
 	    errAbort("Field %s in query doesn't exist in %s.", field->name, glTagTypeFile);
     }
 struct slName *var;
@@ -252,9 +254,9 @@ for (var = rql->whereVarList; var != NULL; var = var->next)
     {
     if (!hashLookupEvenInWilds(glTagTypes, var->name))
         errAbort(
-           "Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes around\n"
-           "a word? Maybe %s is hosed?.",
-            var->name, glTagTypeFile);
+	   "Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes around\n"
+	   "a word? Maybe %s is hosed?.",
+	    var->name, glTagTypeFile);
     }
 }
 
@@ -529,14 +531,14 @@ for (record = recordList; record != NULL; record = record->next)
 		if (newRelease == NULL && oldRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
-                             "at line %d of %s",
+		             "at line %d of %s",
 			     key, oldPos->startLineIx, oldPos->fileName,
 			     newPos->startLineIx, newPos->fileName);
 		    }
 		else if (oldRelease == NULL && newRelease != NULL)
 		    {
 		    errAbort("Have release tag for track %s at line %d of %s, but not "
-                             "at line %d of %s",
+		             "at line %d of %s",
 			     key, newPos->startLineIx, newPos->fileName,
 			     oldPos->startLineIx, oldPos->fileName);
 		    }
@@ -546,13 +548,13 @@ for (record = recordList; record != NULL; record = record->next)
 			{
 			errAbort("Duplicate tracks %s starting lines %d and %d of %s",
 			    key, oldPos->startLineIx, newPos->startLineIx, oldPos->fileName);
-                        }
-                    else
-                        errAbort("Duplicate tracks %s starting lines %d of %s and %d of %s",
-                            key, oldPos->startLineIx, oldPos->fileName,
-                            newPos->startLineIx, newPos->fileName);
-                    }
-                }
+			}
+		    else
+			errAbort("Duplicate tracks %s starting lines %d of %s and %d of %s",
+			    key, oldPos->startLineIx, oldPos->fileName,
+			    newPos->startLineIx, newPos->fileName);
+		    }
+		}
 	    }
 	hashAdd(uniqHash, key, record);
 	}
@@ -573,7 +575,7 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
     if (sameString(firstField->name, "include"))
 	{
 	struct tdbField *field;
-	for (field = firstField; field != NULL; field = field->next)
+        for (field = firstField; field != NULL; field = field->next)
             {
             if (!sameString(field->name, "include"))
                 {
@@ -581,8 +583,8 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
                     field->name, tdbRecordLineIx(record), lf->fileName);
                 }
             char dir[PATH_LEN];
-	    splitPath(lf->fileName, dir, NULL, NULL);
-	    char includeName[PATH_LEN];
+            splitPath(lf->fileName, dir, NULL, NULL);
+            char includeName[PATH_LEN];
             char *words[5];
             int count = chopLine(field->val, words);
             if (count > 2)
@@ -605,12 +607,12 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
                      lf->fileName);
 
             safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
-	    if (hashLookup(circularHash, includeName))
-		{
-                errAbort("Including file %s in an infinite loop line %d of %s",
+            if (hashLookup(circularHash, includeName))
+                {
+		errAbort("Including file %s in an infinite loop line %d of %s",
 			includeName, tdbRecordLineIx(record), lf->fileName);
 		}
-            recurseThroughIncludes(includeName, lm, circularHash, pRecordList,
+	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList,
                 subRelease);
 	    }
 	}
@@ -880,13 +882,13 @@ for (field = fieldList; field != NULL; field = field->next)
 	boolean match;
 	if (doWild)
 	    match = wildMatch(field->name, r->name);
-	else
-	    match = (strcmp(field->name, r->name) == 0);
-	if (match)
-	    fprintf(out, "%s %s\n", r->name, r->val);
-	}
+        else
+            match = (strcmp(field->name, r->name) == 0);
+        if (match)
+            fprintf(out, "%s %s%c", r->name, r->val,(clOneLine?'|':'\n' ));
+        }
     }
-if (!clNoBlank)
+if (!clNoBlank || clOneLine)
     fprintf(out, "\n");
 }
 
@@ -982,9 +984,9 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 	    if (parentFp->startLineIx > childFp->startLineIx)
 	        errAbort("Child before parent in %s\n"
 		         "Child (%s) at line %d, parent (%s) at line %d",
-                         childFp->fileName, child->key, childFp->startLineIx,
+			 childFp->fileName, child->key, childFp->startLineIx,
 			 parent->key, parentFp->startLineIx);
-            struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp,
+	    struct tdbRecord *closestParent = closestTdbAboveLevel(recordList, childFp,
 	        parentDepth);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
@@ -1010,22 +1012,22 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
-        struct slName *typeList = hashFindValEvenInWilds(glTagTypes, field->name);
-        if (typeList == NULL)
-            {
-            recordAbort(record,
-                "Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
-                "The tag is",
-                field->name, glTagTypeFile, field->name);
-            }
-        if (!matchAnyWild(typeList, type))
-            {
-            recordAbort(record,
-                "Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
-                "in %s if this is not a mistake.  The tag is",
-                field->name, type, glTagTypeFile);
-            }
-        }
+	struct slName *typeList = hashFindValEvenInWilds(glTagTypes, field->name);
+	if (typeList == NULL)
+	    {
+	    recordAbort(record,
+	        "Tag '%s' not found in %s.\nIf it's not a typo please add %s to that file.  "
+		"The tag is",
+	        field->name, glTagTypeFile, field->name);
+	    }
+	if (!matchAnyWild(typeList, type))
+	    {
+	    recordAbort(record,
+	        "Tag '%s' not allowed for tracks of type '%s'.  Please add it to supported types\n"
+		"in %s if this is not a mistake.  The tag is",
+	        field->name, type, glTagTypeFile);
+	    }
+	}
     }
 
 /* Additional child/parent checks. */
@@ -1378,6 +1380,7 @@ clStrict = optionExists("strict");
 release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 clNoBlank = optionExists("noBlank");
+clOneLine = optionExists("oneLine");
 clRewrite = optionVal("rewrite", clRewrite);
 clNoCompSub = optionExists("noCompSub");
 longLabelLength = optionInt("longLabelLength", longLabelLength);

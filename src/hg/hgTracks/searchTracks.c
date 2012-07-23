@@ -153,7 +153,7 @@ char **labels;
 char **values;
 AllocArray(labels, count);
 AllocArray(values, count);
-for(ix=0;ix<count;ix++)
+for (ix=0;ix<count;ix++)
     {
     labels[ix] = cloneString(nicerTypes[ix]);
     values[ix] = cloneString(crudeTypes[ix]);
@@ -186,7 +186,7 @@ if (!isEmpty(simpleEntry))
         // Unfortunately trixSearch can't handle the slName list
         int i;
         char **trixWords = needMem(sizeof(char *) * trixWordCount);
-        for(i = 0, el = trixList; el != NULL; i++, el = el->next)
+        for (i = 0, el = trixList; el != NULL; i++, el = el->next)
             trixWords[i] = strLower(el->name);
 
         // Now open the trix file
@@ -419,7 +419,7 @@ else
         if (startFrom > 0 && startFrom < tracksFound)
             {
             int countUp = 0;
-            for(countUp=0; countUp < startFrom;countUp++)
+            for (countUp=0; countUp < startFrom;countUp++)
                 {
                 if (slPopHead(&tracks) == NULL) // memory waste
                     break;
