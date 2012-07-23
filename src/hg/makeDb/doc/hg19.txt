@@ -19286,3 +19286,11 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
+# UPDATE COSMIC TRACK - v60 (DONE 2012-07-23 larrym)
+
+~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v60_190712.csv.gz
+New length: 166164
+Old length: 136638
+Percent bed overlap with previous version: 100.00%
+Number of deleted IDs: 4
+Number of added IDs: 29530
