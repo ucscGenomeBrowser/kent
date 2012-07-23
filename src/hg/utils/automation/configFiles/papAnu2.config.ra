@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db papAnu2
+clade mammal
+genomeCladePriority 16
+scientificName Papio anubis
+commonName Baboon
+assemblyDate Mar. 2012
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Baylor Panu_2.0
+orderKey 391
+mitoAcc none
+fastaFiles /hive/data/genomes/papAnu2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/papAnu2/ucsc/*.agp.gz
+dbDbSpeciesDir baboon
+photoCreditURL http://www.oumedicine.com/pathology/general-program-info/faculty-staff/roman-f-wolf-dvm
+photoCreditName Roman Wolf, University of Oklahoma Health Sciences Center
+ncbiGenomeId 394
+ncbiAssemblyId 383538
+ncbiAssemblyName Panu_2.0
+ncbiBioProject 54005
+genBankAccessionID GCA_000264685.1
+taxId   9555
