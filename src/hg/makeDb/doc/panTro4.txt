@@ -831,3 +831,27 @@ TMPDIR=/scratch/tmp
     ln -s blastz.panTro4.swap lastz.panTro4
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr3:132959918-132967918" where name="panTro4";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/panTro4/pushQ
+    cd /hive/data/genomes/panTro4/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl panTro4 2> stderr.txt | grep -v transMap > panTro4.sql
+    #   real    3m46.246s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/panTro4/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/panTro4/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/panTro4/bbi/quality.bw
+# WARNING: panTro4 does not have seq
+# WARNING: panTro4 does not have extFile
+# WARNING: panTro4 does not have estOrientInfo
+
+    scp -p panTro4.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/panTro4.sql"
+
+############################################################################
