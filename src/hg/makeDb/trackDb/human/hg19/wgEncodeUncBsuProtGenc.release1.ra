@@ -43,7 +43,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel GM12878
-        longLabel GM12878 Cytosol Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
+        longLabel GM12878 Cyt Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed
         color 153,38,0
@@ -105,7 +105,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel GM12878
-        longLabel GM12878 Cytosol Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel GM12878 Cyt Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed
         color 153,38,0
