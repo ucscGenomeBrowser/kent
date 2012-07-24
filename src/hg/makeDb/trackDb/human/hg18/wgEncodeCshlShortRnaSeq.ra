@@ -4,7 +4,7 @@ shortLabel CSHL Sm RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Small RNA-seq
 group expression
 subGroup1 view Views m1-Transfrags=Transfrags m2-PlusRawSignal=Plus_Raw_Signal m3-MinusRawSignal=Minus_Raw_Signal m4-Alignments=Alignments
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t3PROSTATE=prostate
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t3PROSTATE=Prostate
 subGroup3 localization Localization m0-cell=Cell m10-polysome=Polysome m20-cytosol=Cytosol m30-nucleus=Nucleus m40-nucleoplasm=Nucleoplasm m50-chromatin=Chromatin m60-nucleolus=Nucleolus
 dimensions dimensionX=cellType dimensionY=localization
 #fileSortOrder cell=Cell_Line view=View geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
@@ -94,7 +94,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel pros cell tot TF
         color 0,102,136
-        longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
+        longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in Prostate cell)
         subGroups view=m1-Transfrags cellType=t3PROSTATE localization=m0-cell
         type broadPeak
 
@@ -191,7 +191,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
         shortLabel pros cell tot +S
         color 0,102,136
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in prostate cell)
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (small RNA in Prostate cell)
         subGroups view=m2-PlusRawSignal cellType=t3PROSTATE localization=m0-cell
         # type bigWig 0 1611371
         minLimit 0
@@ -328,7 +328,7 @@ noInherit on
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
         shortLabel pros cell tot -S
         color 0,102,136
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in prostate cell)
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (small RNA in Prostate cell)
         subGroups view=m3-MinusRawSignal cellType=t3PROSTATE localization=m0-cell
         # type bigWig 0 1611371
         minLimit 0
@@ -516,7 +516,7 @@ noInherit on
         baseColorUseSequence nameIsSequence
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        longLabel ENCODE CSHL RNA-seq Tags (small RNA in prostate cell)
+        longLabel ENCODE CSHL RNA-seq Tags (small RNA in Prostate cell)
         subGroups view=m4-Alignments cellType=t3PROSTATE localization=m0-cell
         type bigBed 6
 

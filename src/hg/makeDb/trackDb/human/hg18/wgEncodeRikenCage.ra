@@ -4,7 +4,7 @@ shortLabel RIKEN CAGE Loc
 longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views m1-PlusClusters=Plus_Clusters m3-MinusClusters=Minus_Clusters m5-Alignments=Alignments
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3NHEK=NHEK t3PROSTATE=prostate
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3NHEK=NHEK t3PROSTATE=Prostate
 subGroup3 localization Localization m0-cell=Cell m10-polysome=Polysome m20-cytosol=Cytosol m30-nucleus=Nucleus m40-nucleoplasm=Nucleoplasm m50-chromatin=Chromatin m60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
@@ -33,7 +33,7 @@ wgEncode 1
         track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
         parent wgEncodeRikenCageView1-PlusClusters off
         shortLabel Pros cell pA- +
-        longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in prostate whole cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Clusters (PolyA- RNA in Prostate whole cell)
         subGroups view=m1-PlusClusters cellType=t3PROSTATE localization=m0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
@@ -197,7 +197,7 @@ wgEncode 1
         track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
         parent wgEncodeRikenCageView3-MinusClusters off
         shortLabel Pros cell pA- -
-        longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in prostate whole cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Clusters (PolyA- RNA in Prostate whole cell)
         subGroups view=m3-MinusClusters cellType=t3PROSTATE localization=m0-cell rnaExtract=longNonPolyA
         type bedGraph 4
         color 221,17,153
@@ -394,7 +394,7 @@ wgEncode 1
         track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
         parent wgEncodeRikenCageView5-Alignments off
         shortLabel Pros cell pA- A
-        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in prostate whole cell)
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- RNA in Prostate whole cell)
         subGroups view=m5-Alignments cellType=t3PROSTATE localization=m0-cell rnaExtract=longNonPolyA
         type bed 6
         #baseColorDefault diffBases

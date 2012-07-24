@@ -6,7 +6,7 @@ shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
 subGroup1 view Views m0-PlusRawSignal=Plus_Raw_Signal m1-MinusRawSignal=Minus_Raw_Signal m2-Alignments=Alignments m3-Clusters=Clusters
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3NHEK=NHEK t3PROSTATE=prostate
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3NHEK=NHEK t3PROSTATE=Prostate
 subGroup3 localization Localization m0-cell=Cell m10-polysome=Polysome m20-cytosol=Cytosol m30-nucleus=Nucleus m40-nucleoplasm=Nucleoplasm m50-chromatin=Chromatin m60nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
@@ -199,7 +199,7 @@ wgEncode 1
         track wgEncodeGisPetPlusRawSigRep1ProstateCellLongpolya
         subTrack wgEncodeGisPetView0-PlusRawSignal off
         shortLabel pros cell A+ +S1
-        longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (PolyA+ RNA in prostate cell)
+        longLabel ENCODE GIS PET Plus Strand Raw Signal Rep 1 (PolyA+ RNA in Prostate cell)
         subGroups view=m0-PlusRawSignal cellType=t3PROSTATE localization=m0-cell rnaExtract=longPolyA
         type bedGraph 4
         minLimit 0
@@ -404,7 +404,7 @@ wgEncode 1
         track wgEncodeGisPetMinusRawSigRep1ProstateCellLongpolya
         subTrack wgEncodeGisPetView1-MinusRawSignal off
         shortLabel pros cell A+ -S1
-        longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (PolyA+ RNA in prostate cell)
+        longLabel ENCODE GIS PET Minus Strand Raw Signal Rep 1 (PolyA+ RNA in Prostate cell)
         subGroups view=m1-MinusRawSignal cellType=t3PROSTATE localization=m0-cell rnaExtract=longPolyA
         type bedGraph 4
         minLimit 0
@@ -593,7 +593,7 @@ wgEncode 1
         track wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya
         subTrack wgEncodeGisPetView2-Alignments off
         shortLabel pros cell A+ AL1
-        longLabel ENCODE GIS PET Alignments Rep 1 (PolyA+ RNA in prostate cell)
+        longLabel ENCODE GIS PET Alignments Rep 1 (PolyA+ RNA in Prostate cell)
         subGroups view=m2-Alignments cellType=t3PROSTATE localization=m0-cell rnaExtract=longPolyA
         colorByStrand 46,0,184 238,85,34
         type bigBed 6
@@ -804,7 +804,7 @@ wgEncode 1
         track wgEncodeGisPetClustersRep1ProstateCellPap
         subTrack wgEncodeGisPetView3-Clusters off
         shortLabel pros cell A+ CL1
-        longLabel ENCODE GIS PET Clusters Rep 1 (PolyA+ RNA in prostate cell)
+        longLabel ENCODE GIS PET Clusters Rep 1 (PolyA+ RNA in Prostate cell)
         subGroups view=m3-Clusters cellType=t3PROSTATE localization=m0-cell rnaExtract=longPolyA
         type bed 12
 
