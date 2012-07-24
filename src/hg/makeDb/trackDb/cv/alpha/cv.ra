@@ -6969,8 +6969,93 @@ color 230,159,0
 sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
+term EPC_(CD117+,CD71-,TER119-)
+tag EPCPMM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71-,TER119- #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71-,TER119-
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117+,CD71+,TER119-)
+tag EPCPPM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71+,TER119- #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71+,TER119-
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117-,CD71+,TER119+)
+tag EPCMPP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117-,CD71+,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117-,CD71+,TER119+
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117-,CD71-,TER119+)
+tag EPCMMP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117-,CD71-,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117-,CD71-,TER119+
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117+,CD71+,TER119+)
+tag EPCPPP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71+,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71+,TER119+
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
 term EpiSC-5
-tag EpiSC5
+tag EPISC5
 type Cell Line
 organism mouse
 category primaryCells
@@ -6987,7 +7072,7 @@ sex M
 protocol missing
 
 term EpiSC-7
-tag EpiSC7
+tag EPISC7
 type Cell Line
 organism mouse
 category primaryCells

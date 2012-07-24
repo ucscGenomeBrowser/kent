@@ -1569,7 +1569,7 @@ if (ord == NULL)  /* no columns are visible, go to back to configure page */
     {
     doConfigure(conn, colList);
     return;
-    };
+    }
 
 
 if (cartVarExists(cart, getTextVarName))
@@ -1640,7 +1640,6 @@ else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
     doAdvFilterKeyUpload(conn, colList, col);
 else if ((col = advFilterKeyClearPressed(colList)) != NULL)
     doAdvFilterKeyClear(conn, colList, col);
-
 else
     displayData(conn, colList);
 

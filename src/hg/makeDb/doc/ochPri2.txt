@@ -331,3 +331,20 @@ ochPri2.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_6491:75719-81052" where name="ochPri2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/pushQ
+    cd /hive/data/genomes/ochPri2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl ochPri2 2> stderr.txt | grep -v transMap > ochPri2.sql
+    #   real    3m37.306s
+
+    scp -p ochPri2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/ochPri2.sql"
+
+############################################################################
