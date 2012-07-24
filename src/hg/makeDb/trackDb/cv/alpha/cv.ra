@@ -6970,7 +6970,7 @@ sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
 term EpiSC-5
-tag EpiSC5
+tag EPISC5
 type Cell Line
 organism mouse
 category primaryCells
@@ -6987,7 +6987,7 @@ sex M
 protocol missing
 
 term EpiSC-7
-tag EpiSC7
+tag EPISC7
 type Cell Line
 organism mouse
 category primaryCells
