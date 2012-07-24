@@ -526,3 +526,20 @@ nomLeu2.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL397298:23130040-23137416" where name="nomLeu2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/nomLeu2/pushQ
+    cd /hive/data/genomes/nomLeu2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl nomLeu2 2> stderr.txt | grep -v transMap > nomLeu2.sql
+    #   real    3m52.913s
+
+    scp -p nomLeu2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/nomLeu2.sql"
+
+############################################################################
