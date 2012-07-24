@@ -687,8 +687,7 @@ puts("</td></tr></table>\n"
      "</td></tr></table>\n"
      "</td></tr></table>\n");
 cgiMakeHiddenVar("phase", chooseTablePhase);
-puts("</FORM>"
-    "</CENTER>\n");
+puts("</FORM></CENTER>\n");
 
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
        "<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",

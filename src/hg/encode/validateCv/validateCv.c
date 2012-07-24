@@ -330,7 +330,7 @@ if (type == NULL || sameWord(type,CV_TERM_SEQ_PLATFORM))
 // walk through all the rest of types with standard requirements: tag and description
 if (setting == NULL)
     checkSettings = CV_TAG " " CV_DESCRIPTION;
-while(cvTypes != NULL)
+while (cvTypes != NULL)
     {
     if (type != NULL && setting == NULL)
         verbose(1,"Must haves: %s\n",checkSettings);

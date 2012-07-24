@@ -1083,7 +1083,7 @@ for (i=0; i<count; i++, text++, textPos++)
 	    {
 	    /* display AA at the center of a codon */
 	    if (((seqStart + textPos) % 3) == offset)
-	        {
+                {
 		/* display alternate background color */
                 if (((seqStart + textPos)/3 %2) == 0)
                     {
@@ -1095,8 +1095,8 @@ for (i=0; i<count; i++, text++, textPos++)
                     }
 
 		/* display AA */
-	        hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, cBuf);
-	        }
+                hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, cBuf);
+                }
 	    }
 	}
     }
@@ -2660,9 +2660,9 @@ if (!hideArrows)
 	{
 	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-		     lf->orientation, lf->highlightColor, FALSE);
-	else
-	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+                     lf->orientation, lf->highlightColor, FALSE);
+        else
+            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
                      lf->orientation, bColor, FALSE);
         }
     }
@@ -2731,9 +2731,9 @@ for (sf = components; sf != NULL; sf = sf->next)
 		}
 	    else
 		{
-		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-				    color, lf->score );
-		}
+                drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
+                                    color, lf->score );
+                }
 
             /* Display barbs only if no intron is visible on the item.
                This occurs when the exon completely spans the window,
@@ -2787,7 +2787,7 @@ if (start != -1 && !lfs->noLine)
         {
         if (vis == tvFull || vis == tvPack)
             clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                lfs->orientation, bColor, TRUE);
+                         lfs->orientation, bColor, TRUE);
         hvGfxLine(hvg, x1, midY, x2, midY, color);
         }
     }
@@ -3660,11 +3660,11 @@ for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
     sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
-    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom,
-        lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
+                     lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct psl *psl = pslLoad(row+rowOffset);
+        {
+        struct psl *psl = pslLoad(row+rowOffset);
 	lf = lfFromPsl(psl, FALSE);
 	slAddHead(&lfList, lf);
 	}
@@ -4828,7 +4828,7 @@ if (!showSpliceVariants)
                 canonicalTable, winEnd, winStart);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
-	while ((row = sqlNextRow(sr)) != NULL)
+        while ((row = sqlNextRow(sr)) != NULL)
 	    hashAdd(hash, row[0], NULL);
 	sqlFreeResult(&sr);
 	hFreeConn(&conn);
@@ -4892,13 +4892,13 @@ if (refAcc != NULL)
         if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
-	        {
-	        /* Use the usual color */
-	        col = tg->ixColor;
-	        }
+                {
+                /* Use the usual color */
+                col = tg->ixColor;
+                }
 	    else
                 {
-	        col = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+                col = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
                 }
 	    }
 	sqlFreeResult(&sr);
@@ -4946,7 +4946,7 @@ if (hTableExists(database, "kgColor"))
     struct sqlConnection *conn = hAllocConn(database);
     char query[512];
     safef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'",
-        lf->name);
+          lf->name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row = sqlNextRow(sr);
     if (row != NULL)
@@ -5154,12 +5154,12 @@ if (decipherId != NULL)
         if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
-	        {
-	        col = MG_BLUE;
-	        }
+                {
+                col = MG_BLUE;
+                }
 	    else
 		{
-	        col = MG_RED;
+                col = MG_RED;
 		}
 	    }
 	sqlFreeResult(&sr);
@@ -5172,9 +5172,9 @@ if (decipherId != NULL)
         if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
-	        {
-	        col = MG_GRAY;
-	        }
+                {
+                col = MG_GRAY;
+                }
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -5998,9 +5998,9 @@ if((lfList != NULL) && hTableExists(database,  "estOrientInfo"))
         estOrient = hashIntValDefault(orientHash, lf->name, 0);
         if (estOrient < 0)
             lf->orientation = -1 * lf->orientation;
-        else if(estOrient == 0)
+        else if (estOrient == 0)
             lf->orientation = 0;  // not known, don't display chevrons
-	}
+        }
     hashFree(&orientHash);
     }
 hFreeConn(&conn);
@@ -9141,7 +9141,7 @@ if (vis == tvDense)
                 NULL, &rowOffset);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)
-	    {
+            {
 	    int start, end;
 	    row += rowOffset;
 	    start = atoi(row[1]);
@@ -9267,10 +9267,10 @@ if (!tg->limitedVisSet)
             if (!tg->syncChildVisToSelf)
 		{
 		for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-		    limitVisibility(subtrack);
-		}
+                    limitVisibility(subtrack);
+                }
             }
-        while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
             if (vis == tvFull && tg->canPack)
                 vis = tvPack;
@@ -11256,10 +11256,10 @@ if (useGeneSymbol)
         dyStringAppend(name, geneSymbol);
     else
         {
-	char *chp;
+        char *chp;
         safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
         geneSymbol = sqlQuickString(conn, query);
-	if (geneSymbol && differentString(geneSymbol, "0"))
+        if (geneSymbol && differentString(geneSymbol, "0"))
             {
 	    // pick the first one, if multiple gene symbols exist
             chp = strstr(geneSymbol, ",");
@@ -11516,8 +11516,8 @@ else
             if (sameWord(phenClass, "1"))
                 {
 		// set to lighter green for class 1
-	        sqlFreeResult(&sr);
-	        return class1Clr;
+                sqlFreeResult(&sr);
+                return class1Clr;
                 }
             else if (sameWord(phenClass, "4"))
                 {
@@ -11574,8 +11574,10 @@ else
         {
         /* get the gene symbol of the exact KG that matches not only ID but also genomic position */
         safef(query, sizeof(query),
-        "select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
-        el->name, el->chromStart, el->chromEnd);
+              "select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o"
+              " where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId"
+              " and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
+              el->name, el->chromStart, el->chromEnd);
         geneLabel = sqlQuickString(conn, query);
         }
     else
@@ -12381,7 +12383,7 @@ else
 }
 
 static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-				char *itemName, char *mapItemName, int start, int end,
+                                char *itemName, char *mapItemName, int start, int end,
                                 int x, int y, int width, int height)
 /* create mouse over with title for pubs blat features. */
 {
@@ -12415,7 +12417,7 @@ static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 {
 struct bed *bed = item;
 genericMapItem(tg, hvg, item,
-		    bed->name, bed->name, start, end,
+                    bed->name, bed->name, start, end,
                     x, y, width, height);
 }
 
@@ -12786,14 +12788,14 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
         {
-           limitVisibility(subtrack);
+        limitVisibility(subtrack);
         enum trackVisibility minVis = vis;
         if (subtrack->limitedVisSet)
             minVis = tvMin(minVis, subtrack->limitedVis);
         int h = subtrack->totalHeight(subtrack, minVis);
         subtrack->height = h;
         height += h;
-           }
+        }
     }
 track->height = height;
 return track->height;

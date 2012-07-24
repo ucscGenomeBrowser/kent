@@ -20,6 +20,7 @@ type bed 3
 noInherit on
 wgEncode 1
 visibility hide
+html wgEncodeUncBsuProt.release2
 
     track wgEncodeUncBsuProtViewSignal
     shortLabel Signal
