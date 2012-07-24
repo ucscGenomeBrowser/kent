@@ -2055,4 +2055,27 @@ TMPDIR=/scratch/tmp
     ln -s blastz.monDom5.swap lastz.monDom5
 
 
+############################################################################
+# LASTZ Rhesus  rheMac3 SWAP (DONE - 2012-07-19 - Chin)
+    cd /hive/data/genomes/monDom5/bed/lastzRheMac3.2012-07-19
+    cat fb.monDom5.chainRheMac3Link.txt
+    #   221659579 bases of 3501660299 (6.330%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/monDom5/bed
+    ln -s lastzRheMac3.2012-07-19 lastz.rheMac3
+
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/monDom5/bed/lastzRheMac3.2012-07-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    106m24.321s
+    cat fb.rheMac3.chainMonDom5Link.txt
+    #   214801189 bases of 2639145830 (8.139%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
 #########################################################################
