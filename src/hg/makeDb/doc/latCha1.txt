@@ -416,3 +416,22 @@ http://upload.wikimedia.org/wikipedia/commons/4/4b/Coelacanth.png
     # add Latimeria_chalumnae.png to the source tree src/hg/htdocs/images/
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH126819:1630199-1640227" where name="latCha1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/latCha1/pushQ
+    cd /hive/data/genomes/latCha1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl latCha1 2> stderr.txt | grep -v transMap > latCha1.sql
+    #   real    4m0.069s
+
+    scp -p latCha1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < latCha1.sql
+
+############################################################################

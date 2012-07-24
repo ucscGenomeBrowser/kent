@@ -114,12 +114,14 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
             {
             boolean fileSearch = (cgiOptionalInt("fileSearch",0) == 1);
             struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, FALSE,
-                                                    !fileSearch, fileSearch);
+                                                     !fileSearch, fileSearch);
             if (slCount(pairs) > 0)
                 {
-                char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
-                                name, pairs,NULL, ANYLABEL,"mdbVal", "style='min-width: 200px; "
-                                "font-size: .9em;' onchange='findTracksMdbValChanged(this);'");
+                char *dropDownHtml =
+                                cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
+                                                      name, pairs, NULL, ANYLABEL, "mdbVal",
+                                                      "style='min-width: 200px; font-size: .9em;' "
+                                                      "onchange='findTracksMdbValChanged(this);'");
                 if (dropDownHtml)
                     {
                     dyStringAppend(output,dropDownHtml);

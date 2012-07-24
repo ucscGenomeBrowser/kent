@@ -24,6 +24,8 @@
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
+char *incorrectUsernameOrPassword="The username or password you entered is incorrect.";
+char *incorrectUsername="The username you entered is incorrect.";
 /* The excludeVars are not saved to the cart. */
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", 
      "hgLogin_password", "hgLogin_password2", "hgLogin_newPassword1",
@@ -798,7 +800,7 @@ else
 if (!password)
     {
     freez(&errMsg);
-    errMsg = cloneString("User not found.");
+    errMsg = cloneString(incorrectUsername);
     changePasswordPage(conn);
     return;
     }
@@ -1151,9 +1153,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
     freez(&errMsg);
-    char temp[256];
-    safef(temp,sizeof(temp),"User name %s not found.",userName);
-    errMsg = cloneString(temp);
+    errMsg = cloneString(incorrectUsernameOrPassword);
     displayLoginPage(conn);
     return;
     }
@@ -1184,7 +1184,7 @@ else if (usingNewPassword(conn, userName, password))
     } 
 else
     {
-    errMsg = cloneString("Invalid user name or password.");
+    errMsg = cloneString(incorrectUsernameOrPassword);
     displayLoginPage(conn);
     return;
     }

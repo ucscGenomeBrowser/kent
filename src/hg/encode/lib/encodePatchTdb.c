@@ -622,9 +622,9 @@ char tempTagText[1024];
 char *leadingComment, *indentation;
 splitTagText(tag, &leadingComment, &indentation, NULL, NULL);
 safef(tempTagText, sizeof tempTagText, "%s%s%s %s\n",
-    lcOverride ? lcOverride : leadingComment,
-    iOverride ? iOverride : indentation,
-    tag->name, tag->val);
+      lcOverride ? lcOverride : leadingComment,
+      iOverride ? iOverride : indentation,
+      tag->name, tag->val);
 tag->text = cloneString(tempTagText);
 freeMem(leadingComment);
 freeMem(indentation);

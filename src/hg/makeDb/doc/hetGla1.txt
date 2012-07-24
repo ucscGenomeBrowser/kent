@@ -8,11 +8,11 @@
 #    http://www.ncbi.nlm.nih.gov/nuccore?term=AFSB00000000[pacc]
 #    http://www.ncbi.nlm.nih.gov/nuccore/AFSB00000000.1
 #   Beijing Genomics Institute, Shenzhen
- 
+
 # Whole Genome Shotgun sequencing project:
 #    http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AFSB00
-#    WGS: AFSB01000001:AFSB01273990 
-#    Scaffold: JH165514:JH204779 
+#    WGS: AFSB01000001:AFSB01273990
+#    Scaffold: JH165514:JH204779
 
 ##########################################################################
 # Download sequence (DONE - 2011-12-01 Chin)
@@ -25,7 +25,7 @@
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Heterocephalus_glaber/HetGla_1.0/*"
     # FINISHED --2011-12-01 11:18:35--
     # Downloaded: 20 files, 1003M in 35m 12s (486 KB/s)
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
     # 2643961837 bases (213913418 N's 2430048419 real 2430048419 upper 0 lower)
@@ -52,8 +52,8 @@
     # verify the names are OK
     zcat ucsc.fa.gz | grep "^>" | sort | head
     zcat ucsc.fa.gz | grep "^>" | sort | tail
-    # head:tail =  JH165514:JH204779 
-    
+    # head:tail =  JH165514:JH204779
+
     # N50
     mkdir N50
     gunzip ucsc.fa.gz
@@ -75,7 +75,7 @@
 db hetGla1
 clade mammal
 genomeCladePriority 35
-scientificName Heterocephalus glaber 
+scientificName Heterocephalus glaber
 commonName naked mole-rat
 assemblyDate Jul. 2011
 assemblyLabel HetGla_1.0 (NCBI project 68323, accession GCA_000230455.1)
@@ -102,7 +102,7 @@ XXXX TODO - replace *** use actual url for project etc.. in all html files
 # Search for '***' notes in each file in and make corrections (sometimes the
 # files used for a previous assembly might make a better template):
 #   description.html /cluster/data/hetGla1/html/{trackDb.ra,gap.html,gold.html}
-# 
+#
 # Then copy these files to your ~/kent/src/hg/makeDb/trackDb/moleRat/hetGla1
 #  - cd ~/kent/src/hg/makeDb/trackDb
 #  - edit makefile to add hetGla1 to DBS.
@@ -122,7 +122,7 @@ XXXX TODO - replace *** use actual url for project etc.. in all html files
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit hetGla1 > do.log 2>&1 &
     #   real     581m17.442s
     cat faSize.rmsk.txt
-    # 2643978223 bases (213913418 N's 2430064805 real 1624736547 upper 
+    # 2643978223 bases (213913418 N's 2430064805 real 1624736547 upper
     # 805328258 lower) in 39267 sequences in 1 files
     # %30.46 masked total, %33.14 masked real
 
@@ -144,7 +144,7 @@ XXXX TODO - replace *** use actual url for project etc.. in all html files
         hetGla1 > do.log 2>&1 &
     #   real    68m40.246s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     # 50055772 bases of 2430064805 (2.060%) in intersection
 
     # add to rmsk after it is done:
@@ -227,12 +227,12 @@ close (FH);
 
     # Masking statistics
     twoBitToFa hetGla1.wmsk.2bit stdout | faSize stdin
-    # 2643978223 bases (213913418 N's 2430064805 real 1648910110 upper 
+    # 2643978223 bases (213913418 N's 2430064805 real 1648910110 upper
     #   781154695 lower) in 39267 sequences in 1 files
     # %29.54 masked total, %32.15 masked real
 
     twoBitToFa hetGla1.wmsk.sdust.2bit stdout | faSize stdin
-    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper 
+    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper
     #   792929095 lower) in 39267 sequences in 1 files
     # %29.99 masked total, %32.63 masked real
 
@@ -261,7 +261,7 @@ close (FH);
     twoBitToFa hetGla1.cleanWMSdust.2bit stdout | faSize stdin \
         > hetGla1.cleanWMSdust.faSize.txt
     cat hetGla1.cleanWMSdust.faSize.txt
-    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper 
+    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper
     #    792929095 lower) in 39267 sequences in 1 files
     # %29.99 masked total, %32.63 masked real
 
@@ -277,7 +277,7 @@ close (FH);
     #   safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa hetGla1.2bit stdout | faSize stdin > faSize.hetGla1.txt
     cat faSize.hetGla1.txt
-    #   2643978223 bases (213913418 N's 2430064805 real 1636844037 upper 
+    #   2643978223 bases (213913418 N's 2430064805 real 1636844037 upper
     #   793220768 lower) in 39267 sequences in 1 files
     #   %30.00 masked total, %32.64 masked real
 
@@ -289,7 +289,7 @@ close (FH);
 
 ########################################################################
 # Create kluster run files (DONE - 2011-12-07 - Chin)
-    # numerator is hetGla1 gapless bases "real" as reported by: 
+    # numerator is hetGla1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap hetGla1 gap
     # 213913418 bases of 2430064805 (8.803%) in intersection
 
@@ -315,12 +315,12 @@ close (FH);
     hgsql -N \
 	-e 'select * from gap where bridge="no" order by size;' hetGla1 \
 	| sort -k7,7nr
-    # all gaps are bridged 
+    # all gaps are bridged
     hgsql -e "select bridge from gap;" hetGla1 | sort | uniq
     # bridge
     # yes
 
-    #   most non-bridges gaps have size = 100, follow pig's example (5000) 
+    #   most non-bridges gaps have size = 100, follow pig's example (5000)
     #	decide on a minimum gap for this break
     # skip the following steps
     # gapToLift -verbose=2 -minGap=100 hetGla1 jkStuff/nonBridged.lft \
@@ -389,7 +389,7 @@ hetGla1.genbank.est.native.loadDesc = yes
     git add src/lib/gbGenome.c
     git commit -m "adding hetGla1 moleRat" src/lib/gbGenome.c
     git pull
-    git push	    
+    git push
 
     ssh hgwdev                  # used to do this on "genbank" machine
     screen	#  control this business with a screen since it takes a while
@@ -397,7 +397,7 @@ hetGla1.genbank.est.native.loadDesc = yes
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial hetGla1 &
     #   logFile: var/build/logs/2011.12.13-10:43:43.hetGla1.initalign.log
-    #   real    1029m23.335s 
+    #   real    1029m23.335s
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
@@ -420,7 +420,7 @@ hetGla1.genbank.est.native.loadDesc = yes
 
 #########################################################################
 # reset default position as JH169644:1002890-1003079 (DONE 2012-01-04 - Chin)
-# for hox1- (NM_214560) homeobox protein HB1 
+# for hox1- (NM_214560) homeobox protein HB1
 #
     hgsql -e \
 'update dbDb set defaultPos="JH169644:1002890-1003079" where name="hetGla1";' \
@@ -441,7 +441,7 @@ hetGla1.genbank.est.native.loadDesc = yes
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -477,7 +477,7 @@ endif
 '_EOF_'
     # << happy emacs
 
-    chmod 775 runOne 
+    chmod 775 runOne
     gensub2 chr.list single template jobList
     para create jobList
     para try
@@ -525,7 +525,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 ##########################################################################
 #  BLATSERVERS ENTRY (DONE 2011-01-05 - Chin)
 #       After getting a blat server assigned by the Blat Server Gods,
-#  
+#
 # blat5
 # ports 17784 (trans) and 17785 (untrans).
 
@@ -586,7 +586,7 @@ done
     # Longest finished job:         225s       3.75m     0.06h    0.00d
     # Submission to last job:       600s      10.00m     0.17h    0.01d
 
-    # Make sure all files ended with linefeed 
+    # Make sure all files ended with linefeed
     # this did not work, runs out of file handles ?
     # run endsInLf in batch of 256 files
     find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
@@ -640,7 +640,7 @@ done
     # WARNING: hgwdev does not have /gbdb/hetGla1/bbi/quality.bw
     # WARNING: hetGla1 does not have seq
     # WARNING: hetGla1 does not have extFile
-    # 
+    #
 
     #	copy it to hgwbeta
     scp -p hetGla1.pushQ.sql hgwbeta:/tmp
@@ -651,3 +651,17 @@ done
     #	sizes will set properly
 
 #######################################################################
+# LIFTOVER TO hetGla2 (DONE - 2012-07-23 - Hiram )
+    mkdir /hive/data/genomes/hetGla1/bed/blat.hetGla2.2012-07-23
+    cd /hive/data/genomes/hetGla1/bed/blat.hetGla2.2012-07-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/hetGla1/jkStuff/hetGla1.11.ooc hetGla1 hetGla2
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/hetGla1/jkStuff/hetGla1.11.ooc \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 hetGla1 hetGla2 > do.log 2>&1
+    #	real    195m33.266s
+
+#############################################################################
