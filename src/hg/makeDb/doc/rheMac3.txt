@@ -975,4 +975,31 @@ TMPDIR=/scratch/tmp
 ***********************************************************************
 
 ############################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr3:132959918-132967918" where name="rheMac3";' \
+	hgcentraltest
 
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/pushQ
+    cd /hive/data/genomes/rheMac3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl rheMac3 2> stderr.txt | grep -v transMap > rheMac3.sql
+    #   real    4m8.890s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/rheMac3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/rheMac3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/rheMac3/bbi/quality.bw
+# WARNING: rheMac3 does not have seq
+# WARNING: rheMac3 does not have extFile
+# WARNING: rheMac3 does not have estOrientInfo
+
+    # eliminated the chainMm9 and chainRn4 chainNet tracks from the .sql
+    # and the rheMac3 chainNet tracks on mm9 and rn4
+    # the mm10 and rn5 tracks are the new ones
+
+    scp -p rheMac3.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/rheMac3.sql"
+
+############################################################################
