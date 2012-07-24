@@ -427,7 +427,7 @@ for(i=0;i<numIndexes;i++)
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     /* for each tissue we need to average the scores together */
-    for(i=0; i<numIndexes; i++)
+    for (i=0; i<numIndexes; i++)
         {
         float aveScores = 0;
         int aveCount =0;
@@ -441,9 +441,9 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	/* create the linked features */
 	lf = lfFromBed(bed);
 
-	/* average the scores together to get the ave score for this
-	   tissue type */
-        for(sr = srList; sr != NULL; sr = sr->next)
+        /* average the scores together to get the ave score for this
+           tissue type */
+        for (sr = srList; sr != NULL; sr = sr->next)
             {
             currentIndex = sr->val;
             if ( bed->expScores[currentIndex] != -10000)
@@ -455,7 +455,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 
         /* if there were some good values do the average
            otherwise mark as missing */
-        if(aveCount != 0)
+        if (aveCount != 0)
             lf->score = aveScores/aveCount;
         else
             lf->score = -10000;
@@ -812,20 +812,20 @@ if(tg->limitedVis == tvDense)
 else
     {
     /* for each experiment create a linked features series */
-    for(i = 0; i < bedList->expCount; i++)
-	{
-	char buff[256];
-	AllocVar(lfs);
+    for (i = 0; i < bedList->expCount; i++)
+        {
+        char buff[256];
+        AllocVar(lfs);
 	if(bedList != NULL)
 	    {
 	    snprintf(buff, sizeof(buff), "%d", bedList->expIds[i]);
 	    lfs->name = cloneString(buff);
-	    }
-	else
-	    lfs->name = cloneString(tg->shortLabel);
-        for(bed = bedList; bed != NULL; bed = bed->next)
-	    {
-	    lf = lfFromBed(bed);
+            }
+        else
+            lfs->name = cloneString(tg->shortLabel);
+        for (bed = bedList; bed != NULL; bed = bed->next)
+            {
+            lf = lfFromBed(bed);
             lf->tallStart = bed->chromStart;
             lf->tallEnd = bed->chromEnd;
 	    lf->score = bed->expScores[i];
@@ -1034,11 +1034,12 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if (val > 0)
-        if(val == addednumber+1){
-                return shadesOfLowe1[9];
+    if (val == addednumber+1)
+        {
+        return shadesOfLowe1[9];
         }
-	else if(val == addednumber+2){
-		return  shadesOfLowe2[9];
+        else if(val == addednumber+2){
+                return  shadesOfLowe2[9];
 	}
 	else if(val == addednumber+3){
 		return shadesOfLowe3[9];
@@ -1218,15 +1219,15 @@ void fixLfs(struct track *tg)
 {
 struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
-for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
+for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     /* Set the beginning and end of each linkedFeaturesSeries. */
     {
     lfs->start = BIGNUM;
     lfs->end = 0;
-    for(lf = lfs->features; lf != NULL; lf = lf->next)
-	{
-	if(lf->start < lfs->start)
-	    lfs->start = lf->start;
+    for (lf = lfs->features; lf != NULL; lf = lf->next)
+        {
+        if(lf->start < lfs->start)
+            lfs->start = lf->start;
 	if(lf->end > lfs->end)
 	    lfs->end = lf->end;
 	}

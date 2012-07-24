@@ -688,7 +688,7 @@ strLower(exp->organism);
 
 struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
-for(;edv != NULL; edv = edv->next)
+for (;edv != NULL; edv = edv->next)
     {
     if (sameWord(edv->var,MDB_VAR_LAB))
         {

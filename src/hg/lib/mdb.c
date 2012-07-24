@@ -250,7 +250,7 @@ struct mdbLimbVal *limbVal = *limbValPtr;
 hashFree(&(limbVal->objHash));
 
 struct mdbLeafObj *leafObj = NULL;
-while((leafObj = slPopHead(&(limbVal->objs))) != NULL)
+while ((leafObj = slPopHead(&(limbVal->objs))) != NULL)
     mdbLeafObjFree(&leafObj);
 
 freeMem(limbVal->val);
@@ -282,7 +282,7 @@ struct mdbObj *mdbObj  = NULL;
 struct mdbObj *mdbObjs = NULL;
 struct mdbVar *mdbVar;
 struct mdb *thisRow;
-while((thisRow = slPopHead(mdbPtr)) != NULL)
+while ((thisRow = slPopHead(mdbPtr)) != NULL)
     {
     if (mdbObj == NULL || differentString(thisRow->obj,mdbObj->obj) )
         {
@@ -328,7 +328,7 @@ struct mdbByVar *rootVar  = NULL;
 struct mdbLimbVal *limbVal  = NULL;
 struct mdbLeafObj *leafObj;
 struct mdb *thisRow;
-while((thisRow = slPopHead(mdbPtr)) != NULL)
+while ((thisRow = slPopHead(mdbPtr)) != NULL)
     {
     // Start at root
     if (rootVar == NULL || differentString(thisRow->var,rootVar->var) )
@@ -397,13 +397,13 @@ static int mdbObjCRC(struct mdbObj *mdbObjs)
 {
 int crc = 0;
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
     if (mdbObj->obj != NULL)
         crc += hashCrc(mdbObj->obj);
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbVar->var != NULL)
             crc += hashCrc(mdbVar->var);
@@ -459,7 +459,7 @@ if (mdbObj->varHash == NULL)
     mdbObj->varHash = hashNew(8);
 
 int ix;
-for(ix = 0;ix<count;ix++)
+for (ix = 0;ix<count;ix++)
     {
     if (*words[ix] == '#')
         break;
@@ -500,9 +500,9 @@ if (mdbObj->obj == NULL)
     {
     char * tableName = NULL;
     char * fileName = NULL;
-    for(mdbVar  = mdbObj->vars;
-        mdbVar != NULL && (tableName == NULL || fileName == NULL);
-        mdbVar  = mdbVar->next)
+    for (mdbVar  = mdbObj->vars;
+         mdbVar != NULL && (tableName == NULL || fileName == NULL);
+         mdbVar  = mdbVar->next)
         {
         if (sameString(mdbVar->var,MDB_VAR_TABLENAME))
             tableName = mdbVar->val;
@@ -594,7 +594,7 @@ if (strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should
     mdbObj->obj = nibbledWord;
     verbose(3, "metadataLineParse() %s=%s\n",MDB_OBJ,mdbObj->obj);
     varPairs = line;
-    while(strlen(line) > 0)
+    while (strlen(line) > 0)
         {
         nibbledWord = cloneNextWordByDelimiter(&line,' ');;
         if (nibbledWord == NULL)
@@ -670,7 +670,7 @@ for (thisWord=0; thisWord<count; thisWord++)
         if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
             {
             char * aVal = NULL;
-            while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
+            while ((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
                 {
                 AllocVar(limbVal);
                 limbVal->val = aVal;
@@ -723,12 +723,12 @@ boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var,char *val,boolean no
 {
 // Does var already exist in mdbByVars?
 struct mdbByVar *mdbByVar = mdbByVars;
-for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
+for (;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
     {
     if (sameString(mdbByVar->var,var) && mdbByVar->notEqual == notEqual)
         {
         struct mdbLimbVal * limbVal = mdbByVar->vals;
-        for(;limbVal!=NULL;limbVal=limbVal->next)
+        for (;limbVal!=NULL;limbVal=limbVal->next)
             {
             if (sameString(limbVal->val,val))
                 return FALSE; // Nothing to do as this var is already there.
@@ -795,7 +795,7 @@ else
     hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
 
     struct mdbVar *var = mdbVars->next;
-    for(;var != NULL;var = var->next)
+    for (;var != NULL;var = var->next)
         mdbObjSetVar(mdbObj, var->var,var->val);
     }
 return mdbObj;
@@ -808,7 +808,7 @@ struct mdbObj *mdbObjs = NULL;
 struct hashEl* objEl = NULL;
 
 struct hashCookie objCookie = hashFirst(objsHash);
-while((objEl = hashNext(&objCookie)) != NULL)
+while ((objEl = hashNext(&objCookie)) != NULL)
     {
     struct mdbObj *mdbObj;
     AllocVar(mdbObj);
@@ -817,7 +817,7 @@ while((objEl = hashNext(&objCookie)) != NULL)
     struct hash *hashedVars = objEl->val;
     struct hashCookie varCookie = hashFirst(hashedVars);
     struct hashEl* varEl = NULL;
-    while((varEl = hashNext(&varCookie)) != NULL)
+    while ((varEl = hashNext(&varCookie)) != NULL)
         {
         if (sameString(varEl->name,MDB_METAOBJ_RAKEY))
             continue;
@@ -1034,7 +1034,7 @@ char lock[64];
 safef(lock,sizeof lock,"lock_%s",tableName);
 sqlGetLock(conn, lock);
 
-for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
+for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
     {
     // Handle delete requests first
     if (mdbObj->deleteThis)
@@ -1056,7 +1056,7 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             }
         else  // deletes selected vars
             {
-            for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
+            for (mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
                 {
                 safef(query, sizeof(query),
                       "select obj from %s where obj = '%s' and var = '%s'",
@@ -1092,7 +1092,7 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         }
 
     // Now it is time for update or add!
-    for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
+    for (mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
         {
         stripEnclosingDoubleQuotes(mdbVar->val); // Ensures values are stripped of enclosing quotes
 
@@ -1197,7 +1197,7 @@ if (mdbObj != NULL && mdbObj->obj != NULL)
                    (strchr(mdbObj->obj,'%') ? "like" : "="),mdbObj->obj);
 
     struct mdbVar *mdbVar;
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbVar==mdbObj->vars)
             dyStringPrintf(dy, " and (");
@@ -1265,7 +1265,7 @@ struct dyString *dy = newDyString(4096);
 dyStringPrintf(dy, "select obj,var,val from %s", table);
 
 struct mdbByVar *rootVar;
-for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if (rootVar==mdbByVars)
         dyStringPrintf(dy, " where (var ");
@@ -1286,7 +1286,7 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
 
     struct mdbLimbVal *limbVal;
     boolean multiVals = FALSE;
-    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (limbVal->val == NULL || strlen(limbVal->val) < 1)
             continue;
@@ -1401,7 +1401,7 @@ dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 struct mdbByVar *rootVar;
 boolean gotVar = FALSE;
 int tix;
-for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
+for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
     {
     boolean hasVal = (rootVar->vals != NULL);
     //boolean hasVal = (  rootVar->vals != NULL
@@ -1432,12 +1432,12 @@ for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
     struct mdbLimbVal *limbVal;
     boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
     boolean wilds = FALSE;
-    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (strchr(limbVal->val,'%') != NULL)
             wilds = TRUE;
         }
-    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (limbVal->val == NULL || strlen(limbVal->val) < 1)
             continue;
@@ -1561,7 +1561,7 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF )
 //       ethy fred
 // TODO: Expand for mutilple var types; strip quotes from vals on ra style
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL)
         continue;
@@ -1578,7 +1578,7 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
         mdbVarValPrint(mdbVar,raStyle, outF);
         }
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbObj->varHash == NULL || !sameOk(MDB_OBJ_TYPE,mdbVar->var))
             mdbVarValPrint(mdbVar,raStyle, outF);
@@ -1603,7 +1603,7 @@ if (mdbObj!=NULL)
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
         dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
         }
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
             {
@@ -1737,13 +1737,13 @@ FILE *tabFile = mustOpen(file, "w");
 int count = 0;
 
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL)
         continue;
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbVar->var == NULL || mdbVar->val == NULL)
             continue;
@@ -1770,13 +1770,13 @@ void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
 //   metaObject Fred
 //   metaObject Lucy
 struct mdbByVar *rootVar = NULL;
-for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if (rootVar->var == NULL)
         continue;
 
     struct mdbLimbVal *limbVal = NULL;
-    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (limbVal->val == NULL)
             continue;
@@ -1792,7 +1792,7 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
             printf("%s",limbVal->val);
 
         struct mdbLeafObj *leafObj = NULL;
-        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+        for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
             if (leafObj->obj == NULL)
                 continue;
@@ -1815,7 +1815,7 @@ int mdbObjCount(struct mdbObj *mdbObjs,boolean objs)
 {
 int count = 0;
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL)
         continue;
@@ -1824,7 +1824,7 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     else
         {
         struct mdbVar *mdbVar = NULL;
-        for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
             {
             if (mdbVar->var != NULL && mdbVar->val != NULL)
                 count++;
@@ -1840,7 +1840,7 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals)
 {
 int count = 0;
 struct mdbByVar *rootVar = NULL;
-for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
     if (rootVar->var == NULL)
         continue;
@@ -1849,7 +1849,7 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     else
         {
         struct mdbLimbVal *limbVal = NULL;
-        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
             if (limbVal->val == NULL)
                 continue;
@@ -1858,7 +1858,7 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
             else
                 {
                 struct mdbLeafObj *leafObj = NULL;
-                for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+                for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
                     {
                     if (leafObj->obj != NULL)
                         count++;
@@ -1883,7 +1883,7 @@ if (mdbObj->varHash != NULL)
     mdbVar = hashFindVal(mdbObj->varHash,var); // case sensitive (unfortunately)
 else
     {
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (sameWord(var,mdbVar->var)) // case insensitive
             break;
@@ -1949,7 +1949,7 @@ if (var != NULL)
     return sameOk(foundVal,val);
     }
 struct mdbVar *mdbVar = NULL;
-for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
     if (differentStringNullOk(var,mdbVar->var) != 0)
         continue;
@@ -1965,7 +1965,7 @@ boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, 
 // Returns TRUE if any object in set contains var
 {
 struct mdbObj *mdbObj = mdbObjs;
-for(;mdbObj!=NULL; mdbObj=mdbObj->next)
+for (;mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     if (mdbObjContains(mdbObj, var, val))
         return TRUE;
@@ -1990,10 +1990,10 @@ if (mdbObj != NULL)
     // NOTE: This should not loop through all, as the list could be huge.
     //       Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
+    for (;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
         struct mdbVar *mdbVar = commonVars->vars;     // Will walk through the first obj's vars
-        for(; mdbVar != NULL; mdbVar = mdbVar->next )
+        for (; mdbVar != NULL; mdbVar = mdbVar->next )
             {
             if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
                 dyStringPrintf(dyPruneVars,"%s ",mdbVar->var); // var not found so add to prune list
@@ -2029,12 +2029,12 @@ if (mdbByVar != NULL)
             return sameOk(leafObj->obj,obj);
             }
         }
-    for(limbVal=mdbByVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=mdbByVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
         if (differentStringNullOk(val,limbVal->val) != 0)
             continue;
 
-        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+        for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
             if (differentStringNullOk(obj,leafObj->obj) != 0)
                 continue;
@@ -2069,14 +2069,14 @@ else
     errAbort("mdbObjReorderVars cannot parse vars argument.\n");
 
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     int ix;
     struct mdbVar *orderedVars = NULL;
     struct mdbVar **varsToReorder = needMem(sizeof(struct mdbVar *) * count);
 
     struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+    while ((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
         {
         ix = stringArrayIx(mdbVar->var,words,count); // Is case insensitive
         if (ix < 0)
@@ -2087,7 +2087,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 
     if (back) // add to front of backward list
         {
-        for( ix=0; ix<count; ix++ )
+        for ( ix=0; ix<count; ix++ )
             {                              // NOTE: For NULL, could add "None"
             if (varsToReorder[ix] != NULL) //       but that would be too much "inside ball"
                 slAddHead(&orderedVars,varsToReorder[ix]);
@@ -2097,7 +2097,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 
     if (!back)  // Add to front of forward list
         {
-        for( ix=count-1; ix>=0; ix-- )
+        for ( ix=count-1; ix>=0; ix-- )
             {
             if (varsToReorder[ix] != NULL)
                 slAddHead(&orderedVars,varsToReorder[ix]);
@@ -2151,20 +2151,20 @@ const struct mdbObj *a = *((struct mdbObj **)va);
 const struct mdbObj *b = *((struct mdbObj **)vb);
 struct mdbVar* aVar = a->vars;
 struct mdbVar* bVar = b->vars;
-for(;aVar != NULL && bVar != NULL;aVar=aVar->next,bVar=bVar->next)
+for (;aVar != NULL && bVar != NULL;aVar=aVar->next,bVar=bVar->next)
     {
     int ret = differentWord(aVar->var, bVar->var); // case insensitive
     if (ret != 0)
         {
         // Look for it by walking vars
         struct mdbVar* tryVar = bVar->next;
-        for(;tryVar;tryVar=tryVar->next)
+        for (;tryVar;tryVar=tryVar->next)
             {
             if (sameWord(aVar->var, tryVar->var))
                 return -1; // Current aVar found in B so B has extra var & A has NULL: A sorts first
             }
         tryVar = aVar->next;
-        for(;tryVar;tryVar=tryVar->next)
+        for (;tryVar;tryVar=tryVar->next)
             {
             if (sameWord(tryVar->var, bVar->var))
                 return 1; // Current bVar found in A so A has extra var & B has NULL: B sorts first
@@ -2208,7 +2208,7 @@ struct slPair *onePair = varValPairs;
 struct dyString *dyTerms = dyStringNew(256);
 dyStringAppend(dyTerms,onePair->name);
 onePair = onePair->next;
-for(; onePair != NULL; onePair = onePair->next)
+for (; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
@@ -2229,7 +2229,7 @@ boolean mdbObjRemoveOneVar(struct mdbObj *mdbObj, char *var, char *val)
 {
 struct mdbVar *lastVar = NULL;
 struct mdbVar *mdbVar = mdbObj->vars;
-for(;mdbVar != NULL;lastVar=mdbVar,mdbVar=mdbVar->next)
+for (;mdbVar != NULL;lastVar=mdbVar,mdbVar=mdbVar->next)
     {
     if (sameWord(mdbVar->var,var))
         {
@@ -2264,7 +2264,7 @@ if (vars != NULL)
         }
     }
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     if (count == 0)
         {
@@ -2278,7 +2278,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         {
         struct mdbVar *keepTheseVars = NULL;
         struct mdbVar *mdbVar = NULL;
-        while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+        while ((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
             {
             int ix = stringArrayIx(mdbVar->var,words,count);
             if (ix < 0)
@@ -2327,7 +2327,7 @@ boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
-for(mdb = mdbList; mdb; mdb=mdb->next)
+for (mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
     if (thisVal == NULL)
@@ -2353,7 +2353,7 @@ if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that 
     {
     char *val = NULL;
     struct mdbObj *mdb = mdbList;
-    for( ; mdb; mdb=mdb->next)
+    for (; mdb; mdb=mdb->next)
         {
         if (val == NULL)
             {
@@ -2409,7 +2409,7 @@ void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
 // Replaces objs' vars with var=val pairs provided, preparing for DB update.
 {
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
@@ -2478,7 +2478,7 @@ char *varsLine = cloneString(vars);
 int ix=0,count = chopByWhite(varsLine,NULL,0);
 char **var = needMem(count * sizeof(char *));
 chopByWhite(varsLine,var,count);
-for(ix=0;ix<count;ix++)
+for (ix=0;ix<count;ix++)
     {
     boolean notEqual = FALSE;
     char *val = strchr(var[ix],'=');// list may be vars alone! (var1=val1 var2 var3!=val3 var4=None)
@@ -2579,7 +2579,7 @@ void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *val,boolea
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 {
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
@@ -2619,7 +2619,7 @@ if (mdbObj->vars != NULL)
         newObj->varHash = hashNew(8);
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
+    for (mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
         {
         struct mdbVar *newVar = NULL;
         AllocVar(newVar);
@@ -2641,7 +2641,7 @@ struct slName *mdbObjToSlName(struct mdbObj *mdbObjs)
 {
 struct slName *mdbNames = NULL;
 struct mdbObj *mdbObj = mdbObjs;
-for( ;mdbObj!=NULL; mdbObj=mdbObj->next)
+for (;mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     slAddHead(&mdbNames,slNameNew(mdbObj->obj)); //allocates memory
     }
@@ -2677,10 +2677,10 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar = mdbObj->vars;mdbVar != NULL;mdbVar=mdbVar->next)
+    for (mdbVar = mdbObj->vars;mdbVar != NULL;mdbVar=mdbVar->next)
         {
         struct hash *termHash = hashFindVal(termTypeHash,mdbVar->var);
         if (termHash == NULL) // No cv definition for term so no validation can be done
@@ -2737,7 +2737,7 @@ static struct mdbVar *mdbObjEncodeEdvsAsMdbVars(struct mdbObj *mdbObj,struct slN
 {
 struct mdbVar *edvVars = NULL;
 struct slName *var = compositeEdvs;
-for(;var!=NULL;var=var->next)
+for (;var!=NULL;var=var->next)
     {
     char *val = mdbObjFindValue(mdbObj,var->name);
     if (val)
@@ -2823,12 +2823,12 @@ mdbObjsSortOnVars(&mdbObjs, MDB_VAR_COMPOSITE);
 
 struct dyString *dyVars = dyStringNew(256);
 
-while(mdbObjs != NULL)
+while (mdbObjs != NULL)
     {
     // Work on a composite at a time
     boolean compositelessObj = FALSE;
     char *compName = NULL;
-    while(mdbObjs != NULL && compName == NULL)
+    while (mdbObjs != NULL && compName == NULL)
         {
         compName = mdbObjFindValue(mdbObjs,MDB_VAR_COMPOSITE);
         if (compName == NULL)
@@ -2911,7 +2911,7 @@ while(mdbObjs != NULL)
     int expObjsCount=0; // Total of all experimental object accoss the composite
     int expMax=0;       // Largest experiment (in number of objects)
     int expMin=999;     // Smallest experiment (in number of objects)
-    while(mdbCompositeObjs != NULL)
+    while (mdbCompositeObjs != NULL)
         {
         // Must sort each cycle, because sort order is lost during mdbObjs FilterByVars();
         mdbObjsSortOnVars(&mdbCompositeObjs, edvSortOrder);
@@ -2932,7 +2932,7 @@ while(mdbObjs != NULL)
         dyStringClear(dyVars);
         struct mdbVar *edvVar = edvVarVals;
         int valsFound = 0;
-        for(;edvVar!=NULL;edvVar=edvVar->next)
+        for (;edvVar!=NULL;edvVar=edvVar->next)
             {
             dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
             if (differentString(edvVar->val,MDB_VAL_ENCODE_EDV_NONE))
@@ -3012,7 +3012,7 @@ while(mdbObjs != NULL)
             expMax = objsInExp;
         if (expMin > objsInExp)
             expMin = objsInExp;
-        while(mdbExpObjs != NULL)
+        while (mdbExpObjs != NULL)
             {
             struct mdbObj *obj = slPopHead(&mdbExpObjs);
 
@@ -3166,7 +3166,7 @@ if (mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
     {
     // free all roots
     struct mdbObj *mdbObj = NULL;
-    while((mdbObj = slPopHead(mdbObjsPtr)) != NULL)
+    while ((mdbObj = slPopHead(mdbObjsPtr)) != NULL)
         {
         // Free hash first (shared memory)
         hashFree(&(mdbObj->varHash));
@@ -3186,7 +3186,7 @@ void mdbVarsFree(struct mdbVar **mdbVarsPtr)
 // Frees one or more metadata vars and any val as well
 {
 struct mdbVar *mdbVar = NULL;
-while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
+while ((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
     {
     freeMem(mdbVar->val);
     freeMem(mdbVar->var);
@@ -3201,14 +3201,14 @@ if (mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
     {
     // free all roots
     struct mdbByVar *rootVar = NULL;
-    while((rootVar = slPopHead(mdbByVarsPtr)) != NULL)
+    while ((rootVar = slPopHead(mdbByVarsPtr)) != NULL)
         {
         // Free hash first (shared memory)
         hashFree(&(rootVar->valHash));
 
         // free all limbs
         struct mdbLimbVal *limbVal = NULL;
-        while((limbVal = slPopHead(&(rootVar->vals))) != NULL)
+        while ((limbVal = slPopHead(&(rootVar->vals))) != NULL)
             mdbLimbValFree(&limbVal);
 
         // The rest of root
@@ -3352,7 +3352,7 @@ struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *va
 struct slPair *onePair;
 struct dyString *dyTerms = dyStringNew(256);
 // Build list of terms as "var1=val1 var2=val2a,val2b,val2c var3=%val3%"
-for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
+for (onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     {
     if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro
         continue;                          //       to do the right thing
@@ -3565,7 +3565,7 @@ char letter = 'A';
 struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
 struct slPair *relevant = NULL;
 struct dyString *dyQuery = dyStringNew(256);
-while(cvApproved != NULL)
+while (cvApproved != NULL)
     {
     struct slPair *oneVar = slPopHead(&cvApproved);
     dyStringClear(dyQuery);

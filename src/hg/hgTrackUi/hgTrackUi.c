@@ -2266,7 +2266,8 @@ else
     }
 
 static char *orthoMenu[] =
-    { "no filter",
+    {
+      "no filter",
       "available",
       "matches major human allele",
       "matches minor human allele",
@@ -2526,8 +2527,8 @@ else if (sameString(track, "snp"))
 else if (snpVersion(track) >= 125)
     snp125Ui(tdb);
 else if (sameString(track, "rertyHumanDiversityLd")
-     ||	 startsWith("hapmapLd", track)
-     ||	 sameString(tdb->type, "ld2"))
+     ||  startsWith("hapmapLd", track)
+     ||  sameString(tdb->type, "ld2"))
     ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
     cbrWabaUi(tdb);
@@ -2855,13 +2856,13 @@ if (!tdbIsDownloadsOnly(tdb))
 
         if (tdbIsSuperTrackChild(tdb))
             {
-            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
-                "onchange='visTriggersHiddenSelect(this);'");
+            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText superChild visDD",
+                                            trackDbSetting(tdb, "onlyVisibility"),
+                                            "onchange='visTriggersHiddenSelect(this);'");
             }
         else
-            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
+            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText visDD",
+                                            trackDbSetting(tdb, "onlyVisibility"),NULL);
         }
 
     if (!ajax)
@@ -2875,7 +2876,7 @@ if (!tdbIsDownloadsOnly(tdb))
             cgiMakeOnClickButton("window.history.back();","Cancel");
             }
 
-        if(tdbIsComposite(tdb))
+        if (tdbIsComposite(tdb))
             printf("\n&nbsp;&nbsp;<a href='#' "
                    "onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); "
                    "return false;'>Reset to defaults</a>\n",setting);
@@ -2890,7 +2891,7 @@ if (!tdbIsDownloadsOnly(tdb))
         if (differentString(tdb->type, "chromGraph"))
             {
             char buf[256];
-            if(ajax)
+            if (ajax)
                 // reference to a separate form doesn't work in modal dialog,
                 // so change window.location directly.
                 safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;",
@@ -2957,7 +2958,7 @@ if (ct)
 	printBbiUpdateTime(&timep);
 	}
     else
-	printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+        printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
     }
 
 if (!ct)
@@ -3000,10 +3001,10 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     makeTopLink(tdb);
     printf("&nbsp</td></tr></table>");
     }
-}	/*	void trackUi(struct trackDb *tdb)	*/
+}       /*      void trackUi(struct trackDb *tdb)       */
 
 struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
-	char *longLabel, int defaultVis, boolean canPack)
+        char *longLabel, int defaultVis, boolean canPack)
 /* Create trackDb for a track without a corresponding table. */
 {
 struct trackDb *tdb;

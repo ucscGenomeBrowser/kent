@@ -255,9 +255,9 @@ for (el = elList; el != NULL; el = el->next)
 	char *ctFileName = (char *)(el->val);
 	if (fileExists(ctFileName))
 	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines);
-	/* Save off only if the custom tracks are live -- if none are live,
-	 * leave cart variables in place so hgSession can detect and inform
-	 * the user. */
+        /* Save off only if the custom tracks are live -- if none are live,
+         * leave cart variables in place so hgSession can detect and inform
+         * the user. */
 	if (ctList)
 	    {
 	    struct customTrack *ct;
@@ -579,7 +579,7 @@ return cart;
 }
 
 struct cart *cartNew(unsigned int userId, unsigned int sessionId,
-	char **exclude, struct hash *oldVars)
+        char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
@@ -886,7 +886,7 @@ void cartRemoveLike(struct cart *cart, char *wildCard)
 /* Remove all variable from cart that match wildCard. */
 {
 struct slPair *cartVars = cartVarsLike(cart,wildCard);
-while(cartVars != NULL)
+while (cartVars != NULL)
     {
     struct slPair *cartVar = slPopHead(&cartVars);
     cartRemove(cart, cartVar->name);
@@ -898,7 +898,7 @@ void cartRemovePrefix(struct cart *cart, char *prefix)
 /* Remove variables with given prefix from cart. */
 {
 struct slPair *cartVars = cartVarsWithPrefix(cart,prefix);
-while(cartVars != NULL)
+while (cartVars != NULL)
     {
     struct slPair *cartVar = slPopHead(&cartVars);
     cartRemove(cart, cartVar->name);
@@ -1362,7 +1362,7 @@ if(geoMirrorEnabled())
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
-	struct hash *oldVars)
+        struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
 int hguid = getCookieId(cookieName);
@@ -1378,7 +1378,7 @@ return cart;
 }
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
-	struct hash *oldVars, boolean doContentType)
+        struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
@@ -1399,7 +1399,7 @@ return cart;
 }
 
 struct cart *cartAndCookie(char *cookieName, char **exclude,
-	struct hash *oldVars)
+        struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write cookie and
  * content-type part HTTP preamble to web page.  Don't write any HTML though. */
 {
@@ -1407,7 +1407,7 @@ return cartAndCookieWithHtml(cookieName, exclude, oldVars, TRUE);
 }
 
 struct cart *cartAndCookieNoContent(char *cookieName, char **exclude,
-	struct hash *oldVars)
+        struct hash *oldVars)
 /* Load cart from cookie and session cgi variable. Don't write out
  * content type or any HTML. */
 {
@@ -1415,7 +1415,7 @@ return cartAndCookieWithHtml(cookieName, exclude, oldVars, FALSE);
 }
 
 static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
-	struct cart *cart)
+        struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
 int status = setjmp(htmlRecover);
@@ -1610,7 +1610,7 @@ cartFooter();
 }
 
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
-	char **exclude, struct hash *oldVars)
+        char **exclude, struct hash *oldVars)
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
  * cartHtmlEnd(), as well as writing the body of the HTML.
@@ -1671,7 +1671,7 @@ cartFooter();
 }
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
-	char *cookieName, char **exclude, struct hash *oldVars)
+        char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
  * preamble, call doMiddle with cart, and write end of web-page.
  * Exclude may be NULL.  If it exists it's a comma-separated list of
@@ -1832,7 +1832,7 @@ if (hIsGsidServer())
     conn= hAllocConn(genomeDb);
     while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
         {
-	safef(query, sizeof(query),
+        safef(query, sizeof(query),
 	      "select id from %s where id like '%s%s'", msaTable, "%",  words[0]);
 	sr = sqlGetResult(conn, query);
 	if (sqlNextRow(sr) != NULL)
@@ -1999,7 +1999,7 @@ void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
    with this tdb and it's children. */
 {
 struct trackDb *subTdb;
-for(subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
+for (subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
     cartRemoveAllForTdbAndChildren(cart,subTdb);
 cartRemoveAllForTdb(cart,tdb);
 saveState(cart);
@@ -2166,7 +2166,7 @@ if (vis != tvHide)
 
 // Now turn all other supertrack children to hide and the supertrack to visible
 struct slRef *childRef;
-for(childRef = tdb->parent->children;childRef != NULL; childRef = childRef->next)
+for (childRef = tdb->parent->children;childRef != NULL; childRef = childRef->next)
     {
     struct trackDb *child = childRef->val;
     if (child == tdb)
@@ -2213,7 +2213,7 @@ enum trackVisibility visMax  = tvHide;
 enum trackVisibility visOrig = tdbVisLimitedByAncestry(cart, parent, FALSE);
 
 // Should walk through children to get max new vis for this parent
-for(subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
+for (subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
     {
     char *foundVis = hashFindVal(subVisHash, subtrack->track); // if the subtrack doesn't have
     if (foundVis != NULL)                                      // individual vis AND...
@@ -2256,7 +2256,7 @@ if (visMax != visOrig || reshapeFully)
         }
 
     // Now set all subtracks that inherit vis back to visOrig
-    for(subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
+    for (subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
         {
         int fourState = subtrackFourStateChecked(subtrack,cart);
         if (!fourStateChecked(fourState))
@@ -2358,7 +2358,7 @@ WARN("reshape: %s",reshapeFully?"Fully":"Incrementally");
 int count = 0;
 if (hasViews)
     {
-    for(tdbView = tdbContainer->subtracks;tdbView != NULL; tdbView = tdbView->next )
+    for (tdbView = tdbContainer->subtracks;tdbView != NULL; tdbView = tdbView->next )
         {
         char *view = NULL;
         if (tdbIsView(tdbView,&view) )
