@@ -662,6 +662,6 @@ done
         -ooc /hive/data/genomes/hetGla1/jkStuff/hetGla1.11.ooc \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	 hetGla1 hetGla2 > do.log 2>&1
-    #	real    58m58.107s
+    #	real    195m33.266s
 
 #############################################################################
