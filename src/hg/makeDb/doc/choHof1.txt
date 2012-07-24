@@ -240,3 +240,22 @@ choHof1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to CHM/CHML/OPN3 gene displays:
+#	(DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_5701:20408-28976" where name="choHof1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/choHof1/pushQ
+    cd /hive/data/genomes/choHof1/pushQ
+    # Mark says don't let the transMap track get there
+    makePushQSql.pl choHof1 2> stderr.txt | grep -v transMap > choHof1.sql
+
+    scp -p choHof1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < choHof1.sql
+
+############################################################################

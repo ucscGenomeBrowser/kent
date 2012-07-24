@@ -58,7 +58,7 @@
 
 <DIV ID="trackDbDoc_intro" class="intro"></DIV>
 
-<P>The remainder of this document will be broken into the following sections and should be
+<P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
 
 <OL>
@@ -316,10 +316,6 @@ are described along with their type specific settings.</P>
         <A name="maxWindowToDraw"></A><IMG class='toggle detail'>
         <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="maxWindowToQuery">
-        <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
-        <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="minGrayLevel"><A name="minGrayLevel"></A><IMG class='toggle detail'>
         <div class="format"><code>minGrayLevel  &lt;1-9&gt;</code></div>
     </TD></TR>
@@ -462,6 +458,10 @@ are described along with their type specific settings.</P>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
         <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxWindowToQuery">
+        <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
+        <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="spanList"><A name="spanList"></A><IMG class='toggle detail'>
         <div class="format"><code>spanList &lt;s1&gt;[,s2&hellip;]</code></div>
@@ -809,10 +809,6 @@ are described along with their type specific settings.</P>
         <div class="format">
             <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
             <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="speciesUseFile">
-        <A name="speciesUseFile"></A><IMG class='toggle detail setF'>
-        <div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
         <div class="format"><code>summary &lt;tableName&gt;</code></div>
@@ -3840,6 +3836,20 @@ bigWig</P>
             Not in our trackDbs (tdbQuery -strict).
             Specifically ifdef'd out of code with
             <BR><code>#define BRANEY_SAYS_USETARG_IS_OBSOLETE.</code>
+        </TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="speciesUseFile"><A name="speciesUseFile"></A>
+            <code>speciesUseFile &lt;fileName&gt;</code></TD>
+        <TD>wigMaf</TD>
+        <TD>
+            <P><I>Deprecated</I></P>
+            <P>Much more rarely used, this setting can
+            replace <code>speciesOrder</code> and <code>speciesGroups</code>.
+            Set the <code>speciesUseFile</code> to a path relative to the apache cgi-bin.
+            The file should contain a single species name as the first word of each line.</P>
+            <P><B>Example:</B></P>
+            <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
         </TD>
     </TR>
     <TR VALIGN=TOP>

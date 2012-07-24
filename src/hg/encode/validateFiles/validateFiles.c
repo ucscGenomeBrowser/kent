@@ -16,7 +16,7 @@
 #include "asParse.h"
 #include "bigBed.h"
 
-char *version = "4.4";
+char *version = "4.5";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -57,70 +57,70 @@ void usage()
 /* Explain usage and exit. */
 {
   errAbort(
-  "validateFiles - Validate format of different track input files\n"
-  "                Program exits with non-zero status if any errors detected\n"
-  "                  otherwise exits with zero status\n"
-  "                Use filename 'stdin' to read from stdin\n"
-  "                Files can be in .gz, .bz2, .zip, .Z format and are \n"
-  "                  automatically decompressed\n"
-  "                Multiple input files of the same type can be listed\n"
-  "                Error messages are written to stderr\n"
-  "                OK or failing file lines can be optionally written to stdout\n"
+  "validateFiles - Validates the format of different genomic files.\n"
+  "                Exits with a zero status for no errors detected and non-zero for errors.\n"
+  "                Uses filename 'stdin' to read from stdin.\n"
+  "                Automatically decompresses Files in .gz, .bz2, .zip, .Z format.\n"
+  "                Accepts multiple input files of the same type.\n"
+  "                Writes Error messages to stderr\n"
   "usage:\n"
-  "   validateFiles -type=FILE_TYPE file1 [file2 [...]]\n"
-  "options:\n"
-  "   -type=(a value from the list below)\n"
-  "         tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak|bedGraph\n"
-  "                   : see http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
-  "         fasta     : Fasta files (only one line of sequence, and no quality scores)\n"
-  "         fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)\n"
-  "         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)\n"
-  "         csqual    : Colorspace quality (see link below)\n"
-  "                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)\n"
-#ifdef USE_BAM
-  "         BAM       : Binary Alignment/Map\n"
-  "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
-#endif
-  "         bigWig    : Big Wig\n"
-  "                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html)\n"
-  "         bigBedN[+[P]]: \n"
-  "                     (see http://genome.ucsc.edu/goldenPath/help/bigBed.html)\n"
-  "         bedN[+[P]] : \n"
-  "                     (see http://genome.ucsc.edu/FAQ/FAQformat.html#format1)\n"
-  "                         N is between 3 and 15, \n"
-  "                         optional (+) if extra \"bedPlus\" fields, \n"
-  "                         optional P specifies the number of extra fields. Not required, but preferred.\n"
+  "   validateFiles -chromInfo=FILE -options -type=FILE_TYPE file1 [file2 [...]]\n"
+  "\n"
+  "   -type=\n"
+  "       fasta        : Fasta files (only one line of sequence, and no quality scores)\n"
+  "       fastq        : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)\n"
+  "       csfasta      : Colorspace fasta (implies -colorSpace)\n"
+  "       csqual       : Colorspace quality (see link below)\n"
+  "                      See http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm\n"
+  "       BAM          : Binary Alignment/Map\n"
+  "                      See http://samtools.sourceforge.net/SAM1.pdf\n"
+  "       bigWig       : Big Wig\n"
+  "                      See http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
+  "       bedN[+P]     : BED N or BED N+ or BED N+P\n"
+  "                      where N is a number between 3 and 15 of standard BED columns,\n"
+  "                      optional + indicates the presence of additional columns\n"
+  "                      and P is the number of addtional columns\n" 
   "                      Examples: -type=bed6 or -type=bed6+ or -type=bed6+3 \n"
+  "                      See http://genome.ucsc.edu/FAQ/FAQformat.html#format1\n"
+  "       bigBedN[+P]  : bigBED N  or bigBED N+ or bigBED N+P, similar to BED\n"
+  "                      See http://genome.ucsc.edu/goldenPath/help/bigBed.html\n"
+  "       tagAlign     : Alignment files, replaced with BAM\n"
+  "       pairedTagAlign  \n"
+  "       broadPeak    : ENCODE Peak formats\n"
+  "       narrowPeak     These are specialized bedN+P formats.\n"
+  "       gappedPeak     See http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
+  "       bedGraph    :  BED Graph\n"
   "\n"
   "   -as=fields.as                If you have extra \"bedPlus\" fields, it's great to put a definition\n"
-  "                                  of each field in a row in AutoSql format here. Applies to bed-related types.\n"
-  "   -tab - If set, expect fields to be tab separated, normally\n"
-  "           expects white space separator. Applies to bed-related types.\n"
+  "                                of each field in a row in AutoSql format here. Applies to bed-related types.\n"
+  "   -tab                         If set, expect fields to be tab separated, normally\n"
+  "                                expects white space separator. Applies to bed-related types.\n"
   "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names\n"
-  "                                  and sizes\n"
+  "                                and sizes\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
-  "                                  with formats such as tagAlign and pairedTagAlign)\n"
-  "   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome\n"
-  "                                  in .2bit file\n"
-  "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
-  "                                  validating tagAlign or pairedTagAlign files\n"
+  "                                with formats such as tagAlign and pairedTagAlign)\n"
+  "   -isSorted                    Input is sorted by chrom, only affects types tagAlign and pairedTagAlign\n"
+  "   -doReport                    Output report in filename.report\n"
+  "   -version                     Print version\n"
+  "\n"
+  "For Alignment validations\n"
+  "   -genome=path/to/hg18.2bit    REQUIRED to validate sequence mappings match the genome specified\n"
+  "                                in the .2bit file. (BAM, tagAlign, pairedTagAlign)\n"
+  "   -nMatch                      N's do not count as a mismatch\n"
+  "   -matchFirst=n                Only check the first N bases of the sequence\n"
+  "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) \n"
   "   -mismatchTotalQuality=n      Maximum total quality score at mismatching positions\n"
-  "   -matchFirst=n                only check the first N bases of the sequence\n"
   "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
   "                                  pairedTagAlign files (default is the total for the pair)\n"
   "   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)\n"
-  "   -nMatch                      N's do not count as a mismatch\n"
+  "   -allowOther                  Allow chromosomes that aren't native in BAM's\n"
+  "   -allowBadLength              Allow chromosomes that have the wrong length in BAM\n"
+  "   -complementMinus             Complement the query sequence on the minus strand (for testing BAM)\n"
+  "   -showBadAlign                Show non-compliant alignments\n"
+  "   -bamPercent=N.N              Percentage of BAM alignments that must be compliant\n"
   "   -privateData                 Private data so empty sequence is tolerated\n"
-  "   -isSorted                    Input is sorted by chrom, only affects types tagAlign and pairedTagAlign\n"
-  "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
-  "   -allowBadLength              allow chromosomes that have the wrong length in BAM\n"
-  "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
-  "   -showBadAlign                show non-compliant alignments\n"
-  "   -bamPercent=N.N              percentage of BAM alignments that must be compliant\n"
   "\n"
-  "   -doReport                    output report in filename.report\n"
-  "   -version                     Print version\n"
   );
 }
 
@@ -411,14 +411,15 @@ if (i == 0)
     if (s==row)
         reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
     else
-        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
+        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,
+                   name, row);
     return 0;
     }
 else if (privateData)   // PrivateData means sequence should be empty
     {
     if (s==row)
-        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data"
-            , lf->fileName, lf->lineIx,name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data",
+                   lf->fileName, lf->lineIx,name);
     else
         reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]"
 	    , lf->fileName, lf->lineIx,name, row);
@@ -768,9 +769,9 @@ if (strand == '-')
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
     reportWarn("Error [file=%s, line=%d]: "
-        "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
-        lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
-        chrom, chromStart, chromEnd, strand);
+               "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+               lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+               chrom, chromStart, chromEnd, strand);
     return FALSE;
     }
 
@@ -979,7 +980,7 @@ void validateBed(struct lineFile *lf, int bedN, int bedP, struct asObject *as)
 // Validate regular bed [3-15] . and  +
 {
 char *row;
-int bufSize = 1024;  // bufSIze is max row length
+int bufSize = 1024;  // bufSize is max row length
 char *buf = needMem(bufSize); 
 char *words[1024];
 unsigned chromSize;
@@ -997,7 +998,10 @@ while (lineFileNextReal(lf, &row))
 	{
 	if (as == NULL)
 	    {
-	    fieldCount = chopByChar(row, '\t', NULL, 0);
+	    if (tab)
+		fieldCount = chopByChar(row, '\t', NULL, 0);
+	    else
+	    	fieldCount = chopByWhite(row, NULL, 0);
 	    char *asText = bedAsDef(bedN, fieldCount);
 	    as = asParseText(asText);
 	    allocedAs = TRUE;
@@ -1275,15 +1279,14 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
         {
-        reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
-            chroms->name);
+        reportErrAbort("bigWig contains invalid chromosome name: %s\n", chroms->name);
         }
     else
         {
         if (*size != chroms->size)
             {
-            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-                chroms->name, *size, chroms->size);
+            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, "
+                           "not %d bases\n", chroms->name, *size, chroms->size);
             }
         }
     }
@@ -1454,8 +1457,10 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
                 squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
             reportWarn("Error [file=%s, line=%d]: "
-            "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-                file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+                       "total quality at mismatches too high (found %d, maximum is %d) "
+                       "(%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+                       file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart,
+                       seq, match, dna, squal);
             }        
         }
     return FALSE;

@@ -91,10 +91,10 @@ int i;
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     struct graphPoint2D *gList = NULL;
-    for(i=0; i< sg->numExps; i++)
-	{
-	struct graphPoint2D *gTemp = NULL;
-	gTemp = createSageGraphPoint(sg, i+1);
+    for (i=0; i< sg->numExps; i++)
+        {
+        struct graphPoint2D *gTemp = NULL;
+        gTemp = createSageGraphPoint(sg, i+1);
 	slAddHead(&gList, gTemp);
 	}
     gptAddGraphPointList(gp, gList, "linesp");

@@ -18,7 +18,6 @@ sub usage {
 usage: $base dbSNPdb > ucscAlleleFreq.txt
     Combines allele counts from dbSNP database tables SNPAlleleFreq and
     SNPAlleleFreq_TGP which was added in human build 134.
-    Assumes that the tables are sorted by snp_id (first column).
     Prints to stdout combined allele frequencies in the format used in
     our snpNNN table (where NNN >= 132).
 options:
@@ -56,7 +55,11 @@ sub getOneSnp($) {
     my ($al, $cnt, $freq) = @{$snp{als}->[$i]};
     if ($i < $#{$snp{als}}) {
       my $nextAl = $snp{als}->[$i+1][0];
-      die "allele $al appears twice for $snp{id}" if ($al eq $nextAl);
+      if ($al eq $nextAl) {
+	# 7/3/2012: Problematic merging of adjacent ss's into same rs -- skip it instead of die.
+	warn "allele $al appears twice for $snp{id}; skipping snp." ;
+	%snp = %{&getOneSnp($pipe)};
+      }
     }
 #    print STDERR "id=$snp{id}\tal=$al\tcount=$cnt\tfreq=$freq\n";
   }
@@ -97,12 +100,13 @@ my %rc = ( 'A' => 'T',
 	   'T' => 'A',
 	   'N' => 'N',
 	   '/' => '/',
+	   '-' => '-',
 	 );
 
 sub revComp($) {
   # Reverse-complement an allele, possibly with /-delims, unless it is symbolic.
   my ($al) = @_;
-  die "How do I revComp '$al'?" unless ($al =~ /^[ACGTN\/]+$/);
+  die "How do I revComp '$al'?" unless ($al =~ /^[ACGTN\/-]+$/);
   my $rcAl = "";
   while ($al =~ s/(.)$//) {
     $rcAl .= $rc{$1};
@@ -135,10 +139,10 @@ sub combineSnps($$) {
   foreach my $alInfo (@{$bSnp->{als}}) {
     $bStr .= "$alInfo->[0]/";
   }
-  if ($aStr ne $bStr) {
+  if ($aStr && $bStr && $aStr ne $bStr) {
     $aStr =~ s#N/##;  $aStr =~ s#/$##;
     $bStr =~ s#N/##;  $bStr =~ s#/$##;
-    if ($aStr =~ /$bStr/ || $bStr =~ /$aStr/) {
+    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
 #      print STDERR "id=$snp{id}: allele subset relationship $aStr vs. $bStr\n";
     } else {
       my $bRcStr = &revComp($bStr);
@@ -196,11 +200,13 @@ my ($dbSNPdb) = @ARGV;
 open(my $oldAlF,
      "hgsql $dbSNPdb -NBe 'select snp_id,allele,chr_cnt,freq " .
      "from SNPAlleleFreq, Allele " .
-     "where SNPAlleleFreq.allele_id = Allele.allele_id;' |") || die "$!";
+     "where SNPAlleleFreq.allele_id = Allele.allele_id " .
+     "order by snp_id;' |") || die "$!";
 open(my $tgpAlF,
      "hgsql $dbSNPdb -NBe 'select snp_id,allele,count,freq " .
      "from SNPAlleleFreq_TGP, Allele " .
-     "where SNPAlleleFreq_TGP.allele_id = Allele.allele_id;' |") || die "$!";
+     "where SNPAlleleFreq_TGP.allele_id = Allele.allele_id " .
+     "order by snp_id;' |") || die "$!";
 
 my $aSnp = &getOneSnp($oldAlF);
 my $bSnp = &getOneSnp($tgpAlF);

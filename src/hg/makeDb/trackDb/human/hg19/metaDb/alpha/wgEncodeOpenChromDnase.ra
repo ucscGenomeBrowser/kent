@@ -869,6 +869,240 @@ subId 6861
 tableName wgEncodeOpenChromDnaseCd20ro01794Sig
 view Signal
 
+metaObject wgEncodeOpenChromDnaseCerebellumocAlnRep1
+objType file
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7340
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseCerebellumocAlnRep2
+objType file
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7340
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal
+objType table
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7340
+tableName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseCerebellumocPk
+objType table
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7340
+tableName wgEncodeOpenChromDnaseCerebellumocPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseCerebellumocRawDataRep1
+objType file
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7340
+view RawData
+
+metaObject wgEncodeOpenChromDnaseCerebellumocRawDataRep2
+objType file
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7340
+view RawData
+
+metaObject wgEncodeOpenChromDnaseCerebellumocSig
+objType table
+cell Cerebellum_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+fileName wgEncodeOpenChromDnaseCerebellumocSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7340
+tableName wgEncodeOpenChromDnaseCerebellumocSig
+view Signal
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1
+objType file
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7339
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2
+objType file
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7339
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal
+objType table
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7339
+tableName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocPk
+objType table
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7339
+tableName wgEncodeOpenChromDnaseCerebrumfrontalocPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep1
+objType file
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7339
+view RawData
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep2
+objType file
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7339
+view RawData
+
+metaObject wgEncodeOpenChromDnaseCerebrumfrontalocSig
+objType table
+cell Cerebrum_frontal_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-08
+dateUnrestricted 2013-04-07
+fileName wgEncodeOpenChromDnaseCerebrumfrontalocSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7339
+tableName wgEncodeOpenChromDnaseCerebrumfrontalocSig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseChorionAlnRep1
 objType file
 cell Chorion
@@ -1766,6 +2000,371 @@ subId 4107
 treatment None
 view Validation
 
+metaObject wgEncodeOpenChromDnaseFibroblgm03348AlnRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7312
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348AlnRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7312
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7312
+tableName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7310
+treatment lenti-control
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7310
+treatment lenti-control
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7310
+tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal
+treatment lenti-control
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonPk
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7310
+tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk
+treatment lenti-control
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7310
+treatment lenti-control
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7310
+treatment lenti-control
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LenticonSig
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7310
+tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig
+treatment lenti-control
+view Signal
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7311
+treatment lenti-MyoD
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7311
+treatment lenti-MyoD
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7311
+tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal
+treatment lenti-MyoD
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7311
+tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk
+treatment lenti-MyoD
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7311
+treatment lenti-MyoD
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7311
+treatment lenti-MyoD
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7311
+tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig
+treatment lenti-MyoD
+view Signal
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348Pk
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7312
+tableName wgEncodeOpenChromDnaseFibroblgm03348Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348RawDataRep1
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7312
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348RawDataRep2
+objType file
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7312
+view RawData
+
+metaObject wgEncodeOpenChromDnaseFibroblgm03348Sig
+objType table
+cell Fibrobl_GM03348
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseFibroblgm03348Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7312
+tableName wgEncodeOpenChromDnaseFibroblgm03348Sig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseFibropAlnRep1
 objType file
 attic auxExp
@@ -2491,7 +3090,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep1.bam,wgEncodeOpenChromDnaseFrontalcortexocAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7137
@@ -2508,7 +3107,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep2.bam,wgEncodeOpenChromDnaseFrontalcortexocAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7137
@@ -2595,6 +3194,123 @@ labVersion fseq v 1.84, iff_generic_female
 project wgEncode
 subId 7137
 tableName wgEncodeOpenChromDnaseFrontalcortexocSig
+view Signal
+
+metaObject wgEncodeOpenChromDnaseGcbcellAlnRep1
+objType file
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellAlnRep1.bam,wgEncodeOpenChromDnaseGcbcellAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7308
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGcbcellAlnRep2
+objType file
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellAlnRep2.bam,wgEncodeOpenChromDnaseGcbcellAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7308
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal
+objType table
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7308
+tableName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGcbcellPk
+objType table
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7308
+tableName wgEncodeOpenChromDnaseGcbcellPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseGcbcellRawDataRep1
+objType file
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7308
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGcbcellRawDataRep2
+objType file
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7308
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGcbcellSig
+objType table
+cell GC_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseGcbcellSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7308
+tableName wgEncodeOpenChromDnaseGcbcellSig
 view Signal
 
 metaObject wgEncodeOpenChromDnaseGlioblaAlnRep1
@@ -2761,6 +3477,240 @@ project wgEncode
 subId 2514
 tableName wgEncodeOpenChromDnaseGlioblaSig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromDnaseGm10248AlnRep1
+objType file
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248AlnRep1.bam,wgEncodeOpenChromDnaseGm10248AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7511
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm10248AlnRep2
+objType file
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248AlnRep2.bam,wgEncodeOpenChromDnaseGm10248AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7511
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm10248BaseOverlapSignal
+objType table
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7511
+tableName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGm10248Pk
+objType table
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7511
+tableName wgEncodeOpenChromDnaseGm10248Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseGm10248RawDataRep1
+objType file
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7511
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm10248RawDataRep2
+objType file
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7511
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm10248Sig
+objType table
+cell GM10248
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeOpenChromDnaseGm10248Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7511
+tableName wgEncodeOpenChromDnaseGm10248Sig
+view Signal
+
+metaObject wgEncodeOpenChromDnaseGm10266AlnRep1
+objType file
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266AlnRep1.bam,wgEncodeOpenChromDnaseGm10266AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7400
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm10266AlnRep2
+objType file
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266AlnRep2.bam,wgEncodeOpenChromDnaseGm10266AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7400
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm10266BaseOverlapSignal
+objType table
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7400
+tableName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGm10266Pk
+objType table
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7400
+tableName wgEncodeOpenChromDnaseGm10266Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseGm10266RawDataRep1
+objType file
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7400
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm10266RawDataRep2
+objType file
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7400
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm10266Sig
+objType table
+cell GM10266
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm10266Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7400
+tableName wgEncodeOpenChromDnaseGm10266Sig
 view Signal
 
 metaObject wgEncodeOpenChromDnaseGm12878AlnRep1
@@ -3446,6 +4396,123 @@ project wgEncode
 subId 1488
 tableName wgEncodeOpenChromDnaseGm12892Sig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromDnaseGm13976AlnRep1
+objType file
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976AlnRep1.bam,wgEncodeOpenChromDnaseGm13976AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7500
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm13976AlnRep2
+objType file
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976AlnRep2.bam,wgEncodeOpenChromDnaseGm13976AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7500
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm13976BaseOverlapSignal
+objType table
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7500
+tableName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGm13976Pk
+objType table
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7500
+tableName wgEncodeOpenChromDnaseGm13976Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseGm13976RawDataRep1
+objType file
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7500
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm13976RawDataRep2
+objType file
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7500
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm13976Sig
+objType table
+cell GM13976
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-17
+dateUnrestricted 2013-04-16
+fileName wgEncodeOpenChromDnaseGm13976Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 7500
+tableName wgEncodeOpenChromDnaseGm13976Sig
 view Signal
 
 metaObject wgEncodeOpenChromDnaseGm18507AlnRep1
@@ -4229,6 +5296,123 @@ tableName wgEncodeOpenChromDnaseGm19240Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseGm20000AlnRep1
+objType file
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000AlnRep1.bam,wgEncodeOpenChromDnaseGm20000AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7399
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm20000AlnRep2
+objType file
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000AlnRep2.bam,wgEncodeOpenChromDnaseGm20000AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7399
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseGm20000BaseOverlapSignal
+objType table
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7399
+tableName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGm20000Pk
+objType table
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7399
+tableName wgEncodeOpenChromDnaseGm20000Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseGm20000RawDataRep1
+objType file
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7399
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm20000RawDataRep2
+objType file
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7399
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm20000Sig
+objType table
+cell GM20000
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-16
+dateUnrestricted 2013-04-15
+fileName wgEncodeOpenChromDnaseGm20000Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7399
+tableName wgEncodeOpenChromDnaseGm20000Sig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseH1hescAlnRep1
 objType file
 cell H1-hESC
@@ -4755,6 +5939,123 @@ project wgEncode
 subId 1519
 tableName wgEncodeOpenChromDnaseH9esSig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromDnaseHeartocAlnRep1
+objType file
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocAlnRep1.bam,wgEncodeOpenChromDnaseHeartocAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7321
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseHeartocAlnRep2
+objType file
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocAlnRep2.bam,wgEncodeOpenChromDnaseHeartocAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7321
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseHeartocBaseOverlapSignal
+objType table
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7321
+tableName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseHeartocPk
+objType table
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7321
+tableName wgEncodeOpenChromDnaseHeartocPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseHeartocRawDataRep1
+objType file
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7321
+view RawData
+
+metaObject wgEncodeOpenChromDnaseHeartocRawDataRep2
+objType file
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7321
+view RawData
+
+metaObject wgEncodeOpenChromDnaseHeartocSig
+objType table
+cell Heart_OC
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+fileName wgEncodeOpenChromDnaseHeartocSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7321
+tableName wgEncodeOpenChromDnaseHeartocSig
 view Signal
 
 metaObject wgEncodeOpenChromDnaseHek293tAlnRep1
@@ -7259,6 +8560,123 @@ subId 4107
 treatment None
 view Validation
 
+metaObject wgEncodeOpenChromDnaseImr90AlnRep1
+objType file
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90AlnRep1.bam,wgEncodeOpenChromDnaseImr90AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7397
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseImr90AlnRep2
+objType file
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90AlnRep2.bam,wgEncodeOpenChromDnaseImr90AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7397
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseImr90BaseOverlapSignal
+objType table
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7397
+tableName wgEncodeOpenChromDnaseImr90BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseImr90Pk
+objType table
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7397
+tableName wgEncodeOpenChromDnaseImr90Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseImr90RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7397
+view RawData
+
+metaObject wgEncodeOpenChromDnaseImr90RawDataRep2
+objType file
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7397
+view RawData
+
+metaObject wgEncodeOpenChromDnaseImr90Sig
+objType table
+cell IMR90
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseImr90Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 7397
+tableName wgEncodeOpenChromDnaseImr90Sig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseIpsAlnRep1
 objType file
 attic auxExp
@@ -8393,7 +9811,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep1.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7133
@@ -8411,7 +9829,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep2.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7133
@@ -8429,7 +9847,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep3.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 7133
@@ -8552,7 +9970,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep1.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7138
@@ -8570,7 +9988,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep2.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7138
@@ -8588,7 +10006,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep3.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 7138
@@ -9896,7 +11314,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep1.bam,wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7134
@@ -9914,7 +11332,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep2.bam,wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7134
@@ -11118,6 +12536,123 @@ tableName wgEncodeOpenChromDnaseMyometrSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseNaivebcellAlnRep1
+objType file
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam,wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7313
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseNaivebcellAlnRep2
+objType file
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam,wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7313
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal
+objType table
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7313
+tableName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseNaivebcellPk
+objType table
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7313
+tableName wgEncodeOpenChromDnaseNaivebcellPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseNaivebcellRawDataRep1
+objType file
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7313
+view RawData
+
+metaObject wgEncodeOpenChromDnaseNaivebcellRawDataRep2
+objType file
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7313
+view RawData
+
+metaObject wgEncodeOpenChromDnaseNaivebcellSig
+objType table
+cell Naive_B_cell
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-03
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseNaivebcellSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7313
+tableName wgEncodeOpenChromDnaseNaivebcellSig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseNhekAlnRep1
 objType file
 cell NHEK
@@ -11310,6 +12845,156 @@ project wgEncode
 subId 4107
 treatment None
 view Validation
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereAlnRep1
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep1.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7309
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereAlnRep2
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep2.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7309
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereAlnRep3
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep3.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep3.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 3
+subId 7309
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal
+objType table
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7309
+tableName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseOlfneurospherePk
+objType table
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurospherePk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7309
+tableName wgEncodeOpenChromDnaseOlfneurospherePk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereRawDataRep1
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7309
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereRawDataRep2
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7309
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereRawDataRep3
+objType file
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep3.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 3
+subId 7309
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOlfneurosphereSig
+objType table
+cell Olf_neurosphere
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-02
+dateUnrestricted 2013-04-02
+fileName wgEncodeOpenChromDnaseOlfneurosphereSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7309
+tableName wgEncodeOpenChromDnaseOlfneurosphereSig
+view Signal
 
 metaObject wgEncodeOpenChromDnaseOsteoblAlnRep1
 objType file
@@ -12228,6 +13913,123 @@ project wgEncode
 subId 4908
 tableName wgEncodeOpenChromDnaseRwpe1Sig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromDnaseSknshAlnRep1
+objType file
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshAlnRep1.bam,wgEncodeOpenChromDnaseSknshAlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7398
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseSknshAlnRep2
+objType file
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshAlnRep2.bam,wgEncodeOpenChromDnaseSknshAlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7398
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseSknshBaseOverlapSignal
+objType table
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7398
+tableName wgEncodeOpenChromDnaseSknshBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseSknshPk
+objType table
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 7398
+tableName wgEncodeOpenChromDnaseSknshPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseSknshRawDataRep1
+objType file
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 7398
+view RawData
+
+metaObject wgEncodeOpenChromDnaseSknshRawDataRep2
+objType file
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 7398
+view RawData
+
+metaObject wgEncodeOpenChromDnaseSknshSig
+objType table
+cell SK-N-SH
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-14
+dateUnrestricted 2013-04-14
+fileName wgEncodeOpenChromDnaseSknshSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 7398
+tableName wgEncodeOpenChromDnaseSknshSig
 view Signal
 
 metaObject wgEncodeOpenChromDnaseStellateAlnRep1
@@ -13357,4 +15159,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 597405302
+# MAGIC: -1049507995

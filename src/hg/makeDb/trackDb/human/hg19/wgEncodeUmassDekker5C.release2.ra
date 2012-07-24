@@ -5,7 +5,7 @@ shortLabel UMass 5C
 longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
 group regulation
 compositeTrack on
-subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2)
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2)
 subGroup2 region Region NONE=None
 dimensions dimensionX=cellType
 sortOrder cellType=+

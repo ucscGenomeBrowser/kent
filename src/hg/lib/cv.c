@@ -1,5 +1,3 @@
-
-
 // cv.c stands for Controlled Vocabullary and this file contains the
 // library APIs for reading and making sense of the contents of cv.ra.
 
@@ -14,7 +12,8 @@
 
 // CV Defines that should not necessarily be public
 
-// CV UGLY TERMS (NOTE: These should be hiddne inside cv.c APIS and callers should use non-UGLY terms)
+// CV UGLY TERMS (NOTE: These should be hidden inside cv.c APIS
+//                      and callers should use non-UGLY terms)
 #define CV_UGLY_TOT_CELLTYPE    "cellType"
 #define CV_UGLY_TERM_CELL_LINE  "Cell Line"
 #define CV_UGLY_TERM_ANTIBODY   "Antibody"
@@ -30,7 +29,8 @@ const char *cvTypeNormalized(const char *sloppyTerm)
 {
 static const char *badCvSpellingOfCell     = CV_UGLY_TOT_CELLTYPE;
 static const char *badCvSpellingOfAntibody = CV_UGLY_TERM_ANTIBODY;
-if (sameWord((char *)sloppyTerm,CV_TERM_CELL) || sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+if (sameWord((char *)sloppyTerm,CV_TERM_CELL)
+||  sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
     return badCvSpellingOfCell;
 if (sameWord((char *)sloppyTerm,CV_TERM_ANTIBODY))
     return badCvSpellingOfAntibody;
@@ -43,7 +43,8 @@ const char *cvTermNormalized(const char *sloppyTerm)
 {
 static const char *approvedSpellingOfCell     = CV_TERM_CELL;
 static const char *approvedSpellingOfAntibody = CV_TERM_ANTIBODY;
-if (sameWord((char *)sloppyTerm,CV_UGLY_TOT_CELLTYPE) || sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
+if (sameWord((char *)sloppyTerm,CV_UGLY_TOT_CELLTYPE)
+||  sameWord((char *)sloppyTerm,CV_UGLY_TERM_CELL_LINE))
     return approvedSpellingOfCell;
 if (sameWord((char *)sloppyTerm,CV_UGLY_TERM_ANTIBODY))
     return approvedSpellingOfAntibody;
@@ -168,7 +169,7 @@ else
         root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
     safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
     }
-if(!fileExists(filePath))
+if (!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
 return filePath;
 }
@@ -215,13 +216,13 @@ if (cvHashOfTermTypes == NULL)
     if (cellHash)
         {
         hashAdd(cvHashOfTermTypes,CV_TERM_CELL,cellHash);
-        hashReplace(cellHash, CV_TERM, cloneString(CV_TERM_CELL)); // spilling memory of 'cellType' val
+        hashReplace(cellHash, CV_TERM, cloneString(CV_TERM_CELL)); // spilling memory of cellType
         }
     struct hash *abHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TERM_ANTIBODY);
     if (abHash)
         {
         hashAdd(cvHashOfTermTypes,CV_TERM_ANTIBODY,abHash);
-        hashReplace(abHash, CV_TERM, cloneString(CV_TERM_ANTIBODY)); // spilling memory of 'Antibody' val
+        hashReplace(abHash, CV_TERM, cloneString(CV_TERM_ANTIBODY)); // spilling memory of Antibody
         }
     }
 
@@ -284,12 +285,12 @@ while ((hEl = hashNext(&hc)) != NULL)
             && differentWord(setting,CV_SEARCHABLE_MULTI_SELECT)
             && differentWord(setting,CV_SEARCHABLE_FREE_TEXT)
             && differentWord(setting,CV_SEARCHABLE_WILD_LIST)))
-           continue;
+            continue;
         }
     if (cvDefined)
         {
         setting = hashFindVal(typeHash,CV_TOT_CV_DEFINED);
-        if(SETTING_NOT_ON(setting))
+        if (SETTING_NOT_ON(setting))
             continue;
         }
     char *term  = hEl->name;
@@ -341,7 +342,8 @@ struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
 if (termHash != NULL)
     {
     char *validationRule = hashFindVal(termHash,CV_VALIDATE);
-    // NOTE: Working on memory in hash but we are throwing away a comment and removing trailing spaces so that is okay
+    // NOTE: Working on memory in hash but we are throwing away a comment
+    // and removing trailing spaces so that is okay
     strSwapChar(validationRule,'#','\0'); // Chop off any comment in the setting
     validationRule = trimSpaces(validationRule);
     return validationRule;  // Clone?
@@ -482,171 +484,189 @@ char *validationRule = (char *)cvValidationRule(term);
 if (validationRule == NULL)
     {
     if (reason != NULL)
-        safef(reason,len,"ERROR in %s: Term '%s' in typeOfTerms but has no '%s' setting.",CV_FILE_NAME,(char *)term,CV_VALIDATE);
+        safef(reason,len,"ERROR in %s: Term '%s' in typeOfTerms but has no '%s' setting.",
+              CV_FILE_NAME,(char *)term,CV_VALIDATE);
     return FALSE;
     }
 
-    // Validate should be or start with known word
-    if (startsWithWord(CV_VALIDATE_CV,validationRule))
-        {
-        struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-        struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
-        if (SETTING_NOT_ON(hashFindVal(termHash,CV_TOT_CV_DEFINED))) // Known type of term but no validation to be done
-            {
-            if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but is not '%s'.",CV_FILE_NAME,(char *)term,CV_TOT_CV_DEFINED);
-            return FALSE;
-            }
+// Validate should be or start with known word
+if (startsWithWord(CV_VALIDATE_CV,validationRule))
+    {
+    struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+    struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
+    if (SETTING_NOT_ON(hashFindVal(termHash,CV_TOT_CV_DEFINED))) // Known type of term but
+        {                                                        // no validation to be done
+        if (reason != NULL)
+            safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but is not '%s'.",
+                    CV_FILE_NAME,(char *)term,CV_TOT_CV_DEFINED);
+        return FALSE;
+        }
 
-        // cvDefined so every val should be in cv
-        struct hash *cvHashForTerm = (struct hash *)cvTermHash((char *)term);
-        if (cvHashForTerm == NULL)
+    // cvDefined so every val should be in cv
+    struct hash *cvHashForTerm = (struct hash *)cvTermHash((char *)term);
+    if (cvHashForTerm == NULL)
+        {
+        if (reason != NULL)
+            safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not found as"
+                                " a cv term.",CV_FILE_NAME,(char *)term);
+        return FALSE;
+        }
+    struct hash *cvHashForVal = hashFindVal(cvHashForTerm,(char *)val);
+    // No cv definition for term so no validation can be done
+    if (cvHashForVal == NULL || hashFindVal(cvHashForVal, "deprecated"))
+        {
+        if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
+        &&  sameString((char *)val,MDB_VAL_ENCODE_EDV_NONE))
+            return TRUE;
+        else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
             {
-            if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.",CV_FILE_NAME,(char *)term);
-            return FALSE;
-            }
-        struct hash *cvHashForVal = hashFindVal(cvHashForTerm,(char *)val);
-        if (cvHashForVal == NULL || hashFindVal(cvHashForVal, "deprecated")) // No cv definition for term so no validation can be done
-            {
-            if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString((char *)val,MDB_VAL_ENCODE_EDV_NONE))
+            cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
+            if (cvHashForTerm == NULL)
+                {
+                if (reason != NULL)
+                    safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not "
+                                        "found as a cv term.",CV_FILE_NAME,CV_TERM_CONTROL);
+                return FALSE;
+                }
+            if (hashFindVal(cvHashForTerm,(char *)val) != NULL)
                 return TRUE;
-            else if (sameString(validationRule,CV_VALIDATE_CV_OR_CONTROL))
-                {
-                cvHashForTerm = (struct hash *)cvTermHash(CV_TERM_CONTROL);
-                if (cvHashForTerm == NULL)
-                    {
-                    if (reason != NULL)
-                        safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.",CV_FILE_NAME,CV_TERM_CONTROL);
-                    return FALSE;
-                    }
-                if (hashFindVal(cvHashForTerm,(char *)val) != NULL)
-                    return TRUE;
-                }
-            if (reason != NULL)
-                safef(reason,len,"INVALID cv lookup: %s = '%s' %s",(char *)term,(char *)val,(cvHashForVal?"DEPRECATED.":"not found."));
-            return FALSE;
             }
+        if (reason != NULL)
+            safef(reason,len,"INVALID cv lookup: %s = '%s' %s",(char *)term,(char *)val,
+                    (cvHashForVal?"DEPRECATED.":"not found."));
+        return FALSE;
         }
-    else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
+    }
+else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
+    {
+    if (dateToSeconds((char *)val,"%F") == 0)
         {
-        if (dateToSeconds((char *)val,"%F") == 0)
-            {
-            if (reason != NULL)
-                safef(reason,len,"INVALID date: %s = %s",(char *)term,(char *)val);
-            return FALSE;
-            }
+        if (reason != NULL)
+            safef(reason,len,"INVALID date: %s = %s",(char *)term,(char *)val);
+        return FALSE;
         }
-    else if (startsWithWord(CV_VALIDATE_EXISTS,validationRule))
-        {
-        return TRUE;  // (e.g. fileName exists) Nothing to be done at this time.
-        }
-    else if (startsWithWord(CV_VALIDATE_FLOAT,validationRule))
-        {
-        char* end;
-        double notNeeded = strtod((char *)val, &end); // Don't want float, just error (However, casting to void resulted in a compile error on Ubuntu Maveric and Lucid)
+    }
+else if (startsWithWord(CV_VALIDATE_EXISTS,validationRule))
+    {
+    return TRUE;  // (e.g. fileName exists) Nothing to be done at this time.
+    }
+else if (startsWithWord(CV_VALIDATE_FLOAT,validationRule))
+    {
+    // Don't want float, just error (However, casting to void resulted in
+    // a compile error on Ubuntu Maveric and Lucid)
+    char* end;
+    double notNeeded = strtod((char *)val, &end);
 
-        if ((end == (char *)val) || (*end != '\0'))
+    if ((end == (char *)val) || (*end != '\0'))
+        {
+        if (reason != NULL)
+            safef(reason,len,"INVALID float: %s = %s (resulting double: %g)",
+                    (char *)term,(char *)val,notNeeded);
+        return FALSE;
+        }
+    }
+else if (startsWithWord(CV_VALIDATE_INT,validationRule))
+    {
+    char *p0 = (char *)val;
+    if (*p0 == '-')
+        p0++;
+    char *p = p0;
+    while ((*p >= '0') && (*p <= '9'))
+        p++;
+    if ((*p != '\0') || (p == p0))
+        {
+        if (reason != NULL)
+            safef(reason,len,"INVALID integer: %s = %s",(char *)term,(char *)val);
+        return FALSE;
+        }
+    }
+else if (startsWithWord(CV_VALIDATE_LIST,validationRule))
+    {
+    validationRule = skipBeyondDelimit(validationRule,' ');
+    if (validationRule == NULL)
+        {
+        if (reason != NULL)
+            safef(reason,len,"ERROR in %s: Invalid '%s' for %s.",
+                    CV_FILE_NAME,CV_VALIDATE_LIST,(char *)term);
+        return FALSE;
+        }
+    int count = chopByChar(validationRule, ',', NULL, 0);
+    if (count == 1)
+        {
+        if (differentString((char *)val,validationRule))
             {
             if (reason != NULL)
-                safef(reason,len,"INVALID float: %s = %s (resulting double: %g)",(char *)term,(char *)val,notNeeded);
+                safef(reason,len,"INVALID list '%s' match: %s = '%s'",
+                        validationRule,(char *)term,(char *)val);
             return FALSE;
             }
         }
-    else if (startsWithWord(CV_VALIDATE_INT,validationRule))
+    else if (count > 1)
         {
-        char *p0 = (char *)val;
-        if (*p0 == '-')
-            p0++;
-        char *p = p0;
-        while ((*p >= '0') && (*p <= '9'))
-            p++;
-        if ((*p != '\0') || (p == p0))
-            {
-            if (reason != NULL)
-                safef(reason,len,"INVALID integer: %s = %s",(char *)term,(char *)val);
-            return FALSE;
-            }
-        }
-    else if (startsWithWord(CV_VALIDATE_LIST,validationRule))
-        {
-        validationRule = skipBeyondDelimit(validationRule,' ');
-        if (validationRule == NULL)
-            {
-            if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Invalid '%s' for %s.",CV_FILE_NAME,CV_VALIDATE_LIST,(char *)term);
-            return FALSE;
-            }
-        int count = chopByChar(validationRule, ',', NULL, 0);  ////////////////////////
-        if (count == 1)
-            {
-            if (differentString((char *)val,validationRule))
-                {
-                if (reason != NULL)
-                    safef(reason,len,"INVALID list '%s' match: %s = '%s'",validationRule,(char *)term,(char *)val);
-                return FALSE;
-                }
-            }
-        else if (count > 1)
-            {
-            char **array = needMem(count*sizeof(char*));
-            chopByChar(cloneString(validationRule), ',', array, count); // Want to also trimSpaces()? No
+        char **array = needMem(count*sizeof(char*));
+        chopByChar(cloneString(validationRule), ',', array, count);
 
-            if (stringArrayIx((char *)val, array, count) == -1)
-                {
-                if (reason != NULL)
-                    safef(reason,len,"INVALID list '%s' match: %s = '%s'",validationRule,(char *)term,(char *)val);
-                return FALSE;
-                }
-            }
-        else
+        if (stringArrayIx((char *)val, array, count) == -1)
             {
             if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Invalid 'validate list: %s' for term %s.",CV_FILE_NAME,validationRule,(char *)term);
+                safef(reason,len,"INVALID list '%s' match: %s = '%s'",
+                        validationRule,(char *)term,(char *)val);
             return FALSE;
             }
-        }
-    else if (startsWithWord(CV_VALIDATE_NONE,validationRule))
-        {
-        return TRUE;
-        }
-    else if (startsWithWord(CV_VALIDATE_REGEX,validationRule))
-        {
-        validationRule = skipBeyondDelimit(validationRule,' ');
-        if (validationRule == NULL)
-            {
-            if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Invalid '%s' for %s.",CV_FILE_NAME,CV_VALIDATE_REGEX,(char *)term);
-            return FALSE;
-            }
-        // Real work ahead interpreting regex
-        regex_t regEx;
-        int err = regcomp(&regEx, validationRule, REG_NOSUB);
-        if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
-            {
-            char buffer[128];
-            regerror(err, &regEx, buffer, sizeof buffer);
-            if (reason != NULL)
-                safef(reason,len,"ERROR in %s: Invalid regular expression for %s - %s.  %s.",CV_FILE_NAME,(char *)term,validationRule,buffer);
-            return FALSE;
-            }
-        err = regexec(&regEx, (char *)val, 0, NULL, 0);
-        if (err != 0)
-            {
-            //char buffer[128];
-            //regerror(err, &regEx, buffer, sizeof buffer);
-            if (reason != NULL)
-                safef(reason,len,"INVALID regex '%s' match: %s = '%s'",validationRule,(char *)term,(char *)val);
-            return FALSE;
-            }
-        regfree(&regEx);
         }
     else
         {
         if (reason != NULL)
-            safef(reason,len,"ERROR in %s: Unknown validationRule rule '%s' for term %s.",CV_FILE_NAME,validationRule,(char *)term);
+            safef(reason,len,"ERROR in %s: Invalid 'validate list: %s' for term %s.",
+                    CV_FILE_NAME,validationRule,(char *)term);
         return FALSE;
         }
+    }
+else if (startsWithWord(CV_VALIDATE_NONE,validationRule))
+    {
+    return TRUE;
+    }
+else if (startsWithWord(CV_VALIDATE_REGEX,validationRule))
+    {
+    validationRule = skipBeyondDelimit(validationRule,' ');
+    if (validationRule == NULL)
+        {
+        if (reason != NULL)
+            safef(reason,len,"ERROR in %s: Invalid '%s' for %s.",
+                    CV_FILE_NAME,CV_VALIDATE_REGEX,(char *)term);
+        return FALSE;
+        }
+    // Real work ahead interpreting regex
+    regex_t regEx;
+    int err = regcomp(&regEx, validationRule, REG_NOSUB);
+    if (err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
+        {
+        char buffer[128];
+        regerror(err, &regEx, buffer, sizeof buffer);
+        if (reason != NULL)
+            safef(reason,len,"ERROR in %s: Invalid regular expression for %s - %s.  %s.",
+                    CV_FILE_NAME,(char *)term,validationRule,buffer);
+        return FALSE;
+        }
+    err = regexec(&regEx, (char *)val, 0, NULL, 0);
+    if (err != 0)
+        {
+        //char buffer[128];
+        //regerror(err, &regEx, buffer, sizeof buffer);
+        if (reason != NULL)
+            safef(reason,len,"INVALID regex '%s' match: %s = '%s'",
+                    validationRule,(char *)term,(char *)val);
+        return FALSE;
+        }
+    regfree(&regEx);
+    }
+else
+    {
+    if (reason != NULL)
+        safef(reason,len,"ERROR in %s: Unknown validationRule rule '%s' for term %s.",
+                CV_FILE_NAME,validationRule,(char *)term);
+    return FALSE;
+    }
 return TRUE;
 }
 

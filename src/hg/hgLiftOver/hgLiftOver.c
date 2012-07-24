@@ -230,7 +230,6 @@ cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
                         HGLFT_REFRESHONLY_VAR);
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", HGLFT_LAST_CHAIN, chainString);
-puts("</FORM>\n");
 
 cartSaveSession(cart);
 puts("</FORM>");

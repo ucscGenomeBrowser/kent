@@ -1604,7 +1604,7 @@ type wig 0 62385
 track encodeAffyChIpHl60Pval
 superTrack encodeAffyChipSuper dense
 compositeTrack on
-subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup1 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
 shortLabel Affy pVal
 longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) P-Value
@@ -1622,7 +1622,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr00
     parent encodeAffyChIpHl60Pval
-    subGroups factor=Brg1 time=0h
+    subGroups factor=Brg1 time=t0h
     shortLabel Affy Brg1 RA 0h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 0hrs) P-Value
     color 225,0,0
@@ -1630,7 +1630,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr02
     parent encodeAffyChIpHl60Pval
-    subGroups factor=Brg1 time=2h
+    subGroups factor=Brg1 time=t2h
     shortLabel Affy Brg1 RA 2h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 2hrs) P-Value
     color 225,0,0
@@ -1638,7 +1638,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr08
     parent encodeAffyChIpHl60Pval
-    subGroups factor=Brg1 time=8h
+    subGroups factor=Brg1 time=t8h
     shortLabel Affy Brg1 RA 8h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 8hrs) P-Value
     color 225,0,0
@@ -1646,7 +1646,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr32
     parent encodeAffyChIpHl60Pval
-    subGroups factor=Brg1 time=32h
+    subGroups factor=Brg1 time=t32h
     shortLabel Affy Brg1 RA 32h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 32hrs) P-Value
     color 225,0,0
@@ -1654,7 +1654,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCebpeHr00
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CEBPe time=0h
+    subGroups factor=CEBPe time=t0h
     shortLabel Affy CEBPe RA 0h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 0hrs) P-Value
     color 200,25,0
@@ -1662,7 +1662,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCebpeHr02
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CEBPe time=2h
+    subGroups factor=CEBPe time=t2h
     shortLabel Affy CEBPe RA 2h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 2hrs) P-Value
     color 200,25,0
@@ -1670,7 +1670,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCebpeHr08
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CEBPe time=8h
+    subGroups factor=CEBPe time=t8h
     shortLabel Affy CEBPe RA 8h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 8hrs) P-Value
     color 200,25,0
@@ -1678,7 +1678,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCebpeHr32
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CEBPe time=32h
+    subGroups factor=CEBPe time=t32h
     shortLabel Affy CEBPe RA 32h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 32hrs) P-Value
     color 200,25,0
@@ -1686,7 +1686,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCtcfHr00
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CTCF time=0h
+    subGroups factor=CTCF time=t0h
     shortLabel Affy CTCF RA 0h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 0hrs) P-Value
     color 175,50,0
@@ -1694,7 +1694,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCtcfHr02
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CTCF time=2h
+    subGroups factor=CTCF time=t2h
     shortLabel Affy CTCF RA 2h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 2hrs) P-Value
     color 175,50,0
@@ -1702,7 +1702,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCtcfHr08
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CTCF time=8h
+    subGroups factor=CTCF time=t8h
     shortLabel Affy CTCF RA 8h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 8hrs) P-Value
     color 175,50,0
@@ -1710,7 +1710,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalCtcfHr32
     parent encodeAffyChIpHl60Pval
-    subGroups factor=CTCF time=32h
+    subGroups factor=CTCF time=t32h
     shortLabel Affy CTCF RA 32h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 32hrs) P-Value
     color 175,50,0
@@ -1718,7 +1718,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalH3K27me3Hr00
     parent encodeAffyChIpHl60Pval
-    subGroups factor=H3K27me3 time=0h
+    subGroups factor=H3K27me3 time=t0h
     shortLabel Affy H3K27me3 RA 0h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) P-Value
     color 150,75,0
@@ -1726,7 +1726,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalH3K27me3Hr02
     parent encodeAffyChIpHl60Pval
-    subGroups factor=H3K27me3 time=2h
+    subGroups factor=H3K27me3 time=t2h
     shortLabel Affy H3K27me3 RA 2h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) P-Value
     color 150,75,0
@@ -1734,7 +1734,7 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalH3K27me3Hr08
     parent encodeAffyChIpHl60Pval
-    subGroups factor=H3K27me3 time=8h
+    subGroups factor=H3K27me3 time=t8h
     shortLabel Affy H3K27me3 RA 8h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) P-Value
     color 150,75,0
@@ -1743,7 +1743,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalH3K27me3Hr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy H3K27me3 RA 32h
-    subGroups factor=H3K27me3 time=32h
+    subGroups factor=H3K27me3 time=t32h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) P-Value
     color 150,75,0
     priority 31
@@ -1751,7 +1751,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalH4Kac4Hr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 0h
-    subGroups factor=H4Kac4 time=0h
+    subGroups factor=H4Kac4 time=t0h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) P-Value
     color 125,100,0
     priority 33
@@ -1759,7 +1759,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalH4Kac4Hr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 2h
-    subGroups factor=H4Kac4 time=2h
+    subGroups factor=H4Kac4 time=t2h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) P-Value
     color 125,100,0
     priority 35
@@ -1767,7 +1767,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalH4Kac4Hr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 8h
-    subGroups factor=H4Kac4 time=8h
+    subGroups factor=H4Kac4 time=t8h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) P-Value
     color 125,100,0
     priority 37
@@ -1775,7 +1775,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalH4Kac4Hr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy H4Kac4 RA 32h
-    subGroups factor=H4Kac4 time=32h
+    subGroups factor=H4Kac4 time=t32h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) P-Value
     color 125,100,0
     priority 39
@@ -1783,7 +1783,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalP300Hr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 0h
-    subGroups factor=P300 time=0h
+    subGroups factor=P300 time=t0h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 0hrs) P-Value
     color 100,125,0
     priority 41
@@ -1791,7 +1791,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalP300Hr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 2h
-    subGroups factor=P300 time=2h
+    subGroups factor=P300 time=t2h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 2hrs) P-Value
     color 100,125,0
     priority 43
@@ -1799,7 +1799,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalP300Hr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 8h
-    subGroups factor=P300 time=8h
+    subGroups factor=P300 time=t8h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 8hrs) P-Value
     color 100,125,0
     priority 45
@@ -1807,7 +1807,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalP300Hr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy P300 RA 32h
-    subGroups factor=P300 time=32h
+    subGroups factor=P300 time=t32h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 32hrs) P-Value
     color 100,125,0
     priority 47
@@ -1815,7 +1815,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalPu1Hr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 0h
-    subGroups factor=PU1 time=0h
+    subGroups factor=PU1 time=t0h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 0hrs) P-Value
     color 75,150,0
     priority 49
@@ -1823,7 +1823,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalPu1Hr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 2h
-    subGroups factor=PU1 time=2h
+    subGroups factor=PU1 time=t2h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 2hrs) P-Value
     color 75,150,0
     priority 51
@@ -1831,7 +1831,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalPu1Hr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 8h
-    subGroups factor=PU1 time=8h
+    subGroups factor=PU1 time=t8h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 8hrs) P-Value
     color 75,150,0
     priority 53
@@ -1839,7 +1839,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalPu1Hr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy PU1 RA 32h
-    subGroups factor=PU1 time=32h
+    subGroups factor=PU1 time=t32h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 32hrs) P-Value
     color 75,150,0
     priority 55
@@ -1847,7 +1847,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRnapHr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 0h
-    subGroups factor=Pol2 time=0h
+    subGroups factor=Pol2 time=t0h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) P-Value
     color 50,175,0
     priority 57
@@ -1855,7 +1855,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRnapHr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 2h
-    subGroups factor=Pol2 time=2h
+    subGroups factor=Pol2 time=t2h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) P-Value
     color 50,175,0
     priority 59
@@ -1863,7 +1863,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRnapHr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 8h
-    subGroups factor=Pol2 time=8h
+    subGroups factor=Pol2 time=t8h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) P-Value
     color 50,175,0
     priority 61
@@ -1871,7 +1871,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRnapHr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy Pol2 RA 32h
-    subGroups factor=Pol2 time=32h
+    subGroups factor=Pol2 time=t32h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) P-Value
     color 50,175,0
     priority 63
@@ -1879,7 +1879,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRaraHr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 0h
-    subGroups factor=RARA time=0h
+    subGroups factor=RARA time=t0h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 0hrs) P-Value
     color 25,200,0
     priority 65
@@ -1887,7 +1887,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRaraHr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 2h
-    subGroups factor=RARA time=2h
+    subGroups factor=RARA time=t2h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 2hrs) P-Value
     color 25,200,0
     priority 67
@@ -1895,7 +1895,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRaraHr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 8h
-    subGroups factor=RARA time=8h
+    subGroups factor=RARA time=t8h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 8hrs) P-Value
     color 25,200,0
     priority 69
@@ -1903,7 +1903,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalRaraHr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy RARA RA 32h
-    subGroups factor=RARA time=32h
+    subGroups factor=RARA time=t32h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 32hrs) P-Value
     color 25,200,0
     priority 71
@@ -1911,7 +1911,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalSirt1Hr00
     parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 0h
-    subGroups factor=SIRT1 time=0h
+    subGroups factor=SIRT1 time=t0h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 0hrs) P-Value
     color 0,225,0
     priority 73
@@ -1919,7 +1919,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalSirt1Hr02
     parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 2h
-    subGroups factor=SIRT1 time=2h
+    subGroups factor=SIRT1 time=t2h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 2hrs) P-Value
     color 0,225,0
     priority 75
@@ -1927,7 +1927,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalSirt1Hr08
     parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 8h
-    subGroups factor=SIRT1 time=8h
+    subGroups factor=SIRT1 time=t8h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 8hrs) P-Value
     color 0,225,0
     priority 77
@@ -1935,7 +1935,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalSirt1Hr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy SIRT1 RA 32h
-    subGroups factor=SIRT1 time=32h
+    subGroups factor=SIRT1 time=t32h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 32hrs) P-Value
     color 0,225,0
     priority 79
@@ -1943,7 +1943,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60PvalTfiibHr32
     parent encodeAffyChIpHl60Pval
     shortLabel Affy TFIIB RA 32h
-    subGroups factor=TFIIB time=32h
+    subGroups factor=TFIIB time=t32h
     longLabel Affymetrix ChIP-chip (TFIIB retinoic acid-treated HL-60, 32hrs) P-Value
     color 0,0,200
     priority 81
@@ -1951,7 +1951,7 @@ dataVersion ENCODE June 2005 Freeze
 track encodeAffyChIpHl60Sites
 superTrack encodeAffyChipSuper dense
 compositeTrack on
-subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup1 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
 shortLabel Affy Sites
 longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Sites
@@ -1966,7 +1966,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesBrg1Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 0h
-    subGroups factor=Brg1 time=0h
+    subGroups factor=Brg1 time=t0h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 0hrs) Sites
     color 225,0,0
     priority 2
@@ -1974,7 +1974,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesBrg1Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 2h
-    subGroups factor=Brg1 time=2h
+    subGroups factor=Brg1 time=t2h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 2hrs) Sites
     color 225,0,0
     priority 4
@@ -1982,7 +1982,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesBrg1Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 8h
-    subGroups factor=Brg1 time=8h
+    subGroups factor=Brg1 time=t8h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 8hrs) Sites
     color 225,0,0
     priority 6
@@ -1990,7 +1990,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesBrg1Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Brg1 RA 32h
-    subGroups factor=Brg1 time=32h
+    subGroups factor=Brg1 time=t32h
     longLabel Affymetrix ChIP-chip (Brg1 retinoic acid-treated HL-60, 32hrs) Sites
     color 225,0,0
     priority 8
@@ -1998,7 +1998,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCebpeHr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 0h
-    subGroups factor=CEBPe time=0h
+    subGroups factor=CEBPe time=t0h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 0hrs) Sites
     color 200,25,0
     priority 10
@@ -2006,7 +2006,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCebpeHr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 2h
-    subGroups factor=CEBPe time=2h
+    subGroups factor=CEBPe time=t2h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 2hrs) Sites
     color 200,25,0
     priority 12
@@ -2014,7 +2014,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCebpeHr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 8h
-    subGroups factor=CEBPe time=8h
+    subGroups factor=CEBPe time=t8h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 8hrs) Sites
     color 200,25,0
     priority 14
@@ -2022,7 +2022,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCebpeHr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CEBPe RA 32h
-    subGroups factor=CEBPe time=32h
+    subGroups factor=CEBPe time=t32h
     longLabel Affymetrix ChIP-chip (CEBPe retinoic acid-treated HL-60, 32hrs) Sites
     color 200,25,0
     priority 16
@@ -2030,7 +2030,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCtcfHr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 0h
-    subGroups factor=CTCF time=0h
+    subGroups factor=CTCF time=t0h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 0hrs) Sites
     color 175,50,0
     priority 18
@@ -2038,7 +2038,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCtcfHr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 2h
-    subGroups factor=CTCF time=2h
+    subGroups factor=CTCF time=t2h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 2hrs) Sites
     color 175,50,0
     priority 20
@@ -2046,7 +2046,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCtcfHr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 8h
-    subGroups factor=CTCF time=8h
+    subGroups factor=CTCF time=t8h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 8hrs) Sites
     color 175,50,0
     priority 22
@@ -2054,7 +2054,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesCtcfHr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy CTCF RA 32h
-    subGroups factor=CTCF time=32h
+    subGroups factor=CTCF time=t32h
     longLabel Affymetrix ChIP-chip (CTCF retinoic acid-treated HL-60, 32hrs) Sites
     color 175,50,0
     priority 24
@@ -2062,7 +2062,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH3K27me3Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 0h
-    subGroups factor=H3K27me3 time=0h
+    subGroups factor=H3K27me3 time=t0h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) Sites
     color 150,75,0
     priority 26
@@ -2070,7 +2070,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH3K27me3Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 2h
-    subGroups factor=H3K27me3 time=2h
+    subGroups factor=H3K27me3 time=t2h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) Sites
     color 150,75,0
     priority 28
@@ -2078,7 +2078,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH3K27me3Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 8h
-    subGroups factor=H3K27me3 time=8h
+    subGroups factor=H3K27me3 time=t8h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) Sites
     color 150,75,0
     priority 30
@@ -2086,7 +2086,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH3K27me3Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H3K27me3 RA 32h
-    subGroups factor=H3K27me3 time=32h
+    subGroups factor=H3K27me3 time=t32h
     longLabel Affymetrix ChIP-chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) Sites
     color 150,75,0
     priority 32
@@ -2094,7 +2094,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH4Kac4Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 0h
-    subGroups factor=H4Kac4 time=0h
+    subGroups factor=H4Kac4 time=t0h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) Sites
     color 125,100,0
     priority 34
@@ -2102,7 +2102,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH4Kac4Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 2h
-    subGroups factor=H4Kac4 time=2h
+    subGroups factor=H4Kac4 time=t2h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) Sites
     color 125,100,0
     priority 36
@@ -2110,7 +2110,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH4Kac4Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 8h
-    subGroups factor=H4Kac4 time=8h
+    subGroups factor=H4Kac4 time=t8h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) Sites
     color 125,100,0
     priority 38
@@ -2118,7 +2118,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesH4Kac4Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy H4Kac4 RA 32h
-    subGroups factor=H4Kac4 time=32h
+    subGroups factor=H4Kac4 time=t32h
     longLabel Affymetrix ChIP-chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) Sites
     color 125,100,0
     priority 40
@@ -2126,7 +2126,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesP300Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 0h
-    subGroups factor=P300 time=0h
+    subGroups factor=P300 time=t0h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 0hrs) Sites
     color 100,125,0
     priority 42
@@ -2134,7 +2134,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesP300Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 2h
-    subGroups factor=P300 time=2h
+    subGroups factor=P300 time=t2h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 2hrs) Sites
     color 100,125,0
     priority 44
@@ -2142,7 +2142,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesP300Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 8h
-    subGroups factor=P300 time=8h
+    subGroups factor=P300 time=t8h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 8hrs) Sites
     color 100,125,0
     priority 46
@@ -2150,7 +2150,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesP300Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy P300 RA 32h
-    subGroups factor=P300 time=32h
+    subGroups factor=P300 time=t32h
     longLabel Affymetrix ChIP-chip (P300 retinoic acid-treated HL-60, 32hrs) Sites
     color 100,125,0
     priority 48
@@ -2158,7 +2158,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesPu1Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 0h
-    subGroups factor=PU1 time=0h
+    subGroups factor=PU1 time=t0h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 0hrs) Sites
     color 75,150,0
     priority 50
@@ -2166,7 +2166,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesPu1Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 2h
-    subGroups factor=PU1 time=2h
+    subGroups factor=PU1 time=t2h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 2hrs) Sites
     color 75,150,0
     priority 52
@@ -2174,7 +2174,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesPu1Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 8h
-    subGroups factor=PU1 time=8h
+    subGroups factor=PU1 time=t8h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 8hrs) Sites
     color 75,150,0
     priority 54
@@ -2182,7 +2182,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesPu1Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy PU1 RA 32h
-    subGroups factor=PU1 time=32h
+    subGroups factor=PU1 time=t32h
     longLabel Affymetrix ChIP-chip (PU1 retinoic acid-treated HL-60, 32hrs) Sites
     color 75,150,0
     priority 56
@@ -2190,7 +2190,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRnapHr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 0h
-    subGroups factor=Pol2 time=0h
+    subGroups factor=Pol2 time=t0h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) Sites
     color 50,175,0
     priority 58
@@ -2198,7 +2198,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRnapHr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 2h
-    subGroups factor=Pol2 time=2h
+    subGroups factor=Pol2 time=t2h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) Sites
     color 50,175,0
     priority 60
@@ -2206,7 +2206,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRnapHr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 8h
-    subGroups factor=Pol2 time=8h
+    subGroups factor=Pol2 time=t8h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) Sites
     color 50,175,0
     priority 62
@@ -2214,7 +2214,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRnapHr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy Pol2 RA 32h
-    subGroups factor=Pol2 time=32h
+    subGroups factor=Pol2 time=t32h
     longLabel Affymetrix ChIP-chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) Sites
     color 50,175,0
     priority 64
@@ -2222,7 +2222,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRaraHr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 0h
-    subGroups factor=RARA time=0h
+    subGroups factor=RARA time=t0h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 0hrs) Sites
     color 25,200,0
     priority 66
@@ -2230,7 +2230,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRaraHr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 2h
-    subGroups factor=RARA time=2h
+    subGroups factor=RARA time=t2h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 2hrs) Sites
     color 25,200,0
     priority 68
@@ -2238,7 +2238,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRaraHr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 8h
-    subGroups factor=RARA time=8h
+    subGroups factor=RARA time=t8h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 8hrs) Sites
     color 25,200,0
     priority 70
@@ -2246,7 +2246,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesRaraHr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy RARA RA 32h
-    subGroups factor=RARA time=32h
+    subGroups factor=RARA time=t32h
     longLabel Affymetrix ChIP-chip (RARA retinoic acid-treated HL-60, 32hrs) Sites
     color 25,200,0
     priority 72
@@ -2254,7 +2254,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesSirt1Hr00
     parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 0h
-    subGroups factor=SIRT1 time=0h
+    subGroups factor=SIRT1 time=t0h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 0hrs) Sites
     color 0,225,0
     priority 74
@@ -2262,7 +2262,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesSirt1Hr02
     parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 2h
-    subGroups factor=SIRT1 time=2h
+    subGroups factor=SIRT1 time=t2h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 2hrs) Sites
     color 0,225,0
     priority 76
@@ -2270,7 +2270,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesSirt1Hr08
     parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 8h
-    subGroups factor=SIRT1 time=8h
+    subGroups factor=SIRT1 time=t8h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 8hrs) Sites
     color 0,225,0
     priority 78
@@ -2278,7 +2278,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesSirt1Hr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy SIRT1 RA 32h
-    subGroups factor=SIRT1 time=32h
+    subGroups factor=SIRT1 time=t32h
     longLabel Affymetrix ChIP-chip (SIRT1 retinoic acid-treated HL-60, 32hrs) Sites
     color 0,225,0
     priority 80
@@ -2286,7 +2286,7 @@ dataVersion ENCODE June 2005 Freeze
     track encodeAffyChIpHl60SitesTfiibHr32
     parent encodeAffyChIpHl60Sites
     shortLabel Affy TFIIB RA 32h
-    subGroups factor=TFIIB time=32h
+    subGroups factor=TFIIB time=t32h
     longLabel Affymetrix ChIP-chip (TFIIB retinoic acid-treated HL-60, 32hrs) Sites
     color 0,0,200
     priority 82
@@ -2301,7 +2301,7 @@ shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict P-Value
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
-subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup2 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 group encodeChip
 priority 43.7
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2315,7 +2315,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr00
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H3K9K14ac2 time=0h
+    subGroups factor=H3K9K14ac2 time=t0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict P-Value
     color 225,0,0
@@ -2323,7 +2323,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr02
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H3K9K14ac2 time=2h
+    subGroups factor=H3K9K14ac2 time=t2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict P-Value
     color 225,0,0
@@ -2331,7 +2331,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr08
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H3K9K14ac2 time=8h
+    subGroups factor=H3K9K14ac2 time=t8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict P-Value
     color 225,0,0
@@ -2339,7 +2339,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr32
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H3K9K14ac2 time=32h
+    subGroups factor=H3K9K14ac2 time=t32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict P-Value
     color 225,0,0
@@ -2347,7 +2347,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr00
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H4Kac4 time=0h
+    subGroups factor=H4Kac4 time=t0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict P-Value
     color 150,75,0
@@ -2355,7 +2355,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr02
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H4Kac4 time=2h
+    subGroups factor=H4Kac4 time=t2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict P-Value
     color 150,75,0
@@ -2363,7 +2363,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr08
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H4Kac4 time=8h
+    subGroups factor=H4Kac4 time=t8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict P-Value
     color 150,75,0
@@ -2371,7 +2371,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr32
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=H4Kac4 time=32h
+    subGroups factor=H4Kac4 time=t32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict P-Value
     color 150,75,0
@@ -2379,7 +2379,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictPol2Hr00
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=Pol2 time=0h
+    subGroups factor=Pol2 time=t0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict P-Value
     color 50,175,0
@@ -2387,7 +2387,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictPol2Hr02
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=Pol2 time=2h
+    subGroups factor=Pol2 time=t2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict P-Value
     color 50,175,0
@@ -2395,7 +2395,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictPol2Hr08
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=Pol2 time=8h
+    subGroups factor=Pol2 time=t8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict P-Value
     color 50,175,0
@@ -2403,7 +2403,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictPol2Hr32
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=Pol2 time=32h
+    subGroups factor=Pol2 time=t32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict P-Value
     color 50,175,0
@@ -2411,7 +2411,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictp63_ActD
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=actd time=0h
+    subGroups factor=actd time=t0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict P-Value
     color 0,0,200
@@ -2419,7 +2419,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictp63_mActD
     parent encodeAffyChIpHl60PvalStrict
-    subGroups factor=mactd time=0h
+    subGroups factor=mactd time=t0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict P-Value
     color 0,0,200
@@ -2431,7 +2431,7 @@ shortLabel Affy Strict Sig
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Signal
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
-subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup2 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 group encodeChip
 priority 43.8
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2446,7 +2446,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr00
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H3K9K14ac2 time=0h
+    subGroups factor=H3K9K14ac2 time=t0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Signal
     color 225,0,0
@@ -2454,7 +2454,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr02
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H3K9K14ac2 time=2h
+    subGroups factor=H3K9K14ac2 time=t2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict Signal
     color 225,0,0
@@ -2462,7 +2462,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr08
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H3K9K14ac2 time=8h
+    subGroups factor=H3K9K14ac2 time=t8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict Signal
     color 225,0,0
@@ -2470,7 +2470,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictH3K9K14DHr32
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H3K9K14ac2 time=32h
+    subGroups factor=H3K9K14ac2 time=t32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict Signal
     color 225,0,0
@@ -2478,7 +2478,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr00
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H4Kac4 time=0h
+    subGroups factor=H4Kac4 time=t0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict Signal
     color 150,75,0
@@ -2486,7 +2486,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr02
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H4Kac4 time=2h
+    subGroups factor=H4Kac4 time=t2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict Signal
     color 150,75,0
@@ -2494,7 +2494,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr08
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H4Kac4 time=8h
+    subGroups factor=H4Kac4 time=t8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict Signal
     color 150,75,0
@@ -2502,7 +2502,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictHisH4Hr32
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=H4Kac4 time=32h
+    subGroups factor=H4Kac4 time=t32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict Signal
     color 150,75,0
@@ -2510,7 +2510,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictPol2Hr00
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=Pol2 time=0h
+    subGroups factor=Pol2 time=t0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict Signal
     color 50,175,0
@@ -2518,7 +2518,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictPol2Hr02
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=Pol2 time=2h
+    subGroups factor=Pol2 time=t2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict Signal
     color 50,175,0
@@ -2526,7 +2526,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictPol2Hr08
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=Pol2 time=8h
+    subGroups factor=Pol2 time=t8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict Signal
     color 50,175,0
@@ -2534,7 +2534,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictPol2Hr32
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=Pol2 time=32h
+    subGroups factor=Pol2 time=t32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict Signal
     color 50,175,0
@@ -2542,7 +2542,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictp63_ActD
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=actd time=0h
+    subGroups factor=actd time=t0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Signal
     color 0,0,200
@@ -2550,7 +2550,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SignalStrictp63_mActD
     parent encodeAffyChIpHl60SignalStrict
-    subGroups factor=mactd time=0h
+    subGroups factor=mactd time=t0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Signal
     color 0,0,200
@@ -2563,7 +2563,7 @@ shortLabel Affy Strict Sites
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Sites
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
-subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+subGroup2 time Timepoint t0h=0hrs t2h=2hrs t8h=8hrs t32h=32hrs
 group encodeChip
 priority 43.9
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2573,7 +2573,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr00
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H3K9K14ac2 time=0h
+    subGroups factor=H3K9K14ac2 time=t0h
     shortLabel Affy H3K9ac2 0h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Sites
     color 225,0,0
@@ -2581,7 +2581,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr02
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H3K9K14ac2 time=2h
+    subGroups factor=H3K9K14ac2 time=t2h
     shortLabel Affy H3K9ac2 2h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 2hrs) Strict Sites
     color 225,0,0
@@ -2589,7 +2589,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr08
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H3K9K14ac2 time=8h
+    subGroups factor=H3K9K14ac2 time=t8h
     shortLabel Affy H3K9ac2 8h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 8hrs) Strict Sites
     color 225,0,0
@@ -2597,7 +2597,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictH3K9K14DHr32
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H3K9K14ac2 time=32h
+    subGroups factor=H3K9K14ac2 time=t32h
     shortLabel Affy H3K9ac2 32h
     longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 32hrs) Strict Sites
     color 225,0,0
@@ -2605,7 +2605,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr00
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H4Kac4 time=0h
+    subGroups factor=H4Kac4 time=t0h
     shortLabel Affy H4Kac4 0h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 0hrs) Strict Sites
     color 150,75,0
@@ -2613,7 +2613,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr02
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H4Kac4 time=2h
+    subGroups factor=H4Kac4 time=t2h
     shortLabel Affy H4Kac4 2h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 2hrs) Strict Sites
     color 150,75,0
@@ -2621,7 +2621,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr08
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H4Kac4 time=8h
+    subGroups factor=H4Kac4 time=t8h
     shortLabel Affy H4Kac4 8h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 8hrs) Strict Sites
     color 150,75,0
@@ -2629,7 +2629,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictHisH4Hr32
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=H4Kac4 time=32h
+    subGroups factor=H4Kac4 time=t32h
     shortLabel Affy H4Kac4 32h
     longLabel Affymetrix ChIP-chip (H4Kac4, retinoic acid-treated HL-60, 32hrs) Strict Sites
     color 150,75,0
@@ -2637,7 +2637,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictRnapHr00
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=Pol2 time=0h
+    subGroups factor=Pol2 time=t0h
     shortLabel Affy Pol2 0h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 0hrs) Strict Sites
     color 50,175,0
@@ -2645,7 +2645,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictRnapHr02
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=Pol2 time=2h
+    subGroups factor=Pol2 time=t2h
     shortLabel Affy Pol2 2h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 2hrs) Strict Sites
     color 50,175,0
@@ -2653,7 +2653,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictRnapHr08
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=Pol2 time=8h
+    subGroups factor=Pol2 time=t8h
     shortLabel Affy Pol2 8h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 8hrs) Strict Sites
     color 50,175,0
@@ -2661,7 +2661,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictRnapHr32
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=Pol2 time=32h
+    subGroups factor=Pol2 time=t32h
     shortLabel Affy Pol2 32h
     longLabel Affymetrix ChIP-chip (Pol2, retinoic acid-treated HL-60, 32hrs) Strict Sites
     color 50,175,0
@@ -2669,7 +2669,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictP63_ActD
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=actd time=0h
+    subGroups factor=actd time=t0h
     shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Sites
     color 0,0,200
@@ -2677,7 +2677,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60SitesStrictP63_mActD
     parent encodeAffyChIpHl60SitesStrict
-    subGroups factor=mactd time=0h
+    subGroups factor=mactd time=t0h
     shortLabel Affy p63 ME-180
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Sites
     color 0,0,200

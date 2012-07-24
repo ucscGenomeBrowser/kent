@@ -20,11 +20,13 @@
 #define METADATA_VALUE_PREFIX    "hgt_mdbVal"
 
 // Currently selected tab
-enum searchTab {
+enum searchTab
+    {
     simpleTab   = 0,
     advancedTab = 1,
     filesTab    = 2,
-};
+    };
+
 
 void getSearchTrixFile(char *database, char *buf, int len);
 // Fill-in the name of the track search trix file
@@ -41,8 +43,10 @@ char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml);
 struct slPair *mdbSelectPairs(struct cart *cart, struct slPair *mdbVars);
 // Returns the current mdb  vars and vals in the table of drop down selects
 
-char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects, struct slPair *mdbVars,int cols,boolean fileSearch);
-// generates the html for the table rows containing mdb var and val selects.  Assume tableSearch unless fileSearch
+char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects,
+                         struct slPair *mdbVars,int cols,boolean fileSearch);
+// generates the html for the table rows containing mdb var and val selects.
+// Assume tableSearch unless fileSearch
 
 boolean searchNameMatches(struct trackDb *tdb, struct slName *wordList);
 // returns TRUE if all words in preparsed list matches short or long label
@@ -52,6 +56,7 @@ boolean searchDescriptionMatches(struct trackDb *tdb, struct slName *wordList);
 // returns TRUE if all words in preparsed list matches html description page.
 // A "word" can be "multiple words" (parsed from quoteed string).
 // Because description contains html, quoted string match has limits.
-// DANGER: this will alter html of tdb struct (replacing \n with ' ', so the html should not be displayed after.
+// DANGER: this will alter html of tdb struct (replacing \n with ' ',
+//         so the html should not be displayed after.
 
 #endif /* SEARCH_H */

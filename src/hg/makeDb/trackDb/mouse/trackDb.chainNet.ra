@@ -107,10 +107,16 @@ priority 440.3
 
 track chainNetBosTau7 override
 priority 450.3
+shortLabel $o_db Chain/Net
+chainMinScore 3000
+chainLinearGap medium
 
 track chainNetBosTau6 override
 priority 450.3
 shortLabel $o_db Chain/Net
+chainMinScore 3000
+chainLinearGap medium
+
 
 track chainNetBosTau4 override
 priority 450.3

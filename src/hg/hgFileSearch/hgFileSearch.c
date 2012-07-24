@@ -16,7 +16,7 @@
 
 #define FAKE_MDB_MULTI_SELECT_SUPPORT
 
-struct hash *trackHash = NULL;	// Is this needed?
+struct hash *trackHash = NULL;  // Is this needed?
 boolean measureTiming = FALSE;  /* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
 
 #define FILE_SEARCH_WHAT "Downloadable ENCODE Files"
@@ -80,7 +80,7 @@ static boolean mdbSelectsAddFoundComposites(struct slPair **pMdbSelects,struct t
 // create comma separated list of composites
 struct dyString *dyComposites = dyStringNew(256);
 struct trackDb *tdb = tdbsFound;
-for(;tdb != NULL; tdb = tdb->next)
+for (;tdb != NULL; tdb = tdb->next)
     {
     if (tdbIsComposite(tdb))
         dyStringPrintf(dyComposites,"%s,",tdb->track);
@@ -111,9 +111,9 @@ static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int 
 struct slRef *foundTdbs = NULL;
 
 struct trixSearchResult *tsList;
-for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); 
-    tsList != NULL; 
-    tsList = tsList->next)
+for (tsList = trixSearch(trix, descWordCount, descWords, TRUE);
+     tsList != NULL;
+     tsList = tsList->next)
     {
     struct trackDb *tdb = (struct track *) hashFindVal(trackHash, tsList->itemId);
     if (track != NULL)  // It is expected that this is NULL 
@@ -132,7 +132,7 @@ struct slName *tdbListGetGroups(struct trackDb *tdbList)
 struct slName *groupList = NULL;
 char *lastGroup = "[]";
 struct trackDb *tdb = tdbList;
-for(;tdb!=NULL;tdb=tdb->next)
+for (;tdb!=NULL;tdb=tdb->next)
     {
     if (differentString(lastGroup,tdb->grp))
         lastGroup = slNameStore(&groupList, tdb->grp);
@@ -182,13 +182,13 @@ int cols;
 #ifdef USE_TABS
 enum searchTab selectedTab = simpleTab;
 char *currentTab = cartUsualString(cart, FILE_SEARCH_CURRENT_TAB, "simpleTab");
-if(sameString(currentTab, "simpleTab"))
+if (sameString(currentTab, "simpleTab"))
     {
     selectedTab = simpleTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
     freez(&nameSearch);
     }
-else if(sameString(currentTab, "filesTab"))
+else if (sameString(currentTab, "filesTab"))
     {
     selectedTab = filesTab;
     descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
@@ -319,7 +319,7 @@ if (selectedTab==filesTab && fileTypeSearch)
 
 // mdb selects
 struct slPair *mdbSelects = NULL;
-if(metaDbExists)
+if (metaDbExists)
     {
     struct slPair *mdbVars = mdbVarsSearchable(conn,FALSE,TRUE); // Not tables, just files
     mdbSelects = mdbSelectPairs(cart, mdbVars);
@@ -345,11 +345,11 @@ printf("</div>\n");
 printf("</div>\n"); // End tabs div
 #endif///def USE_TABS
 
-if(nameSearch != NULL && !strlen(nameSearch))
+if (nameSearch != NULL && !strlen(nameSearch))
     nameSearch = NULL;
-if(descSearch != NULL && !strlen(descSearch))
+if (descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
-if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
+if (groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
 
 printf("</form>\n");
@@ -365,12 +365,12 @@ if (doSearch && selectedTab==simpleTab && isEmpty(descSearch))
     doSearch = FALSE;
 #endif///def USE_TABS
 
-if(doSearch)
+if (doSearch)
     {
     // Now search
 #ifdef USE_TABS
     struct slRef *foundTdbs = NULL;
-    if(selectedTab==simpleTab)
+    if (selectedTab==simpleTab)
         {
         foundTdbs = simpleSearchForTdbs(trix,descWords,descWordCount);
         // What to do now?
@@ -378,11 +378,11 @@ if(doSearch)
             uglyTime("Searched for tracks");
 
         // Sort and Print results
-        if(selectedTab!=filesTab)
+        if (selectedTab!=filesTab)
             {
             enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
             int tracksFound = slCount(foundTdbs);
-            if(tracksFound > 1)
+            if (tracksFound > 1)
                 findTracksSort(&tracks,sortBy);
 
             displayFoundTracks(cart,tracks,tracksFound,sortBy);
@@ -391,8 +391,8 @@ if(doSearch)
                 uglyTime("Displayed found files");
             }
         }
-    else if(selectedTab==filesTab && mdbPairs != NULL)
-#endif///def USE_TABS
+    else if (selectedTab==filesTab && mdbPairs != NULL)
+#endif ///def USE_TABS
         {
         if (nameSearch || descSearch || groupSearch)
             {  // Use nameSearch, descSearch and groupSearch to narrow down the list of composites.
@@ -426,7 +426,6 @@ printf("Search for downloadable ENCODE files by entering search terms in "
        "the Track name or Description fields and/or by making selections with "
        "the group, data format, and/or ENCODE metadata drop-downs.");
 printf("<BR><a target='_blank' href='../goldenPath/help/fileSearch.html'>more help</a>\n");
-webEndSectionTables();
 }
 
 void doMiddle(struct cart *cart)
@@ -460,7 +459,7 @@ jsIncludeFile("utils.js",NULL);
 // This line is needed to get the multi-selects initialized
 jsIncludeFile("ddcl.js",NULL);
 printf("<script type='text/javascript'>$(document).ready(function() "
-        "{ findTracks.updateMdbHelp(0); });</script>\n");
+       "{ findTracks.updateMdbHelp(0); });</script>\n");
 
 doFileSearch(db,organism,cart,tdbList);
 
@@ -486,4 +485,4 @@ return 0;
 // 2) Work out simple verses advanced tabs
 // 3) work out support for non-encode downloads
 // 4) Make an hgTrackSearch to replace hgTracks track search ??   
-//    Simlpler code, but may not be good idea because of composite reshaping in cart vars
+//    Simpler code, but may not be good idea because of composite reshaping in cart vars

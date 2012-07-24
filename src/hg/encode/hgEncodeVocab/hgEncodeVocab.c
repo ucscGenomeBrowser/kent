@@ -72,7 +72,7 @@ if (s != NULL)
         char *docSetting = cloneString(s);
         char *settings=docSetting;
         int count=0;
-        while((s = nextWord(&settings)) != NULL)
+        while ((s = nextWord(&settings)) != NULL)
             {
             char *docTitle = NULL;
             char *fileName = NULL;
@@ -235,7 +235,7 @@ if (ids != NULL)
         {
         if (slCount(nameList) == 1)
             {
-            while(slCount(nameList) < slCount(idList))
+            while (slCount(nameList) < slCount(idList))
                 slAddHead(&nameList,slNameNew(nameList->name));
             }
         else
@@ -313,10 +313,9 @@ if (ra == NULL)
 
 char *label = hashFindVal(ra, CV_LABEL);
 
-puts("<TR>");
 struct dyString *dyDefinition = dyStringNew(256);
 if (inTable)
-    dyStringPrintf(dyDefinition,"  <td colspan=%d style='background:%s; color:%s;'>&nbsp;",
+    dyStringPrintf(dyDefinition,"<tr><td colspan=%d style='background:%s; color:%s;'>&nbsp;",
                    TABLE_COLS_AVAILABLE(0),COLOR_LTGREEN,COLOR_DARKBLUE);
 else
     dyStringPrintf(dyDefinition,"<div style='max-width:900px;'>");
@@ -334,13 +333,12 @@ char *val = getDescription(ra,NULL);
 dyStringPrintf(dyDefinition,"%s",val);
 freeMem(val);
 if (inTable)
-    dyStringAppend(dyDefinition,"&nbsp;</td>");
+    dyStringAppend(dyDefinition,"&nbsp;</td></tr>");
 else
     dyStringPrintf(dyDefinition,"</div>");
 printf("%s\n",dyStringContents(dyDefinition));
 dyStringFree(&dyDefinition);
 
-puts("</TR>");
 return TRUE;
 }
 
@@ -487,7 +485,7 @@ if (sameWord(org, ORG_HUMAN))
         char *tiers=cloneString(cgiOptionalString("tiers"));
         char *tier;
         (void)strSwapChar(tiers,',',' ');
-        while((tier=nextWord(&tiers)))
+        while ((tier=nextWord(&tiers)))
             {
             if (atoi(hashFindVal(ra,"tier"))==atoi(tier))
                 {
@@ -659,7 +657,7 @@ while ((hEl = hashNext(&hc)) != NULL)
     }
 
 // At this point every term should have been found
-for(ix=0;ix<requestCount;ix++)
+for (ix=0;ix<requestCount;ix++)
     {
     if (targets[ix] == NULL)
         errAbort("Failed to find antibody %s=%s\n",CV_TERM,requested[ix]);
@@ -871,7 +869,7 @@ if (slCount(termList) > 0)
     doTypeHeader(type, org,sortable);
 
     // Print out the terms
-    while((ra = slPopHead(&termList)) != NULL)
+    while ((ra = slPopHead(&termList)) != NULL)
         {
         if (doTypeRow( ra, org ))
             totalPrinted++;

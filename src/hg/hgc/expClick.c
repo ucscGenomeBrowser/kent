@@ -31,7 +31,7 @@ if (val == -10000)
     return(color);
     }
 
-if(absVal > max)
+if (absVal > max)
     absVal = max;
 if (max == 0)
     errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n");

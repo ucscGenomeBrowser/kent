@@ -3162,6 +3162,25 @@ TMPDIR=/scratch/tmp
     ln -s blastz.canFam2.swap lastz.canFam2
 
 
+############################################################################
+# SNP131 (DONE 6/13/11 angie)
+
+    mkdir -p /hive/data/outside/dbSNP/131/dog
+    cd /hive/data/outside/dbSNP/131/dog
+    # Unfortunately, the contigs we have from Broad are not exactly the same
+    # as the NCBI RefSeq assembly (distinct from the NCBI GenBank assembly)
+    # that dbSNP used.  So ignoreDbSnpContigs tosses out all the Un's and randoms's.
+    cat > config.ra <<EOF
+db canFam2
+orgDir dog_9615
+build 131
+buildAssembly 2_1
+liftUp /hive/data/outside/dbSNP/131/dog/suggested.lft
+ignoreDbSnpContigs NW_(87633[4-9]|8763[4-9][0-9]|876[4-9][0-9][0-9]|87[78][0-9][0-9][0-9]|879[0-4][0-9][0-9]|8795[0-5][0-9]|879560)
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+
+
 #########################################################################
 # LASTZ Cow BosTau7 (DONE - 2012-01-24 - Chin)
     screen

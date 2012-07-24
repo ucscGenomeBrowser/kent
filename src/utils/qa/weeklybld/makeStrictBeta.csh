@@ -33,7 +33,7 @@ set wc = `cat warning.txt | wc -w`
 if ( "$wc" != "0" ) then
     echo "trackDb strict html non-fatal errs found:"
     cat warning.txt
-    cat warning.txt | mail -s "v$BRANCHNN missing html error found by trackDb make strict" $USER browser-qa
+    cat warning.txt | mail -s "v$BRANCHNN missing html error found by trackDb make strict" $USER ${BUILDMEISTER} browser-qa
 endif
 rm warning.txt
 

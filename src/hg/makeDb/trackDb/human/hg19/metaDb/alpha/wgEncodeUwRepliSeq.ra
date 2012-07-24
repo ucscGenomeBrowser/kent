@@ -128,7 +128,7 @@ geoSampleAccession GSM923453
 grant Stam
 lab UW
 labExpId DS9028
-md5sum b18e106d138d34b7972f5e2f3f555f00
+md5sum 46c9f45a25d2c84edc2e01740bab48d4
 origAssembly hg19
 phase G2
 project wgEncode
@@ -1526,7 +1526,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9015
-md5sum c51955ad8635265f08fa0e65c87749e0
+md5sum e07837d686bd83c00bfd88740c02e576
 origAssembly hg19
 phase G1b
 project wgEncode
@@ -1592,7 +1592,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9016
-md5sum 9be0b17c28d1763ffa9d07678db83bf8
+md5sum ec2b5648e32066d430044783f7885169
 origAssembly hg19
 phase G2
 project wgEncode
@@ -1681,7 +1681,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9017
-md5sum a94de9957a79e64a55dbb78967918d18
+md5sum 13deb2ee0d6768d7db416a51063a1824
 origAssembly hg19
 phase S1
 project wgEncode
@@ -1747,7 +1747,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9018
-md5sum d190295dadb13ac02eeacadbfe492da4
+md5sum d79a6b9610ca219dadd9928467bca3e4
 origAssembly hg19
 phase S2
 project wgEncode
@@ -1813,7 +1813,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9019
-md5sum a7de2b4505bdbed93ca3155fdcbe7ad4
+md5sum 3531bb60250a853b166b0cfe49409d64
 origAssembly hg19
 phase S3
 project wgEncode
@@ -1879,7 +1879,7 @@ geoSampleAccession GSM923443
 grant Stam
 lab UW
 labExpId DS9020
-md5sum cd3a2ab856c300c377ac5e8f90021d43
+md5sum e538586704abb2a3771e51d7cbf156d7
 origAssembly hg19
 phase S4
 project wgEncode
@@ -3337,7 +3337,7 @@ geoSampleAccession GSM923450
 grant Stam
 lab UW
 labExpId DS9831
-md5sum 254936a9272bd2bc8b98043d7d332fce
+md5sum 29440b2823e072b060aaec4768e192b8
 origAssembly hg19
 phase S3
 project wgEncode
@@ -4636,7 +4636,7 @@ geoSampleAccession GSM923446
 grant Stam
 lab UW
 labExpId DS19718
-md5sum 0346655fc04a96c7f3fa344692daa0df
+md5sum 205105efa42d70b84e9cf8632029c0c3
 origAssembly hg19
 phase G2
 project wgEncode
@@ -4729,7 +4729,7 @@ geoSampleAccession GSM923446
 grant Stam
 lab UW
 labExpId DS19719
-md5sum edb2ceb8cc2a1273601c6d3e51ceb3f1
+md5sum bdc03b4d93016092f8ec38bd6554f086
 origAssembly hg19
 phase S1
 project wgEncode
@@ -4798,7 +4798,7 @@ geoSampleAccession GSM923446
 grant Stam
 lab UW
 labExpId DS19720
-md5sum 0977558eb7a8c660b82813039cace5aa
+md5sum 186552eb144ab96cbd1edb8909522a43
 origAssembly hg19
 phase S2
 project wgEncode
@@ -4867,7 +4867,7 @@ geoSampleAccession GSM923446
 grant Stam
 lab UW
 labExpId DS19721
-md5sum c4e1e87307290b786a4030a1fa461095
+md5sum 8bed00f35d46b3dc50035686c2484f8b
 origAssembly hg19
 phase S3
 project wgEncode
@@ -4936,7 +4936,7 @@ geoSampleAccession GSM923446
 grant Stam
 lab UW
 labExpId DS19722
-md5sum 4c588b1c91a9a103816c0f1dee3b0598
+md5sum 49d7ee5a79c47cd52ef3206babc59b28
 origAssembly hg19
 phase S4
 project wgEncode
@@ -5146,7 +5146,7 @@ geoSampleAccession GSM923452
 grant Stam
 lab UW
 labExpId DS9852
-md5sum d182ecc50065aa4961dc9b938224d4ed
+md5sum 964c11337a4a679a8f3694918f2fa788
 origAssembly hg19
 phase G2
 project wgEncode
@@ -6094,7 +6094,7 @@ geoSampleAccession GSM923448
 grant Stam
 lab UW
 labExpId DS8837
-md5sum 91f131c6ebf72fb7f6d258bd39745436
+md5sum 0ae064abae0c770bea5371a27ec054e6
 origAssembly hg19
 phase G1
 project wgEncode
@@ -6160,7 +6160,7 @@ geoSampleAccession GSM923448
 grant Stam
 lab UW
 labExpId DS8838
-md5sum d2fed809e8bd2e1656cb4642dda52250
+md5sum 1182a3b5e7d3c424616705984d83f079
 origAssembly hg19
 phase G2
 project wgEncode
@@ -6249,7 +6249,7 @@ geoSampleAccession GSM923448
 grant Stam
 lab UW
 labExpId DS8839
-md5sum 20f0f68cf9b02e81350dce7de855352c
+md5sum 68ad6360c988aa9a5689d1fd59631b36
 origAssembly hg19
 phase S1
 project wgEncode

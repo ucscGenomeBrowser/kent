@@ -7530,7 +7530,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5959
 view Alignments
 
@@ -7559,7 +7559,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5959
 view Alignments
 
@@ -7588,7 +7588,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain Unknown
 subId 5959
 tableName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdPk
 view Peaks
@@ -7619,7 +7619,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5959
 view RawData
 
@@ -7649,7 +7649,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5959
 view RawData
 
@@ -7678,7 +7678,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain Unknown
 subId 5959
 tableName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdSig
 view Signal
@@ -7708,7 +7708,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5956
 view Alignments
 
@@ -7737,7 +7737,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5956
 view Alignments
 
@@ -7767,7 +7767,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5956
 view RawData
 
@@ -7797,7 +7797,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5956
 view RawData
 
@@ -7826,7 +7826,7 @@ seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain Unknown
 subId 5956
 tableName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig
 view Signal
@@ -7856,7 +7856,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5960
 view Alignments
 
@@ -7885,7 +7885,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain Unknown
 subId 5960
 view Alignments
 
@@ -7914,7 +7914,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain Unknown
 subId 5960
 tableName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdPk
 view Peaks
@@ -7945,7 +7945,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5960
 view RawData
 
@@ -7975,7 +7975,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5960
 view RawData
 
@@ -8004,7 +8004,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain Unknown
 subId 5960
 tableName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdSig
 view Signal
@@ -11633,4 +11633,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -405710294
+# MAGIC: -403169440

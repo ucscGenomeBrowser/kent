@@ -38,7 +38,7 @@ include wgEncodeSydhRnaSeq.ra
 include wgEncodeLicrRnaSeq.release2.ra
 
 # Uw RNA-Seq (wrangler: Venkat)
-include wgEncodeUwRnaSeq.ra alpha
+include wgEncodeUwRnaSeq.ra
 
 # Caltech TFBS (wrangler: Venkat)
 include wgEncodeCaltechTfbs.ra beta,public
@@ -51,7 +51,8 @@ include wgEncodeCaltechHist.ra
 include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.release2.ra
+include wgEncodeCshlLongRnaSeq.release2.ra beta,public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha

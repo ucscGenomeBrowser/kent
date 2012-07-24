@@ -56,7 +56,7 @@ group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3CACO2=Caco-2 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3GM12875=GM12875 t3H7HESC=H7-hESC t3HAC=HAc t3HASP=HA-sp t3HBMEC=HBMEC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HFF=HFF t3HFFMYC=HFF-Myc t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HPAF=HPAF t3HPF=HPF t3HRE=HRE t3HRPEPIC=HRPEpiC t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3NB4=NB4 t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3PANC1=PANC-1 t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup3 treatment Treatment zNone=None DIFFA02D=2_day_diff_protocol_A DIFFA05D=5_day_diff_protocol_A DIFFA09D=9_day_diff_protocol_A DIFFA14D=14_day_diff_protocol_A OHTAM=4-OHTAM_20_nM_72_hr ZNF2C10C5=ZNF_knockout_2C10_C5 ZNF4C50C4=ZNF_knockout_4C50_C4 ZNFA41C6=ZNF_knockout_A4.1-C6 ZNFF41B2=ZNF_knockout_F4.1-B2 ZNFP5=ZNF_knockout_P5
-subGroup4 factor Factor H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 zInput=Input
+subGroup4 factor Factor H3K04ME3=H3K4me3 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 zInput=Input
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep dimA=treatment
 dimensionAchecked zNone
@@ -69,7 +69,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeUwHistone.release4
+html wgEncodeUwHistone.release5
 
     track wgEncodeUwHistoneViewHot
     shortLabel Hotspots
@@ -1833,105 +1833,15 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5176 dateSubmitted=2011-12-13
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 1
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6279 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 1
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6280 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 1
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6281 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 1
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6282 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6HotspotsRep2
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 2
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6283 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2HotspotsRep2
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 2
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6284 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4HotspotsRep2
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 2
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6285 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5HotspotsRep2
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 2
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6286 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep2
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 2
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6287 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5HotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel K562 H3K4M3 Ht 1
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type broadPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6288 dateSubmitted=2012-03-26
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
@@ -1950,6 +1860,42 @@ html wgEncodeUwHistone.release4
         type broadPeak
         origAssembly hg19
         # subId=6811 dateSubmitted=2012-04-04
+
+        track wgEncodeUwHistoneAg04450H3k27acStdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel AG50 H3K27ac Ht 1
+        longLabel AG04450 H3K27ac Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
+        subGroups view=Hot factor=H3K27AC cellType=t3AG04450 treatment=zNone rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7502 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k27me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel AG50 H3K27m3 Ht 1
+        longLabel AG04450 H3K27me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
+        subGroups view=Hot factor=H3K27ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7503 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep2
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel AG50 H3K9me3 Ht 2
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
+        subGroups view=Hot factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep2
+        type broadPeak
+        origAssembly hg19
+        # subId=7504 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdHotspotsRep1
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel AG50 H3K9me3 Ht 1
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
+        subGroups view=Hot factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type broadPeak
+        origAssembly hg19
+        # subId=7505 dateSubmitted=2012-07-18
 
     track wgEncodeUwHistoneViewPeaks
     shortLabel Peaks
@@ -3713,105 +3659,15 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5176 dateSubmitted=2011-12-13
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 1
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6279 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 1
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6280 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 1
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6281 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 1
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6282 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6PkRep2
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 2
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6283 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2PkRep2
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 2
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6284 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4PkRep2
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 2
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6285 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5PkRep2
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 2
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6286 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep2
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 2
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6287 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5PkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel K562 H3K4M3 Pk 1
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type narrowPeak
-        origAssembly hg19
-        color 46,0,184
-        # subId=6288 dateSubmitted=2012-03-26
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
@@ -3830,6 +3686,42 @@ html wgEncodeUwHistone.release4
         type narrowPeak
         origAssembly hg19
         # subId=6811 dateSubmitted=2012-04-04
+
+        track wgEncodeUwHistoneAg04450H3k27acStdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel AG50 H3K27ac Pk 1
+        longLabel AG04450 H3K27ac Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=H3K27AC cellType=t3AG04450 treatment=zNone rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7502 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k27me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel AG50 H3K27m3 Pk 1
+        longLabel AG04450 H3K27me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=H3K27ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7503 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdPkRep2
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel AG50 H3K9me3 Pk 2
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep2
+        type narrowPeak
+        origAssembly hg19
+        # subId=7504 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdPkRep1
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel AG50 H3K9me3 Pk 1
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type narrowPeak
+        origAssembly hg19
+        # subId=7505 dateSubmitted=2012-07-18
 
     track wgEncodeUwHistoneViewRawSig
     shortLabel Sg Signal
@@ -6170,105 +6062,15 @@ html wgEncodeUwHistone.release4
         origAssembly hg19
         # subId=5178 dateSubmitted=2011-12-13
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 1
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep1
-        type bigWig 1.000000 6018.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6279 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 1
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep1
-        type bigWig 1.000000 3587.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6280 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 1
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep1
-        type bigWig 1.000000 4201.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6281 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 1
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep1
-        type bigWig 1.000000 5489.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6282 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawRep2
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 2
-        longLabel K562 H3K4me3 ZNF knockout A4.1-C6 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFA41C6 rep=rep2
-        type bigWig 1.000000 4209.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6283 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawRep2
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 2
-        longLabel K562 H3K4me3 ZNF knockout F4.1-B2 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFF41B2 rep=rep2
-        type bigWig 1.000000 7109.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6284 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawRep2
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 2
-        longLabel K562 H3K4me3 ZNF knockout 4C50 C4 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNF4C50C4 rep=rep2
-        type bigWig 1.000000 5934.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6285 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawRep2
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 2
-        longLabel K562 H3K4me3 ZNF knockout 2C10 C5 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNF2C10C5 rep=rep2
-        type bigWig 1.000000 10429.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6286 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep2
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 2
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep2
-        type bigWig 1.000000 5201.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6287 dateSubmitted=2012-03-26
 
-        track wgEncodeUwHistoneK562H3k04me3StdZnfp5RawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel K562 H3K4M3 Sg 1
-        longLabel K562 H3K4me3 ZNF knockout P5 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=t1K562 treatment=ZNFP5 rep=rep1
-        type bigWig 1.000000 4885.000000
-        origAssembly hg19
-        color 46,0,184
-        # subId=6288 dateSubmitted=2012-03-26
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
@@ -6287,4 +6089,40 @@ html wgEncodeUwHistone.release4
         type bigWig 1.000000 1575.000000
         origAssembly hg19
         # subId=6811 dateSubmitted=2012-04-04
+
+        track wgEncodeUwHistoneAg04450H3k27acStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel AG50 H3K27ac Rw 1
+        longLabel AG04450 H3K27ac Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
+        subGroups view=zRSig factor=H3K27AC cellType=t3AG04450 treatment=zNone rep=rep1
+        type bigWig 1.000000 6453.000000
+        origAssembly hg19
+        # subId=7502 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k27me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel AG50 H3K27m3 Rw 1
+        longLabel AG04450 H3K27me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
+        subGroups view=zRSig factor=H3K27ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type bigWig 1.000000 6137.000000
+        origAssembly hg19
+        # subId=7503 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdRawRep2
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel AG50 H3K9m3 Raw 2
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
+        subGroups view=zRSig factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep2
+        type bigWig 1.000000 21112.000000
+        origAssembly hg19
+        # subId=7504 dateSubmitted=2012-07-18
+
+        track wgEncodeUwHistoneAg04450H3k09me3StdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel AG50 H3K9m3 Raw 1
+        longLabel AG04450 H3K9me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
+        subGroups view=zRSig factor=H3K09ME3 cellType=t3AG04450 treatment=zNone rep=rep1
+        type bigWig 1.000000 28743.000000
+        origAssembly hg19
+        # subId=7505 dateSubmitted=2012-07-18
 

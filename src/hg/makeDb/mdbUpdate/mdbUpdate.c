@@ -300,7 +300,7 @@ else // no file specified
         }
 
     boolean resort = FALSE;
-    while(orVars != NULL)
+    while (orVars != NULL)
         {
         char *vars = orVars;
         orVars = strstr(vars," || ");
@@ -363,9 +363,10 @@ if (mdbObjs != NULL)
             boolean createExpIfNecessary = testIt ? FALSE : TRUE; 
 
             boolean updateAccession = (optionExists("accession"));
-            struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,
-                                (verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession);
-                                            // 1=warnings
+            struct mdbObj *updatable =
+                        mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,
+                                                   (verboseLevel() > 1 ? 1 : 0), // 1=warnings
+                                                   createExpIfNecessary,updateAccession);
             if (updatable == NULL)
                 {
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n",

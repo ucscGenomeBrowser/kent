@@ -33,7 +33,9 @@ wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
-wgEncodeReg.ra \
+wgEncodeRegDnaseClustered.ra \
+wgEncodeRegTfbsClustered.ra \
+wgEncodeRegTxn.ra \
 wgEncodeRikenCage.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeSunyAlbanyTiling.ra \

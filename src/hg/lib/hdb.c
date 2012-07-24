@@ -1246,8 +1246,9 @@ dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
 if (dbSize != diskSize)
     {
-    errAbort("External file %s cannot be opened or has wrong size.  Old size %lld, new size %lld, error %s",
-   	path, dbSize, diskSize, strerror(errno));
+    errAbort("External file %s cannot be opened or has wrong size.  "
+             "Old size %lld, new size %lld, error %s",
+             path, dbSize, diskSize, strerror(errno));
     }
 sqlFreeResult(&sr);
 return path;
@@ -3631,7 +3632,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             if (tdb->subtracks == NULL)
                 tdbMarkAsCompositeChild(tdb);
             else
-               tdbMarkAsCompositeView(tdb);
+                tdbMarkAsCompositeView(tdb);
             }
         }
     trackDbContainerMarkup(tdb, tdb->subtracks);

@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db gadMor1
+clade vertebrate
+genomeCladePriority 125
+scientificName Gadus morhua
+commonName Atlantic cod
+assemblyDate May. 2010
+assemblyLabel Genofisk GadMor_May2010 (GCA_000231765.1)
+assemblyShortLabel Genofisk GadMor_May2010
+orderKey 4780
+mitoAcc NC_002081
+fastaFiles /hive/data/genomes/gadMor1/genbank/unplaced.fa.gz
+agpFiles /hive/data/genomes/gadMor1/genbank/unplaced.agp.gz
+dbDbSpeciesDir gadMor
+photoCreditURL http://www.wikigallery.org/wiki/painting_204538/Andreas-Ludwig-Kruger/Cod-Gadus-Morhua
+photoCreditName Andreas Ludwig Kruger 1743-1822, Wikigallery 
+ncbiGenomeId 2661
+ncbiAssemblyId 311358
+ncbiAssemblyName GadMor_May2010
+ncbiBioProject 41391
+genBankAccessionID GCA_000231765.1
+taxId	8049

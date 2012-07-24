@@ -210,7 +210,7 @@ gbVerbLeave(2, "copying from %s", inFasta);
 }
 
 void reportAligns(struct gbSelect* select, unsigned orgCat, struct gbAlignInfo *alignInfo)
-/* Report back to drive program that sequences either need aligned or migated for
+/* Report back to drive program that sequences either need aligned or migrated for
  * this for this partation.  This is used to determine what needs to be
  * installed after the alignment.  This is needed  because they might be all
  * be migrate, so that fasta can't be the indicator.  If there is nothing
