@@ -2,7 +2,8 @@
 
 
 # Affymetrix RNA-chip (wrangler: braney)
-include wgEncodeAffyRnaChip.ra
+include wgEncodeAffyRnaChip.ra beta,public
+include wgEncodeAffyRnaChip.patch.ra alpha
 
 # BU ORChID (wrangler: Brian)
 include wgEncodeBuOrchid.ra
