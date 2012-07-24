@@ -496,3 +496,22 @@ melUnd1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH556451:700038-706370" where name="melUnd1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/pushQ
+    cd /hive/data/genomes/melUnd1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl melUnd1 2> stderr.txt | grep -v transMap > melUnd1.sql
+    #   real    4m1.757s
+
+    scp -p melUnd1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < melUnd1.sql
+
+############################################################################
