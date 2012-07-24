@@ -296,3 +296,27 @@ pteVam1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_8765:35746-39000" where name="pteVam1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/pteVam1/pushQ
+    cd /hive/data/genomes/pteVam1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl pteVam1 2> stderr.txt | grep -v transMap > pteVam1.sql
+    #   real    3m39.590s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/pteVam1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/pteVam1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/pteVam1/bbi/quality.bw
+# WARNING: pteVam1 does not have seq
+# WARNING: pteVam1 does not have extFile
+# WARNING: pteVam1 does not have estOrientInfo
+
+    scp -p pteVam1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/pteVam1.sql"
+
+############################################################################
