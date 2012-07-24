@@ -18590,33 +18590,6 @@ seqPlatform Illumina_GA2x
 subId 4529
 view TssGencV7
 
-metaObject wgEncodeRikenCageNhekNucleusPapTssHmm
-objType table
-bioRep 028N,027N
-cell NHEK
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-24
-dateUnrestricted 2013-04-24
-dccAccession wgEncodeEH001154
-donorId 4F1155J
-expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId CTig10011,K09
-localization nucleus
-md5sum 753e2ccd54a46e58196020fac9d71f9b
-project wgEncode
-readType 1x36
-rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-sex F
-subId 7560
-tableName wgEncodeRikenCageNhekNucleusPapTssHmm
-view TssHmm
-
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV2
 objType file
 bioRep 027N
@@ -20615,4 +20588,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 750464633
+# MAGIC: -181554525
