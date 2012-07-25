@@ -33,7 +33,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
-        shortLabel GM12878
+        shortLabel GM12878 Cel
         longLabel GM12878 Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU
         subGroups view=pepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
         type bigBed
@@ -42,7 +42,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
-        shortLabel GM12878
+        shortLabel GM12878 Cyt
         longLabel GM12878 Cyt Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed
@@ -51,7 +51,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
-        shortLabel K562
+        shortLabel K562 Cel
         longLabel K562 Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
         type bigBed
@@ -60,7 +60,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt off
-        shortLabel H1-hESC
+        shortLabel H1-hESC Cel
         longLabel H1-hESC Proteogenomics Gehcode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1HESC localization=CELL protocol=FASP
         type bigBed
@@ -69,7 +69,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt off
-        shortLabel H1-neurons
+        shortLabel H1-neurons Cel
         longLabel H1-neurons Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1NEURONS localization=CELL protocol=MUDPIT
         type bigBed
@@ -77,7 +77,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt off
-        shortLabel H1-hESC
+        shortLabel H1-hESC Cel
         longLabel H1-hESC Proteogenomics Gencode and Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1HESC localization=CELL protocol=MUDPIT
         type bigBed
@@ -95,7 +95,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
-        shortLabel GM12878
+        shortLabel GM12878 Cel PTM
         longLabel GM12878 Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
         type bigBed
@@ -104,7 +104,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
-        shortLabel GM12878
+        shortLabel GM12878 Cyt PTM
         longLabel GM12878 Cyt Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed
@@ -113,7 +113,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
-        shortLabel K562
+        shortLabel K562 Cel PTM
         longLabel K562 Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
         type bigBed
@@ -122,7 +122,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt off
-        shortLabel H1-hESC
+        shortLabel H1-hESC Cel PTM
         longLabel H1-hESC Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=H1HESC localization=CELL protocol=FASP
         type bigBed
@@ -131,7 +131,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt off
-        shortLabel H1-neurons
+        shortLabel H1-neurons Cel PTM
         longLabel H1-neurons Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU
         subGroups view=mPepMapGcFt cellType=H1NEURONS localization=CELL protocol=MUDPIT
         type bigBed
@@ -139,7 +139,7 @@ html wgEncodeUncBsuProtGenc.release1
 
         track wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt off
-        shortLabel H1-hESC
+        shortLabel H1-hESC Cel PTM
         longLabel H1-hESC Proteogenomics Gencode and Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=H1HESC localization=CELL protocol=MUDPIT
         type bigBed
