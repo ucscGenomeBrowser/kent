@@ -16697,7 +16697,7 @@ term dccInternalNotes
 tag DCCINTERNALNOTES
 type typeOfTerm
 label Internal DCC Notes
-description Notes about tracks that are internal to the DCC.
+description Notes about tracks that are internal to the DCC. RELOAD will be used to indicate that the table was reloaded with the same content, but with a corrected .as file.
 searchable no
 cvDefined no
 validate none
