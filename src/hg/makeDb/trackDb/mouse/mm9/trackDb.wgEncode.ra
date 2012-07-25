@@ -63,3 +63,6 @@ include wgEncodeFsuRepliChip.ra
 
 # PSU RNA-Seq (wrangler: Venkat)
 include wgEncodePsuRnaSeq.ra
+
+# PSU DNase (wrangler: Venkat)
+include wgEncodePsuDnase.ra
