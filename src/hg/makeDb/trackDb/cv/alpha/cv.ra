@@ -15282,6 +15282,12 @@ type strain
 description Strain 129, has widely available embryonic stem cells
 label 129
 
+term 129.DLCR/DLCR
+tag 129DLCR
+type strain
+description 129 strain mouse with homozygous deletion of the beta-globin LCR region, see Bender et. al. (2000). Beta-globin gene switching and DNase I sensitivity of the endogenous beta-globin locus in mice do not require the locus control region. #PROVISIONAL
+label 129.&#916;LCR/&#916;LCR
+
 term 129/Ola
 tag 129OLA
 type strain
