@@ -328,3 +328,27 @@ close (FH);
     #   743599327 bases of 2867564654 (25.931%) in intersection
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold4004:96950-104215" where name="papHam1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/papHam1/pushQ
+    cd /hive/data/genomes/papHam1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl papHam1 2> stderr.txt | grep -v transMap > papHam1.sql
+    #   real    3m56.635s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/papHam1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/papHam1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/papHam1/bbi/quality.bw
+# WARNING: papHam1 does not have seq
+# WARNING: papHam1 does not have extFile
+# WARNING: papHam1 does not have estOrientInfo
+
+    scp -p papHam1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/papHam1.sql"
+
+############################################################################

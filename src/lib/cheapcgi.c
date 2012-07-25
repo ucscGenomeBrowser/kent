@@ -431,12 +431,12 @@ for(mp=mp->multi;mp;mp=mp->next)
 	safef(varNameData, sizeof(varNameData), "%s__data", cdName);
 	AllocVar(el);
         el->val = mp->fileName;
-	slAddHead(&list, el);
-	hashAddSaveName(hash, varNameData, el, &el->name);
-	//debug
+        slAddHead(&list, el);
+        hashAddSaveName(hash, varNameData, el, &el->name);
+        //debug
         //fprintf(stderr,"GALT special: saved varNameData:[%s], mp=>fileName:[%s]\n",el->name,el->val);
         //fflush(stderr);
-	}
+        }
     else if (mp->multi)
 	{
 	warn("unexpected nested MIME structures");
@@ -1427,7 +1427,7 @@ if (width==0)
         if (min)
             sz=atoi(min) + 1000;
         width = 10;
-        while(sz/=10)
+        while (sz/=10)
             width+=10;
         }
     }
@@ -1599,7 +1599,7 @@ cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,styl
 }
 
 void cgiMakeDropListClass(char *name, char *menu[],
-	                  int menuSize, char *checked, char *class)
+                          int menuSize, char *checked, char *class)
 /* Make a drop-down list with names. */
 {
 cgiMakeDropListClassWithStyle(name, menu, menuSize, checked, class, NULL);

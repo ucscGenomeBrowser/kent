@@ -4,6 +4,7 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
 
 track ctgPos2
@@ -21,4 +22,17 @@ termRegex GJ0[0-9]+(\.1)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
+track intronEst override
+visibility hide
 
+track refGene override
+visibility hide
+
+track chainNetHg19 override
+visibility pack
+
+track chainNetMm10 override
+visibility pack
+
+track xenoRefGene override
+visibility pack

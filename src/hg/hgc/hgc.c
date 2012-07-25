@@ -1206,7 +1206,7 @@ int ix,cnt = chopLine(setting, words);
 char query[512];
 char extra[128];
 boolean gotOne = FALSE;
-for(ix=0;ix<cnt;ix++)
+for (ix=0;ix<cnt;ix++)
     {
     char *db = words[ix];          // db.table.column=title or db.table=title or db=title
     char *table,*column = "name";
@@ -1455,7 +1455,7 @@ struct extraField *col = extras;
 #else///ifndef EXTRA_FIELDS_SUPPORT
 struct asColumn *col = as->columnList;
 #endif///ndef EXTRA_FIELDS_SUPPORT
-for(;col != NULL && count < fieldCount;col=col->next)
+for (;col != NULL && count < fieldCount;col=col->next)
     {
     if (start > 0)  // skip past already known fields
         {
@@ -1898,8 +1898,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-	    if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
-		{ /*look for start of exon on neg strand */
+            if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
+                { /*look for start of exon on neg strand */
                 tCoding=TRUE;
                 dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
                 addTag(dyT,exonTag);
@@ -1909,7 +1909,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qCoding=TRUE;
                     if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                         tCodonPos = gp->exonFrames[nextEndIndex]+1;
-		    qCodonPos = tCodonPos; /* put translation back in sync */
+                    qCodonPos = tCodonPos; /* put translation back in sync */
 		    qFlip = tFlip;
 		    }
 		}
@@ -2656,9 +2656,9 @@ if (!foundPep)
             {
             hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
                 "translate", seqName);
-	    printf("Translated Protein</A> from ");
+            printf("Translated Protein</A> from ");
             if (sameString(geneTable, "refGene") )
-		{
+                {
 		printf("genomic DNA\n");
                 }
 	    else
@@ -5038,7 +5038,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                     }
                 }
             else
-               fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+                fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
             }
 
         /* Flip underline/italic/bold bits. */
@@ -5513,9 +5513,9 @@ if (row != NULL)
     /* print RGD EST Report link if it is Rat genome and it has a link to RGD */
     if (sameWord(organism, "Rat"))
 	{
-	if (hTableExists(database, "rgdEstLink"))
-	    {
-	    snprintf(query, sizeof(query),
+        if (hTableExists(database, "rgdEstLink"))
+            {
+            snprintf(query, sizeof(query),
                 "select id from %s.rgdEstLink where name = '%s';",  database, acc);
             if (sqlQuickQuery(conn2, query, rgdEstId, sizeof(rgdEstId)) != NULL)
                 {
@@ -8499,12 +8499,12 @@ if (hTableExists(database, "superfamily"))
 	struct trackDb *tdbSf = hashFindVal(trackHash, "superfamily");
         if (tdbSf != NULL)
 	    {
-	    char supfamURL[512];
-	    printf("<B>Superfamily Link: </B>");
+            char supfamURL[512];
+            printf("<B>Superfamily Link: </B>");
             safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>",
-	              tdbSf->url, genomeStr, proteinID);
+                      tdbSf->url, genomeStr, proteinID);
             printf("%s%s</A><BR>\n", supfamURL, proteinID);
-	    }
+            }
         }
 #endif
     }
@@ -8734,7 +8734,7 @@ if (hTableExists(database, "ensInfo"))
     struct ensInfo *info = NULL;
 
     safef(query, sizeof(query),
-        "select * from ensInfo where name = '%s'", item);
+          "select * from ensInfo where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8763,9 +8763,9 @@ if (sqlGetField(database, tdb->table, "name", condStr) != NULL)
             {
 	    char *pepTable = NULL, *mrnaTable = NULL;
 	    if (wordCount > 1)
-	        pepTable = words[1];
+                pepTable = words[1];
 	    if (wordCount > 2)
-	        mrnaTable = words[2];
+                mrnaTable = words[2];
 	    genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
 	    }
         }
@@ -9147,7 +9147,7 @@ if (url != NULL && url[0] != 0)
 
     while (row != NULL)
         {
-	diseaseClass = row[0];
+        diseaseClass = row[0];
 	printf(", %s", diseaseClass);
         row = sqlNextRow(sr);
 	}
@@ -9179,7 +9179,7 @@ if (url != NULL && url[0] != 0)
 
     while (row != NULL)
         {
-	upperDisease = replaceChars(row[0], "'", "''");
+        upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -9223,7 +9223,7 @@ if (url != NULL && url[0] != 0)
         {
         printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; more ...  </B>");
         printf("<A HREF=\"%s?showAllRef=Y&%s\">click here to view the complete list</A> ",
-	       hgcName(), currentCgiUrl->string);
+               hgcName(), currentCgiUrl->string);
         }
 
     safef(query, sizeof(query),
@@ -9608,7 +9608,7 @@ if (url != NULL && url[0] != 0)
             }
 	else
             {
-	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+            /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
             safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
 
             sr = sqlMustGetResult(conn, query);
@@ -9650,10 +9650,10 @@ if (url != NULL && url[0] != 0)
         {
         printf("<B>UCSC Canonical Gene ");
         printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
-	       "../cgi-bin/hgGene?hgg_gene=", kgId);
+               "../cgi-bin/hgGene?hgg_gene=", kgId);
         printf("%s</A></B>: ", kgId);
 
-	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+        safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
         sr = sqlMustGetResult(conn, query);
         row = sqlNextRow(sr);
         if (row != NULL)
@@ -9671,12 +9671,12 @@ if (url != NULL && url[0] != 0)
             row = sqlNextRow(sr);
             if (row != NULL)
                 {
-	        printf("%s", row[0]);
-	        }
+                printf("%s", row[0]);
+                }
 
-	    sqlFreeResult(&sr);
-	    }
-	else
+            sqlFreeResult(&sr);
+            }
+        else
             {
 	    printf("%s", kgDescription);
 	    }
@@ -9691,7 +9691,7 @@ if (url != NULL && url[0] != 0)
 	    int printedCnt;
 	    printedCnt = 0;
 	    while ((row = sqlNextRow(sr)) != NULL)
-	        {
+                {
                 if (printedCnt < 1)
 		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
 		else
@@ -9699,7 +9699,7 @@ if (url != NULL && url[0] != 0)
                 printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
                        "../cgi-bin/hgGene?hgg_gene=", row[0]);
                 printf("%s</A></B>", row[0]);
-	        printedCnt++;
+                printedCnt++;
 		}
             if (printedCnt >= 1) printf("<BR>\n");
 	    }
@@ -9793,7 +9793,7 @@ if (url != NULL && url[0] != 0)
         while ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (!disorderShown)
-	        {
+                {
                 printf("<B>Disorder(s):</B><UL>\n");
 		disorderShown = TRUE;
 		}
@@ -9844,10 +9844,10 @@ if (url != NULL && url[0] != 0)
 	    int printedCnt;
 	    printedCnt = 0;
 	    while ((row = sqlNextRow(sr)) != NULL)
-	        {
-	        if (printedCnt < 1)
+                {
+                if (printedCnt < 1)
 		    printf("<B>RefSeq Gene(s): </B>");
-	        else
+                else
 		    printf(", ");
                 printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=",
                        row[0], chromStart, chromEnd);
@@ -10039,7 +10039,7 @@ if (url != NULL && url[0] != 0)
             }
 	else
             {
-	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+            /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
             safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
 
             sr = sqlMustGetResult(conn, query);
@@ -10057,10 +10057,10 @@ if (url != NULL && url[0] != 0)
         {
         printf("<B>UCSC Canonical Gene ");
         printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
-	       "../cgi-bin/hgGene?hgg_gene=", kgId);
+               "../cgi-bin/hgGene?hgg_gene=", kgId);
         printf("%s</A></B>: ", kgId);
 
-	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+        safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
         sr = sqlMustGetResult(conn, query);
         row = sqlNextRow(sr);
         if (row != NULL)
@@ -10078,12 +10078,12 @@ if (url != NULL && url[0] != 0)
             row = sqlNextRow(sr);
             if (row != NULL)
                 {
-	        printf("%s", row[0]);
-	        }
+                printf("%s", row[0]);
+                }
 
-	    sqlFreeResult(&sr);
-	    }
-	else
+            sqlFreeResult(&sr);
+            }
+        else
             {
 	    printf("%s", kgDescription);
 	    }
@@ -10098,7 +10098,7 @@ if (url != NULL && url[0] != 0)
 	    int printedCnt;
 	    printedCnt = 0;
 	    while ((row = sqlNextRow(sr)) != NULL)
-	        {
+                {
 	        if (printedCnt < 1)
 		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
 		else
@@ -10106,7 +10106,7 @@ if (url != NULL && url[0] != 0)
                 printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
                        "../cgi-bin/hgGene?hgg_gene=", row[0]);
                 printf("%s</A></B>", row[0]);
-	        printedCnt++;
+                printedCnt++;
 		}
             if (printedCnt >= 1) printf("<BR>\n");
 	    }
@@ -10215,13 +10215,13 @@ if (url != NULL && url[0] != 0)
         {
 	if (row[0] != NULL)
 	    {
-	    char *replStr;
-	    char *chp;
-	    replStr= cloneString(row[0]);
+            char *replStr;
+            char *chp;
+            replStr= cloneString(row[0]);
 
             // just take the first AA replacement if there are multiple
-	    chp = strstr(replStr, ",");
-	    if (chp != NULL) *chp = '\0';
+            chp = strstr(replStr, ",");
+            if (chp != NULL) *chp = '\0';
 
 	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
 	    }
@@ -13917,9 +13917,9 @@ if (row != NULL)
         printf("<H3>Genetic Map Position</H3>\n");
 	printf("<TABLE>\n");
 	printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
-	printf("<TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+        printf("<TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
                infoRow->stsMarkerName, infoRow->Chr, infoRow->geneticPos);
-	printf("</TABLE><P>\n");
+        printf("</TABLE><P>\n");
 
         /* Print out alignment information - full sequence */
         webNewSection("Genomic Alignments:");
@@ -14031,17 +14031,22 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
 	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
 	printf("</TABLE>\n");
-	htmlHorizontalLine();
-	printf("<TABLE>\n");
-	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
-        if( infoRow->UiStsId != 0)
-            printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
-        if( infoRow->MGIId != 0)
-              printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\" TARGET=_BLANK>%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId );
-        if( strcmp(infoRow->MGIName, "") )
+        htmlHorizontalLine();
+        printf("<TABLE>\n");
+        printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
+        if (infoRow->UiStsId != 0)
+            printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD>"
+                   "<A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
+                   "TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+        if (infoRow->MGIId != 0)
+            printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B>"
+                   "<A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?"
+                   "accID=MGI%c3A%d\" TARGET=_BLANK>%d</A></TD></TR>\n",
+                   sChar,infoRow->MGIId,infoRow->MGIId );
+        if (strcmp(infoRow->MGIName, ""))
             printf("<TR><TH ALIGN=left>MGI Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->MGIName);
         printf("</TABLE>\n");
-	htmlHorizontalLine();
+        htmlHorizontalLine();
 	/* Print out primer information */
 	printf("<TABLE>\n");
 	printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer1);
@@ -14058,13 +14063,13 @@ if (row != NULL)
             printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
                    infoRow->wigName, infoRow->wigChr, infoRow->wigGeneticPos);
             }
-        if(strcmp(infoRow->mgiName, ""))
+        if (strcmp(infoRow->mgiName, ""))
             {
             printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
             printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
                    infoRow->mgiName, infoRow->mgiChr, infoRow->mgiGeneticPos);
             }
-        if(strcmp(infoRow->rhName, ""))
+        if (strcmp(infoRow->rhName, ""))
             {
             printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH><TH ALIGN=left WIDTH=150>Score</TH?</TR>\n");
             printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD><TD WIDTH=150>%.2f</TD></TR>\n",
@@ -14072,9 +14077,9 @@ if (row != NULL)
             }
         printf("</TABLE><P>\n");
 
-	/* Print out alignment information - full sequence */
-	webNewSection("Genomic Alignments:");
-	sprintf(stsid,"%d",infoRow->identNo);
+        /* Print out alignment information - full sequence */
+        webNewSection("Genomic Alignments:");
+        sprintf(stsid,"%d",infoRow->identNo);
 	sprintf(stsPrimer, "%d_%s", infoRow->identNo, infoRow->name);
         sprintf(stsClone, "%d_%s_clone", infoRow->identNo, infoRow->name);
 
@@ -14133,7 +14138,7 @@ if (row != NULL)
 	    printf("<H3>This is the only location found for %s</H3>\n",marker);
         else
 	    {
-	    sqlFreeResult(&sr);
+            sqlFreeResult(&sr);
             printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
             printf("<TABLE>\n");
             sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -14141,10 +14146,10 @@ if (row != NULL)
                     table, marker, seqName, start, end);
             sr = sqlGetResult(conn,query);
             while ((row = sqlNextRow(sr)) != NULL)
-                {
-		stsMapMouseNewStaticLoad(row, &stsRow);
-		printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+            {
+                stsMapMouseNewStaticLoad(row, &stsRow);
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+                       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 		}
 	    printf("</TABLE>\n");
 	    }
@@ -14205,17 +14210,21 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
 	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
 	printf("</TABLE>\n");
-	htmlHorizontalLine();
-	printf("<TABLE>\n");
-	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
-        if( infoRow->UiStsId != 0)
-            printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
-        if( infoRow->RGDId != 0)
-              printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\" TARGET=_BLANK>%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId );
-        if( strcmp(infoRow->RGDName, "") )
+        htmlHorizontalLine();
+        printf("<TABLE>\n");
+        printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
+        if (infoRow->UiStsId != 0)
+            printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD>"
+                   "<A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
+                   "TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+        if (infoRow->RGDId != 0)
+            printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B>"
+                   "<A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\" "
+                   "TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->RGDId,infoRow->RGDId );
+        if (strcmp(infoRow->RGDName, ""))
             printf("<TR><TH ALIGN=left>RGD Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->RGDName);
         printf("</TABLE>\n");
-	htmlHorizontalLine();
+        htmlHorizontalLine();
 	/* Print out primer information */
 	printf("<TABLE>\n");
 	printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer1);
@@ -17620,9 +17629,9 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Type:</B> %s<BR>", ncRna->type);
     if (ncRna->extGeneId != NULL)
     if (!sameWord(ncRna->extGeneId, ""))
-	{
+        {
         printf("<B>External Gene ID:</B> %s<BR>", ncRna->extGeneId);
-	}
+        }
     bed = bedLoadN(row+hasBin, bedSize);
     ncRnaPrintPos(bed, bedSize);
     }
@@ -19214,9 +19223,9 @@ for(i = 0; i < length; i++)
         else
             printf("<tr><td align=center>");
 
-	/* if we have a url, create a reference */
-	if(differentString(url,""))
-	    printf("<a href=\"%s\" TARGET=_BLANK>%c</a>", url, header[i]);
+        /* if we have a url, create a reference */
+        if(differentString(url,""))
+            printf("<a href=\"%s\" TARGET=_BLANK>%c</a>", url, header[i]);
 	else
 	    printf("%c", header[i]);
 
@@ -19780,8 +19789,8 @@ if ((smp->chromStart + smp->samplePosition[i] - humMusWinSize / 2 + 1) < left
     return(0);
 
 if( smp->chromStart + smp->samplePosition[i] -
-    humMusWinSize / 2  + 1< thisStart
-    && smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  )
+                                                humMusWinSize / 2  + 1  < thisStart
+&&  (smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2     ) < thisStart  )
     return(0);
 
 if ((smp->chromStart + smp->samplePosition[i] -  humMusWinSize / 2 + 1) > right
@@ -19790,9 +19799,9 @@ if ((smp->chromStart + smp->samplePosition[i] -  humMusWinSize / 2 + 1) > right
 
 
 if( smp->chromStart + smp->samplePosition[i] -
-    humMusWinSize / 2 + 1 > thisEnd
+                                                humMusWinSize / 2 + 1  > thisEnd
     && smp->chromStart + smp->samplePosition[i] +
-    humMusWinSize / 2  > thisEnd  )
+                                                humMusWinSize / 2      > thisEnd  )
     return(0);
 
 return(1);
@@ -20328,8 +20337,8 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    printf("alignment</A> ");
 	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTable=%s\">",
 		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->track);
-	    printf("peptide</A> ");
+                psl->tStart, psl->tEnd, database,tdb->track);
+            printf("peptide</A> ");
             printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
                 100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
                 100.0 * (psl->match + psl->repMatch) / (psl->match + psl->repMatch + psl->misMatch),
@@ -20367,7 +20376,7 @@ if (sqlTableExists(conn, "sgdOtherDescription"))
     struct sqlResult *sr;
     char query[256], **row;
     safef(query, sizeof(query),
-        "select * from sgdOtherDescription where name = '%s'", item);
+          "select * from sgdOtherDescription where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -20396,10 +20405,10 @@ if (sqlTableExists(conn, "sgdClone"))
     struct sqlResult *sr;
     char query[256], **row;
     safef(query, sizeof(query),
-        "select * from sgdClone where name = '%s'", item);
+          "select * from sgdClone where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
+        {
 	sgdCloneStaticLoad(row+1, &sgd);
 	dyStringPrintf(dy, "<B>ATCC catalog number:</B><A HREF=\"http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=%s&Template=uniqueClones\" TARGET=_blank>%s</A><BR>\n", sgd.atccName, sgd.atccName);
 	}
@@ -23196,13 +23205,13 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 
     ii = 0;
-    chrom       = row[ii];ii++;
-    chromStart  = row[ii];ii++;
-    chromEnd    = row[ii];ii++;
-    fibroblast  = row[ii];ii++;
-    iPS		= row[ii];ii++;
-    absArea	= row[ii];ii++;
-    gene	= row[ii];ii++;
+chrom       = row[ii];ii++;
+chromStart  = row[ii];ii++;
+chromEnd    = row[ii];ii++;
+fibroblast  = row[ii];ii++;
+    iPS         = row[ii];ii++;
+    absArea     = row[ii];ii++;
+    gene        = row[ii];ii++;
     dist2gene	= row[ii];ii++;
     relation2gene = row[ii];ii++;
     dist2island	= row[ii];ii++;
@@ -23651,7 +23660,7 @@ if (sqlTableExists(conn, confTable))
     char query[256], **row;
 
     safef(query, sizeof(query),
-        "select * from %s where id = '%s'", confTable, item);
+          "select * from %s where id = '%s'", confTable, item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -24135,9 +24144,8 @@ if (isCustomTrack(track))
             break;
     }
 
-if ((!isCustomTrack(track) && dbIsFound)  ||
-        ((ct!= NULL) && (ct->dbTrackType != NULL) &&
-            sameString(ct->dbTrackType, "maf")))
+if ((!isCustomTrack(track) && dbIsFound)
+||  ((ct!= NULL) && (ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (isHubTrack(track))
@@ -24933,7 +24941,7 @@ else if (sameWord(table, "transRegCodeProbe"))
         "transRegCodeCondition", "growthCondition");
     }
 else if (sameWord(table, "wgEncodeRegDnaseClustered") ||
-	sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
+        sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
     }
