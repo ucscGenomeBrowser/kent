@@ -178,8 +178,8 @@ if (!hIsGsidServer() && !hIsCgbServer())
     {
     boolean hasCustomTracks = customTracksExist(cart, NULL);
     printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-        hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
-        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
+           hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
+           hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
 

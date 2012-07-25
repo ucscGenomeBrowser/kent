@@ -6,3 +6,8 @@ html gold
 track gap override
 html gap
 
+track chainNetMm10 override
+visibility pack
+
+track xenoRefGene override
+visibility pack

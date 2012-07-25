@@ -300,3 +300,20 @@ micMur1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_31:985166-987669" where name="micMur1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/micMur1/pushQ
+    cd /hive/data/genomes/micMur1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl micMur1 2> stderr.txt | grep -v transMap > micMur1.sql
+    #   real    3m52.913s
+
+    scp -p micMur1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/micMur1.sql"
+
+############################################################################

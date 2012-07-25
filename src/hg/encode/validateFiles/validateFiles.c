@@ -411,14 +411,15 @@ if (i == 0)
     if (s==row)
         reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
     else
-        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
+        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,
+                   name, row);
     return 0;
     }
 else if (privateData)   // PrivateData means sequence should be empty
     {
     if (s==row)
-        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data"
-            , lf->fileName, lf->lineIx,name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data",
+                   lf->fileName, lf->lineIx,name);
     else
         reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]"
 	    , lf->fileName, lf->lineIx,name, row);
@@ -768,9 +769,9 @@ if (strand == '-')
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
     reportWarn("Error [file=%s, line=%d]: "
-        "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
-        lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
-        chrom, chromStart, chromEnd, strand);
+               "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+               lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+               chrom, chromStart, chromEnd, strand);
     return FALSE;
     }
 
@@ -1278,15 +1279,14 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
         {
-        reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
-            chroms->name);
+        reportErrAbort("bigWig contains invalid chromosome name: %s\n", chroms->name);
         }
     else
         {
         if (*size != chroms->size)
             {
-            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-                chroms->name, *size, chroms->size);
+            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, "
+                           "not %d bases\n", chroms->name, *size, chroms->size);
             }
         }
     }
@@ -1457,8 +1457,10 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
                 squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
             reportWarn("Error [file=%s, line=%d]: "
-            "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-                file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+                       "total quality at mismatches too high (found %d, maximum is %d) "
+                       "(%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+                       file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart,
+                       seq, match, dna, squal);
             }        
         }
     return FALSE;

@@ -768,4 +768,90 @@ panTro4.genbank.est.native.load = yes
     git push
     make etc-update
 
+############################################################################
+# LASTZ Rhesus rheMac3 run (DONE 2012-07-12 - Chin)
+    mkdir /hive/data/genomes/panTro4/bed/lastzRheMac3.2012-07-19
+    cd /hive/data/genomes/panTro4/bed/lastzRheMac3.2012-07-19
+    cat << '_EOF_' > DEF
+# chimp vs rhesus
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Chimp PanTro4
+SEQ1_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ1_LEN=//hive/data/genomes/panTro4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Rhesus RheMac3
+SEQ2_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ2_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro4/bed/lastzRheMac3.2012-07-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen -S panTro4_rheMac3 # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+    -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+    -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+    -syntenicNet > do.log 2>&1 &
+    # real    4327m41.345s
+
+    cat fb.panTro4.chainRheMac3Link.txt
+    #   2362219217 bases of 2902338967 (81.390%) in intersection
+    cd /hive/data/genomes/panTro4/bed
+    ln -s lastzRheMac3.2012-07-19 lastz.rheMac3
+
+    #   running the swap  
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    -swap /hive/data/genomes/panTro4/bed/lastzRheMac3.2012-07-19/DEF \
+    -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+    -syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
+    -bigClusterHub=swarm > swap.log 2>&1 &
+    #   real    82m21.660s
+    cat fb.rheMac3.chainPanTro4Link.txt
+    #   2278587464 bases of 2639145830 (86.338%) in intersection
+   # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.panTro4.swap lastz.panTro4
+
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr3:132959918-132967918" where name="panTro4";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/panTro4/pushQ
+    cd /hive/data/genomes/panTro4/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl panTro4 2> stderr.txt | grep -v transMap > panTro4.sql
+    #   real    3m46.246s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/panTro4/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/panTro4/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/panTro4/bbi/quality.bw
+# WARNING: panTro4 does not have seq
+# WARNING: panTro4 does not have extFile
+# WARNING: panTro4 does not have estOrientInfo
+
+    scp -p panTro4.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/panTro4.sql"
+
+############################################################################

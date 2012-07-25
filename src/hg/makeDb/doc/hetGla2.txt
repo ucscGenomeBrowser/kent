@@ -442,3 +442,22 @@ hetGla2.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH602185:522994-528500" where name="hetGla2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/hetGla2/pushQ
+    cd /hive/data/genomes/hetGla2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl hetGla2 2> stderr.txt | grep -v transMap > hetGla2.sql
+    #   real    3m59.755s
+
+    scp -p hetGla2.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < hetGla2.sql
+
+############################################################################

@@ -208,7 +208,8 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class='top
 
 /* Sequence View */
 if (hIsGisaidServer())
-    {hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class='topbar' "
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?db=%s\" class='topbar' "
             "style='color:#FFFFFF;'>Sequence View</A></TD>", database);
     }
 else
