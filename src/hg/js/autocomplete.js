@@ -69,9 +69,9 @@ var suggestBox = {
         var lastSelected = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var str;
         if(assemblySupportsGeneSuggest) {
-            str = "enter new position, gene symbol or annotation search terms";
+            str = "enter position, gene symbol or search terms";
         } else {
-            str = "enter new position or annotation search terms";
+            str = "enter position or search terms";
         }
         $('#positionInput').Watermark(str, '#686868');
         if(assemblySupportsGeneSuggest) {

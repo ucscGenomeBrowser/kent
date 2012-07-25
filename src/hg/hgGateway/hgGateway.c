@@ -109,7 +109,7 @@ puts("<td align=center>\n");
 hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(db, position));
 hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", addCommasToPos(db, position));
 puts("</td><td align=center>\n");
-hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='45'>\n");
 if(supportsSuggest)
     hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db));
 printf("</td>\n");
