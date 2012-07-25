@@ -1312,8 +1312,10 @@ char *contextSpecificHelpLabel = NULL;
 void setContextSpecificHelp(char *link, char *label)
 // Override default behavior for the context specific help link
 {
-contextSpecificHelpLink = link;
-contextSpecificHelpLabel = label;
+if(link)
+    contextSpecificHelpLink = cloneString(link);
+if(label)
+    contextSpecificHelpLabel = cloneString(label);
 }
 
 char *menuBar(struct cart *cart)
