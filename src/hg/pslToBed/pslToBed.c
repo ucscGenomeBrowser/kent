@@ -32,40 +32,50 @@ struct cds
 int start, end;   // cds start and end 
 };
 
+static unsigned getTargetForQuery(struct psl *psl, int queryAddress)
+// get target address for query address from PSL
+{
+int  blockNum;
+
+for (blockNum=0; blockNum < psl->blockCount; blockNum++)
+    {
+    if (psl->qStarts[blockNum] > queryAddress)
+	{
+	// this block starts past the queryAddress
+	// just point to the beginning of this block
+	return psl->tStarts[blockNum];
+	}
+    else if (psl->qStarts[blockNum] + psl->blockSizes[blockNum] > queryAddress)
+	{
+	// since block addresses are always increasing we know if the end
+	// of the block is beyond our address that the address is 
+	// in this block
+	unsigned offsetInBlock = queryAddress - psl->qStarts[blockNum];
+
+	assert(offsetInBlock < psl->blockSizes[blockNum]);
+
+	return psl->tStarts[blockNum] + offsetInBlock;
+	}
+    }
+
+// we don't have any blocks with this query in it, just point
+// to the end
+return psl->tEnd;
+}
+
 static void setThick(struct psl *psl, struct bed *bed, struct cds *cds)
 // set thickStart and thickEnd based on CDS record
 {
-int ii;
 int thickStart, thickEnd;
 
-thickStart = thickEnd = 0;
-for(ii=0; ii < psl->blockCount; ii++)
-    {
-    if (psl->qStarts[ii] + psl->blockSizes[ii] > cds->start - 1)
-	{
-	int offset = cds->start - psl->qStarts[ii];
-	if (offset < 0)
-	    offset = 0;
-	thickEnd = thickStart = psl->tStarts[ii] + offset - 1;
-	break;
-	}
-    }
+// we subtract one from start to convert to PSL coordinate system
+thickStart = getTargetForQuery(psl, cds->start - 1); 
+thickEnd = getTargetForQuery(psl, cds->end); 
 
-for(; ii < psl->blockCount; ii++)
-    {
-    if (psl->qStarts[ii] + psl->blockSizes[ii] >= cds->end)
-	{
-	int offset = cds->end - psl->qStarts[ii];
-	if (offset < 0)
-	    offset = 0;
-	thickEnd = psl->tStarts[ii] + offset;
-	break;
-	}
-    }
-if (ii >= psl->blockCount)
-    {
-    thickEnd = psl->tStarts[ii - 1] + psl->blockSizes[ii - 1];
-    }
+// if thickStart equals thickEnd, then there is no CDS
+if (thickStart == thickEnd)
+    thickStart = thickEnd = 0;
+
 bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
@@ -83,7 +93,9 @@ while ((psl = pslNext(pslLf)) != NULL)
     if (cdsHash)
 	{
 	struct cds *cds = hashFindVal(cdsHash, psl->qName);
-	if (cds != NULL)
+	if (cds == NULL)
+	    bed->thickStart = bed->thickEnd = 0;
+	else
 	    setThick(psl, bed, cds);
 	}
     bedTabOutN(bed, 12, bedFh);
