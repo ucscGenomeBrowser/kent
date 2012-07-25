@@ -3036,3 +3036,24 @@ TMPDIR=/scratch/tmp
     #	1933784568 bases of 2822760080 (68.507%) in intersection
 
 ############################################################################
+# LASTZ Rhesus rheMac3 SWAP (DONE - 2012-07-19 - Chin)
+    cd /hive/data/genomes/rheMac3/bed/lastzCalJac3.2012-07-19
+    cat fb.rheMac3.chainCalJac3Link.txt
+    #   1893656467 bases of 2639145830 (71.753%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/calJac3/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.rheMac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/rheMac3/bed/lastzCalJac3.2012-07-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+    -chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    84m31.344s
+    cat fb.calJac3.chainRheMac3Link.txt
+    #   1931533122 bases of 2752505800 (70.174%) in intersection
+
+    cd /hive/data/genomes/calJac3/bed
+    ln -s blastz.rheMac3.swap lastz.rheMac3
+
+############################################################################
