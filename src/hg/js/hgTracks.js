@@ -2556,6 +2556,27 @@ var imageV2 = {
         }
     },
 
+    loadSuggestBox: function ()
+    {
+        if($('#positionInput').length) {
+            suggestBox.init(getDb(), $("#suggestTrack").length > 0,
+                            function (item) {
+                                genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
+                            },
+                            function (position) {
+                                genomePos.set(position, commify(getSizeFromCoordinates(position)));
+                            });
+            // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
+            if($("#suggestTrack").length) {
+                $(document.TrackHeaderForm).submit(function(event) {
+                                                       if($('#hgFindMatches').length) {
+                                                           vis.makeTrackVisible($("#suggestTrack").val());
+                                                       }
+                                                   });
+            }
+        }
+    },
+    
     afterReload: function ()
     {   // Reload various UI widgets after updating imgTbl map.
         dragReorder.init();
@@ -2572,6 +2593,7 @@ var imageV2 = {
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
         imageV2.markAsDirtyPage();
+        imageV2.loadSuggestBox();
     },
 
     updateImgForId: function (html, id)
@@ -2978,25 +3000,7 @@ $(document).ready(function()
             return false;
     }
     initVars();
-
-    var db = getDb();
-    if($('#positionInput').length) {
-        suggestBox.init(db, hgTracks.assemblySupportsGeneSuggest,
-             function (item) {
-                  genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
-             },
-             function (position) {
-                  genomePos.set(position, commify(getSizeFromCoordinates(position)));
-             });
-             // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
-             if($("#suggestTrack").length) {
-                  $(document.TrackHeaderForm).submit(function(event) {
-                                                  if($('#hgFindMatches').length) {
-                                                      vis.makeTrackVisible($("#suggestTrack").val());
-                                                  }
-                                              });
-             }
-    }
+    imageV2.loadSuggestBox();
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
         var allLinks = $('a');

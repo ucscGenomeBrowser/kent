@@ -73,6 +73,7 @@ var suggestBox = {
         } else {
             str = "enter position or search terms";
         }
+        $('#positionInput').val("");
         $('#positionInput').Watermark(str, '#686868');
         if(assemblySupportsGeneSuggest) {
             $('#positionInput').autocomplete({
