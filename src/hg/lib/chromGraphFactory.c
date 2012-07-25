@@ -212,7 +212,13 @@ return count;
 static char *findSnpTable(struct sqlConnection *conn)
 /* Return name of SNP table if any */
 {
-char *tables[] = {"snp134", "snp133", "snp132", "snp131", "snp130", "snp129", "snp128", "snp127", "snp126", "snp125", "snp"};
+char *tables[] = {
+"snp145", "snp144", "snp143", "snp142", "snp141",
+"snp140", "snp139", "snp138", "snp137", "snp136",
+"snp135", "snp134", "snp133", "snp132", "snp131", 
+"snp130", "snp129", "snp128", "snp127", "snp126", 
+"snp125", "snp"
+};
 int i;
 for (i=0; i<ArraySize(tables); ++i)
     if (sqlTableExists(conn, tables[i]))
