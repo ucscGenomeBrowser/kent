@@ -7774,7 +7774,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view Alignments
 
@@ -7801,7 +7801,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view Alignments
 
@@ -7828,7 +7828,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view RawData
 
@@ -7855,7 +7855,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view RawData
 
@@ -7882,7 +7882,7 @@ replicate 1
 seqPlatform Illumina_GA2x
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view RepSignal
 
@@ -7909,7 +7909,7 @@ replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 view RepSignal
 
@@ -7935,9 +7935,9 @@ project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
-strain C57BL/6
+strain Unknown
 subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1428255089
+# MAGIC: 1429301323

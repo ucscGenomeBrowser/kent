@@ -176,19 +176,19 @@ hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
 if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
+    {
+    hPrintf(" (aka %s", spDisplayId);
+    /* show once if the new and old displayId are the same */
+    oldDisplayId = oldSpDisplayId(spDisplayId);
+    if (oldDisplayId != NULL)
         {
-        hPrintf(" (aka %s", spDisplayId);
-        /* show once if the new and old displayId are the same */
-        oldDisplayId = oldSpDisplayId(spDisplayId);
-        if (oldDisplayId != NULL)
+        if (!sameWord(spDisplayId, oldDisplayId))
             {
-            if (!sameWord(spDisplayId, oldDisplayId))
-                {
-                hPrintf(" or %s", oldSpDisplayId(spDisplayId));
-	        }
-	    }
-	hPrintf(")\n");
-	}
+            hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+            }
+        }
+    hPrintf(")\n");
+    }
 hPrintf(" %s\n", description);
 hPrintf("</font><br>");
 
@@ -511,10 +511,10 @@ else
 	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
 		{
-	        hUserAbort(
-		"'%s' does not seem to be a valid UniProtKB protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
-		        , queryID);
-	        }
+	        hUserAbort("'%s' does not seem to be a valid UniProtKB protein ID or a gene "
+	                   "symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> "
+	                   "to start another query.", queryID);
+                }
 
 	    proteinInSupportedGenome = FALSE;
 	    database = strdup(GLOBAL_PB_DB);

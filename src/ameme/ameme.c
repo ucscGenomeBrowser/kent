@@ -815,7 +815,7 @@ dnaMark0(list, mark0, slogMark0);
 }
 
 void makeMark1(struct seqList *seqList, double mark0[5], int slogMark0[5],
-        double mark1[5][5], int slogMark1[5][5])
+               double mark1[5][5], int slogMark1[5][5])
 /* Make up 1st order Markov model - probability that one nucleotide
  * will follow another. */
 {
@@ -832,7 +832,7 @@ void makeTripleTable(struct seqList *seqList,
 {
 struct dnaSeq *list = seqsInList(seqList);
 dnaMarkTriple(list, mark0, slogMark0, mark1, slogMark1,
-        mark2, slogMark2, offset, advance, earlyEnd);
+              mark2, slogMark2, offset, advance, earlyEnd);
 }
 
 void makeMark2(struct seqList *seqList,
@@ -1426,8 +1426,8 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
                 }
             else
                 fprintf(hitOut, "%d\t%2.3f\t%s\t%d\n",
-                    profileId, invSlogScale*pos->score,
-                    seqEl->seq->name, pos->pos);
+                        profileId, invSlogScale*pos->score,
+                        seqEl->seq->name, pos->pos);
             }
         }
     posList = slCat(newPosList, posList);
@@ -1692,7 +1692,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
             if (considerRc)
                 rcProfile =  rcProfileCopy(profile);
             profile->score = iterateProfile(profile, rcProfile, goodSeq,
-	        goodSeqElSize, NULL, NULL, FALSE, NULL, 0, FALSE);
+                                            goodSeqElSize, NULL, NULL, FALSE, NULL, 0, FALSE);
 	    freeProfile(&rcProfile);
             slAddHead(&profileList, profile);
 	    if (++progTime >= 50)
@@ -1869,7 +1869,7 @@ for (frame=0; frame<3; frame += 1)
     {
     int readFrame = (frame+2)%3;
     makeTripleTable(bgSeq, mark0, slogMark0, mark1, slogMark1,
-        codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
+                    codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
     }
 /* Usually there's a little noise in our data that makes stop codons appear at a small
  * frequency in coding regions.  We won't eliminate this completely, but reduce it
@@ -2005,7 +2005,7 @@ return bestScore;
 }
 
 void showProfHits(struct profile *prof, struct profile *rcProf, struct seqList *seqList,
-                    int seqElSize, int nameSize, int *retBestScore)
+                  int seqElSize, int nameSize, int *retBestScore)
 /* Display profile in context of goodSeq. While we're scanning through also
  * return best score of profile on any sequence. */
 {
@@ -2085,7 +2085,7 @@ for (i=0; i<maxIterations; ++i)
     lastScore = score;
     lastHash = profHash;
     score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize,
-        &newProf, &rcNewProf, FALSE, NULL, 0, FALSE);
+                           &newProf, &rcNewProf, FALSE, NULL, 0, FALSE);
     if (prof != initProf)
         freeProfile(&prof);
     freeProfile(&rcProf);
@@ -2296,7 +2296,7 @@ fputc(c, htmlOut);
 }
 
 void colorProfiles(struct profile *profList, struct seqList *seqList,
-        int seqSize, boolean considerRc)
+                   int seqSize, boolean considerRc)
 /* Display profiles in color on sequences. */
 {
 int profCount = slCount(profList);
@@ -2677,7 +2677,7 @@ makeTempName(&tn, "imp", ".pfl");
 fprintf(htmlOut, "<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n",
     numMotifs, goodSeqListSize, goodSeqElSize);
 fprintf(htmlOut,"<P>Settings are %s location; %sinclude reverse complement; %d occurrences "
-            "per sequence; %s align; ", (useLocation ? "use" : "ignore"),
+        "per sequence; %s align; ", (useLocation ? "use" : "ignore"),
     (considerRc ? "" : "don't "), maxOcc,
     (leftAlign ? "left" : "right") );
 fprintf(htmlOut, "restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",

@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db panTro4
+clade mammal
+genomeCladePriority 10
+scientificName Pan troglodytes
+commonName Chimp
+assemblyDate Feb. 2011
+assemblyLabel CSAC Pan_troglodytes-2.1.4 (GCA_000001515.4)
+assemblyShortLabel Pan_troglodytes-2.1.4
+orderKey 229
+# chrM bioproject: 10627 - the RefSeq genome project
+mitoAcc NC_001643
+fastaFiles /hive/data/genomes/panTro4/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/panTro4/ucsc/*.agp.gz
+dbDbSpeciesDir chimp
+photoCreditURL http://www.smm.org/
+photoCreditName Science Museum of Minnesota
+ncbiGenomeId 202
+ncbiAssemblyId 255628
+ncbiAssemblyName Pan_troglodytes-2.1.4
+# there are a number of projects, a refSeq genome, chrY project, and
+# chr22 project
+ncbiBioProject 13184
+genBankAccessionID GCA_000001515.4
+taxId   9598

@@ -104,7 +104,7 @@ int guidelineSpacing = 12;  /* Pixels between guidelines. */
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
 
 int rulerMode = tvHide;         /* on, off, full */
-struct hvGfx *hvgSide = NULL;     // An extra pointer to a side label image that can be built if needed
+struct hvGfx *hvgSide = NULL;   // Extra pointer to a sideLabel image that can be built if needed
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -125,7 +125,7 @@ int imagePixelHeight = 0;
 struct hash *oldVars = NULL;
 struct jsonElement *jsonForClient = NULL;
 
-boolean hideControls = FALSE;		/* Hide all controls? */
+boolean hideControls = FALSE;           /* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
 boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when requesting just one track) */
 
@@ -243,18 +243,18 @@ for (group = groupList; group != NULL; group = group->next)
         /* if default vis then reset group priority */
         if (changeVis == -1)
             group->priority = group->defaultPriority;
-    for (tr = group->trackList; tr != NULL; tr = tr->next)
-        {
-        struct track *track = tr->track;
-	struct trackDb *tdb = track->tdb;
-        if (changeVis == -1) // to default
+        for (tr = group->trackList; tr != NULL; tr = tr->next)
+            {
+            struct track *track = tr->track;
+            struct trackDb *tdb = track->tdb;
+            if (changeVis == -1) // to default
                 {
-                if(tdbIsComposite(tdb))
+                if (tdbIsComposite(tdb))
                     {
                     safef(pname, sizeof(pname),"%s.*",track->track); //to remove all settings associated with this composite!
                     cartRemoveLike(cart,pname);
                     struct track *subTrack;
-                    for(subTrack = track->subtracks;subTrack != NULL; subTrack = subTrack->next)
+                    for (subTrack = track->subtracks;subTrack != NULL; subTrack = subTrack->next)
                         {
                         subTrack->visibility = tdb->visibility;
                         cartRemove(cart, subTrack->track);
@@ -316,10 +316,10 @@ for (group = groupList; group != NULL; group = group->next)
                 if (tdbIsComposite(tdb))
                     {
                     struct track *subtrack;
-                    for(subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
+                    for (subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
                         {
-                        if (changeVis == tvHide)
-                            cartRemove(cart, subtrack->track); // Since subtrack level vis is an override, simply remove it to hide it
+                        if (changeVis == tvHide)               // Since subtrack level vis is an
+                            cartRemove(cart, subtrack->track); // override, simply remove to hide
                         else
                             cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
                         subtrack->visibility = changeVis;
@@ -343,16 +343,16 @@ return x;
 
 
 static void mapBoxTrackUi(struct hvGfx *hvg, int x, int y, int width,
-              int height, char *name, char *shortLabel, char *id)
+                          int height, char *name, char *shortLabel, char *id)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 x = hvGfxAdjXW(hvg, x, width);
 char *url = trackUrl(name, chromName);
 
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
-    if(curSlice)
+    if (curSlice)
         sliceAddLink(curSlice,url,shortLabel);
     }
 else
@@ -366,25 +366,25 @@ freeMem(url);
 }
 
 static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, int height,
-    struct track *toggleGroup, char *chrom,
-    int start, int end, char *message)
+                                   struct track *toggleGroup, char *chrom,
+                                   int start, int end, char *message)
 /*print out a box along the DNA bases that toggles a cart variable
  * "complement" to complement the DNA bases at the top by the ruler*/
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, width);
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?complement_%s=%d&%s",
-        hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
+    safef(link,sizeof(link),"%s?complement_%s=%d&%s", hgTracksName(), database,
+          !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE),ui->string);
     imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, NULL);
     }
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    hPrintf("HREF=\"%s?complement_%s=%d",
-        hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
+    hPrintf("HREF=\"%s?complement_%s=%d", hgTracksName(), database,
+           !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
     hPrintf("&%s\"", ui->string);
     freeDyString(&ui);
     if (message != NULL)
@@ -413,7 +413,8 @@ static boolean trackUsesRemoteData(struct track *track)
 if (!IS_KNOWN(track->remoteDataSource))
     {
     SET_TO_NO(track->remoteDataSource);
-    //if (track->bbiFile != NULL)   // FIXME: Chicken or the egg.  bigWig/bigBed "bbiFile" filled in by loadItems, but we don't want to load items.
+    //if (track->bbiFile != NULL)   // FIXME: Chicken or the egg. bigWig/bigBed "bbiFile" filled
+    //                              //        in by loadItems, but we don't want to load items.
     //    {
     //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
     //        SET_TO_YES(track->remoteDataSource);
@@ -582,19 +583,19 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     {
     /* If the start or end is encompassed by this band fill
        it in. */
-    if(winStart >= cb->chromStart &&
-       winStart <= cb->chromEnd)
-	{
-	safef(startBand, buffSize, "%s", cb->name);
-	}
+    if (winStart >= cb->chromStart
+    &&  winStart <= cb->chromEnd)
+        {
+        safef(startBand, buffSize, "%s", cb->name);
+        }
     /* End is > rather than >= due to odditiy in the
        cytoband track where the starts and ends of two
        bands overlaps by one. */
-    if(winEnd > cb->chromStart &&
-       winEnd <= cb->chromEnd)
-	{
-	safef(endBand, buffSize, "%s", cb->name);
-	}
+    if (winEnd >  cb->chromStart
+    &&  winEnd <= cb->chromEnd)
+        {
+        safef(endBand, buffSize, "%s", cb->name);
+        }
     }
 }
 
@@ -671,14 +672,14 @@ if(doIdeo)
     ideoTrack->ixColor = hvGfxFindRgb(hvg, &ideoTrack->color);
     ideoTrack->ixAltColor = hvGfxFindRgb(hvg, &ideoTrack->altColor);
     hvGfxSetClip(hvg, 0, gfxBorder, ideoWidth, ideoTrack->height);
-    if(sameString(startBand, endBand))
+    if (sameString(startBand, endBand))
         safef(title, sizeof(title), "%s (%s)", chromName, startBand);
     else
         safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
     hvGfxTextCentered(hvg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
-    ideoTrack->drawItems(ideoTrack, winStart, winEnd, hvg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
-             font, ideoTrack->ixColor, ideoTrack->limitedVis);
+    ideoTrack->drawItems(ideoTrack, winStart, winEnd, hvg, textWidth+4, gfxBorder,
+                         ideoWidth-textWidth-4, font, ideoTrack->ixColor, ideoTrack->limitedVis);
     hvGfxUnclip(hvg);
     /* Save out picture and tell html file about it. */
     hvGfxClose(&hvg);
@@ -691,7 +692,7 @@ if (doIdeo && !psOutput)
     {
     hPrintf("<TR><TD HEIGHT=5></TD></TR>");
     hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom'>",
-        ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
+            ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
     hPrintf("</TD></TR>");
     hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>\n");
     }
@@ -1100,7 +1101,7 @@ tg->visibility = tvHide;
 tg->hasUi = TRUE;
 tg->shortLabel = cloneString(OLIGO_MATCH_TRACK_LABEL);
 safef(longLabel, sizeof(longLabel),
-    "Perfect Matches to Short Sequence (%s)", medOligo);
+      "Perfect Matches to Short Sequence (%s)", medOligo);
 tg->longLabel = longLabel;
 tg->loadItems = oligoMatchLoad;
 tg->itemName = oligoMatchName;
@@ -1306,8 +1307,7 @@ switch (vis)
 
         /*draw y-value limits for 'sample' tracks.
          * (always puts 0-100% range)*/
-        if( track->subType == lfSubSample &&
-                track->heightPer > (3 * fontHeight ) )
+        if (track->subType == lfSubSample && track->heightPer > (3 * fontHeight))
             {
             ymax = y - (track->heightPer / 2) + (fontHeight / 2);
             ymin = y + (track->heightPer / 2) - (fontHeight / 2);
@@ -1346,7 +1346,9 @@ int portX = insideX;
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
-if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+if (theImgBox
+&& imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,
+                          &portWidth,&basesPerPixel))
     {
     portX = (int)((portalStart - chromStart) / basesPerPixel);
     portX += gfxBorder;
@@ -1360,11 +1362,13 @@ int rightButtonX = portX + portWidth - arrowButtonWidth - 1;
 char buttonText[256];
 Color fillColor = lightGrayIndex();
 labelColor = blackIndex();
-hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
-hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
+hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth,
+                    labelColor, fillColor, TRUE);
+hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth,
+                    labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
 mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
-           NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
+               NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 #ifdef IMAGEv2_SHORT_TOGGLE
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
@@ -1401,17 +1405,21 @@ if (track->limitedVis != tvHide)
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
         if (isCenterLabelConditional(track))
-            label = track->tdb->parent->longLabel;
+            {
+            struct trackDb* tdbComposite = tdbGetComposite(track->tdb);
+            if (tdbComposite != NULL)
+                label = tdbComposite->longLabel;
+            }
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
-                            labelColor, font, label);
+                          labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
                 {
                 doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
-                        trackPastTabWidth, fontHeight, insideHeight, labelColor);
+                                       trackPastTabWidth, fontHeight, insideHeight, labelColor);
                 toggleDone = TRUE;
                 }
             }
@@ -1474,7 +1482,7 @@ int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int start = 1;
 struct slList *item;
 boolean isWig = (sameString("wig", type) || startsWith("wig ", type) ||
-        startsWith("bedGraph", type));
+                 startsWith("bedGraph", type));
 
 if (isCenterLabelIncluded(track))
     y += fontHeight;
@@ -1546,7 +1554,7 @@ Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
 		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
-		      isCenterLabelIncluded(track), font, labelColor,
+                      isCenterLabelIncluded(track), font, labelColor,
 		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
@@ -1557,7 +1565,7 @@ return y;
 static int getMaxWindowToDraw(struct trackDb *tdb);
 
 int doTrackMap(struct track *track, struct hvGfx *hvg, int y, int fontHeight,
-           int trackPastTabX, int trackPastTabWidth)
+               int trackPastTabX, int trackPastTabWidth)
 /* Write out the map for this track. Return the new offset. */
 {
 int mapHeight = 0;
@@ -1570,8 +1578,8 @@ switch (track->limitedVis)
     case tvFull:
         if (!nextItemCompatible(track))
             {
-            if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-                {
+            if (trackIsCompositeWithSubtracks(track))  // TODO: Change when tracks->subtracks
+                {                                      //       are always set for composite
                 if (isCenterLabelIncluded(track))
                     y += fontHeight;
                 struct track *subtrack;
@@ -1579,14 +1587,15 @@ switch (track->limitedVis)
                     {
                     if (isSubtrackVisible(subtrack))
                         {
-                        if(subtrack->limitedVis == tvFull)
+                        if (subtrack->limitedVis == tvFull)
                             y = doMapItems(subtrack, hvg, fontHeight, y);
                         else
                             {
                             if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
-                            if(theImgBox && subtrack->limitedVis == tvDense)
-                                mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
+                            if (theImgBox && subtrack->limitedVis == tvDense)
+                                mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth,
+                                                track->lineHeight, subtrack);
                             y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
                             }
                         }
@@ -1652,7 +1661,7 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
-if(tdbIsCompositeChild(subtrack->tdb))
+if (tdbIsCompositeChild(subtrack->tdb))
     {
     if (!subtrack->limitedVisSet)
         {
@@ -1666,7 +1675,7 @@ return subtrack->limitedVis;
 }
 
 static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart,int winEnd,
-	int insideWidth,int seqBaseCount,int rulerClickY,int rulerClickHeight)
+        int insideWidth,int seqBaseCount,int rulerClickY,int rulerClickHeight)
 /* Make hit boxes that will zoom program around ruler. */
 {
 int boxes = 30;
@@ -1718,8 +1727,8 @@ return newWinWidth;
 }
 
 static int doDrawRuler(struct hvGfx *hvg,int *newWinWidth,int *rulerClickHeight,
-	int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
-	int fontHeight,boolean rulerCds)
+        int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
+        int fontHeight,boolean rulerCds)
 /* draws the ruler. */
 {
 int scaleBarPad = 2;
@@ -1751,7 +1760,7 @@ if (baseShowPos||baseShowAsm)
     char *freezeName = NULL;
     freezeName = hFreezeFromDb(database);
     sprintLongWithCommas(numBuf, winEnd-winStart);
-    if(freezeName == NULL)
+    if (freezeName == NULL)
 	freezeName = "Unknown";
     if (baseShowPos&&baseShowAsm)
 	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,
@@ -1776,25 +1785,28 @@ if (baseShowScaleBar)
     int scaleBarY = y + 0.5 * scaleBarTotalHeight;
     *rulerClickHeight += scaleBarTotalHeight;
     hvGfxTextRight(hvg, insideX, y + scaleBarPad,
-	    (scaleBarX-2)-insideX, scaleBarHeight, MG_BLACK, font, scaleText);
+                   (scaleBarX-2)-insideX, scaleBarHeight, MG_BLACK, font, scaleText);
     hvGfxLine(hvg, scaleBarX, scaleBarY, scaleBarEndX, scaleBarY, MG_BLACK);
     hvGfxLine(hvg, scaleBarX, y+scaleBarPad, scaleBarX,
-	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+              y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
     hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
-	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+              y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
     if(cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE))
         {
         int fHeight = vgGetFontPixelHeight(hvg->vg, font);
-        hvGfxText(hvg, scaleBarEndX + 10, y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0), MG_BLACK, font, database);
+        hvGfxText(hvg, scaleBarEndX + 10,
+                  y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0),
+                  MG_BLACK, font, database);
         }
     y += scaleBarTotalHeight;
     }
 if (baseShowRuler)
     {
     hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
-		font, relNumOff, winBaseCount, 0, 1);
+                           font, relNumOff, winBaseCount, 0, 1);
     }
-*newWinWidth = makeRulerZoomBoxes(hvg, cart,winStart,winEnd,insideWidth,seqBaseCount,rulerClickY,*rulerClickHeight);
+*newWinWidth = makeRulerZoomBoxes(hvg, cart,winStart,winEnd,insideWidth,seqBaseCount,
+                                  rulerClickY,*rulerClickHeight);
 
 if (zoomedToBaseLevel || rulerCds)
     {
@@ -1803,8 +1815,7 @@ if (zoomedToBaseLevel || rulerCds)
     struct dnaSeq *extraSeq;
     /* extraSeq has extra leading & trailing bases
     * for translation in to amino acids */
-    boolean complementRulerBases =
-	    cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+    boolean complementRulerBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
     // gray bases if not matching the direction of display
     if (complementRulerBases != revCmplDisp)
 	baseColor = MG_GRAY;
@@ -1833,16 +1844,14 @@ if (zoomedToBaseLevel || rulerCds)
     seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
 
     if (zoomedToBaseLevel)
-	drawBases(hvg, insideX, y+rulerHeight, insideWidth, baseHeight,
-	    baseColor, font, complementRulerBases, seq);
+        drawBases(hvg, insideX, y+rulerHeight, insideWidth, baseHeight,
+                  baseColor, font, complementRulerBases, seq);
 
     /* set up clickable area to toggle ruler visibility */
-	{
-	char newRulerVis[100];
+        {
+        char newRulerVis[100];
 	safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
-		     rulerMode == tvFull ?
-			    rulerMenu[tvDense] :
-			    rulerMenu[tvFull]);
+              rulerMode == tvFull ? rulerMenu[tvDense] : rulerMenu[tvFull]);
 	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight, NULL,
 	    FALSE, NULL, 0, 0, "", newRulerVis);
 	}
@@ -1879,11 +1888,11 @@ if (zoomedToBaseLevel || rulerCds)
 
 	    /* create list of codons in the specified coding frame */
 	    sfList = baseColorCodonsFromDna(refFrame, winStart, winEnd,
-					 extraSeq, complementRulerBases);
+                                            extraSeq, complementRulerBases);
 	    /* draw the codons in the list, with alternating colors */
 	    baseColorDrawRulerCodons(hvg, sfList, scale, insideX, y,
-				codonHeight, font, winStart, MAXPIXELS,
-				zoomedToCodonLevel);
+                                     codonHeight, font, winStart, MAXPIXELS,
+                                     zoomedToCodonLevel);
 	    }
 	}
     }
@@ -1948,7 +1957,8 @@ leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 
 struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
-struct image *theSideImg = NULL; // Because dragScroll drags off end of image, the side label gets seen. Therefore we need 2 images!!
+struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
+                                 //    the side label gets seen. Therefore we need 2 images!!
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
@@ -1958,7 +1968,7 @@ int sliceOffsetX[stMaxSliceTypes];
 int sliceHeight        = 0;
 int sliceOffsetY       = 0;
 char *rulerTtl = NULL;
-if(theImgBox)
+if (theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
@@ -1969,7 +1979,7 @@ if(theImgBox)
     hPrintf("<input type='hidden' name='r' value='%d'>\n", winEnd);
     hPrintf("<input type='hidden' name='pix' value='%d'>\n", tl.picWidth);
     // If a portal was established, then set the global dimensions to the entire image size
-    if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
+    if (imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
         {
         pixWidth = tl.picWidth;
         winBaseCount = winEnd - winStart;
@@ -1981,10 +1991,12 @@ if(theImgBox)
         {
         sliceWidth[stButton]   = trackTabWidth + 1;
         sliceWidth[stSide]     = leftLabelWidth - sliceWidth[stButton] + 1;
-        sliceOffsetX[stSide]   = (revCmplDisp? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton]) : sliceWidth[stButton]);
-        sliceOffsetX[stButton] = (revCmplDisp? (tl.picWidth - sliceWidth[stButton]) : 0);
+        sliceOffsetX[stSide]   =
+                          (revCmplDisp ? (tl.picWidth - sliceWidth[stSide] - sliceWidth[stButton])
+                                       : sliceWidth[stButton]);
+        sliceOffsetX[stButton] = (revCmplDisp ? (tl.picWidth - sliceWidth[stButton]) : 0);
         }
-    sliceOffsetX[stData] = (revCmplDisp?0:sliceWidth[stSide] + sliceWidth[stButton]);
+    sliceOffsetX[stData] = (revCmplDisp ? 0 : sliceWidth[stSide] + sliceWidth[stButton]);
     sliceWidth[stData]   = tl.picWidth - (sliceWidth[stSide] + sliceWidth[stButton]);
     }
 struct flatTracks *flatTracks = NULL;
@@ -2040,8 +2052,8 @@ boolean safeHeight = TRUE;
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
-    if(tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX, it could be a subtrack
-        limitedVisFromComposite(track);
+    if (tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX,
+        limitedVisFromComposite(track);  // it could be a subtrack
     else
         limitVisibility(track);
 
@@ -2055,15 +2067,14 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
-        for (subtrack = track->subtracks; subtrack != NULL;
-                        subtrack = subtrack->next)
+        for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
             {
             if (!isSubtrackVisible(subtrack))
                 continue;
 
-            // subtrack vis can be explicit or inherited from composite/view.  Then it could be limited because of pixel height
+            // subtrack vis can be explicit or inherited from composite/view.
+            // Then it could be limited because of pixel height
             limitedVisFromComposite(subtrack);
-            //assert(subtrack->limitedVisSet); // This is no longer a valid assertion, since visible track with no items items will not have limitedVisSet
 
             if (subtrack->limitedVis != tvHide)
                 {
@@ -2087,8 +2098,10 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         char numBuf[SMALLBUF];
         sprintLongWithCommas(numBuf, maxSafeHeight);
         if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at the following track which is now hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                (flatTrack->next != NULL?"<BR>Additional tracks may have also been hidden at this zoom level.":""));
+            warn("Image is over %s pixels high (%d pix) at the following track which is now "
+                 "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
+                 (flatTrack->next != NULL ?
+                      "<BR>Additional tracks may have also been hidden at this zoom level." : ""));
         safeHeight = FALSE;
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
@@ -2116,7 +2129,7 @@ else
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
     hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
 
-    if(theImgBox)
+    if (theImgBox)
         {
         // Adds one single image for all tracks (COULD: build the track by track images)
         theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
@@ -2126,7 +2139,8 @@ else
 
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
         {
-        // TODO: It would be great to make the images smaller, but keeping both the same full size for now
+        // TODO: It would be great to make the two images smaller,
+        //       but keeping both the same full size for now
         struct tempName gifTnSide;
         trashDirFile(&gifTnSide, "hgt", "side", ".png");
         hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
@@ -2147,11 +2161,12 @@ hPrintf("<MAP id='map' Name=%s>\n", mapName);
 findTrackColors(hvg, trackList);
 
 // Good to go ahead and add all imgTracks regardless of buttons, left label, centerLabel, etc.
-if(theImgBox)
+if (theImgBox)
     {
     if (rulerMode != tvHide)
         {
-        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel, not reorderable
+        curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,
+                                           IMG_FIXEDPOS); // No tdb, no centerLbl, not reorderable
         }
 
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
@@ -2159,10 +2174,11 @@ if(theImgBox)
         track = flatTrack->track;
         if (track->limitedVis != tvHide)
             {
-            if(track->labelColor == track->ixColor && track->ixColor == 0)
+            if (track->labelColor == track->ixColor && track->ixColor == 0)
                 track->ixColor = hvGfxFindRgb(hvg, &track->color);
             int order = flatTrack->order;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isCenterLabelIncluded(track),order);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
+                                               isCenterLabelIncluded(track),order);
             if (trackShouldUseAjaxRetrieval(track))
                 imgTrackMarkForAjaxRetrieval(curImgTrack,TRUE);
             }
@@ -2182,18 +2198,22 @@ if (withLeftLabels && psOutput == NULL)
         int height = basePositionHeight;
         if (rulerCds)
             height += rulerTranslationHeight;
-        if(theImgBox)
+        if (theImgBox)
             {
             // Mini-buttons (side label slice) for ruler
             sliceHeight      = height + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
+                                                   sliceWidth[stButton],sliceHeight,
+                                                   sliceOffsetX[stButton],sliceOffsetY);
             }
-        else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off  // TODO: Should remove wasted pixels too
+        else if (!trackImgOnly) // Side buttons only need to be drawn when drawing page with js
+            {                   // advanced features off  // TODO: Should remove wasted pixels too
             drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
+            }
         mapBoxTrackUi(hvgSide, trackTabX, y, trackTabWidth, height,
-              RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
+                      RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
         }
 
@@ -2211,16 +2231,18 @@ if (withLeftLabels && psOutput == NULL)
             if (track->group != lastGroup)
                 grayButtonGroup = !grayButtonGroup;
             lastGroup = track->group;
-            if(theImgBox)
+            if (theImgBox)
                 {
                 // Mini-buttons (side label slice) for tracks
                 sliceHeight      = yEnd - yStart;
                 sliceOffsetY     = yStart - 1;
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
+                                                       sliceWidth[stButton],sliceHeight,
+                                                       sliceOffsetX[stButton],sliceOffsetY);
                 }
-            else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off
-                {
+            else if (!trackImgOnly) // Side buttons only need to be drawn when drawing page
+                {                   // with js advanced features off
                 if (grayButtonGroup)
                     drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth, h, track->hasUi);
                 else
@@ -2229,14 +2251,15 @@ if (withLeftLabels && psOutput == NULL)
 
             if (track->hasUi)
                 {
-                if(tdbIsCompositeChild(track->tdb))
+                if (tdbIsCompositeChild(track->tdb))
                     {
                     struct trackDb *parent = tdbGetComposite(track->tdb);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-                        parent->track, parent->shortLabel, track->track);
+                                  parent->track, parent->shortLabel, track->track);
                     }
                 else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track,
+                                  track->shortLabel, track->track);
                 }
             }
         }
@@ -2252,37 +2275,39 @@ if (withLeftLabels)
         Color lightRed = hvGfxFindColorIx(hvgSide, 255, 180, 180);
 
         hvGfxBox(hvgSide, leftLabelX + leftLabelWidth, 0,
-            gfxBorder, pixHeight, lightRed);
+                 gfxBorder, pixHeight, lightRed);
         }
     y = gfxBorder;
     if (rulerMode != tvHide)
         {
-        if(theImgBox)
+        if (theImgBox)
             {
             // side label slice for ruler
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
+                                                   sliceWidth[stSide],sliceHeight,
+                                                   sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
             {
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, titleHeight,
-                MG_BLACK, font, WIN_TITLE_LABEL);
+                           MG_BLACK, font, WIN_TITLE_LABEL);
             y += titleHeight;
             }
         if (baseShowPos||baseShowAsm)
             {
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, showPosHeight,
-                MG_BLACK, font, WIN_POS_LABEL);
+                           MG_BLACK, font, WIN_POS_LABEL);
             y += showPosHeight;
             }
         if (baseShowScaleBar)
             {
             y += scaleBarPad;
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, scaleBarHeight,
-                MG_BLACK, font, SCALE_BAR_LABEL);
+                           MG_BLACK, font, SCALE_BAR_LABEL);
             y += scaleBarHeight + scaleBarPad;
             }
         if (baseShowRuler)
@@ -2299,11 +2324,11 @@ if (withLeftLabels)
                 labelWidth = mgFontStringWidth(font,rulerLabel);
                 }
             if (hvgSide->rc)
-            safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
+                safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
             else
                 safef(rulerLabel,ArraySize(rulerLabel),"%s:",shortChromName);
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, rulerHeight,
-                MG_BLACK, font, rulerLabel);
+                           MG_BLACK, font, rulerLabel);
             y += rulerHeight;
             freeMem(shortChromName);
             }
@@ -2311,26 +2336,27 @@ if (withLeftLabels)
             {
             /* disable complement toggle for HIV because HIV is single stranded RNA */
             if (!hIsGsidServer())
-                    drawComplementArrow(hvgSide,leftLabelX, y,
-                                        leftLabelWidth-1, baseHeight, font);
+                drawComplementArrow(hvgSide,leftLabelX, y, leftLabelWidth-1, baseHeight, font);
             if (zoomedToBaseLevel)
                 y += baseHeight;
             }
-            if (rulerCds)
-                y += rulerTranslationHeight;
+        if (rulerCds)
+            y += rulerTranslationHeight;
         }
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
         if (track->limitedVis == tvHide)
             continue;
-         if(theImgBox)
+        if (theImgBox)
             {
             // side label slice for tracks
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
+                                                   sliceWidth[stSide],sliceHeight,
+                                                   sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
         if (trackShouldUseAjaxRetrieval(track))
@@ -2356,14 +2382,15 @@ if (withGuidelines)
     {
     struct hvGfx *bgImg = hvg; // Default to the one image
     boolean exists = FALSE;
-    if(theImgBox)
+    if (theImgBox)
         {
         struct tempName gifBg;
         char base[64];
-        safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
+        safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,
+              guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
-        if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
-            exists = FALSE;                       // However, for the time being, rebuild when user presses "default tracks"
+        if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image. However,
+            exists = FALSE;                      // for now, rebuild on "default tracks" request
 
         if (!exists)
             {
@@ -2384,7 +2411,7 @@ if (withGuidelines)
         for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
             hvGfxBox(bgImg, x, 0, 1, pixHeight, lightBlue);
         hvGfxUnclip(bgImg);
-        if(bgImg != hvg)
+        if (bgImg != hvg)
             hvGfxClose(&bgImg);
         }
     }
@@ -2392,16 +2419,19 @@ if (withGuidelines)
 /* Show ruler at top. */
 if (rulerMode != tvHide)
     {
-    if(theImgBox)
+    if (theImgBox)
         {
         // data slice for ruler
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
         sliceOffsetY     = 0;
         curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
+        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,
+                                               sliceWidth[stData],sliceHeight,
+                                               sliceOffsetX[stData],sliceOffsetY);
         curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
-    y = doDrawRuler(hvg,&newWinWidth,&rulerClickHeight,rulerHeight,yAfterRuler,yAfterBases,font,fontHeight,rulerCds);
+    y = doDrawRuler(hvg,&newWinWidth,&rulerClickHeight,rulerHeight,yAfterRuler,yAfterBases,font,
+                    fontHeight,rulerCds);
     }
 
 /* Draw center labels. */
@@ -2415,16 +2445,19 @@ if (withCenterLabels)
         if (track->limitedVis == tvHide)
             continue;
 
-        if(theImgBox)
+        if (theImgBox)
             {
             // center label slice of tracks Must always make, even if the centerLabel is empty
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
+                                                   sliceWidth[stData],sliceHeight,
+                                                   sliceOffsetX[stData],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             if (isCenterLabelConditional(track))
-                imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track)?clNowSeen:clNotSeen);
+                imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track) ?
+                                                                            clNowSeen : clNotSeen);
             }
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
@@ -2444,20 +2477,22 @@ if (withCenterLabels)
         {
         track = flatTrack->track;
         if (track->limitedVis == tvHide)
-                continue;
+            continue;
 
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
-        if(theImgBox)
+        if (theImgBox)
             {
             // data slice of tracks
             sliceOffsetY     = yStart;
             sliceHeight      = yEnd - yStart - 1;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            if(sliceHeight > 0)
+            if (sliceHeight > 0)
                 {
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,
+                                                       sliceWidth[stData],sliceHeight,
+                                                       sliceOffsetX[stData],sliceOffsetY);
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
@@ -2467,10 +2502,12 @@ if (withCenterLabels)
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
-            mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
+            mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
+            // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 
-        if(yEnd!=y)
-            warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
+        if (yEnd!=y)
+            warn("Slice height does not add up.  Expecting %d != %d actual",
+                 yEnd - yStart - 1,y-yStart);
         }
     y++;
     }
@@ -2484,21 +2521,24 @@ if (withLeftLabels)
         {
         track = flatTrack->track;
         if (track->limitedVis == tvHide)
-                continue;
-        if(theImgBox)
+            continue;
+        if (theImgBox)
             {
             // side label slice of tracks
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
+                                                   sliceWidth[stSide],sliceHeight,
+                                                   sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
     #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-        else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
+        else if (track->drawLeftLabels != NULL
+             &&  (theImgBox == NULL || track->limitedVis == tvDense))
     #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
     #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
@@ -2516,7 +2556,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
     track = flatTrack->track;
     if (track->limitedVis != tvHide)
         {
-        if(theImgBox)
+        if (theImgBox)
             {
             // Set imgTrack in case any map items will be set
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
@@ -2539,7 +2579,7 @@ if(newWinWidth)
     }
 
 /* Save out picture and tell html file about it. */
-if(hvgSide != hvg)
+if (hvgSide != hvg)
     hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
 
@@ -2587,7 +2627,7 @@ else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
-    while(TRUE)
+    while (TRUE)
         {
         size_t n = fread(buf, 1, sizeof(buf), fd);
         if(n)
@@ -2601,11 +2641,11 @@ else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "
     }
 #endif///def SUPPORT_CONTENT_TYPE
 
-if(theImgBox)
+if (theImgBox)
     {
     imageBoxDraw(theImgBox);
     // If a portal was established, then set the global dimensions back to the portal size
-    if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+    if (imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
         {
         pixWidth = tl.picWidth;
         winBaseCount = winEnd - winStart;
@@ -2617,7 +2657,7 @@ else
     {
     char *titleAttr = "title='click or drag mouse in base position track to zoom in'";
     hPrintf("<IMG SRC='%s' BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
-        gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
+            gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
     hPrintf("><BR>\n");
     }
 flatTracksFree(&flatTracks);
@@ -2681,7 +2721,7 @@ if (!tg->isRemoteSql)
 else
     {
     return sqlConnectRemote(tg->remoteSqlHost, tg->remoteSqlUser, tg->remoteSqlPassword,
-        tg->remoteSqlDatabase);
+                            tg->remoteSqlDatabase);
     }
 }
 
@@ -2699,7 +2739,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
-    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by6 hgTracks. (FIXME: Until we want to see them in cfg list and searchTracks!)
+    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by hgTracks.
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
@@ -2767,10 +2807,10 @@ if (ct->dbTrack)
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
-             NULL, &rowOffset);
+                     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, fieldCount);
+        {
+        bed = bedLoadN(row+rowOffset, fieldCount);
 	    if (scoreFilter && bed->score < scoreFilter)
 		continue;
 	slAddHead(&list, bed);
@@ -2814,10 +2854,10 @@ if (ct->dbTrack)
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
-             NULL, &rowOffset);
+                     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, 9);
+        {
+        bed = bedLoadN(row+rowOffset, 9);
 	if (scoreFilter && bed->score < scoreFilter)
 	    continue;
 	bed8To12(bed);
@@ -2874,10 +2914,10 @@ if (ct->dbTrack)
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
-             NULL, &rowOffset);
+                     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, fieldCount);
+        {
+        bed = bedLoadN(row+rowOffset, fieldCount);
 	    if (scoreFilter && bed->score < scoreFilter)
 		continue;
 	bed8To12(bed);
@@ -2926,10 +2966,10 @@ if (ct->dbTrack)
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
-             NULL, &rowOffset);
+                     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, fieldCount);
+        {
+        bed = bedLoadN(row+rowOffset, fieldCount);
 	lf = lfFromBed(bed);
 	    if (scoreFilter && bed->score < scoreFilter)
 		continue;
@@ -2980,10 +3020,10 @@ if (ct->dbTrack)
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
-             NULL, &rowOffset);
+                     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	bed = bedLoadN(row+rowOffset, fieldCount);
+        {
+        bed = bedLoadN(row+rowOffset, fieldCount);
 	lfs = lfsFromColoredExonBed(bed);
 	slAddHead(&lfsList, lfs);
 	}
@@ -3059,7 +3099,8 @@ if (sameString(type, "maf"))
 
     wigMafMethods(tg, tdb, 0, NULL);
     if (!ct->dbTrack)
-    errAbort("custom maf tracks must be in database");
+        errAbort("custom maf tracks must be in database");
+
 
     struct mafPriv *mp;
     AllocVar(mp);
@@ -3072,9 +3113,9 @@ else if (sameString(type, "wig"))
     {
     tg = trackFromTrackDb(tdb);
     if (ct->dbTrack)
-    tg->loadItems = wigLoadItems;
+        tg->loadItems = wigLoadItems;
     else
-    tg->loadItems = ctWigLoadItems;
+        tg->loadItems = ctWigLoadItems;
     tg->customPt = ct;
     tg->nextItemButtonable = FALSE;
     }
@@ -3384,7 +3425,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
 	    addTdbListToTrackList(tdbList, NULL, pTrackList);
 	    // we're going to free the hubConnectStatus list
-	    hub->trackHub = NULL;
+            hub->trackHub = NULL;
 	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
@@ -3401,8 +3442,8 @@ boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
 return (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
-    hTableExists("hgFixed", "rebaseRefs") &&
-    hTableExists("hgFixed", "rebaseCompanies"));
+        hTableExists("hgFixed", "rebaseRefs") &&
+        hTableExists("hgFixed", "rebaseCompanies"));
 }
 
 static void setSuperTrackHasVisibleMembers(struct trackDb *tdb)
@@ -3492,7 +3533,7 @@ grpFreeList(&grps);
 	slSort(&hubList, hubCmpAlpha);	// alphabetize
 	minPriority -= 1.0;             // priority is 1-based
 	// the idea here is to get enough room between priority 1
-	// (which is custom tracks) and the group with the next
+        // (which is custom tracks) and the group with the next
 	// priority number, so that the hub nestle inbetween the
 	// custom tracks and everything else at the top of the list
 	// of track groups
@@ -3509,8 +3550,8 @@ grpFreeList(&grps);
 	    priority += priorityInc;
 	    slAddHead(&list, group);
 	    hashAdd(hash, group->name, group);
-	    }
-	}
+            }
+        }
     }
 
 /* Loop through tracks and fill in their groups.
@@ -3698,11 +3739,11 @@ hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(t
 void limitSuperTrackVis(struct track *track)
 /* Limit track visibility by supertrack parent */
 {
-if(tdbIsSuperTrackChild(track->tdb))
+if (tdbIsSuperTrackChild(track->tdb))
     {
     assert(track->tdb->parent != NULL);
     if (sameString("hide", cartUsualString(cart, track->tdb->parent->track,
-                                    track->tdb->parent->isShow ? "show" : "hide")))
+                                           track->tdb->parent->isShow ? "show" : "hide")))
         track->visibility = tvHide;
     }
 }
@@ -3746,7 +3787,7 @@ registerTrackHandlers();
 loadFromTrackDb(&trackList);
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
-if (userSeqString != NULL) 
+if (userSeqString != NULL)
     slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 if (restrictionEnzymesOk())
@@ -3905,14 +3946,14 @@ if (isNotEmpty(maxWinToDraw))
     {
     unsigned maxWTD = sqlUnsigned(maxWinToDraw);
     if (maxWTD > 1)
-    return maxWTD;
+        return maxWTD;
     }
 return 0;
 }
 
 static void drawMaxWindowWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-                 int xOff, int yOff, int width, MgFont *font, Color color,
-                 enum trackVisibility vis)
+                                 int xOff, int yOff, int width, MgFont *font, Color color,
+                                 enum trackVisibility vis)
 /* This is a stub drawItems handler to be swapped in for the usual drawItems when the window
  * size is larger than the threshold specified by trackDb setting maxWindowToDraw. */
 {
@@ -3991,15 +4032,16 @@ for (;track != NULL; track = track->next)
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
-        if(shapedByubtrackOverride)
+        if (shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-    if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
-        { // Need to update track visibility
-        // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
-        // So now we need to find the supertrack and take changed cart values of its children
+    if ((shapedByubtrackOverride || cleanedByContainerSettings)
+    &&  tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
+        {   // Need to update track visibility
+            // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
+            // So now we need to find the supertrack and take changed cart values of its children
         struct slRef *childRef;
-        for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
+        for (childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
             {
             struct trackDb * childTdb = childRef->val;
             struct track *child = hashFindVal(trackHash, childTdb->track);
@@ -4096,7 +4138,7 @@ while(1)
 	{  // move it from the waiting queue to the running queue
 	pfd = slPopHead(&pfdList);
 	slAddHead(&pfdRunning, pfd);
-	}
+        }
     pthread_mutex_unlock( &pfdMutex );
     if (allDone)
 	return NULL;
@@ -4279,13 +4321,14 @@ makeGlobalTrackHash(trackList);
 
 
 // honor defaultImgOrder
-if(cgiVarExists("hgt.defaultImgOrder"))
+if (cgiVarExists("hgt.defaultImgOrder"))
     {
     char wildCard[32];
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
-parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+// Subtrack settings must be removed when composite/view settings are updated
+parentChildCartCleanup(trackList,cart,oldVars);
 if (measureTiming)
     measureTime("parentChildCartCleanup");
 
@@ -4310,9 +4353,11 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     int sideSliceWidth  = 0;   // Just being explicit
     if (withLeftLabels)
         sideSliceWidth   = (insideX - gfxBorder*3) + 2;
-    theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
-    // Define a portal with a default expansion size, then set the global dimensions to the full image size
-    if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
+    theImgBox = imgBoxStart(database,chromName,winStart,winEnd,
+                            (!revCmplDisp),sideSliceWidth,tl.picWidth);
+    // Define a portal with a default expansion size,
+    // then set the global dimensions to the full image size
+    if (imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
         {
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
@@ -4336,10 +4381,10 @@ for (track = trackList; track != NULL; track = track->next)
 
     /* remove cart priority variables if they are set
        to the default values in the trackDb */
-    if(!hTrackOnChrom(track->tdb, chromName))
-	{
-	track->limitedVis = tvHide;
-	track->limitedVisSet = TRUE;
+    if (!hTrackOnChrom(track->tdb, chromName))
+        {
+        track->limitedVis = tvHide;
+        track->limitedVisSet = TRUE;
 	}
     }
 /* pre-load remote tracks in parallel */
@@ -4406,7 +4451,7 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList != NULL)
         {
         int looper;
-        for(looper=1;looper<=2;looper++)
+        for (looper=1;looper<=2;looper++)
             {
             boolean isOpen = !isCollapsedGroup(group);
             char buf[1000];
@@ -4416,10 +4461,10 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-if(theImgBox)
+if (theImgBox)
     {
     // If a portal was established, then set the global dimensions back to the portal size
-    if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
+    if (imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
         {
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
@@ -4457,10 +4502,10 @@ if (!hideControls)
     /* Show title . */
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
-    freezeName = "Unknown";
+        freezeName = "Unknown";
     hPrintf("<span style='font-size:x-large;'><B>");
     if (startsWith("zoo",database) )
-	{
+        {
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
 	    organization, browserName, organism, freezeName);
 	}
@@ -4480,7 +4525,7 @@ if (!hideControls)
 		hPrintf("%s %s on %s %s Assembly (%s)",
 			organization, browserName, organism, freezeName, database);
 	    }
-	}
+        }
     hPrintf("</B></span><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
@@ -4488,12 +4533,18 @@ if (!hideControls)
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
-    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left",
+                       "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left",
+                       "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left",
+                       "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right",
+                       "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right",
+                       "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right",
+                       "return imageV2.navigateButtonClick(this);");
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
@@ -4508,7 +4559,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
-	{
+        {
 	/* Break into a second form so that zooming and scrolling
 	 * can be done with a 'GET' so that user can back up from details
 	 * page without Internet Explorer popping up an annoying dialog.
@@ -4522,14 +4573,17 @@ if (!hideControls)
         // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
         // If so and it is reached by the back button, a page reload will occur instead.
         hPrintf("<INPUT TYPE='text' style='display:none;' name='dirty' id='dirty' VALUE='false'>\n");
-        // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
-        // NOTE: Larry and I have seen that the new URL is not even used, but this will abort the page load and hasten the isDirty() check in hgTracks.js
-        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') {document.getElementById('dirty').value = 'false'; window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
-	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
-	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
-	    hPrintf("\n%s", trackGroupsHidden1->string);
-	hPrintf("</CENTER></FORM>\n");
-	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
+        // Unfortunately this does not work in IE, so IE will get reloaded only after this full load
+        // NOTE: Larry and I have seen that the new URL is not even used, but this will abort
+        //       the page load and hasten the isDirty() check in hgTracks.js
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == "
+                "'true') {document.getElementById('dirty').value = 'false'; "
+                "window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
+        hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
+                "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
+            hPrintf("\n%s", trackGroupsHidden1->string);
+        hPrintf("</CENTER></FORM>\n");
+        hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
 	    hPrintf("%s", trackGroupsHidden2->string);
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
@@ -4573,27 +4627,41 @@ if (!hideControls)
 makeChromIdeoImage(&trackList, psOutput, ideoTn);
 
 #ifdef USE_NAVIGATION_LINKS
-    hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
-    hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
-    hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
-        hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
+hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",
+        tl.picWidth);//min(tl.picWidth, 800));
+hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' "
+        "title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
+hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' "
+        "title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
+hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' "
+        "title='move 10&#37; to the left'>&lt;</a>\n");
 
-    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
-    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom in 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
-    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom in 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
-    hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'>&gt;<i>base</i>&lt;</a>\n");
+hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table with, forcing others to sides
+hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' "
+        "title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
+hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' "
+        "title='zoom in 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' "
+        "title='zoom in 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' "
+        "title='zoom in to base range'>&gt;<i>base</i>&lt;</a>\n");
 
-    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
-    hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
-    hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-        hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
+hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table with, forcing others to sides
+hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' "
+        "title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
+hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' "
+        "title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
+hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' "
+        "title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
+hPrintf("<td>&nbsp;</td>\n"); // Without width cell expands table with, forcing others to sides
+hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' "
+        "title='move 10&#37; to the right'>&gt;</a>\n");
 
-    hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
-    hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
-    hPrintf("</tr></table>\n");
+hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' "
+        "title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
+hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' """
+        "title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
+hPrintf("</tr></table>\n");
 #endif///def USE_NAVIGATION_LINKS
 
 /* Make clickable image and map. */
@@ -4617,13 +4685,15 @@ if (!hideControls)
     /* note a trick of WIDTH=27 going on here.  The 6,15,6 widths following
      * go along with this trick */
     hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
-        tl.picWidth, 27);
+            tl.picWidth, 27);
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
-    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left",
+                       "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right",
+                       "return imageV2.navigateButtonClick(this);");
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
@@ -4638,50 +4708,55 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
-    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left",
+                       "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right",
+                       "return imageV2.navigateButtonClick(this);");
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
 
     /* Display bottom control panel. */
-
-    if(isSearchTracksSupported(database,cart))
+    if (isSearchTracksSupported(database,cart))
         {
         cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");
         }
     hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
-	hPrintf("&nbsp;");
-    hButtonWithMsg("hgt.defaultImgOrder", "default order","Display current tracks in their default order");
+    hPrintf("&nbsp;");
+    hButtonWithMsg("hgt.defaultImgOrder", "default order",
+                   "Display current tracks in their default order");
     // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
-	{
-	hPrintf("&nbsp;");
-	hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
-	}
+        {
+        hPrintf("&nbsp;");
+        hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
+        }
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='%s' onClick='document.customTrackForm.submit();return false;' title='%s'>",
-        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
-        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+    hPrintf("<INPUT TYPE='button' VALUE='%s' onClick='document.customTrackForm.submit();"
+            "return false;' title='%s'>",
+            hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
+            hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
     if (hubConnectTableExists())
-	{
-	hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
-	hPrintf(" ");
-	}
+        {
+        hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();"
+                "return false;' title='Import tracks from hubs'>");
+        hPrintf(" ");
+        }
 
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
     if (!hIsGsidServer())
-	{
+        {
         hButtonWithMsg("hgt.toggleRevCmplDisp", "reverse",
-            revCmplDisp?"Show forward strand at this location":"Show reverse strand at this location");
+                       revCmplDisp ? "Show forward strand at this location"
+                                   : "Show reverse strand at this location");
         hPrintf(" ");
-	}
+        }
 
     hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
     hPrintf(" ");
@@ -4699,25 +4774,27 @@ if (!hideControls)
     if (showTrackControls)
 	{
 	/* Display viewing options for each track. */
-	/* Chuck: This is going to be wrapped in a table so that
-	 * the controls don't wrap around randomly */
-	hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-	hPrintf("<tr><td align='left'>\n");
+        /* Chuck: This is going to be wrapped in a table so that
+         * the controls don't wrap around randomly */
+        hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+        hPrintf("<tr><td align='left'>\n");
 
-	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return vis.expandAllGroups(false)");
-	hPrintf("</td>");
+        hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups",
+                           "return vis.expandAllGroups(false)");
+        hPrintf("</td>");
 
-	hPrintf("<td colspan='%d' align='CENTER' nowrap>"
-	   "Use drop-down controls below and press refresh to alter tracks "
-	   "displayed.<BR>"
-	   "Tracks with lots of items will automatically be displayed in "
-	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' align='CENTER' nowrap>"
+           "Use drop-down controls below and press refresh to alter tracks "
+           "displayed.<BR>"
+           "Tracks with lots of items will automatically be displayed in "
+                "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
-	hPrintf("<td align='right'>");
-	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return vis.expandAllGroups(true)");
-	hPrintf("</td></tr>");
+        hPrintf("<td align='right'>");
+        hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
+                           "return vis.expandAllGroups(true)");
+        hPrintf("</td></tr>");
 
-	if (!hIsGsidServer())
+        if (!hIsGsidServer())
 	    {
 	    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
 	    }
@@ -4742,31 +4819,35 @@ if (!hideControls)
 				    &indicator, &otherState);
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
-	    if (!hIsGsidServer())
+            if (!hIsGsidServer())
                 hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
-	    else
-                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS-1);
+            else
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",
+                        MAX_CONTROL_COLUMNS-1);
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
         //#define BUTTONS_BY_CSS_NOT_HERE
         #ifdef BUTTONS_BY_CSS_NOT_HERE
-            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
-                group->name, group->name, isOpen?"Collapse":"Expand", indicator);
+            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" "
+                    "id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
+                    group->name, group->name, isOpen?"Collapse":"Expand", indicator);
         #else///ifndef BUTTONS_BY_CSS_NOT_HERE
-            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
+                    "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
         #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
-            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
+            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
+                    "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
-	    controlGridEndRow(cg);
+            controlGridEndRow(cg);
 
-	    /* First track group that is not the custom track group (#1)
-	     * or a track hub, gets the Base Position track
-	     * unless it's collapsed. */
-	    if (!showedRuler && !isHubTrack(group->name) &&
+            /* First track group that is not the custom track group (#1)
+             * or a track hub, gets the Base Position track
+             * unless it's collapsed. */
+            if (!showedRuler && !isHubTrack(group->name) &&
 		    differentString(group->name, "user") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
@@ -4804,9 +4885,9 @@ if (!hideControls)
                     // Print an icon before the title when one is defined
                     hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
 
-		    freeMem(url);
-		    freeMem(longLabel);
-		    }
+                    freeMem(url);
+                    freeMem(longLabel);
+                    }
 		hPrintf(" %s", track->shortLabel);
 		if (tdbIsSuper(track->tdb))
 		    hPrintf("...");
@@ -4820,14 +4901,15 @@ if (!hideControls)
 			superTrackDropDown(cart, track->tdb,
 					    superTrackHasVisibleMembers(track->tdb));
 		    else
-			{
-			/* check for option of limiting visibility to one mode */
-			hTvDropDownClassVisOnly(track->track, track->visibility,
-				    rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
-				    "hiddenText" : "normalText",
-				    trackDbSetting(track->tdb, "onlyVisibility"));
-			}
-		    }
+                        {
+                        /* check for option of limiting visibility to one mode */
+                        hTvDropDownClassVisOnly(track->track, track->visibility,
+                                                rTdbTreeCanPack(track->tdb),
+                                                (track->visibility == tvHide) ? "hiddenText"
+                                                                              : "normalText",
+                                                trackDbSetting(track->tdb, "onlyVisibility"));
+                        }
+                    }
 		else
 		    /* If track is not on this chrom print an informational
 		    message for the user. */
@@ -4907,7 +4989,7 @@ void zoomToSize(int newSize)
 int center = ((long long int)winStart + (long long int)winEnd)/2;
 if (center < 0)
     errAbort("zoomToSize: error computing center: %d = (%d + %d)/2\n",
-    center, winStart, winEnd);
+             center, winStart, winEnd);
 if (newSize > seqBaseCount)
     newSize = seqBaseCount;
 winStart = center - newSize/2;
@@ -4997,7 +5079,7 @@ double x;
 int insideX = trackOffsetX(); /* The global versions of these are not yet set */
 int insideWidth = tl.picWidth-gfxBorder-insideX;
 double guideBases = (double)guidelineSpacing * (double)(winEnd - winStart)
-    / ((double)insideWidth);
+                    / ((double)insideWidth);
 
 if (stringVal == NULL || !isdigit(stringVal[0]))
     {
@@ -5031,7 +5113,7 @@ doTrackForm(psTn.forCgi, &ideoPsTn);
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
-if(pdfFile != NULL)
+if (pdfFile != NULL)
     {
     printf("<UL>\n");
     printf("<LI><A TARGET=_blank HREF=\"%s\">"
@@ -5053,7 +5135,7 @@ if(pdfFile != NULL)
 else
     printf("<BR><BR>PDF format not available");
 
-    printf("<a href='../cgi-bin/hgTracks'><input type='button' VALUE='Return to Browser'></a>\n");
+printf("<a href='../cgi-bin/hgTracks'><input type='button' VALUE='Return to Browser'></a>\n");
 }
 
 boolean isGenome(char *pos)
@@ -5130,7 +5212,7 @@ if (isGenome(position) || NULL ==
         freeMem(position);
         position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
         hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-        if(hgp != NULL && position != defaultPosition)
+        if (hgp != NULL && position != defaultPosition)
             cartSetString(cart, "position", position);
         }
     }
@@ -5272,8 +5354,8 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
-       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-       chromPtr->name, chromPtr->name);
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+           chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
@@ -5318,8 +5400,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
-       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-       row[0], row[0]);
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+           row[0], row[0]);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
@@ -5525,14 +5607,14 @@ if(!trackImgOnly)
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
-        webIncludeResourceFile("jquery-ui.css");
-        if (!searching) // NOT doing search
-            {
-            webIncludeResourceFile("jquery.contextmenu.css");
-            jsIncludeFile("jquery.contextmenu.js", NULL);
-            webIncludeResourceFile("ui.dropdownchecklist.css");
-            jsIncludeFile("ui.dropdownchecklist.js", NULL);
-            jsIncludeFile("ddcl.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    if (!searching)     // NOT doing search
+        {
+        webIncludeResourceFile("jquery.contextmenu.css");
+        jsIncludeFile("jquery.contextmenu.js", NULL);
+        webIncludeResourceFile("ui.dropdownchecklist.css");
+        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        jsIncludeFile("ddcl.js", NULL);
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
@@ -5554,7 +5636,7 @@ else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
     doSearchTracks(groupList);
     }
 else if (sameWord(configPageCall, "configure") ||
-    sameWord(configPageCall, "configure tracks and display"))
+         sameWord(configPageCall, "configure tracks and display"))
     {
     cartRemove(cart, "hgTracksConfigPage");
     configPage();

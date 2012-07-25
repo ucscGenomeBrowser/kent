@@ -4227,3 +4227,30 @@ html wgEncodeRikenCage.release3
         type bed 6
         # subId=6743 dateSubmitted=2012-03-30
 
+        track wgEncodeRikenCageNhekNucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK nucl pA+
+        longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
+        subGroups view=TssHmm cellType=t3NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
+        type bed 6
+        color 179,0,134
+        # subId=7560 dateSubmitted=2012-07-24
+
+        track wgEncodeRikenCageH1hescNucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel H1ES nucl pA+
+        longLabel H1-hESC nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
+        subGroups view=TssHmm cellType=t1H1HESC localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
+        type bed 6
+        color 0,107,27
+        # subId=7561 dateSubmitted=2012-07-20
+
+        track wgEncodeRikenCageH1hescCytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel H1ES cyto pA+ 
+        longLabel H1-hESC cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN
+        subGroups view=TssHmm cellType=t1H1HESC localization=cytosol rnaExtract=pAP rep=Pooled rank=rankP
+        type bed 6
+        color 0,107,27
+        # subId=7562 dateSubmitted=2012-07-20
+

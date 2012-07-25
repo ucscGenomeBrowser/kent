@@ -16,7 +16,7 @@
 #include "asParse.h"
 #include "bigBed.h"
 
-char *version = "4.4";
+char *version = "4.5";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -411,14 +411,15 @@ if (i == 0)
     if (s==row)
         reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
     else
-        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
+        reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,
+                   name, row);
     return 0;
     }
 else if (privateData)   // PrivateData means sequence should be empty
     {
     if (s==row)
-        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data"
-            , lf->fileName, lf->lineIx,name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data",
+                   lf->fileName, lf->lineIx,name);
     else
         reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]"
 	    , lf->fileName, lf->lineIx,name, row);
@@ -768,9 +769,9 @@ if (strand == '-')
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
     reportWarn("Error [file=%s, line=%d]: "
-        "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
-        lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
-        chrom, chromStart, chromEnd, strand);
+               "sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+               lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+               chrom, chromStart, chromEnd, strand);
     return FALSE;
     }
 
@@ -979,7 +980,7 @@ void validateBed(struct lineFile *lf, int bedN, int bedP, struct asObject *as)
 // Validate regular bed [3-15] . and  +
 {
 char *row;
-int bufSize = 1024;  // bufSIze is max row length
+int bufSize = 1024;  // bufSize is max row length
 char *buf = needMem(bufSize); 
 char *words[1024];
 unsigned chromSize;
@@ -997,7 +998,10 @@ while (lineFileNextReal(lf, &row))
 	{
 	if (as == NULL)
 	    {
-	    fieldCount = chopByChar(row, '\t', NULL, 0);
+	    if (tab)
+		fieldCount = chopByChar(row, '\t', NULL, 0);
+	    else
+	    	fieldCount = chopByWhite(row, NULL, 0);
 	    char *asText = bedAsDef(bedN, fieldCount);
 	    as = asParseText(asText);
 	    allocedAs = TRUE;
@@ -1024,7 +1028,7 @@ while (lineFileNextReal(lf, &row))
     int rowLen = strlen(row);
     if (bufSize < rowLen)
         {
-        bufSize += bufSize;
+        bufSize = 2 * rowLen; // allocate twice as much as we need now
         freeMem(buf);
         buf = needMem(bufSize); 
         }
@@ -1275,15 +1279,14 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
         {
-        reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
-            chroms->name);
+        reportErrAbort("bigWig contains invalid chromosome name: %s\n", chroms->name);
         }
     else
         {
         if (*size != chroms->size)
             {
-            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
-                chroms->name, *size, chroms->size);
+            reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, "
+                           "not %d bases\n", chroms->name, *size, chroms->size);
             }
         }
     }
@@ -1454,8 +1457,10 @@ if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
                 squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
             reportWarn("Error [file=%s, line=%d]: "
-            "total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-                file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+                       "total quality at mismatches too high (found %d, maximum is %d) "
+                       "(%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+                       file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart,
+                       seq, match, dna, squal);
             }        
         }
     return FALSE;

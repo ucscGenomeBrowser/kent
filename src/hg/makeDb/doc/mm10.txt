@@ -7597,6 +7597,59 @@ done
     ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
 
+#############################################################################
+# hgPal downloads (WORKING - Hiram - 2012-07-05)
+#   FASTA from 60-way for refGene
+
+    ssh hgwdev
+    screen -S mm10HgPal
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/pal
+    cd /hive/data/genomes/mm10/bed/multiz60way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    export mz=multiz60way
+    export gp=refGene
+    export db=mm10
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    #   real    93m34.376s
+
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    1m16.821s
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=refGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+
 #########################################################################
 # lastz nile tilapia oreNil2 (DONE - 2012-04-02 - Hiram)
     # establish a screen to control this job with a name to indicate what it is

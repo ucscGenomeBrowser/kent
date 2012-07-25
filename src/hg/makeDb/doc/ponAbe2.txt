@@ -2294,4 +2294,23 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s blastz.ponAbe2.swap lastz.ponAbe2
 
+##########################################################################
+# LASTZ  Rhesus rheMac3 Swap (DONE - 2012-04-26 - Chin)
+    cd /hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18
+    cat fb.rheMac3.chainPonAbe2Link.txt
+    #   2354152230 bases of 2639145830 (89.201%) in intersection
+
+    #   and, for the swap
+    mkdir /hive/data/genomes/ponAbe2/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/ponAbe2/bed/blastz.rheMac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rheMac3/bed/blastzPonAbe2.2012-04-18/DEF \
+       -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium  > swap.log 2>&1 &
+    #   real    289m9.479s
+    cat fb.ponAbe2.chainRheMac3Link.txt
+    #   2565157739 bases of 3093572278 (82.919%) in intersection
+    cd /hive/data/genomes/ponAbe2/bed
+    ln -s blastz.rheMac3.swap lastz.rheMac3
+
 ##############################################################################

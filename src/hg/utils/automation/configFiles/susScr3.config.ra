@@ -1,0 +1,29 @@
+# Config parameters for makeGenomeDb.pl:
+db susScr3
+clade mammal
+genomeCladePriority 35
+scientificName Sus scrofa
+commonName Pig
+assemblyDate Aug. 2011
+assemblyLabel Swine Genome Sequencing Consortium Sscrofa10.2
+assemblyShortLabel SGSC Sscrofa10.2
+orderKey 2349
+# chrM included in refSeq project 28993 AF934253.1
+mitoAcc NC_000845
+fastaFiles /hive/data/genomes/susScr3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/susScr3/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir pig
+photoCreditURL http://www.ars.usda.gov/is/graphics/photos/
+photoCreditName USDA Agricultural Research Service
+ncbiGenomeId 84
+ncbiAssemblyId 304498
+ncbiAssemblyName Sscrofa10.2
+# refseq project: 28993
+# WGS/genbank project: 13421
+ncbiBioProject 13421
+# genbank assembly:
+genBankAccessionID GCA_000003025.4
+# refseq assembly:
+# genBankAccessionID GCF_000003025.5
+taxId 9823

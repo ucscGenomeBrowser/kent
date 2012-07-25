@@ -131,7 +131,7 @@ if (s == NULL)
 char *scrubbed = needMem(strlen(s));
 char *from=s;
 char *to=scrubbed;
-while(*from!='\0')
+while (*from!='\0')
     {
     if (*from == '<')
         {
@@ -259,7 +259,7 @@ fprintf(f, "document.write(\"<center>"
               "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
               "text-align:left;'>"
             "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER>"
-	    "<UL id='warnList'></UL>"
+            "<UL id='warnList'></UL>"
             "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>"
             "</div></center>\");\n");
 fprintf(f,"function showWarnBox() {"

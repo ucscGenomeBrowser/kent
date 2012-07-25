@@ -1101,7 +1101,7 @@ char *slPairListToString(struct slPair *list,boolean quoteIfSpaces)
 // Don't rely on dyString.  We should do the accounting ourselves and not create extra dependencies.
 int count = 0;
 struct slPair *pair = list;
-for(;pair != NULL; pair = pair->next)
+for (;pair != NULL; pair = pair->next)
     {
     assert(pair->name != NULL && pair->val != NULL); // Better assert and get this over with,
                                                      // complete with stack
@@ -1122,7 +1122,7 @@ if (count == 0)
 char *str = needMem(count+5); // A bit of slop
 
 char *strPtr = str;
-for(pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
+for (pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
     {
     if (pair != list) // Not first cycle
         *strPtr++ = ' ';
@@ -1176,7 +1176,7 @@ if (count == 0)
 char *str = needMem(count+5); // A bit of slop
 
 char *strPtr = str;
-for(pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
+for (pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
     {
     if (pair != list)
         *strPtr++ = delimiter;
@@ -1363,7 +1363,7 @@ char * findWordByDelimiter(char *word,char delimit, char *line)
 {
 int ix;
 char *p=line;
-while(p!=NULL && *p!='\0')
+while (p!=NULL && *p!='\0')
     {
     for (ix = 0;
          word[ix] != '\0' && word[ix] == *p;
@@ -1375,7 +1375,7 @@ while(p!=NULL && *p!='\0')
         || (delimit == ' ' && isspace(*p)))
             return p - ix; // matched and delimited
         }
-    for(;   *p!='\0'
+    for (;   *p!='\0'
          && *p!=delimit
          && (delimit != ' ' || !isspace(*p));
         p++) ;    // advance to next delimit
@@ -1852,7 +1852,11 @@ return count;
  * outArray.  It returns the number of strings.
  * If you pass in NULL for outArray, it will just
  * return the number of strings that it *would*
- * chop. */
+ * chop. 
+ * GOTCHA: since multiple separators are skipped
+ * and treated as one, it is impossible to parse 
+ * a list with an empty string. 
+ * e.g. cat\t\tdog returns only cat and dog but no empty string */
 int chopString(char *in, char *sep, char *outArray[], int outSize)
 {
 int recordCount = 0;
@@ -1879,7 +1883,8 @@ return recordCount;
 }
 
 int chopByWhite(char *in, char *outArray[], int outSize)
-/* Like chopString, but specialized for white space separators. */
+/* Like chopString, but specialized for white space separators. 
+ * See the GOTCHA in chopString */
 {
 int recordCount = 0;
 char c;
@@ -2034,7 +2039,7 @@ if (s != NULL)
         beyond = strchr(s,delimit);
     if (beyond != NULL)
         {
-        for(beyond++;*beyond == delimit;beyond++) ;
+        for (beyond++;*beyond == delimit;beyond++) ;
         if (*beyond != '\0')
             return beyond;
         }
@@ -2296,7 +2301,7 @@ if (*line == 0)
     return NULL;
 int size=0;
 char *e;
-for(e=line;*e!=0;e++)
+for (e=line;*e!=0;e++)
     {
     if (*e==delimit)
         break;
@@ -2342,7 +2347,7 @@ int cntStringsInList(char *pStrings)
 {
 int cnt=0;
 char *p = pStrings;
-while(nextStringInList(&p) != NULL)
+while (nextStringInList(&p) != NULL)
     cnt++;
 return cnt;
 }
@@ -3398,7 +3403,7 @@ tp->tm_mday  += addDays;
 tp->tm_mon   += addMonths;
 tp->tm_year  += addYears;
 int dom=28;
-while( (tp->tm_mon >11  || tp->tm_mon <0)
+while ( (tp->tm_mon >11  || tp->tm_mon <0)
     || (tp->tm_mday>dom || tp->tm_mday<1) )
     {
     if (tp->tm_mon>11)   // First month: tm.tm_mon is 0-11 range

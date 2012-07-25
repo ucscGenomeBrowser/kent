@@ -106,7 +106,7 @@ enum cvSearchable
 // metadata Variavble are only certain declared types
     {
     cvNotSearchable        =0,  // Txt is default
-    cvSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
+    cvSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list
     cvSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
     cvSearchByFreeText     =3,  // Search by free text field
     cvSearchByWildList     =4,  // Search by comma delimited list (accepts '%' wildcard)

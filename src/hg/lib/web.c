@@ -154,9 +154,9 @@ if (withHtmlHeader)
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     else
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+             "\"http://www.w3.org/TR/html4/loose.dtd\">");
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
-    //puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
     puts(
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
@@ -185,7 +185,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
     if (endsWith(scriptName, "qaPushQ")) // Tired of failed stylesheet versioning that messes up RR releaseLog.html (regular and ENCODE)
-	printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
+        printf("    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />\n");
     else
         webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
@@ -215,7 +215,7 @@ if (withLogo)
 	puts("<IMG SRC=\"../images/title.jpg\">");
 	}
     puts("</TH></TR>" "\n"
-    	 "" "\n" );
+         "" "\n" );
     }
 
 /* Put up the hot links bar. */
@@ -274,20 +274,23 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
-    puts(        // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+    puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
          "<TR><TD COLSPAN=3>\n"
-	 "<div id=firstSection>"
+         "<div id=firstSection>"
          "      <!--outer table is for border purposes-->\n"
-         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
+                     "CELLPADDING='1'><TR><TD>\n"
+         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
+                     "CELLPADDING='0'><TR><TD>\n"
          "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
          );
     htmlTextOut(textOutBuf);
 
     puts(
          "     </div></div>\n"
-         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+              "<TR><TH HEIGHT=10></TH></TR>\n"
          "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
          );
     };
@@ -344,7 +347,7 @@ void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args,
 	/* output a CGI and HTML header with the given title in printf format */
 {
 webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
-			     withLogo, FALSE);
+                             withLogo, FALSE);
 }
 
 void webStart(struct cart *theCart, char *db, char *format, ...)
@@ -394,8 +397,10 @@ puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
 puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
     "<BR>\n\n"
     "   <!--outer table is for border purposes-->\n"
-    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-    "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
+    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER
+        "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
+    "    <TABLE BGCOLOR='#" HG_COL_INSIDE
+         "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
     "     <div class='subheadingBar' class='windowSize'>"
 );
 
@@ -403,7 +408,8 @@ vprintf(format, args);
 
 puts(
     "     </div>\n"
-    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>\n"
+    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+         "<TR><TH HEIGHT=10></TH></TR>\n"
     "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
 );
 
@@ -411,7 +417,7 @@ va_end(args);
 }
 
 void webEndSectionTables()
-/* Finish with section tables (but don't do /BODY /HTML lik
+/* Finish with section tables (but don't do /BODY /HTML like
  * webEnd does. */
 {
 webEndSection();
@@ -500,11 +506,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	defaultLabel = clades[numClades];
     numClades++;
     if (numClades >= ArraySize(clades))
-	internalErr();
+        internalErr();
     }
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
-		    defaultLabel, onChangeText);
+                    defaultLabel, onChangeText);
 }
 
 static void printSomeGenomeListHtmlNamedMaybeCheck(char *customOrgCgiName,
@@ -975,8 +981,8 @@ if (oldVars)
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
     if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
-	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
-	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
+        (!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+        (!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
@@ -1189,8 +1195,12 @@ char extension[FILEEXT_LEN];
 splitPath(fileName, NULL, baseName, extension);
 boolean js = sameString(".js",extension);
 boolean style = !js && sameString(".css",extension);
-boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
-if(!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
+boolean image = !js
+             && !style
+             && (  sameString(".png",extension)
+                || sameString(".jpg",extension)
+                || sameString(".gif",extension));
+if (!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
     errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
 
 // Build and verify directory
@@ -1203,18 +1213,20 @@ else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
-if(docRoot != NULL)
+if (docRoot != NULL)
     fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
 else
     // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
-if(!fileExists(dyStringContents(fullDirName)))
-    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
+if (!fileExists(dyStringContents(fullDirName)))
+    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n",
+             dyStringContents(fullDirName));
 
 // build and verify real path to file
 struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDirName), fileName);
-if(!fileExists(dyStringContents(realFileName)))
-    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
+if (!fileExists(dyStringContents(realFileName)))
+    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n",
+             dyStringContents(realFileName));
 
 // build and verify link path including timestamp in the form of dir/baseName + timeStamp or CGI Version + ext
 long mtime = fileModTime(dyStringContents(realFileName));
@@ -1224,7 +1236,7 @@ if(hIsPreviewHost() || hIsPrivateHost())
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
-if(!fileExists(dyStringContents(linkWithTimestamp)))
+if (!fileExists(dyStringContents(linkWithTimestamp)))
     errAbort("Cannot find correct version of file '%s'; this is due to an installation error\n\nError details: %s does not exist",
              fileName, dyStringContents(linkWithTimestamp));
 
@@ -1256,22 +1268,22 @@ return link;
 }
 
 char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml)
-// If this is the first call, will
-//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// If this is the first call, will return full path of timestamped link to the requested
+//   resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
 // NOTE: png, jpg and gif should also be supported but are untested.
 {
 static struct hash *includedResourceFiles = NULL;
-if(!includedResourceFiles)
+if (!includedResourceFiles)
     includedResourceFiles = newHash(0);
 
-if(hashLookup(includedResourceFiles, fileName))
+if (hashLookup(includedResourceFiles, fileName))
     return NULL;
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
 if (link)
-    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
-return link;
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because
+return link;                                         // memory will be freed by caller!!!
 }
 
 boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName)

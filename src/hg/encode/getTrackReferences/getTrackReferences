@@ -137,7 +137,6 @@ def makeHtml(infoDict, original, plain):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog='getTrackReferences',
         description='Turns PubMed Ids and PubMedCentral Ids into GB formatted citations in html',
         epilog='example: getTrackReferences PMC3039671 21347206'
         )
@@ -146,7 +145,7 @@ def main():
     parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     #if len(sys.argv) <= 1:
     #    parser.print_help()
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
     ids = args.ids
     references = dict()
 
