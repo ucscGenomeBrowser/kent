@@ -334,3 +334,27 @@ sorAra1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_163319:8348-15207" where name="sorAra1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/sorAra1/pushQ
+    cd /hive/data/genomes/sorAra1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl sorAra1 2> stderr.txt | grep -v transMap > sorAra1.sql
+    #   real    3m42.169s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/sorAra1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/sorAra1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/sorAra1/bbi/quality.bw
+# WARNING: sorAra1 does not have seq
+# WARNING: sorAra1 does not have extFile
+# WARNING: sorAra1 does not have estOrientInfo
+
+    scp -p sorAra1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/sorAra1.sql"
+
+############################################################################
