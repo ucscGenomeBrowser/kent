@@ -307,6 +307,7 @@ boolean dbIsFound = FALSE;
 
 /* was cartHtmlStart done?  */
 static boolean didCartHtmlStart = FALSE;
+static boolean plainTextDump = FALSE;
 
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
@@ -4614,6 +4615,11 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
     doGetDnaExtended1();
     return;
     }
+// This output probably should be just text/plain but
+// trying to support the fancy warn handler box requires html.
+// But we want to keep it very simple and close to a plain text dump.
+plainTextDump = TRUE;
+puts("<html><head></head><body>\n");
 pushWarnHandler(htmlVaWarn);
 hgBotDelay();
 puts("<PRE>");
@@ -4673,7 +4679,10 @@ else
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
+
 puts("</PRE>");
+puts("</body></html>\n");
+popWarnHandler();
 }
 
 struct hTableInfo *ctToHti(struct customTrack *ct)
@@ -25321,7 +25330,7 @@ else
 
 if (didCartHtmlStart)
     cartHtmlEnd();
-else
+else if (!plainTextDump)
     webEnd();
 }
 
