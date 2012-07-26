@@ -225,8 +225,8 @@ if (geneList != NULL)
 	}
     }
 else if (useFile)
-    /* Read genePreds from a file */
-    list = genePredReaderLoadFile(gpFile, NULL);
+    /* Read genePreds from a file passed instead of a table */
+    list = genePredReaderLoadFile(geneTable, NULL);
 else if (geneName != NULL)
     list = getPredsForName(geneName, geneTable, dbName);
 else if (geneBeds != NULL)
