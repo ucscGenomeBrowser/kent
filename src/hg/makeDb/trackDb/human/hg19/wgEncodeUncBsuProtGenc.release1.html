@@ -30,53 +30,40 @@ or protein encoding region that have been annotated as introns previously.
 <h2>Display Conventions and Configuration</h2>
 
 <p>The display for this track shows peptide mappings as contiguous,
-rectangular items.  These items are rendered in grayscale according to the
+rectangular items rendered in grayscale according to their
 score, with darker items representing higher-confidence peptide mappings.  
-The name of each item is the amino acid
-sequence of the peptide.  If a period (.) appears at the end of a
-name, it signifies a stop codon.  
+The name of each item is the amino acid sequence of the peptide and a period (.) 
+at the end of a name, it signifies a stop codon.  
 <br>
 </p>
-<p>In addition to the displayed genomic coordinates, several additional
-fields are available for each track item.<br>
+<p>In addition to the displayed genomic coordinates, for the standard unmodified track, 
+several additional fields are available for each track item:<br>
 </p>
 <ul>
-  <li>The <span style="font-style: italic;">Raw Score</span> reflects
-the strength of the peptide mapping, in contrast to
-the <span style="font-style: italic;">Score</span> field which
-reflects the confidence of the mapping. The <span style="font-style:
-italic;">Score</span> field is computed as <span style="font-style:
-italic;">-100&times;log<sub>10</sub>(E-Value)</span> for the peptide mapping, and
-scores of 200 or greater have an estimated 5% false discovery rate
-(FDR) while scores of 230 or greater have an estimated 1%
-FDR. The <span style="font-style: italic;"> Raw Score </span> offers
-an additional level of confidence: raw scores of 300 or greater have
-an estimated 5% false discovery rate. Note
-that <span style="font-style: italic;">Raw Score</span> is not
-normalized for the length of the peptide mapping,
-while <span style="font-style: italic;">Score</span> is.
-Consequently, short mappings might have a
-strong <span style="font-style: italic;"> Raw Score </span> but a
-weaker
-<span style="font-style: italic;"> Score. </span></li>
-  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
-semi-unique identifier of the spectrum associated with the peptide
+  <li>The <span style="font-style: italic;">Raw Score</span> is the score given by Peppy, 
+which reflects the strength of the peptide mapping; as an estimated <span style="font-style: italic;">p</span>-value
+it also indicates the confidence of the mapping.  The score is used by the Genome Browser 
+to render shade to the displaying solid rectangular.  The <span style="font-style: italic;">Score</span>
+field is computed as [RawScore - RawScore at 10% FDR cutoff) / (RawScore at near 0% FDR cutoff - RawScore
+at 10% FDR cutoff)] * 1000, and is then converted to an integer.  Raw scores above the
+0% FDR threshold have a score of 1000 (best), while those below the 10% FDR threshold
+have a score of 0 (worst)</li>. 
+  <li>The <span style="font-style: italic;">Spectrum ID</span> is an 
+identifier of the spectrum associated with the peptide
 mapping, and can be used to track the origins of the mapping.<br>
   </li>
   <li>The <span style="font-style: italic;">Peptide Rank </span>
 indicates the rank of each peptide/spectrum mapping.  A spectrum can
 be chimeric, containing more than one peptide, and the spectrum can be
-mapped with confidence to two or more distinct peptides.  Peptides
-with ranks greater than 3 are deleted from the track.</li>
-  <li>The <span style="font-style: italic;">Peptide Repeat Count</span>
-indicates the number of places in the genome that match the peptide
-sequence. This reflects the uniqueness of the peptide mapping in the
-genome. Any mappings to highly-duplicated regions will have a
-high <span style="font-style: italic;"> Peptide Repeat Count </span> and
-peptides which were repeated more than 10 times in the genome were
-deleted from the track.<br>
-  </li>
+mapped to two or more distinct peptides.  Here, we are only reporting the 
+top-scoring match.  If more than one peptide 'tied' for the top score, then 
+all peptides were included and all matches have a <span style="font-style: italic;">Peptide Rank</span>
+of 1.<br>
+</li>
+
+
 </ul>
+
 
 <h2>Methods</h2>
 

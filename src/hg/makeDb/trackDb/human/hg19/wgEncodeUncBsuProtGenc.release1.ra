@@ -6,7 +6,7 @@ superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGenc
 longLabel Proteogenomics Hg19 and GENCODE V11 Mapping from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
-subGroup1 view Views pepMapGcFt=Peptide_Mapping_Gencode_Filtered mPepMapGcFt=Modified_peptide_Mapping_Gencode_Filtered
+subGroup1 view Views pepMapGcFt=Peptide_Mapping_with_Genome_and_Gencode_(Filtered) mPepMapGcFt=Modified_Peptide_Mapping_with_Genome_and_Gencode_(Filtered)
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) H1HESC=H1-hESC&nbsp;(Tier_1) H1NEURONS=H1-neurons&nbsp;(Tier_2)
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
 subGroup4 protocol Protocol FASP=FASP INGEL=In_gel MUDPIT=MudPIT
