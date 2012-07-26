@@ -36,7 +36,6 @@ char *indexFrame = "index";
 struct tempName indexTn;
 trashDirFile(&indexTn, "hgg", "index", ".html");
 FILE *f = mustOpen(indexTn.forCgi, "w");
-htmlSetBackground(addSuffix("../",hBackgroundImage()));
 htmStart(f, "Region Index");
 fprintf(f, "<BODY>");
 fprintf(f, "<B>%s</B><BR>\n", gg->shortLabel);

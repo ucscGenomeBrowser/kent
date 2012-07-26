@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "liftOver.h"
 #include "wikiLink.h"
+#include "web.h"
 #include "hgTracks.h"
 
 /* list of links to display in a menu */
@@ -133,323 +134,230 @@ agpFragFree(&agpItem);  // the one we maybe used
 void printMenuBar()
 /* Put up the menu bar. */
 {
-boolean gotBlat = hIsBlatIndexedDatabase(database);
-struct dyString *uiVars = uiStateUrlPart(NULL);
-char *orgEnc = cgiEncode(organism);
-boolean psOutput = cgiVarExists("hgt.psOutput");
 struct hotLink *link, *links = NULL;
+int i, len;
+char *menuStr, buf[4096], uiVars[1024];
+safef(uiVars, sizeof(uiVars), "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR>\n");
-hPrintf("<TD><TABLE BORDER=\"0\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A>&nbsp;&nbsp;</TD>",
-    orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+menuStr = menuBar(cart);
 
-if (hIsGisaidServer())
-    {
-    /* disable hgGateway for gisaid for now */
-    //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A>&nbsp;&nbsp;</TD>", orgEnc, database);
-    hPrintf(
-    "<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-    '%', '%',
-    cartSessionVarName(),
-    cartSessionId(cart),
-    "Select Subjects");
-    }
-else
-if (hIsGsidServer())
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A>&nbsp;&nbsp;</TD>", orgEnc, database);
-    hPrintf(
-    "<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-    '%', '%', "Select Subjects");
-    }
-else
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%u\" class=\"topbar\">Genomes</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
-    }
-if (psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSetorg=%s&db=%s&%s=%u\" class='topbar'>Genome Browser</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
-    }
-if (gotBlat)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A>&nbsp;&nbsp;</TD>", uiVars->string);
-    }
-if (hIsGisaidServer())
-    {
-    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-       database,
-       cartSessionVarName(),
-       cartSessionId(cart),
-       "Table View");
-    }
-else if (hIsGsidServer())
-    {
-    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-       database, "Table View");
-    }
-else
-    {
-    /* disable TB for CGB servers */
-    if (!hIsCgbServer())
-	{
-	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&%s=%u\" "
-		    "class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-		    database, cartSessionVarName(), cartSessionId(cart),
-	"Tables");
-	}
-    }
+// Create top items in view menu
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
+appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);
+safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
+      hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
+appendLink(&links, buf, "DNA", "dnaLink", FALSE);
+safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%d&db=%s", cartSessionId(cart), database);
+appendLink(&links, buf, "In other genomes", "convertMenuLink", FALSE);
 
-if (hgNearOk(database))
+// Add link-outs to other dbs as appropriate for this assembly
+if (differentWord(database,"susScr2"))
     {
-    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-                 uiVars->string, "Gene Sorter");
-    }
-if (hgPcrOk(database))
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A>&nbsp;&nbsp;</TD>", uiVars->string);
-    }
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\" id='dnaLink'>"
-        "%s</A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
-        winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
-    }
+    /* Print Ensembl anchor for latest assembly of organisms we have
+     * supported by Ensembl == if versionString from trackVersion exists */
+    char ensVersionString[256], ensDateReference[256];
+    ensGeneTrackVersion(database, ensVersionString, ensDateReference, sizeof(ensVersionString));
 
-if (!psOutput)
-    {
-    /* disable Convert function for CGB servers for the time being */
-    if (!hIsCgbServer())
-    if (liftOverChainForDb(database) != NULL)
+    if (sameWord(database,"hg19"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgConvert?%s&db=%s",
-		uiVars->string, database);
-        hPrintf("\" class=\"topbar\">Convert</A>&nbsp;&nbsp;</TD>");
+        printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
         }
-    }
-
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PS/PDF");
-    }
-
-if (!psOutput)
-    {
-    if (wikiLinkEnabled())
+    else if (sameWord(database,"hg18"))
         {
-        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
-        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
-        cartSessionVarName(), cartSessionId(cart));
+        printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd, &links);
         }
-    }
-
-char ensVersionString[256];
-char ensDateReference[256];
-ensGeneTrackVersion(database, ensVersionString, ensDateReference,
-    sizeof(ensVersionString));
-
-if (!psOutput)
-    {
-    if (differentWord(database,"susScr2"))
+    else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
         {
-        /* Print Ensembl anchor for latest assembly of organisms we have
-        * supported by Ensembl == if versionString from trackVersion exists */
-        if (sameWord(database,"hg19"))
+        printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
+        }
+    else if (ensVersionString[0])
+        {
+        char *archive = NULL;
+        if (ensDateReference[0] && differentWord("current", ensDateReference))
+            archive = cloneString(ensDateReference);
+        /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
+        if (isUnknownChrom(database, chromName))
             {
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
-            }
-        else if (sameWord(database,"hg18"))
-            {
-            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd, &links);
-            }
-        else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
-            {
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
-            }
-        else if (ensVersionString[0])
-            {
-            char *archive = NULL;
-            if (ensDateReference[0] && differentWord("current", ensDateReference))
-                archive = cloneString(ensDateReference);
-            /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-            if (isUnknownChrom(database, chromName))
-                {
-                //	which table to check
-                char *ctgPos = "ctgPos";
+            //	which table to check
+            char *ctgPos = "ctgPos";
 
-                if (sameWord(database,"fr2"))
-                    fr2ScaffoldEnsemblLink(archive, &links);
-		else if (hTableExists(database, UCSC_TO_ENSEMBL))
-		    printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
-                else if (hTableExists(database, ctgPos))
-                    /* see if we are entirely within a single contig */
-                    {
-                    struct sqlConnection *conn = hAllocConn(database);
-                    struct sqlResult *sr = NULL;
-                    char **row = NULL;
-                    char query[256];
-                    safef(query, sizeof(query),
-            "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-                    ctgPos, chromName, winEnd, winStart);
-                    sr = sqlGetResult(conn, query);
-
-                    int itemCount = 0;
-                    struct ctgPos *ctgItem = NULL;
-                    while ((row = sqlNextRow(sr)) != NULL)
-                        {
-                        ctgPosFree(&ctgItem);   // if there is a second one
-                        ctgItem = ctgPosLoad(row);
-                        ++itemCount;
-                        if (itemCount > 1)
-                            break;
-                        }
-                    sqlFreeResult(&sr);
-                    hFreeConn(&conn);
-                    if (1 == itemCount)
-                        {   // verify *entirely* within single contig
-                        if ((winEnd <= ctgItem->chromEnd) &&
-                            (winStart >= ctgItem->chromStart))
-                            {
-                            int ctgStart = winStart - ctgItem->chromStart;
-                            int ctgEnd = ctgStart + winEnd - winStart;
-                            printEnsemblAnchor(database, archive, ctgItem->contig,
-                                               ctgStart, ctgEnd, &links);
-                            }
-                        }
-                    ctgPosFree(&ctgItem);   // the one we maybe used
-                    }
-                }
-            else
-                {
+            if (sameWord(database,"fr2"))
+                fr2ScaffoldEnsemblLink(archive, &links);
+            else if (hTableExists(database, UCSC_TO_ENSEMBL))
                 printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
+            else if (hTableExists(database, ctgPos))
+                /* see if we are entirely within a single contig */
+                {
+                struct sqlConnection *conn = hAllocConn(database);
+                struct sqlResult *sr = NULL;
+                char **row = NULL;
+                char query[256];
+                safef(query, sizeof(query),
+                      "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+                      ctgPos, chromName, winEnd, winStart);
+                sr = sqlGetResult(conn, query);
+
+                int itemCount = 0;
+                struct ctgPos *ctgItem = NULL;
+                while ((row = sqlNextRow(sr)) != NULL)
+                    {
+                    ctgPosFree(&ctgItem);   // if there is a second one
+                    ctgItem = ctgPosLoad(row);
+                    ++itemCount;
+                    if (itemCount > 1)
+                        break;
+                    }
+                sqlFreeResult(&sr);
+                hFreeConn(&conn);
+                if (1 == itemCount)
+                    {   // verify *entirely* within single contig
+                    if ((winEnd <= ctgItem->chromEnd) &&
+                        (winStart >= ctgItem->chromStart))
+                        {
+                        int ctgStart = winStart - ctgItem->chromStart;
+                        int ctgEnd = ctgStart + winEnd - winStart;
+                        printEnsemblAnchor(database, archive, ctgItem->contig,
+                                           ctgStart, ctgEnd, &links);
+                        }
+                    }
+                ctgPosFree(&ctgItem);   // the one we maybe used
                 }
+            }
+        else
+            {
+            printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
             }
         }
     }
 
-if (!psOutput)
+if (sameString(database, "hg18"))
     {
-    char buf[2056];
-    /* Print NCBI MapView anchor */
-    if (sameString(database, "hg18"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "hg19"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "mm8"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "danRer2"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "galGal3"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "canFam2"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "rheMac2"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "panTro2"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "anoGam1"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (sameString(database, "bosTau6"))
-        {
-        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-        }
-    if (startsWith("oryLat", database))
-        {
-        safef(buf, sizeof(buf), "http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "UTGB", "medakaLink", TRUE);
-        }
-    if (sameString(database, "cb3"))
-        {
-        safef(buf, sizeof(buf), "http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
-        }
-    if (sameString(database, "cb4"))
-        {
-        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d",
-            chromName, winStart+1, winEnd);
-        appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
-        }
-    if (sameString(database, "ce10"))
-        {
-        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
-        }
-    if (sameString(database, "ce4"))
-        {
-        safef(buf, sizeof(buf), "http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
-        }
-    if (sameString(database, "ce2"))
-        {
-        safef(buf, sizeof(buf), "http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
-            skipChr(chromName), winStart+1, winEnd);
-        appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
-        }
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "hg19"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "mm8"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "danRer2"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "galGal3"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "canFam2"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "rheMac2"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "panTro2"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "anoGam1"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (sameString(database, "bosTau6"))
+    {
+    safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (startsWith("oryLat", database))
+    {
+    safef(buf, sizeof(buf), "http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "UTGB", "medakaLink", TRUE);
+    }
+else if (sameString(database, "cb3"))
+    {
+    safef(buf, sizeof(buf), "http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
+    }
+else if (sameString(database, "cb4"))
+    {
+    safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d",
+          chromName, winStart+1, winEnd);
+    appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
+    }
+else if (sameString(database, "ce10"))
+    {
+    safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
+    }
+else if (sameString(database, "ce4"))
+    {
+    safef(buf, sizeof(buf), "http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
+    }
+else if (sameString(database, "ce2"))
+    {
+    safef(buf, sizeof(buf), "http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+          skipChr(chromName), winStart+1, winEnd);
+    appendLink(&links, buf, "WormBase", "wormbaseLink", TRUE);
     }
 
-for(link = links; link != NULL; link = link->next)
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
+// finish View menu
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", uiVars);
+appendLink(&links, buf, "Configure Browser", "configureMenuLink", FALSE);
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
+appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
+appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
+appendLink(&links, "../cgi-bin/cartReset", "Reset all user settings", "cartResetMenuLink", FALSE);
 
-if (hIsGisaidServer())
+struct dyString *viewMenu = dyStringCreate("<li class='menuparent'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+len = slCount(links);
+for(i = 0, link = links; link != NULL; i++, link = link->next)
     {
-    //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNotYet\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
+    char class[100];
+    if(i == 0)
+        safef(class, sizeof(class), "first");
+    else if (i + 1 == len)
+        safef(class, sizeof(class), "last");
+    else
+        class[0] = 0;
+    char *encodedName = htmlEncode(link->name);
+    dyStringAppend(viewMenu, "<li");
+    if(*class)
+        dyStringPrintf(viewMenu, " class='%s'", class);
+    dyStringPrintf(viewMenu, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
+                   link->external ? " TARGET='_blank'" : "", encodedName);
+    freez(&encodedName);
     }
-else
-if (hIsGsidServer())
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gsidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
-    }
-else
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
-    }
+dyStringAppend(viewMenu, "</ul>\n</li>\n");
 
-hPuts("<TD colspan=20>&nbsp;</TD></TR></TABLE></TD>");
-hPuts("</TR></TABLE>");
-hPuts("</TD></TR></TABLE>\n");
+menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
+hPuts(menuStr);
+freez(&menuStr);
 }

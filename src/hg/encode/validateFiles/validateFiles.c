@@ -1028,7 +1028,7 @@ while (lineFileNextReal(lf, &row))
     int rowLen = strlen(row);
     if (bufSize < rowLen)
         {
-        bufSize += bufSize;
+        bufSize = 2 * rowLen; // allocate twice as much as we need now
         freeMem(buf);
         buf = needMem(bufSize); 
         }

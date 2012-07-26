@@ -282,4 +282,10 @@ boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
 void lazarusLives(unsigned long newExpireSeconds);
 /* Long running process requests more time */
 
+void setContextSpecificHelp(char *link, char *label);
+// Override default behavior for the context specific help link
+
+char *menuBar(struct cart *cart);
+// return HTML for the menu bar (read from a configuration file).
+
 #endif /* WEB_H */
