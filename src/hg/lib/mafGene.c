@@ -771,7 +771,7 @@ unsigned *lastStart = &exonStart[pred->exonCount];
 unsigned *exonEnd = pred->exonEnds;
 int *frames = pred->exonFrames;
 
-boolean utr = options & MAFGENE_UTR;
+boolean includeUtr = options & MAFGENE_INCLUDEUTR;
 
 if (frames == NULL)
     {
@@ -785,7 +785,7 @@ int start = 0;
 
 
 /* first skip 5' UTR if the includeUtr option is not set */
-if (!utr) 
+if (!includeUtr) 
     {
     for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
        {
@@ -802,7 +802,7 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     int thisStart = *exonStart;
     int thisEnd = *exonEnd;
     
-    if (!utr) 
+    if (!includeUtr) 
         {
         if (thisStart > pred->cdsEnd)
 	    break;
@@ -816,7 +816,7 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
         
 	}
     int thisSize = thisEnd - thisStart;
-    if (!utr)
+    if (!includeUtr)
         verbose(3, "in %d %d cds %d %d\n",*exonStart,*exonEnd, thisStart, thisEnd);
     AllocVar(gi);
     gi->frame = *frames;
@@ -832,7 +832,7 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     start += gi->exonSize;
     slAddHead(&giList, gi);
  
-    if (!utr) 
+    if (!includeUtr) 
         {
         if (thisEnd == pred->cdsEnd)
 	    break;
