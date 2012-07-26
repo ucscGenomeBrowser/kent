@@ -15,7 +15,7 @@ dimensionBchecked rank1,rankP
 #dimensionDchecked rep0,rep1,rep2,rep3,rep4,Pooled
 filterComposite dimC=multi dimB=multi
 sortOrder  cellType=+ localization=+ rnaExtract=+ view=- rank=+
-fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Replicate bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
@@ -3941,14 +3941,6 @@ html wgEncodeRikenCage.release3
         color 46,0,184
         # subId=5611 dateSubmitted=2012-02-10
 
-        #track wgEncodeRikenCageNhekNucleusPapTssHmmV3
-        #subTrack wgEncodeRikenCageViewTssHmm off
-        #shortLabel NHEK nucl pA+
-        #longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
-        #subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
-        #type bed 6
-        #color 179,0,134
-        # subId=5611 dateSubmitted=2012-02-10
 
         track wgEncodeRikenCageHfdpcCellPapTssHmm
         subTrack wgEncodeRikenCageViewTssHmm off
@@ -4143,17 +4135,6 @@ html wgEncodeRikenCage.release3
         type bed 6
         # subId=6725 dateSubmitted=2012-03-30
 
-        #track wgEncodeRikenCageNhekNucleusPapTssHmmV4
-        #subTrack wgEncodeRikenCageViewTssHmm off
-        #shortLabel NHEK nucl pA+
-        #longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
-        #subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
-        #type bed 6
-        #color 179,0,134
-        # subId=6726 dateSubmitted=2012-03-30
-        # This may end up going away
-        # it did
-
         track wgEncodeRikenCageHvmfCellPapTssHmm
         subTrack wgEncodeRikenCageViewTssHmm off
         shortLabel HVMF cell pA+
@@ -4227,7 +4208,7 @@ html wgEncodeRikenCage.release3
         type bed 6
         # subId=6743 dateSubmitted=2012-03-30
 
-        track wgEncodeRikenCageNhekNucleusPapTssHmm
+        track wgEncodeRikenCageNhekNucleusPapTssHmmV3
         parent wgEncodeRikenCageViewTssHmm off
         shortLabel NHEK nucl pA+
         longLabel NHEK nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
