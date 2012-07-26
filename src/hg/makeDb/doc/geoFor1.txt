@@ -1,0 +1,113 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   11-Apr-2012
+#       ORGANISM:       Geospiza fortis
+#       TAXID:  48883
+#       ASSEMBLY LONG NAME:     GeoFor_1.0
+#       ASSEMBLY SHORT NAME:    GeoFor_1.0
+#       ASSEMBLY SUBMITTER:     Beijing Genomics Institute
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       ASSEMBLY ACCESSION:     GCA_000277835.1
+
+#       FTP-RELEASE DATE: 25-Jul-2012
+
+#       http://www.ncbi.nlm.nih.gov/genome/13302
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/402638/
+
+#       http://www.ncbi.nlm.nih.gov/bioproject/156703
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AKZB01
+#       Genome Coverage : 115x
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=48883
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Geospiza_fortis/GeoFor_1.0/
+
+##########################################################################
+# Download sequence (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/geoFor1
+    cd /hive/data/genomes/geoFor1
+    mkdir genbank
+    cd genbank
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Geospiza_fortis/GeoFor_1.0/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 1065292181 bases (24006152 N's 1041286029 real 1041286029 upper 0 lower)
+#       in 27239 sequences in 1 files
+# Total size: mean 39109.1 sd 545732.4 min 131 (gi|397531944|gb|JH767125.1|)
+#       max 30495534 (gi|397559183|gb|JH739887.1|) median 598
+# %0.00 masked total, %0.00 masked real
+
+    # strip the names down to something reasonable, they can all be:
+    # >JH7[0-9]
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*JH7/>JH7/; s/.1. Geospiza.*//" | gzip -c > ucsc.fa.gz
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e "s/^\(JH7[0-9]*\).1/\1/" | gzip -c > ucsc.agp.gz
+    checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+    mkdir /hive/data/genomes/geoFor1/photograph
+    cd /hive/data/genomes/geoFor1/photograph
+    wget -O female_galapagos_medium_ground_finch.jpg \
+http://upload.wikimedia.org/wikipedia/commons/7/7b/Female_Gal%C3%A1pagos_medium_ground_finch.jpg
+    convert -geometry "350x350" female_galapagos_medium_ground_finch.jpg \
+        Geospiza_fortis.jpg
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "from Wikimedia Commons - Charlesjsharp" Geospiza_fortis.jpg
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Geospiza_fortis.jpg /usr/local/apache/htdocs/images
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-07-26 - Hiram)
+    # obtain a template for this from the source tree:
+    # kent/src/hg/utils/automation/configFiles/
+    # and check it back into the source tree when completed here:
+    cd /hive/data/genomes/geoFor1
+    cat << '_EOF_' > geoFor1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db geoFor1
+clade vertebrate
+genomeCladePriority 60
+scientificName Geospiza fortis
+commonName Medium Ground Finch
+assemblyDate Apr. 2012
+assemblyLabel Beijing Genomics Institute
+assemblyShortLabel GeoFor_1.0
+orderKey 4373
+mitoAcc none
+fastaFiles /hive/data/genomes/geoFor1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/geoFor1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://commons.wikimedia.org/wiki/User:Charlesjsharp
+photoCreditName Photo courtesy of Charles J Sharp, Wikimedia Commons
+ncbiGenomeId 13302
+ncbiAssemblyId 402638
+ncbiAssemblyName GeoFor_1.0
+ncbiBioProject 156703
+genBankAccessionID GCA_000277835.1
+taxId 48883
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp geoFor1.config.ra > agp.log 2>&1
+    #   real    1m4.001s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev geoFor1.config.ra > db.log 2>&1
+    #   real    9m24.133s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/geoFor1.unmasked.2bit /gbdb/geoFor1/geoFor1.2bit
+    #	browser should function now
+
+##########################################################################
