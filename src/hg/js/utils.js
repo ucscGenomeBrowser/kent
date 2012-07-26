@@ -498,10 +498,8 @@ function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";
     html += "<center>";
-    html += "<div id='warnBox' style='display:none; background-color:Beige; ";
-    html += "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; ";
-    html += "text-align:left;'>";
-    html += "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER>";
+    html += "<div id='warnBox' style='display:none;'>";
+    html += "<CENTER><B id='warnHead'></B></CENTER>";
     html += "<UL id='warnList'></UL>";
     html += "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>";
     html += "</div></center>";

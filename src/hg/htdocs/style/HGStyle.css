@@ -481,3 +481,20 @@ body.oldStaticPage .section h1 {
 body.oldStaticPage .sectionContent {
 	padding: 0 14px;
 }
+
+#hgFindResults {
+        padding: 1em;
+}
+
+#warnBox {
+    background-color: Beige;
+    border: 3px ridge DarkRed;
+    width:640px;
+    padding:10px; 
+    margin:10px;
+    text-align:left;
+}
+
+#warnHead {
+    color: DarkRed;
+}
