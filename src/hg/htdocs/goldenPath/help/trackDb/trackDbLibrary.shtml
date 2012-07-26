@@ -670,8 +670,8 @@
     formats all starting with three common fields (chromosome start end)
     and having optionally many more fields.  For complete bed or bigBed
     format definitions please see:
-    <A HREF="http://genome.cse.ucsc.edu/FAQ/FAQformat.html">
-    http://genome.cse.ucsc.edu/FAQ/FAQformat.html</A>.</P>
+    <A HREF="../../../FAQ/FAQformat.html">
+    http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
 <DIV class="bed"><span class="types bed bigBed"></span>
@@ -1229,20 +1229,6 @@
     explanation</I></P>
 </DIV>
 
-<DIV class="defaultGeneTracks"><span class="types bed"></span>
-<div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
-    <P>Special case for SNP tracks.</P>
-    <P>SNP tracks (type bed but named beginning with "snp", have a special set of
-    configuration options, one of which is the chance to see in the
-    details page of a SNP, the predicted functional affect on a gene.
-    Since there are often many gene tracks and models, the prediction
-    will depend upon the gene model used.  The user has a chance to
-    choose from those available, but this setting allows establishing
-    a default gene track or tracks to base predictions on.</P>
-    <P><B>Example</B>:</P>
-    <pre>   defaultGeneTracks knownGenes</pre>
-</DIV>
-
 <DIV class="exonArrowsDense"><span class="types bed"></span>
 <div class="format"><code>exonArrowsDense &lt;off/on&gt;</code></div>
     <P>On tracks that show
@@ -1392,8 +1378,8 @@
     While there are differences between the formats, all support the basic
     graph configuration controls.  For detailed specifications of each
     type and how to prepare them for display in the Genome Browser please
-    see: <A HREF="http://genome.cse.ucsc.edu/FAQ/FAQformat.html">
-    http://genome.cse.ucsc.edu/FAQ/FAQformat.html</A>.</P>
+    see: <A HREF="../../../FAQ/FAQformat.html">
+    http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
 <DIV class="wig"><span class="types wig bigWig bamWig"></span>
@@ -1911,10 +1897,11 @@
 
 <DIV class="bam"><span class="types bam"></span>
 <div class="format"><code>type bam</code></div>
-    <P>Remote datafiles of
-    type <code>bam</code> are declared this way.  However, additional bam
-    specific and/or remote datafile specific settings will be
-    necessary.</P>
+    <P>If the <code>bigDataUrl</code> setting is given, that URL's data will be
+    displayed. Otherwise, a database table with a single column <code>fileName</code>
+    can specify the location of a local file or a URL.
+    If the database table includes a column <code>seqName</code>, a different
+    VCF file or URL can be specified for each assembly sequence.</P>
     <P><em>Example can be found below.</em></P>
 </DIV>
 
@@ -2072,8 +2059,9 @@
     <P><I>Not found in our trackDbs</I></P>
     <P>Searching to join pairs of tags by name,
     will be limited to some maximum distance (default 20,000
-    bases).  Use this setting to declare a more reasonable maximum,
-    which may speed rendering.</P>
+    bases).  Using a larger range makes it more likely that both
+    reads in a pair will be found even when only one read is in
+    the viewed region.  Using a smaller range may speed rendering.</P>
     <P><hr class="example" /><B>Example:</B></P>
     <pre>
     pairedEndsByName .
@@ -2122,9 +2110,9 @@
     <P>Another alignment
     format is PSL lines, which are typically taken from files generated
     by BLAT or psLayout.  For further information about this format
-    please refer to <A HREF="http://genome.ucsc.edu/FAQ/FAQformat.html#format2">
+    please refer to <A HREF="../../../FAQ/FAQformat.html#format2">
     http://genome.ucsc.edu/FAQ/FAQformat.html#format2</A> and
-    <A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html#BLATAlign"
+    <A HREF="..//hgTracksHelp.html#BLATAlign"
             TARGET="_blank">
     BLAT documentation</A>.</P>
 </DIV>
@@ -2311,8 +2299,8 @@
     occurs in the querying species.  Double lines represent gaps in both
     species which could result from a number of causes (e.g. an inversion
     in one species).  For more information on the "chain" format, please
-    refer to: <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/chain.html">
-    http://genome.cse.ucsc.edu/goldenPath/help/chain.html</A></P>
+    refer to: <A HREF="../chain.html">
+    http://genome.ucsc.edu/goldenPath/help/chain.html</A></P>
     <P>A netAlign track
     represents the best chain for each region in target genome.  The net
     track will show the largest, highest scoring chains that span a
@@ -2322,8 +2310,8 @@
     help to visualizing genome rearrangements such as inversions and
     retroposed elements.    For more information on the "netAlign"
     format, please refer to:
-    <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/net.html">
-    http://genome.cse.ucsc.edu/goldenPath/help/net.html</A></P>
+    <A HREF="../net.html">
+    http://genome.ucsc.edu/goldenPath/help/net.html</A></P>
 </DIV>
 
 <DIV class="chain"><span class="types chain"></span>
@@ -2842,31 +2830,190 @@
 </DIV>
 
 
+<!-- - - - - - - - SNP settings - - - - - - - -->
+<DIV class="snp_intro">
+<H3>snp<em>NNN</em>: specialized subclass of BED 6 for dbSNP variants</H3>
+    <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
+    <P>This particular variant of bed 6, identified by table name,
+    is for UCSC's subset of
+    <A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
+    NCBI's database of short genetic variants.</P>
+</DIV>
+
+<DIV class="snp"><span class="types snp"></span>
+<div class="format"><code>type bed 6 + # Track name starts with &quot;snp&quot;
+    followed by the 3-digit dbSNP build number </code></div>
+    <P>UCSC's subset of dbSNP could be described as "bed 6 + 19"
+    and is produced by a complex process starting with downloading
+    several database dump files and fasta files from dbSNP, and ending
+    with the creation of snp<em>NNN</em> and several auxiliary data
+    tables. This type is not supported as a custom track type.</P>
+</DIV>
+
+<DIV class="chimpDb"><span class = "types snp"></span>
+<div class="format"><code>chimpDb &lt;db&gt;</code></div>
+    <P>If chimp chains/nets were used to identify the chimp reference
+    assembly allele at the location homologous to the human SNP, this
+    specifies which chimp genome assembly was used, e.g. <code>panTro2</code>.</P>
+</DIV>
+
+<DIV class="chimpMacaqueOrthoTable"><span class="types snp"></span>
+<div class="format"><code>chimpMacaqueOrthoTable &lt;table&gt;</code></div>
+    <P>If chains/nets from chimp and rhesus macaque were use to identify
+    the chimp or macaque reference assembly allele at the location
+    homologous to the human SNP, this specifies the database table
+    that contains the mapped alleles.</P>
+</DIV>
+
+<DIV class="chimpOrangMacOrthoTable"><span class="types snp"></span>
+<div class="format"><code>chimpOrangMacOrthoTable &lt;table&gt;</code></div>
+    <P>If chains/nets from chimp, orangutan and rhesus macaque were use to identify
+    the chimp/orangutan/macaque reference assembly allele at the location
+    homologous to the human SNP, this specifies the database table
+    that contains the mapped alleles.</P>
+</DIV>
+
+<DIV class="codingAnnoLabel_table"><span class="types snp"></span>
+<div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
+    <P><B>Deprecated; will probably be removed.</B>
+    This specifies a text label for display of &lt;table&gt;'s
+    predictions of a SNP's effect on a protein coding gene.</P>
+</DIV>
+
+<DIV class="codingAnnotations"><span class="types snp"></span>
+<div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
+    <P><B>Deprecated; will probably be removed.</B>
+    This specifies one or more tables containing predictions of SNPs'
+    effects on protein coding coding genes.</P>
+</DIV>
+
+<DIV class="defaultGeneTracks"><span class="types snp"></span>
+<div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
+    <P>The details page of a SNP can display the predicted functional
+    affect on a gene from any genePred track.
+    Since there are often many gene tracks and models, the prediction
+    will depend upon the gene model used.  The user has a chance to
+    choose from those available, but this setting allows establishing
+    a default gene track or tracks to base predictions on.</P>
+    <P><B>Example</B>:</P>
+    <pre>   defaultGeneTracks knownGenes</pre>
+</DIV>
+
+<DIV class="defaultMaxWeight"><span class="types snp"></span>
+<div class="format"><code>defaultMaxWeight &lt;1|2|3&gt;</code></div>
+    <P>dbSNP assigns a weight of 1, 2 or 3 to each variant, depending
+    on how many distinct mappings a variant's flanking sequences have
+    to the genome.
+    If this is set to <code>1</code>, only uniquely mapped variants will
+    be displayed by default.  If <code>2</code>, only uniquely mapped
+    variants and variants with a small number of duplicate mappings will
+    be displayed.  If <code>3</code>, all variants will be shown regardless
+    of weight.  Note: some tables such as snp<em>NNN</em>Common and
+    snp<em>NNN</em>Flagged contain only uniquely mapped variants, so this
+    setting has no effect on those tables.</P>
+</DIV>
+
+<DIV class="hapmapPhase"><span class="types snp"></span>
+<div class="format"><code>hapmapPhase &lt;II|III&gt;</code></div>
+    <P>The SNP details page looks for the SNP's ID in HapMap track tables
+    which have different names and contents depending on whether they
+    were loaded from HapMap phase II or HapMap phase III data.
+    (This setting is also used by HapMap SNPs tracks.)</P>
+</DIV>
+
+<DIV class="macaqueDb"><span class="types snp"></span>
+<div class="format"><code>macaqueDb &lt;db&gt;</code></div>
+    <P>If macaque chains/nets were used to identify the macaque reference
+    assembly allele at the location homologous to the human SNP, this
+    specifies which macaque genome assembly was used, e.g. <code>rheMac2</code>.</P>
+</DIV>
+
+<DIV class="orangDb"><span class="types snp"></span>
+<div class="format"><code>orangDb &lt;db&gt;</code></div>
+    <P>If orangutan chains/nets were used to identify the orangutan reference
+    assembly allele at the location homologous to the human SNP, this
+    specifies which orangutan genome assembly was used, e.g. <code>ponAbe2</code>.</P>
+</DIV>
+
+<DIV class="snpExceptions"><span class="types snp"></span>
+<div class="format"><code>snpExceptions &lt;table&gt;</code></div>
+    <P>This specifies an auxiliary table that contains annotations of unusual
+    properties of variants.  As of dbSNP build 132, exceptions are incorporated
+    into the main snp<em>NNN</em> table and this setting does not apply.</P>
+</DIV>
+
+<DIV class="snpExceptionDesc"><span class="types snp"></span>
+<div class="format"><code>snpExceptionDesc &lt;table&gt;</code></div>
+    <P>This specifies an auxiliary table that maps exception keywords
+    to one-sentence descriptions.</P>
+</DIV>
+
+<DIV class="snpSeq"><span class="types snp"></span>
+<div class="format"><code>snpSeq &lt;table&gt;</code></div>
+    <P>This specifies an auxiliary table that maps variant IDs to
+    file offsets at which flanking sequences are stored.</P>
+</DIV>
+
+<DIV class="snpSeqFile"><span class="types snp"></span>
+<div class="format"><code>snpSeqFile &lt;path&gt;</code></div>
+    <P>This specifies an auxiliary file that contains the flanking
+    sequences of each variant's representative submitted SNP.</P>
+</DIV>
+
+<DIV class="snp_example"><span class="types snp"></span>
+<div class="format"><B>Example of a SNP track:</B></div>
+    <pre>
+track snp135Common
+shortLabel Common SNPs(135)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
+group varRep
+priority 99.0911
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp135Seq
+snpExceptionDesc snp135ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+    </pre>
+    <P>This track displays variants from dbSNP build 135 with Minor Allele Frequency (MAF)
+    of at least 1%.  Flanking sequence file offsets come from the snp135Seq table,
+    descriptions of unusual properties come from the snp135ExceptionDesc table,
+    effects of variants on protein coding genes are shown with respect to the table
+    knownGene (UCSC Genes track) by default, and if the viewed region is more than
+    10,000,000 base pairs, the data will not be loaded and drawn.</P>
+</DIV>
+
+
 <!-- - - - - - - - VCFTABIX settings - - - - - - - -->
 <DIV class="vcfTabix_intro">
-<H3>vcfTabix: Variable Call Format</H3>
-    <P>Variable Call Format
-    type tracks are based upon a flexible and extendable line-oriented
-    text format developed by the <A HREF="http://www.1000genomes.org/" TARGET="_blank">1000
+<H3>vcfTabix: Variant Call Format indexed by tabix</H3>
+    <P><A HREF="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
+    TARGET=_BLANK>Variant Call Format (VCF)<A>
+    is a flexible and extendable line-oriented text format developed by the
+    <A HREF="http://www.1000genomes.org/" TARGET="_blank">1000
     Genomes Project</A> for releases of single nucleotide
     variants, indels, copy number variants and structural variants
-    discovered by the project. When a VCF file is compressed and indexed
+    discovered by the project, and has since been adopted by other large
+    projects. When a VCF file is compressed and indexed
     using <A HREF="http://samtools.sourceforge.net/tabix.shtml" TARGET="_blank">tabix</A>,
     and made web-accesible, the Browser will fetch only the portions of
     the file necessary to display items in the viewed region. In other
-    worrds, this is a remote data file format.  Please refer to
-    <A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/goldenPath/help/vcf.html">
-    http://hgwdev-tdreszer.cse.ucsc.edu/goldenPath/help/vcf.html</A>
+    words, this is a remote data file format, as are BAM, bigBed and bigWig.
+    Please refer to
+    <A HREF="../vcf.html">http://genome.ucsc.edu/goldenPath/help/vcf.html</A>
     for a complete description of how to prepare and display VCF data.
-    <I>TODO: this track type appears to be supported only for trackHubs
-    and custom tracks.</I></P>
+</P>
 </DIV>
 
 <DIV class="vcfTabix"><span class="types vcfTabix"></span>
 <div class="format"><code>type vcfTabIx</code></div>
-    <P>Variable Call Format
-    tracks have data stored in remote data files and not on the local
-    MySQL database.</P>
+    <P>If the <code>bigDataUrl</code> setting is given, that URL's data will be
+    displayed. Otherwise, a database table with a single column <code>fileName</code>
+    can specify the location of a local file or a URL.
+    If the database table includes a column <code>seqName</code>, a different
+    VCF file or URL can be specified for each assembly sequence.</P>
     <P><em>Example can be found below.</em></P>
 </DIV>
 
@@ -2879,7 +3026,8 @@
     maxWindowToDraw 3000000
       ...    </pre>
     <P>This VCF track has its data in a remote file
-    named "<code>myVcf.gz</code>".  That file is paired with an index named
+    named "<code>myVcf.gz</code>".  That file is paired with a tabix-generated
+    index file named
     "<code>myVcf.gz.tbi</code>" and found in the same remote location.
     </P>
 </DIV>
@@ -2901,7 +3049,7 @@
 <div class="format"><code>type pgSnp</code></div>
     <P>Personal Genome SNP
     type tracks are essentially in "bed 4 + 3" format.
-    The forth "<code>name</code>" column is filled with one or more variants,
+    The fourth "<code>name</code>" column is filled with one or more variants
     (including insertions and deletions) delimited with a '<code>/</code>'
     character.  The fifth column contains the number of variants found
     in the "<code>name</code>" column, while the sixth and seventh columns contain
@@ -2914,9 +3062,18 @@
     each variant if that information is in the table. The variant item
     details page will compute any amino acid change if the variant is
     in a coding region.</P>
-    <P><I>Note: currently there are no settings
-    supported beyond those described in "Common trackDb
-    settings" in this document.</I></P>
+</DIV>
+
+<DIV class="pgPolyphenPredTab"><span class="types pgSnp"></span>
+<div class="format"><code>pgPolyphenPredTab &lt;table&gt;</code></div>
+    <P><I>Not supported for custom tracks.</I></P>
+    <P>Auxiliary table with likelihoods of variant damage to proteins from polyPhen.</P>
+</DIV>
+
+<DIV class="pgSiftPredTab"><span class="types pgSnp"></span>
+<div class="format"><code>pgSiftPredTab &lt;table&gt;</code></div>
+    <P><I>Not supported for custom tracks.</I></P>
+    <P>Auxiliary table with likelihood of variant damage to proteins from SIFT.</P>
 </DIV>
 
 <DIV class="pgSnp_example"><span class="types pgSnp"></span>
