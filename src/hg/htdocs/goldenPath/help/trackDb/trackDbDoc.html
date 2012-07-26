@@ -71,12 +71,13 @@ used as a ready reference.</P>
                                                                 signal graphing tracks</LI>
         <LI><A HREF="#genePred">genePred</A>: Gene models and predictions</LI>
         <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
+        <LI><A HREF="#pgSnp">pgSnp</A>: Personal Genome SNP tracks</LI>
+        <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
         <LI><A HREF="#psl">psl</A>: sequence alignments</LI>
         <LI><A HREF="#chain">chain and netAlign</A>: paired sequence alignments</LI>
         <LI><A HREF="#wigMaf">wigMaf</A>: Multiple alignments</LI>
         <LI><A HREF="#expRatio">expRatio</A>: Microarray expression data</LI>
-        <LI><A HREF="#vcfTabix">vcfTabix</A>: Variable Call Format</LI>
-        <LI><A HREF="#pgSnp">pgSnp</A>: Personal Genome SNP tracks</LI>
+        <LI><A HREF="#snp">snp</A>: short genetic variants from dbSNP</LI>
         <LI><A HREF="#rareTypes">Specialize or rarely used</A>:<BR>
             <A HREF="#altGraphX">altGraphX</A>,
             <A HREF="#bedDetail">bedDetail</A>,
@@ -383,10 +384,6 @@ are described along with their type specific settings.</P>
         <A name="showCdsMaxZoom"></A><IMG class='toggle detail setB'>
         <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="defaultGeneTracks">
-        <A name="defaultGeneTracks"></A><IMG class='toggle detail'>
-        <div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="exonArrowsDense">
         <A name="exonArrowsDense"></A><IMG class='toggle detail'>
         <div class="format"><code>exonArrowsDense &lt;off/on&gt;</code></div>
@@ -649,6 +646,54 @@ are described along with their type specific settings.</P>
 </TABLE>
 <BR><BR>
 
+<A name="pgSnp"></A>
+<TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
+<THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;pgSnp - Personal Genome SNP track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="pgSnp"><IMG class='toggle detail'>
+        <div class="format"><code>type pgSnp</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pgPolyphenPredTab"><A name="pgPolyphenPredTab"></A><IMG class='toggle detail'>
+        <div class="format"><code>pgPolyphenPredTab &lt;arg&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pgSiftPredTab"><A name="pgSiftPredTab"></A><IMG class='toggle detail'>
+        <div class="format"><code>pgSiftPredTab &lt;arg&gt;</code></div>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="pgSnp_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a Personal Genome SNP track:</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="vcfTabix"></A>
+<TABLE class="settingsTable" id="vcfTabix_-_Variant_Call_Format_Track_Settings">
+<THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
+        &nbsp;vcfTabix - Variant Call Format (indexed by tabix) track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
+        <div class="format"><code>type vcfTabIx</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
+        </DIV>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="vcfTabix_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a VCF track:</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
 <A name="psl"></A>
 <TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="psl_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -858,44 +903,67 @@ are described along with their type specific settings.</P>
 </TABLE>
 <BR><BR>
 
-<A name="vcfTabix"></A>
-<TABLE class="settingsTable" id="vcfTabix_-_Variable_Call_Format_Track_Settings">
-<THEAD><TR><TD><DIV ID="vcfTabix_intro" class="intro"></DIV></TD></TR></THEAD>
+<A name="snp"></A>
+<TABLE class="settingsTable" id="snp_-_short_genetic_variants_from_dbSNP_Track_Settings">
+<THEAD><TR><TD><DIV ID="snp_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
-        &nbsp;vcfTabix - Variable Call Format track settings
+        &nbsp;snp - short genetic variants from dbSNP track settings
     </TH></TR>
-    <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
-        <div class="format"><code>type vcfTabIx</code></div>
+    <TR VALIGN=TOP><TD class="snp"><IMG class='toggle detail'>
+        <div class="format"><code>type bed 6 +</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    <TR VALIGN=TOP><TD class="chimpDb"><A name="chimpDb"></A><IMG class='toggle detail'>
+	<div class="format"><code>chimpDb &lt;db&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chimpMacaqueOrthoTable"><A name="chimpMacaqueOrthoTable"></A><IMG class='toggle detail'>
+        <div class="format"><code>chimpMacaqueOrthoTable &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chimpOrangMacOrthoTable"><A name="chimpOrangMacOrthoTable"></A><IMG class='toggle detail'>
+        <div class="format"><code>chimpOrangMacOrthoTable &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="codingAnnoLabel_table"><A name="codingAnnoLabel_table"></A><IMG class='toggle detail'>
+        <div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="codingAnnotations"><A name="codingAnnotations"></A><IMG class='toggle detail'>
+        <div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultGeneTracks"><A name="defaultGeneTracks"></A><IMG class='toggle detail'>
+        <div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="defaultMaxWeight"><A name="defaultMaxWeight"></A><IMG class='toggle detail'>
+        <div class="format"><code>defaultMaxWeight &lt;1|2|3&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hapmapPhase"><A name="hapmapPhase"></A><IMG class='toggle detail'>
+        <div class="format"><code>hapmapPhase &lt;II|III&gt;</code></div>
+    </TR>
+    <TR VALIGN=TOP><TD class="macaqueDb"><A name="macaqueDb"></A><IMG class='toggle detail'>
+        <div class="format"><code>macaqueDb &lt;db&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="orangDb"><A name="orangDb"></A><IMG class='toggle detail'>
+        <div class="format"><code>orangDb &lt;db&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="snpExceptions"><A name="snpExceptions"></A><IMG class='toggle detail'>
+        <div class="format"><code>snpExceptions &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="snpExceptionDesc"><A name="snpExceptionDesc"></A><IMG class='toggle detail'>
+        <div class="format"><code>snpExceptionDesc &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="snpSeq"><A name="snpSeq"></A><IMG class='toggle detail'>
+        <div class="format"><code>snpSeq &lt;table&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="snpSeqFile"><A name="snpSeqFile"></A><IMG class='toggle detail'>
+        <div class="format"><code>snpSeqFile &lt;path&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD>
             <P>Additional settings found in the "Item or
             region tracks" section are also available for displaying
-            varaible call format tracks.</P>
+            snp tracks.</P>
             <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
         </DIV>
     </TD></TR>
-    <TR class="examples" VALIGN=TOP><TD class="vcfTabix_example">
+    <TR class="examples" VALIGN=TOP><TD class="snp_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of a VCF track:</B></div>
-    </TD></TR>
-</TABLE>
-<BR><BR>
-
-<A name="pgSnp"></A>
-<TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
-<THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>
-    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;pgSnp - Personal Genome SNP track settings
-    </TH></TR>
-    <TR VALIGN=TOP><TD class="pgSnp"><IMG class='toggle detail'>
-        <div class="format"><code>type pgSnp</code></div>
-    </TD></TR>
-    <TR class="examples" VALIGN=TOP><TD class="pgSnp_example">
-        <IMG class='toggle detail'>
-        <div class="format"><B>Example of a Personal Genome SNP track:</B></div>
+        <div class="format"><B>Example of a snp track:</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -1587,18 +1655,18 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">chimpDb</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">chimpMacaqueOrthoTable</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">chimpOrangMacOrthoTable</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">chip</A></TD>
@@ -1615,13 +1683,13 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A HREF="#codingAnnoLabel_snp">codingAnnoLabel_snp&lt;*&gt;</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">codingAnnotations</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">color</A></TD>
@@ -1721,10 +1789,8 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">defaultGeneTracks</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD><A HREF="#bed">bed/bigBed</A> -&gt;
-            <A HREF="#item_lessFrequent">Less frequently used</A></P>
-        </TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">defaultLinkedTables</A></TD>
@@ -1734,8 +1800,8 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">defaultMaxWeight</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">denseCoverage</P></A></TD>
@@ -1980,8 +2046,8 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">hapmapPhase</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#">snp</A></TD>
+        <TD><A HREF="#snp">snp (also HapMap SNPs track)</A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">hgGene</A></TD>
@@ -2187,8 +2253,8 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">macaqueDb</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">mafDot</A></TD>
@@ -2404,8 +2470,8 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">orangDb</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">origAssembly</A></TD>
@@ -2503,12 +2569,12 @@ into a single image.</P>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">pgPolyphenPredTab</A></TD>
         <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A HREF="#pgSnp">pgSnp</A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">pgSiftPredTab</A></TD>
         <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A HREF="#pgSnp">pgSnp</A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">pred</A></TD>
@@ -2778,33 +2844,33 @@ into a single image.</P>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpExceptionDesc</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpExceptions</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpSeq</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpSeqFile</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#snp"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpTable</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#gwasCatalog"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">snpVersion</A></TD>
-        <TD><A onclick="return jumpTo(this);" HREF="#">bed</A></TD>
-        <TD>Special for <A HREF="#snpSpecial">SNP tracks</A></TD>
+        <TD><A onclick="return jumpTo(this);" HREF="#"></A></TD>
+        <TD><A HREF="#gwasCatalog"></A></TD>
     </TR>
     <TR VALIGN=TOP>
         <TD><A onclick="return jumpTo(this);" HREF="#">sortOrder</A></TD>
@@ -3183,19 +3249,19 @@ with tdbQuery from *</P>
 <P>chromGraph - ??? Not found in tdbQuery -strict
 from *</P>
 <P>gff
-<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format3">
-         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format3</A></P>
+<A HREF="../../../FAQ/FAQformat.html#format3">
+         http://genome.ucsc.edu/FAQ/FAQformat.html#format3</A></P>
 <P>    Not found in tdbQuery -strict from *</P>
 <P>gtf
-<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format4">
-         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format4</A></P>
+<A HREF="../../../FAQ/FAQformat.html#format4">
+         genome.ucsc.edu/FAQ/FAQformat.html#format4</A></P>
 <P>    Not found in tdbQuery -strict from *</P>
 <P>maf &ndash; replaced by wigMaf hg17, tdbQuery
 -strict: 1 track: fr1.tbaFishBirdCFTR
 </P>
 <P>
-<A HREF="http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format5">
-         http://hgwdev-tdreszer.cse.ucsc.edu/FAQ/FAQformat.html#format5</A></P>
+<A HREF="../../../FAQ/FAQformat.html#format5">
+         http://genome.ucsc.edu/FAQ/FAQformat.html#format5</A></P>
 <P>net but not netAlign - custom only??? Not found
 with tdbQuery non strict</P>
 <P>sample &ndash; RARE bed variant,
@@ -3370,89 +3436,19 @@ bigWig</P>
 </TABLE>
 <BR><BR>
 
-<A name="snpSpecial"></A>
-<H3>Special settings for SNP tracks</H3>
+<A name="gwasCatalog"></A>
+<H3>Special settings for GWAS Catalog track</H3>
 <P>    </P>
-<TABLE class="settingsTable" id="SNP_Specialized_Settings">
+<TABLE class="settingsTable" id="GWAS_Catalog_Track_Specialized_Settings">
     <TR VALIGN=TOP><TH WIDTH=100>Rejected settings</TH><TH WIDTH=100>For Types</TH><TH>Reason</TH>
     </TR>
+    <TR VALIGN=TOP>
+        <TD class="snpTable"><A name="snpTable"></A><code>snpTable &lt;table&gt;</code></TD><TD>gwasCatalog (bed)</TD>
+        <TD>Special for gwasCatalog: table used to map dbSNP IDs to genomic coords</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="chimpDb"><A name="chimpDb"></A><code>chimpDb</code></TD><TD>bed</TD>
-        <TD>special case: snp135Common</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="chimpMacaqueOrthoTable"><A name="chimpMacaqueOrthoTable"></A>
-            <code>chimpMacaqueOrthoTable</code></TD><TD>bed</TD>
-        <TD>Special case: snp125Ui (rare hg18.snp128, hg18.snp126)</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="chimpOrangMacOrthoTable"><A name="chimpOrangMacOrthoTable"></A>
-            <code>chimpOrangMacOrthoTable</code></TD><TD>bed 6 +</TD>
-        <TD>Special case: snp125Ui (only snp###)</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="codingAnnoLabel_snp"><A name="codingAnnoLabel_snp"></A>
-            <code>codingAnnoLabel_snp130CodingDbSnp</code></TD><TD>bed</TD>
-        <TD>Special case: snp125 hgc only</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="codingAnnotations"><A name="codingAnnotations"></A>
-            <code>codingAnnotations</code></TD><TD>bed</TD>
-        <TD>Special case: snp125 hgc only</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="defaultMaxWeight"><A name="defaultMaxWeight"></A>
-            <code>defaultMaxWeight</code></TD><TD>bed</TD>
-        <TD>Special for "snp" tracks.</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="hapmapPhase"><A name="hapmapPhase"></A><code>hapmapPhase</code></TD><TD>bed</TD>
-        <TD>Special case HapMap SNPs</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="macaqueDb"><A name="macaqueDb"></A><code>macaqueDb</code></TD><TD>bed</TD>
-        <TD>special case: snp135Common</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="orangDb"><A name="orangDb"></A><code>orangDb</code></TD><TD>bed</TD>
-        <TD>special case: snp135Common</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="pgPolyphenPredTab"><A name="pgPolyphenPredTab"></A>
-            <code>pgPolyphenPredTab</code></TD><TD>bed</TD>
-        <TD>Special for pgSnp track.</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="pgSiftPredTab"><A name="pgSiftPredTab"></A><code>pgSiftPredTab</code></TD>
-        <TD>bed</TD>
-        <TD>Special for pgSnp track.</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpExceptions"><A name="snpExceptions"></A><code>snpExceptions</code></TD>
-        <TD>bed</TD>
-        <TD>Special for snp tracks</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpExceptionDesc"><A name="snpExceptionDesc"></A>
-            <code>snpExceptionDesc</code></TD><TD>bed</TD>
-        <TD>Special for snp tracks</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpSeq"><A name="snpSeq"></A><code>snpSeq</code></TD><TD>bed</TD>
-        <TD>Special for snp tracks</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpSeqFile"><A name="snpSeqFile"></A><code>snpSeqFile</code></TD><TD>bed</TD>
-        <TD>Special for snp tracks</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpTable"><A name="snpTable"></A><code>snpTable</code></TD><TD>bed</TD>
-        <TD>Special for gwasCatelog and shown in hgc</TD>
-    </TR>
-    <TR VALIGN=TOP>
-        <TD class="snpVersion"><A name="snpVersion"></A><code>snpVersion</code></TD><TD>bed</TD>
-        <TD>Special for gwasCatelog and shown in hgc</TD>
+        <TD class="snpVersion"><A name="snpVersion"></A><code>snpVersion</code></TD><TD>gwasCatalog (bed)</TD>
+        <TD>Special for gwasCatalog: dbSNP build number of table used to map dbSNP IDs to genomic coords</TD>
     </TR>
 </TABLE>
 <BR><BR>
