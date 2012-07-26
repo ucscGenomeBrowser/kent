@@ -66,11 +66,21 @@ return psl->tEnd;
 static void setThick(struct psl *psl, struct bed *bed, struct cds *cds)
 // set thickStart and thickEnd based on CDS record
 {
-int thickStart, thickEnd;
+unsigned thickStart, thickEnd;
+unsigned cdsStart = cds->start - 1;
+unsigned cdsEnd = cds->end;
+
+if (psl->strand[0] == '-')
+    {
+    // if on negative strand, cds is from end
+    unsigned temp = cdsStart;
+    cdsStart = psl->qSize - cdsEnd;
+    cdsEnd = psl->qSize - temp;
+    }
 
 // we subtract one from start to convert to PSL coordinate system
-thickStart = getTargetForQuery(psl, cds->start - 1); 
-thickEnd = getTargetForQuery(psl, cds->end); 
+thickStart = getTargetForQuery(psl, cdsStart);
+thickEnd = getTargetForQuery(psl, cdsEnd);
 
 // if thickStart equals thickEnd, then there is no CDS
 if (thickStart == thickEnd)
@@ -117,10 +127,13 @@ while (lineFileRow(lf, row))
     // lines are of the form of <start>..<end>
     struct cds *cds;
     AllocVar(cds);
-    cds->start = atoi(row[1]);
+    cds->start = atoi(row[1]);  // atoi will stop at '.'
     char *ptr = strchr(row[1], '.');	 // point to first '.'
     ptr+=2; // step past two '.'s
     cds->end = atoi(ptr);
+    if (cds->start > cds->end)
+	errAbort("CDS start(%d) is before end(%d) on line %d",
+		cds->start, cds->end, lf->lineIx);
     hashAdd(hash, row[0], cds);
     }
 lineFileClose(&lf);
