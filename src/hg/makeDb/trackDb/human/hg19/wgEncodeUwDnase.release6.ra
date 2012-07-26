@@ -55,7 +55,7 @@ group regulation
 subGroup1 view Views Hot=HotSpots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3BONEMARROWHS5=Bone_Marrow_HS5 t3BONEMARROWHS27A=Bone_Marrow_HS27a t3BONEMARROWMSC=Bone_Marrow_MSC t3CACO2=Caco-2 t3CD04NAIVEWB11970640=CD4+_Naive_Wb11970640 t3CD04NAIVEWB78495824=CD4+_Naive_Wb78495824 t3CD34MOBILIZED=CD34+_Mobilized t3CMK=CMK t3GM04503=GM04503 t3GM04504=GM04504 t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAAH=HA-h t3HAASP=HA-sp t3HAC=HAc t3HAEPIC=HAEpiC t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3M059J=M059J t3NB4=NB4  t3NHA=NH-A t3NHBERA=NHBE_RA t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPMI7951=RPMI-7951 t3RPTEC=RPTEC t3SAEC=SAEC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3SKZMC=SkMC t3T47D=T-47D t3TH01=Th1 t3TH01WB33676984=Th1_Wb33676984 t3TH01WB54553204=Th1_Wb54553204 t3TH02=Th2 t3TH02WB33676984=Th2_Wb33676984 t3TH02WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824 t3TREGWB83319432=Treg_Wb83319432 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup3 rep Replicate rep1=1 rep2=2
-subGroup4 treatment Treatment None=None 4OHTAM=4-OHTAM_20_nM_72_hr DIFF4D=DIFF<br>4_d DIFFA2D=diffProtA_2_d DIFFA5D=diffProtA_5_d DIFFA9D=diffProtA_9_d DIFFA14D=diffProtA_14_d EST100NM1H=Estradiol_100_nM<br>1_hr ESTCTRL0H=Estradiol_Control<br>0_hr
+subGroup4 treatment Treatment None=None OHTAM=4-OHTAM_20_nM_72_hr DIFF4D=DIFF<br>4_d DIFFA2D=diffProtA_2_d DIFFA5D=diffProtA_5_d DIFFA9D=diffProtA_9_d DIFFA14D=diffProtA_14_d EST100NM1H=Estradiol_100_nM<br>1_hr ESTCTRL0H=Estradiol_Control<br>0_hr
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 sortOrder cellType=+ rep=+ view=+
 filterComposite dimZ
@@ -1289,7 +1289,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Ht 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS HotSpots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=t3WI38 treatment=4OHTAM rep=rep1
+        subGroups view=Hot cellType=t3WI38 treatment=OHTAM rep=rep1
         type broadPeak
         # subId=3214 dateSubmitted=2011-01-11
 
@@ -1297,7 +1297,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Ht 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS HotSpots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=t3WI38 treatment=4OHTAM rep=rep2
+        subGroups view=Hot cellType=t3WI38 treatment=OHTAM rep=rep2
         type broadPeak
         # subId=3215 dateSubmitted=2011-01-11
 
@@ -2972,7 +2972,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=t3WI38 treatment=4OHTAM rep=rep1
+        subGroups view=Peaks cellType=t3WI38 treatment=OHTAM rep=rep1
         type narrowPeak
         # subId=3214 dateSubmitted=2011-01-11
 
@@ -2980,7 +2980,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=t3WI38 treatment=4OHTAM rep=rep2
+        subGroups view=Peaks cellType=t3WI38 treatment=OHTAM rep=rep2
         type narrowPeak
         # subId=3215 dateSubmitted=2011-01-11
 
@@ -4805,7 +4805,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sg 1
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=t3WI38 treatment=4OHTAM rep=rep1
+        subGroups view=zRSig cellType=t3WI38 treatment=OHTAM rep=rep1
         type bigWig 1.000000 21917.000000
         # subId=3214 dateSubmitted=2011-01-11
 
@@ -4813,7 +4813,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sg 2
         longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=t3WI38 treatment=4OHTAM rep=rep2
+        subGroups view=zRSig cellType=t3WI38 treatment=OHTAM rep=rep2
         type bigWig 1.000000 24297.000000
         # subId=3215 dateSubmitted=2011-01-11
 
