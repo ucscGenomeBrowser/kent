@@ -1530,42 +1530,35 @@ void setThemeFromCart(struct cart *cart)
 // Get theme from cart and use it to get background file from config;
 // format is browser.theme.<name>=<stylesheet>[,<background>]
 
-char **options;
-int optionCount;
 char *cartTheme = cartOptionalString(cart, "theme");
-if (cartTheme==NULL)
-    return;
 
-char *themeKey = catTwoStrings("browser.theme.", cartTheme);
-char *themeDefLine = cfgOption(themeKey);
-freez(&themeKey);
-if (themeDefLine == NULL)
-    return;
+// XXXX which setting should take precedence? Currently browser.theme does.
 
-sqlStringDynamicArray(themeDefLine, &options, &optionCount);
-if(options == NULL)
-    return;
-
-char *styleFile = options[0];
-if(isNotEmpty(styleFile))
+char *styleFile = cfgOption("browser.style");
+if(styleFile != NULL)
     {
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-    if (link)
+    char buf[512];
+    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    char *copy = cloneString(buf);
+    htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
+    webSetStyle(copy);       // for web.c, used by hgc
+    }
+
+if(isNotEmpty(cartTheme))
+    {
+    char *themeKey = catTwoStrings("browser.theme.", cartTheme);
+    styleFile = cfgOption(themeKey);
+    freeMem(themeKey);
+    if (isEmpty(styleFile))
+        return;
+
+    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
+    if (link != NULL)
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc
         }
     }
-
-if(optionCount >= 2)
-    {
-    char *background = options[1];
-    if(isNotEmpty(background))
-        htmlSetBackground(cloneString(background));
-    }
-
-freeMem(options[0]);
-freez(&options);
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),

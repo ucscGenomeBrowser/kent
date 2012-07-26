@@ -27,7 +27,7 @@ TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
             mrnaToGene pslCDnaFilter pslDiff pslHisto \
-            pslPartition pslSelect pslStats pslSwap spideyToPsl \
+            pslPartition pslSelect pslStats pslSwap pslToBed spideyToPsl \
 	    sqlToXml xmlToSql utils
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp

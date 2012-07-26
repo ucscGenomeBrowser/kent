@@ -79,9 +79,6 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             NULL };
 
-// MERGE_GENE_SUGGEST is used for work on redmine #5933
-// #define MERGE_GENE_SUGGEST
-
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -4558,7 +4555,7 @@ if (!hideControls)
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
-    hWrites("<div style='height:1em;'></div>\n");
+    hWrites("<div style='height:0.3em;'></div>\n");
 #endif//ndef USE_NAVIGATION_LINKS
 
     if (showTrackControls)
@@ -4610,41 +4607,20 @@ if (!hideControls)
 
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
-#ifdef MERGE_GENE_SUGGEST
 	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
-        hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
-        hWrites(" ");
-        hButtonWithOnClick("hgt.jump", "go", NULL, "imageV2.jumpButtonOnClick()");
-        jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest",
-                      newJsonBoolean(assemblySupportsGeneSuggest(database)));
-        if (assemblySupportsGeneSuggest(database))
-            hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n",
-                    assemblyGeneSuggestTrack(database));
-#else///ifndef MERGE_GENE_SUGGEST
-        hWrites("position/search ");
-        hTextVar("position", addCommasToPos(database, position), 30);
-        sprintLongWithCommas(buf, winEnd - winStart);
-	if(assemblySupportsGeneSuggest(database))
-            hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
-                    "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
-                    "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
-                    );
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
-        hButtonWithOnClick("hgt.jump", "jump", NULL, "imageV2.jumpButtonOnClick()");
-	hOnClickButton(clearButtonJavascript,"clear");
-        hPrintf(" size <span id='size'>%s</span> bp. ", buf);
-        hWrites(" ");
-        hButton("hgTracksConfigPage", "configure");
-#endif///ndef MERGE_GENE_SUGGEST
-        if (survey && differentWord(survey, "off"))
-            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' "
-                    "TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
-                    survey, surveyLabel ? surveyLabel : "Take survey");
-        hPutc('\n');
-        }
+	hButton("hgt.jump", "go");
+	jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
+	if(assemblySupportsGeneSuggest(database))
+	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+	if (survey && differentWord(survey, "off"))
+            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+	hPutc('\n');
+	}
     }
 
 /* Make chromsome ideogram gif and map. */
@@ -5619,9 +5595,7 @@ if(!trackImgOnly)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-#ifdef MERGE_GENE_SUGGEST
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-#endif///def MERGE_GENE_SUGGEST
     if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);

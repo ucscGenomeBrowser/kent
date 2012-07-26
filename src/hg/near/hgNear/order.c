@@ -391,10 +391,9 @@ void doOrderInfo(struct sqlConnection *conn)
 {
 struct order *ordList, *ord;
 
+makeTitle("Info Sorting Types for Gene Sorter", "hgNearHelp.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\">\n");
 cartSaveSession(cart);
-makeTitle("Info Sorting Types for Gene Sorter", 
-	"hgNearHelp.html");
 controlPanelStart();
 
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 BGCOLOR=\"#"HG_COL_INSIDE"\">\n");

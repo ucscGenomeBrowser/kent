@@ -387,3 +387,27 @@ saiBol1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH378122:1872708-1880068" where name="saiBol1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/saiBol1/pushQ
+    cd /hive/data/genomes/saiBol1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl saiBol1 2> stderr.txt | grep -v transMap > saiBol1.sql
+    #   real    3m42.169s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/saiBol1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/saiBol1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/saiBol1/bbi/quality.bw
+# WARNING: saiBol1 does not have seq
+# WARNING: saiBol1 does not have extFile
+# WARNING: saiBol1 does not have estOrientInfo
+
+    scp -p saiBol1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/saiBol1.sql"
+
+############################################################################

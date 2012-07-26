@@ -387,3 +387,27 @@ tarSyr1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_66368:1-2388" where name="tarSyr1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/tarSyr1/pushQ
+    cd /hive/data/genomes/tarSyr1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl tarSyr1 2> stderr.txt | grep -v transMap > tarSyr1.sql
+    #   real    4m6.158s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/tarSyr1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr1/bbi/quality.bw
+# WARNING: tarSyr1 does not have seq
+# WARNING: tarSyr1 does not have extFile
+# WARNING: tarSyr1 does not have estOrientInfo
+
+    scp -p tarSyr1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/tarSyr1.sql"
+
+############################################################################
