@@ -21,8 +21,9 @@ origins of sample proteins (Giddings, et al. 2003).</p>
 matched to genomic sequences for selected cell lines, using a workflow and 
 software specifically designed for this purpose.  The tracks can be used to 
 identify which parts of the genome are translated into proteins, to verify 
-which transcripts discovered by other ENCODE experiments are protein-coding, and 
-to reveal new genes and/or splice variants. Of particular interest is the possibility
+which transcripts discovered by other ENCODE experiments are protein-coding,
+to reveal new genes and/or splice variants and proteins with post-translational 
+modifications (PTM). Of particular interest is the possibility
 of uncovering the translation of small open reading frames (ORFs), antisense transcripts, 
 or protein encoding region that have been annotated as introns previously.
 </p>
@@ -36,18 +37,26 @@ The name of each item is the amino acid sequence of the peptide and a period (.)
 at the end of a name, it signifies a stop codon.  
 <br>
 </p>
-<p>In addition to the displayed genomic coordinates, for the standard unmodified track, 
-several additional fields are available for each track item:<br>
+<p>In addition to the common fields in genome browser display, here are several 
+additional fields for these tracks:<br>
 </p>
 <ul>
+  <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence for 
+regular pepitde mapping and peptide sequence appended with the integer fraction of the 
+PTM mass for peptides with PTM mapping.
+  </li>
+  <li>The <span style="font-style: italic;">Score</span> is derived from the Raw Score
+given by the proteomics peptide mapping software Peppy.  It is computed as 
+[RawScore - RawScore at 10% FDR cutoff) / (RawScore at near 0% FDR cutoff - RawScore
+at 10% FDR cutoff)] * 1000, and is then converted to an integer.  Raw scores above the
+0% FDR threshold have a score of 1000 (best), while those below the 10% FDR threshold
+have a score of 0 (worst).  The degree of shade on the solid rectangular representing 
+the peptides are based on this score. 
+  </li>
   <li>The <span style="font-style: italic;">Raw Score</span> is the score given by Peppy, 
 which reflects the strength of the peptide mapping; as an estimated <span style="font-style: italic;">p</span>-value
 it also indicates the confidence of the mapping.  The score is used by the Genome Browser 
-to render shade to the displaying solid rectangular.  The <span style="font-style: italic;">Score</span>
-field is computed as [RawScore - RawScore at 10% FDR cutoff) / (RawScore at near 0% FDR cutoff - RawScore
-at 10% FDR cutoff)] * 1000, and is then converted to an integer.  Raw scores above the
-0% FDR threshold have a score of 1000 (best), while those below the 10% FDR threshold
-have a score of 0 (worst)</li>. 
+to render shade to the displaying solid rectangular.  </li>. 
   <li>The <span style="font-style: italic;">Spectrum ID</span> is an 
 identifier of the spectrum associated with the peptide
 mapping, and can be used to track the origins of the mapping.<br>
