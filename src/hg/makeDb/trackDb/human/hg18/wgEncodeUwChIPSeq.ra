@@ -8,10 +8,10 @@ shortLabel UW Histone
 longLabel ENCODE Histone Modifications by Univ. Washington ChIP-seq
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hotspots zRawSig=Raw_Signal
-subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3BJ=BJ t3CACO2=Caco-2 t3GM06990=GM06990 t3GM12801=GM12801 t3GM12864=GM12864 t3GM12865=GM12865 t3GM12872=GM12872 t3GM12873=GM12873 t3GM12874=GM12874 t3GM12875=GM12875 t3HEK293=HEK293 t3HL60=HL-60 t3HMEC=HMEC t3HRE=HRE t3NHEK=NHEK t3SAEC=SAEC t3SKNSHRA=SK-N-SH_RA t3WERIRB1=WERI-Rb-1
 #subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3
 subGroup3 factor Factor CTCF=CTCF H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3
-subGroup4 rank Rank 1st=1st 2nd=2nd
+subGroup4 rank Rank m1st=1st m2nd=2nd
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rank
 dimensionZchecked 1st
 #fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
@@ -36,14 +36,14 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12874 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12874 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12874 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12874 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12875 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12875 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12875 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12875 rank=m1st
         type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12875Ctcf
@@ -51,7 +51,7 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12875 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12875 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12875 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12875 rank=m2nd
         #type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12873Ctcf
@@ -59,7 +59,7 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12873 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12873 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12873 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12873 rank=m2nd
         #type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12874Ctcf
@@ -67,28 +67,28 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12874 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12874 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12874 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12874 rank=m2nd
         #type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12873 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12873 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12873 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12873 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12865 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12865 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12865 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12865 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12872 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12872 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12872 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12872 rank=m1st
         type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12872Ctcf
@@ -96,14 +96,14 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12872 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12872 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12872 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12872 rank=m2nd
         #type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12864 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12864 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12864 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12864 rank=m1st
         type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12864Ctcf
@@ -111,7 +111,7 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12864 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12864 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12864 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12864 rank=m2nd
         #type narrowPeak
 
         #track wgEncodeUwChIPSeqPeaksRep2Gm12865Ctcf
@@ -119,105 +119,105 @@ noInherit on
         #subTrack wgEncodeUwChIPSeqViewaPeaks off
         #shortLabel GM12865 CTCF P2
         #longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 2nd (CTCF in GM12865 cells)
-        #subGroups view=aPeaks factor=CTCF cellType=GM12865 rank=2nd
+        #subGroups view=aPeaks factor=CTCF cellType=GM12865 rank=m2nd
         #type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1BjtertCtcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel BJ CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in BJ cells)
-        subGroups view=aPeaks factor=CTCF cellType=BJ rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3BJ rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1BjH3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel BJ H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in BJ cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=BJ rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3BJ rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1BjH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel BJ H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in BJ cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=BJ rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3BJ rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1BjH3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel BJ H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in BJ cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=BJ rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3BJ rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Caco2Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel Caco2 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in Caco-2 cells)
-        subGroups view=aPeaks factor=CTCF cellType=Caco2 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3CACO2 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel Caco2 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in Caco-2 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=Caco2 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3CACO2 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel Cco2 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in Caco-2 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=Caco2 rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3CACO2 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel Cco2 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in Caco-2 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=Caco2 rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3CACO2 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm06990Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM06990 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM06990 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM06990 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM06990 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel 06990 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in GM06990 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=GM06990 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3GM06990 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel 6990 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in GM06990 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=GM06990 rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3GM06990 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel 6990 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in GM06990 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=GM06990 rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3GM06990 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksGm12801Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel GM12801 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12801 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12801 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3GM12801 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel GM12878 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in GM12878 cells)
-        subGroups view=aPeaks factor=CTCF cellType=GM12878 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t1GM12878 rank=m1st
         type narrowPeak
         color 153,38,0
 
@@ -225,7 +225,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel GM128 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in GM12878 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=GM12878 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t1GM12878 rank=m1st
         type narrowPeak
         color 153,38,0
 
@@ -233,7 +233,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel M128 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in GM12878 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=GM12878 rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t1GM12878 rank=m1st
         type narrowPeak
         color 153,38,0
 
@@ -241,7 +241,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel M128 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in GM12878 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=GM12878 rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t1GM12878 rank=m1st
         type narrowPeak
         color 153,38,0
 
@@ -249,7 +249,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HEK293 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HEK293 cells)
-        subGroups view=aPeaks factor=CTCF cellType=HEK293 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3HEK293 rank=m1st
         type narrowPeak
         color 133,0,173
 
@@ -257,7 +257,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HeLaS3 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HeLa-S3 cells)
-        subGroups view=aPeaks factor=CTCF cellType=HELA rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t2HELAS3 rank=m1st
         type narrowPeak
         color 0,119,158
 
@@ -265,7 +265,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HLaS3 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in HeLa-S3 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=HELA rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t2HELAS3 rank=m1st
         type narrowPeak
         color 0,119,158
 
@@ -273,7 +273,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HLS3 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HeLa-S3 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=HELA rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t2HELAS3 rank=m1st
         type narrowPeak
         color 0,119,158
 
@@ -281,7 +281,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HLS3 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in HeLa-S3 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=HELA rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t2HELAS3 rank=m1st
         type narrowPeak
         color 0,119,158
 
@@ -289,7 +289,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HepG2 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HepG2 cells)
-        subGroups view=aPeaks factor=CTCF cellType=HEPG2 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t2HEPG2 rank=m1st
         color 189,0,157
         type narrowPeak
 
@@ -297,7 +297,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HepG2 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in HepG2 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=HEPG2 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t2HEPG2 rank=m1st
         type narrowPeak
         color 189,0,157
 
@@ -305,7 +305,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HpG2 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HepG2 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=HEPG2 rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t2HEPG2 rank=m1st
         type narrowPeak
         color 189,0,157
 
@@ -313,7 +313,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HpG2 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in HepG2 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=HEPG2 rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t2HEPG2 rank=m1st
         type narrowPeak
         color 189,0,157
 
@@ -321,63 +321,63 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HL60 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HL-60 cells)
-        subGroups view=aPeaks factor=CTCF cellType=HL60 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3HL60 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HL60 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in HL-60 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=HL60 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3HL60 rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HmecCtcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HMEC CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HMEC cells)
-        subGroups view=aPeaks factor=CTCF cellType=HMEC rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3HMEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HMEC H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HMEC cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=HMEC rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3HMEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksHreCtcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HRE CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HRE cells)
-        subGroups view=aPeaks factor=CTCF cellType=HRE rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3HRE rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HreH3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HRE H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in HRE cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=HRE rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3HRE rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HreH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HRE H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HRE cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=HRE rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3HRE rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HreH3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HRE H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in HRE cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=HRE rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3HRE rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1HuvecCtcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HUVEC CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in HUVEC cells)
-        subGroups view=aPeaks factor=CTCF cellType=HUVEC rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t2HUVEC rank=m1st
         type narrowPeak
         color 224,75,0
 
@@ -385,7 +385,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HUVEC H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in HUVEC cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=HUVEC rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t2HUVEC rank=m1st
         type narrowPeak
         color 224,75,0
 
@@ -393,7 +393,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HUVEC H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in HUVEC cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=HUVEC rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t2HUVEC rank=m1st
         type narrowPeak
         color 224,75,0
 
@@ -401,7 +401,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel HUVEC H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in HUVEC cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=HUVEC rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t2HUVEC rank=m1st
         type narrowPeak
         color 224,75,0
 
@@ -409,7 +409,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel K562 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in K562 cells)
-        subGroups view=aPeaks factor=CTCF cellType=K562 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t1K562 rank=m1st
         type narrowPeak
         color 46,0,184
 
@@ -417,7 +417,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel K562 H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in K562 cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=K562 rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t1K562 rank=m1st
         type narrowPeak
         color 46,0,184
 
@@ -425,7 +425,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel K562 H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in K562 cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=K562 rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t1K562 rank=m1st
         type narrowPeak
         color 46,0,184
 
@@ -433,7 +433,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks
         shortLabel K562 H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in K562 cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=K562 rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t1K562 rank=m1st
         type narrowPeak
         color 46,0,184
 
@@ -441,7 +441,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel NHEK CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in NHEK cells)
-        subGroups view=aPeaks factor=CTCF cellType=NHEK rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3NHEK rank=m1st
         type narrowPeak
         color 179,0,134
 
@@ -449,7 +449,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel NHEK H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in NHEK cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=NHEK rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3NHEK rank=m1st
         type narrowPeak
         color 179,0,134
 
@@ -457,7 +457,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel NHEK H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in NHEK cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=NHEK rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3NHEK rank=m1st
         type narrowPeak
         color 179,0,134
 
@@ -465,7 +465,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel NHEK H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in NHEK cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=NHEK rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3NHEK rank=m1st
         type narrowPeak
         color 179,0,134
 
@@ -473,63 +473,63 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SAEC CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in SAEC cells)
-        subGroups view=aPeaks factor=CTCF cellType=SAEC rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3SAEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SaecH3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SAEC H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in SAEC cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=SAEC rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3SAEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SAEC H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in SAEC cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=SAEC rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3SAEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SAEC H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in SAEC cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=SAEC rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3SAEC rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SknshraCtcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SKNSHRA CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in SK-N-SH_RA cells)
-        subGroups view=aPeaks factor=CTCF cellType=SKNSHRA rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3SKNSHRA rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SKN H3K4me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K4me3 in SK-N-SH_RA cells)
-        subGroups view=aPeaks factor=H3K04me3 cellType=SKNSHRA rank=1st
+        subGroups view=aPeaks factor=H3K04me3 cellType=t3SKNSHRA rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SKN H3K27me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K27me3 in SK-N-SH_RA cells)
-        subGroups view=aPeaks factor=H3K27me3 cellType=SKNSHRA rank=1st
+        subGroups view=aPeaks factor=H3K27me3 cellType=t3SKNSHRA rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel SKN H3K36me3 P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (H3K36me3 in SK-N-SH_RA cells)
-        subGroups view=aPeaks factor=H3K36me3 cellType=SKNSHRA rank=1st
+        subGroups view=aPeaks factor=H3K36me3 cellType=t3SKNSHRA rank=m1st
         type narrowPeak
 
         track wgEncodeUwChIPSeqPeaksWerirb1Ctcf
         subTrack wgEncodeUwChIPSeqViewaPeaks off
         shortLabel WERIRb1 CTCF P1
         longLabel ENCODE UW Histone ChIP Peaks (FDR 0.5%) - 1st (CTCF in WERI-Rb-1 cells)
-        subGroups view=aPeaks factor=CTCF cellType=WERIRb1 rank=1st
+        subGroups view=aPeaks factor=CTCF cellType=t3WERIRB1 rank=m1st
         type narrowPeak
 
     track wgEncodeUwChIPSeqViewcHot
@@ -544,266 +544,266 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12874 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12874 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12874 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12874 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12875 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12875 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12875 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12875 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12875 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12875 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12875 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12875 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12873 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12873 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12873 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12873 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12874 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12874 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12874 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12874 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12873 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12873 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12873 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12873 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12865 CTCF 1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12865 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12865 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12865 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12872 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12872 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12872 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12872 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12872 CTCF 2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12872 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12872 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12872 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12864 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12864 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12864 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12864 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12864 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12864 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12864 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12864 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12865 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12865 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12865 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM12865 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1BjtertCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in BJ cells)
-        subGroups view=cHot factor=CTCF cellType=BJ rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3BJ rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2BjtertCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in BJ cells)
-        subGroups view=cHot factor=CTCF cellType=BJ rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3BJ rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in BJ cells)
-        subGroups view=cHot factor=H3K04me3 cellType=BJ rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3BJ rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in BJ cells)
-        subGroups view=cHot factor=H3K04me3 cellType=BJ rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3BJ rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1BjH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in BJ cells)
-        subGroups view=cHot factor=H3K27me3 cellType=BJ rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3BJ rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2BjH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in BJ cells)
-        subGroups view=cHot factor=H3K27me3 cellType=BJ rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3BJ rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in BJ cells)
-        subGroups view=cHot factor=H3K36me3 cellType=BJ rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3BJ rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel BJ H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in BJ cells)
-        subGroups view=cHot factor=H3K36me3 cellType=BJ rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3BJ rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Caco2 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in Caco-2 cells)
-        subGroups view=cHot factor=CTCF cellType=Caco2 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3CACO2 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Caco2 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in Caco-2 cells)
-        subGroups view=cHot factor=CTCF cellType=Caco2 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3CACO2 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Caco2 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=Caco2 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3CACO2 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Cco2 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=Caco2 rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3CACO2 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Cco2 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=Caco2 rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3CACO2 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Cco2 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=Caco2 rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3CACO2 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Cco2 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=Caco2 rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3CACO2 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel Cco2 H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in Caco-2 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=Caco2 rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3CACO2 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM06990 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM06990 cells)
-        subGroups view=cHot factor=CTCF cellType=GM06990 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM06990 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM06990 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM06990 cells)
-        subGroups view=cHot factor=CTCF cellType=GM06990 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3GM06990 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 06990 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=GM06990 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3GM06990 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 06990 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=GM06990 rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3GM06990 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 6990 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=GM06990 rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3GM06990 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 6990 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=GM06990 rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3GM06990 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 6990 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=GM06990 rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3GM06990 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel 6990 H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in GM06990 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=GM06990 rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3GM06990 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12801 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12801 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12801 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3GM12801 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel GM12878 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in GM12878 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12878 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t1GM12878 rank=m1st
         type broadPeak
         color 153,38,0
 
@@ -811,7 +811,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM12878 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in GM12878 cells)
-        subGroups view=cHot factor=CTCF cellType=GM12878 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t1GM12878 rank=m2nd
         type broadPeak
         color 153,38,0
 
@@ -819,7 +819,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel GM128 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=GM12878 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t1GM12878 rank=m1st
         type broadPeak
         color 153,38,0
 
@@ -827,7 +827,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel GM128 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=GM12878 rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t1GM12878 rank=m2nd
         type broadPeak
         color 153,38,0
 
@@ -835,7 +835,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel M128 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=GM12878 rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t1GM12878 rank=m1st
         type broadPeak
         color 153,38,0
 
@@ -843,7 +843,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel M128 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=GM12878 rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t1GM12878 rank=m2nd
         type broadPeak
         color 153,38,0
 
@@ -851,7 +851,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel M128 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=GM12878 rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t1GM12878 rank=m1st
         type broadPeak
         color 153,38,0
 
@@ -859,7 +859,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel M128 H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in GM12878 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=GM12878 rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t1GM12878 rank=m2nd
         type broadPeak
         color 153,38,0
 
@@ -867,7 +867,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HEK293 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HEK293 cells)
-        subGroups view=cHot factor=CTCF cellType=HEK293 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3HEK293 rank=m1st
         type broadPeak
         color 133,0,173
 
@@ -875,7 +875,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HEK293 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in HEK293 cells)
-        subGroups view=cHot factor=CTCF cellType=HEK293 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3HEK293 rank=m2nd
         type broadPeak
         color 133,0,173
 
@@ -883,7 +883,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HeLaS3 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HeLa-S3 cells)
-        subGroups view=cHot factor=CTCF cellType=HELA rank=1st
+        subGroups view=cHot factor=CTCF cellType=t2HELAS3 rank=m1st
         type broadPeak
         color 0,119,158
 
@@ -891,7 +891,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HeLaS3 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in HeLa-S3 cells)
-        subGroups view=cHot factor=CTCF cellType=HELA rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t2HELAS3 rank=m2nd
         color 0,102,136
         type broadPeak
 
@@ -899,7 +899,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLaS3 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HELA rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t2HELAS3 rank=m1st
         type broadPeak
         color 0,119,158
 
@@ -907,7 +907,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLaS3 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HELA rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t2HELAS3 rank=m2nd
         type broadPeak
         color 0,119,158
 
@@ -915,7 +915,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLS3 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HELA rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t2HELAS3 rank=m1st
         type broadPeak
         color 0,119,158
 
@@ -923,7 +923,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLS3 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HELA rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t2HELAS3 rank=m2nd
         type broadPeak
         color 0,119,158
 
@@ -931,7 +931,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLS3 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HELA rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t2HELAS3 rank=m1st
         type broadPeak
         color 0,119,158
 
@@ -939,7 +939,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HLS3 H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in HeLa-S3 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HELA rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t2HELAS3 rank=m2nd
         type broadPeak
         color 0,119,158
 
@@ -947,7 +947,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HepG2 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HepG2 cells)
-        subGroups view=cHot factor=CTCF cellType=HEPG2 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t2HEPG2 rank=m1st
         color 189,0,157
         type broadPeak
 
@@ -955,7 +955,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HepG2 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in HepG2 cells)
-        subGroups view=cHot factor=CTCF cellType=HEPG2 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t2HEPG2 rank=m2nd
         type broadPeak
         color 189,0,157
 
@@ -963,7 +963,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HepG2 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in HepG2 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HEPG2 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t2HEPG2 rank=m1st
         type broadPeak
         color 189,0,157
 
@@ -971,7 +971,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HepG2 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in HepG2 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HEPG2 rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t2HEPG2 rank=m2nd
         type broadPeak
         color 189,0,157
 
@@ -979,7 +979,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HpG2 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HepG2 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HEPG2 rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t2HEPG2 rank=m1st
         type broadPeak
         color 189,0,157
 
@@ -987,7 +987,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HpG2 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in HepG2 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HEPG2 rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t2HEPG2 rank=m2nd
         type broadPeak
         color 189,0,157
 
@@ -995,7 +995,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HpG2 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in HepG2 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HEPG2 rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t2HEPG2 rank=m1st
         type broadPeak
         color 189,0,157
 
@@ -1003,98 +1003,98 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HL60 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HL-60 cells)
-        subGroups view=cHot factor=CTCF cellType=HL60 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3HL60 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HL60 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in HL-60 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HL60 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3HL60 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HL60 H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in HL-60 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HL60 rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3HL60 rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HmecCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HMEC CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HMEC cells)
-        subGroups view=cHot factor=CTCF cellType=HMEC rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3HMEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HMEC H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HMEC cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HMEC rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3HMEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HreCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HRE cells)
-        subGroups view=cHot factor=CTCF cellType=HRE rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3HRE rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2HreCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in HRE cells)
-        subGroups view=cHot factor=CTCF cellType=HRE rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3HRE rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in HRE cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HRE rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3HRE rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2HreH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in HRE cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HRE rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3HRE rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HRE cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HRE rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3HRE rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2HreH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in HRE cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HRE rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3HRE rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in HRE cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HRE rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3HRE rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2HreH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HRE H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in HRE cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HRE rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3HRE rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in HUVEC cells)
-        subGroups view=cHot factor=CTCF cellType=HUVEC rank=1st
+        subGroups view=cHot factor=CTCF cellType=t2HUVEC rank=m1st
         type broadPeak
         color 224,75,0
 
@@ -1102,7 +1102,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in HUVEC cells)
-        subGroups view=cHot factor=CTCF cellType=HUVEC rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t2HUVEC rank=m2nd
         type broadPeak
         color 224,75,0
 
@@ -1110,7 +1110,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HUVEC rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t2HUVEC rank=m1st
         type broadPeak
         color 224,75,0
 
@@ -1118,7 +1118,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K04me3 cellType=HUVEC rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t2HUVEC rank=m2nd
         type broadPeak
         color 224,75,0
 
@@ -1126,7 +1126,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HUVEC rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t2HUVEC rank=m1st
         type broadPeak
         color 224,75,0
 
@@ -1134,7 +1134,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K27me3 cellType=HUVEC rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t2HUVEC rank=m2nd
         type broadPeak
         color 224,75,0
 
@@ -1142,7 +1142,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HUVEC rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t2HUVEC rank=m1st
         type broadPeak
         color 224,75,0
 
@@ -1150,7 +1150,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel HUVEC H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in HUVEC cells)
-        subGroups view=cHot factor=H3K36me3 cellType=HUVEC rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t2HUVEC rank=m2nd
         type broadPeak
         color 224,75,0
 
@@ -1158,7 +1158,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel K562 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in K562 cells)
-        subGroups view=cHot factor=CTCF cellType=K562 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t1K562 rank=m1st
         type broadPeak
         color 46,0,184
 
@@ -1166,7 +1166,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel K562 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in K562 cells)
-        subGroups view=cHot factor=CTCF cellType=K562 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t1K562 rank=m2nd
         color 46,0,184
         type broadPeak
 
@@ -1174,7 +1174,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel K562 H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in K562 cells)
-        subGroups view=cHot factor=H3K04me3 cellType=K562 rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t1K562 rank=m1st
         type broadPeak
         color 46,0,184
 
@@ -1182,7 +1182,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel K562 H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in K562 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=K562 rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t1K562 rank=m1st
         type broadPeak
         color 46,0,184
 
@@ -1190,7 +1190,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel K562 H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in K562 cells)
-        subGroups view=cHot factor=H3K27me3 cellType=K562 rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t1K562 rank=m2nd
         type broadPeak
         color 46,0,184
 
@@ -1198,7 +1198,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot
         shortLabel K562 H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in K562 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=K562 rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t1K562 rank=m1st
         type broadPeak
         color 46,0,184
 
@@ -1206,7 +1206,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel K562 H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in K562 cells)
-        subGroups view=cHot factor=H3K36me3 cellType=K562 rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t1K562 rank=m2nd
         type broadPeak
         color 46,0,184
 
@@ -1214,7 +1214,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in NHEK cells)
-        subGroups view=cHot factor=CTCF cellType=NHEK rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3NHEK rank=m1st
         type broadPeak
         color 179,0,134
 
@@ -1222,7 +1222,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in NHEK cells)
-        subGroups view=cHot factor=CTCF cellType=NHEK rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3NHEK rank=m2nd
         type broadPeak
         color 179,0,134
 
@@ -1230,7 +1230,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in NHEK cells)
-        subGroups view=cHot factor=H3K04me3 cellType=NHEK rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3NHEK rank=m1st
         type broadPeak
         color 179,0,134
 
@@ -1238,7 +1238,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in NHEK cells)
-        subGroups view=cHot factor=H3K04me3 cellType=NHEK rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3NHEK rank=m2nd
         type broadPeak
         color 179,0,134
 
@@ -1246,7 +1246,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in NHEK cells)
-        subGroups view=cHot factor=H3K27me3 cellType=NHEK rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3NHEK rank=m1st
         type broadPeak
         color 179,0,134
 
@@ -1254,7 +1254,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in NHEK cells)
-        subGroups view=cHot factor=H3K27me3 cellType=NHEK rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3NHEK rank=m2nd
         type broadPeak
         color 179,0,134
 
@@ -1262,7 +1262,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in NHEK cells)
-        subGroups view=cHot factor=H3K36me3 cellType=NHEK rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3NHEK rank=m1st
         type broadPeak
         color 179,0,134
 
@@ -1270,7 +1270,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel NHEK H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in NHEK cells)
-        subGroups view=cHot factor=H3K36me3 cellType=NHEK rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3NHEK rank=m2nd
         type broadPeak
         color 179,0,134
 
@@ -1278,126 +1278,126 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in SAEC cells)
-        subGroups view=cHot factor=CTCF cellType=SAEC rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3SAEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SaecCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in SAEC cells)
-        subGroups view=cHot factor=CTCF cellType=SAEC rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3SAEC rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in SAEC cells)
-        subGroups view=cHot factor=H3K04me3 cellType=SAEC rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3SAEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in SAEC cells)
-        subGroups view=cHot factor=H3K04me3 cellType=SAEC rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3SAEC rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in SAEC cells)
-        subGroups view=cHot factor=H3K27me3 cellType=SAEC rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3SAEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SaecH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in SAEC cells)
-        subGroups view=cHot factor=H3K27me3 cellType=SAEC rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3SAEC rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SaecH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in SAEC cells)
-        subGroups view=cHot factor=H3K36me3 cellType=SAEC rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3SAEC rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SaecH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SAEC H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in SAEC cells)
-        subGroups view=cHot factor=H3K36me3 cellType=SAEC rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3SAEC rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKNSHRA CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in SK-N-SH_RA cells)
-        subGroups view=cHot factor=CTCF cellType=SKNSHRA rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3SKNSHRA rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKNSHRA CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in SK-N-SH_RA cells)
-        subGroups view=cHot factor=CTCF cellType=SKNSHRA rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3SKNSHRA rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K4me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K4me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K04me3 cellType=SKNSHRA rank=1st
+        subGroups view=cHot factor=H3K04me3 cellType=t3SKNSHRA rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K4me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K4me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K04me3 cellType=SKNSHRA rank=2nd
+        subGroups view=cHot factor=H3K04me3 cellType=t3SKNSHRA rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K27me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K27me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K27me3 cellType=SKNSHRA rank=1st
+        subGroups view=cHot factor=H3K27me3 cellType=t3SKNSHRA rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K27me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K27me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K27me3 cellType=SKNSHRA rank=2nd
+        subGroups view=cHot factor=H3K27me3 cellType=t3SKNSHRA rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K36me3 H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (H3K36me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K36me3 cellType=SKNSHRA rank=1st
+        subGroups view=cHot factor=H3K36me3 cellType=t3SKNSHRA rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel SKN H3K36me3 H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (H3K36me3 in SK-N-SH_RA cells)
-        subGroups view=cHot factor=H3K36me3 cellType=SKNSHRA rank=2nd
+        subGroups view=cHot factor=H3K36me3 cellType=t3SKNSHRA rank=m2nd
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel WERIRb1 CTCF H1
         longLabel ENCODE UW Histone ChIP Hotspots - 1st (CTCF in WERI-Rb-1 cells)
-        subGroups view=cHot factor=CTCF cellType=WERIRb1 rank=1st
+        subGroups view=cHot factor=CTCF cellType=t3WERIRB1 rank=m1st
         type broadPeak
 
         track wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf
         subTrack wgEncodeUwChIPSeqViewcHot off
         shortLabel WERIRb1 CTCF H2
         longLabel ENCODE UW Histone ChIP Hotspots - 2nd (CTCF in WERI-Rb-1 cells)
-        subGroups view=cHot factor=CTCF cellType=WERIRb1 rank=2nd
+        subGroups view=cHot factor=CTCF cellType=t3WERIRB1 rank=m2nd
         type broadPeak
 
     track wgEncodeUwChIPSeqViewzRawSig
@@ -1416,266 +1416,266 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12874 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12874 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12874 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12874 rank=m1st
         type wig 1.00 10482.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12875 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12875 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12875 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12875 rank=m1st
         type wig 1.00 4347.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12875 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12875 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12875 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12875 rank=m2nd
         type wig 1.00 6378.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12873 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12873 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12873 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12873 rank=m2nd
         type wig 1.00 7574.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12874 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12874 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12874 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12874 rank=m2nd
         type wig 1.00 4434.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12873 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12873 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12873 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12873 rank=m1st
         type wig 1.00 3934.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12865 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12865 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12865 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12865 rank=m1st
         type wig 1.00 5694.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12872 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12872 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12872 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12872 rank=m1st
         type wig 1.00 4366.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12872 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12872 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12872 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12872 rank=m2nd
         type wig 1.00 6765.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12864 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12864 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12864 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12864 rank=m1st
         type wig 1.00 4246.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12864 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12864 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12864 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12864 rank=m2nd
         type wig 1.00 6652.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12865 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12865 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12865 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12865 rank=m2nd
         type wig 1.00 4070.00
 
         track wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in BJ cells)
-        subGroups view=zRawSig factor=CTCF cellType=BJ rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3BJ rank=m1st
         type wig 1.00 8678.00
 
         track wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in BJ cells)
-        subGroups view=zRawSig factor=CTCF cellType=BJ rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3BJ rank=m2nd
         type wig 1.00 5417.00
 
         track wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=BJ rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3BJ rank=m1st
         type wig 1.00 2466.00
 
         track wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=BJ rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3BJ rank=m2nd
         type wig 1.00 2779.00
 
         track wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=BJ rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3BJ rank=m1st
         type wig 1.00 5615.00
 
         track wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=BJ rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3BJ rank=m2nd
         type wig 1.00 6969.00
 
         track wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=BJ rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3BJ rank=m1st
         type wig 1.00 8803.00
 
         track wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel BJ H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in BJ cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=BJ rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3BJ rank=m2nd
         type wig 1.00 9888.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Caco2 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in Caco-2 cells)
-        subGroups view=zRawSig factor=CTCF cellType=Caco2 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3CACO2 rank=m1st
         type wig 1.00 8819.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Caco2 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in Caco-2 cells)
-        subGroups view=zRawSig factor=CTCF cellType=Caco2 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3CACO2 rank=m2nd
         type wig 1.00 11026.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Caco2 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=Caco2 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3CACO2 rank=m1st
         type wig 1.00 1719.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Cco2 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=Caco2 rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3CACO2 rank=m2nd
         type wig 1.00 2151.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Cco2 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=Caco2 rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3CACO2 rank=m1st
         type wig 1.00 8014.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Cco2 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=Caco2 rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3CACO2 rank=m2nd
         type wig 1.00 6788.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Cco2 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=Caco2 rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3CACO2 rank=m1st
         type wig 1.00 7494.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel Cco2 H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in Caco-2 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=Caco2 rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3CACO2 rank=m2nd
         type wig 1.00 7220.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM06990 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM06990 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM06990 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM06990 rank=m1st
         type wig 1.00 7406.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM06990 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM06990 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM06990 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3GM06990 rank=m2nd
         type wig 1.00 9469.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 06990 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=GM06990 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3GM06990 rank=m1st
         type wig 1.00 1467.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 06990 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=GM06990 rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3GM06990 rank=m2nd
         type wig 1.00 2237.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 6990 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=GM06990 rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3GM06990 rank=m1st
         type wig 1.00 3852.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 6990 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=GM06990 rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3GM06990 rank=m2nd
         type wig 1.00 3440.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 6990 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=GM06990 rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3GM06990 rank=m1st
         type wig 1.00 4097.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel 6990 H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in GM06990 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=GM06990 rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3GM06990 rank=m2nd
         type wig 1.00 5143.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12801 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12801 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12801 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3GM12801 rank=m1st
         type wig 1.00 1582.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel GM12878 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in GM12878 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12878 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t1GM12878 rank=m1st
         type wig 1.00 2948.00
         color 153,38,0
 
@@ -1683,7 +1683,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM12878 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in GM12878 cells)
-        subGroups view=zRawSig factor=CTCF cellType=GM12878 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t1GM12878 rank=m2nd
         type wig 1.00 7533.00
         color 153,38,0
 
@@ -1691,7 +1691,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel GM128 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=GM12878 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t1GM12878 rank=m1st
         type wig 1.00 2568.00
         color 153,38,0
 
@@ -1699,7 +1699,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel GM128 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=GM12878 rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t1GM12878 rank=m2nd
         type wig 1.00 2005.00
         color 153,38,0
 
@@ -1707,7 +1707,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel M128 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=GM12878 rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t1GM12878 rank=m1st
         type wig 1.00 3181.00
         color 153,38,0
 
@@ -1715,7 +1715,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel M128 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=GM12878 rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t1GM12878 rank=m2nd
         type wig 1.00 4466.00
         color 153,38,0
 
@@ -1723,7 +1723,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel M128 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=GM12878 rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t1GM12878 rank=m1st
         type wig 1.00 4307.00
         color 153,38,0
 
@@ -1731,7 +1731,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel M128 H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in GM12878 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=GM12878 rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t1GM12878 rank=m2nd
         type wig 1.00 4547.00
         color 153,38,0
 
@@ -1739,7 +1739,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HEK293 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HEK293 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HEK293 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3HEK293 rank=m1st
         type wig 1.00 5034.00
         color 133,0,173
 
@@ -1747,7 +1747,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HEK293 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in HEK293 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HEK293 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3HEK293 rank=m2nd
         type wig 1.00 10986.00
         color 133,0,173
 
@@ -1755,7 +1755,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HeLaS3 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HeLa-S3 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HELA rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t2HELAS3 rank=m1st
         type wig 1.00 4445.00
         color 0,119,158
 
@@ -1763,7 +1763,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HeLaS3 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in HeLa-S3 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HELA rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t2HELAS3 rank=m2nd
         color 0,102,136
         type wig 1.00 3988.00
 
@@ -1771,7 +1771,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLaS3 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HELA rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HELAS3 rank=m1st
         type wig 1.00 5208.00
         color 0,119,158
 
@@ -1779,7 +1779,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLS3 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HELA rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HELAS3 rank=m2nd
         type wig 1.00 3634.00
         color 0,119,158
 
@@ -1787,7 +1787,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLS3 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HELA rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HELAS3 rank=m1st
         type wig 1.00 6700.00
         color 0,119,158
 
@@ -1795,7 +1795,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLS3 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HELA rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HELAS3 rank=m2nd
         type wig 1.00 7722.00
         color 0,119,158
 
@@ -1803,7 +1803,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLS3 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HELA rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t2HELAS3 rank=m1st
         type wig 1.00 8512.00
         color 0,119,158
 
@@ -1811,7 +1811,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HLS3 H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in HeLa-S3 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HELA rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t2HELAS3 rank=m2nd
         type wig 1.00 8755.00
         color 0,119,158
 
@@ -1819,7 +1819,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HepG2 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HepG2 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HEPG2 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t2HEPG2 rank=m1st
         color 189,0,157
         type wig 1.00 2376.00
 
@@ -1827,7 +1827,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HepG2 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in HepG2 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HEPG2 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t2HEPG2 rank=m2nd
         type wig 1.00 6362.00
         color 189,0,157
 
@@ -1835,7 +1835,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HepG2 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in HepG2 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HEPG2 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HEPG2 rank=m1st
         type wig 1.00 1434.00
         color 189,0,157
 
@@ -1843,7 +1843,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HepG2 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in HepG2 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HEPG2 rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HEPG2 rank=m2nd
         type wig 1.00 1619.00
         color 189,0,157
 
@@ -1851,7 +1851,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HpG2 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HepG2 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HEPG2 rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HEPG2 rank=m1st
         type wig 1.00 2920.00
         color 189,0,157
 
@@ -1859,7 +1859,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HpG2 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in HepG2 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HEPG2 rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HEPG2 rank=m2nd
         type wig 1.00 2880.00
         color 189,0,157
 
@@ -1867,7 +1867,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HpG2 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in HepG2 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HEPG2 rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t2HEPG2 rank=m1st
         type wig 1.00 3871.00
         color 189,0,157
 
@@ -1875,98 +1875,98 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HL60 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HL-60 cells)
-        subGroups view=zRawSig factor=CTCF cellType=HL60 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3HL60 rank=m1st
         type wig 1.00 2306.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HL60 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in HL-60 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HL60 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3HL60 rank=m1st
         type wig 1.00 1509.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HL60 H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in HL-60 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HL60 rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3HL60 rank=m2nd
         type wig 1.00 1910.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HMEC CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HMEC cells)
-        subGroups view=zRawSig factor=CTCF cellType=HMEC rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3HMEC rank=m1st
         type wig 1.00 5388.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HMEC H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HMEC cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HMEC rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3HMEC rank=m1st
         type wig 1.00 8339.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HreCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HRE cells)
-        subGroups view=zRawSig factor=CTCF cellType=HRE rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3HRE rank=m1st
         type wig 1.00 2558.00
 
         track wgEncodeUwChIPSeqRawSignalRep2HreCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in HRE cells)
-        subGroups view=zRawSig factor=CTCF cellType=HRE rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3HRE rank=m2nd
         type wig 1.00 4965.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HRE rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3HRE rank=m1st
         type wig 1.00 1056.00
 
         track wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HRE rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3HRE rank=m2nd
         type wig 1.00 1580.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HRE rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3HRE rank=m1st
         type wig 1.00 4189.00
 
         track wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HRE rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3HRE rank=m2nd
         type wig 1.00 2699.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HRE rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3HRE rank=m1st
         type wig 1.00 4118.00
 
         track wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HRE H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in HRE cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HRE rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3HRE rank=m2nd
         type wig 1.00 4560.00
 
         track wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in HUVEC cells)
-        subGroups view=zRawSig factor=CTCF cellType=HUVEC rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t2HUVEC rank=m1st
         type wig 1.00 3186.00
         color 224,75,0
 
@@ -1974,7 +1974,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in HUVEC cells)
-        subGroups view=zRawSig factor=CTCF cellType=HUVEC rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t2HUVEC rank=m2nd
         type wig 1.00 2048.00
         color 224,75,0
 
@@ -1982,7 +1982,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HUVEC rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HUVEC rank=m1st
         type wig 1.00 3611.00
         color 224,75,0
 
@@ -1990,7 +1990,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=HUVEC rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t2HUVEC rank=m2nd
         type wig 1.00 2858.00
         color 224,75,0
 
@@ -1998,7 +1998,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HUVEC rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HUVEC rank=m1st
         type wig 1.00 3861.00
         color 224,75,0
 
@@ -2006,7 +2006,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=HUVEC rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t2HUVEC rank=m2nd
         type wig 1.00 3857.00
         color 224,75,0
 
@@ -2014,7 +2014,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HUVEC rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t2HUVEC rank=m1st
         type wig 1.00 5075.00
         color 224,75,0
 
@@ -2022,7 +2022,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel HUVEC H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in HUVEC cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=HUVEC rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t2HUVEC rank=m2nd
         type wig 1.00 5116.00
         color 224,75,0
 
@@ -2030,7 +2030,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel K562 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in K562 cells)
-        subGroups view=zRawSig factor=CTCF cellType=K562 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t1K562 rank=m1st
         type wig 1.00 8787.00
         color 46,0,184
 
@@ -2038,7 +2038,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel K562 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in K562 cells)
-        subGroups view=zRawSig factor=CTCF cellType=K562 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t1K562 rank=m2nd
         type wig 1.00 8641.00
         color 46,0,184
 
@@ -2046,7 +2046,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel K562 H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in K562 cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=K562 rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t1K562 rank=m1st
         type wig 1.00 4959.00
         color 46,0,184
 
@@ -2054,7 +2054,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel K562 H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in K562 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=K562 rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t1K562 rank=m1st
         type wig 1.00 7009.00
         color 46,0,184
 
@@ -2062,7 +2062,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel K562 H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in K562 cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=K562 rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t1K562 rank=m2nd
         type wig 1.00 5885.00
         color 46,0,184
 
@@ -2070,7 +2070,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig
         shortLabel K562 H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in K562 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=K562 rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t1K562 rank=m1st
         type wig 1.00 8452.00
         color 46,0,184
 
@@ -2078,7 +2078,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel K562 H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in K562 cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=K562 rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t1K562 rank=m2nd
         type wig 1.00 9718.00
         color 46,0,184
 
@@ -2086,7 +2086,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in NHEK cells)
-        subGroups view=zRawSig factor=CTCF cellType=NHEK rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3NHEK rank=m1st
         type wig 1.00 5464.00
         color 179,0,134
 
@@ -2094,7 +2094,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in NHEK cells)
-        subGroups view=zRawSig factor=CTCF cellType=NHEK rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3NHEK rank=m2nd
         type wig 1.00 4604.00
         color 179,0,134
 
@@ -2102,7 +2102,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=NHEK rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3NHEK rank=m1st
         type wig 1.00 1975.00
         color 179,0,134
 
@@ -2110,7 +2110,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=NHEK rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3NHEK rank=m2nd
         type wig 1.00 2112.00
         color 179,0,134
 
@@ -2118,7 +2118,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=NHEK rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3NHEK rank=m1st
         type wig 1.00 10372.00
         color 179,0,134
 
@@ -2126,7 +2126,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=NHEK rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3NHEK rank=m2nd
         type wig 1.00 3975.00
         color 179,0,134
 
@@ -2134,7 +2134,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=NHEK rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3NHEK rank=m1st
         type wig 1.00 3957.00
         color 179,0,134
 
@@ -2142,7 +2142,7 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel NHEK H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in NHEK cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=NHEK rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3NHEK rank=m2nd
         type wig 1.00 3966.00
         color 179,0,134
 
@@ -2150,125 +2150,125 @@ noInherit on
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in SAEC cells)
-        subGroups view=zRawSig factor=CTCF cellType=SAEC rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3SAEC rank=m1st
         type wig 1.00 6524.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in SAEC cells)
-        subGroups view=zRawSig factor=CTCF cellType=SAEC rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3SAEC rank=m2nd
         type wig 1.00 4521.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=SAEC rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3SAEC rank=m1st
         type wig 1.00 1459.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=SAEC rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3SAEC rank=m2nd
         type wig 1.00 1771.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=SAEC rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3SAEC rank=m1st
         type wig 1.00 3724.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=SAEC rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3SAEC rank=m2nd
         type wig 1.00 4736.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAEC H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=SAEC rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3SAEC rank=m1st
         type wig 1.00 3815.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SAECH3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in SAEC cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=SAEC rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3SAEC rank=m2nd
         type wig 1.00 3587.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKNSHRA CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=CTCF cellType=SKNSHRA rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3SKNSHRA rank=m1st
         type wig 1.00 3367.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKNSHRA CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=CTCF cellType=SKNSHRA rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3SKNSHRA rank=m2nd
         type wig 1.00 4118.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K4me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K4me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=SKNSHRA rank=1st
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3SKNSHRA rank=m1st
         type wig 1.00 1477.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K4me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K4me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K04me3 cellType=SKNSHRA rank=2nd
+        subGroups view=zRawSig factor=H3K04me3 cellType=t3SKNSHRA rank=m2nd
         type wig 1.00 1472.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K27me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K27me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=SKNSHRA rank=1st
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3SKNSHRA rank=m1st
         type wig 1.00 3276.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K27me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K27me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K27me3 cellType=SKNSHRA rank=2nd
+        subGroups view=zRawSig factor=H3K27me3 cellType=t3SKNSHRA rank=m2nd
         type wig 1.00 5083.00
 
         track wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K36me3 S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (H3K36me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=SKNSHRA rank=1st
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3SKNSHRA rank=m1st
         type wig 1.00 6400.00
 
         track wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel SKN H3K36me3 S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (H3K36me3 in SK-N-SH_RA cells)
-        subGroups view=zRawSig factor=H3K36me3 cellType=SKNSHRA rank=2nd
+        subGroups view=zRawSig factor=H3K36me3 cellType=t3SKNSHRA rank=m2nd
         type wig 1.00 6508.00
 
         track wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel WERIRb1 CTCF S1
         longLabel ENCODE UW Histone ChIP Raw Signal - 1st (CTCF in WERI-Rb-1 cells)
-        subGroups view=zRawSig factor=CTCF cellType=WERIRb1 rank=1st
+        subGroups view=zRawSig factor=CTCF cellType=t3WERIRB1 rank=m1st
         type wig 1.00 2847.00
 
         track wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
         subTrack wgEncodeUwChIPSeqViewzRawSig off
         shortLabel WERIRb1 CTCF S2
         longLabel ENCODE UW Histone ChIP Raw Signal - 2nd (CTCF in WERI-Rb-1 cells)
-        subGroups view=zRawSig factor=CTCF cellType=WERIRb1 rank=2nd
+        subGroups view=zRawSig factor=CTCF cellType=t3WERIRB1 rank=m2nd
         type wig 1.00 3005.00
 
