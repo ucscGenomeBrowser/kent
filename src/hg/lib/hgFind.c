@@ -2382,7 +2382,7 @@ hFreeConn(&conn);
 return(found);
 }
 
-void hgPositionsHtml(char *db, struct hgPositions *hgp, FILE *f,
+static void hgPositionsHtml(char *db, struct hgPositions *hgp, FILE *f,
 		     boolean useWeb, char *hgAppName, struct cart *cart)
 /* Write out hgp table as HTML to file. */
 {
@@ -2393,6 +2393,7 @@ char range[HGPOSRANGESIZE];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+boolean containerDivPrinted = FALSE;
 
 if (useWeb)
     webStart(cart, db, "Select Position");
@@ -2407,6 +2408,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             errAbort("no track for table \"%s\" found via a findSpec", table->name); // wish we had searchName
 	char *vis = hCarefulTrackOpenVis(db, trackName);
 	boolean excludeTable = FALSE;
+        if(!containerDivPrinted)
+            {
+            fprintf(f, "<div id='hgFindResults'>\n");
+            containerDivPrinted = TRUE;
+            }
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
@@ -2452,6 +2458,9 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	    fprintf(f, "</PRE>\n");
 	}
     }
+
+if(containerDivPrinted)
+    fprintf(f, "</div>\n");
 
 if (useWeb)
     webEnd();

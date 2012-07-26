@@ -2,6 +2,7 @@ metaObject wgEncodeUmassDekker5C
 objType composite
 composite wgEncodeUmassDekker5C
 expVars lab,dataType,cell
+geoSeriesAccession GSE39510
 
 metaObject wgEncodeUmassDekker5CEnmPrimer
 objType file
@@ -60,6 +61,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnmMatrixRep1.matrix.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 7b39ccda74f8ce14f5f5eb115ffb57d2
@@ -82,6 +84,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnmMatrixRep2.matrix.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 7ed1c53c450669d9c67056d20422f8a3
@@ -104,6 +107,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnmPrimerPeaks.peaks.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum cb8347327c6ae5aa2222d8bdf36a640e
@@ -146,6 +150,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnmRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum b4a73ddbd9b98116903a3df1d840e6c1
@@ -190,6 +195,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnmRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 6def7aa1f405d38b032a7bcfb8686ba1
@@ -213,6 +219,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnrMatrixRep1.matrix.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum c848aae33aad5c74b728b7a84dd526b4
@@ -235,6 +242,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnrMatrixRep2.matrix.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 9df03c280cf9e8e511a844f9ddc3fb2c
@@ -257,6 +265,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnrPrimerPeaks.peaks.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 41447355a90643cb7d76f935a471444a
@@ -299,6 +308,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnrRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum bfef788d5e2d5af9e2b9a0bf12cfc69a
@@ -343,6 +353,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878EnrRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum 5f0363e00984f320b7e871a74420fda7
@@ -387,6 +398,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001665
 expId 1665
 fileName wgEncodeUmassDekker5CGm12878PkV2.bed.gz
+geoSampleAccession GSM970499
 grant Dekker
 lab UMass-Dekker
 md5sum b5e579c7bb3e210ccb36217110ee1e4d
@@ -410,6 +422,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnmMatrixRep1.matrix.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum b8a22d151e142abc81c4369b38457c96
@@ -432,6 +445,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnmMatrixRep2.matrix.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 7802ead807d226856e3e3206e760bf94
@@ -454,6 +468,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnmPrimerPeaks.peaks.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 4a710967c49f5ab3fd12148913b93ee8
@@ -496,6 +511,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnmRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 8829a36596dff7e62c3f1793ee112b7a
@@ -540,6 +556,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnmRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum a98b1be78f7ab865adaaffb5c0918063
@@ -563,6 +580,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnrMatrixRep1.matrix.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 80e4b24500433ce6c9e63f5ec393d3ad
@@ -585,6 +603,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnrMatrixRep2.matrix.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 0663a0b5bddbcca3b02a2c55a4d096a6
@@ -607,6 +626,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnrPrimerPeaks.peaks.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 1d2a5e278efd49c24680e130223bffdd
@@ -649,6 +669,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnrRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 21accb0a754b1cd414316e5e2f396dd4
@@ -693,6 +714,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescEnrRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum 86a5cfcb29026a39a453c27634ad08bb
@@ -737,6 +759,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001666
 expId 1666
 fileName wgEncodeUmassDekker5CH1hescPkV2.bed.gz
+geoSampleAccession GSM970498
 grant Dekker
 lab UMass-Dekker
 md5sum d4ab6e7ec49042fda51b3aad829c5c60
@@ -760,6 +783,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnmMatrixRep1.matrix.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 1d0feaad9509b1d75b0a5347c438be91
@@ -782,6 +806,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnmMatrixRep2.matrix.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 4177d4304fdaa3b9ef8b2cf97d85a40e
@@ -804,6 +829,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnmPrimerPeaks.peaks.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 4868b3121a359e4a897c7c8445790be9
@@ -846,6 +872,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnmRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 8b9d16d5464bace12dec151268206a2f
@@ -890,6 +917,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnmRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 6c153046884f104ac1b692e9c830502d
@@ -913,6 +941,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnrMatrixRep1.matrix.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 53cd3c256d3fb3a6a1af709499c76328
@@ -935,6 +964,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnrMatrixRep2.matrix.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 9ed5d6c41ed10b9c93308cca2e5752a4
@@ -957,6 +987,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnrPrimerPeaks.peaks.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum c59ac10e3dbab632581261d6de49a595
@@ -999,6 +1030,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnrRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 71303651fa24cf6194b3f131c7e7efd0
@@ -1043,6 +1075,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3EnrRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 12e587bca201850078faf3b745653851
@@ -1087,6 +1120,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001667
 expId 1667
 fileName wgEncodeUmassDekker5CHelas3PkV2.bed.gz
+geoSampleAccession GSM970497
 grant Dekker
 lab UMass-Dekker
 md5sum 6d15b0d587abdfc7585cd9c87567038f
@@ -1110,6 +1144,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnmMatrixRep1.matrix.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 7585a763f8113388d4bb02c961b56ce8
@@ -1132,6 +1167,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnmMatrixRep2.matrix.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 3e4504be4c1ca88144cc9d8ed70543f6
@@ -1154,6 +1190,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnmPrimerPeaks.peaks.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 150c09dbd609ebb912ef6542c708da99
@@ -1196,6 +1233,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnmRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum d524d6d1378308b7a88bc79088a4c3f3
@@ -1240,6 +1278,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnmRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 27ec9432b3583838e3e899830ebde2b0
@@ -1263,6 +1302,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnrMatrixRep1.matrix.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 8fce2498cffd37dfc7360c048d83d525
@@ -1285,6 +1325,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnrMatrixRep2.matrix.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 0aebbfadd83d831c4c1197a1e5e765df
@@ -1307,6 +1348,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnrPrimerPeaks.peaks.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum e13789c772375c19bf8009576328936b
@@ -1349,6 +1391,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnrRawDataRep1V2.fastq.tgz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 8f183f16b4708e4951662c7e907c5d67
@@ -1393,6 +1436,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562EnrRawDataRep2V2.fastq.tgz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum 476d83fb31563e98bcfa5888f3b756cb
@@ -1437,6 +1481,7 @@ dateUnrestricted 2011-10-25
 dccAccession wgEncodeEH001668
 expId 1668
 fileName wgEncodeUmassDekker5CK562PkV2.bed.gz
+geoSampleAccession GSM970500
 grant Dekker
 lab UMass-Dekker
 md5sum e6298e43182775f168b66788136fada2
@@ -1447,4 +1492,4 @@ submittedDataVersion V2 - Additional peaks that were initially skipped
 tableName wgEncodeUmassDekker5CK562PkV2
 view Peaks
 
-# MAGIC: 1656308852
+# MAGIC: -2018875615
