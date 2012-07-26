@@ -2164,6 +2164,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002922
 expId 2922
 fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdPk.narrowPeak.gz
+geoSampleAccession GSM970218
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2189,6 +2190,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002922
 expId 2922
 fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM970218
 grant Snyder
 lab USC
 md5sum 74388f10eeafa035dde131d07804e702
@@ -2213,6 +2215,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002922
 expId 2922
 fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM970218
 grant Snyder
 lab USC
 md5sum 328db7eca8d97e6c57bbfd7921818b8a
@@ -2237,6 +2240,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002922
 expId 2922
 fileName wgEncodeSydhHistoneMcf7H3k27me3bUcdSig.bigWig
+geoSampleAccession GSM970218
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2310,6 +2314,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002923
 expId 2923
 fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdPk.narrowPeak.gz
+geoSampleAccession GSM970217
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -2335,6 +2340,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002923
 expId 2923
 fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep1.fastq.tgz
+geoSampleAccession GSM970217
 grant Snyder
 lab USC
 md5sum 65ac0f4db2dcf8a05f57d9dad7ad9ec8
@@ -2359,6 +2365,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002923
 expId 2923
 fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdRawDataRep2.fastq.tgz
+geoSampleAccession GSM970217
 grant Snyder
 lab USC
 md5sum f9431fca31ccbb1d067028e8ee918d8f
@@ -2383,6 +2390,7 @@ dateUnrestricted 2013-03-07
 dccAccession wgEncodeEH002923
 expId 2923
 fileName wgEncodeSydhHistoneMcf7H3k36me3bUcdSig.bigWig
+geoSampleAccession GSM970217
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -5129,4 +5137,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -2062964295
+# MAGIC: -1245138663
