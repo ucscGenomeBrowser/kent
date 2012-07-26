@@ -27,7 +27,7 @@
                   <li><a href="#other">Other Tools</a></li>
                 </ul>
                 </p>
-                <p class="date">Updated 01 May 2012</p>
+                <p class="date">Updated 25 July 2012</p>
 
                </div><!--end content-->
        </div><!--end wrapper-->
@@ -218,7 +218,7 @@
                         Allows pooling of replicate datasets while allowing for replicate and data-type specific read
                         shifting and smoothing parameters. It can be used to generate signal density maps for ChIP-seq,
                         DNase-seq, FAIRE-seq and MNase-seq data. Wiggler also implicitly models variability in
-                        mapability to appropriately normalize signal density and distinguish missing data from true zero
+                        mappability to appropriately normalize signal density and distinguish missing data from true zero
                         signal. Wiggler software is available for download from the align2rawsignal
                         <a href="http://code.google.com/p/align2rawsignal/" target="_blank">
                         project page</a>.
@@ -299,6 +299,18 @@
                         </li></p>
 
                         <p><li>
+                        <a class="thick" href="http://code.google.com/p/cagt/" target="_blank">CAGT (Clustering AGgregation Tool)</a><br>
+                        Deciphers the heterogeneity and diversity of profiles of functional signals (e.g.,
+                        chromatin mark ChIP-seq signal) centered at a collection of sites (e.g., TSSs or TF
+                        binding sites) in a genome. Rather than averaging the profiles over all the anchor
+                        sites (traditional aggregation plots), CAGT accounts for the inherent heterogeneity
+                        in signal magnitude, shape and orientation. CAGT partitions the set of anchor sites into
+                        compact clusters such that each cluster represents anchor points that show similar patterns
+                        of the functional signal profiles with different clusters having distinct patterns. The
+                        different groups of patterns are often enriched for distinct biological functions.
+                        </p>
+
+                        <p><li>
                         <a class="thick" href="http://archive.gersteinlab.org/proj/tftarget/" target="_blank">TIP</a><br>
                         Predicts the targets of transcription factors using the data from ChIP-seq experiments.
                         </p>
@@ -349,19 +361,19 @@
                 <div class="content">
                       <ul>
                         <p><li>
-                        <a class="thick" href="http://www.uwencode.org/software/bedops" target="_blank">BEDOPS</a><br>
-                        A suite of scalable tools that offers high-performance feature analysis and comparison methods
-                        for genomic data in BED format. It also provides efficient data storage and retrieval techniques. The
-                        tools work with data sets of any size and number.  Pre-built binaries, documentation, and source files
-                        are available from the BEDOPS <a href="http://code.google.com/p/bedops/" target="_blank">
-                        project page</a>. All source code is free and available under the GNU General
-                        Public License.
+                        <a class="thick" href="http://code.google.com/p/bedops/" target="_blank">BEDOPS</a><br>
+                        Performs common genomic analysis tasks and offers improved flexibility, scalability
+                        and execution time characteristics over previously published packages. The suite
+                        includes a utility to compress large inputs into a lossless format that can provide
+                        greater space savings and faster data extractions than alternatives.
                         </p>
 
                         <p>
-                        Neph SJ <em>et al</em>.
-                        BEDOPS: High performance genomic feature operations.
-                        <em>Bioinformatics</em>. (In Revision)
+                        Neph S, Kuehn MS, Reynolds AP, Haugen E, Thurman RE, Johnson AK, Rynes E, Maurano MT, Vierstra J,
+                        Thomas S <em>et al</em>.
+                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/22576172" target="_blank">
+                        BEDOPS: high-performance genomic feature operations</a>.
+                        <em>Bioinformatics</em>. 2012 Jul 15;28(14):1919-20.
                         </li></p>
 
                         <p><li>
