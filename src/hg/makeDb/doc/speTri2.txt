@@ -382,3 +382,27 @@ speTri2.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH393412:896020-902549" where name="speTri2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/speTri2/pushQ
+    cd /hive/data/genomes/speTri2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl speTri2 2> stderr.txt | grep -v transMap > speTri2.sql
+    #   real    3m56.966s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/speTri2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/speTri2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/speTri2/bbi/quality.bw
+# WARNING: speTri2 does not have seq
+# WARNING: speTri2 does not have extFile
+# WARNING: speTri2 does not have estOrientInfo
+
+    scp -p speTri2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/speTri2.sql"
+
+############################################################################
