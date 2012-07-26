@@ -2568,7 +2568,7 @@ var imageV2 = {
                             });
             // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
             if($("#suggestTrack").length) {
-                $(document.TrackHeaderForm).submit(function(event) {
+                $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
                                                        if($('#hgFindMatches').length) {
                                                            vis.makeTrackVisible($("#suggestTrack").val());
                                                        }
