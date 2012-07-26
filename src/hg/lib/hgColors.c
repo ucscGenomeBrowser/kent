@@ -32,9 +32,3 @@ if (newVal <= 0) newVal = 1;
 if (newVal > newMax) newVal = newMax;
 return newVal;
 }
-
-char *hgColOutside()
-/* get color to use from body background, as a string of hex digits */
-{
-return cfgOptionDefault("browser.bgcolor", HG_COL_OUTSIDE);
-}

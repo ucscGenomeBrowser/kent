@@ -444,10 +444,6 @@ trackHash = trackHashMakeWithComposites(db,chrom,&tdbList,FALSE);
 cartWebStart(cart, db, "Search for " FILE_SEARCH_WHAT " in the %s %s Assembly", 
              organism, hFreezeFromDb(db));
 
-// This cleverness allows us to have the background image like "Track Search" does, 
-//      without all the hgTracks overhead
-printf("<style type='text/css'>body {background-image:url('%s');}</style>",hBackgroundImage());
-
 webIncludeResourceFile("HGStyle.css");
 webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
@@ -475,7 +471,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

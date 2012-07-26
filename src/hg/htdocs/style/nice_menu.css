@@ -8,15 +8,15 @@
 
 
 /* FROM Jabico's style.css */
-body {
+/*  body.cgi {
 	margin:0px;
 	padding:0px;
-/* 	font-size:13px;
+ 	font-size:13px;
 	color:#6b6b6b;
+	line-height:19px; 
+	background:#e6e3db;
 	font-family:Arial, Helvetica, sans-serif;
-	line-height:19px; */
-	background:#feeeca; 
-}
+}*/
 #main-menu-whole {
 	width:100%;
 	height:32px;
@@ -314,11 +314,12 @@ ul.nice-menu li.menuparent span {
 	font-size:14px;
 	cursor: pointer;
 	/*padding:0px 5px 0px 15px;*/
-	padding:0px 10px 0px 18px;
-	background:url('../images/plusesign-main-menu.png') no-repeat 5px center;
+	padding:0 18px 0 0;
+	/* background:url('../images/plusesign-main-menu.png') no-repeat 5px center; */
 }
+
 ul.nice-menu a:hover, ul.nice-menu a.active {
-	color:#f0f1f9;
+	/* color:#f0f1f9; */
 }
 #main-menu ul li.menuparent ul li span {
 	color:#121e9b;
@@ -329,14 +330,14 @@ ul.nice-menu a:hover, ul.nice-menu a.active {
 ul.nice-menu ul {
 	position:absolute;
 	top:2.5em;
-	left:21px;
+	left:10px;
 	margin-right: 0;
 	border:2px solid #f5f5f5;
 	/*border-top:0px;*/
 	background:#fbfbfb;
-	-webkit-box-shadow: 0px 4px 5px rgba(160, 160, 160, 0.49);
-    -moz-box-shadow:    0px 4px 5px rgba(160, 160, 160, 0.49);
-    box-shadow:         0px 4px 5px rgba(160, 160, 160, 0.49);
+	-webkit-box-shadow: 0px 4px 5px rgba(160, 160, 160, 0.89);
+    -moz-box-shadow:    0px 4px 5px rgba(160, 160, 160, 0.89);
+    box-shadow:         0px 4px 5px rgba(60, 60, 60, 0.89);
 }
 ul.nice-menu ul li {
 	padding:0;
@@ -369,8 +370,8 @@ span#home-link:hover {
 }
 
 /* for dropdown menu highlighting on hover */
-ul.nice-menu ul li:hover {
-    background-color: #327de4;
+ul.nice-menu ul li:hover, ul.nice-menu ul li:active {
+    background-color: #327de4 !important;
     color: #fff !important;
 }
 /* END - GREG ADDED STYLES */ 
@@ -381,7 +382,6 @@ ul.nice-menu ul li a {
 	padding:0;
 	margin:0;
 	color:#121e9b !important;
-	/* old color => 121e9b */
 	display:block;
 	background:none;
 	text-align:left;
@@ -447,12 +447,46 @@ ul.nice-menu-down li ul li ul {
     vertical-align: middle;
     white-space: nowrap;
     width: 100%;
-    -webkit-border-top-left-radius: 4px;
-    -webkit-border-top-right-radius: 4px;
-    -moz-border-radius-topleft: 4px;
-    -moz-border-radius-topright: 4px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
-a:link {color: #1122CC;}
+a:link {color: #121E9A;}
 
+
+#imgTbl, #chrom {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 2px;
+}
+
+
+/* Below are all the styles used by the superfish plugin
+I need SOME of these for the arrows in the dropdown menu. I'll
+end up deleting any I don't need
+
+
+/*** arrows **/
+.sf-menu a.sf-with-ul {
+	padding-right: 	2.25em;
+	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
+}
+.sf-sub-indicator {
+	position:		absolute;
+	display:		block;
+	right:			.75em;
+	top:			1.05em; /* IE6 only */
+	width:			10px;
+	height:			10px;
+	text-indent: 	-999em;
+	overflow:		hidden;
+	background:		url('../images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+}
+
+a > .sf-sub-indicator {  /* give all except IE6 the correct values */
+	top:			.8em;
+	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
+}
