@@ -581,7 +581,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7482
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
@@ -1243,7 +1242,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7441
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqA549CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
@@ -1831,7 +1829,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7427
-tableName wgEncodeCshlLongRnaSeqA549CytosolPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CytosolPapTranscriptGencV10
@@ -2418,7 +2415,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7420
-tableName wgEncodeCshlLongRnaSeqA549NucleusPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapTranscriptGencV10
@@ -3025,7 +3021,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7452
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
@@ -3687,7 +3682,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7447
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
@@ -4295,7 +4289,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7472
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
@@ -4957,7 +4950,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7469
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
@@ -5510,7 +5502,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7426
-tableName wgEncodeCshlLongRnaSeqCd20CellPamTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPamTranscriptGencV10
@@ -6117,7 +6108,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7424
-tableName wgEncodeCshlLongRnaSeqCd20CellPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPapTranscriptGencV10
@@ -6518,7 +6508,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7419
-tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalTranscriptGencV10
@@ -7179,7 +7168,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7479
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
@@ -7841,7 +7829,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7465
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
@@ -8713,7 +8700,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7453
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
@@ -9375,7 +9361,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7448
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
@@ -10425,7 +10410,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7443
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
@@ -11087,7 +11071,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7494
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
@@ -11749,7 +11732,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7486
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
@@ -12411,7 +12393,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7485
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
@@ -12908,7 +12889,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7435
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
@@ -13405,7 +13385,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7475
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
@@ -13902,7 +13881,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7483
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
@@ -14399,7 +14377,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7463
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
@@ -14989,7 +14966,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7406
-tableName wgEncodeCshlLongRnaSeqHaoafCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalTranscriptGencV10
@@ -15598,7 +15574,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7412
-tableName wgEncodeCshlLongRnaSeqHaoecCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalTranscriptGencV10
@@ -16207,7 +16182,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7432
-tableName wgEncodeCshlLongRnaSeqHchCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHchCellTotalTranscriptGencV10
@@ -16869,7 +16843,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7492
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
@@ -17531,7 +17504,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7476
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
@@ -18606,7 +18578,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7438
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
@@ -19268,7 +19239,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7462
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
@@ -19930,7 +19900,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7444
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
@@ -20592,7 +20561,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7471
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
@@ -21254,7 +21222,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7489
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
@@ -21916,7 +21883,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7470
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
@@ -22578,7 +22544,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7496
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
@@ -23240,7 +23205,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7457
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
@@ -23902,7 +23866,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7477
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
@@ -24509,7 +24472,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7402
-tableName wgEncodeCshlLongRnaSeqHfdpcCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHfdpcCellTotalTranscriptGencV10
@@ -25006,7 +24968,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7442
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
@@ -25503,7 +25464,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7449
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
@@ -25917,7 +25877,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7434
-tableName wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptGencV10
@@ -27267,7 +27226,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7409
-tableName wgEncodeCshlLongRnaSeqHmscatCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmscatCellTotalTranscriptGencV10
@@ -27874,7 +27832,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7404
-tableName wgEncodeCshlLongRnaSeqHmscbmCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmscbmCellTotalTranscriptGencV10
@@ -28472,7 +28429,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7433
-tableName wgEncodeCshlLongRnaSeqHmscucCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalTranscriptGencV10
@@ -29079,7 +29035,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7422
-tableName wgEncodeCshlLongRnaSeqHobCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHobCellTotalTranscriptGencV10
@@ -29709,7 +29664,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7428
-tableName wgEncodeCshlLongRnaSeqHpcplCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalTranscriptGencV10
@@ -30316,7 +30270,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7416
-tableName wgEncodeCshlLongRnaSeqHpiepcCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalTranscriptGencV10
@@ -30923,7 +30876,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7411
-tableName wgEncodeCshlLongRnaSeqHsavecCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalTranscriptGencV10
@@ -31585,7 +31537,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7451
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV7
@@ -32247,7 +32198,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7480
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
@@ -32912,7 +32862,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7456
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
@@ -33577,7 +33526,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7459
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
@@ -34077,7 +34025,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7446
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
@@ -34742,7 +34689,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7488
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
@@ -35407,7 +35353,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7458
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
@@ -36072,7 +36017,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7495
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
@@ -36680,7 +36624,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7407
-tableName wgEncodeCshlLongRnaSeqHvmfCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHvmfCellTotalTranscriptGencV10
@@ -37287,7 +37230,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7413
-tableName wgEncodeCshlLongRnaSeqHwpCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHwpCellTotalTranscriptGencV10
@@ -37882,7 +37824,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7431
-tableName wgEncodeCshlLongRnaSeqImr90CellPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellPapTranscriptGencV10
@@ -38477,7 +38418,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7405
-tableName wgEncodeCshlLongRnaSeqImr90CellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalTranscriptGencV10
@@ -39072,7 +39012,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7414
-tableName wgEncodeCshlLongRnaSeqImr90CytosolPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapTranscriptGencV10
@@ -39667,7 +39606,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7423
-tableName wgEncodeCshlLongRnaSeqImr90NucleusPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapTranscriptGencV10
@@ -40329,7 +40267,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7481
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
@@ -40991,7 +40928,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7478
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
@@ -41861,7 +41797,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7445
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
@@ -42523,7 +42458,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7474
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
@@ -43181,7 +43115,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7466
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
@@ -43841,7 +43774,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7440
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
@@ -44501,7 +44433,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7439
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
@@ -45163,7 +45094,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7436
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
@@ -45825,7 +45755,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7450
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
@@ -46487,7 +46416,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7473
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
@@ -47149,7 +47077,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7493
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
@@ -47736,7 +47663,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7403
-tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapTranscriptGencV10
@@ -48323,7 +48249,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7415
-tableName wgEncodeCshlLongRnaSeqMcf7NucleusPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapTranscriptGencV10
@@ -48875,7 +48800,6 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7429
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPamTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamTranscriptGencV10
@@ -49482,7 +49406,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7421
-tableName wgEncodeCshlLongRnaSeqMonocd14CellPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapTranscriptGencV10
@@ -50089,7 +50012,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7410
-tableName wgEncodeCshlLongRnaSeqNhdfCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhdfCellTotalTranscriptGencV10
@@ -51095,7 +51017,6 @@ sex F
 spikeInPool Nist14
 subId 7487
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2
@@ -51124,7 +51045,6 @@ sex F
 spikeInPool Nist14
 subId 7460
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
@@ -52160,7 +52080,6 @@ sex F
 spikeInPool Nist14
 subId 7468
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2
@@ -52189,7 +52108,6 @@ sex F
 spikeInPool Nist14
 subId 7484
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
@@ -52694,7 +52612,6 @@ sex F
 spikeInPool Nist14
 subId 7490
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
@@ -53362,7 +53279,6 @@ sex F
 spikeInPool Nist14
 subId 7491
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
@@ -54030,7 +53946,6 @@ sex F
 spikeInPool Nist14
 subId 7461
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
@@ -54699,7 +54614,6 @@ sex F
 spikeInPool Nist14
 subId 7464
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
@@ -55306,7 +55220,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7401
-tableName wgEncodeCshlLongRnaSeqNhemfm2CellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhemfm2CellTotalTranscriptGencV10
@@ -55913,7 +55826,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7418
-tableName wgEncodeCshlLongRnaSeqNhemm2CellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhemm2CellTotalTranscriptGencV10
@@ -56575,7 +56487,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7467
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
@@ -57237,7 +57148,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7437
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
@@ -57844,7 +57754,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7408
-tableName wgEncodeCshlLongRnaSeqSkmcCellTotalTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSkmcCellTotalTranscriptGencV10
@@ -58432,7 +58341,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7430
-tableName wgEncodeCshlLongRnaSeqSknshCellPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapTranscriptGencV10
@@ -59019,7 +58927,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7417
-tableName wgEncodeCshlLongRnaSeqSknshCytosolPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapTranscriptGencV10
@@ -59606,7 +59513,6 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7425
-tableName wgEncodeCshlLongRnaSeqSknshNucleusPapTranscriptDeNovo
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapTranscriptGencV10
@@ -60213,7 +60119,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7455
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
@@ -60875,7 +60780,6 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7454
 submittedDataVersion V2 - New version of processing used.
-tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
@@ -60906,4 +60810,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 88394954
+# MAGIC: 1983014887
