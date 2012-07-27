@@ -19,6 +19,9 @@ hetGla	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Bathyergida
 # Guinea pig Cavia porcellus
 cavPor	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Caviidae; Cavia
 
+# Chinchilla lanigera
+chiLan  Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Chinchillidae; Chinchilla
+
 # Squirrel Spermophilus tridecemlineatus
 speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xerinae; Marmotini; Spermophilus
 
