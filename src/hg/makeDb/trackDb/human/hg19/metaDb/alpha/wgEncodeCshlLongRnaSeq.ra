@@ -556,7 +556,7 @@ subId 3601
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -1218,7 +1218,7 @@ subId 3602
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -1807,7 +1807,7 @@ subId 5784
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqA549CytosolPapTranscriptDeNovo
-objType table
+objType file
 bioRep 087C,088C
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -2394,7 +2394,7 @@ subId 5763
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapTranscriptDeNovo
-objType table
+objType file
 bioRep 088N,087N
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -3000,7 +3000,7 @@ subId 3603
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -3662,7 +3662,7 @@ subId 3604
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -4270,7 +4270,7 @@ subId 3605
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -4932,7 +4932,7 @@ subId 3606
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -5485,7 +5485,7 @@ subId 5761
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPamTranscriptDeNovo
-objType table
+objType file
 bioRep 042WC,041WC
 cell CD20+
 composite wgEncodeCshlLongRnaSeq
@@ -5983,6 +5983,60 @@ subId 5772
 tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1V2
+objType file
+bioRep 041WC
+cell CD20+
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId RO01794
+fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44498
+labProtocolId 041WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7673
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2V2
+objType file
+bioRep 042WC
+cell CD20+
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId RO01778
+fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44499
+labProtocolId 042WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7680
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep1
 objType file
 bioRep 041WC
@@ -6038,7 +6092,7 @@ subId 5772
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPapTranscriptDeNovo
-objType table
+objType file
 bioRep 042WC,041WC
 cell CD20+
 composite wgEncodeCshlLongRnaSeq
@@ -6387,6 +6441,32 @@ subId 5780
 tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1V2
+objType file
+bioRep 043WC
+cell CD34+_Mobilized
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45901
+labProtocolId 043WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7665
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalSpikeinsRep1
 objType file
 bioRep 043WC
@@ -6414,7 +6494,7 @@ subId 5780
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 043WC
 cell CD34+_Mobilized
 composite wgEncodeCshlLongRnaSeq
@@ -7074,7 +7154,7 @@ subId 3611
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -7736,7 +7816,7 @@ subId 3612
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -8608,7 +8688,7 @@ subId 3607
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -9270,7 +9350,7 @@ subId 3608
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -10320,7 +10400,7 @@ subId 3609
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -10982,7 +11062,7 @@ subId 3610
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -11644,7 +11724,7 @@ subId 3613
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -12306,7 +12386,7 @@ subId 3614
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -12803,7 +12883,7 @@ subId 3615
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -13300,7 +13380,7 @@ subId 3616
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -13797,7 +13877,7 @@ subId 3617
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -14294,7 +14374,7 @@ subId 3618
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -14884,7 +14964,7 @@ subId 7191
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHaoafCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 056WC
 cell HAoAF
 composite wgEncodeCshlLongRnaSeq
@@ -15493,7 +15573,7 @@ subId 5994
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHaoecCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 058WC,057WC
 cell HAoEC
 composite wgEncodeCshlLongRnaSeq
@@ -16102,7 +16182,7 @@ subId 6867
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHchCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 060WC,059WC
 cell HCH
 composite wgEncodeCshlLongRnaSeq
@@ -16764,7 +16844,7 @@ subId 3629
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -17426,7 +17506,7 @@ subId 3630
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -18501,7 +18581,7 @@ subId 3632
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -19163,7 +19243,7 @@ subId 3633
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -19825,7 +19905,7 @@ subId 3634
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -20487,7 +20567,7 @@ subId 3639
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -21149,7 +21229,7 @@ subId 3640
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -21811,7 +21891,7 @@ subId 3635
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -22473,7 +22553,7 @@ subId 3636
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -23135,7 +23215,7 @@ subId 3637
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -23797,7 +23877,7 @@ subId 3638
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -24405,7 +24485,7 @@ subId 6904
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHfdpcCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 061WC,062WC
 cell HFDPC
 composite wgEncodeCshlLongRnaSeq
@@ -24901,7 +24981,7 @@ subId 3619
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -25398,7 +25478,7 @@ subId 3620
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -25813,7 +25893,7 @@ subId 5889
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 063WC
 cell HMEpC
 composite wgEncodeCshlLongRnaSeq
@@ -27163,7 +27243,7 @@ subId 6879
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHmscatCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 065WC,066WC
 cell hMSC-AT
 composite wgEncodeCshlLongRnaSeq
@@ -27770,7 +27850,7 @@ subId 6902
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHmscbmCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 067WC,068WC
 cell hMSC-BM
 composite wgEncodeCshlLongRnaSeq
@@ -28318,8 +28398,58 @@ subId 6075
 tableName wgEncodeCshlLongRnaSeqHmscucCellTotalJunctions
 view Junctions
 
+metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1V2
+objType file
+bioRep 069WC
+cell hMSC-UC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 0052501.7
+fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47299
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7678
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2V2
+objType file
+bioRep 070WC
+cell hMSC-UC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 0081101.7
+fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47300
+localization cell
+project wgEncode
+readType 2x101D
+replicate 2
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7682
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 069WC,070WC
 cell hMSC-UC
 composite wgEncodeCshlLongRnaSeq
@@ -28925,7 +29055,7 @@ subId 6880
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHobCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 053WC,054WC
 cell HOB
 composite wgEncodeCshlLongRnaSeq
@@ -29421,6 +29551,31 @@ subId 5759
 tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1V2
+objType file
+bioRep 071WC
+cell HPC-PL
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 0101504.13
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47301
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7674
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2
 objType file
 bioRep 072WC
@@ -29447,6 +29602,32 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6863
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2V2
+objType file
+bioRep 072WC
+cell HPC-PL
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 0032601.13
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47104
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 2
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7661
+submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep1
@@ -29504,7 +29685,7 @@ subId 5759
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 072WC,071WC
 cell HPC-PL
 composite wgEncodeCshlLongRnaSeq
@@ -30111,7 +30292,7 @@ subId 5884
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHpiepcCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 073WC,074WC
 cell HPIEpC
 composite wgEncodeCshlLongRnaSeq
@@ -30718,7 +30899,7 @@ subId 5867
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHsavecCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 094WC,093WC
 cell HSaVEC
 composite wgEncodeCshlLongRnaSeq
@@ -31379,7 +31560,7 @@ subId 3621
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -32041,7 +32222,7 @@ subId 3622
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -32705,7 +32886,7 @@ subId 3627
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -33370,7 +33551,7 @@ subId 3628
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -33870,7 +34051,7 @@ subId 3623
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -34535,7 +34716,7 @@ subId 3624
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -35200,7 +35381,7 @@ subId 3625
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -35865,7 +36046,7 @@ subId 3626
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -36475,7 +36656,7 @@ subId 6873
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHvmfCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 051WC,052WC
 cell HVMF
 composite wgEncodeCshlLongRnaSeq
@@ -37082,7 +37263,7 @@ subId 6875
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHwpCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 080WC,079WC
 cell HWP
 composite wgEncodeCshlLongRnaSeq
@@ -37569,6 +37750,60 @@ subId 5771
 tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1V2
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45016
+labProtocolId 045WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7666
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2V2
+objType file
+bioRep 046WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45017
+labProtocolId 046WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7679
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1
 objType file
 bioRep 045WC
@@ -37622,7 +37857,7 @@ subId 5771
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellPapTranscriptDeNovo
-objType table
+objType file
 bioRep 046WC,045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
@@ -38110,6 +38345,60 @@ subId 5783
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1V2
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7675
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2V2
+objType file
+bioRep 046WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45239
+labProtocolId 046WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 2
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7669
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1
 objType file
 bioRep 045WC
@@ -38163,7 +38452,7 @@ subId 5783
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 045WC,046WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
@@ -38651,6 +38940,60 @@ subId 5762
 tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1V2
+objType file
+bioRep 045C
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45611
+labProtocolId 045N+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7664
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2V2
+objType file
+bioRep 046C
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45612
+labProtocolId 046N+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7668
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1
 objType file
 bioRep 045C
@@ -38704,7 +39047,7 @@ subId 5762
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapTranscriptDeNovo
-objType table
+objType file
 bioRep 046C,045C
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
@@ -39192,6 +39535,60 @@ subId 5778
 tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1V2
+objType file
+bioRep 045N
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45613
+labProtocolId 045C+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7662
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2V2
+objType file
+bioRep 046N
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId 58607680
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID45635
+labProtocolId 046C+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 7663
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1
 objType file
 bioRep 045N
@@ -39245,7 +39642,7 @@ subId 5778
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapTranscriptDeNovo
-objType table
+objType file
 bioRep 045N,046N
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
@@ -39907,7 +40304,7 @@ subId 3648
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -40569,7 +40966,7 @@ subId 3649
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -41303,6 +41700,58 @@ subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2
+objType file
+bioRep 025CH
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9185
+labProtocolId 025CHt
+localization chromatin
+project wgEncode
+protocol None
+readType 2x76D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7667
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4V2
+objType file
+bioRep 026CH
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9186
+labProtocolId 026CHt
+localization chromatin
+project wgEncode
+protocol None
+readType 2x76D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7677
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep3
 objType file
 attic auxSup
@@ -41387,7 +41836,7 @@ subId 3641
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptDeNovoV2
-objType table
+objType file
 bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -42049,7 +42498,7 @@ subId 3642
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -42707,7 +43156,7 @@ subId 3643
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -43231,6 +43680,58 @@ subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3V2
+objType file
+bioRep 025NL
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9187
+labProtocolId 025NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x76D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7670
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4V2
+objType file
+bioRep 026NL
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9188
+labProtocolId 026NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x76D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7671
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep3
 objType file
 attic auxSup
@@ -43315,7 +43816,7 @@ subId 3644
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptDeNovoV2
-objType table
+objType file
 bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -43839,6 +44340,58 @@ subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3V2
+objType file
+bioRep 025NP
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9189
+labProtocolId 025NPt
+localization nucleoplasm
+project wgEncode
+protocol None
+readType 2x76D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7676
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4V2
+objType file
+bioRep 026NP
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID9190
+labProtocolId 026NPt
+localization nucleoplasm
+project wgEncode
+protocol None
+readType 2x76D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7683
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep3
 objType file
 attic auxSup
@@ -43923,7 +44476,7 @@ subId 3645
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptDeNovoV2
-objType table
+objType file
 bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -44585,7 +45138,7 @@ subId 3646
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -45247,7 +45800,7 @@ subId 3647
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -45909,7 +46462,7 @@ subId 3650
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -46571,7 +47124,7 @@ subId 3651
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -47159,7 +47712,7 @@ subId 5883
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapTranscriptDeNovo
-objType table
+objType file
 bioRep 089C,090C
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -47746,7 +48299,7 @@ subId 5760
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapTranscriptDeNovo
-objType table
+objType file
 bioRep 090N,089N
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -48297,7 +48850,7 @@ subId 5764
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPamTranscriptDeNovo
-objType table
+objType file
 bioRep 040WC,039WC
 cell Monocytes-CD14+
 composite wgEncodeCshlLongRnaSeq
@@ -48795,6 +49348,60 @@ subId 5773
 tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1V2
+objType file
+bioRep 039WC
+cell Monocytes-CD14+
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId RO01746
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44594
+labProtocolId 039WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7672
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2V2
+objType file
+bioRep 040WC
+cell Monocytes-CD14+
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+donorId RO01746
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44497
+labProtocolId 040WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 7681
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep1
 objType file
 bioRep 039WC
@@ -48850,7 +49457,7 @@ subId 5773
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapTranscriptDeNovo
-objType table
+objType file
 bioRep 040WC,039WC
 cell Monocytes-CD14+
 composite wgEncodeCshlLongRnaSeq
@@ -49458,7 +50065,7 @@ subId 6889
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhdfCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 050WC,049WC
 cell NHDF
 composite wgEncodeCshlLongRnaSeq
@@ -50130,6 +50737,62 @@ spikeInPool Nist14
 subId 3657
 view GeneDeNovo
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoRep5V2
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoRep5V2.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8830
+labProtocolId 035WC-
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 5
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7487
+submittedDataVersion V2 - New version of processing used.
+view GeneDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoV2
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoV2.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7460
+submittedDataVersion V2 - New version of processing used.
+view GeneDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamGeneGencV7
 objType file
 bioRep 007WC,008WC
@@ -50404,6 +51067,64 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3657
+view TranscriptDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8830
+labProtocolId 035WC-
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 5
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7487
+submittedDataVersion V2 - New version of processing used.
+tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2
+view TranscriptDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8665,LID8666
+labProtocolId 007WC-,008WC-
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7460
+submittedDataVersion V2 - New version of processing used.
+tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
@@ -50911,6 +51632,62 @@ spikeInPool Nist14
 subId 3659
 view GeneDeNovo
 
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoRep5V2
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoRep5V2.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 5
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7468
+submittedDataVersion V2 - New version of processing used.
+view GeneDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoV2
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoV2.gff.gz
+grant Gingeras
+lab CSHL
+labExpId LID16631,LID16632
+labProtocolId 007WC+,008WC+
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7484
+submittedDataVersion V2 - New version of processing used.
+view GeneDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapGeneGencV7
 objType file
 bioRep 007WC,008WC
@@ -51355,6 +52132,64 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 3659
+view TranscriptDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2
+objType file
+bioRep 035WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 5
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7468
+submittedDataVersion V2 - New version of processing used.
+tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2
+view TranscriptDeNovo
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2
+objType file
+bioRep 007WC,008WC
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-19
+dateUnrestricted 2013-04-19
+donorId 4F1155J
+fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID16631,LID16632
+labProtocolId 007WC+,008WC+
+labVersion iIDR
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+spikeInPool Nist14
+subId 7484
+submittedDataVersion V2 - New version of processing used.
+tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
@@ -51832,7 +52667,7 @@ subId 3652
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -52500,7 +53335,7 @@ subId 3653
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -53168,7 +54003,7 @@ subId 3654
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -53837,7 +54672,7 @@ subId 3655
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -54447,7 +55282,7 @@ subId 6901
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhemfm2CellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 081WC,082WC
 cell NHEM.f_M2
 composite wgEncodeCshlLongRnaSeq
@@ -55054,7 +55889,7 @@ subId 6882
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqNhemm2CellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 083WC,084WC
 cell NHEM_M2
 composite wgEncodeCshlLongRnaSeq
@@ -55715,7 +56550,7 @@ subId 3660
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -56377,7 +57212,7 @@ subId 3661
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -56985,7 +57820,7 @@ subId 6908
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqSkmcCellTotalTranscriptDeNovo
-objType table
+objType file
 bioRep 047WC,048WC
 cell SkMC
 composite wgEncodeCshlLongRnaSeq
@@ -57573,7 +58408,7 @@ subId 5775
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapTranscriptDeNovo
-objType table
+objType file
 bioRep 086WC,085WC
 cell SK-N-SH
 composite wgEncodeCshlLongRnaSeq
@@ -58160,7 +58995,7 @@ subId 5782
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSknshCytosolPapTranscriptDeNovo
-objType table
+objType file
 bioRep 085C,086C
 cell SK-N-SH
 composite wgEncodeCshlLongRnaSeq
@@ -58747,7 +59582,7 @@ subId 5767
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapTranscriptDeNovo
-objType table
+objType file
 bioRep 086N,085N
 cell SK-N-SH
 composite wgEncodeCshlLongRnaSeq
@@ -59353,7 +60188,7 @@ subId 3662
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptDeNovoV2
-objType table
+objType file
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -60015,7 +60850,7 @@ subId 3663
 view TranscriptDeNovo
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovoV2
-objType table
+objType file
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -60071,4 +60906,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -2142223786
+# MAGIC: 88394954
