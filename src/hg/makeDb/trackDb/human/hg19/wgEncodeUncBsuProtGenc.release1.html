@@ -48,7 +48,7 @@ peptides and some are specific to regular peptides or PTM peptides only <br>
 Fields common to both regular and PTM peptides:
 </p>
   <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence 
-for regular pepitde mapping and peptide sequence appended with the integer fraction 
+for regular pepitde mapping and peptide sequence appended with the integer portion
 of the PTM mass for PTM peptide mapping. These appear in the left or right space as 
 short label besides the main Genome Browser display window depending on the 
 configuration</li>
@@ -84,13 +84,16 @@ number of places in the genome where the peptide is encoded, reflecting the prev
 or uniqueness of the peptide mapping in the genome.  Those peptides mapped to only a 
 few genomic locations will have a low peptideRepeatCount, whereas those peptides mapped 
 to highly duplicated regions will have a high <span style="font-style: italic;">
-peptideRepeatCount</span>.  Peptides with <span style="font-style: italic;">
-peptideRepeatCount</span> greater than 10 times in the genome were deleted from the track.
-  </li>
+peptideRepeatCount</span>.  <u>Peptides with <span style="font-style: italic;">
+peptideRepeatCount</span> greater than 10 times in the genome were deleted from the 
+track</u>.</li>
 
 <p>
 Fields specific to PTM peptides:
 </p>
+  <li>The <span style="font-style: italic;"> modificationMass</span> reflects the 
+additional molecular weight for each modified peptide matched to a spectrum.
+  </li>
 </ul>
 
 
