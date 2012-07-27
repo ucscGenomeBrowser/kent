@@ -658,6 +658,9 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
+/* construct a linkedFeatures object from a genePred */
+
 struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb *tdb,
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
@@ -1191,6 +1194,10 @@ void affyTxnPhase2Methods(struct track *track);
 
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
+
+void loadGenePredWithConfiguredName(struct track *tg);
+/* Convert gene pred info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
 
 boolean highlightItem(struct track *tg, void *item);
 /* Should this item be highlighted? */

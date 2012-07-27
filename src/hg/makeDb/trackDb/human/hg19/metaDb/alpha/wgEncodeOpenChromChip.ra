@@ -425,6 +425,63 @@ tableName wgEncodeOpenChromChipA549Pol2Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipColonocInputAln
+objType file
+antibody Input
+cell Colon_OC
+composite wgEncodeOpenChromChip
+controlId Colon_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipColonocInputAln.bam,wgEncodeOpenChromChipColonocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7524
+view Alignments
+
+metaObject wgEncodeOpenChromChipColonocInputRawData
+objType file
+antibody Input
+cell Colon_OC
+composite wgEncodeOpenChromChip
+controlId Colon_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipColonocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7524
+view RawData
+
+metaObject wgEncodeOpenChromChipColonocInputSig
+objType table
+antibody Input
+cell Colon_OC
+composite wgEncodeOpenChromChip
+controlId Colon_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipColonocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7524
+tableName wgEncodeOpenChromChipColonocInputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
 objType file
 antibody CTCF
@@ -1039,6 +1096,120 @@ setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2Sig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromChipGm10248InputAln
+objType file
+antibody Input
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm10248InputAln.bam,wgEncodeOpenChromChipGm10248InputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7517
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10248InputRawData
+objType file
+antibody Input
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm10248InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7517
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10248InputSig
+objType table
+antibody Input
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm10248InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7517
+tableName wgEncodeOpenChromChipGm10248InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipGm10266InputAln
+objType file
+antibody Input
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10266InputAln.bam,wgEncodeOpenChromChipGm10266InputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7518
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10266InputRawData
+objType file
+antibody Input
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10266InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7518
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10266InputSig
+objType table
+antibody Input
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10266InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7518
+tableName wgEncodeOpenChromChipGm10266InputSig
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep1
@@ -2166,6 +2337,120 @@ tableName wgEncodeOpenChromChipGm12892CtcfSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipGm13976InputAln
+objType file
+antibody Input
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13976InputAln.bam,wgEncodeOpenChromChipGm13976InputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7519
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13976InputRawData
+objType file
+antibody Input
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13976InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7519
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13976InputSig
+objType table
+antibody Input
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13976InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7519
+tableName wgEncodeOpenChromChipGm13976InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipGm13977InputAln
+objType file
+antibody Input
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13977InputAln.bam,wgEncodeOpenChromChipGm13977InputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7520
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13977InputRawData
+objType file
+antibody Input
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13977InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7520
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13977InputSig
+objType table
+antibody Input
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodeOpenChromChipGm13977InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7520
+tableName wgEncodeOpenChromChipGm13977InputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipGm19238CtcfAlnRep1
 objType file
 antibody CTCF
@@ -2721,6 +3006,63 @@ tableName wgEncodeOpenChromChipGm19240CtcfSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipGm20000InputAln
+objType file
+antibody Input
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm20000InputAln.bam,wgEncodeOpenChromChipGm20000InputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7521
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm20000InputRawData
+objType file
+antibody Input
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm20000InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7521
+view RawData
+
+metaObject wgEncodeOpenChromChipGm20000InputSig
+objType table
+antibody Input
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm20000InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7521
+tableName wgEncodeOpenChromChipGm20000InputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipH1hescCmycAlnRep1
 objType file
 antibody c-Myc
@@ -3115,6 +3457,63 @@ setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Sig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromChipHeartocInputAln
+objType file
+antibody Input
+cell Heart_OC
+composite wgEncodeOpenChromChip
+controlId Heart_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipHeartocInputAln.bam,wgEncodeOpenChromChipHeartocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7525
+view Alignments
+
+metaObject wgEncodeOpenChromChipHeartocInputRawData
+objType file
+antibody Input
+cell Heart_OC
+composite wgEncodeOpenChromChip
+controlId Heart_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipHeartocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7525
+view RawData
+
+metaObject wgEncodeOpenChromChipHeartocInputSig
+objType table
+antibody Input
+cell Heart_OC
+composite wgEncodeOpenChromChip
+controlId Heart_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipHeartocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7525
+tableName wgEncodeOpenChromChipHeartocInputSig
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycAlnRep1
@@ -6070,6 +6469,177 @@ subId 3832
 treatment None
 view Validation
 
+metaObject wgEncodeOpenChromChipKidneyocInputAln
+objType file
+antibody Input
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipKidneyocInputAln.bam,wgEncodeOpenChromChipKidneyocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7527
+view Alignments
+
+metaObject wgEncodeOpenChromChipKidneyocInputRawData
+objType file
+antibody Input
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipKidneyocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7527
+view RawData
+
+metaObject wgEncodeOpenChromChipKidneyocInputSig
+objType table
+antibody Input
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipKidneyocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7527
+tableName wgEncodeOpenChromChipKidneyocInputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipLncapInputAln
+objType file
+antibody Input
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLncapInputAln.bam,wgEncodeOpenChromChipLncapInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7522
+view Alignments
+
+metaObject wgEncodeOpenChromChipLncapInputRawData
+objType file
+antibody Input
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLncapInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7522
+view RawData
+
+metaObject wgEncodeOpenChromChipLncapInputSig
+objType table
+antibody Input
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLncapInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7522
+tableName wgEncodeOpenChromChipLncapInputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipLungocInputAln
+objType file
+antibody Input
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLungocInputAln.bam,wgEncodeOpenChromChipLungocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7526
+view Alignments
+
+metaObject wgEncodeOpenChromChipLungocInputRawData
+objType file
+antibody Input
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLungocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7526
+view RawData
+
+metaObject wgEncodeOpenChromChipLungocInputSig
+objType table
+antibody Input
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipLungocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7526
+tableName wgEncodeOpenChromChipLungocInputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 objType file
 antibody c-Myc
@@ -8201,6 +8771,202 @@ tableName wgEncodeOpenChromChipMcf7Pol2Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipMedulloCtcfAlnRep1
+objType file
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam,wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7325
+view Alignments
+
+metaObject wgEncodeOpenChromChipMedulloCtcfAlnRep2
+objType file
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam,wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7325
+view Alignments
+
+metaObject wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal
+objType table
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 7325
+tableName wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMedulloCtcfPkRep1
+objType table
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7325
+tableName wgEncodeOpenChromChipMedulloCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipMedulloCtcfRawDataRep1
+objType file
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7325
+view RawData
+
+metaObject wgEncodeOpenChromChipMedulloCtcfRawDataRep2
+objType file
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7325
+view RawData
+
+metaObject wgEncodeOpenChromChipMedulloCtcfSig
+objType table
+antibody CTCF
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloCtcfSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_D721
+project wgEncode
+setType exp
+subId 7325
+tableName wgEncodeOpenChromChipMedulloCtcfSig
+view Signal
+
+metaObject wgEncodeOpenChromChipMedulloInputAln
+objType file
+antibody Input
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloInputAln.bam,wgEncodeOpenChromChipMedulloInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+setType input
+subId 7323
+view Alignments
+
+metaObject wgEncodeOpenChromChipMedulloInputRawData
+objType file
+antibody Input
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7323
+view RawData
+
+metaObject wgEncodeOpenChromChipMedulloInputSig
+objType table
+antibody Input
+cell Medullo
+composite wgEncodeOpenChromChip
+controlId Medullo/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromChipMedulloInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7323
+tableName wgEncodeOpenChromChipMedulloInputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipMonocd14InputAln
 objType file
 antibody Input
@@ -8539,6 +9305,63 @@ tableName wgEncodeOpenChromChipNhekCtcfSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipPancreasocInputAln
+objType file
+antibody Input
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipPancreasocInputAln.bam,wgEncodeOpenChromChipPancreasocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7523
+view Alignments
+
+metaObject wgEncodeOpenChromChipPancreasocInputRawData
+objType file
+antibody Input
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipPancreasocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7523
+view RawData
+
+metaObject wgEncodeOpenChromChipPancreasocInputSig
+objType table
+antibody Input
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipPancreasocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7523
+tableName wgEncodeOpenChromChipPancreasocInputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipProgfibCtcfAlnRep1
 objType file
 antibody CTCF
@@ -8864,4 +9687,61 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: 1831908647
+metaObject wgEncodeOpenChromChipSpleenocInputAln
+objType file
+antibody Input
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipSpleenocInputAln.bam,wgEncodeOpenChromChipSpleenocInputAln.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+setType input
+subId 7528
+view Alignments
+
+metaObject wgEncodeOpenChromChipSpleenocInputRawData
+objType file
+antibody Input
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipSpleenocInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 7528
+view RawData
+
+metaObject wgEncodeOpenChromChipSpleenocInputSig
+objType table
+antibody Input
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipSpleenocInputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 7528
+tableName wgEncodeOpenChromChipSpleenocInputSig
+view Signal
+
+# MAGIC: 1098264936
