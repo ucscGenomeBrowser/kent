@@ -199,7 +199,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL00000
 color 0,107,27
 sex M
 tier 1
-protocol ENCODE:H1_ES_protocol.pdf
+protocol ENCODE:missing
+#Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol. 
 
 term H1-neurons
 tag H1NEURONS
@@ -371,7 +372,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
@@ -392,7 +393,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th0_adult
 
 term Adult_CD4_Th1
@@ -413,7 +414,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th1_adult
 
 term AoAF
@@ -1408,7 +1409,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb11970640_Stam_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 
 term CD4+_Naive_Wb78495824
 tag CD4NAIVEWB78495824
@@ -1426,7 +1427,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 
 term GC_B_cell
 tag GCBCELL
@@ -1599,7 +1600,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
@@ -1620,7 +1621,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th0_cord_blood
 
 term Cord_CD4_Th1
@@ -1641,7 +1642,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th1_cord_blood
 
 term Decidua
@@ -4279,6 +4280,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS27a_Stam_protocol.pdf
 
 term bone_marrow_HS5
@@ -4296,6 +4298,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS5_Stam_protocol.pdf
 
 term bone_marrow_MSC
@@ -4313,6 +4316,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:MSC_Stam_protocol.pdf
 
 term HSaVEC
@@ -5611,6 +5615,7 @@ orderUrl http://www.griffith.edu.au/professional-page/professor-alan-mackay-sim
 termId termId BTO:0000961
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000961
 lab Crawford
+label Olfactory neurosphere
 protocol Crawford:Olfneurosphere_Crawford_protocol.pdf
 
 term Osteobl
@@ -5863,6 +5868,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
+label Prostate
 protocol Gingeras:Prostate_Gingeras_protocol.pdf
 
 term Prostate_OC
@@ -6219,7 +6225,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf 
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+
 
 term T98G
@@ -16546,11 +16552,11 @@ projectName FSU
 #	Experiment defining:
 #  	  100s: expId:100 cellType:110 strain:120 sex:130 age:140 localization:150 rnaExtract:160 readType:165 insertLength:166 phase:170 treatment:180 Antibody:190 attic:190
 #	Undefine:
-#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 rank:242 submittedDataVersion:250
+#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 submittedDataVersion:250
 #	DCC descriptive:
 #  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
 #	Lab descriptive:
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
+#  	  400s: labExpId:410 bioRep:415 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 promoter:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
@@ -16607,6 +16613,7 @@ validate list: manual,automatic
 deprecated No longer neede by GENCODE
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
 optionalVars label,validation,targetUrl,lots,displayName,deprecated
+# Used on hg18 in SangerGencode
 
 term Antibody
 tag ANTIBODY
@@ -16995,18 +17002,6 @@ priority 410
 requiredVars term,tag,type,description
 optionalVars label,deprecated
 
-term labProtocolId
-tag LABPROTOCOLID
-type typeOfTerm
-label Lab specific protocol ID
-description Some labs produce experiments under multiple defined protocols which may or may not be experiment altering, but which should be recorded all the same.
-searchable no
-cvDefined no
-validate none
-priority 420
-requiredVars term,tag,type,description
-optionalVars label,deprecated
-
 term labVersion
 tag LABVERSION
 type typeOfTerm
@@ -17031,6 +17026,7 @@ priority 590
 deprecated no longer needed by GENCODE
 requiredVars term,tag,type,description
 optionalVars label,deprecated
+#Used on 1 track on hg18 SangerGencode
 
 term localization
 tag LOCALIZATION
@@ -17184,19 +17180,6 @@ cvDefined yes
 validate cv or None
 priority 200
 # Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
-requiredVars term,tag,type,description
-optionalVars label,deprecated
-
-term rank
-tag RANK
-type typeOfTerm
-label Rank of replicate
-description Experiments with multiple replicates may declare a preferred replicate for visualization.
-searchable no
-cvDefined no
-validate list: 1st,2nd,3rd
-priority 242
-# Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 requiredVars term,tag,type,description
 optionalVars label,deprecated
 
