@@ -37,13 +37,19 @@ The name of each item is the amino acid sequence of the peptide and a period (.)
 at the end of a name, it signifies a stop codon.  
 <br>
 </p>
-<p>In addition to the common fields in genome browser display, here are several 
-additional fields specific for these tracks:<br>
+<p>In addition to the common fields in genome browser display, these Proteogenomics tracks
+have some unique fields and some of which are common to both regular and PTM peptides and some are 
+specific to regular peptides or PTM peptides only <br>
 </p>
 <ul>
+
+<p>
+Fields common to both regular and PTM peptides:
+</p>
   <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence for 
 regular pepitde mapping and peptide sequence appended with the integer fraction of the 
-PTM mass for PTM peptide mapping.</li>
+PTM mass for PTM peptide mapping. These appear in the left or right space besides the main 
+Genome Browser display window depending on the configuration</li>
   <li>The <span style="font-style: italic;">Score</span> is derived from the 'Raw score 
 for a peptide/spectrum match' (see below) given by the proteomics peptide mapping software 
 Peppy (Giddings <EM>et al.</EM> 2003).  Score is computed as 
@@ -51,24 +57,18 @@ Peppy (Giddings <EM>et al.</EM> 2003).  Score is computed as
 and is then converted to an integer.  Raw scores above the 0% FDR threshold have a score of 1000 (best), 
 while those below the 10% FDR threshold have a score of 0 (worst).  The score is used by 
 the Genome Browser to render shade to the displaying solid rectangular.</li>
-  <li>The <span style="font-style: italic;">'Raw Score for a peptide/spectrum match'</span> is 
-the original peptide mapping score given by Peppy, which reflects the strength of the peptide 
-mapping; as an estimated <span style="font-style: italic;">p</span>-value, indicating the 
-confidence of the peptide mapping.</li>
-  <li>The <span style="font-style: italic;">'An identifier of the spectrum associated with the peptide mapping'</span> 
-is the original identifier of the spectrum that mapped to the peptide sequence, and it can be used 
-to track the original spectrum.<br></li>
-  <li>The <span style="font-style: italic;">'Rank or the peptides/spectrum match, for spectrum matching to different peptides' </span>
-indicates the rank of each peptide/spectrum mapping.  A spectrum can
-be chimeric, containing more than one peptide, and the spectrum can be
-mapped to two or more distinct peptides.  Here, we are only reporting the 
-top-scoring match.  If more than one peptide 'tied' for the top score, then 
-all peptides were included and all matches have a rank of 1.<br></li>
-<li>The<span style="font-style: italic;">'Indicates the number of places in the genome where the peptide
-is encoded for a peptide/spectrum match' </span> indicates 
-</li>
-
-
+  <li>The <span style="font-style: italic;">rawScore </span> is the original peptide mapping score given by Peppy, 
+which reflects the strength of the peptide mapping; as an estimated <span style="font-style: italic;">p</span>-value, 
+indicating the confidence of the peptide mapping.</li>
+  <li>The <span style="font-style: italic;">spectrumId </span> is the original identifier of the spectrum 
+that mapped to the peptide sequence, and it can be used to track the original spectrum.<br></li>
+  <li>The <span style="font-style: italic;">peptideRank </span>indicates the rank of each peptide/spectrum 
+mapping.  A spectrum can be chimeric, containing more than one peptide, and the spectrum can be
+mapped to two or more distinct peptides.  Here, we are only reporting the top-scoring match.  
+If more than one peptide 'tied' for the top score, then all peptides were included and all matches 
+have a peptideRank of 1.<br></li>
+<li>The <span style="font-style: italic;">peptideRepeatCount</span> Indicates the number of places 
+in the genome where the peptide is encoded for a peptide/spectrum match.</li>
 </ul>
 
 
