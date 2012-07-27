@@ -2283,9 +2283,9 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-include altSeqComposite5.ra beta,public
+include altSeqComposite5.ra public
 
-include altSeqComposite9.ra alpha
+include altSeqComposite9.ra alpha,beta
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
