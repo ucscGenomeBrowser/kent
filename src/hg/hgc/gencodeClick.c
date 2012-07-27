@@ -494,6 +494,23 @@ sortUniqSupportExidence(&supportEvids);
 return supportEvids;
 }
 
+static char *getSupportEvidEnsemblUrl(char *gencodeId)
+/* Generate a URL to the ensembl supporting evidence page.
+ * WARNING: static return. */
+{
+static char url[256];
+// generate organism part of url in the form: Homo_sapiens
+char *sciName = hScientificName(database);
+if (sciName == NULL)
+    errAbort("can't get scientific name for %s", database);
+char *space = strchr(sciName, ' ');
+if (space != NULL)
+    *space = '_';
+safef(url, sizeof(url), "http://www.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s", sciName, gencodeId);
+freeMem(sciName);
+return url;
+}
+
 static void writeSupportExidenceEntry(struct supportEvid *supportEvid)
 /* write HTML table entry  for a supporting evidence */
 {
@@ -502,14 +519,14 @@ printf("<td width=\"25%%\">%s", supportEvid->seqSrc);
 printf("<td width=\"25%%\">%s", supportEvid->seqId);
 }
 
-static void writeSupportingEvidenceLinkHtml(struct wgEncodeGencodeTranscriptSupport *transcriptSupports,
+static void writeSupportingEvidenceLinkHtml(char *gencodeId, struct wgEncodeGencodeTranscriptSupport *transcriptSupports,
                                             struct wgEncodeGencodeExonSupport *exonSupports)
 /* write HTML links to supporting evidence */
 {
 struct supportEvid *supportEvids = loadSupportEvid(transcriptSupports, exonSupports);
 
 printf("<table class=\"hgcCcds\"><thead>\n");
-printf("<tr><th colspan=\"4\">Supporting Evidence</tr>\n");
+printf("<tr><th colspan=\"4\">Supporting Evidence (<a href=\"%s\" target=\"_blank\">view in Ensembl</a>)</tr>\n", getSupportEvidEnsemblUrl(gencodeId));
 printf("<tr class=\"hgcCcdsSub\"><th>Source<th>Sequence<th>Source<th>Sequence</tr>\n");
 printf("</thead><tbody>\n");
 struct supportEvid *supportEvid = supportEvids;
@@ -610,7 +627,7 @@ writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
 writeUniProtLinkHtml(uniProts);
-writeSupportingEvidenceLinkHtml(transcriptSupports, exonSupports);
+writeSupportingEvidenceLinkHtml(gencodeId, transcriptSupports, exonSupports);
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeAnnotationRemarkFreeList(&remarks);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);

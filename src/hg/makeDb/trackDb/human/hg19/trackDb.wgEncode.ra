@@ -8,9 +8,14 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.ra 
-include wgEncodeGencodeV10.ra 
-include wgEncodeGencodeV12.ra
+include wgEncodeGencodeV7.ra beta,public
+include wgEncodeGencodeV10.ra beta,public
+include wgEncodeGencodeV12.ra beta,public
+
+# GENCODE trackDb changes in transition to public to support highlighting
+include wgEncodeGencodeV7.release3.ra alpha
+include wgEncodeGencodeV10.release3.ra alpha
+include wgEncodeGencodeV12.release3.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra

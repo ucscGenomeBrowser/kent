@@ -164,6 +164,8 @@ groupings expRatio
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
+highlightBy genePred
+highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks

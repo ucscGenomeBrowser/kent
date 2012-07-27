@@ -49,6 +49,7 @@
 #include "bactigPos.h"
 #include "genePred.h"
 #include "genePredReader.h"
+#include "gencodeTracks.h"
 #include "isochores.h"
 #include "spDb.h"
 #include "simpleRepeat.h"
@@ -98,7 +99,6 @@
 #include "variation.h"
 #include "estOrientInfo.h"
 #include "versionInfo.h"
-#include "gencodeIntron.h"
 #include "retroGene.h"
 #include "switchGear.h"
 #include "dless.h"
@@ -4149,6 +4149,40 @@ slReverse(&sfList);
 return sfList;
 }
 
+struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra)
+/* construct a linkedFeatures object from a genePred */
+{
+int grayIx = maxShade;
+struct linkedFeatures *lf;
+AllocVar(lf);
+lf->grayIx = grayIx;
+lf->name = cloneString(gp->name);
+if (extra && gp->name2)
+    lf->extra = cloneString(gp->name2);
+lf->orientation = orientFromChar(gp->strand[0]);
+
+lf->components = sfFromGenePred(gp, grayIx);
+
+if (tg->itemAttrTbl != NULL)
+    lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
+                                  gp->chrom, gp->txStart, gp->txEnd);
+
+linkedFeaturesBoundsAndGrays(lf);
+
+if (gp->cdsStart >= gp->cdsEnd)
+    {
+    lf->tallStart = gp->txEnd;
+    lf->tallEnd = gp->txEnd;
+    }
+else
+    {
+    lf->tallStart = gp->cdsStart;
+    lf->tallEnd = gp->cdsEnd;
+    }
+// Don't free gp; it might be used in the drawing phase by baseColor code.
+lf->original = gp;
+return lf;
+}
 
 static struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
                                         struct track *tg, struct sqlConnection *conn, char *table,
@@ -4157,8 +4191,7 @@ static struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
  * we have already connected to database. Optinally Set lf extra to
  * gene pred name2, to display gene name instead of transcript ID.*/
 {
-struct linkedFeatures *lfList = NULL, *lf;
-int grayIx = maxShade;
+struct linkedFeatures *lfList = NULL;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
@@ -4181,39 +4214,14 @@ char *noncodingClause = (hideNoncoding ? "cdsStart != cdsEnd" : NULL);
 gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, noncodingClause);
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    if(doNmd && genePredNmdTarget(gp))
+    if (doNmd && genePredNmdTarget(gp))
 	{
 	genePredFree(&gp);
-	continue;
 	}
-    AllocVar(lf);
-    lf->grayIx = grayIx;
-    lf->name = cloneString(gp->name);
-    if (extra && gp->name2)
-        lf->extra = cloneString(gp->name2);
-    lf->orientation = orientFromChar(gp->strand[0]);
-
-    lf->components = sfFromGenePred(gp, grayIx);
-
-    if (tg->itemAttrTbl != NULL)
-        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
-                                      gp->chrom, gp->txStart, gp->txEnd);
-
-    linkedFeaturesBoundsAndGrays(lf);
-
-    if (gp->cdsStart >= gp->cdsEnd)
-        {
-        lf->tallStart = gp->txEnd;
-        lf->tallEnd = gp->txEnd;
-        }
     else
         {
-        lf->tallStart = gp->cdsStart;
-        lf->tallEnd = gp->cdsEnd;
+        slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, extra));
         }
-    // Don't free gp; it might be used in the drawing phase by baseColor code.
-    lf->original = gp;
-    slAddHead(&lfList, lf);
     }
 slReverse(&lfList);
 genePredReaderFree(&gpr);
@@ -4294,98 +4302,13 @@ freeMem(clause);
 return dyQuery;
 }
 
-static void gencodeFilterByMethodChoice(struct dyString *dyClause, char *choice)
-/* add compared for a choice for special case of GENCODE transcript method. */
-{
-if (sameString(choice, "manual"))
-    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\")");
-else if (sameString(choice, "automatic"))
-    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
-else if (sameString(choice, "manual_only"))
-    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\")");
-else if (sameString(choice, "automatic_only"))
-    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\") and (transSrc.source not like \"%havana%\")");
-else
-    errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
-}
-
-static char *gencodeFilterByMethod(filterBy_t *filterBy)
-{
-if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
-    return NULL;
-
-struct dyString *clause = newDyString(256);
-struct slName *slChoice = NULL;
-dyStringAppend(clause, "(transSrc.transcriptId = attrs.transcriptId) and ");
-boolean first = TRUE;
-for(slChoice = filterBy->slChoices; slChoice != NULL; slChoice = slChoice->next)
-    {
-    if(!first)
-        dyStringPrintf(clause, " or ");
-    first = FALSE;
-    gencodeFilterByMethodChoice(clause, slChoice->name);
-    }
-return dyStringCannibalize(&clause);
-}
-
-static void gencodeFilterBy(filterBy_t *filterBy, struct dyString *where)
-/* handle adding on filterBy clause for gencode */
-{
-char *clause;
-if (sameString(filterBy->column, "transcriptMethod"))
-    clause = gencodeFilterByMethod(filterBy);
-else
-    clause = filterByClause(filterBy);
-if (clause != NULL)
-    {
-    dyStringPrintf(where, " and (%s)", clause);
-    freeMem(clause);
-    }
-}
-
-static struct dyString *gencodeFilterBySetQueryWhere(struct track *tg, filterBy_t *filterBySet)
-/* build where clause based on filters, or NULL if none */
-{
-struct dyString *where = dyStringNew(0);
-filterBy_t *filterBy;
-for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
-    gencodeFilterBy(filterBy, where);
-if (dyStringLen(where) == 0)
-    dyStringFree(&where);
-return where;
-}
-
-static struct dyString *gencodeFilterBySetQuery(struct track *tg, filterBy_t *filterBySet, struct linkedFeatures *lf)
-/* construct the query for GENCODE filterBySet */
-{
-struct dyString *where = gencodeFilterBySetQueryWhere(tg, filterBySet);
-if (where == NULL)
-    return NULL;
-char *attrsTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs");
-char *srcTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource");
-struct dyString *dyQuery = dyStringCreate("select 1 from %s attrs, %s transSrc where (attrs.transcriptId = \"%s\") %s", attrsTbl, srcTbl, lf->name, where->string);
-dyStringFree(&where);
-return dyQuery;
-}
-
 static boolean genePredClassFilterBySet(struct track *tg, char *classTable,
                                         filterBy_t *filterBySet, struct linkedFeatures *lf)
 /* Check if an item passes a filterBySet filter  */
 {
-struct dyString *dyQuery = NULL;
-if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
-    {
-    if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
-        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
-        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
-        || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
-        dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
-    }
-else
-    dyQuery = genePredClassFilterBySetQuery(tg, classTable, filterBySet, lf);
+struct dyString *dyQuery = genePredClassFilterBySetQuery(tg, classTable, filterBySet, lf);
 if (dyQuery == NULL)
     return TRUE;
-
 struct sqlConnection *conn = hAllocConn(database);
 boolean passesThroughFilter = sqlQuickNum(conn, dyQuery->string);
 dyStringFree(&dyQuery);
@@ -4438,7 +4361,7 @@ return TRUE;
 
 void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
- * in "extra" field (usually gene name)*/
+ * in "extra" field (usually gene name) */
 {
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
@@ -5364,16 +5287,6 @@ if (hTableExists(database,  "refLink"))
         name = NULL;
     }
 return name;
-}
-
-char *gencodeGeneName(struct track *tg, void *item)
-/* Get name to use for Gencode gene item. */
-{
-struct linkedFeatures *lf = item;
-if (lf->extra != NULL)
-    return lf->extra;
-else
-    return lf->name;
 }
 
 char *getRgdGene2Symbol(struct sqlConnection *conn, char *acc)
@@ -10268,53 +10181,6 @@ linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
 }
 
-Color gencodeIntronColorItem(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of ENCODE gencode intron track item.
- * Use recommended color palette pantone colors (level 4) for red, green, blue*/
-{
-struct gencodeIntron *intron = (struct gencodeIntron *)item;
-
-if (sameString(intron->status, "not_tested"))
-    return hvGfxFindColorIx(hvg, 214,214,216);       /* light grey */
-if (sameString(intron->status, "RT_negative"))
-    return hvGfxFindColorIx(hvg, 145,51,56);       /* red */
-if (sameString(intron->status, "RT_positive") ||
-        sameString(intron->status, "RACE_validated"))
-    return hvGfxFindColorIx(hvg, 61,142,51);       /* green */
-if (sameString(intron->status, "RT_wrong_junction"))
-    return getOrangeColor(hvg);                 /* orange */
-if (sameString(intron->status, "RT_submitted"))
-    return hvGfxFindColorIx(hvg, 102,109,112);       /* grey */
-return hvGfxFindColorIx(hvg, 214,214,216);       /* light grey */
-}
-
-static void gencodeIntronLoadItems(struct track *tg)
-/* Load up track items. */
-{
-bedLoadItem(tg, tg->table, (ItemLoader)gencodeIntronLoad);
-}
-
-static void gencodeIntronMethods(struct track *tg)
-/* Load up custom methods for ENCODE Gencode intron validation track */
-{
-tg->loadItems = gencodeIntronLoadItems;
-tg->itemColor = gencodeIntronColorItem;
-}
-
-static void gencodeGeneMethods(struct track *tg)
-/* Load up custom methods for ENCODE Gencode gene track */
-{
-tg->loadItems = loadGenePredWithConfiguredName;
-tg->itemName = gencodeGeneName;
-}
-
-static void gencodeRaceFragsMethods(struct track *tg)
-/* Load up custom methods for ENCODE Gencode RACEfrags track */
-{
-tg->loadItems = loadGenePred;
-tg->subType = lfNoIntronLines;
-}
-
 void loadDless(struct track *tg)
 /* Load dless items */
 {
@@ -13256,7 +13122,6 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
-registerTrackHandler("encodeGencodeGenePolyAMar07",bed9Methods);
 registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
@@ -13339,32 +13204,7 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
-registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
-// one per gencode version, after V7 when it was substantially changed
-// FIXME: this is hacky, need a way to register based on pattern
-registerTrackHandlerOnFamily("wgEncodeGencodeV3", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV4", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV10", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV11", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV12", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV13", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeGencodeV15", gencodeGeneMethods);
-
-registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
-registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
-registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandlerOnFamily("encodeGencodeGeneJun05", gencodeGeneMethods);
-registerTrackHandlerOnFamily("encodeGencodeGeneOct05", gencodeGeneMethods);
-registerTrackHandlerOnFamily("encodeGencodeGeneMar07", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
-registerTrackHandlerOnFamily("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
+gencodeRegisterTrackHandlers();
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandlerOnFamily("pgSnp", pgSnpMethods);

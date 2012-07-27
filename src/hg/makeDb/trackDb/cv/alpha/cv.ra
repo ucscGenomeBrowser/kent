@@ -371,7 +371,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
@@ -392,7 +392,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th0_adult
 
 term Adult_CD4_Th1
@@ -413,7 +413,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th1_adult
 
 term AoAF
@@ -1408,7 +1408,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb11970640_Stam_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 
 term CD4+_Naive_Wb78495824
 tag CD4NAIVEWB78495824
@@ -1426,7 +1426,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 
 term GC_B_cell
 tag GCBCELL
@@ -1599,7 +1599,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
@@ -1620,7 +1620,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th0_cord_blood
 
 term Cord_CD4_Th1
@@ -1641,7 +1641,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+_Th1_cord_blood
 
 term Decidua
@@ -6219,7 +6219,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf 
+protocol Crawford_Stam:Crawford-Stam_CD4naive_SOP.pdf
 label T_cells_CD4+
 
 term T98G
