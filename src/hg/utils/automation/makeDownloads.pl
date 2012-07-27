@@ -327,6 +327,19 @@ sub printAssemblyUsage {
 For conditions of use regarding the $Organism genome sequence data, see
 http://www.hgsc.bcm.edu/content/conditions-use
 
+-----------------------------------------------------------------------------
+GenBank Data Usage
+
+The GenBank database is designed to provide and encourage access within
+the scientific community to the most up to date and comprehensive DNA
+sequence information. Therefore, NCBI places no restrictions on the use
+or distribution of the GenBank data. However, some submitters may claim
+patent, copyright, or other intellectual property rights in all or a
+portion of the data they have submitted. NCBI is not in a position to
+assess the validity of such claims, and therefore cannot provide comment
+or unrestricted permission concerning the use, copying, or distribution
+of the information contained in GenBank.
+-----------------------------------------------------------------------------
 _EOF_
     ;
   } elsif (&isWustl($assemblyLabel)) {
@@ -342,8 +355,6 @@ the following understanding:
    if the providers of these data are properly acknowledged.  See
    http://genome.ucsc.edu/goldenPath/credits.html for credit information.
 
-*** IF GENOME HAS BEEN PUBLISHED -- ADD CITATION ***
-*** IF GENOME HAS NOT YET BEEN PUBLISHED: ***
 3. The centers producing the data reserve the right to publish the initial
    large-scale analyses of the data set, including large-scale identification
    of regions of evolutionary conservation and large-scale genomic assembly.
@@ -352,6 +363,19 @@ the following understanding:
 
 4. Any redistribution of the data should carry this notice.
 
+-----------------------------------------------------------------------------
+GenBank Data Usage
+
+The GenBank database is designed to provide and encourage access within
+the scientific community to the most up to date and comprehensive DNA
+sequence information. Therefore, NCBI places no restrictions on the use
+or distribution of the GenBank data. However, some submitters may claim
+patent, copyright, or other intellectual property rights in all or a
+portion of the data they have submitted. NCBI is not in a position to
+assess the validity of such claims, and therefore cannot provide comment
+or unrestricted permission concerning the use, copying, or distribution
+of the information contained in GenBank.
+-----------------------------------------------------------------------------
 _EOF_
     ;
   } elsif ($assemblyLabel =~ /JGI/) {
@@ -364,39 +388,72 @@ _EOF_
    (DOE Joint Genome Institute) is properly acknowledged.  See
    http://genome.ucsc.edu/goldenPath/credits.html for credit information.
 
-3. *** PLEASE ADD PUBLICATION PLANS, IF ANY ***
+3. Any redistribution of the data should carry this notice.
 
-4. Any redistribution of the data should carry this notice.
+-----------------------------------------------------------------------------
+GenBank Data Usage
 
+The GenBank database is designed to provide and encourage access within
+the scientific community to the most up to date and comprehensive DNA
+sequence information. Therefore, NCBI places no restrictions on the use
+or distribution of the GenBank data. However, some submitters may claim
+patent, copyright, or other intellectual property rights in all or a
+portion of the data they have submitted. NCBI is not in a position to
+assess the validity of such claims, and therefore cannot provide comment
+or unrestricted permission concerning the use, copying, or distribution
+of the information contained in GenBank.
+-----------------------------------------------------------------------------
 _EOF_
     ;
 } elsif ($assemblyLabel =~ /Broad/) {
     print $fh <<_EOF_
 -----------------------------------------------------------------------------
-The $Organism sequence is made freely available before scientific publication 
+The $Organism sequence is made freely available before scientific publication
 with the following understanding:
 
-   1. The data may be freely downloaded, used in analyses, and repackaged in 
+   1. The data may be freely downloaded, used in analyses, and repackaged in
       databases.
-   2. Users are free to use the data in scientific papers analyzing particular 
-      genes and regions if the provider of these data (The Broad Institute) is 
+   2. Users are free to use the data in scientific papers analyzing particular
+      genes and regions if the provider of these data (The Broad Institute) is
       properly acknowledged.
-   3. The center producing the data reserves the right to publish the initial 
-      large-scale analyses of the data set, including large-scale identification 
-      of regions of evolutionary conservation and large-scale genomic assembly. 
-      Large-scale refers to regions with size on the order of a chromosome (that 
+   3. The center producing the data reserves the right to publish the initial
+      large-scale analyses of the data set, including large-scale identification
+      of regions of evolutionary conservation and large-scale genomic assembly.
+      Large-scale refers to regions with size on the order of a chromosome (that
       is, 30 Mb or more).
-   4. Any redistribution of the data should carry this notice. 1. The data may 
+   4. Any redistribution of the data should carry this notice. 1. The data may
       be freely downloaded, used in analyses, and repackaged in databases.
 
+-----------------------------------------------------------------------------
+GenBank Data Usage
+
+The GenBank database is designed to provide and encourage access within
+the scientific community to the most up to date and comprehensive DNA
+sequence information. Therefore, NCBI places no restrictions on the use
+or distribution of the GenBank data. However, some submitters may claim
+patent, copyright, or other intellectual property rights in all or a
+portion of the data they have submitted. NCBI is not in a position to
+assess the validity of such claims, and therefore cannot provide comment
+or unrestricted permission concerning the use, copying, or distribution
+of the information contained in GenBank.
 -----------------------------------------------------------------------------
 _EOF_
     ;
   } else {
     print $fh <<_EOF_
+-----------------------------------------------------------------------------
+GenBank Data Usage
 
-*** PLEASE PASTE IN CONDITIONS OF USE FOR THIS ASSEMBLY IF THERE ARE ANY ***
-
+The GenBank database is designed to provide and encourage access within
+the scientific community to the most up to date and comprehensive DNA
+sequence information. Therefore, NCBI places no restrictions on the use
+or distribution of the GenBank data. However, some submitters may claim
+patent, copyright, or other intellectual property rights in all or a
+portion of the data they have submitted. NCBI is not in a position to
+assess the validity of such claims, and therefore cannot provide comment
+or unrestricted permission concerning the use, copying, or distribution
+of the information contained in GenBank.
+-----------------------------------------------------------------------------
 _EOF_
     ;
   }
@@ -433,7 +490,7 @@ sub printTableSpecificUsage {
     &printSomeHaveConditions() if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
-   softberryGene.txt and softberryPep.txt -  Free for academic 
+   softberryGene.txt and softberryPep.txt -  Free for academic
         and nonprofit use. Commercial users should contact
         Softberry, Inc. at http://www.softberry.com.
 
@@ -445,15 +502,15 @@ _EOF_
     &printSomeHaveConditions() if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
-   Swiss-Prot/UniProt data in knownGene.txt - 
+   Swiss-Prot/UniProt data in knownGene.txt -
         UniProt copyright (c) 2002 - 2004 UniProt consortium
 
         For non-commercial use all databases and documents in the UniProt FTP
-        directory may be copied and redistributed freely, without advance 
-        permission, provided that this copyright statement is reproduced with 
-        each copy. 
+        directory may be copied and redistributed freely, without advance
+        permission, provided that this copyright statement is reproduced with
+        each copy.
 
-        For commercial use all databases and documents in the UniProt FTP 
+        For commercial use all databases and documents in the UniProt FTP
         directory, except the files
 
         ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz
@@ -462,16 +519,16 @@ _EOF_
 
         ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/uniprot_sprot.xml.gz
 
-        may be copied and redistributed freely, without advance permission, 
+        may be copied and redistributed freely, without advance permission,
         provided that this copyright statement is reproduced with each copy.
 
         More information for commercial users can be found in:
         http://www.expasy.org/announce/sp_98.html
 
-        From January 1, 2005, all databases and documents in the UniProt FTP 
-        directory may be copied and redistributed freely by all entities, 
-        without advance permission, provided that this copyright statement is 
-        reproduced with each copy. 
+        From January 1, 2005, all databases and documents in the UniProt FTP
+        directory may be copied and redistributed freely by all entities,
+        without advance permission, provided that this copyright statement is
+        reproduced with each copy.
 
 _EOF_
     ;
@@ -548,7 +605,7 @@ sub getDescriptives {
   my $projectUrl = "***PLEASE INSERT PROJECT URL OR REMOVE THIS STATEMENT***";
   # WUSTL project page example: http://genome.wustl.edu/genome.cgi?GENOME=Gallus%20gallus
   # Baylor project page example: http://www.hgsc.bcm.tmc.edu/projects/honeybee/
-  # Broad Institute project page example: http://www.broad.mit.edu/mammals/horse/ 
+  # Broad Institute project page example: http://www.broad.mit.edu/mammals/horse/
   return ($Organism, $assemblyDate, $assemblyLabel,
 	  $organism, $consortium, $sequencingCenter, $projectUrl);
 }
@@ -585,15 +642,15 @@ and click the "describe table schema" button.  There is also a "view
 table schema" link on the configuration page for each track.
 
 ---------------------------------------------------------------
-If you plan to download a large file or multiple files from this 
-directory, we recommend you use ftp rather than downloading the files 
-via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then go to 
-the directory goldenPath/$db/database/. To download multiple 
+If you plan to download a large file or multiple files from this
+directory, we recommend you use ftp rather than downloading the files
+via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then go to
+the directory goldenPath/$db/database/. To download multiple
 files, use the "mget" command:
 
     mget <filename1> <filename2> ...
     - or -
-    mget -a (to download all the files in the directory) 
+    mget -a (to download all the files in the directory)
 
 Alternate methods to ftp access.
 
@@ -606,7 +663,7 @@ For a single file, e.g. gc5Base.txt.gz
 Or with wget, all files:
     wget --timestamping \
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/*'
-With wget, a single file: 
+With wget, a single file:
     wget --timestamping \
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz' \
         -O gc5Base.txt.gz
@@ -804,8 +861,8 @@ _EOF_
   }
   if (&dbHasTable($dbHost, $db, 'xenoMrna')) {
     print $fh <<_EOF_
-xenoMrna.fa.gz - GenBank mRNAs from species other than that of 
-    the genome. This sequence data is updated once a week via automatic 
+xenoMrna.fa.gz - GenBank mRNAs from species other than that of
+    the genome. This sequence data is updated once a week via automatic
     GenBank updates.
 _EOF_
     ;
@@ -883,10 +940,10 @@ _EOF_
   ;
   print $fh <<_EOF_
 ------------------------------------------------------------------
-If you plan to download a large file or multiple files from this 
-directory, we recommend that you use ftp rather than downloading the 
-files via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then 
-go to the directory goldenPath/$db/chromosomes. To download multiple 
+If you plan to download a large file or multiple files from this
+directory, we recommend that you use ftp rather than downloading the
+files via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then
+go to the directory goldenPath/$db/chromosomes. To download multiple
 files, use the "mget" command:
 
     mget <filename1> <filename2> ...
@@ -894,13 +951,13 @@ files, use the "mget" command:
     mget -a (to download all the files in the directory)
 
 Alternate methods to ftp access.
-    
+
 Using an rsync command to download the entire directory:
     rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/ .
 For a single file, e.g. chrM.fa.gz
     rsync -avzP \
         rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz .
-    
+
 Or with wget, all files:
     wget --timestamping \
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/*'
@@ -908,7 +965,7 @@ With wget, a single file:
     wget --timestamping \
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz' \
         -O chrM.fa.gz
-    
+
 To uncompress the fa.gz files:
     gunzip <file>.fa.gz
 
@@ -968,11 +1025,11 @@ Or with wget, all files:
         'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz' \ 
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz' \
         -O ${db}ToHg19.over.chain.gz
 
 To uncompress the *.chain.gz files:
-    gunzip <file>.chain.gz 
+    gunzip <file>.chain.gz
 The liftOver utility can read the files in their .gz format,
 it is not necessary to uncompress them to use with the liftOver command.
 
@@ -1217,7 +1274,7 @@ _EOF_
 if ($stopStep eq 'install') {
 &HgAutomate::verbose(1, <<_EOF_
  *** Please take a look at the downloads for $db using a web browser.
- *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/$db. 
+ *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/$db.
  *** Edit each README.txt to resolve any notes marked with "***":
      $topDir/goldenPath/database/README.txt
      $topDir/goldenPath/bigZips/README.txt
