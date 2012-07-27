@@ -529,7 +529,6 @@ view Signal
 
 metaObject wgEncodeUwDgfCd4naivewb11970640Aln
 objType file
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -541,15 +540,15 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfCd4naivewb11970640Hotspots
 objType table
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -561,8 +560,9 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 tableName wgEncodeUwDgfCd4naivewb11970640Hotspots
 treatment None
@@ -570,7 +570,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfCd4naivewb11970640Pk
 objType table
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -582,8 +581,9 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 tableName wgEncodeUwDgfCd4naivewb11970640Pk
 treatment None
@@ -591,7 +591,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfCd4naivewb11970640Raw
 objType table
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -603,8 +602,9 @@ grant Stam
 lab UW
 labExpId DS14108
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 tableName wgEncodeUwDgfCd4naivewb11970640Raw
 treatment None
@@ -612,7 +612,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfCd4naivewb11970640RawData
 objType file
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -623,15 +622,15 @@ fileName wgEncodeUwDgfCd4naivewb11970640RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14108
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfCd4naivewb11970640Sig
 objType table
-accession hg19
 cell CD4+_Naive_Wb11970640
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -642,8 +641,9 @@ fileName wgEncodeUwDgfCd4naivewb11970640Sig.bigWig
 grant Stam
 lab UW
 labExpId DS14108
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7349
 tableName wgEncodeUwDgfCd4naivewb11970640Sig
 treatment None
@@ -6503,7 +6503,6 @@ view Signal
 
 metaObject wgEncodeUwDgfT47dAln
 objType file
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6515,15 +6514,15 @@ grant Stam
 lab UW
 labExpId DS19794
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfT47dHotspots
 objType table
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6535,8 +6534,9 @@ grant Stam
 lab UW
 labExpId DS19794
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 tableName wgEncodeUwDgfT47dHotspots
 treatment None
@@ -6544,7 +6544,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfT47dPk
 objType table
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6556,8 +6555,9 @@ grant Stam
 lab UW
 labExpId DS19794
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 tableName wgEncodeUwDgfT47dPk
 treatment None
@@ -6565,7 +6565,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfT47dRaw
 objType table
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6577,8 +6576,9 @@ grant Stam
 lab UW
 labExpId DS19794
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 tableName wgEncodeUwDgfT47dRaw
 treatment None
@@ -6586,7 +6586,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfT47dRawData
 objType file
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6597,15 +6596,15 @@ fileName wgEncodeUwDgfT47dRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS19794
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfT47dSig
 objType table
-accession hg19
 cell T-47D
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6616,8 +6615,9 @@ fileName wgEncodeUwDgfT47dSig.bigWig
 grant Stam
 lab UW
 labExpId DS19794
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7350
 tableName wgEncodeUwDgfT47dSig
 treatment None
@@ -6625,7 +6625,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTh17Aln
 objType file
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6637,15 +6636,15 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfTh17Hotspots
 objType table
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6657,8 +6656,9 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 tableName wgEncodeUwDgfTh17Hotspots
 treatment None
@@ -6666,7 +6666,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTh17Pk
 objType table
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6678,8 +6677,9 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 tableName wgEncodeUwDgfTh17Pk
 treatment None
@@ -6687,7 +6687,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTh17Raw
 objType table
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6699,8 +6698,9 @@ grant Stam
 lab UW
 labExpId DS11039
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 tableName wgEncodeUwDgfTh17Raw
 treatment None
@@ -6708,7 +6708,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfTh17RawData
 objType file
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6719,15 +6718,15 @@ fileName wgEncodeUwDgfTh17RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11039
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTh17Sig
 objType table
-accession hg19
 cell Th17
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6738,8 +6737,9 @@ fileName wgEncodeUwDgfTh17Sig.bigWig
 grant Stam
 lab UW
 labExpId DS11039
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7351
 tableName wgEncodeUwDgfTh17Sig
 treatment None
@@ -6770,7 +6770,6 @@ view Alignments
 
 metaObject wgEncodeUwDgfTh1AlnRep2
 objType file
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6782,9 +6781,10 @@ grant Stam
 lab UW
 labExpId DS18018
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 treatment None
 view Alignments
@@ -6815,7 +6815,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTh1HotspotsRep2
 objType table
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6827,9 +6826,10 @@ grant Stam
 lab UW
 labExpId DS18018
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 tableName wgEncodeUwDgfTh1HotspotsRep2
 treatment None
@@ -6861,7 +6861,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTh1PkRep2
 objType table
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6873,9 +6872,10 @@ grant Stam
 lab UW
 labExpId DS18018
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 tableName wgEncodeUwDgfTh1PkRep2
 treatment None
@@ -6928,7 +6928,6 @@ view RawData
 
 metaObject wgEncodeUwDgfTh1RawDataRep2
 objType file
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6939,16 +6938,16 @@ fileName wgEncodeUwDgfTh1RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18018
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTh1RawRep2
 objType table
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -6960,9 +6959,10 @@ grant Stam
 lab UW
 labExpId DS18018
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 tableName wgEncodeUwDgfTh1RawRep2
 treatment None
@@ -6993,7 +6993,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTh1SigRep2
 objType table
-accession hg19
 cell Th1
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7004,9 +7003,10 @@ fileName wgEncodeUwDgfTh1SigRep2.bigWig
 grant Stam
 lab UW
 labExpId DS18018
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
 replicate 2
+seqPlatform Illumina_HiSeq_2000
 subId 7352
 tableName wgEncodeUwDgfTh1SigRep2
 treatment None
@@ -7014,7 +7014,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTh1wb33676984Aln
 objType file
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7026,15 +7025,15 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfTh1wb33676984Hotspots
 objType table
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7046,8 +7045,9 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 tableName wgEncodeUwDgfTh1wb33676984Hotspots
 treatment None
@@ -7055,7 +7055,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTh1wb33676984Pk
 objType table
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7067,8 +7066,9 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 tableName wgEncodeUwDgfTh1wb33676984Pk
 treatment None
@@ -7076,7 +7076,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTh1wb33676984Raw
 objType table
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7088,8 +7087,9 @@ grant Stam
 lab UW
 labExpId DS18015
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 tableName wgEncodeUwDgfTh1wb33676984Raw
 treatment None
@@ -7097,7 +7097,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfTh1wb33676984RawData
 objType file
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7108,15 +7107,15 @@ fileName wgEncodeUwDgfTh1wb33676984RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18015
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTh1wb33676984Sig
 objType table
-accession hg19
 cell Th1_Wb33676984
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7127,8 +7126,9 @@ fileName wgEncodeUwDgfTh1wb33676984Sig.bigWig
 grant Stam
 lab UW
 labExpId DS18015
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7353
 tableName wgEncodeUwDgfTh1wb33676984Sig
 treatment None
@@ -7136,7 +7136,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTh2Aln
 objType file
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7148,15 +7147,15 @@ grant Stam
 lab UW
 labExpId DS17603
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfTh2Hotspots
 objType table
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7168,8 +7167,9 @@ grant Stam
 lab UW
 labExpId DS17603
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 tableName wgEncodeUwDgfTh2Hotspots
 treatment None
@@ -7177,7 +7177,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTh2Pk
 objType table
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7189,8 +7188,9 @@ grant Stam
 lab UW
 labExpId DS17603
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 tableName wgEncodeUwDgfTh2Pk
 treatment None
@@ -7198,7 +7198,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTh2Raw
 objType table
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7210,8 +7209,9 @@ grant Stam
 lab UW
 labExpId DS17603
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 tableName wgEncodeUwDgfTh2Raw
 treatment None
@@ -7219,7 +7219,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfTh2RawData
 objType file
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7230,15 +7229,15 @@ fileName wgEncodeUwDgfTh2RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17603
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTh2Sig
 objType table
-accession hg19
 cell Th2
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7249,8 +7248,9 @@ fileName wgEncodeUwDgfTh2Sig.bigWig
 grant Stam
 lab UW
 labExpId DS17603
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7356
 tableName wgEncodeUwDgfTh2Sig
 treatment None
@@ -7258,7 +7258,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTh2wb54553204Aln
 objType file
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7270,15 +7269,15 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfTh2wb54553204Hotspots
 objType table
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7290,8 +7289,9 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 tableName wgEncodeUwDgfTh2wb54553204Hotspots
 treatment None
@@ -7299,7 +7299,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTh2wb54553204Pk
 objType table
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7311,8 +7310,9 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 tableName wgEncodeUwDgfTh2wb54553204Pk
 treatment None
@@ -7320,7 +7320,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTh2wb54553204Raw
 objType table
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7332,8 +7331,9 @@ grant Stam
 lab UW
 labExpId DS17597
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 tableName wgEncodeUwDgfTh2wb54553204Raw
 treatment None
@@ -7341,7 +7341,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfTh2wb54553204RawData
 objType file
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7352,15 +7351,15 @@ fileName wgEncodeUwDgfTh2wb54553204RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17597
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTh2wb54553204Sig
 objType table
-accession hg19
 cell Th2_Wb54553204
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7371,8 +7370,9 @@ fileName wgEncodeUwDgfTh2wb54553204Sig.bigWig
 grant Stam
 lab UW
 labExpId DS17597
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7354
 tableName wgEncodeUwDgfTh2wb54553204Sig
 treatment None
@@ -7380,7 +7380,6 @@ view Signal
 
 metaObject wgEncodeUwDgfTregwb78495824Aln
 objType file
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7392,15 +7391,15 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 treatment None
 view Alignments
 
 metaObject wgEncodeUwDgfTregwb78495824Hotspots
 objType table
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7412,8 +7411,9 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 tableName wgEncodeUwDgfTregwb78495824Hotspots
 treatment None
@@ -7421,7 +7421,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfTregwb78495824Pk
 objType table
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7433,8 +7432,9 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 tableName wgEncodeUwDgfTregwb78495824Pk
 treatment None
@@ -7442,7 +7442,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfTregwb78495824Raw
 objType table
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7454,8 +7453,9 @@ grant Stam
 lab UW
 labExpId DS14702
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 tableName wgEncodeUwDgfTregwb78495824Raw
 treatment None
@@ -7463,7 +7463,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfTregwb78495824RawData
 objType file
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7474,15 +7473,15 @@ fileName wgEncodeUwDgfTregwb78495824RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14702
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 treatment None
 view RawData
 
 metaObject wgEncodeUwDgfTregwb78495824Sig
 objType table
-accession hg19
 cell Treg_Wb78495824
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -7493,11 +7492,12 @@ fileName wgEncodeUwDgfTregwb78495824Sig.bigWig
 grant Stam
 lab UW
 labExpId DS14702
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 7355
 tableName wgEncodeUwDgfTregwb78495824Sig
 treatment None
 view Signal
 
-# MAGIC: -1935202613
+# MAGIC: 865793787

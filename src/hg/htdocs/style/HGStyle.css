@@ -137,8 +137,12 @@ TABLE.hgcCcds TH {
 TABLE.hgcCcds TD {
     height: 1em;
 }
+/* table header has white text, include links */
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
+    color: #ffffff;
+}
+TABLE.hgcCcds THEAD * A {
     color: #ffffff;
 }
 TABLE.hgcCcds TR.hgcCcdsSub {

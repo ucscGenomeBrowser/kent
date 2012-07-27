@@ -4,14 +4,14 @@
 #    registerTrackHandlerOnFamily for new gencode versions.
 #  - Must ensure attrs.transcriptType matches current transcriptTypes.
 ##
-track wgEncodeGencodeV11
+track wgEncodeGencodeV10
 compositeTrack on
 superTrack wgEncodeGencodeSuper hide
-shortLabel GENCODE Genes V11
-longLabel Gene Annotations from ENCODE/GENCODE Version 11
+shortLabel GENCODE Genes V10
+longLabel Gene Annotations from ENCODE/GENCODE Version 10
 group genes
 dragAndDrop subTracks
-priority 34.3
+priority 34.303
 visibility hide
 ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
@@ -26,29 +26,29 @@ fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
 wgEncode 1
-wgEncodeGencodeVersion 11
-wgEncodeGencodeAttrs wgEncodeGencodeAttrsV11
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV11
-wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV11
-wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV11
-wgEncodeGencodePdb wgEncodeGencodePdbV11
-wgEncodeGencodePubMed wgEncodeGencodePubMedV11
-wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV11
-wgEncodeGencodeTag wgEncodeGencodeTagV11
-wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV11
-wgEncodeGencodeUniProt wgEncodeGencodeUniProtV11
-wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV11
-wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV11
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV11
+wgEncodeGencodeVersion 10
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsV10
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV10
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV10
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV10
+wgEncodeGencodePdb wgEncodeGencodePdbV10
+wgEncodeGencodePubMed wgEncodeGencodePubMedV10
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV10
+wgEncodeGencodeTag wgEncodeGencodeTagV10
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV10
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtV10
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV10
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV10
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV10
 
-    track wgEncodeGencodeV11ViewGenes
+    track wgEncodeGencodeV10ViewGenes
     shortLabel Genes
     view aGenes
     configurable on
     visibility full
-    subTrack wgEncodeGencodeV11
+    subTrack wgEncodeGencodeV10
     type genePred
-    itemClassTbl wgEncodeGencodeAttrsV11
+    itemClassTbl wgEncodeGencodeAttrsV10
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
     cdsDrawDefault genomic\ codons
@@ -68,158 +68,157 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     #  - supportLevel is a pseudo-column name handled in the code
     filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
              transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
-             attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,ambiguous_orf,antisense,disrupted_domain,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
+             attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,ambiguous_orf,antisense,disrupted_domain,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,ncrna_host,nonsense_mediated_decay,non_coding,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
              supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
     highlightBy supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA \
-                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,ambiguous_orf,antisense,disrupted_domain,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,ambiguous_orf,antisense,disrupted_domain,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_tRNA_pseudogene,ncrna_host,nonsense_mediated_decay,non_coding,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,sense_intronic,sense_overlapping,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNA_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
     
-    
-        track wgEncodeGencodeBasicV11
-        subTrack wgEncodeGencodeV11ViewGenes on
+        track wgEncodeGencodeBasicV10
+        subTrack wgEncodeGencodeV10ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 11
+        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
         priority 1
     
-        track wgEncodeGencodeCompV11
-        subTrack wgEncodeGencodeV11ViewGenes off
+        track wgEncodeGencodeCompV10
+        subTrack wgEncodeGencodeV10ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 11 
+        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 10 
         type genePred
         priority 2
     
-        track wgEncodeGencodePseudoGeneV11
-        subTrack wgEncodeGencodeV11ViewGenes off
+        track wgEncodeGencodePseudoGeneV10
+        subTrack wgEncodeGencodeV10ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 11
+        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
         color 255,51,255
         priority 3
     
-    track wgEncodeGencodeV11View2Way 
+    track wgEncodeGencodeV10View2Way 
     shortLabel 2-Way
     view 42-Way 
     visibility hide
-    subTrack wgEncodeGencodeV11
+    subTrack wgEncodeGencodeV10
     type genePred
     configurable off
 
-        track wgEncodeGencode2wayConsPseudoV11
-        subTrack wgEncodeGencodeV11View2Way off
+        track wgEncodeGencode2wayConsPseudoV10
+        subTrack wgEncodeGencodeV10View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 11
+        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
         color 255,51,255
         priority 4
     
-    track wgEncodeGencodeV11ViewPolya
+    track wgEncodeGencodeV10ViewPolya
     shortLabel PolyA
     view cPolya
     visibility hide
-    subTrack wgEncodeGencodeV11
+    subTrack wgEncodeGencodeV10
     type genePred
     configurable off
 
-        track wgEncodeGencodePolyaV11
-        subTrack wgEncodeGencodeV11ViewPolya off
+        track wgEncodeGencodePolyaV10
+        subTrack wgEncodeGencodeV10ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 11
+        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 10
         type genePred
         color 0,0,0
         priority 5
     
 # searchs for basic
-searchName wgEncodeGencodeBasicV11
-searchTable wgEncodeGencodeBasicV11
+searchName wgEncodeGencodeBasicV10
+searchTable wgEncodeGencodeBasicV10
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.2
 
-searchName wgEncodeGencodeBasicGeneSymV11
-searchTable wgEncodeGencodeBasicV11
+searchName wgEncodeGencodeBasicGeneSymV10
+searchTable wgEncodeGencodeBasicV10
 searchMethod exact
 searchType genePred
 searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeBasicGeneV11
-searchTable wgEncodeGencodeBasicV11
+searchName wgEncodeGencodeBasicGeneV10
+searchTable wgEncodeGencodeBasicV10
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaTranscriptV11
-searchTable wgEncodeGencodeBasicV11
+searchName wgEncodeGencodeBasicHavanaTranscriptV10
+searchTable wgEncodeGencodeBasicV10
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaGeneV11
-searchTable wgEncodeGencodeBasicV11
+searchName wgEncodeGencodeBasicHavanaGeneV10
+searchTable wgEncodeGencodeBasicV10
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for comp
-searchName wgEncodeGencodeCompV11
-searchTable wgEncodeGencodeCompV11
+searchName wgEncodeGencodeCompV10
+searchTable wgEncodeGencodeCompV10
 searchMethod prefix
 searchType genePred
 termRegex ENST[0-9.]+
 searchPriority 2.2
 
-searchName wgEncodeGencodeCompGeneSymV11
-searchTable wgEncodeGencodeCompV11
+searchName wgEncodeGencodeCompGeneSymV10
+searchTable wgEncodeGencodeCompV10
 searchMethod exact
 searchType genePred
 searchPriority 2.4
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeCompGeneV11
-searchTable wgEncodeGencodeCompV11
+searchName wgEncodeGencodeCompGeneV10
+searchTable wgEncodeGencodeCompV10
 searchMethod prefix
 searchType genePred
 termRegex ENSG[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaTranscriptV11
-searchTable wgEncodeGencodeCompV11
+searchName wgEncodeGencodeCompHavanaTranscriptV10
+searchTable wgEncodeGencodeCompV10
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMT[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaGeneV11
-searchTable wgEncodeGencodeCompV11
+searchName wgEncodeGencodeCompHavanaGeneV10
+searchTable wgEncodeGencodeCompV10
 searchMethod prefix
 searchType genePred
 termRegex OTTHUMG[0-9.]+
 searchPriority 2.4
-xrefTable wgEncodeGencodeAttrsV11
+xrefTable wgEncodeGencodeAttrsV10
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searchs for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoV11
-searchTable wgEncodeGencode2wayConsPseudoV11
+searchName wgEncodeGencode2wayConsPseudoV10
+searchTable wgEncodeGencode2wayConsPseudoV10
 searchMethod exact
 searchType genePred
 termRegex PGOHUM[0-9.]+

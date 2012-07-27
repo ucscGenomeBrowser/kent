@@ -1162,6 +1162,7 @@ void sortableTdbItemsFree(sortableTdbItem **items);
 // Frees all memory associated with a list of sortable tdb items
 
 #define FILTER_BY "filterBy"
+#define HIGHLIGHT_BY "highlightBy"
 typedef struct _filterBy
 // A single filterBy set (from trackDb.ra filterBy column:Title=value,value
 //                             [column:Title=value|label,value|label,value|label])
@@ -1181,11 +1182,20 @@ typedef struct _filterBy
 filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 
+filterBy_t *highlightBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
+/* Gets one or more "highlightBy" settings (ClosestToHome).  returns NULL if not found */
+
 void filterBySetFree(filterBy_t **filterBySet);
 // Free a set of filterBy structs
 
 char *filterBySetClause(filterBy_t *filterBySet);
 // returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs
+
+INLINE boolean filterByAllChosen(filterBy_t *filterBy)
+/* Is "All" chosen in the filter list? */
+{
+return ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")));
+}
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
                       filterBy_t *filterBySet, boolean onOneLine);
