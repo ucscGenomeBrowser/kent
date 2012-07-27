@@ -41,6 +41,7 @@ set felCat felCat3,felCat4,felCat5
 set fr fr1,fr2,fr3
 set gadMor gadMor1
 set galGal galGal2,galGal3,galGal4
+set geoFor geoFor1
 set melGal melGal1
 set gasAcu gasAcu1
 set gorGor gorGor1,gorGor3
@@ -91,7 +92,7 @@ set vicPac vicPac1
 set xenTro xenTro1,xenTro2,xenTro3
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$chrPic,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel,$gadMor,$latCha,$melUnd,$oreNil,$papHam,$saiBol,$triMan
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$chrPic,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel,$gadMor,$latCha,$melUnd,$oreNil,$papHam,$saiBol,$triMan,$geoFor
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
