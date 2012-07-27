@@ -162,7 +162,7 @@ void makeTitle(char *title, char *helpName)
 char buf[1024];
 safef(buf, sizeof(buf), "../goldenPath/help/%s", helpName);
 setContextSpecificHelp(buf, NULL);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s", title);
 }
 
 /* ---- Some helper routines for order methods. ---- */
@@ -1655,9 +1655,7 @@ void doMainDisplay(struct sqlConnection *conn,
 /* Put up the main gene sorter display - a control panel followed by
  * a big table. */
 {
-char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Sorter", genome);
-cartWebStart(cart, database, buf);
+cartWebStart(cart, database, "UCSC %s Gene Sorter", genome);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 mainControlPanel(curGeneId, ord, ordList);
