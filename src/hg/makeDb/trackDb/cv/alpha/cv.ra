@@ -15086,6 +15086,7 @@ type dataType
 label CAGE
 description CAGE 5' RNA Tags
 dataGroup RNA Profiling
+#Provisional, shouldn't the description be Cap analysis gene (CAGE) is a technique used to sequence the 5' end of a sample's population of messenger RNA
 
 term ChipSeq
 tag CHIPSEQ
