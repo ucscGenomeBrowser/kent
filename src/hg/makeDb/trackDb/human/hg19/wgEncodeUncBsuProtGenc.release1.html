@@ -48,15 +48,17 @@ Fields common to both regular and PTM peptides:
 </p>
   <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence for 
 regular pepitde mapping and peptide sequence appended with the integer fraction of the 
-PTM mass for PTM peptide mapping. These appear in the left or right space besides the main 
-Genome Browser display window depending on the configuration</li>
-  <li>The <span style="font-style: italic;">Score</span> is derived from the 'Raw score 
-for a peptide/spectrum match' (see below) given by the proteomics peptide mapping software 
-Peppy (Giddings <EM>et al.</EM> 2003).  Score is computed as 
-[RawScore - RawScore at 10% FDR cutoff) / (RawScore at near 0% FDR cutoff - RawScoreat 10% FDR cutoff)] * 1000, 
+PTM mass for PTM peptide mapping. These appear in the left or right space as short label 
+besides the main Genome Browser display window depending on the configuration</li>
+  <li>The <span style="font-style: italic;">Score</span> is derived from the <span style="font-style: italic;">
+rawScore </span>(see below) given by the proteomics peptide mapping software Peppy 
+(Giddings <EM>et al.</EM> 2003).  Score is computed as 
+[<span style="font-style: italic;">rawScore</span> - <span style="font-style: italic;">rawScore</span> 
+at 10% FDR cutoff) / (<span style="font-style: italic;">rawScore</span> at near 0% FDR cutoff - 
+<span style="font-style: italic;">rawScore</span> at 10% FDR cutoff)] * 1000, 
 and is then converted to an integer.  Raw scores above the 0% FDR threshold have a score of 1000 (best), 
-while those below the 10% FDR threshold have a score of 0 (worst).  The score is used by 
-the Genome Browser to render shade to the displaying solid rectangular.</li>
+while those below the 10% FDR threshold have a score of 0 (worst).  The <span style="font-style: italic;">Score</span> 
+is used by the Genome Browser to render shade to the displaying solid rectangular.</li>
   <li>The <span style="font-style: italic;">rawScore </span> is the original peptide mapping score given by Peppy, 
 which reflects the strength of the peptide mapping; as an estimated <span style="font-style: italic;">p</span>-value, 
 indicating the confidence of the peptide mapping.</li>
@@ -66,9 +68,24 @@ that mapped to the peptide sequence, and it can be used to track the original sp
 mapping.  A spectrum can be chimeric, containing more than one peptide, and the spectrum can be
 mapped to two or more distinct peptides.  Here, we are only reporting the top-scoring match.  
 If more than one peptide 'tied' for the top score, then all peptides were included and all matches 
-have a peptideRank of 1.<br></li>
-<li>The <span style="font-style: italic;">peptideRepeatCount</span> Indicates the number of places 
-in the genome where the peptide is encoded for a peptide/spectrum match.</li>
+have a <span style="font-style: italic;">peptideRank of 1</span>.<br></li>
+
+<p>
+Fields specific to regular peptides:
+</p>
+  <li>The <span style="font-style: italic;">peptideRepeatCount</span> Indicates the number of places 
+in the genome where the peptide is encoded, reflecting the prevalence or uniqueness of the peptide mapping 
+in the genome.  Those peptides mapped to only a few genomic locations will have a low peptideRepeatCount, 
+whereas those peptides mapped to highly duplicated regions will have a high <span style="font-style: italic;">
+peptideRepeatCount</span>.  Peptides with <span style="font-style: italic;">peptideRepeatCount</span> greater 
+than 10 times in the genome were deleted from the track.
+  </li>
+  
+  </li>
+
+<p>
+Fields specific to PTM peptides:
+</p>
 </ul>
 
 
