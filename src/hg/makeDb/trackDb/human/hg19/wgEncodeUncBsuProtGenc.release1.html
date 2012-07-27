@@ -38,15 +38,11 @@ The name of each item is the amino acid sequence of the peptide and a period (.)
 at the end of a name, it signifies a stop codon.  
 <br>
 </p>
-<p>In addition to the common fields in genome browser display, these Proteogenomics 
-tracks have some unique fields and some of which are common to both regular and PTM 
-peptides and some are specific to regular peptides or PTM peptides only <br>
+<p>In addition to the common fields in genome browser display, here are additional 
+fields specific to these Proteogenomic tracks: <br>
 </p>
 <ul>
 
-<p>
-Fields common to both regular and PTM peptides:
-</p>
   <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence 
 for regular pepitde mapping and peptide sequence appended with the integer portion
 of the PTM mass for PTM peptide mapping. These appear in the left or right space as 
@@ -76,9 +72,6 @@ we are only reporting the top-scoring match.  If more than one peptide 'tied' fo
 the top score, then all peptides were included and all matches have a <span style=
 "font-style: italic;">peptideRank of 1</span>.<br></li>
 
-<p>
-Fields specific to regular peptides:
-</p>
   <li>The <span style="font-style: italic;">peptideRepeatCount</span> Indicates the 
 number of places in the genome where the peptide is encoded, reflecting the prevalence 
 or uniqueness of the peptide mapping in the genome.  Those peptides mapped to only a 
@@ -86,13 +79,10 @@ few genomic locations will have a low peptideRepeatCount, whereas those peptides
 to highly duplicated regions will have a high <span style="font-style: italic;">
 peptideRepeatCount</span>.  <u>Peptides with <span style="font-style: italic;">
 peptideRepeatCount</span> greater than 10 times in the genome were deleted from the 
-track</u>.</li>
-
-<p>
-Fields specific to PTM peptides:
-</p>
+track</u> (this field is for regular peptides only).</li>
   <li>The <span style="font-style: italic;"> modificationMass</span> reflects the 
-additional molecular weight for each modified peptide matched to a spectrum.
+additional molecular weight for each modified peptide matched to a spectrum (this
+field is for PTM peptides only).
   </li>
 </ul>
 
