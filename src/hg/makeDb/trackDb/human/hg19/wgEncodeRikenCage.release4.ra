@@ -4,16 +4,16 @@ shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views TssHmm=TSS_HMM_Clusters MinusRawSignal=Minus_Signal PlusRawSignal=Plus_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20=B_cells_CD20+&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3AG04450=AG04450 t3BJ=BJ t3CD34MOBILIZED=CD34+_Mobilized t3HAOAF=HAoAF t3HAOEC=HAoEC t3HCH=HCH t3HFDPC=HFDPC t3HMEPC=HMEpC t3HMSCAT=hMSC-AT t3HMSCBM=hMSC-BM t3HMSCUC=hMSC-UC t3HOB=HOB t3HPCPL=HPC-PL t3HPIEPC=HPIEpC t3HSAVEC=HSaVEC t3HVMF=HVMF t3HWP=HWP t3NHDF=NHDF t3NHEK=NHEK t3NHEMFM2=NHEM.f_M2 t3NHEMM2=NHEM_M2 t3PROSTATE=prostate t3SKMC=SkMC t3SKNSHRA=SK-N-SH_RA
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20=B_cells_CD20+&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3AG04450=AG04450 t3BJ=BJ t3CD34MOBILIZED=CD34+_Mobilized t3HAOAF=HAoAF t3HAOEC=HAoEC t3HCH=HCH t3HFDPC=HFDPC t3HMEPC=HMEpC t3HMSCAT=hMSC-AT t3HMSCBM=hMSC-BM t3HMSCUC=hMSC-UC t3HOB=HOB t3HPCPL=HPC-PL t3HPIEPC=HPIEpC t3HSAVEC=HSaVEC t3HVMF=HVMF t3HWP=HWP t3NHDF=NHDF t3NHEK=NHEK t3NHEMFM2=NHEM.f_M2 t3NHEMM2=NHEM_M2 t3PROSTATE=Prostate t3SKMC=SkMC t3SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization wcell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
 subGroup6 rank Replicate rank1=1st rank2=2nd rankP=Pooled
 dimensions dimensionY=cellType dimensionC=rnaExtract dimensionX=localization dimensionB=rank
-dimensionCchecked pAP,pAM
+#dimensionCchecked pAP,pAM,total
 dimensionBchecked rank1,rankP
 #dimensionDchecked rep0,rep1,rep2,rep3,rep4,Pooled
-filterComposite dimC=multi dimB=multi
+filterComposite dimC=all dimB=multi
 sortOrder  cellType=+ localization=+ rnaExtract=+ view=- rank=+
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Replicate bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
@@ -4218,7 +4218,7 @@ html wgEncodeRikenCage.release4
         # subId=7560 dateSubmitted=2012-07-24
 
         track wgEncodeRikenCageH1hescNucleusPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on 
         shortLabel H1ES nucl pA+
         longLabel H1-hESC nucleus polyA+ CAGE TSS HMM from ENCODE/RIKEN
         subGroups view=TssHmm cellType=t1H1HESC localization=nucleus rnaExtract=pAP rep=Pooled rank=rankP
@@ -4227,7 +4227,7 @@ html wgEncodeRikenCage.release4
         # subId=7561 dateSubmitted=2012-07-20
 
         track wgEncodeRikenCageH1hescCytosolPapTssHmm
-        parent wgEncodeRikenCageViewTssHmm off
+        parent wgEncodeRikenCageViewTssHmm on
         shortLabel H1ES cyto pA+ 
         longLabel H1-hESC cytosol polyA+ CAGE TSS HMM from ENCODE/RIKEN
         subGroups view=TssHmm cellType=t1H1HESC localization=cytosol rnaExtract=pAP rep=Pooled rank=rankP
