@@ -199,7 +199,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL00000
 color 0,107,27
 sex M
 tier 1
-protocol ENCODE:H1_ES_protocol.pdf
+protocol ENCODE:missing
 
 term H1-neurons
 tag H1NEURONS
