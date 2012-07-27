@@ -4280,6 +4280,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS27a_Stam_protocol.pdf
 
 term bone_marrow_HS5
@@ -4297,6 +4298,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS5_Stam_protocol.pdf
 
 term bone_marrow_MSC
@@ -4314,6 +4316,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:MSC_Stam_protocol.pdf
 
 term HSaVEC
@@ -5612,6 +5615,7 @@ orderUrl http://www.griffith.edu.au/professional-page/professor-alan-mackay-sim
 termId termId BTO:0000961
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000961
 lab Crawford
+label Olfactory neurosphere
 protocol Crawford:Olfneurosphere_Crawford_protocol.pdf
 
 term Osteobl
@@ -5864,6 +5868,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
+label Prostate
 protocol Gingeras:Prostate_Gingeras_protocol.pdf
 
 term Prostate_OC
@@ -15081,6 +15086,7 @@ type dataType
 label CAGE
 description CAGE 5' RNA Tags
 dataGroup RNA Profiling
+#Provisional, shouldn't the description be Cap analysis gene (CAGE) is a technique used to sequence the 5' end of a sample's population of messenger RNA
 
 term ChipSeq
 tag CHIPSEQ
