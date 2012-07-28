@@ -47,6 +47,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	mm6 mm7 mm8 mm9 mm10 \
 	rn3 rn4 rn5 \
 	speTri1 speTri2 cavPor3 \
+        chiLan1 \
         hetGla1 hetGla2 \
         sarHar1 \
 	oryCun1 oryCun2 \
@@ -65,7 +66,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	monDom1 monDom4 monDom5 \
 	chrPic1 \
 	anoCar1 anoCar2 \
-	melUnd1 \
+	geoFor1 melUnd1 \
 	galGal2 galGal3 galGal4 \
 	melGal1 \
 	taeGut1 \

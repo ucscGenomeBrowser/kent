@@ -137,8 +137,12 @@ TABLE.hgcCcds TH {
 TABLE.hgcCcds TD {
     height: 1em;
 }
+/* table header has white text, include links */
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
+    color: #ffffff;
+}
+TABLE.hgcCcds THEAD * A {
     color: #ffffff;
 }
 TABLE.hgcCcds TR.hgcCcdsSub {
@@ -350,12 +354,16 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        padding: 5px; 
+        background-color: #E0E0E0; 
+        -moz-border-radius: 3px; 
+        border-radius: 3px;
         border: gray 1px solid;
 }
 
 body.hgGateway .positionDisplay {
-        padding: 7px; background-color: inherit;
+        padding: 5px; 
+        background-color: inherit;
         border: lightgray 1px solid;
 }
 

@@ -425,3 +425,27 @@ vicPac1.perChromTables = no
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_5479:34441-51753" where name="vicPac1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/pushQ
+    cd /hive/data/genomes/vicPac1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl vicPac1 2> stderr.txt | grep -v transMap > vicPac1.sql
+    #   real    3m49.201s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/vicPac1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/vicPac1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/vicPac1/bbi/quality.bw
+# WARNING: vicPac1 does not have seq
+# WARNING: vicPac1 does not have extFile
+# WARNING: vicPac1 does not have estOrientInfo
+
+    scp -p vicPac1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/vicPac1.sql"
+
+############################################################################

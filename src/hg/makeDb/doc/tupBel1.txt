@@ -407,3 +407,27 @@ tupBel1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_149294.1-299378:275786-282564" where name="tupBel1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/tupBel1/pushQ
+    cd /hive/data/genomes/tupBel1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl tupBel1 2> stderr.txt | grep -v transMap > tupBel1.sql
+    #   real    3m48.507s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/tupBel1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/tupBel1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/tupBel1/bbi/quality.bw
+# WARNING: tupBel1 does not have seq
+# WARNING: tupBel1 does not have extFile
+# WARNING: tupBel1 does not have estOrientInfo
+
+    scp -p tupBel1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/tupBel1.sql"
+
+############################################################################

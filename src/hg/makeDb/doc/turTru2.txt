@@ -517,5 +517,28 @@ turTru2.perChromTables = no
     cd /hive/data/genomes/turTru2/bed
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
-
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH481929:22304-29703" where name="turTru2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/turTru2/pushQ
+    cd /hive/data/genomes/turTru2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl turTru2 2> stderr.txt | grep -v transMap > turTru2.sql
+    #   real    3m41.168s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/turTru2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/turTru2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/turTru2/bbi/quality.bw
+# WARNING: turTru2 does not have seq
+# WARNING: turTru2 does not have extFile
+# WARNING: turTru2 does not have estOrientInfo
+
+    scp -p turTru2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/turTru2.sql"
+
+############################################################################
