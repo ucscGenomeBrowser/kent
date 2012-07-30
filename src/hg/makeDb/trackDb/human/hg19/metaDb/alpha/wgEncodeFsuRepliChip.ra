@@ -231,7 +231,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep3.tar.gz
@@ -341,7 +341,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esRawDataRep2.tar.gz
@@ -715,4 +715,4 @@ subId 7727
 tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
 view WaveSignal
 
-# MAGIC: -1775075477
+# MAGIC: -1775083277
