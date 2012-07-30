@@ -30,8 +30,8 @@ include wgEncodeReg.release3.ra
 include wgEncodeUwRepliSeq.ra
 
 # FSU Repli-chip track (wrangler: venkat)
-include wgEncodeFsuRepliChip.ra beta,public
-include wgEncodeFsuRepliChip.release2.ra alpha
+include wgEncodeFsuRepliChip.ra public
+include wgEncodeFsuRepliChip.release2.ra alpha,beta
 
 #include wgEncodeRegNorm.ra alpha
 
