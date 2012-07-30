@@ -73,7 +73,8 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.patch.ra
+include wgEncodeUwAffyExonArray.release4.ra alpha
+include wgEncodeUwAffyExonArray.patch.ra beta,public
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.release3.ra
