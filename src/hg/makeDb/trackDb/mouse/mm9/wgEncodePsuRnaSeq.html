@@ -58,6 +58,8 @@ display individually on the browser.  Instructions for configuring multi-view
 tracks are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
 This track contains the following views:
 <DL>
+<DT><I>Raw Signals</I><DD>The Plus Raw Signal and Minus Raw Signal views show the density of mapped reads 
+on the plus and minus strands (wiggle format), respectively.<DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based
 on processed data.</DD>
 <DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome. <DD>
@@ -70,26 +72,32 @@ on processed data.</DD>
 Cells were grown according to the approved
 <a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>.
 </P>
-<P>
+<p>
 Maps of transcription from the genome are determined by RNA-seq. 
 This consists of two basic steps: isolation of RNA and cDNA synthesis, followed by 
 massively parallel short read sequencing to tag the enriched cDNA segments. 
 Sequencing is done on the Illumina Genome Analyzer II sequencing system, and more recently on the HiSeq.
-Cells were grown according to the approved ENCODE cell culture protocols. 
+</p>
+<p>
 Total RNA was extracted from 5-10 million cells using TRIzol reagent. 
 This was followed by mRNA selection, fragmentation and cDNA synthesis, which were performed as described previously &#40;Mortazavi <em> et al.</em>, 2009&#41;. 
-Double-stranded cDNA samples are processed for library construction for Illumina sequencing, using the ChIP-seq 
-Sample Preparation Kit purchased from Illumina. Strand-specific libraries were generated in a similar manner, 
+Double-stranded cDNA samples are processed for library construction for Illumina sequencing, using the mRNA-seq 
+Sample Preparation Kit purchased from Illumina. 
+</p>
+<p>
+Strand-specific libraries were generated in a similar manner, 
 except for a couple of modifications described previously &#40;Parkhomchuk<em> et al.</em>, 2009&#41;. 
 Briefly, instead of dTTP, dUTP was used during second-strand cDNA synthesis and prior to PCR amplification 
 during library preparation, the strand containing dUTP was treated with Uracil N Glycosylase for removal of uracil 
 and then subjected to high heat to facilitate abasic scission. 
+</p>
+<p>
 Cluster generation, linearization, blocking and sequencing primer reagents were provided in the Illumina Cluster Amplification kits. 
-All samples are being determined as biological replicates.
-</P>
+All samples are considered as biological replicates.
+</p>
 
 <P>
-The resulting sequence reads of 36, 41 or 55-nt (fastq files) were moved to a data library in Galaxy, and 
+The resulting sequence reads of 36, 41, 45, 55 or 99-nt (fastq files) were moved to a data library in Galaxy, and 
 the tools implemented in Galaxy were used for further processing via workflows &#40;Blankenberg <em> et al.</em> 2010 &#41;. 
 The reads were mapped to the mouse genome (mm9 assembly) using the program TopHat &#40;Langmead <em>et al.</em>, 2009 and Trapnell <em> et al.</em>, 2009&#41;, 
 and known transcripts were assembled and quantified in terms of FPKM (Fragments Per Kilobase of exon model per Million mapped fragments) using Cufflinks 
