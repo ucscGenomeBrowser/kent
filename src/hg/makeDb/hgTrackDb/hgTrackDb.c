@@ -492,7 +492,7 @@ if (!isalpha(*c))
         return;
 
     warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
-            daatabase,tdb->track,type,tag);
+            database,tdb->track,type,tag);
     }
 for (c++;*c != '\0';c++)
     {
