@@ -103,7 +103,8 @@ loadDbTracks() {
         fopts="$fopts -raName=$raName"
     fi
     # don't use set -x, since the autoload scripts e-mail stderr.
-    local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
+    #local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
+    local cmd="/cluster/home/cricket/bin/x86_64/hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
     echo $cmd
     eval $cmd
 

@@ -492,13 +492,13 @@ if (!isalpha(*c))
         return;
 
     warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
-         database,tdb->track,type,tag);
+            daatabase,tdb->track,type,tag);
     }
 for (c++;*c != '\0';c++)
     {
     if (!isalnum(*c) && *c != '_' && *c != '-')
         errAbort("Track %s.%s has non-conforming '%s' tag '%s' (contains unsupported characters)",
-                 database,tdb->track,type,tag);
+                database,tdb->track,type,tag);
     }
 }
 
