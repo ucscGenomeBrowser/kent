@@ -63,14 +63,15 @@ bioRep 087WC,088WC
 cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2929
-fileName wgEncodeGisRnaPetA549CellPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA009,RHA010
+labProtocolId 087WC+pet,088WC+pet
 labVersion clone-free
 localization cell
 md5sum 7e21b066dfd20ba339d400542d8250d2
@@ -78,7 +79,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6546
+subId 7271
 tableName wgEncodeGisRnaPetA549CellPapClusters
 view Clusters
 
@@ -344,14 +345,15 @@ bioRep 087C,088C
 cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2927
-fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA011,RHA012
+labProtocolId 087C+pet,088C+pet
 labVersion clone-free
 localization cytosol
 md5sum 9d0f79b9c8483f92600d83d9f16d69c2
@@ -359,7 +361,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6547
+subId 7274
 tableName wgEncodeGisRnaPetA549CytosolPapClusters
 view Clusters
 
@@ -625,14 +627,15 @@ bioRep 087N,088N
 cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2928
-fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA013,RHA014
+labProtocolId 087N+pet,088N+pet
 labVersion clone-free
 localization nucleus
 md5sum e8eab1a32843506fd0ef8db3e61786c4
@@ -640,7 +643,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6549
+subId 7266
 tableName wgEncodeGisRnaPetA549NucleusPapClusters
 view Clusters
 
@@ -3540,15 +3543,16 @@ bioRep 045WC,046WC
 cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 donorId 58607680
 expId 2924
-fileName wgEncodeGisRnaPetImr90CellPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetImr90CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI001,RHI002
+labProtocolId 045WC+pet,046WC+pet
 labVersion clone-free
 localization cell
 md5sum 5226123225f6b3207fb36cb4eacadee2
@@ -3556,7 +3560,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6536
+subId 7276
 tableName wgEncodeGisRnaPetImr90CellPapClusters
 view Clusters
 
@@ -3832,15 +3836,16 @@ bioRep 045C,046C
 cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-28
+dateUnrestricted 2013-03-28
 donorId 58607680
 expId 2930
-fileName wgEncodeGisRnaPetImr90CytosolPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetImr90CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI003,RHI004
+labProtocolId 045C+pet,046C+pet
 labVersion clone-free
 localization cytosol
 md5sum 26660ffc356f5edcf36be2dd32cf9f0e
@@ -3848,7 +3853,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6534
+subId 7187
 tableName wgEncodeGisRnaPetImr90CytosolPapClusters
 view Clusters
 
@@ -4124,15 +4129,16 @@ bioRep 045N,046N
 cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 donorId 58607680
 expId 2931
-fileName wgEncodeGisRnaPetImr90NucleusPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetImr90NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI005,RHI006
+labProtocolId 045N+pet,046N+pet
 labVersion clone-free
 localization nucleus
 md5sum 7c0f62626bb1c83f0186f5ea4279536d
@@ -4140,7 +4146,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6532
+subId 7269
 tableName wgEncodeGisRnaPetImr90NucleusPapClusters
 view Clusters
 
@@ -5409,9 +5415,9 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
-fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedRnaElements.gz
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
+fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM046,RHM047
@@ -5423,7 +5429,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6550
+subId 7267
 tableName wgEncodeGisRnaPetMcf7CellPapClusters
 view Clusters
 
@@ -5689,14 +5695,15 @@ bioRep 089C,090C
 cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2932
-fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM044,RHM045
+labProtocolId 089C+pet,090C+pet
 labVersion clone-free
 localization cytosol
 md5sum 84641dab41e83944b520241c654d6e97
@@ -5704,7 +5711,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6548
+subId 7273
 tableName wgEncodeGisRnaPetMcf7CytosolPapClusters
 view Clusters
 
@@ -5971,13 +5978,14 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-04
-dateUnrestricted 2013-02-04
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2933
-fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM054,RHM055
+labProtocolId 089N+pet,090N+pet
 labVersion clone-free
 localization nucleus
 md5sum d2f6644516c56a348c972997fb193f15
@@ -5985,7 +5993,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6921
+subId 7272
 tableName wgEncodeGisRnaPetMcf7NucleusPapClusters
 view Clusters
 
@@ -6776,14 +6784,15 @@ bioRep 085WC,086WC
 cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2926
-fileName wgEncodeGisRnaPetSknshCellPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS015,RHS016
+labProtocolId 085WC+pet,086WC+pet
 labVersion clone-free
 localization cell
 md5sum 0dc46f7dbcb449ca9c5a1d3fabe5c3bb
@@ -6791,7 +6800,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6533
+subId 7270
 tableName wgEncodeGisRnaPetSknshCellPapClusters
 view Clusters
 
@@ -7057,14 +7066,15 @@ bioRep 085C,086C
 cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-28
-dateUnrestricted 2012-12-28
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2925
-fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS017,RHS018
+labProtocolId 085C+pet,086C+pet
 labVersion clone-free
 localization cytosol
 md5sum 1a556b534c84992a1cbd3d9e8cf8d72b
@@ -7072,7 +7082,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6535
+subId 7268
 tableName wgEncodeGisRnaPetSknshCytosolPapClusters
 view Clusters
 
@@ -7339,13 +7349,14 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-04
-dateUnrestricted 2013-02-04
+dateSubmitted 2012-06-29
+dateUnrestricted 2013-03-29
 expId 2935
-fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedRnaElements.gz
+fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS019,RHS020
+labProtocolId 085N+pet,086N+pet
 labVersion clone-free
 localization nucleus
 md5sum 512df87379c4bf91c009af37eaf29de2
@@ -7353,7 +7364,7 @@ project wgEncode
 readType 2x36
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
-subId 6922
+subId 7275
 tableName wgEncodeGisRnaPetSknshNucleusPapClusters
 view Clusters
 
@@ -7561,4 +7572,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: 575297814
+# MAGIC: 1911529344
