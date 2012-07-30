@@ -30,8 +30,8 @@ include wgEncodeReg.release3.ra
 include wgEncodeUwRepliSeq.ra
 
 # FSU Repli-chip track (wrangler: venkat)
-include wgEncodeFsuRepliChip.ra beta,public
-include wgEncodeFsuRepliChip.release2.ra alpha
+include wgEncodeFsuRepliChip.ra public
+include wgEncodeFsuRepliChip.release2.ra alpha,beta
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -73,7 +73,7 @@ include wgEncodeUw5C.ra
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.release3.ra alpha
+include wgEncodeUwAffyExonArray.release4.ra alpha
 include wgEncodeUwAffyExonArray.patch.ra beta,public
 
 # Duke Affy Exon (wrangler: cricket)
