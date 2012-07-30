@@ -1,7 +1,7 @@
 metaObject wgEncodePsuDnase
 objType composite
 composite wgEncodePsuDnase
-expVars lab,dataType,cell
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodePsuDnaseG1eS129ME0AlnRep1
 objType file
@@ -363,4 +363,4 @@ tableName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep2
 treatment diffProtD_24hr
 view Signal
 
-# MAGIC: 1117428943
+# MAGIC: -1054577825

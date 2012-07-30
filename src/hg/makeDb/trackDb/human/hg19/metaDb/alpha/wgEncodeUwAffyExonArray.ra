@@ -616,6 +616,326 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep1
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId DS15446
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS16723
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15446
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1
+treatment diffProtA_14d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS16723
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2
+treatment diffProtA_14d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep1
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId DS15447
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS16720
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15447
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1
+treatment diffProtA_2d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS16720
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2
+treatment diffProtA_2d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep1
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId DS15444
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS16721
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15444
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1
+treatment diffProtA_5d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS16721
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2
+treatment diffProtA_5d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep1
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep1.CEL.gz
+grant Stam
+lab UW
+labExpId DS15445
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep2.CEL.gz
+grant Stam
+lab UW
+labExpId RS16722
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15445
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1
+treatment diffProtA_9d
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS16722
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7725
+tableName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2
+treatment diffProtA_9d
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayH7esSimpleSignalRep1
 objType table
 cell H7-hESC
@@ -3983,4 +4303,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: 402655197
+# MAGIC: -735297509
