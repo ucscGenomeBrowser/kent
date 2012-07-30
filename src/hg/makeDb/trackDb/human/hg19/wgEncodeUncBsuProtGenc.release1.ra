@@ -10,7 +10,8 @@ subGroup1 view Views pepMapGcFt=Peptide_Mapping_with_Hg19_and_GENCODE_(Filtered)
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) H1HESC=H1-hESC&nbsp;(Tier_1) H1NEURONS=H1-neurons&nbsp;(Tier_2)
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
 subGroup4 protocol Protocol FASP=FASP INGEL=In_gel MUDPIT=MudPIT
-dimensions dimensionX=cellType dimensionY=localization
+dimensions dimensionX=cellType dimensionY=localization dimensionZ=protocol
+dimensionZchecked FASP,INGEL,MUDPIT
 sortOrder cellType=+ localization=+ protocol=+
 fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization protocol=protocol
