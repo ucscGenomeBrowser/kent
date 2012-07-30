@@ -289,7 +289,7 @@ for (i = 0;  i < wordCount;  i++)
     {
     char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
 					       words[i]);
-    if (slNameInList(snp125FuncFilter, simpleFunc))
+    if (slNameInList(snp125FuncFilter, simpleFunc) || slNameInList(snp125FuncFilter, words[i]))
 	return TRUE;
     }
 return FALSE;
@@ -646,7 +646,7 @@ for (i=0; i < varCount; i++)
 return cartColors;
 }
 
-static void snp125SetupFiltersAndColorsFromCart(struct trackDb *tdb)
+static void snp125SetupFiltersAndColorsFromCart(struct trackDb *tdb, int version)
 /* Load the controls set by hgTrackUi into global vars. */
 {
 char *track = tdb->track;
@@ -715,6 +715,13 @@ for (i=0; i < snp125FuncArraySize; i++)
     hashAdd(snp125FuncCartNameHash, snp125FuncDataName[i],
 	    snp125FuncDataName[i]);
     }
+if (version >= 137)
+    {
+    hashAddInt(snp125FuncCartColorHash, "ncRNA",
+	       stringArrayIx("blue", snp125ColorLabel, snp125ColorArraySize));
+    hashAdd(snp125FuncCartNameHash, "ncRNA", "ncRNA");
+    }
+// Map finer-grained func codes in table to simplified filtering/coloring choices.
 int j, k;
 for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
     {
@@ -920,7 +927,7 @@ else if (version >= 125)
 else
     errAbort("How was loadSnp125 called on version < 125? (%d)", version);
 
-snp125SetupFiltersAndColorsFromCart(tg->tdb);
+snp125SetupFiltersAndColorsFromCart(tg->tdb, version);
 filterSnp125Items(tg, version);
 snp125ColorItems(tg, version);
 
