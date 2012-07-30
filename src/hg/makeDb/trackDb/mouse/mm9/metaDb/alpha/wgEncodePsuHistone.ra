@@ -3176,7 +3176,7 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 547f82f1a8862d4ed92ae46d28e8e473
+md5sum ffa498b4a6c54f68b9060d649d00f78f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7940,4 +7940,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1429301323
+# MAGIC: -1748693730
