@@ -146,7 +146,7 @@ INLINE struct trackDb *tdbGetImmediateFolder(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsFolder(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 #define tdbGetSuperTrack(tdb) tdbGetImmediateFolder(tdb)
@@ -196,7 +196,7 @@ INLINE struct trackDb *tdbGetComposite(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsComposite(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
@@ -234,7 +234,7 @@ INLINE struct trackDb *tdbGetMultiTrack(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsMultiTrack(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
@@ -258,7 +258,7 @@ INLINE struct trackDb *tdbGetContainer(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
