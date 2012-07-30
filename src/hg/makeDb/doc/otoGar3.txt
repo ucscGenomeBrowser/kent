@@ -387,3 +387,27 @@ otoGar3.genbank.est.native.load = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL873620:5980653-5987990" where name="otoGar3";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/pushQ
+    cd /hive/data/genomes/otoGar3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl otoGar3 2> stderr.txt | grep -v transMap > otoGar3.sql
+    #   real    3m40.599s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/otoGar3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/otoGar3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/otoGar3/bbi/quality.bw
+# WARNING: otoGar3 does not have seq
+# WARNING: otoGar3 does not have extFile
+# WARNING: otoGar3 does not have estOrientInfo
+
+    scp -p otoGar3.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/otoGar3.sql"
+
+############################################################################

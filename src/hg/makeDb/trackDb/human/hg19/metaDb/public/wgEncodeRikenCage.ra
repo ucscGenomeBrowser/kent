@@ -1767,7 +1767,7 @@ grant Gingeras
 lab RIKEN
 labExpId J72
 localization cell
-md5sum d6c970a05ebafc50f8f109e9e8a515b0
+md5sum 38489b20550f89a117ba9652efd95373
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1792,7 +1792,7 @@ grant Gingeras
 lab RIKEN
 labExpId J73
 localization cell
-md5sum b62e0151d40da03be7d5d2a31238a23c
+md5sum 935bf7c7b2a9d9225739aab7ea69a65d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2294,7 +2294,7 @@ grant Gingeras
 lab RIKEN
 labExpId J84
 localization cytosol
-md5sum a00600b0be2b7f32ca5bfa1d37f9b1c2
+md5sum 71621ab0376d95da763cd0146429528d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2319,7 +2319,7 @@ grant Gingeras
 lab RIKEN
 labExpId J85
 localization cytosol
-md5sum d04a9c6774f547e5aaee9f6dd78334e0
+md5sum 60bb1cd2e8e256eb61c79de047251c61
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3029,7 +3029,7 @@ grant Gingeras
 lab RIKEN
 labExpId J93
 localization nucleus
-md5sum 902ac945214ffc8d988bf25bc4eaef57
+md5sum febdbaf841a04cc6b8a985f99000de90
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3054,7 +3054,7 @@ grant Gingeras
 lab RIKEN
 labExpId J94
 localization nucleus
-md5sum 4978bdc6ef8596eeccf0390fffa5e986
+md5sum d3ea3876b0f4b2a02aab89bec7e9d710
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3898,6 +3898,31 @@ seqPlatform Illumina_GA2x
 subId 2379
 view RawData
 
+metaObject wgEncodeRikenCageH1hescCytosolPapTssHmm
+objType table
+bioRep 006C
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001139
+expId 1139
+fileName wgEncodeRikenCageH1hescCytosolPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J86
+localization cytosol
+md5sum 0d96ca71dbc0c868e13ed2b58b3e5679
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7562
+tableName wgEncodeRikenCageH1hescCytosolPapTssHmm
+view TssHmm
+
 metaObject wgEncodeRikenCageH1hescNucleusPapAlnRep2
 objType table
 bioRep 006N
@@ -4051,6 +4076,31 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 view RawData
+
+metaObject wgEncodeRikenCageH1hescNucleusPapTssHmm
+objType table
+bioRep 006N
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001140
+expId 1140
+fileName wgEncodeRikenCageH1hescNucleusPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J95
+localization nucleus
+md5sum 9db72cc11424489b7a5f1dbbdfe3b22c
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7561
+tableName wgEncodeRikenCageH1hescNucleusPapTssHmm
+view TssHmm
 
 metaObject wgEncodeRikenCageHaoafCellPapAlnRep1
 objType table
@@ -6063,7 +6113,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
-md5sum 166afa3abc92d4e6b2be3119bbb07824
+md5sum e0b744cf7eddfb3fa3dcb74157a27f34
 project wgEncode
 readType 1x36
 replicate 1
@@ -11435,7 +11485,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
-md5sum 1bb3921c15deb6a74e3a64af07aac934
+md5sum 3f4c88c9224b2e8997b37754b9f4447b
 project wgEncode
 readType 1x36
 replicate 1
@@ -16013,7 +16063,7 @@ grant Gingeras
 lab RIKEN
 labExpId K07
 localization cell
-md5sum b14be70fa85e86f98c6cdb6d515a7ad4
+md5sum b52bc0da6e052c54a2b087cd427ad729
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -18506,7 +18556,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
-md5sum 684839e3c1f080801890b4150b5ce00c
+md5sum 9ce38385515dc5a85038e041ca585326
 project wgEncode
 readType 1x36
 replicate 4
@@ -18568,54 +18618,30 @@ view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV3
 objType table
+bioRep 028N,027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-24
+dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH001154
+donorId 4F1155J
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmmV3.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
-labExpId K09
+labExpId CTig10011,K09
 localization nucleus
 md5sum acfc0a827edee9ded634a97c9b701128
-project wgEncode
-rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 5611
-submittedDataVersion V3 - Repacing . with -1 for missing data
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
-view TssHmm
-
-metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV4
-objType table
-bioRep 028N
-cell NHEK
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
-dccAccession wgEncodeEH001154
-donorId 4F1155J
-expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmmV4.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId CTig10011
-localization nucleus
-md5sum d0d4b79df92e17a026fd3da074cb5075
 project wgEncode
 readType 1x36
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex F
-subId 6726
-submittedDataVersion V4 - replaces old version 3 that had broken values
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV4
+subId 7560
+submittedDataVersion V3 - New sample is merged for replicates
+tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageNhemfm2CellPapAlnRep1
@@ -20538,4 +20564,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 359478210
+# MAGIC: 2000543582

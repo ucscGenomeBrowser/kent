@@ -59,8 +59,8 @@ for (blockNum=0; blockNum < psl->blockCount; blockNum++)
     }
 
 // we don't have any blocks with this query in it, just point
-// to the end
-return psl->tEnd;
+// to the last base
+return psl->tEnd - 1;
 }
 
 static void setThick(struct psl *psl, struct bed *bed, struct cds *cds)
@@ -80,7 +80,10 @@ if (psl->strand[0] == '-')
 
 // we subtract one from start to convert to PSL coordinate system
 thickStart = getTargetForQuery(psl, cdsStart);
-thickEnd = getTargetForQuery(psl, cdsEnd);
+
+// cdsEnd actually points to one base after the end, so
+// we translate the base address, then add one
+thickEnd = getTargetForQuery(psl, cdsEnd - 1) + 1;
 
 // if thickStart equals thickEnd, then there is no CDS
 if (thickStart == thickEnd)

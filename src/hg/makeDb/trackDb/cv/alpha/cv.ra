@@ -13951,7 +13951,7 @@ description 120 hour differentiation time point of mG/ER cells towards red blood
 label 120 hour diff protocol C
 
 term diffProtD_3hr
-tag DIFFD3h
+tag DIFFD3H
 description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
 
@@ -17000,6 +17000,18 @@ searchable wildList
 cvDefined no
 validate none
 priority 410
+requiredVars term,tag,type,description
+optionalVars label,deprecated
+
+term labProtocolId
+tag LABPROTOCOLID
+type typeOfTerm
+label Lab specific protocol ID
+description Some labs produce experiments under multiple defined protocols which may or may not be experiment altering, but which should be recorded all the same.
+searchable no
+cvDefined no
+validate none
+priority 420
 requiredVars term,tag,type,description
 optionalVars label,deprecated
 
