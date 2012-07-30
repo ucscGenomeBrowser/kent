@@ -74,7 +74,7 @@ labExpId RHA009,RHA010
 labProtocolId 087WC+pet,088WC+pet
 labVersion clone-free
 localization cell
-md5sum 7e21b066dfd20ba339d400542d8250d2
+md5sum 5389c1c4d1cad7da294fd38074dbd4c4
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -356,7 +356,7 @@ labExpId RHA011,RHA012
 labProtocolId 087C+pet,088C+pet
 labVersion clone-free
 localization cytosol
-md5sum 9d0f79b9c8483f92600d83d9f16d69c2
+md5sum b917affee7662ad988b67af280d33aeb
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -638,7 +638,7 @@ labExpId RHA013,RHA014
 labProtocolId 087N+pet,088N+pet
 labVersion clone-free
 localization nucleus
-md5sum e8eab1a32843506fd0ef8db3e61786c4
+md5sum d0c43f00cb45cbeb8bd891621af892ff
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -3555,7 +3555,7 @@ labExpId RHI001,RHI002
 labProtocolId 045WC+pet,046WC+pet
 labVersion clone-free
 localization cell
-md5sum 5226123225f6b3207fb36cb4eacadee2
+md5sum ca9c092382b3055faccf13452c226eb9
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -3848,7 +3848,7 @@ labExpId RHI003,RHI004
 labProtocolId 045C+pet,046C+pet
 labVersion clone-free
 localization cytosol
-md5sum 26660ffc356f5edcf36be2dd32cf9f0e
+md5sum ddc562fb1312dac43ce66b9b89b0c128
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -4141,7 +4141,7 @@ labExpId RHI005,RHI006
 labProtocolId 045N+pet,046N+pet
 labVersion clone-free
 localization nucleus
-md5sum 7c0f62626bb1c83f0186f5ea4279536d
+md5sum 62119430e017036d6ede9b55fcb70f3a
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -5424,7 +5424,7 @@ labExpId RHM046,RHM047
 labProtocolId 089WC+pet,090WC+pet
 labVersion iIDR
 localization cell
-md5sum 03afbac532b386aabb6fc87509bd358a
+md5sum 9429a9022c64788a8ccb48fe0d5e8124
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -5706,7 +5706,7 @@ labExpId RHM044,RHM045
 labProtocolId 089C+pet,090C+pet
 labVersion clone-free
 localization cytosol
-md5sum 84641dab41e83944b520241c654d6e97
+md5sum 157f067028bf9b6f47e5cdfa40be5f95
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -5988,7 +5988,7 @@ labExpId RHM054,RHM055
 labProtocolId 089N+pet,090N+pet
 labVersion clone-free
 localization nucleus
-md5sum d2f6644516c56a348c972997fb193f15
+md5sum 7339e29c127c1a17405a6589642f3609
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -6795,7 +6795,7 @@ labExpId RHS015,RHS016
 labProtocolId 085WC+pet,086WC+pet
 labVersion clone-free
 localization cell
-md5sum 0dc46f7dbcb449ca9c5a1d3fabe5c3bb
+md5sum e83f2760b330f08d0907be1d11cc769e
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -7077,7 +7077,7 @@ labExpId RHS017,RHS018
 labProtocolId 085C+pet,086C+pet
 labVersion clone-free
 localization cytosol
-md5sum 1a556b534c84992a1cbd3d9e8cf8d72b
+md5sum 2e4a119208b6ac9dcf01d99f9aab944c
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -7359,7 +7359,7 @@ labExpId RHS019,RHS020
 labProtocolId 085N+pet,086N+pet
 labVersion clone-free
 localization nucleus
-md5sum 512df87379c4bf91c009af37eaf29de2
+md5sum cdcaa6fc46640cd38a459e2558e1d74c
 project wgEncode
 readType 2x36
 rnaExtract longPolyA
@@ -7572,4 +7572,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: 1911529344
+# MAGIC: -1243070258
