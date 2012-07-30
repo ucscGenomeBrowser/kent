@@ -20,7 +20,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum 91a501fe63306d15749a0003849f919c,a117f019f0b35f8d8bab60cae8de2f2e
 project wgEncode
@@ -51,7 +50,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum 0c653c2ce4ce05df6653bb460c3a2336,d0054667d050ad3f9ca1d22651d107b0
 project wgEncode
@@ -83,7 +81,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 localization cell
 md5sum 2ac3c88ca0352bab0b285b49655a643a
 project wgEncode
@@ -113,7 +110,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum 3bd540ef60b9b2bb13b8b0daef51c802
@@ -143,7 +139,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum 074201ccc42b3fdf1c8cbdec4b4aa455
@@ -174,7 +169,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum 908a25228d4a87712872415abc1aedab
 project wgEncode
@@ -205,7 +199,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum 76a23160622969ee404e751f3ae29835
 project wgEncode
@@ -236,7 +229,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum 7722cc42211acbdaa18cdd1cd136b027
 project wgEncode
@@ -267,7 +259,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum 0429976b72ec275844944993b80b24e3
 project wgEncode
@@ -297,7 +288,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum 7f450ab4538aa6aaf25f5b151ecb1098
@@ -327,7 +317,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum 6a8296ef9300ea6e0345976d96d93550
@@ -357,7 +346,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum 72565c566abec8a00085304eae5853e5
@@ -389,7 +377,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum 2e6d0b0d91abc884e7ec9f9b481b4eda
 project wgEncode
@@ -421,7 +408,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum ad94ee360d2cb11a4da4362b486fa74a
 project wgEncode
@@ -453,7 +439,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum b55ceb89b9161129ed59cdeffa28a221
 project wgEncode
@@ -485,7 +470,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum 98fa11287628128bbe42292eea6a6681
 project wgEncode
@@ -517,7 +501,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728
-labProtocolId 1A
 localization cell
 md5sum 3bd94337b7e3b83d9a7ff389d85a6936
 project wgEncode
@@ -548,7 +531,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20729
-labProtocolId 1B
 localization cell
 md5sum 7a873c351b14d77dab922cd90499ff8c
 project wgEncode
@@ -579,7 +561,6 @@ geoSampleAccession GSM900188
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 localization cell
 md5sum 8344d850cdfa6b76fa407f4d352f4b9f
 project wgEncode
@@ -608,7 +589,6 @@ fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20728,LID20729
-labProtocolId 1A,1B
 labVersion iIDR
 localization cell
 md5sum c6c98fb4cf7b4727b08e8f704224925b
@@ -636,7 +616,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 project wgEncode
 readType 2x101D
@@ -664,7 +643,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -692,7 +670,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
-labProtocolId 30A,30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -719,7 +696,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 project wgEncode
 readType 2x101D
@@ -746,7 +722,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -773,7 +748,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 project wgEncode
 readType 2x101D
@@ -800,7 +774,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -827,7 +800,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
-labProtocolId 30A,30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -854,7 +826,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 project wgEncode
 readType 2x101D
@@ -882,7 +853,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -910,7 +880,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 project wgEncode
 readType 2x101D
@@ -938,7 +907,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 project wgEncode
 readType 2x101D
@@ -966,7 +934,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 project wgEncode
 readType 2x101D
@@ -994,7 +961,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSe
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1022,7 +988,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
-labProtocolId 20A,20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1049,7 +1014,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1076,7 +1040,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1103,7 +1066,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1130,7 +1092,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1157,7 +1118,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
-labProtocolId 20A,20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1184,7 +1144,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1212,7 +1171,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1240,7 +1198,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1268,7 +1225,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1296,7 +1252,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfAlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE1
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1324,7 +1279,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfAlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE1
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1352,7 +1306,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
-labProtocolId 21A,21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1379,7 +1332,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1406,7 +1358,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1433,7 +1384,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1460,7 +1410,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1487,7 +1436,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
-labProtocolId 21A,21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1514,7 +1462,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1542,7 +1489,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1570,7 +1516,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1598,7 +1543,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1626,7 +1570,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14AlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE14Aln
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1654,7 +1597,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14AlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE14Aln
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1682,7 +1624,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46948,LID46949
-labProtocolId 23A,23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1709,7 +1650,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1736,7 +1676,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1763,7 +1702,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1790,7 +1728,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1817,7 +1754,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46948,LID46949
-labProtocolId 23A,23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1844,7 +1780,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1872,7 +1807,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1900,7 +1834,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1928,7 +1861,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 project wgEncode
 readType 2x101D
@@ -1956,7 +1888,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18AlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE18Aln
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 project wgEncode
 readType 2x101D
@@ -1984,7 +1915,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18AlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE18Aln
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2012,7 +1942,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
-labProtocolId 24A,24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2039,7 +1968,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 project wgEncode
 readType 2x101D
@@ -2066,7 +1994,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2093,7 +2020,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 project wgEncode
 readType 2x101D
@@ -2120,7 +2046,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2147,7 +2072,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
-labProtocolId 24A,24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2174,7 +2098,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 project wgEncode
 readType 2x101D
@@ -2202,7 +2125,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2230,7 +2152,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 project wgEncode
 readType 2x101D
@@ -2258,7 +2179,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2288,7 +2208,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqC
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum ea04394881d5c6697c4b72ee5c8ed65d,61ce59651939c681e5c0fe46f9b4ac12
 project wgEncode
@@ -2319,7 +2238,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqC
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum 822c5eb4a2d40b776a99a87c1e772b44,a564bbf1521163b47a267c220999c524
 project wgEncode
@@ -2351,7 +2269,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 localization cell
 md5sum 20342a4b88687d3c7fdb8fc66512e1d3
 project wgEncode
@@ -2381,7 +2298,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum 0cb7d1717523b6e0aa131f626ac39970
@@ -2411,7 +2327,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum fb1cbf75ec4e6bbfd4b7c47c1db1ccdf
@@ -2442,7 +2357,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum 1298dddfe68b48da4f8bb31d3682499c
 project wgEncode
@@ -2473,7 +2387,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum e3d8144e0dad88e7464188e700be81e3
 project wgEncode
@@ -2504,7 +2417,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum 66aecb5c9ff78e75b7f9515fcb990a87
 project wgEncode
@@ -2535,7 +2447,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum aa3debc44689fd05d419c08c07a9bbf7
 project wgEncode
@@ -2565,7 +2476,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum 9d2699b736cd43c18c62aeab190b8a93
@@ -2595,7 +2505,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum c6defe813b678716106fb11947eac05c
@@ -2625,7 +2534,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum 3cc6c11a1b5805ac9391bcc80cd38e19
@@ -2657,7 +2565,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum 7bc848d177cff8835329996ff81705d3
 project wgEncode
@@ -2689,7 +2596,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum 70a6c5c65bc38783d5f9687571f681a4
 project wgEncode
@@ -2721,7 +2627,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum 4e806f89f5d87f7a05d2a4a04877e2f7
 project wgEncode
@@ -2753,7 +2658,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum 37644ed671ae2954eae640349ffd7377
 project wgEncode
@@ -2785,7 +2689,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040
-labProtocolId 14A
 localization cell
 md5sum 9de19d8687ae5bf8b29110c3d187118d
 project wgEncode
@@ -2816,7 +2719,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21041
-labProtocolId 14B
 localization cell
 md5sum 7aa6c2bf44c3a5cebb02c429409a2835
 project wgEncode
@@ -2847,7 +2749,6 @@ geoSampleAccession GSM900198
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 localization cell
 md5sum 3d0e1696fae631bf4f873f93c678ae8d
 project wgEncode
@@ -2876,7 +2777,6 @@ fileName wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21040,LID21041
-labProtocolId 14A,14B
 labVersion iIDR
 localization cell
 md5sum 8c057e052b72edeadf41e4795a5ec525
@@ -2904,7 +2804,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 project wgEncode
 readType 2x101D
@@ -2932,7 +2831,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2960,7 +2858,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
-labProtocolId 6A,6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -2987,7 +2884,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3014,7 +2910,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3041,7 +2936,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3068,7 +2962,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3095,7 +2988,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
-labProtocolId 6A,6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3122,7 +3014,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3150,7 +3041,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3178,7 +3068,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3206,7 +3095,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3236,7 +3124,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqDu
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum 8a45f86e49c1639b6f7bbdeb457bcb5a,476a478dc2d11df3d51ec0186481a87c
 project wgEncode
@@ -3267,7 +3154,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqDu
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum 782a44f19577aeebfdc0a8608bb73787,dc4fa9c62628754021cf4a00e196fb6a
 project wgEncode
@@ -3299,7 +3185,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 localization cell
 md5sum 0ec70db66a371fdcd72081e9bf8641c2
 project wgEncode
@@ -3329,7 +3214,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum faeddc99361bb491f2e3593f4eb0bd1f
@@ -3359,7 +3243,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum 14296caaee2ffd8581653ceed5f080a4
@@ -3390,7 +3273,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum 1d5a0d47b04fa316aa376c0284dfd83d
 project wgEncode
@@ -3421,7 +3303,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum 0615a98d2a6c78d7b7ace29054d678f5
 project wgEncode
@@ -3452,7 +3333,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum 0fe65ea8158a10d7cb32999354201902
 project wgEncode
@@ -3483,7 +3363,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum a4657f8863de8c079174f5ac90e0303d
 project wgEncode
@@ -3513,7 +3392,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum 9566883f89c209cc0d0e694c876ab5b2
@@ -3543,7 +3421,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum 14a89bea75852c3b168757a480c111c5
@@ -3573,7 +3450,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum 761cdc300c4ed2860085747799d7fa54
@@ -3605,7 +3481,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum cdd06c024a50fda791f6a3c7bd0d857a
 project wgEncode
@@ -3637,7 +3512,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum 43721ac85d56a586b725d8e57cf2c3e7
 project wgEncode
@@ -3669,7 +3543,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum 2d6fb3f394acffd36499cffc983bbdc5
 project wgEncode
@@ -3701,7 +3574,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum 6769183129211c19f85164a74796a643
 project wgEncode
@@ -3733,7 +3605,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730
-labProtocolId 2A
 localization cell
 md5sum 6d27bdbeed54b1caab76f1ff92f11cd6
 project wgEncode
@@ -3764,7 +3635,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20731
-labProtocolId 2B
 localization cell
 md5sum 658df86aa1f3bb2b3101adbc86b04318
 project wgEncode
@@ -3795,7 +3665,6 @@ geoSampleAccession GSM900187
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 localization cell
 md5sum 38d5a701541f99ad616305c4413063fc
 project wgEncode
@@ -3824,7 +3693,6 @@ fileName wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20730,LID20731
-labProtocolId 2A,2B
 labVersion iIDR
 localization cell
 md5sum 1875d02e85ec999583e28b3a61cf2da6
@@ -3852,7 +3720,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqF
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3880,7 +3747,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqF
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3908,7 +3774,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47081,LID47082
-labProtocolId 7A,7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3935,7 +3800,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 project wgEncode
 readType 2x101D
@@ -3962,7 +3826,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -3989,7 +3852,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 project wgEncode
 readType 2x101D
@@ -4016,7 +3878,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -4043,7 +3904,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47081,LID47082
-labProtocolId 7A,7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -4070,7 +3930,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 project wgEncode
 readType 2x101D
@@ -4098,7 +3957,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -4126,7 +3984,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 project wgEncode
 readType 2x101D
@@ -4154,7 +4011,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 project wgEncode
 readType 2x101D
@@ -4184,7 +4040,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqGf
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum e8e3e5bf3fa08005e2fcd43ba97d4291,7ee61c80acb9d2a325c1898ca5c9a707
 project wgEncode
@@ -4215,7 +4070,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqGf
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum aef46bb54edbb117ac262b15ba7c4b66,fa97c0b9449afa5e25621cbeeff0e04a
 project wgEncode
@@ -4247,7 +4101,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 localization cell
 md5sum 8b79327eab7639c6ee68a0a74df5219c
 project wgEncode
@@ -4277,7 +4130,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum 17e2a47c03bbb627af0d685e7ccecf3c
@@ -4307,7 +4159,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum ebfb6faa82e161cfb5159695e157009b
@@ -4338,7 +4189,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum 8ff8360d026cbb28a2bea6708079d1db
 project wgEncode
@@ -4369,7 +4219,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum 92146cb9ee2a28aa42adfe472eb7c49c
 project wgEncode
@@ -4400,7 +4249,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum 44ea5352cf1ffa57d670ab849a6eb806
 project wgEncode
@@ -4431,7 +4279,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum 258d05f8625abd6afda192ea8c99cc47
 project wgEncode
@@ -4461,7 +4308,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum 58122dd434f652157a5949e73a37bd36
@@ -4491,7 +4337,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum 2b790e984484b3298264dac1ce77a9e4
@@ -4521,7 +4366,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum 92f9ad241d997357d5a15cbe806c9d33
@@ -4553,7 +4397,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum 99fa16bd5fdb26d9514b916dc38ee49f
 project wgEncode
@@ -4585,7 +4428,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum 3795087c89a3076b6d8cb5dd05a801ef
 project wgEncode
@@ -4617,7 +4459,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum 3da1307ef55cc40ec9c6dbec6c9ff774
 project wgEncode
@@ -4649,7 +4490,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum 7e819d69ba8cee9679a89daa99bbb870
 project wgEncode
@@ -4681,7 +4521,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179
-labProtocolId 4A
 localization cell
 md5sum 5908a97d6f329355bf4a166069c333d2
 project wgEncode
@@ -4712,7 +4551,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21180
-labProtocolId 4B
 localization cell
 md5sum 6d90300b229ffe50b96b3dea136e6d5a
 project wgEncode
@@ -4743,7 +4581,6 @@ geoSampleAccession GSM900190
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 localization cell
 md5sum 95cd9b855546297b7a11ffb2e450c5ec
 project wgEncode
@@ -4772,7 +4609,6 @@ fileName wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21179,LID21180
-labProtocolId 4A,4B
 labVersion iIDR
 localization cell
 md5sum e0aecf9647d85c1891ad760865138c31
@@ -4802,7 +4638,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqH
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum 6ef130a6a641ef4e78697937b01b4a4d,73e4171577948b1fc59842b90d3b3e2b
 project wgEncode
@@ -4833,7 +4668,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqH
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum 40f4b96be5afde3964b96680733bb760,f915488359eb2e3bc9d92263a3516166
 project wgEncode
@@ -4865,7 +4699,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 localization cell
 md5sum 4a9293e7a85115664e2c6e95f09293d6
 project wgEncode
@@ -4895,7 +4728,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 labVersion iIDR
 localization cell
 md5sum 837fec4e2824a5c18b3ebce81a2f9a57
@@ -4925,7 +4757,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 labVersion iIDR
 localization cell
 md5sum 9d7b9290965c427997b933742802aa69
@@ -4956,7 +4787,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum 4796efb5007c43ad95a99a18b5d5397d
 project wgEncode
@@ -4987,7 +4817,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum 0e811257aad0776ab116317baa6f3133
 project wgEncode
@@ -5018,7 +4847,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum a8a12dfee4f0c79549a9f8d47e92a505
 project wgEncode
@@ -5049,7 +4877,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum 348d6f85de112c739ff649866b372153
 project wgEncode
@@ -5079,7 +4906,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 labVersion iIDR
 localization cell
 md5sum 7c9d7a9da96af9c33cc9f712e23f69a0
@@ -5109,7 +4935,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 labVersion iIDR
 localization cell
 md5sum 5f555fcf675fa00f399f0c8172559b60
@@ -5139,7 +4964,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20871,LID20870
-labProtocolId 16B,16A
 labVersion iIDR
 localization cell
 md5sum 6f2d835c42f573315cf1426ad66c74a6
@@ -5171,7 +4995,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum 205e7438d74163c6a5f6190af76f6419
 project wgEncode
@@ -5203,7 +5026,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum c5bfb863450d323bbaec288e364fdd8f
 project wgEncode
@@ -5235,7 +5057,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum 51f4e544dc5aceb5f1e74544164a8ef6
 project wgEncode
@@ -5267,7 +5088,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum 9a7d8de8e891746ee59895dacd201685
 project wgEncode
@@ -5299,7 +5119,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870
-labProtocolId 16A
 localization cell
 md5sum 64bf19563012c86a819eeb3f466729d8
 project wgEncode
@@ -5330,7 +5149,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20871
-labProtocolId 16B
 localization cell
 md5sum f1d3ebbc233558b08fbe8663cbcb7617
 project wgEncode
@@ -5361,7 +5179,6 @@ geoSampleAccession GSM900199
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 localization cell
 md5sum 8b247f8dd38c887b20df1bdfd832b86d
 project wgEncode
@@ -5390,7 +5207,6 @@ fileName wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20870,LID20871
-labProtocolId 16A,16B
 labVersion iIDR
 localization cell
 md5sum 6961a598b6419ae2e415cc851ac02ef9
@@ -5420,7 +5236,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum 7b6fb73c0ee2914369a06b58736ef56d,8c1f95bf92ff30a0a2f253e3fafa033c
 project wgEncode
@@ -5451,7 +5266,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum 1600e8d81f96aa58373287d2f4857b24,8f04664ba7d1ee24073944d2250ebdbc
 project wgEncode
@@ -5483,7 +5297,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 localization cell
 md5sum 3c22f2812358f6eb7a5d7d8e91da8e09
 project wgEncode
@@ -5513,7 +5326,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum 64d717035b50a79435f95616a1b938e6
@@ -5543,7 +5355,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum bcf22230507beec250962a1651bd700e
@@ -5574,7 +5385,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum 440137e4aebc6dfe9e710d10107ed594
 project wgEncode
@@ -5605,7 +5415,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum 77ea7fc07db631410d60fd9bcef906cf
 project wgEncode
@@ -5636,7 +5445,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum bb66db3096965ace6a16e92f42ca15f9
 project wgEncode
@@ -5667,7 +5475,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum 922c345697eefe14213fa06f9920601f
 project wgEncode
@@ -5697,7 +5504,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum 2ee211275bafaf49b2eea4f6f1b641bd
@@ -5727,7 +5533,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum 8f9659433e75ac724b0e0398aeffcb83
@@ -5757,7 +5562,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum 16b128730f15ec29f9b749a2c03b6e50
@@ -5789,7 +5593,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum 2a2b36fec9e5314d4dade0c8d77fd992
 project wgEncode
@@ -5821,7 +5624,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum 1c1ec52e5a484aa64c5eb50d30be01a1
 project wgEncode
@@ -5853,7 +5655,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum 026962055c414f4a1a0752297bcce6ed
 project wgEncode
@@ -5885,7 +5686,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum b80f74b92ea7ff9fb3e07a209eb8079e
 project wgEncode
@@ -5917,7 +5717,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872
-labProtocolId 17A
 localization cell
 md5sum dc3623e6f83cd73aad310c94102c63d8
 project wgEncode
@@ -5948,7 +5747,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20873
-labProtocolId 17B
 localization cell
 md5sum dddce6223874d9acfea343de56c165fc
 project wgEncode
@@ -5979,7 +5777,6 @@ geoSampleAccession GSM900194
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 localization cell
 md5sum 3626cad061360b5058bbfacca1795f11
 project wgEncode
@@ -6008,7 +5805,6 @@ fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20872,LID20873
-labProtocolId 17A,17B
 labVersion iIDR
 localization cell
 md5sum 2597a679d805876fb4dc268615a0b10f
@@ -6038,7 +5834,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqL
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum 77473346742f6558ff7fd20fbe4645f7,6a02a4e4c8cfda817e2895e1fcaaf3b0
 project wgEncode
@@ -6069,7 +5864,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqL
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum 1d60beeaa912e58fabd40e1e0a5a74b2,4cbe0c6dbc2c66e870b5e4835072fc3a
 project wgEncode
@@ -6101,7 +5895,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 localization cell
 md5sum 8ca0277e072157c5f0cde745dc4144c1
 project wgEncode
@@ -6131,7 +5924,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum 88cc1fc5eeef30bdf414cb3a6773be8b
@@ -6161,7 +5953,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum 068b469280518836bf8ba3602e298228
@@ -6192,7 +5983,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum f33a333b55926cd6e3f0adffc9c4b6b6
 project wgEncode
@@ -6223,7 +6013,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum 48956b1af38ac25ffbe3a80293c87588
 project wgEncode
@@ -6254,7 +6043,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum 53b875acdd99c49036d45e34f0b3e0f7
 project wgEncode
@@ -6285,7 +6073,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum 2b222faea90e341b2f6229b5cb636a70
 project wgEncode
@@ -6315,7 +6102,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum 1b287e2afda0124af62a98b00e696852
@@ -6345,7 +6131,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum 4c22100a86e2efbe64d1a39b41f09feb
@@ -6375,7 +6160,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum aae13caef095f745fa2278ec969a31c3
@@ -6407,7 +6191,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum 3a5ccc2e6841270ef2830abd723ba96c
 project wgEncode
@@ -6439,7 +6222,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum d095346ce6d5d3b0870441df00993a58
 project wgEncode
@@ -6471,7 +6253,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum 63b99bb0535d3a9f09eb83757fdad8fe
 project wgEncode
@@ -6503,7 +6284,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum 12100c43ec5b1d8797a5b8ba50488619
 project wgEncode
@@ -6535,7 +6315,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183
-labProtocolId 8A
 localization cell
 md5sum 8a32f7832c7f0979b06bd2adee8864b6
 project wgEncode
@@ -6566,7 +6345,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21184
-labProtocolId 8B
 localization cell
 md5sum b30e68d2cff76dabedfe1ba179537670
 project wgEncode
@@ -6597,7 +6375,6 @@ geoSampleAccession GSM900189
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 localization cell
 md5sum 9882762d255ba9f5e6ebeebd1a32410f
 project wgEncode
@@ -6626,7 +6403,6 @@ fileName wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21183,LID21184
-labProtocolId 8A,8B
 labVersion iIDR
 localization cell
 md5sum 8e0543ab6e23a66de9bc5e411200de63
@@ -6654,7 +6430,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqLimb
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 project wgEncode
 readType 2x101D
@@ -6682,7 +6457,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqLimb
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6710,7 +6484,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
-labProtocolId 29A,29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6737,7 +6510,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 project wgEncode
 readType 2x101D
@@ -6764,7 +6536,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6791,7 +6562,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 project wgEncode
 readType 2x101D
@@ -6818,7 +6588,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6845,7 +6614,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
-labProtocolId 29A,29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6872,7 +6640,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 project wgEncode
 readType 2x101D
@@ -6900,7 +6667,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6928,7 +6694,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 project wgEncode
 readType 2x101D
@@ -6956,7 +6721,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 project wgEncode
 readType 2x101D
@@ -6986,7 +6750,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqL
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum 859095835df92e8f5235d253416986e5,51c0aabd0ee0dac023408902a3b08b68
 project wgEncode
@@ -7017,7 +6780,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqL
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum dfe860afe7c36797cdaf8371d69f2966,68f60973c0c57449a307940dbb8547ad
 project wgEncode
@@ -7049,7 +6811,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 localization cell
 md5sum cb1da6a2e0a77c24b32a86dd02f73c34
 project wgEncode
@@ -7079,7 +6840,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum b31a319baf8845960ee11745b772cfcd
@@ -7109,7 +6869,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum 42c4609495a9ec04d8e022ffc22211f0
@@ -7140,7 +6899,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum e46a652f5bbe90a498c2da84321c216e
 project wgEncode
@@ -7171,7 +6929,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum 7c112c63b5bce7de575ce722ccd8da0a
 project wgEncode
@@ -7202,7 +6959,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum e5dd4bc9caa69eec643707ff40bee6cd
 project wgEncode
@@ -7233,7 +6989,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum 299bf3454f7828bd8690ff0429130af1
 project wgEncode
@@ -7263,7 +7018,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum be7fec77e0d0344a51369b8656e69501
@@ -7293,7 +7047,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum d692cafb05cbdd05fdd10f7fbbd9220f
@@ -7323,7 +7076,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum be761ef890c2d8ac9716d203639667a1
@@ -7355,7 +7107,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum c284895fc7b0841eea17dd280cd50750
 project wgEncode
@@ -7387,7 +7138,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum fd94929a7d7911fb5446931b5c02eb23
 project wgEncode
@@ -7419,7 +7169,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum adfafa818af116dacf3cefefc1903dd7
 project wgEncode
@@ -7451,7 +7200,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum b3cacc2b89a4b42cd043e91d08b18874
 project wgEncode
@@ -7483,7 +7231,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042
-labProtocolId 18A
 localization cell
 md5sum df56efdb07fb35b0cb6f6afa6157c4ab
 project wgEncode
@@ -7514,7 +7261,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21043
-labProtocolId 18B
 localization cell
 md5sum c005d10f542348af43f1c44e8dc1dd4d
 project wgEncode
@@ -7545,7 +7291,6 @@ geoSampleAccession GSM900195
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 localization cell
 md5sum aac71e120277dadebb43d4729abcac5f
 project wgEncode
@@ -7574,7 +7319,6 @@ fileName wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21042,LID21043
-labProtocolId 18A,18B
 labVersion iIDR
 localization cell
 md5sum c13b71d460c37cb46abd7d84b9018096
@@ -7602,7 +7346,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14AlnRep1.bam,wgEncodeCshlLongRnaSeqLiverE1
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7630,7 +7373,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14AlnRep2.bam,wgEncodeCshlLongRnaSeqLiverE1
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7658,7 +7400,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47144,LID47145
-labProtocolId 26A,26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7685,7 +7426,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7712,7 +7452,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7739,7 +7478,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7766,7 +7504,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7793,7 +7530,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47144,LID47145
-labProtocolId 26A,26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7820,7 +7556,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7848,7 +7583,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7876,7 +7610,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7904,7 +7637,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7932,7 +7664,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqLiv
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 project wgEncode
 readType 2x101D
@@ -7960,7 +7691,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqLiv
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -7988,7 +7718,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
-labProtocolId 28A,28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8015,7 +7744,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8042,7 +7770,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8069,7 +7796,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8096,7 +7822,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8123,7 +7848,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
-labProtocolId 28A,28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8150,7 +7874,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8178,7 +7901,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8206,7 +7928,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8234,7 +7955,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8262,7 +7982,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18AlnRep1.bam,wgEncodeCshlLongRnaSeqLiverE1
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8290,7 +8009,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18AlnRep2.bam,wgEncodeCshlLongRnaSeqLiverE1
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8318,7 +8036,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47148,LID47149
-labProtocolId 27A,27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8345,7 +8062,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8372,7 +8088,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8399,7 +8114,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8426,7 +8140,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8453,7 +8166,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID47148,LID47149
-labProtocolId 27A,27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8480,7 +8192,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8508,7 +8219,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8536,7 +8246,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 project wgEncode
 readType 2x101D
@@ -8564,7 +8273,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 project wgEncode
 readType 2x101D
@@ -8594,7 +8302,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLu
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum c489553aa70ba33be3db5c28ccec3fde,0eadb72fee2968bf0596e7f377503dc5
 project wgEncode
@@ -8625,7 +8332,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLu
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum 4dadd1d3f4118d98b9260e5c4bd301ff,1dbc2703775407426d27d50d0c9ffacb
 project wgEncode
@@ -8657,7 +8363,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 localization cell
 md5sum 42375f4b462455c08dcbd7f99a2281de
 project wgEncode
@@ -8687,7 +8392,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum 86c6c48a5ac6c7d8160210cfeb63e8fc
@@ -8717,7 +8421,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum 33be360467d9b7f9bfcf1329adc9d753
@@ -8748,7 +8451,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum 14bfd6adaf27e3f5985fdb313b040fa0
 project wgEncode
@@ -8779,7 +8481,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum df3400c62a146a09e3caef0f38fe339b
 project wgEncode
@@ -8810,7 +8511,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum 691c93912ce9d873cacd01ef403da252
 project wgEncode
@@ -8841,7 +8541,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum 89ea4fa47dc7479d37c47d6688171bd7
 project wgEncode
@@ -8871,7 +8570,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum 894b190a92b947de51677629b8ac8eff
@@ -8901,7 +8599,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum 9d69563acce19780bd09fa5d1c986ad9
@@ -8931,7 +8628,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum ee548ec66e1a4d8010470e651c1f1439
@@ -8963,7 +8659,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum 2f707336e42e4330bd6c7264cc63589e
 project wgEncode
@@ -8995,7 +8690,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum a3a04922bd41ad33ca2f240cdb459dea
 project wgEncode
@@ -9027,7 +8721,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum 82ea68db0be0f59ceb6d21e57647f618
 project wgEncode
@@ -9059,7 +8752,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum 834351b39d372254aa3ef414e1c805d7
 project wgEncode
@@ -9091,7 +8783,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920
-labProtocolId 15A
 localization cell
 md5sum 2834d666ade4b086e6b4dbf3e4bc33bd
 project wgEncode
@@ -9122,7 +8813,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20921
-labProtocolId 15B
 localization cell
 md5sum 54c55b94d8a0c7142e7097b825f75f26
 project wgEncode
@@ -9153,7 +8843,6 @@ geoSampleAccession GSM900196
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 localization cell
 md5sum 4582c09679fdba9383fb1c4f2d36d4b4
 project wgEncode
@@ -9182,7 +8871,6 @@ fileName wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20920,LID20921
-labProtocolId 15A,15B
 labVersion iIDR
 localization cell
 md5sum 8cc495d0ec83f75bd7b617b4ad72a04b
@@ -9212,7 +8900,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqMa
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum 8b6c164f2cd78b694d6f2e4d93a7b8dc,6fd6b5ec6fdb9ef78152370663b52cce
 project wgEncode
@@ -9243,7 +8930,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqMa
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum 1b960a005325019554f2a2b52eb0fbe5,4887ca148fecf47a84c1a857f46ebfa4
 project wgEncode
@@ -9275,7 +8961,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 localization cell
 md5sum 086b4e579b642a0ea6b629dcb0d0f7e7
 project wgEncode
@@ -9305,7 +8990,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum 846045da93d6a981757bafd87c4b9694
@@ -9335,7 +9019,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum fca2319524aed25d3a34e6c9addaf3cf
@@ -9366,7 +9049,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum f0a9ef62e38a304dc487081e69a34be3
 project wgEncode
@@ -9397,7 +9079,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum e9400641931f4386d5b225c2488253d0
 project wgEncode
@@ -9428,7 +9109,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum 3ec56cd7fd1da369543fc4bfa43a6f45
 project wgEncode
@@ -9459,7 +9139,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum c080e0eb7091685e62202bf3f51606fc
 project wgEncode
@@ -9489,7 +9168,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum ffe0361386079621697475e8904e9ed3
@@ -9519,7 +9197,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum e967cadfb3e1f0627adc9b34997af284
@@ -9549,7 +9226,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum fa51e207a62865246d9e76e712cc053e
@@ -9581,7 +9257,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum ce7ca0045588cf75cd13af461ed8d8cb
 project wgEncode
@@ -9613,7 +9288,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum 88569548b4bf34aa31f915921ade9406
 project wgEncode
@@ -9645,7 +9319,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum aa162ebdcd7a14135323284c7dce6b7b
 project wgEncode
@@ -9677,7 +9350,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum 2d078b58e0707686960488a876b033a7
 project wgEncode
@@ -9709,7 +9381,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924
-labProtocolId 22A
 localization cell
 md5sum af6fe719b660703cff82fdc1689c84e0
 project wgEncode
@@ -9740,7 +9411,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20925
-labProtocolId 22B
 localization cell
 md5sum 3d3e2642d7cb87291a25feb3a2c1eed3
 project wgEncode
@@ -9771,7 +9441,6 @@ geoSampleAccession GSM900184
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 localization cell
 md5sum 832f15b6cd720f9dceeafecb16d2c25b
 project wgEncode
@@ -9800,7 +9469,6 @@ fileName wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20924,LID20925
-labProtocolId 22A,22B
 labVersion iIDR
 localization cell
 md5sum 5e1393f1491a576846d9f28c0b327e3a
@@ -9830,7 +9498,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqO
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum d7b7246d45bdadd464f147786cda7a6d,5e927afc8c10b701bfb6a050f996358b
 project wgEncode
@@ -9861,7 +9528,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqO
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum f66bdd3ea7a171c19a4da6ca4997cdd0,44d1e0f356351d19020b4481e97ee66a
 project wgEncode
@@ -9893,7 +9559,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 localization cell
 md5sum 536c6627aeb9f8fe77e39e95eb5e181f
 project wgEncode
@@ -9923,7 +9588,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum ffe4cab8766f6d37ac92e3f5a763ae6c
@@ -9953,7 +9617,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum 0086ec1243662d3bd4ca82921edd507d
@@ -9984,7 +9647,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum 2695bca7fd28fd4226baff43374d6106
 project wgEncode
@@ -10015,7 +9677,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum 83426609843ec018fa9c3f6fcbebf427
 project wgEncode
@@ -10046,7 +9707,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum 027330c04b03415aa92b50e6fd913c85
 project wgEncode
@@ -10077,7 +9737,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum be5b9ee8ee9ab85e3cc4f9293c87d871
 project wgEncode
@@ -10107,7 +9766,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum e0c4bc68571bba0e9e8f7233e33d6370
@@ -10137,7 +9795,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum 4422bce2e04a0ac9428c47ca8f2d6f40
@@ -10167,7 +9824,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum f85098890bea24255bc8f3bc8188ae7b
@@ -10199,7 +9855,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum a05f48c82d9d4c70863534f731f44e3f
 project wgEncode
@@ -10231,7 +9886,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum 86943199416f48257ecfa02758687334
 project wgEncode
@@ -10263,7 +9917,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum 493d9e1a1f38212935ae417a67a54cb7
 project wgEncode
@@ -10295,7 +9948,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum f3a19a69f7c32232ba9add1c3f53e998
 project wgEncode
@@ -10327,7 +9979,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821
-labProtocolId 11A
 localization cell
 md5sum 508e725bb6677274b73a22f40c196d5f
 project wgEncode
@@ -10358,7 +10009,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20822
-labProtocolId 11B
 localization cell
 md5sum 29579bcaca029781a284a09c8d8aaa63
 project wgEncode
@@ -10389,7 +10039,6 @@ geoSampleAccession GSM900183
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 localization cell
 md5sum cc14c2dfa07f50e45c5fa8b79374ab3f
 project wgEncode
@@ -10418,7 +10067,6 @@ fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20821,LID20822
-labProtocolId 11A,11B
 labVersion iIDR
 localization cell
 md5sum f1695a7156e5f69e9f4491b08b4805f2
@@ -10446,7 +10094,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqPl
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 project wgEncode
 readType 2x101D
@@ -10474,7 +10121,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqPl
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10502,7 +10148,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46983,LID46984
-labProtocolId 10A,10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10529,7 +10174,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 project wgEncode
 readType 2x101D
@@ -10556,7 +10200,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10583,7 +10226,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 project wgEncode
 readType 2x101D
@@ -10610,7 +10252,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10637,7 +10278,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46983,LID46984
-labProtocolId 10A,10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10664,7 +10304,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 project wgEncode
 readType 2x101D
@@ -10692,7 +10331,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10720,7 +10358,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 project wgEncode
 readType 2x101D
@@ -10748,7 +10385,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 project wgEncode
 readType 2x101D
@@ -10778,7 +10414,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSf
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum 2c3812d622a1753231d766a6f105747b,edc05633943351f74000281d4c393dc5
 project wgEncode
@@ -10809,7 +10444,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSf
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum a8ef72d1f331879fac40b94e11234929,4a0beb1c46e2cef4551d4acdd5e568aa
 project wgEncode
@@ -10841,7 +10475,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 localization cell
 md5sum 05ffb901871eee2052123f911251b46c
 project wgEncode
@@ -10871,7 +10504,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum 6fc5b76776c35dd7a58d0458d334d53a
@@ -10901,7 +10533,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum c5150ab11cc8103480bb0e50ce337cfd
@@ -10932,7 +10563,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum e13acfd7dddca3508bad7c8499d103cc
 project wgEncode
@@ -10963,7 +10593,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum 5f97576da298966073b76b8fef37c5d5
 project wgEncode
@@ -10994,7 +10623,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum 99010a1a627743fd3ada2fda976a0294
 project wgEncode
@@ -11025,7 +10653,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum 25b8608a7a600f32c93dd802460b7439
 project wgEncode
@@ -11055,7 +10682,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum b0b1a539240fb4b45e78d11b27dedff0
@@ -11085,7 +10711,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum 3e83ba1e6b0cd9286f13a867da15b5da
@@ -11115,7 +10740,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum 3d581e60fe8d2496e41a5b346aa1f384
@@ -11147,7 +10771,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum 24fc3b46b1e954a6f507faa15a84fc21
 project wgEncode
@@ -11179,7 +10802,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum 9ed630b679008b5418388e2cc99e9f96
 project wgEncode
@@ -11211,7 +10833,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum 67dd18e2e2170c923ef6b06ef3fc50a2
 project wgEncode
@@ -11243,7 +10864,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum 9151ce8f2cd0bbc3a70c8ed5f29dab7a
 project wgEncode
@@ -11275,7 +10895,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181
-labProtocolId 5A
 localization cell
 md5sum 12b85fe823b385655d283958933966ad
 project wgEncode
@@ -11306,7 +10925,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21182
-labProtocolId 5B
 localization cell
 md5sum edbabc32d2a0a92b0ce64e46203fc452
 project wgEncode
@@ -11337,7 +10955,6 @@ geoSampleAccession GSM900191
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 localization cell
 md5sum cf9f8fc5d610b28af6b6acd6877fcf69
 project wgEncode
@@ -11366,7 +10983,6 @@ fileName wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21181,LID21182
-labProtocolId 5A,5B
 labVersion iIDR
 localization cell
 md5sum 191376843f11f0853fa9b2b3cd5dd3de
@@ -11396,7 +11012,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqS
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum 656d4e6a42a0954f8d52857e1e9a88ac,82abc16de38af56d7b5a2e8f1d77b0fa
 project wgEncode
@@ -11427,7 +11042,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqS
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum d80edf4731debd277cc5b93f6d33e431,ae2a731907d2b522b5acc8094bf030a2
 project wgEncode
@@ -11459,7 +11073,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 localization cell
 md5sum ae10c6ea450b63e9b003e9392535265a
 project wgEncode
@@ -11489,7 +11102,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum ed7feab073dad95eade12f061dcfd7c6
@@ -11519,7 +11131,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum 1ce2b5d54787991e22e53648182ffc22
@@ -11550,7 +11161,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum f9fac1352238ff9054b3630bd8f8dff2
 project wgEncode
@@ -11581,7 +11191,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum 86dbb2e73ffc338a5fdf2dc2a1817e29
 project wgEncode
@@ -11612,7 +11221,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum 0967a253772ccf773419bdafe6602f28
 project wgEncode
@@ -11643,7 +11251,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum b3df95b99be105facd1704313de9143e
 project wgEncode
@@ -11673,7 +11280,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum 1506ae3284efd477a228ecf4a332e0a5
@@ -11703,7 +11309,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum aa08b6c995bed0a4bca1beea510ec774
@@ -11733,7 +11338,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum 005af6f70bc78d5f60cc42c668a5e481
@@ -11765,7 +11369,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum dfe1fb36b5b18795530e2b529a1ab162
 project wgEncode
@@ -11797,7 +11400,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum 397ec598661ccaa2f2c3eda82a5ed96f
 project wgEncode
@@ -11829,7 +11431,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum 8fc472a270bc5f4cf51f0d4e71d2f3ce
 project wgEncode
@@ -11861,7 +11462,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum b9edd94db03d72d74b8b0094e9fc62b7
 project wgEncode
@@ -11893,7 +11493,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819
-labProtocolId 9A
 localization cell
 md5sum 0dfd47d8aa94034fa93495906c3f1898
 project wgEncode
@@ -11924,7 +11523,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20820
-labProtocolId 9B
 localization cell
 md5sum 1aeb3e44aeb8d1fc12c3b4201c9d6113
 project wgEncode
@@ -11955,7 +11553,6 @@ geoSampleAccession GSM900186
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 localization cell
 md5sum a513f9843370fcaa775f9facad007b9d
 project wgEncode
@@ -11984,7 +11581,6 @@ fileName wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20819,LID20820
-labProtocolId 9A,9B
 labVersion iIDR
 localization cell
 md5sum b78f223204fe66c624f1ae7012d26414
@@ -12014,7 +11610,6 @@ fileName wgEncodeCshlLongRnaSeqSplAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum e2c32140921922edab8676e2c9417b08
@@ -12044,7 +11639,6 @@ fileName wgEncodeCshlLongRnaSeqSplAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum bbcf78802eb4c5e298f99df6fafdc991
@@ -12074,7 +11668,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum b6248afbd4db1b55d42fef2f3597395f,daf61f204d4503aabbdcb463447f57d8
 project wgEncode
@@ -12105,7 +11698,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum 9ec82409109fac1d6bbd0ba8b58b5e6b,24f1a331171b9495122e727565ed6e21
 project wgEncode
@@ -12137,7 +11729,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 localization cell
 md5sum 039d5d96313c1e1e900e40edf18d48a3
 project wgEncode
@@ -12167,7 +11758,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum b6c2008999b24a777eb057917ca7fe4b
@@ -12198,7 +11788,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum 030b581e55a99ae6ccfd2510dae7dd47
 project wgEncode
@@ -12229,7 +11818,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum 78d5fa6fa08ba5aea0ad310bc631812b
 project wgEncode
@@ -12260,7 +11848,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum 3531d7e578f5749f579065b94fc5df87
 project wgEncode
@@ -12291,7 +11878,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum ada3f995667cf43d552d591a44b36860
 project wgEncode
@@ -12321,7 +11907,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum 4b0daeeda283c40d873af7c685078aae
@@ -12351,7 +11936,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum b042e285508a89d4410f7963b91bb995
@@ -12383,7 +11967,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum 8142ad4f7a2070e5940c34e454a10fe9
 project wgEncode
@@ -12415,7 +11998,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum f68826ca23a4f1f562ae6d4757f2bfa8
 project wgEncode
@@ -12447,7 +12029,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum 4115f23106bb6a8f487cf1bd28b5b3c3
 project wgEncode
@@ -12479,7 +12060,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum 671b17da838d02f4f3912ae9f3cbcc93
 project wgEncode
@@ -12511,7 +12091,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
-labProtocolId 13A
 localization cell
 md5sum 38d4e2dc3b8617f16a6927f4e6c257b8
 project wgEncode
@@ -12542,7 +12121,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
-labProtocolId 13B
 localization cell
 md5sum 2ad90c87142c7368f48b46104b8ac84d
 project wgEncode
@@ -12573,7 +12151,6 @@ geoSampleAccession GSM900197
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 localization cell
 md5sum c9f8fb0affc8b05836b0a6dc43acdf5b
 project wgEncode
@@ -12602,7 +12179,6 @@ fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038,LID21039
-labProtocolId 13A,13B
 labVersion iIDR
 localization cell
 md5sum 5ee3dc6a80508712fd87a4d79bb13981
@@ -12632,7 +12208,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSt
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum 9300d52a8d7342cb173bc2bd42832ac3,ee8b9eb126a2f35b11c5a6ed08516889
 project wgEncode
@@ -12663,7 +12238,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSt
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum 309a02696e48b15db78519360a652835,5dac9c847e80f3726c34d1ff8427bf83
 project wgEncode
@@ -12695,7 +12269,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 localization cell
 md5sum 99abc6db2845dfb5a9bcb2ea127c2f26
 project wgEncode
@@ -12725,7 +12298,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum 705e1b8168dc42cae9b11b13bc34af0a
@@ -12755,7 +12327,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum 3ed29463e63cca0baec4c726081bd8e0
@@ -12786,7 +12357,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum ef1a6862d32fa057029118776ba27c90
 project wgEncode
@@ -12817,7 +12387,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum dc7e73c21df9fb00870fa5585f45be78
 project wgEncode
@@ -12848,7 +12417,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum 96a860fd4bb417b6aedf86eadcb4149f
 project wgEncode
@@ -12879,7 +12447,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum da99cb490e6ca16c57810554623fc92a
 project wgEncode
@@ -12909,7 +12476,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum 20ead0412e92554a0248eb8f98d55eb0
@@ -12939,7 +12505,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum 3f72793677e68b10215f56cb24351a63
@@ -12969,7 +12534,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum ebde5303e69b04ed0bb8674c4efff614
@@ -13001,7 +12565,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum 0126df3283b34395af24a0e3801c49e9
 project wgEncode
@@ -13033,7 +12596,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum 9a1505b724d30b52778603bcbd0e3a43
 project wgEncode
@@ -13065,7 +12627,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum a4148a8080a2553c1f7e54809e4278fd
 project wgEncode
@@ -13097,7 +12658,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum ac0c03936c784fdc3724812f6dfc9205
 project wgEncode
@@ -13129,7 +12689,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732
-labProtocolId 3A
 localization cell
 md5sum a918549be179a4a0f5577b8f4feab5b7
 project wgEncode
@@ -13160,7 +12719,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20733
-labProtocolId 3B
 localization cell
 md5sum ad540df43e583a4e1f0589c427712d24
 project wgEncode
@@ -13191,7 +12749,6 @@ geoSampleAccession GSM900185
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 localization cell
 md5sum a2b97627283ff604ebfda007bea73739
 project wgEncode
@@ -13220,7 +12777,6 @@ fileName wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20732,LID20733
-labProtocolId 3A,3B
 labVersion iIDR
 localization cell
 md5sum 2916c91aaebf73d80c6a0f75783f4a8c
@@ -13250,7 +12806,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum 318e444eed18988aed0210ec57199d20,02898d3bb9c00dd3a072fc59c8a06be5
 project wgEncode
@@ -13281,7 +12836,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum 2b321cc6dd8f0090d4c86bba063ba5c5,97e3b5805238cbb7500600ad5ae1e460
 project wgEncode
@@ -13313,7 +12867,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 localization cell
 md5sum a55e0be980231f22eb2efdc014ecb1b9
 project wgEncode
@@ -13343,7 +12896,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum 138b938c443f040eae10127fa772629e
@@ -13373,7 +12925,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum 408313aa1c409e95bd03554645e1e75f
@@ -13404,7 +12955,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum f4bd4f08d02013606f60102004073ecf
 project wgEncode
@@ -13435,7 +12985,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum 1f1381a3674b438fa21850a4c2f78f2b
 project wgEncode
@@ -13466,7 +13015,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum 646335a2ab3558cc79004a8933d88b6d
 project wgEncode
@@ -13497,7 +13045,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum 9a20e2665549039d7fb4c496d3d204d5
 project wgEncode
@@ -13527,7 +13074,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum 44fe058fc788510294d8bdbb334e6f08
@@ -13557,7 +13103,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum f316652bd834ca20968c51d09e422737
@@ -13587,7 +13132,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum 0daee33738dc18e3abfeaf746b486346
@@ -13619,7 +13163,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum 6494896b6f9e3aef359082a2e1f8396d
 project wgEncode
@@ -13651,7 +13194,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum e6bbcd2d1274174f0271d7f1338f883a
 project wgEncode
@@ -13683,7 +13225,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum 21026339eb5c691c1ce1913474219c87
 project wgEncode
@@ -13715,7 +13256,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum d9a78e0013b70c36cbe2993fdc435027
 project wgEncode
@@ -13747,7 +13287,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
-labProtocolId 12A
 localization cell
 md5sum bb28d5f1b70e6f5066a1f47b6beded94
 project wgEncode
@@ -13778,7 +13317,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20869
-labProtocolId 12B
 localization cell
 md5sum 8f165fc51713c2fe381d8e575d68bdc2
 project wgEncode
@@ -13809,7 +13347,6 @@ geoSampleAccession GSM900193
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 localization cell
 md5sum 81795845bc2acf9eab930bac03d4e6d6
 project wgEncode
@@ -13838,7 +13375,6 @@ fileName wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20868,LID20869
-labProtocolId 12A,12B
 labVersion iIDR
 localization cell
 md5sum e250a3010d4d9441863d1d016d224fe3
@@ -13868,7 +13404,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum 72945c2573b4b23b2e85a77f6e0d513b,05c950fbaa61332101654815e452a80b
 project wgEncode
@@ -13899,7 +13434,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeq
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum b039d28a58d2c88ed8ce3dbf4855d4cd,dc6eff5d68bcf4ef110d0046f437f80c
 project wgEncode
@@ -13931,7 +13465,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 localization cell
 md5sum 31437fad69c795caea65a3c511cb5907
 project wgEncode
@@ -13961,7 +13494,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum 7b4b0a7b5a8b27777bd7308c3624a5ef
@@ -13991,7 +13523,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum b1bca43997c49b1716862e9c3a24011b
@@ -14022,7 +13553,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum d6a41fc6bed637201a857405b7726ba9
 project wgEncode
@@ -14053,7 +13583,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum 655470b632e14ceff93e8e90feab432c
 project wgEncode
@@ -14084,7 +13613,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum c3c5d3d4edc6edb9b94aaab45d07df0f
 project wgEncode
@@ -14115,7 +13643,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum 8a47ef52db6d00b9a1371b0480d7ead5
 project wgEncode
@@ -14145,7 +13672,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum 56855351ee6ba54f96b9673a9cfddd70
@@ -14175,7 +13701,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum 1dc53ffa1dcb390c2dba32aaa8b200e3
@@ -14205,7 +13730,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum f843a61469fd551dfce9a58dcb834c09
@@ -14237,7 +13761,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum 754291103431ef530b9b1615cf54ec05
 project wgEncode
@@ -14269,7 +13792,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum 1e366a791c132d42d620664dbc18b6b8
 project wgEncode
@@ -14301,7 +13823,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum 27702003bbc52e7b9bb284834ee27d72
 project wgEncode
@@ -14333,7 +13854,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum b45f8cdff7fb104b352b78a25f5b728b
 project wgEncode
@@ -14365,7 +13885,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922
-labProtocolId 19A
 localization cell
 md5sum a137383bd1d5351c3b6db6c2c4baa830
 project wgEncode
@@ -14396,7 +13915,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20923
-labProtocolId 19B
 localization cell
 md5sum 08b52938d2f81986ff48e6925cf159f6
 project wgEncode
@@ -14427,7 +13945,6 @@ geoSampleAccession GSM900192
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 localization cell
 md5sum 88f255fc777f0d80f79bc6a3b2efb499
 project wgEncode
@@ -14456,7 +13973,6 @@ fileName wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID20922,LID20923
-labProtocolId 19A,19B
 labVersion iIDR
 localization cell
 md5sum 4dcd9a3fbcc8c064fe060f5ec36f9bff
@@ -14484,7 +14000,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqWb
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 project wgEncode
 readType 2x101D
@@ -14512,7 +14027,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqWb
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14540,7 +14054,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
-labProtocolId 25A,25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14567,7 +14080,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 project wgEncode
 readType 2x101D
@@ -14594,7 +14106,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14621,7 +14132,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 project wgEncode
 readType 2x101D
@@ -14648,7 +14158,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14675,7 +14184,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
-labProtocolId 25A,25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14702,7 +14210,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 project wgEncode
 readType 2x101D
@@ -14730,7 +14237,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14758,7 +14264,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 project wgEncode
 readType 2x101D
@@ -14786,7 +14291,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 project wgEncode
 readType 2x101D
@@ -14800,4 +14304,4 @@ subId 7386
 tableName wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep2
 view PlusRawSignal
 
-# MAGIC: -1399273370
+# MAGIC: -4712177
