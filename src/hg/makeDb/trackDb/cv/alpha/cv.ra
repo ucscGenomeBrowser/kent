@@ -13951,7 +13951,7 @@ description 120 hour differentiation time point of mG/ER cells towards red blood
 label 120 hour diff protocol C
 
 term diffProtD_3hr
-tag DIFFD3h
+tag DIFFD3H
 description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
 
