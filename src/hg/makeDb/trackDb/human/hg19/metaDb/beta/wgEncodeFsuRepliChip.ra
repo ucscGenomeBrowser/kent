@@ -11,6 +11,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esRawDataRep1.pair.tar.gz
@@ -32,6 +33,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esRawDataRep2.pair.tar.gz
@@ -52,6 +54,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esWaveSignalRep1.bigWig
@@ -73,6 +76,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esWaveSignalRep2.bigWig
@@ -95,6 +99,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990RawDataRep1.pair.tar.gz
@@ -116,6 +121,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990RawDataRep2.pair.tar.gz
@@ -136,6 +142,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990WaveSignalRep1.bigWig
@@ -157,6 +164,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990WaveSignalRep2.bigWig
@@ -179,7 +187,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep1.pair.tar.gz
@@ -201,7 +209,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep2.pair.tar.gz
@@ -215,6 +223,28 @@ replicate 2
 subId 5976
 view RawData
 
+metaObject wgEncodeFsuRepliChipH1hescRawDataRep3
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH002770
+expId 2770
+fileName wgEncodeFsuRepliChipH1hescRawDataRep3.tar.gz
+grant Gilbert
+lab FSU
+labExpId H1-hESC_R3_294986
+md5sum e599a0beb39f635b59f66733c9add973
+platform GPL13190
+project wgEncode
+replicate 3
+subId 7727
+view RawData
+
 metaObject wgEncodeFsuRepliChipH1hescWaveSignalRep1
 objType table
 cell H1-hESC
@@ -222,7 +252,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescWaveSignalRep1.bigWig
@@ -244,7 +274,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescWaveSignalRep2.bigWig
@@ -259,6 +289,28 @@ subId 5976
 tableName wgEncodeFsuRepliChipH1hescWaveSignalRep2
 view WaveSignal
 
+metaObject wgEncodeFsuRepliChipH1hescWaveSignalRep3
+objType table
+cell H1-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH002770
+expId 2770
+fileName wgEncodeFsuRepliChipH1hescWaveSignalRep3.bigWig
+grant Gilbert
+lab FSU
+labExpId H1-hESC_R3_294986
+md5sum a715b0a51d2efe63f17b257f48ae5d5b
+platform GPL13190
+project wgEncode
+replicate 3
+subId 7727
+tableName wgEncodeFsuRepliChipH1hescWaveSignalRep3
+view WaveSignal
+
 metaObject wgEncodeFsuRepliChipH7esRawDataRep1
 objType file
 attic auxSup
@@ -267,6 +319,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esRawDataRep1.pair.tar.gz
@@ -280,6 +333,28 @@ replicate 1
 subId 5976
 view RawData
 
+metaObject wgEncodeFsuRepliChipH7esRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH002771
+expId 2771
+fileName wgEncodeFsuRepliChipH7esRawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId H7-hESC_R2_15470902
+md5sum c9f56ad317fa6e1144708582e0341025
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
 metaObject wgEncodeFsuRepliChipH7esWaveSignalRep1
 objType table
 cell H7-hESC
@@ -287,6 +362,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esWaveSignalRep1.bigWig
@@ -301,6 +377,28 @@ subId 5976
 tableName wgEncodeFsuRepliChipH7esWaveSignalRep1
 view WaveSignal
 
+metaObject wgEncodeFsuRepliChipH7esWaveSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH002771
+expId 2771
+fileName wgEncodeFsuRepliChipH7esWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId H7-hESC_R2_15470902
+md5sum 9a644368a07d2840e302fa7f1e28aad3
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipH7esWaveSignalRep2
+view WaveSignal
+
 metaObject wgEncodeFsuRepliChipH9esRawDataRep1
 objType file
 attic auxSup
@@ -309,6 +407,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002772
 expId 2772
 fileName wgEncodeFsuRepliChipH9esRawDataRep1.pair.tar.gz
@@ -329,6 +428,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002772
 expId 2772
 fileName wgEncodeFsuRepliChipH9esWaveSignalRep1.bigWig
@@ -351,7 +451,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002773
 expId 2773
 fileName wgEncodeFsuRepliChipHelas3RawDataRep1.pair.tar.gz
@@ -372,7 +472,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002773
 expId 2773
 fileName wgEncodeFsuRepliChipHelas3WaveSignalRep1.bigWig
@@ -395,7 +495,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002774
 expId 2774
 fileName wgEncodeFsuRepliChipImr90RawDataRep1.pair.tar.gz
@@ -416,7 +516,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002774
 expId 2774
 fileName wgEncodeFsuRepliChipImr90WaveSignalRep1.bigWig
@@ -431,4 +531,188 @@ subId 5976
 tableName wgEncodeFsuRepliChipImr90WaveSignalRep1
 view WaveSignal
 
-# MAGIC: 96844114
+metaObject wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1
+objType file
+attic auxSup
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003044
+expId 3044
+fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum d56801ff8d877fb3b6accd8101d42c8d
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2
+objType file
+attic auxSup
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003044
+expId 3044
+fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R2_293676
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum dfaa3658113fe1f5b05afeb0cf37b2c8
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1
+objType table
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003044
+expId 3044
+fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum e6179f7180d97f3a1a5df9e79ba5a0e5
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2
+objType table
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003044
+expId 3044
+fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R2_293676
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum caa347696c9422754890c7bc06688867
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1
+objType file
+attic auxSup
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003045
+expId 3045
+fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum 91a3bf7ae94a03683a4ef928f5d6cbe2
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2
+objType file
+attic auxSup
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003045
+expId 3045
+fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R2_294709
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum 31a431aebb69d05d71fa9232123109ef
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1
+objType table
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003045
+expId 3045
+fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum 55d0500dfa97afae54c9e2ceb9144d87
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
+objType table
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2012-07-28
+dccAccession wgEncodeEH003045
+expId 3045
+fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R2_294709
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+md5sum 4be704e0dd855a044cc59df0f35ec4ad
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
+view WaveSignal
+
+# MAGIC: -1775123813
