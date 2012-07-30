@@ -287,8 +287,7 @@ if(!skipSectionHeader)
          );
     htmlTextOut(textOutBuf);
 
-    puts(
-         "     </div></div>\n"
+    puts("     </div></div>\n"
          "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
               "<TR><TH HEIGHT=10></TH></TR>\n"
          "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
@@ -401,17 +400,14 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
         "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-    "     <div class='subheadingBar' class='windowSize'>"
-);
+    "     <div class='subheadingBar' class='windowSize'>");
 
 vprintf(format, args);
 
-puts(
-    "     </div>\n"
-    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
-         "<TR><TH HEIGHT=10></TH></TR>\n"
-    "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
-);
+puts("     </div>\n"
+     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+          "<TR><TH HEIGHT=10></TH></TR>\n"
+     "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
 
 va_end(args);
 }

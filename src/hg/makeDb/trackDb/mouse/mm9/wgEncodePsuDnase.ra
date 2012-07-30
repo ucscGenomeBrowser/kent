@@ -10,7 +10,7 @@ subGroup2 cellType Cell_Line G1E=G1E G1EER4=G1E-ER4
 subGroup3 strain Strain S129=129
 subGroup4 sex Sex M=M
 subGroup5 age Age E0=E0
-subGroup6 treatment Treatment NONE=Nonei DIFFD24H=diffD_24hr
+subGroup6 treatment Treatment NONE=Nonei DIFFD24H=Estradiol_24hr
 subGroup7 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
 sortOrder cellType=+ rep=+ view=+

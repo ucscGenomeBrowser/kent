@@ -240,40 +240,29 @@ taxId 48883
     mkdir /hive/data/genomes/geoFor1/bed/cpgIslands
     cd /hive/data/genomes/geoFor1/bed/cpgIslands
     time doCpgIslands.pl geoFor1 > do.log 2>&1
-XXX - running - Thu Jul 26 22:38:29 PDT 2012
-    #   real    7m57.656s
+    #   real    17m6.876s
 
     cat fb.geoFor1.cpgIslandExt.txt
-    #   21205888 bases of 2314771103 (0.916%) in intersection
+    #   5087816 bases of 1041286029 (0.489%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2012-07-26 - Hiram)
     mkdir /hive/data/genomes/geoFor1/bed/genscan
     cd /hive/data/genomes/geoFor1/bed/genscan
     time doGenscan.pl geoFor1 > do.log 2>&1
-XXX - running - Thu Jul 26 22:39:10 PDT 2012
-    #   real    32m10.608s
-# Completed: 4227 of 4229 jobs
-# Crashed: 2 jobs
-# CPU time in finished jobs:      52691s     878.18m    14.64h    0.61d  0.002 y
-# IO & Wait Time:                 15228s     253.80m     4.23h    0.18d  0.000 y
-# Average job time:                  16s       0.27m     0.00h    0.00d
-# Longest finished job:            1770s      29.50m     0.49h    0.02d
-# Submission to last job:          1993s      33.22m     0.55h    0.02d
-
-    # two broken jobs, reducing the window size to 2000000 seems to work:
-./runGsBig.csh JH602052 000 gtf/000/JH602052.gtf pep/000/JH602052.pep subopt/000/JH602052.bed &
-./runGsBig.csh JH602053 000 gtf/000/JH602053.gtf pep/000/JH602053.pep subopt/000/JH602053.bed
-    #   real    real    12m3.901s
-
-    # continuing:
-    time doGenscan.pl -continue=makeBed geoFor1 > makeBed.log 2>&1
-    #   real    9m49.111s
+    #   real    31m32.788s
+# Completed: 27239 of 27239 jobs
+# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           154s       2.57m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
     cat fb.geoFor1.genscan.txt
-    #   65077826 bases of 2314771103 (2.811%) in intersection
+    #   18118133 bases of 1041286029 (1.740%) in intersection
     cat fb.geoFor1.genscanSubopt.txt
-    #   60777320 bases of 2314771103 (2.626%) in intersection
+    #   22582067 bases of 1041286029 (2.169%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-07-26 - Hiram)
@@ -347,23 +336,145 @@ geoFor1.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial geoFor1 &
     #   var/build/logs/2012.07.26-22:50:11.geoFor1.initalign.log
-XXX - running - Thu Jul 26 22:50:29 PDT 2012
-    #   real    883m56.428s
-
+    #   real    175m22.294s
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad geoFor1 &
-    #   real    10m14.118s
-    #   var/dbload/hgwdev/logs/2012.06.10-12:54:07.dbload.log
+    #   real    9m57.487s
+    #   var/dbload/hgwdev/logs/2012.07.27-14:05:35.dbload.log
+
+    # check the end of that dbload.log to see if it was successful
+    #   hgwdev 2012.07.27-14:15:33 dbload: finish
 
     # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add geoFor1 to:
-        etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
     git commit -m "Added geoFor1." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-27 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH740102:562849-570462" where name="geoFor1";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+    # after adding geoFor1 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/geoFor1
+    time makeDownloads.pl -workhorse=hgwdev geoFor1
+    #   real    11m40.799s
+
+    mkdir /hive/data/genomes/geoFor1/pushQ
+    cd /hive/data/genomes/geoFor1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl geoFor1 2> stderr.txt | grep -v transMap > geoFor1.sql
+    #   real    3m52.778s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/geoFor1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/geoFor1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/geoFor1/bbi/quality.bw
+# WARNING: geoFor1 does not have seq
+# WARNING: geoFor1 does not have extFile
+# WARNING: geoFor1 does not have estOrientInfo
+
+    scp -p geoFor1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/geoFor1.sql"
+
+############################################################################
+# lastz melUnd1 Budgerigar (DONE - 2012-02-29 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28
+    cat fb.melUnd1.chainGeoFor1Link.txt
+    #   832321696 bases of 1086614815 (76.598%) in intersection
+
+    # and this swap:
+
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real    56m32.909s
+
+    cat fb.geoFor1.chainMelUnd1Link.txt
+    #   839798431 bases of 1041286029 (80.650%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.melUnd1.swap lastz.melUnd1
+
+##############################################################################
+# lastz hg19 Human (DONE - 2012-02-29 - Hiram)
+    # original alignment to human
+    cd /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+    cat fb.hg19.chainGeoFor1Link.txt
+    #   101503916 bases of 2897316137 (3.503%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m10.240s
+    cat  fb.geoFor1.chainHg19Link.txt
+    #	88547518 bases of 1041286029 (8.504%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# lastz mm10 Mouse (DONE - 2012-02-29 - Hiram)
+    # original alignment to mouse:
+    cd /hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29
+    cat fb.mm10.chainGeoFor1Link.txt
+    #   93984241 bases of 2652783500 (3.543%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    10m0.875s
+    cat  fb.geoFor1.chainMm10Link.txt
+    #   80273915 bases of 1041286029 (7.709%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz melGal1 Turkey (DONE - 2012-02-29 - Hiram)
+    # original alignment to turkey:
+    cd /hive/data/genomes/melGal1/bed/lastzGeoFor1.2012-07-28
+    cat fb.melGal1.chainGeoFor1Link.txt
+    #   679715264 bases of 935922386 (72.625%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/melGal1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    43m59.718s
+    cat fb.geoFor1.chainHg19Link.txt
+    #   698483400 bases of 1041286029 (67.079%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+##############################################################################
