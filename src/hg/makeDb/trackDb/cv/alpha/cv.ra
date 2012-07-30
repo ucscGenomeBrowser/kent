@@ -6986,6 +6986,7 @@ strain Unknown
 description liver fraction CD117+,CD71-,TER119- #PROVISIONAL
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71-,TER119-
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 153,38,0
@@ -7003,6 +7004,7 @@ strain Unknown
 description liver fraction CD117+,CD71+,TER119- #PROVISIONAL
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71+,TER119-
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 153,38,0
@@ -7020,6 +7022,7 @@ strain Unknown
 description liver fraction CD117-,CD71+,TER119+ #PROVISIONAL
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117-,CD71+,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 153,38,0
@@ -7037,6 +7040,7 @@ strain Unknown
 description liver fraction CD117-,CD71-,TER119+ #PROVISIONAL
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117-,CD71-,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 153,38,0
@@ -7054,6 +7058,7 @@ strain Unknown
 description liver fraction CD117+,CD71+,TER119+ #PROVISIONAL
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71+,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 153,38,0
