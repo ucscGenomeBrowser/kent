@@ -1,20 +1,17 @@
 User-agent: *
-Disallow: /goldenPath/
-Disallow: /cgi-bin
-Disallow: //cgi-bin
-Disallow: /admin/
-Disallow: /qa/
-
-User-agent: msnbot Crawl-delay: 1200 Disallow: /
-
-User-agent: Googlebot
-Disallow: /admin/
-Disallow: /goldenPath/
-Disallow: /qa/
+Crawl-Delay: 1 # Slow'em down a little
 Disallow: /cgi-bin/
-
-User-agent: htdig
 Disallow: /admin/
-Disallow: /goldenPath/
-Disallow: /qa/
-Disallow: /cgi-bin/
+Disallow: /goldenPath/stats.html # Disallow for some gp files/dirs
+Disallow: /goldenPath/statistics/
+Disallow: /goldenPath/certificate.html
+Disallow: /goldenPath/certificates/
+Disallow: /goldenPath/gbdDescriptions.html
+Disallow: /goldenPath/gbdDescriptionsOld.html
+Disallow: /goldenPath/mapPlots/
+Disallow: /*.js$   # Disallow all files ending with these extensions 
+Disallow: /*.inc$
+Disallow: /*.css$
+Disallow: /*.gif$
+Disallow: /*.jpg$
+Disallow: /*.png$
