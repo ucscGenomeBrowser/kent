@@ -2704,7 +2704,7 @@ fileName wgEncodeUwDnaseCd20ro01778RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18208
-md5sum ee66a62fc47d851edb38906b8c0a5d8e
+md5sum 46acddb9d5af36a5c2f459e94ce60595
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2726,7 +2726,7 @@ fileName wgEncodeUwDnaseCd20ro01778RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17541
-md5sum a1b640317b4f6ac1dcc29e3b4b7445fc
+md5sum d6dfcfe9225cf42c013236d28e4c764a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2867,7 +2867,7 @@ fileName wgEncodeUwDnaseCd34mobilizedRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16814
-md5sum 792392d36849af14473f94ca642aa137
+md5sum 1f6ada91d6b851001ffb58364a259ab9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3415,7 +3415,7 @@ fileName wgEncodeUwDnaseGm04503RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18637
-md5sum a107672bb72d7295766ba22754020dc6
+md5sum 37f1e350af6d56c82a69ee37ace1d273
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3437,7 +3437,7 @@ fileName wgEncodeUwDnaseGm04503RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18640
-md5sum 215651e32eec7e735111bb640298a8f3
+md5sum 563c29709c586e208d63a7cfc74c4e85
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3649,7 +3649,7 @@ fileName wgEncodeUwDnaseGm04504RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18973
-md5sum 153149bb3b9bec6fc3e9b077208de430
+md5sum 9468d96e3dacee0edefdfabebad7e2ca
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3671,7 +3671,7 @@ fileName wgEncodeUwDnaseGm04504RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18975
-md5sum 6fb5e22c419cf1fccd18365ea0b5320d
+md5sum 20fa829c88740357bea31326aa7525d9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4936,7 +4936,7 @@ fileName wgEncodeUwDnaseH7esDiffa14dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12147
-md5sum 415f24ba6f564a9a9767c258dcaf7835
+md5sum 69c4ec182c3d5675243f41dc0e706438
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4958,7 +4958,7 @@ fileName wgEncodeUwDnaseH7esDiffa14dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11814
-md5sum fb64c941fb396c142e73c5202fe9aca5
+md5sum 34c770bcbfd9092a4d0440b89c5a20e0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5287,7 +5287,7 @@ fileName wgEncodeUwDnaseH7esDiffa5dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15665
-md5sum ebbd77257b8fd0dff6c97eb7650a72be
+md5sum 54369f079a7c22cc3c421f462b9c42d7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5309,7 +5309,7 @@ fileName wgEncodeUwDnaseH7esDiffa5dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11953
-md5sum affcdb3667303167a82a1afd5a04a7ab
+md5sum 5be27681a5efcfb007f2c6f10bc32a3d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5450,7 +5450,7 @@ fileName wgEncodeUwDnaseH7esDiffa9dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15809
-md5sum 3d3aa3663b348a38b21a5463781da197
+md5sum 25848f28ae659ebf2aff943f07dec763
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6994,7 +6994,7 @@ fileName wgEncodeUwDnaseHbvpRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14834
-md5sum 08155a5e9f2202e0b9178841ff673580
+md5sum e7f2cd5b6b341bde4b930e5eca5c0bf3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7182,7 +7182,7 @@ fileName wgEncodeUwDnaseHbvsmcRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14860
-md5sum 3e587c7a3e55791f40a781405910a174
+md5sum 8c64c205299f77c7cd2c45c06ff12ab7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7204,7 +7204,7 @@ fileName wgEncodeUwDnaseHbvsmcRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14845
-md5sum 50ea982b1e77597c0e84414a08fc19fd
+md5sum 0df3d590a6d38371ea772da573ee1b77
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11389,7 +11389,7 @@ fileName wgEncodeUwDnaseHmvecdadRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12957
-md5sum 3f421c8115767ead88bef8dfe701960a
+md5sum 2f530b30f91616b7ae6b1180215bc159
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11411,7 +11411,7 @@ fileName wgEncodeUwDnaseHmvecdadRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12952
-md5sum 57940224ee6ee81f728788865860ae91
+md5sum 95bec8313d309a2d9ac714b712de3bc9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13512,7 +13512,7 @@ fileName wgEncodeUwDnaseHpaecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12916
-md5sum 76315f1d94a05e3f4cd5c40102489fdb
+md5sum 3289c58d183f1df3007b8a0d16572cbc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15361,7 +15361,7 @@ fileName wgEncodeUwDnaseHs27aRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16602
-md5sum 156a64ae190a152c2f28d151e26a3314
+md5sum f5f99622cc7c7bfc0e93d4982c4b0cd8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15478,7 +15478,7 @@ fileName wgEncodeUwDnaseHs5RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16597
-md5sum dea49293bd1142a4aeffcf72c6ec11b7
+md5sum fb2adccaf0a468d68d8f3bf1e2098f52
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15936,7 +15936,7 @@ fileName wgEncodeUwDnaseHsmmtRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15538
-md5sum c48f45984c827de55b51754342950b18
+md5sum d9569298db4a1ae18cd0e9e4951ecfca
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19381,7 +19381,7 @@ fileName wgEncodeUwDnaseLhcnm2Diff4dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20647
-md5sum 68e412120e4d41c0a56e5a0924562843
+md5sum 433986cb718d1654fbaa288637949437
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19403,7 +19403,7 @@ fileName wgEncodeUwDnaseLhcnm2Diff4dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20534
-md5sum 5d2d6607b0f5ac4e7fd2a669f7aa4fbc
+md5sum 0c8c8e68b456ef37f458af6d1c320d1b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19569,7 +19569,7 @@ fileName wgEncodeUwDnaseLhcnm2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20548
-md5sum 001de0f12fdda12f0816a02698c795bf
+md5sum c213172a93d9bdf3ed97ef6b5213d9b7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19591,7 +19591,7 @@ fileName wgEncodeUwDnaseLhcnm2RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20485
-md5sum 85fe4206dc65d994c5f50924332be37e
+md5sum 9dc59c8d9fab9f97f61e4aa187c9effe
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20047,7 +20047,7 @@ fileName wgEncodeUwDnaseM059jRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20493
-md5sum 3bbef7b368d347f49d0b19a61194cd4a
+md5sum 5701c5cc6b8f62814506a8b6c0015ad2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20069,7 +20069,7 @@ fileName wgEncodeUwDnaseM059jRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20497
-md5sum a1a8a45c1397a3b255f674da8f2c2091
+md5sum 9553cf2a2b3c1eacf03cfcf3092b3661
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20331,7 +20331,7 @@ fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18271
-md5sum c5da6ebbb310644e0a649f02dce46c6d
+md5sum e48899260ce28feac0b3b740b09babec
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20353,7 +20353,7 @@ fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18025
-md5sum 217d26b7fa37cb13d1552cdbeb519a5c
+md5sum 95e7da7ca3ec8bd749bbabae5d849274
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20565,7 +20565,7 @@ fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18267
-md5sum eaef867c62fc605a43d14b17702e27a4
+md5sum 11c4cc5755b3b49d27e1bd5b13b03de0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20587,7 +20587,7 @@ fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18021
-md5sum 4ef49ad59503a5281f14e0b38c1e4ff1
+md5sum 7e77c491fed9c997131651fa0048f47b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21258,7 +21258,7 @@ fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18065
-md5sum 78d8e1ba6db9f928cae4befb49f4d56d
+md5sum d506e7759a619b089b88769da2bdb146
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21499,7 +21499,7 @@ fileName wgEncodeUwDnaseMscRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20514
-md5sum 9e7d1496cd69c59aeb27615fbe730bde
+md5sum 8300f60aafce1854143d68774a5e9fa2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21521,7 +21521,7 @@ fileName wgEncodeUwDnaseMscRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20518
-md5sum ca6e596d170e64edfcf84124e4215adf
+md5sum 43c8d5775d55ffc41976ed048bb43b96
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22230,7 +22230,7 @@ fileName wgEncodeUwDnaseNhberaRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11969
-md5sum 382eac748d585fb584e90d448b7d7612
+md5sum 077446d5a237b255803330ee13add9b5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22252,7 +22252,7 @@ fileName wgEncodeUwDnaseNhberaRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11959
-md5sum 3a7dd6b66d113a6d30c973ef28ed786a
+md5sum 9fc49ab574017637f391b100e10ccfa1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23460,7 +23460,7 @@ fileName wgEncodeUwDnaseNt2d1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14575
-md5sum 2fcd7c232c3a4c807239477dd25d4519
+md5sum cd0590c84edaa75d4c143c8a03e1c262
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23946,7 +23946,7 @@ fileName wgEncodeUwDnasePrecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12098
-md5sum 7dfd9e7b6a47f498dbfdedc48755c5af
+md5sum abcda94bcc6ea3c29a2ea180dc1c4df2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23968,7 +23968,7 @@ fileName wgEncodeUwDnasePrecRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12088
-md5sum 9a1e63d5678c787f942c8a425054be9c
+md5sum 3c4df769bbdd630cd67a0d95e84c0029
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24180,7 +24180,7 @@ fileName wgEncodeUwDnaseRpmi7951RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20909
-md5sum 56f281b86b2f2eeec1939835940fe7dc
+md5sum 4a6917e2b591247dbede6f7cde6c45c3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24202,7 +24202,7 @@ fileName wgEncodeUwDnaseRpmi7951RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20904
-md5sum 29068bdc63d3ded237994cdeb2516df5
+md5sum 4adcd7fbe74676801c8ced4973756237
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25661,7 +25661,7 @@ fileName wgEncodeUwDnaseT47dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS19794
-md5sum ab9693de2dcf0b52c71b948090dbf56e
+md5sum f286871e48e2e157922f48e898e86564
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25683,7 +25683,7 @@ fileName wgEncodeUwDnaseT47dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS19790
-md5sum 39d9e98f7b5289f6b5c0af5df5477163
+md5sum 8c111a6c663e20f22f788cb6ef2ff0b4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25824,7 +25824,7 @@ fileName wgEncodeUwDnaseTh17RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11039
-md5sum a325007612d3221b7a91f1c34777a7c3
+md5sum e751ef040d04813bd914e5aa573282af
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26041,7 +26041,7 @@ fileName wgEncodeUwDnaseTh1RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18018
-md5sum d00c7823b80cfe0d664982fe5605c3c0
+md5sum 34559d35dd330cf5528a58428682e212
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26184,7 +26184,7 @@ fileName wgEncodeUwDnaseTh1wb33676984RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18015
-md5sum cb8a03c6172f9ac4eedf73b413a82efe
+md5sum 6d6165a3d13cc60f235a8ceb114331d9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26372,7 +26372,7 @@ fileName wgEncodeUwDnaseTh1wb54553204RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17593
-md5sum a8c9d8e3dcca912ae2286b1c416715a5
+md5sum ada17de5676f7a74eadc7b6d3274dbe8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26635,7 +26635,7 @@ fileName wgEncodeUwDnaseTh2RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17603
-md5sum eb45171a99905b2f2d49955a1755f735
+md5sum 811cd56300efe2130758c205a9948693
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26895,7 +26895,7 @@ fileName wgEncodeUwDnaseTh2wb54553204RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17597
-md5sum d5e8be8981adc711f54090f0ac7a0110
+md5sum b04256ca7594f44445e807fa3446ba74
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -27012,7 +27012,7 @@ fileName wgEncodeUwDnaseTregwb78495824RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14702
-md5sum 7c22be1b236753e345c2130a0a6373b1
+md5sum 4f26e6e9b5f43835f0c6277a8c079f33
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -27129,7 +27129,7 @@ fileName wgEncodeUwDnaseTregwb83319432RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17589
-md5sum 85b679a3c119a97f387fb0aee2d158b0
+md5sum 6cb0c077138bb492ad61828042816712
 origAssembly hg19
 project wgEncode
 replicate 1

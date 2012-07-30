@@ -2556,6 +2556,27 @@ var imageV2 = {
         }
     },
 
+    loadSuggestBox: function ()
+    {
+        if($('#positionInput').length) {
+            suggestBox.init(getDb(), $("#suggestTrack").length > 0,
+                            function (item) {
+                                genomePos.set(item.id, commify(getSizeFromCoordinates(item.id)));
+                            },
+                            function (position) {
+                                genomePos.set(position, commify(getSizeFromCoordinates(position)));
+                            });
+            // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
+            if($("#suggestTrack").length) {
+                $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
+                                                       if($('#hgFindMatches').length) {
+                                                           vis.makeTrackVisible($("#suggestTrack").val());
+                                                       }
+                                                   });
+            }
+        }
+    },
+    
     afterReload: function ()
     {   // Reload various UI widgets after updating imgTbl map.
         dragReorder.init();
@@ -2572,6 +2593,7 @@ var imageV2 = {
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
         imageV2.markAsDirtyPage();
+        imageV2.loadSuggestBox();
     },
 
     updateImgForId: function (html, id)
@@ -2878,32 +2900,6 @@ var imageV2 = {
         }
     },
 
-    jumpButtonOnClick: function () // called from hgTracks.c
-    {   // onClick handler for the "jump" button.
-        // Handles situation where user types a gene name into the gene box and immediately hits the jump button,
-        // expecting the browser to jump to that gene.
-        var gene = $('#suggest').val();
-        var db = getDb();
-        if(gene
-        && gene.length > 0
-        && gene != "gene"
-        && db
-        && $('#positionDisplay').length == 0
-        && (genomePos.getOriginalPos() == genomePos.get() || genomePos.get().length == 0)) {
-            var pos = lookupGene(db, gene);
-            if(pos) {
-                vis.makeTrackVisible($("#suggestTrack").val());
-                genomePos.set(pos, null);
-                // Following doesn't work b/c we get the hugo symbol from the suggest list, not the known gene id.
-                // $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' name='hgFind.matches' " + "value='" + name + "'>");
-            } else {
-                // turn this into a full text search.
-                genomePos.set(gene, null);
-            }
-        }
-        return true;
-    },
-
     navigateInPlace: function (params, disabledEle, keepCurrentTrackVisible)
     {
     // request an hgTracks image, using params
@@ -2941,60 +2937,6 @@ var imageV2 = {
             });
     }
 
-}
-
-  ////////////////////////////////////
- //// suggest  (aka gene search) ////
-////////////////////////////////////
-var suggestBox = {
-    lastEntered: null,
-
-    init: function (db)
-    {
-        var ele = $('#positionInput');
-        if(!ele.length) {
-            ele = $('input#suggest');
-        }
-        if(jQuery.fn.autocomplete && ele.length && db) {
-            if(jQuery.fn.Watermark) {
-                var str;
-                if(hgTracks.assemblySupportsGeneSuggest) {
-                     str = "enter new position, gene symbol or annotation search terms";
-                } else {
-                     str = "enter new position or annotation search terms";
-                }
-                $('#positionInput').Watermark(str, '#686868');
-            }
-            ele.autocomplete({
-                delay: 500,
-                minLength: 2,
-                source: ajaxGet(function () {return getDb();}, new Object, true),
-                open: function(event, ui) {
-                    var pos = $(this).offset().top + $(this).height();
-                    if (!isNaN(pos)) {
-                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
-                        var auto = $('.ui-autocomplete');
-                        var curHeight = $(auto).children().length * 21;
-                        if (curHeight > maxHeight)
-                            $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
-                        else
-                            $(auto).css({maxHeight: 'none',overflow:'hidden'});
-                    }
-                },
-                select: function (event, ui) {
-                        genomePos.set(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
-                        vis.makeTrackVisible($("#suggestTrack").val());
-                        suggestBox.lastEntered = ui.item.value;
-                        // jQuery('body').css('cursor', 'wait');
-                        // document.TrackHeaderForm.submit();
-                    }
-            });
-
-            // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
-            // working, which is a major annoyance.
-            // $('input#suggest').focus();
-        }
-    }
 }
 
   //////////////////////
@@ -3058,10 +3000,7 @@ $(document).ready(function()
             return false;
     }
     initVars();
-
-    var db = getDb();
-    suggestBox.init(db);
-
+    imageV2.loadSuggestBox();
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
         var allLinks = $('a');
@@ -3077,18 +3016,6 @@ $(document).ready(function()
                 return postTheForm($(thisForm).attr('name'),this.href);
             }
             return true;
-        });
-    }
-
-    if($("#positionInput").length) {
-        $("#positionInput").change(function(event) {
-            if(!suggestBox.lastEntered || suggestBox.lastEntered != $('#positionInput').val()) {
-                $('#position').val($('#positionInput').val());
-            }
-        });
-        $("#positionDisplay").click(function(event) {
-            genomePos.set($(this).text());
-            $('#positionInput').val($(this).text());
         });
     }
 

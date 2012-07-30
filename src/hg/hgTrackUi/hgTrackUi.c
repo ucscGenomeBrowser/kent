@@ -2809,9 +2809,9 @@ if (!ajax)
                        "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
-                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
-                        tdb->grp,tdb->grp,grp->label,grp->label,
-                        endsWith(grp->label," Tracks")?"":" tracks");
+                       hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
+                       tdb->grp,tdb->grp,grp->label,grp->label,
+                       endsWith(grp->label," Tracks")?"":" tracks");
                 break;
                 }
             }
@@ -3004,7 +3004,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
 }       /*      void trackUi(struct trackDb *tdb)       */
 
 struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
-        char *longLabel, int defaultVis, boolean canPack)
+                                      char *longLabel, int defaultVis, boolean canPack)
 /* Create trackDb for a track without a corresponding table. */
 {
 struct trackDb *tdb;
@@ -3132,7 +3132,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

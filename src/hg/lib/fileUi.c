@@ -580,7 +580,7 @@ if (sortOrder != NULL)
                                     "TARGET=ucscHelp>help</A>"
         cgiDown(0.9);
         printf("<B>Filter files by:</B> (select multiple %sitems - %s)\n"
-                "<table><tr valign='bottom'>\n",
+               "<table><tr valign='bottom'>\n",
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
         printf("</tr></table>\n");
@@ -611,13 +611,13 @@ cgiDown(0.7);
 puts("Additional resources:");
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' "
        "TARGET=ucscDownloads>files.txt</A></B> - lists the name and metadata for each download.\n",
-                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+       server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/md5sum.txt' "
        "TARGET=ucscDownloads>md5sum.txt</A></B> - lists the md5sum output for each download.\n",
-                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+       server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s'>downloads server</A></B> - "
        "alternative access to downloadable files (may include obsolete data).\n",
-                server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
+       server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
@@ -676,9 +676,9 @@ if (sortOrder)
         char *align = (sameString("labVersion",sortOrder->column[ix])
                     || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":"");
         printf("<TH class='sortable sort%d%s' %s%s%s>%s</TH>\n",
-            sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
-            (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
-            nowrap,align,sortOrder->title[ix]); // keeing track of sortOrder
+               sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
+               (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
+               nowrap,align,sortOrder->title[ix]); // keeing track of sortOrder
         columnCount++;
         if (sameWord(sortOrder->column[ix],"dateUnrestricted"))
             restrictedColumn = columnCount;
@@ -788,7 +788,7 @@ for (;oneFile!= NULL;oneFile=oneFile->next)
 
                 char *align = (sameString("labVersion",sortOrder->column[ix])
                             || sameString("softwareVersion",sortOrder->column[ix]) ?
-                                " align='left'":" align='center'");
+                               " align='left'":" align='center'");
                 if (sameString("dateUnrestricted",sortOrder->column[ix])
                 &&  field
                 &&  dateIsOld(field,"%F"))
@@ -1176,7 +1176,7 @@ if (exceededLimit)
         filesExpected = FOUND_FILE_LIMIT + 1;
 
     printf("<DIV class='redBox' style='width: 380px;'>Too many files found.  Displaying first "
-            "%d of at least %d.<BR>Narrow search parameters and try again.</DIV><BR>\n",
+           "%d of at least %d.<BR>Narrow search parameters and try again.</DIV><BR>\n",
            fileCount,filesExpected);
     }
                                                     // 0=No columns 'filtered' on file search page

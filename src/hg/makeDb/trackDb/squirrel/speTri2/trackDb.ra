@@ -4,5 +4,17 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
 
+track ensGene override
+visibility pack
+
+track chainNetMm10 override
+visibility pack
+
+track intronEst override
+visibility hide
+
+track xenoRefGene override
+visibility pack

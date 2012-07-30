@@ -32,40 +32,63 @@ struct cds
 int start, end;   // cds start and end 
 };
 
+static unsigned getTargetForQuery(struct psl *psl, int queryAddress)
+// get target address for query address from PSL
+{
+int  blockNum;
+
+for (blockNum=0; blockNum < psl->blockCount; blockNum++)
+    {
+    if (psl->qStarts[blockNum] > queryAddress)
+	{
+	// this block starts past the queryAddress
+	// just point to the beginning of this block
+	return psl->tStarts[blockNum];
+	}
+    else if (psl->qStarts[blockNum] + psl->blockSizes[blockNum] > queryAddress)
+	{
+	// since block addresses are always increasing we know if the end
+	// of the block is beyond our address that the address is 
+	// in this block
+	unsigned offsetInBlock = queryAddress - psl->qStarts[blockNum];
+
+	assert(offsetInBlock < psl->blockSizes[blockNum]);
+
+	return psl->tStarts[blockNum] + offsetInBlock;
+	}
+    }
+
+// we don't have any blocks with this query in it, just point
+// to the last base
+return psl->tEnd - 1;
+}
+
 static void setThick(struct psl *psl, struct bed *bed, struct cds *cds)
 // set thickStart and thickEnd based on CDS record
 {
-int ii;
-int thickStart, thickEnd;
+unsigned thickStart, thickEnd;
+unsigned cdsStart = cds->start - 1;
+unsigned cdsEnd = cds->end;
 
-thickStart = thickEnd = 0;
-for(ii=0; ii < psl->blockCount; ii++)
+if (psl->strand[0] == '-')
     {
-    if (psl->qStarts[ii] + psl->blockSizes[ii] > cds->start - 1)
-	{
-	int offset = cds->start - psl->qStarts[ii];
-	if (offset < 0)
-	    offset = 0;
-	thickEnd = thickStart = psl->tStarts[ii] + offset - 1;
-	break;
-	}
+    // if on negative strand, cds is from end
+    unsigned temp = cdsStart;
+    cdsStart = psl->qSize - cdsEnd;
+    cdsEnd = psl->qSize - temp;
     }
 
-for(; ii < psl->blockCount; ii++)
-    {
-    if (psl->qStarts[ii] + psl->blockSizes[ii] >= cds->end)
-	{
-	int offset = cds->end - psl->qStarts[ii];
-	if (offset < 0)
-	    offset = 0;
-	thickEnd = psl->tStarts[ii] + offset;
-	break;
-	}
-    }
-if (ii >= psl->blockCount)
-    {
-    thickEnd = psl->tStarts[ii - 1] + psl->blockSizes[ii - 1];
-    }
+// we subtract one from start to convert to PSL coordinate system
+thickStart = getTargetForQuery(psl, cdsStart);
+
+// cdsEnd actually points to one base after the end, so
+// we translate the base address, then add one
+thickEnd = getTargetForQuery(psl, cdsEnd - 1) + 1;
+
+// if thickStart equals thickEnd, then there is no CDS
+if (thickStart == thickEnd)
+    thickStart = thickEnd = 0;
+
 bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
@@ -83,7 +106,9 @@ while ((psl = pslNext(pslLf)) != NULL)
     if (cdsHash)
 	{
 	struct cds *cds = hashFindVal(cdsHash, psl->qName);
-	if (cds != NULL)
+	if (cds == NULL)
+	    bed->thickStart = bed->thickEnd = 0;
+	else
 	    setThick(psl, bed, cds);
 	}
     bedTabOutN(bed, 12, bedFh);
@@ -105,10 +130,13 @@ while (lineFileRow(lf, row))
     // lines are of the form of <start>..<end>
     struct cds *cds;
     AllocVar(cds);
-    cds->start = atoi(row[1]);
+    cds->start = atoi(row[1]);  // atoi will stop at '.'
     char *ptr = strchr(row[1], '.');	 // point to first '.'
     ptr+=2; // step past two '.'s
     cds->end = atoi(ptr);
+    if (cds->start > cds->end)
+	errAbort("CDS start(%d) is before end(%d) on line %d",
+		cds->start, cds->end, lf->lineIx);
     hashAdd(hash, row[0], cds);
     }
 lineFileClose(&lf);

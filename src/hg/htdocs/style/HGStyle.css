@@ -1,15 +1,32 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff9d2;
+}
+
+body.cgi {
+	margin: 0;
+	padding: 0;
+	background: #FFF9D2;
+}
+
+body.hgTracks {
+	background: url("../../images/internal_bg1.jpg") repeat-x scroll left bottom #F9F9F7;
+}
+
+a:link {color: #121E9A;}
+
 .topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
                 color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
 
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
-.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
+.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8;}
 .leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
 .hiddenText {background-color: silver}
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
-.topbar { white-space: nowrap; padding: 0px 10px;}
+.topbar { white-space: nowrap; padding: 0px 10px; height: 24px;}
 A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
 A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
 A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
@@ -120,8 +137,12 @@ TABLE.hgcCcds TH {
 TABLE.hgcCcds TD {
     height: 1em;
 }
+/* table header has white text, include links */
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
+    color: #ffffff;
+}
+TABLE.hgcCcds THEAD * A {
     color: #ffffff;
 }
 TABLE.hgcCcds TR.hgcCcdsSub {
@@ -333,8 +354,17 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        padding: 5px; 
+        background-color: #E0E0E0; 
+        -moz-border-radius: 3px; 
+        border-radius: 3px;
         border: gray 1px solid;
+}
+
+body.hgGateway .positionDisplay {
+        padding: 5px; 
+        background-color: inherit;
+        border: lightgray 1px solid;
 }
 
 .positionInput {
@@ -440,4 +470,39 @@ label small {
 /* input[type=submit]:hover,input[type=button]:hover { color: #0000AA; border:2px outset #008800; } */
 /* img[src="../images/add_sm.gif"]:hover,img[src="../images/remove_sm.gif"]:hover { outline:#008800 outset 1px; } */
 
+/* Styles for static pages with the "original" browser look */
+body.oldStaticPage {
+		background-color: rgb(255,249,210); /* #fff9d2 */
+	}
 
+body.oldStaticPage .nav {
+	margin: 6px 0 6px;
+}
+
+body.oldStaticPage .section h1 {
+	background-color: rgb(217,228,248); /* #d9e4f8 */
+   	font-size: 1.1em;
+	padding: 3px 14px;
+	margin: 0;
+}
+	
+body.oldStaticPage .sectionContent {
+	padding: 0 14px;
+}
+
+#hgFindResults {
+        padding: 1em;
+}
+
+#warnBox {
+    background-color: Beige;
+    border: 3px ridge DarkRed;
+    width:640px;
+    padding:10px; 
+    margin:10px;
+    text-align:left;
+}
+
+#warnHead {
+    color: DarkRed;
+}

@@ -21,8 +21,7 @@ enum chainColorEnum ret;
 chainColor = trackDbSettingClosestToHomeOrDefault(tdb, OPT_CHROM_COLORS,
     CHROM_COLORS);
 /* allow cart to override trackDb setting */
-ret = chainColorStringToEnum(
-        cartUsualStringClosestToHome(cart, tdb, parentLevel,
-            OPT_CHROM_COLORS, chainColor));
+ret = chainColorStringToEnum(cartUsualStringClosestToHome(cart, tdb, parentLevel,
+                                                          OPT_CHROM_COLORS, chainColor));
 return(ret);
 }       /*      enum chainColorEnum chainFetchColorOption()     */

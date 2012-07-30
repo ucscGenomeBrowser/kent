@@ -526,7 +526,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
-htmlSetBackground(hBackgroundImage());
 if (cgiVarExists("pbt.reset"))
     resetVars();
 cartHtmlShellPB("UCSC Proteome Browser", doMiddle, hUserCookie(), excludeVars, oldVars);

@@ -95,7 +95,9 @@ tableName wgEncodeGencodePolyaV4
 metaObject wgEncodeGencodeV4
 objType composite
 composite wgEncodeGencodeV4
-expVars lab,objStatus replaced by V11
+dataType Gencode
+expVars lab,dataType,labExpId
+objStatus replaced by V11
 
 metaObject wgEncodeGencodeYalePseudoV4
 objType table
@@ -115,4 +117,4 @@ project wgEncode
 subId 2094
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: 1432048470
+# MAGIC: -1780899449
