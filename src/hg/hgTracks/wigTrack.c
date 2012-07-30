@@ -1124,10 +1124,10 @@ return usingDataSpan;
 }
 
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis,
-        struct preDrawContainer *preDrawList, int preDrawZero, 
-        int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
+                    struct hvGfx *hvg, int xOff, int yOff, int width,
+                    MgFont *font, Color color, enum trackVisibility vis,
+                    struct preDrawContainer *preDrawList, int preDrawZero,
+                    int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
 /* Draw once we've figured out predraw... */
 {
 enum wiggleYLineMarkEnum yLineOnOff;
@@ -1428,16 +1428,16 @@ struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-        pre, pre->preDrawZero, pre->preDrawSize, 
-        &tg->graphUpperLimit, &tg->graphLowerLimit);
+                   pre, pre->preDrawZero, pre->preDrawSize,
+                   &tg->graphUpperLimit, &tg->graphLowerLimit);
     }
 }
 
 void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-        boolean withCenterLabels, MgFont *font, Color color,
-        enum trackVisibility vis, char *shortLabel,
-        double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
+                       struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+                       boolean withCenterLabels, MgFont *font, Color color,
+                       enum trackVisibility vis, char *shortLabel,
+                       double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
 /* Draw labels on left for a wiggle-type track. */
 {
 int fontHeight = tl.fontHeight+1;
@@ -1577,7 +1577,7 @@ void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /*	drawing left labels	*/
 {
 wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels,
-        font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit, TRUE);
+                  font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit,TRUE);
 }
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])

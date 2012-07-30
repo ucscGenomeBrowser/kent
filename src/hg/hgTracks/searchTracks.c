@@ -195,7 +195,7 @@ if (!isEmpty(simpleEntry))
         struct trix *trix = trixOpen(trixFile);
 
         struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
-        for( ; tsList != NULL; tsList = tsList->next)
+        for ( ; tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
             if (track != NULL)  // It is expected that this is NULL

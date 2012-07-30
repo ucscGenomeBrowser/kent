@@ -461,7 +461,7 @@ return median;
 }
 
 void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
-        double *retQ1, double *retMedian, double *retQ3, double *retMax)
+                          double *retQ1, double *retMedian, double *retQ3, double *retMax)
 /* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
 {
 doubleSort(count, array);
@@ -518,7 +518,7 @@ return median;
 }
 
 void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
-        double *retQ1, double *retMedian, double *retQ3, double *retMax)
+                            double *retQ1, double *retMedian, double *retQ3, double *retMax)
 /* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
 {
 int i,count = slCount(list);
@@ -1375,10 +1375,8 @@ while (p!=NULL && *p!='\0')
         || (delimit == ' ' && isspace(*p)))
             return p - ix; // matched and delimited
         }
-    for (;   *p!='\0'
-         && *p!=delimit
-         && (delimit != ' ' || !isspace(*p));
-        p++) ;    // advance to next delimit
+    for (;   *p!='\0' && *p!=delimit && (delimit != ' ' || !isspace(*p)); p++)
+        ;  // advance to next delimit
     if (*p!='\0')
         {
         p++;
@@ -2728,7 +2726,7 @@ return newList;
 }
 
 void fileOffsetSizeFindGap(struct fileOffsetSize *list,
-        struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap)
+                           struct fileOffsetSize **pBeforeGap, struct fileOffsetSize **pAfterGap)
 /* Starting at list, find all items that don't have a gap between them and the previous item.
  * Return at gap, or at end of list, returning pointers to the items before and after the gap. */
 {

@@ -351,16 +351,16 @@ if (!doGreat())
     if (doCt)
         {
         hPrintf("%s\n", "</TD><TD>"
-         "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-         "Custom track</A> header: </B>");
+                "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+                "Custom track</A> header: </B>");
         }
     else
         {
         cgiMakeCheckBox(hgtaPrintCustomTrackHeaders,
-            cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
+                        cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
         hPrintf("%s\n", "</TD><TD> <B> Include "
-         "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-         "custom track</A> header: </B>");
+                        "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+                        "custom track</A> header: </B>");
         }
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>name=");
     safef(buf, sizeof(buf), "tb_%s", hti->rootName);
@@ -368,9 +368,7 @@ if (!doGreat())
     cgiMakeTextVar(hgtaCtName, setting, 16);
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>description=");
     safef(buf, sizeof(buf), "table browser query on %s%s%s",
-         table,
-         (table2 ? ", " : ""),
-         (table2 ? table2 : ""));
+          table, (table2 ? ", " : ""), (table2 ? table2 : ""));
     setting = cgiUsualString(hgtaCtDesc, buf);
     cgiMakeTextVar(hgtaCtDesc, setting, 50);
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");

@@ -655,16 +655,16 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-    if (curTrack == NULL)
-        {
-        struct trackDb *tdb = hTrackDbForTrack(database, curTable);
-        struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
-        if (cTdb)
-            curTrack = cTdb;
-        else
-            curTrack = tdb;
-        isMaf = isMafTable(database, curTrack, curTable);
-        }
+if (curTrack == NULL)
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
+    if (cTdb)
+        curTrack = cTdb;
+    else
+        curTrack = tdb;
+    isMaf = isMafTable(database, curTrack, curTable);
+    }
 
 /* Region line */
 {
@@ -824,16 +824,17 @@ if (correlateTrackTableOK(tdb, curTable))
         /* debugging 	dbg	vvvvv	*/
         if (curTrack && curTrack->type)		/*	dbg	*/
             {
-            hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
+            hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')",
+                    curTrack->type, tdb2->type, table2);
             }
         /* debugging 	debug	^^^^^	*/
 #endif
 
         }
-        else
-            cgiMakeButton(hgtaDoCorrelatePage, "create");
+    else
+        cgiMakeButton(hgtaDoCorrelatePage, "create");
 
-        hPrintf("</TD></TR>\n");
+    hPrintf("</TD></TR>\n");
     }
 
 /* Print output type line. */
