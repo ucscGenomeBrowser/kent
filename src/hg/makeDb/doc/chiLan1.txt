@@ -123,15 +123,14 @@ taxId 34839
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek chiLan1 > do.log 2>&1 &
-XXX - running - Fri Jul 27 14:24:19 PDT 2012
-    #   real    242m59.832s
+    #   real    650m7.044s
 
     cat faSize.rmsk.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 981275330 upper
-    #           60010699 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %5.63 masked total, %5.76 masked real
+    #   2390852391 bases (106575991 N's 2284276400 real 1581183547 upper
+    #   703092853 lower) in 2838 sequences in 1 files
+    #   Total size: mean 842442.7 sd 4383001.2 min 1000 (AGCD01081635)
+    #   max 63520090 (JH721862) median 2911
+    #   %29.41 masked total, %30.78 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
@@ -139,7 +138,7 @@ XXX - running - Fri Jul 27 14:24:19 PDT 2012
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps chiLan1 rmsk
-    #   60063362 bases of 1065292181 (5.638%) in intersection
+    #   703728919 bases of 2390852391 (29.434%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -192,53 +191,52 @@ XXX - running - Fri Jul 27 14:24:19 PDT 2012
     cd /hive/data/genomes/chiLan1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev chiLan1 > do.log 2>&1 &
-XXX - running - Fri Jul 27 14:25:02 PDT 2012
-    #   real    56m40.276s
+    #   real    172m49.925s
 
     # Masking statistics
      cat faSize.chiLan1.wmsk.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 840644896 upper
-    #           200641133 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %18.83 masked total, %19.27 masked real
+    #   2390852391 bases (106575991 N's 2284276400 real 1622493987 upper
+    #   661782413 lower) in 2838 sequences in 1 files
+    #   Total size: mean 842442.7 sd 4383001.2 min 1000 (AGCD01081635)
+    #   max 63520090 (JH721862) median 2911
+    #   %27.68 masked total, %28.97 masked real
 
     cat faSize.chiLan1.wmsk.sdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    #   2390852391 bases (106575991 N's 2284276400 real 1611206785 upper
+    #   673069615 lower) in 2838 sequences in 1 files
+    #   Total size: mean 842442.7 sd 4383001.2 min 1000 (AGCD01081635)
+    #   max 63520090 (JH721862) median 2911
+    #   %28.15 masked total, %29.47 masked real
 
     cat faSize.chiLan1.cleanWMSdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    #   2390852391 bases (106575991 N's 2284276400 real 1611206785 upper
+    #   673069615 lower) in 2838 sequences in 1 files
+    #   Total size: mean 842442.7 sd 4383001.2 min 1000 (AGCD01081635)
+    #   max 63520090 (JH721862) median 2911
+    #   %28.15 masked total, %29.47 masked real
 
     cat fb.chiLan1.windowmaskerSdust.clean.txt
-    #   207669489 bases of 1065292181 (19.494%) in intersection
+    #   673069615 bases of 2390852391 (28.152%) in intersection
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps chiLan1 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    #   332330878 bases of 2390852391 (13.900%) in intersection
 
 ##########################################################################
-# add simpleRepeats to WindowMasker result (DONE - 2012-07-27 - Hiram)
+# add simpleRepeats to RepeatMasker result (DONE - 2012-07-30 - Hiram)
     # add to rmsk after it is done:
     cd /hive/data/genomes/chiLan1
-    twoBitMask -add bed/windowMasker/chiLan1.cleanWMSdust.2bit \
+    twoBitMask -add chiLan1.rmsk.2bit \
 	bed/simpleRepeat/trfMask.bed chiLan1.2bit
     #	you can safely ignore the warning about fields >= 13
 
     twoBitToFa chiLan1.2bit stdout | faSize stdin > faSize.chiLan1.2bit.txt
     cat faSize.chiLan1.2bit.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833083628 upper
-    #           208202401 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.54 masked total, %19.99 masked real
+    #   2390852391 bases (106575991 N's 2284276400 real 1580253341 upper
+    #   704023059 lower) in 2838 sequences in 1 files
+    #   Total size: mean 842442.7 sd 4383001.2 min 1000 (AGCD01081635)
+    #   max 63520090 (JH721862) median 2911
+    #   %29.45 masked total, %30.82 masked real
 
     rm /gbdb/chiLan1/chiLan1.2bit
     ln -s `pwd`/chiLan1.2bit /gbdb/chiLan1/chiLan1.2bit
@@ -248,50 +246,63 @@ XXX - running - Fri Jul 27 14:25:02 PDT 2012
     mkdir /hive/data/genomes/chiLan1/bed/cpgIslands
     cd /hive/data/genomes/chiLan1/bed/cpgIslands
     time doCpgIslands.pl chiLan1 > do.log 2>&1
-    #   real    17m6.876s
+    #   real    24m13.577s
 
     cat fb.chiLan1.cpgIslandExt.txt
-    #   5087816 bases of 1041286029 (0.489%) in intersection
+    #   27037127 bases of 2284276400 (1.184%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2012-07-27 - Hiram)
     mkdir /hive/data/genomes/chiLan1/bed/genscan
     cd /hive/data/genomes/chiLan1/bed/genscan
     time doGenscan.pl chiLan1 > do.log 2>&1
-    #   real    31m32.788s
-# Completed: 27239 of 27239 jobs
-# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:           154s       2.57m     0.04h    0.00d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+    #   real    34m54.484s
+    # two failed jobs 
+# Completed: 2836 of 2838 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      49352s     822.54m    13.71h    0.57d  0.002 y
+# IO & Wait Time:                 12838s     213.96m     3.57h    0.15d  0.000 y
+# Average job time:                  22s       0.37m     0.01h    0.00d
+# Longest finished job:            1435s      23.92m     0.40h    0.02d
+# Submission to last job:          1543s      25.72m     0.43h    0.02d
+
+    # changing the window size to -window=2000000 and running:
+    ./testGsBig.csh JH721897 000 gtf/000/JH721897.gtf pep/000/JH721897.pep \
+        subopt/000/JH721897.bed
+    #   real    8m58.351s
+    ./testGsBig.csh JH721865 000 gtf/000/JH721865.gtf pep/000/JH721865.pep subopt/000/JH721865.bed
+    #   real    13m56.143s
+
+    # continuing
+    time doGenscan.pl -continue=makeBed chiLan1 > bed.log 2>&1
+    #   real    3m24.229s
 
     cat fb.chiLan1.genscan.txt
-    #   18118133 bases of 1041286029 (1.740%) in intersection
+    #   65590106 bases of 2284276400 (2.871%) in intersection
     cat fb.chiLan1.genscanSubopt.txt
-    #   22582067 bases of 1041286029 (2.169%) in intersection
+    #   54325275 bases of 2284276400 (2.378%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-07-27 - Hiram)
-    # Use -repMatch=400, based on size -- for human we use 1024
+    # Use -repMatch=850, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1041286029 / 2897316137 \) \* 1024
-    #   ( 1041286029 / 2897316137 ) * 1024 = 368.022281
+    #   2390852391 bases (106575991 N's 2284276400 real 1580253341 upper
+    calc \( 2284276400 / 2897316137 \) \* 1024
+    #   ( 2284276400 / 2897316137 ) * 1024 = 807.333036
 
-    # round up to 400 (melUnd1 was also 400)
+    # round up to 850 (orycun2 was also 920)
 
     cd /hive/data/genomes/chiLan1
     time blat chiLan1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/chiLan1.11.ooc -repMatch=400
-    #   Wrote 14450 overused 11-mers to jkStuff/chiLan1.11.ooc
-    #   real    0m32.689s
-    #   melUnd1 was: Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+      -makeOoc=jkStuff/chiLan1.11.ooc -repMatch=850
+    #   Wrote 20262 overused 11-mers to jkStuff/chiLan1.11.ooc
+    #   real    0m54.278s
+    #	oryCun2 was: Wrote 32543 overused 11-mers to jkStuff/oryCun2.11.ooc
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" chiLan1 | sort | uniq -c
-    #   68589 yes
+    #    78817 yes
 #    cd /hive/data/genomes/chiLan1/jkStuff
 #    gapToLift chiLan1 chiLan1.nonBridged.lift -bedFile=chiLan1.nonBridged.bed
     # largest non-bridged contig:
@@ -304,38 +315,38 @@ XXX - running - Fri Jul 27 14:25:02 PDT 2012
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Geospiza fortis	1	0	0
+# Chinchilla lanigera     45      1228    0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add chiLan1 just after ce2
-# chiLan1 (Medium Ground Finch - Darwin finch)
+    # edit etc/genbank.conf to add chiLan1 just before oryLat2
+# chiLan1 (Chinchilla lanigera)
 chiLan1.serverGenome = /hive/data/genomes/chiLan1/chiLan1.2bit
 chiLan1.clusterGenome = /hive/data/genomes/chiLan1/chiLan1.2bit
-chiLan1.ooc = /hive/data/genomes/chiLan1/jkStuff/chiLan1.11.ooc
 chiLan1.lift = no
-chiLan1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-chiLan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-chiLan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-chiLan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-chiLan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-chiLan1.refseq.mrna.native.load = no
+chiLan1.perChromTables = no
+chiLan1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+chiLan1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+chiLan1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+chiLan1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+chiLan1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+chiLan1.ooc = /hive/data/genomes/chiLan1/jkStuff/chiLan1.11.ooc
+chiLan1.refseq.mrna.native.load = yes
 chiLan1.refseq.mrna.xeno.load = yes
 chiLan1.genbank.mrna.xeno.load = no
-chiLan1.genbank.est.native.load = no
+chiLan1.genbank.est.native.load = yes
 chiLan1.downloadDir = chiLan1
-chiLan1.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding chiLan1 medium ground finch" etc/genbank.conf
+    git commit -m "adding chiLan1 Chinchilla" etc/genbank.conf
     git push
     make etc-update
 
     git pull
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "adding definition for geoForNames" src/lib/gbGenome.c
+    git commit -m "adding definition for chiLanNames" src/lib/gbGenome.c
     git push
     make install-server
 
@@ -343,12 +354,12 @@ chiLan1.perChromTables = no
     screen -S chiLan1           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial chiLan1 &
-    #   var/build/logs/2012.07.26-22:50:11.chiLan1.initalign.log
+XXX running - Mon Jul 30 09:39:28 PDT 2012
+    #   var/build/logs/2012.07.30-09:39:12.chiLan1.initalign.log
     #   real    175m22.294s
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-XXX - waiting for load lock - Fri Jul 27 08:48:51 PDT 2012
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad chiLan1 &
     #   real    10m14.118s
     #   var/dbload/hgwdev/logs/2012.06.10-12:54:07.dbload.log
