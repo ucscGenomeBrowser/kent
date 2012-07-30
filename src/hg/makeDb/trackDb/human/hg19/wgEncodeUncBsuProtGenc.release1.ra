@@ -34,7 +34,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel GM12878 Ce
-        longLabel GM12878 InGel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU
+        longLabel GM12878 In-gel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU
         subGroups view=pepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
         type bigBed 12
         color 153,38,0
@@ -52,7 +52,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel K562 Ce
-        longLabel K562 InGel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU 
+        longLabel K562 In-gel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
         type bigBed 12
         color 46,0,184
@@ -96,7 +96,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel GM12878 Ce PTM
-        longLabel GM12878 InGel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel GM12878 In-gel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
         type bigBed 12
         color 153,38,0
@@ -114,7 +114,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel K562 Ce PTM
-        longLabel K562 InGel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel K562 In-gel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
         type bigBed 12
         color 46,0,184
