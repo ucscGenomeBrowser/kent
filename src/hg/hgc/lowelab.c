@@ -3765,10 +3765,20 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 					if (pairCount + 1 < crispr->blockCount)
 					{
 						memset(tempSeq, '\0', sizeof(tempSeq));
-						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount],
-							crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
-						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + 1 + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount], tempSeq,
-							   crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
+					    memcpy(tempSeq, sequence->dna +
+					           crispr->chromStarts[pairCount] +
+					           crispr->blockSizes[pairCount],
+					           crispr->chromStarts[pairCount+1] -
+					           crispr->blockSizes[pairCount] -
+					           crispr->chromStarts[pairCount]);
+					    printf("<td>%d</td><td>%s</td><td>%d</td>\n",
+					           crispr->chromStart + 1 +
+					           crispr->chromStarts[pairCount] +
+					           crispr->blockSizes[pairCount],
+					           tempSeq,
+						   crispr->chromStarts[pairCount+1] -
+						   crispr->blockSizes[pairCount] -
+						   crispr->chromStarts[pairCount]);
 					}
 					else
 					{
@@ -3791,11 +3801,19 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 					if (pairCount - 1 >= 0)
 					{
 						memset(tempSeq, '\0', sizeof(tempSeq));
-						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount-1] + crispr->blockSizes[pairCount-1],
-							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+					    memcpy(tempSeq, sequence->dna +
+					           crispr->chromStarts[pairCount-1] +
+					           crispr->blockSizes[pairCount-1],
+						   crispr->chromStarts[pairCount] -
+						   crispr->blockSizes[pairCount-1] -
+						   crispr->chromStarts[pairCount-1]);
 						reverseComplement(tempSeq, strlen(tempSeq));
-						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + crispr->chromStarts[pairCount], tempSeq,
-							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+					    printf("<td>%d</td><td>%s</td><td>%d</td>\n",
+					           crispr->chromStart +
+					           crispr->chromStarts[pairCount], tempSeq,
+						   crispr->chromStarts[pairCount] -
+						   crispr->blockSizes[pairCount-1] -
+						   crispr->chromStarts[pairCount-1]);
 					}
 					else
 					{

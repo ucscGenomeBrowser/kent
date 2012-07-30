@@ -54,6 +54,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esWaveSignalRep1.bigWig
@@ -75,6 +76,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esWaveSignalRep2.bigWig
@@ -97,6 +99,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990RawDataRep1.pair.tar.gz
@@ -118,6 +121,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990RawDataRep2.pair.tar.gz
@@ -138,6 +142,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990WaveSignalRep1.bigWig
@@ -159,6 +164,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002769
 expId 2769
 fileName wgEncodeFsuRepliChipGm06990WaveSignalRep2.bigWig
@@ -181,7 +187,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep1.pair.tar.gz
@@ -203,7 +209,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep2.pair.tar.gz
@@ -225,7 +231,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescRawDataRep3.tar.gz
@@ -246,7 +252,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescWaveSignalRep1.bigWig
@@ -268,7 +274,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescWaveSignalRep2.bigWig
@@ -290,7 +296,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002770
 expId 2770
 fileName wgEncodeFsuRepliChipH1hescWaveSignalRep3.bigWig
@@ -313,6 +319,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esRawDataRep1.pair.tar.gz
@@ -334,7 +341,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esRawDataRep2.tar.gz
@@ -355,6 +362,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esWaveSignalRep1.bigWig
@@ -376,7 +384,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esWaveSignalRep2.bigWig
@@ -399,6 +407,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002772
 expId 2772
 fileName wgEncodeFsuRepliChipH9esRawDataRep1.pair.tar.gz
@@ -419,6 +428,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002772
 expId 2772
 fileName wgEncodeFsuRepliChipH9esWaveSignalRep1.bigWig
@@ -441,7 +451,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002773
 expId 2773
 fileName wgEncodeFsuRepliChipHelas3RawDataRep1.pair.tar.gz
@@ -462,7 +472,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002773
 expId 2773
 fileName wgEncodeFsuRepliChipHelas3WaveSignalRep1.bigWig
@@ -485,7 +495,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002774
 expId 2774
 fileName wgEncodeFsuRepliChipImr90RawDataRep1.pair.tar.gz
@@ -506,7 +516,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-02
-dateUnrestricted 2012-12-02
+dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002774
 expId 2774
 fileName wgEncodeFsuRepliChipImr90WaveSignalRep1.bigWig
@@ -529,7 +539,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1.tar.gz
@@ -552,7 +562,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2.tar.gz
@@ -574,7 +584,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1.bigWig
@@ -597,7 +607,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2.bigWig
@@ -621,7 +631,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1.tar.gz
@@ -644,7 +654,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2.tar.gz
@@ -666,7 +676,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1.bigWig
@@ -689,7 +699,7 @@ composite wgEncodeFsuRepliChip
 dataType RepliChip
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
-dateUnrestricted 2013-04-27
+dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2.bigWig
@@ -705,4 +715,4 @@ subId 7727
 tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
 view WaveSignal
 
-# MAGIC: -530169909
+# MAGIC: -1775123813
