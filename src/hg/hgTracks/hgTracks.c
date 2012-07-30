@@ -95,7 +95,7 @@ struct customTrack *ctList = NULL;  /* Custom tracks. */
 boolean hasCustomTracks = FALSE;  /* whether any custom tracks are for this db*/
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
-boolean withNextItemArrows = FALSE; /* Display next feature (gene) navigation buttons near center labels? */
+boolean withNextItemArrows = FALSE; /* Display next feature (gene) navigation buttons */
 boolean withPriorityOverride = FALSE;   /* Display priority for each track to allow reordering */
 
 int gfxBorder = hgDefaultGfxBorder; /* Width of graphics border. */
@@ -384,7 +384,7 @@ else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("HREF=\"%s?complement_%s=%d", hgTracksName(), database,
-           !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
+            !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
     hPrintf("&%s\"", ui->string);
     freeDyString(&ui);
     if (message != NULL)
@@ -773,13 +773,12 @@ if (target != NULL)
 else
     for (psl = pslList;  psl != NULL;  psl = psl->next)
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
-        {
-        struct linkedFeatures *lf =
-        lfFromPslx(psl, 1, FALSE, FALSE, tg);
-        lf->name = cloneString("");
-        lf->extra = cloneString("");
-        slAddHead(&itemList, lf);
-        }
+            {
+            struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
+            lf->name = cloneString("");
+            lf->extra = cloneString("");
+            slAddHead(&itemList, lf);
+            }
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
@@ -1183,7 +1182,7 @@ if( sameString( track->table, "humMusL" ) ||
     {
     int binCount = round(1.0/track->scaleRange);
     minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
-    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount );
+    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange, binCount );
     min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
     max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
     sprintf( minRangeStr, " "  );
@@ -1332,9 +1331,10 @@ hvGfxUnclip(hvg);
 return y;
 }
 
-static void doLabelNextItemButtons(struct track *track, struct track *parentTrack, struct hvGfx *hvg, MgFont *font, int y,
-                  int trackPastTabX, int trackPastTabWidth, int fontHeight,
-                  int insideHeight, Color labelColor)
+static void doLabelNextItemButtons(struct track *track, struct track *parentTrack,
+                                   struct hvGfx *hvg, MgFont *font, int y,
+                                   int trackPastTabX, int trackPastTabWidth, int fontHeight,
+                                   int insideHeight, Color labelColor)
 /* If the track allows label next-item buttons (next gene), draw them. */
 /* The button will cause hgTracks to run again with the additional CGI */
 /* vars nextItem=trackName or prevItem=trackName, which will then  */
@@ -1386,8 +1386,8 @@ mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButt
                 insideHeight, (theImgBox ? track : parentTrack));
 #endif///ndef IMAGEv2_SHORT_TOGGLE
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
-           NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight,
+               track, FALSE, NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
 static int doCenterLabels(struct track *track, struct track *parentTrack,
@@ -1675,7 +1675,8 @@ return subtrack->limitedVis;
 }
 
 static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart,int winEnd,
-        int insideWidth,int seqBaseCount,int rulerClickY,int rulerClickHeight)
+                              int insideWidth,int seqBaseCount,int rulerClickY,
+                              int rulerClickHeight)
 /* Make hit boxes that will zoom program around ruler. */
 {
 int boxes = 30;
@@ -1727,8 +1728,8 @@ return newWinWidth;
 }
 
 static int doDrawRuler(struct hvGfx *hvg,int *newWinWidth,int *rulerClickHeight,
-        int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
-        int fontHeight,boolean rulerCds)
+                       int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
+                       int fontHeight,boolean rulerCds)
 /* draws the ruler. */
 {
 int scaleBarPad = 2;
@@ -4581,9 +4582,10 @@ if (!hideControls)
                 "window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
         hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
                 "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
-            hPrintf("\n%s", trackGroupsHidden1->string);
+        hPrintf("\n%s", trackGroupsHidden1->string);
         hPrintf("</CENTER></FORM>\n");
-        hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
+        hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n",
+                hgTracksName());
 	    hPrintf("%s", trackGroupsHidden2->string);
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
@@ -4618,7 +4620,9 @@ if (!hideControls)
 	if(assemblySupportsGeneSuggest(database))
 	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
 	if (survey && differentWord(survey, "off"))
-            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+            hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
+                    "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
+                    survey, surveyLabel ? surveyLabel : "Take survey");
 	hPutc('\n');
 	}
     }
@@ -4784,9 +4788,9 @@ if (!hideControls)
         hPrintf("</td>");
 
         hPrintf("<td colspan='%d' align='CENTER' nowrap>"
-           "Use drop-down controls below and press refresh to alter tracks "
-           "displayed.<BR>"
-           "Tracks with lots of items will automatically be displayed in "
+                "Use drop-down controls below and press refresh to alter tracks "
+                "displayed.<BR>"
+                "Tracks with lots of items will automatically be displayed in "
                 "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
         hPrintf("<td align='right'>");

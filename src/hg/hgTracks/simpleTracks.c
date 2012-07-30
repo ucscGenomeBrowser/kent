@@ -752,9 +752,9 @@ if (x < xEnd)
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
         if (!revCmplDisp && x < insideX && xEnd > insideX)
-                x = insideX;
+            x = insideX;
         else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
-                xEnd = insideWidth - 1;
+            xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),
                            x, y, xEnd, yEnd, track);
@@ -2660,15 +2660,14 @@ if (!hideArrows)
 	{
 	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                     lf->orientation, lf->highlightColor, FALSE);
+                         lf->orientation, lf->highlightColor, FALSE);
         else
             clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                     lf->orientation, bColor, FALSE);
+                         lf->orientation, bColor, FALSE);
         }
     }
 
-components = (lf->codons && zoomedToCdsColorLevel) ?
-              lf->codons : lf->components;
+components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
 for (sf = components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -2774,8 +2773,8 @@ if (vis != tvDense)
 }
 
 static void lfSeriesDrawConnecter(struct linkedFeaturesSeries *lfs,
-        struct hvGfx *hvg, int start, int end, double scale, int xOff, int midY,
-        Color color, Color bColor, enum trackVisibility vis)
+                                  struct hvGfx *hvg, int start, int end, double scale, int xOff,
+                                  int midY, Color color, Color bColor, enum trackVisibility vis)
 /* Draw connection between two sets of linked features. */
 {
 if (start != -1 && !lfs->noLine)
@@ -3546,8 +3545,7 @@ tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
 }
 
-struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin,
-        int scoreMax)
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax)
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
@@ -3854,8 +3852,8 @@ tg->items = itemList;
 }
 
 static void atomDrawSimpleAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y,
-        double scale, MgFont *font, Color color, enum trackVisibility vis);
+                             struct hvGfx *hvg, int xOff, int y,
+                             double scale, MgFont *font, Color color, enum trackVisibility vis);
 
 int atomTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height
@@ -4242,7 +4240,7 @@ return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom,
 }
 
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
-        char *chrom, int start, int end)
+                                             char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
 struct linkedFeatures *lfList = NULL;
@@ -5007,8 +5005,8 @@ bedPlusLabelLoad(tg, gadDiseaseList);
 }
 
 static void gadDrawAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y,
-        double scale, MgFont *font, Color color, enum trackVisibility vis)
+                      struct hvGfx *hvg, int xOff, int y,
+                      double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single GAD item at position with extra label in full mode.
  * This is almost identical to bedPlusLabelDrawAt, but uses yet another function
  * to derive extra text in full mode. */
@@ -5139,8 +5137,8 @@ tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
 void rgdQtlDrawAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y,
-        double scale, MgFont *font, Color color, enum trackVisibility vis)
+                  struct hvGfx *hvg, int xOff, int y,
+                  double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single rgdQtl item at position. */
 {
 struct bed *bed = item;
@@ -6226,8 +6224,8 @@ bedLoadItemByQuery(tg, table, NULL, loader);
 
 
 void atomDrawSimpleAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y,
-        double scale, MgFont *font, Color color, enum trackVisibility vis)
+                      struct hvGfx *hvg, int xOff, int y,
+                      double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 struct bed *bed = item;
@@ -7797,8 +7795,8 @@ tg->itemColor = wgRnaColor;
 }
 
 Color stsColor(struct hvGfx *hvg, int altColor,
-        char *genethonChrom, char *marshfieldChrom,
-        char *fishChrom, int ppt)
+               char *genethonChrom, char *marshfieldChrom,
+               char *fishChrom, int ppt)
 /* Return color given info about marker. */
 {
 if (genethonChrom[0] != '0' || marshfieldChrom[0] != '0')
@@ -8617,8 +8615,8 @@ return buf;
 }
 
 static void gapDrawAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y, double scale,
-        MgFont *font, Color color, enum trackVisibility vis)
+                      struct hvGfx *hvg, int xOff, int y, double scale,
+                      MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gap items. */
 {
 struct agpGap *gap = item;
@@ -9050,8 +9048,7 @@ if (vis == tvDense)
         double scale = scaleForPixels(width);
         struct sqlConnection *conn = hAllocConn(database);
         struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion",
-                chromName, winStart, winEnd,
-                NULL, &rowOffset);
+                                           chromName, winStart, winEnd, NULL, &rowOffset);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)
             {
@@ -9292,8 +9289,8 @@ tg->items = lfList;
 }
 
 void valAlDrawAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y, double scale,
-        MgFont *font, Color color, enum trackVisibility vis)
+                 struct hvGfx *hvg, int xOff, int y, double scale,
+                 MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the operon at position. */
 {
 struct linkedFeatures *lf = item;
@@ -9883,8 +9880,8 @@ gfxPolyFree(&poly);
 }
 
 static void triangleDrawAt(struct track *tg, void *item,
-        struct hvGfx *hvg, int xOff, int y, double scale,
-        MgFont *font, Color color, enum trackVisibility vis)
+                           struct hvGfx *hvg, int xOff, int y, double scale,
+                           MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a right- or left-pointing triangle at position.
  * If item has width > 1 or block/cds structure, those will be ignored --
  * this only draws a triangle (direction depending on strand). */
@@ -11958,8 +11955,7 @@ else
 return tg->height;
 }
 
-void logoMethods(struct track *track, struct trackDb *tdb,
-        int argc, char *argv[])
+void logoMethods(struct track *track, struct trackDb *tdb, int argc, char *argv[])
 /* Load up logo type methods. */
 {
 track->loadItems = logoLoad;
@@ -12249,8 +12245,8 @@ else
 }
 
 static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-                                char *itemName, char *mapItemName, int start, int end,
-                                int x, int y, int width, int height)
+                        char *itemName, char *mapItemName, int start, int end,
+                        int x, int y, int width, int height)
 /* create mouse over with title for pubs blat features. */
 {
 if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)) 
@@ -12278,13 +12274,11 @@ return cloneString(newName);
 }
 
 static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-                                char *itemName, char *mapItemName, int start, int end,
-                                int x, int y, int width, int height)
+                              char *itemName, char *mapItemName, int start, int end,
+                              int x, int y, int width, int height)
 {
 struct bed *bed = item;
-genericMapItem(tg, hvg, item,
-                    bed->name, bed->name, start, end,
-                    x, y, width, height);
+genericMapItem(tg, hvg, item, bed->name, bed->name, start, end, x, y, width, height);
 }
 
 static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char* articleId, bool getSnippet)

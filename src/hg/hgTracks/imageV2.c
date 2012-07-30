@@ -390,7 +390,7 @@ else
 }
 
 struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
-                                    int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, 
+                                    int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
                                     char *id)
 // Finds or adds the map item
 {
@@ -1058,7 +1058,7 @@ for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
             count++;
             }
         else
-        {  // NOTE: This assumes that if there is no map then the entire slice should get the link!
+            {  // NOTE: This assumes that if there is no map, the entire slice should get the link!
             char * name = (imgTrack->name != NULL ? imgTrack->name
                                                   : imgTrack->tdb != NULL ? imgTrack->tdb->track
                                                                           : imgFile);
@@ -1896,9 +1896,8 @@ if (imgBox->showPortal)
     jsonObjectAdd(jsonForClient,"imgBoxPortalWidth", newJsonNumber(imgBox->portalWidth));
     jsonObjectAdd(jsonForClient,"imgBoxLeftLabel", newJsonNumber(imgBox->plusStrand ?
                                                                  imgBox->sideLabelWidth : 0));
-    jsonObjectAdd(jsonForClient,"imgBoxPortalOffsetX",
-                                  newJsonNumber((long)(  (imgBox->portalStart - imgBox->chromStart)
-                                                       / imgBox->basesPerPixel)));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalOffsetX", newJsonNumber(
+                  (long)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel)));
     jsonObjectAdd(jsonForClient,"imgBoxBasesPerPixel", newJsonDouble(imgBox->basesPerPixel));
     }
 else

@@ -7787,8 +7787,7 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
-        sqlUnixTimeToDate(timep, FALSE));
+    printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
 
 #ifdef EXTRA_FIELDS_SUPPORT
