@@ -97,27 +97,44 @@ large scale proteomic analysis. Cell lines were cultured according to standard
 and tryptic peptides were prepared using In-gel digestion, or FASP or MudPIT 
 protocol as indicated for each sample (Shevchenko, <EM>et al.</EM> 2007). 
 (ref for FASP) (ref for MudPIT).  Tandem mass spectrometry (RPLC-MS/MS) analysis 
-was then performed on an Eksigent Ultra-LTQ Orbitrap system. The number of Arginine
-or Lysine site missed by the trypsin enzyme is indicated by the metadata parameter 
-<i>miscleavages</i>.
+was then performed on an Eksigent Ultra-LTQ Orbitrap system (Thermo Scientific). 
+The number of Arginine or Lysine site missed by the trypsin enzyme is indicated 
+by the metadata parameter <i>miscleavages</i>.
+
 <p>We performed proteogenomic mapping (Jaffe, et al., 2004) on an <i>in silico</i> 
 translation and proteolytic digestion of the whole human genome (UCSC Hg19), and 
-the GENCODE (V11) translation of protein-codeing transcripts database, with up to 
-one missed cleavage.
+the GENCODE (V11) translation of protein-codeing transcripts database with up to 
+one missed cleavage using <A HREF="http://www.geneffects.com/peppy" target="_blank">
+Peppy</A> software. Peppy's imbedded algorithm matches and scores MS/MS spectra 
+to peptides, which are then mapped back to their corresponding genomic sequences.
+The peptide/spectrum matches (PSMs) found from Hg19 genome and GENCIDE V11 were 
+compared and the PSMs of higher score from either matches were reported.  If the 
+scores from both matches are equal, both of them were reported.  Additional peptides
+matches were found by GENCODE V11 that are not found in Hg19 genome search and some 
+of which span slice junctions.  Overall, a cross-comparison and inclusion of results
+from both database searches resulted a greater coverage.
+
+<p>
+For both the Hg19 genome and GENCODE V11 database searches, a blind search for 
+post-translational modifications (PTMs) was performed using Peppy software.  
+In a blind PTM search, when Peppy matches an MS/MS spectrum to a peptide, if the 
+matching score is increased after the addition of the molecular weight (MW) of a 
+potential PTM, the peptide is determined as having PTM.  In the output of both the
+Hg19 genome and GENCODE V11 database searches, some spectral were output as
+matched with peptides with PTMs and others were output as matched with regular 
+peptides, i.e., peptides without PTMs.  The regular peptides and peptides with 
+PTMs were displayed in separate tracks. 
+</p>
+
+<p>
+For each data set, a reverse database search was also performed using all spectra
+to calculate the false discovery rate (FDR)  (Elias, <EM>et al.</EM> 2007).  Only
+those matches that has a FDR rate of below 5% were included in this track.  The
+unfiltered results of those peptides matches with FDR rate of above 5% and below 
+10% are available for download.
+</p>
 
 
-allowed and using the whole human genomic sequence (UCSC hg19) via the
-genome fingerprint scanning (GFS) program (Giddings, et al. 2003)  and newly 
-developed Peppy 
-(<a href="http://www.peppyresearch.com/">http://www.peppyresearch.com</a>/). 
-We used HMM_Score (Khatun, et al. 2008) to accurately match MS/MS
-spectra to their corresponding genome sequences.  E-values are
-calculated, which estimate the number of results at the given score
-level which would be expected by random chance. We then empirically
-derived the false discovery rate for a given E-Value using a decoy
-database search and only those matches falling within the specified 5%
-FDR rate (E-Value &lt;0.01) are included in the track. The results with
-10% FDR (E-Value &lt;0.05) are available under the Downloads page as Raw Signal.</a> </p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
 Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (<A HREF=http://giddingslab.org/>Giddings Lab</A>). </p>
