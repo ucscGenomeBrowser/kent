@@ -287,7 +287,7 @@ for (;;)
 
         if (!lineFileNextFull(lf, &line, NULL, NULL, NULL))
             { // NOTE: lineFileNextFull joins continuation lines
-           done = TRUE;
+            done = TRUE;
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
@@ -715,17 +715,16 @@ else if (sameWord("bedLogR",type)
 else if (startsWith("bed ", type) || startsWith("bigBed", type))
     {
     if (trackDbSetting(tdb, "bedFilter") != NULL)
-           cType = cfgBedFilt;
+        cType = cfgBedFilt;
     else
         {
         char *words[3];
         int wordCount = chopLine(cloneString( type), words);
-        if ((((wordCount > 1) && (atoi(words[1]) >= 5)) || 
-            trackDbSetting(tdb, "scoreMin") != NULL)
-                && 
-           // Historically needed 'bed n .' but encode didn't follow bed n .
-           ( (wordCount >= 3) || 
-                (!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode")))) 
+        if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
+            || trackDbSetting(tdb, "scoreMin") != NULL)
+        &&  // Historically needed 'bed n .' but encode didn't follow bed n .
+            (  (wordCount >= 3)
+            || (!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode"))))
             {
             cType = cfgBedScore;
 
