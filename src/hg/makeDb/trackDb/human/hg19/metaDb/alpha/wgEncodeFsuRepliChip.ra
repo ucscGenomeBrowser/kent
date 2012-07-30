@@ -215,6 +215,25 @@ replicate 2
 subId 5976
 view RawData
 
+metaObject wgEncodeFsuRepliChipH1hescRawDataRep3
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipH1hescRawDataRep3.tar.gz
+grant Gilbert
+lab FSU
+labExpId H1-hESC_R3_294986
+platform GPL13190
+project wgEncode
+replicate 3
+subId 7727
+view RawData
+
 metaObject wgEncodeFsuRepliChipH1hescWaveSignalRep1
 objType table
 cell H1-hESC
@@ -259,6 +278,25 @@ subId 5976
 tableName wgEncodeFsuRepliChipH1hescWaveSignalRep2
 view WaveSignal
 
+metaObject wgEncodeFsuRepliChipH1hescWaveSignalRep3
+objType table
+cell H1-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipH1hescWaveSignalRep3.bigWig
+grant Gilbert
+lab FSU
+labExpId H1-hESC_R3_294986
+platform GPL13190
+project wgEncode
+replicate 3
+subId 7727
+tableName wgEncodeFsuRepliChipH1hescWaveSignalRep3
+view WaveSignal
+
 metaObject wgEncodeFsuRepliChipH7esRawDataRep1
 objType file
 attic auxSup
@@ -280,6 +318,25 @@ replicate 1
 subId 5976
 view RawData
 
+metaObject wgEncodeFsuRepliChipH7esRawDataRep2
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipH7esRawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId H7-hESC_R2_15470902
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
 metaObject wgEncodeFsuRepliChipH7esWaveSignalRep1
 objType table
 cell H7-hESC
@@ -299,6 +356,25 @@ project wgEncode
 replicate 1
 subId 5976
 tableName wgEncodeFsuRepliChipH7esWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipH7esWaveSignalRep2
+objType table
+cell H7-hESC
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipH7esWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId H7-hESC_R2_15470902
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipH7esWaveSignalRep2
 view WaveSignal
 
 metaObject wgEncodeFsuRepliChipH9esRawDataRep1
@@ -431,4 +507,164 @@ subId 5976
 tableName wgEncodeFsuRepliChipImr90WaveSignalRep1
 view WaveSignal
 
-# MAGIC: 96844114
+metaObject wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1
+objType file
+attic auxSup
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2
+objType file
+attic auxSup
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R2_293676
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1
+objType table
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2
+objType table
+cell iPS_hFib2_iPS4
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS4_R2_293676
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips4WaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1
+objType file
+attic auxSup
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2
+objType file
+attic auxSup
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2.tar.gz
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R2_294709
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+view RawData
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1
+objType table
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R1_294988
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 1
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
+objType table
+cell iPS_hFib2_iPS5
+composite wgEncodeFsuRepliChip
+dataType RepliChip
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-28
+dateUnrestricted 2013-04-27
+fileName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId hFib-iPS5_R2_294709
+labVersion Cell line from GQ. Daley lab, Cell. 2008 Sep 5.134(5):877-86
+platform GPL13190
+project wgEncode
+replicate 2
+subId 7727
+tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
+view WaveSignal
+
+# MAGIC: 1964917403
