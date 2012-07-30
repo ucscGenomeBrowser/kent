@@ -19294,3 +19294,67 @@ Old length: 136638
 Percent bed overlap with previous version: 100.00%
 Number of deleted IDs: 4
 Number of added IDs: 29530
+
+############################################################################
+# lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S hg19
+    mkdir /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+    cd /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+
+    cat << '_EOF_' > DEF
+# Human vs. medium ground finch
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Medium Ground Finch GeoFor1
+SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
+SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   real    238m6.827s
+    cat fb.hg19.chainGeoFor1Link.txt
+    #   101503916 bases of 2897316137 (3.503%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzGeoFor1.2012-07-29 lastz.geoFor1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m10.240s
+    cat  fb.geoFor1.chainHg19Link.txt
+    #	88547518 bases of 1041286029 (8.504%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
