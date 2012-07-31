@@ -1,7 +1,7 @@
 metaObject wgEncodePsuDnase
 objType composite
 composite wgEncodePsuDnase
-expVars lab,dataType,cell
+expVars lab,dataType,cell,treatment
 
 metaObject wgEncodePsuDnaseG1eS129ME0AlnRep1
 objType file
@@ -12,6 +12,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0AlnRep1.bam,wgEncodePsuDnaseG1eS129ME0AlnRep1.bam.bai
 grant Stam
 lab PSU-m
@@ -34,6 +36,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0AlnRep2.bam,wgEncodePsuDnaseG1eS129ME0AlnRep2.bam.bai
 grant Stam
 lab PSU-m
@@ -56,6 +60,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0PkRep1.narrowPeak.gz
 grant Stam
 lab PSU-m
@@ -79,6 +85,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0PkRep2.narrowPeak.gz
 grant Stam
 lab PSU-m
@@ -102,6 +110,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0RawDataRep1.fastq.gz
 grant Stam
 lab PSU-m
@@ -124,6 +134,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0RawDataRep2.fastq.gz
 grant Stam
 lab PSU-m
@@ -146,6 +158,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0SigRep1.bigWig
 grant Stam
 lab PSU-m
@@ -169,6 +183,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
+dccAccession wgEncodeEM003046
+expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0SigRep2.bigWig
 grant Stam
 lab PSU-m
@@ -192,6 +208,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hAlnRep1.bam,wgEncodePsuDnaseG1eer4S129ME0Diffd24hAlnRep1.bam.bai
 grant Stam
 lab PSU-m
@@ -214,6 +232,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hAlnRep2.bam,wgEncodePsuDnaseG1eer4S129ME0Diffd24hAlnRep2.bam.bai
 grant Stam
 lab PSU-m
@@ -236,6 +256,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hPkRep1.narrowPeak.gz
 grant Stam
 lab PSU-m
@@ -259,6 +281,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hPkRep2.narrowPeak.gz
 grant Stam
 lab PSU-m
@@ -282,6 +306,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hRawDataRep1.fastq.gz
 grant Stam
 lab PSU-m
@@ -304,6 +330,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hRawDataRep2.fastq.gz
 grant Stam
 lab PSU-m
@@ -326,6 +354,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep1.bigWig
 grant Stam
 lab PSU-m
@@ -349,6 +379,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
+dccAccession wgEncodeEM003047
+expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep2.bigWig
 grant Stam
 lab PSU-m
@@ -363,4 +395,4 @@ tableName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep2
 treatment diffProtD_24hr
 view Signal
 
-# MAGIC: 1117428943
+# MAGIC: 248630175

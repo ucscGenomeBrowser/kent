@@ -230,6 +230,55 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
+static char *getSetFieldValStr(struct sqlFieldInfo *fi, char *table)
+/* Destructively prepare fi->type for chopCommas, making sure it looks like a set() def. */
+{
+if (!startsWith("set(", fi->type))
+    errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
+	     table, fi->field, fi->type);
+char *vals = fi->type + strlen("set(");
+char *rightParen = strrchr(vals, ')');
+if (rightParen == NULL || rightParen[1] != '\0')
+    errAbort("Expected %s.%s's type to end with ')' but got '%s'",
+	     table, fi->field, fi->type);
+else
+    *rightParen = '\0';
+stripChar(vals, '\'');
+return vals;
+}
+
+static void snp137PrintFunctionFilterControls(struct trackDb *tdb)
+/* As of snp137, show func filter choices based on sql field set
+ * values and Sequence Ontology (SO) terms so we won't have to
+ * hardcode menus as new functional categories are added. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, tdb->table);
+hFreeConn(&conn);
+for (fi = fiList;  fi != NULL;  fi = fi->next)
+    {
+    if (sameString(fi->field, "func"))
+	{
+	char *vals = getSetFieldValStr(fi, tdb->table);
+	char *values[128];
+	int valCount = chopCommas(vals, values);
+	char *labels[valCount];
+	int i;
+	for (i = 0;  i < valCount;  i++)
+	    {
+	    char *val = values[i];
+	    if (sameString(val, "unknown"))
+		labels[i] = "Unknown";
+	    else
+		labels[i] = snpMisoLinkFromFunc(val);
+	    }
+	snp125PrintFilterControls(tdb->track, "Function", "func", labels, values, valCount);
+	return;;
+	}
+    }
+errAbort("Didn't find definition of func field in %s", tdb->table);
+}
+
 static void snp125PrintFilterControlSection(struct trackDb *tdb, int version)
 /* Print a collapsible section of filtering controls on SNP properties, first numeric
  * and then enum/set. */
@@ -301,15 +350,23 @@ snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
 			  snp125ClassDataName, snp125ClassArraySize);
 snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
 			  snp125ValidDataName, snp125ValidArraySize);
-int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
-snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
-			  snp125FuncDataName, funcArraySize);
+if (version < 137)
+    {
+    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
+			      snp125FuncDataName, funcArraySize);
+    }
+else
+    snp137PrintFunctionFilterControls(tdb);
 snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
 			  snp125MolTypeDataName, snp125MolTypeArraySize);
 if (version >= 132)
     {
+    int excArraySize = snp132ExceptionArraySize;
+    if (version < 135)
+	excArraySize -= 2;
     snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
-		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
+		      snp132ExceptionLabels, snp132ExceptionVarName, excArraySize);
     snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
 		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
     }
@@ -453,7 +510,7 @@ if (version > 127 && colorSourceCart == snp125ColorSourceLocType)
     colorSourceCart = SNP125_DEFAULT_COLOR_SOURCE;
 switch (colorSourceCart)
     {
-    int funcArraySize;
+    int funcArraySize, excArraySize;
     case snp125ColorSourceLocType:
                 snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
                                      snp125LocTypeLabels, snp125LocTypeDefault,
@@ -478,9 +535,12 @@ switch (colorSourceCart)
                                      snp125MolTypeArraySize);
                 break;
     case snp125ColorSourceExceptions:
+		excArraySize = snp132ExceptionArraySize;
+		if (version < 135)
+		    excArraySize -= 2;
                 snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
                                      snp132ExceptionLabels, snp132ExceptionDefault,
-                                     snp132ExceptionArraySize);
+                                     excArraySize);
                 break;
     case snp125ColorSourceBitfields:
                 snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
