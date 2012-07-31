@@ -89,23 +89,25 @@ noInherit on
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep1
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Erythroblast + 1
         longLabel Erythroblast 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bigWig 1.000000 23295684.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep1 vsmalladi Tue Jul 31 14:29:08 2012
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep2
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Erythroblast + 2
         longLabel Erythroblast 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bigWig 1.000000 23344592.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep2 vsmalladi Tue Jul 31 14:29:08 2012
 
         track wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
@@ -245,23 +247,25 @@ noInherit on
         # subId=7706 dateSubmitted=2012-07-27
         # was wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep2 vsmalladi Tue Jul 31 13:15:19 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep1
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Megakaryocyte + 1
         longLabel Megakaryocyte 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bigWig 1.000000 2187658.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep1 vsmalladi Tue Jul 31 14:29:07 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep2
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Megakaryocyte + 2
         longLabel Megakaryocyte 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bigWig 1.000000 301191.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep2 vsmalladi Tue Jul 31 14:29:07 2012
 
     track wgEncodePsuRnaSeqViewMinusRawSignal
     shortLabel Minus Raw Signal
@@ -330,23 +334,25 @@ noInherit on
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep1
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Erythroblast - 1
         longLabel Erythroblast 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bigWig -26949678.000000 -1.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep1 vsmalladi Tue Jul 31 14:29:08 2012
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Erythroblast - 2
         longLabel Erythroblast 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bigWig -21627596.000000 -1.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2 vsmalladi Tue Jul 31 14:29:08 2012
 
         track wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep1
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
@@ -486,23 +492,25 @@ noInherit on
         # subId=7706 dateSubmitted=2012-07-27
         # was wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep1 vsmalladi Tue Jul 31 13:15:18 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Megakaryocyte - 2
         longLabel Megakaryocyte  2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bigWig -278887.000000 -1.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2 vsmalladi Tue Jul 31 14:29:07 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep1
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Megakaryocyte - 1
         longLabel Megakaryocyte 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bigWig -4032882.000000 -1.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep1 vsmalladi Tue Jul 31 14:29:07 2012
 
 	track wgEncodePsuRnaSeqViewSignal
 	shortLabel Signal
@@ -738,23 +746,25 @@ noInherit on
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Erythroblast A 2
         longLabel Erythroblast 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bam
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2 vsmalladi Tue Jul 31 14:29:07 2012
 
-        track wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1
+        track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Erythroblast A 1
         longLabel Erythroblast 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bam
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
+        # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1 vsmalladi Tue Jul 31 14:29:07 2012
 
         track wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
@@ -935,21 +945,23 @@ noInherit on
         # subId=7706 dateSubmitted=2012-07-27
         # was wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep2 vsmalladi Tue Jul 31 13:15:18 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Megakaryocyte A 1
         longLabel Megakaryocyte 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
         type bam
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1 vsmalladi Tue Jul 31 14:29:07 2012
 
-        track wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2
+        track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Megakaryocyte A 2
         longLabel Megakaryocyte 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=U strain=CD1 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
         type bam
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
+        # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2 vsmalladi Tue Jul 31 14:29:07 2012
 

@@ -4732,12 +4732,12 @@ tag IPSHFIB2IPS4
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 4 derived from skin fibroblast
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
-vendorName HSCI iPS Cell Core Facitlity
+vendorName HSCI iPS Cell Core Facility
 vendorId hFib2_iPS4
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
@@ -4750,13 +4750,13 @@ tag IPSHFIB2IPS5
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 5 derived from skin fibroblast
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
 vendorName HSCI iPS Cell Core Facility
-vendorId hFIB2_iPS5
+vendorId hFib2_iPS5
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -7672,7 +7672,7 @@ orderUrl http://www.genome.gov/10000336
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 86,180,233
-sex F
+sex U
 protocol Hardison:MEP_Hardison_protocol.pdf
 
 term MEF

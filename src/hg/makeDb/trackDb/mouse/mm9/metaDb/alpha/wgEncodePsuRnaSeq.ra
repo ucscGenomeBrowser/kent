@@ -159,7 +159,7 @@ tableName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep2
 treatment None
 view Signal
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1
 objType table
 age E14.5
 cell Erythrobl
@@ -168,7 +168,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -177,14 +177,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep1
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2
 objType table
 age E14.5
 cell Erythrobl
@@ -193,7 +193,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -202,14 +202,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dAlnRep2
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep1
 objType file
 age E14.5
 cell Erythrobl
@@ -218,7 +218,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -227,13 +227,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep2
 objType file
 age E14.5
 cell Erythrobl
@@ -242,7 +242,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -251,13 +251,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep1
 objType file
 age E14.5
 cell Erythrobl
@@ -266,7 +266,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -275,13 +275,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep2
 objType file
 age E14.5
 cell Erythrobl
@@ -290,7 +290,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -299,13 +299,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep1
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1
 objType table
 age E14.5
 cell Erythrobl
@@ -314,7 +314,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -323,14 +323,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep1
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2
 objType table
 age E14.5
 cell Erythrobl
@@ -339,7 +339,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -348,14 +348,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep1
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1
 objType table
 age E14.5
 cell Erythrobl
@@ -364,7 +364,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -373,14 +373,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep1
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1
 treatment None
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep2
+metaObject wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2
 objType table
 age E14.5
 cell Erythrobl
@@ -389,7 +389,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-20
 dateUnrestricted 2013-04-20
-fileName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -398,10 +398,10 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7568
-tableName wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dPlusRawRep2
+tableName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
@@ -2927,7 +2927,7 @@ tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1
 objType table
 age E14.5
 cell Megakaryo
@@ -2936,7 +2936,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2945,14 +2945,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep1
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2
 objType table
 age E14.5
 cell Megakaryo
@@ -2961,7 +2961,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
@@ -2971,14 +2971,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dAlnRep2
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep1
 objType file
 age E14.5
 cell Megakaryo
@@ -2987,7 +2987,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2996,13 +2996,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep2
 objType file
 age E14.5
 cell Megakaryo
@@ -3011,7 +3011,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -3020,13 +3020,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep1
 objType file
 age E14.5
 cell Megakaryo
@@ -3035,7 +3035,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -3044,13 +3044,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep2
 objType file
 age E14.5
 cell Megakaryo
@@ -3059,7 +3059,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -3068,13 +3068,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep1
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1
 objType table
 age E14.5
 cell Megakaryo
@@ -3083,7 +3083,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -3092,14 +3092,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep1
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2
 objType table
 age E14.5
 cell Megakaryo
@@ -3108,7 +3108,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
@@ -3118,14 +3118,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep1
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1
 objType table
 age E14.5
 cell Megakaryo
@@ -3134,7 +3134,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -3143,14 +3143,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep1
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1
 treatment None
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep2
+metaObject wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2
 objType table
 age E14.5
 cell Megakaryo
@@ -3159,7 +3159,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-fileName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
@@ -3169,10 +3169,10 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex B
 strain CD-1
 subId 7733
-tableName wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dPlusRawRep2
+tableName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
@@ -3718,4 +3718,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: -928264955
+# MAGIC: -928266779
