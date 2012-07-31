@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Downloading Data using FTP - UCSC Genome Browser</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="style/HGStyle.css">
+</head>
+<body class="oldStaticPage">
+
+<div class="header">
+	<img src="images/title.jpg" alt="UCSC Genome Bioinformatics">
+</div><!-- .header -->
+
+<div class="nav">
+<!--#include virtual="inc/topbar.html"-->
+</div><!-- .nav -->
+
+<div class="content">
+
+<div class="section">
+	
+	<h1>Downloading Data using FTP</h1>
+	  
+    <div class="sectionContent">
+
+	<p>We recommend that you download data via our FTP site at <a href="ftp://hgdownload.cse.ucsc.edu/">ftp://hgdownload.cse.ucsc.edu/</a>, particularly if you plan to download multiple files or files of large size. To do so:
+
+	<blockquote>
+	<pre>
+    ftp hgdownload.cse.ucsc.edu 
+    user name: anonymous
+    password: your email address
+    go to the goldenPath directory, pick an assembly directory, then a data directory
+	</pre>
+	</blockquote>
+
+	<p>To download multiple files from the UNIX ftp command line, use the "mget" command. You may want to use the &quot;prompt&quot; command to toggle the interactive mode if you do not want to be prompted for each file that you download.
+
+	<blockquote>
+    <pre>
+    mget [filename1] [filename2] ...
+
+    - <em>or</em> -
+
+    mget -a (to download all the files in the directory) 
+	</pre>
+	</blockquote>
+      
+    </div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+</div><!-- .content -->
+</body>
+</html>
