@@ -513,6 +513,14 @@ for (resTry = 0; resTry < resTryCount; ++resTry)
     {
     resSizes[resTry] = 0;
     resScales[resTry] = res;
+    // if aveSpan is large, then the initial value of res is large,
+    //  and we cannot do all 10 levels without overflowing res* integers and other related variables.
+    if (res > 1000000000) 
+	{
+	resTryCount = resTry + 1;  
+	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);
+	break;
+	}
     res *= resIncrement;
     }
 
