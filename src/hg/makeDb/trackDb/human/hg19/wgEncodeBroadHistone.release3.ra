@@ -2611,7 +2611,7 @@ html wgEncodeBroadHistone.release3
         # subId=7732 dateSubmitted=2012-07-28
 
     track wgEncodeBroadHistoneViewSignal
-    shortLabelnal
+    shortLabel Signal
     view Signal
     visibility full
     parent wgEncodeBroadHistone

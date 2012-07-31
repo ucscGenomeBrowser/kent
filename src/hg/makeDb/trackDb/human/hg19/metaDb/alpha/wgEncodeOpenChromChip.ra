@@ -438,7 +438,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipColonocInputAln.bam,wgEncodeOpenChromChipColonocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 15bac287a548d4d166d511db6a82090c,f43d587f7464aa0541efab83932b7721
 project wgEncode
 setType input
 subId 7524
@@ -457,6 +458,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipColonocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 29cd64afd0c7cfc8cdbba25b95aa5270
 project wgEncode
 setType input
 subId 7524
@@ -476,6 +478,7 @@ fileName wgEncodeOpenChromChipColonocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 3181d55ec6bc75f82de0f65cd4d837b0
 project wgEncode
 setType input
 subId 7524
@@ -1111,7 +1114,8 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm10248InputAln.bam,wgEncodeOpenChromChipGm10248InputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 0b4fb0bc2ae331e5bf3ee3cfcb534da4,b44e11e152573c3f3f35d947ef71bd9a
 project wgEncode
 setType input
 subId 7517
@@ -1130,6 +1134,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm10248InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 9598a3d4b33281779ad560259fd1682a
 project wgEncode
 setType input
 subId 7517
@@ -1149,6 +1154,7 @@ fileName wgEncodeOpenChromChipGm10248InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 212ecb150e275aae6aad859ae8d20881
 project wgEncode
 setType input
 subId 7517
@@ -1168,7 +1174,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipGm10266InputAln.bam,wgEncodeOpenChromChipGm10266InputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum ff90e25c27c49e22117f127b0755f645,f5de474c50a1eb5b61f4f283f6fb2403
 project wgEncode
 setType input
 subId 7518
@@ -1187,6 +1194,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipGm10266InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 4f932096f99cc18ee15da45425e03ed9
 project wgEncode
 setType input
 subId 7518
@@ -1206,6 +1214,7 @@ fileName wgEncodeOpenChromChipGm10266InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum f651996bd2196690a97762237eb9bfc2
 project wgEncode
 setType input
 subId 7518
@@ -2350,7 +2359,8 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm13976InputAln.bam,wgEncodeOpenChromChipGm13976InputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum de39d0427733ca0f22fbccb0b46740a9,15a48319db722e611e596f68a1fbd32b
 project wgEncode
 setType input
 subId 7519
@@ -2369,6 +2379,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm13976InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 9915892b10701880d6f0defdac47e17d
 project wgEncode
 setType input
 subId 7519
@@ -2388,6 +2399,7 @@ fileName wgEncodeOpenChromChipGm13976InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 4033c9f429f77a88ebfd41df8dc74ae6
 project wgEncode
 setType input
 subId 7519
@@ -2407,7 +2419,8 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm13977InputAln.bam,wgEncodeOpenChromChipGm13977InputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 0f536a739c7b3910c543f1b2871eb79e,b1284fb2db3c8930472953752791f4b5
 project wgEncode
 setType input
 subId 7520
@@ -2426,6 +2439,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodeOpenChromChipGm13977InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum a4583503f0153241cd91412921e25681
 project wgEncode
 setType input
 subId 7520
@@ -2445,6 +2459,7 @@ fileName wgEncodeOpenChromChipGm13977InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 25dffdfcc95cefff7b67daea6c42b4cf
 project wgEncode
 setType input
 subId 7520
@@ -3019,7 +3034,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipGm20000InputAln.bam,wgEncodeOpenChromChipGm20000InputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 109799ecae745cfc4ad5a73eb9281f5f,e5b004c230376cff3ff1c62b3770af49
 project wgEncode
 setType input
 subId 7521
@@ -3038,6 +3054,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipGm20000InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e1fe7e384279493e5b3387d20da7c4ca
 project wgEncode
 setType input
 subId 7521
@@ -3057,6 +3074,7 @@ fileName wgEncodeOpenChromChipGm20000InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 3d79a65a35f200bb5cada2dbb93e8616
 project wgEncode
 setType input
 subId 7521
@@ -3472,7 +3490,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipHeartocInputAln.bam,wgEncodeOpenChromChipHeartocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 1b8a18558b3bf24e48e644178f05efc6,6b1365403e1c632f164bb299476232d7
 project wgEncode
 setType input
 subId 7525
@@ -3491,6 +3510,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipHeartocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 7575c9c29fcae62309b8f4905ae38a77
 project wgEncode
 setType input
 subId 7525
@@ -3510,6 +3530,7 @@ fileName wgEncodeOpenChromChipHeartocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 4278fc3e1a97afa21e4e88bc59a0ad7c
 project wgEncode
 setType input
 subId 7525
@@ -6482,7 +6503,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipKidneyocInputAln.bam,wgEncodeOpenChromChipKidneyocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 3f675164d2ab9cf61fee87c6fdf8c19f,a49791638573f4a03ae5023926d94671
 project wgEncode
 setType input
 subId 7527
@@ -6501,6 +6523,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipKidneyocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum c4386b4fd0d5e8c97a1adb4f3a791c6e
 project wgEncode
 setType input
 subId 7527
@@ -6520,6 +6543,7 @@ fileName wgEncodeOpenChromChipKidneyocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 950a5c86269ca0db5efe0ea733600958
 project wgEncode
 setType input
 subId 7527
@@ -6539,7 +6563,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipLncapInputAln.bam,wgEncodeOpenChromChipLncapInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 1680f75ef8336851fae15654707ef974,4c1fcb163701c81720941205b66337d1
 project wgEncode
 setType input
 subId 7522
@@ -6558,6 +6583,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipLncapInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 56b7cea16528ced8bc079b4f380ed99c
 project wgEncode
 setType input
 subId 7522
@@ -6577,6 +6603,7 @@ fileName wgEncodeOpenChromChipLncapInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 258a30ac6efbaac039d5f9fae61e403d
 project wgEncode
 setType input
 subId 7522
@@ -6596,7 +6623,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipLungocInputAln.bam,wgEncodeOpenChromChipLungocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 16b1aff73c4254b35ae3ce1b09ca987f,019e09d0392a8c3c24c1aabea152760c
 project wgEncode
 setType input
 subId 7526
@@ -6615,6 +6643,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipLungocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 96389a564e29509fc2faa65e717d4db8
 project wgEncode
 setType input
 subId 7526
@@ -6634,6 +6663,7 @@ fileName wgEncodeOpenChromChipLungocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 5e3e21bb4f6d922d38ac55b3778e86c9
 project wgEncode
 setType input
 subId 7526
@@ -8784,7 +8814,8 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam,wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 08b33996fafdea70a673a0938c4a810f,e886b7be183a35ccb8231ef010400fd7
 project wgEncode
 replicate 1
 setType exp
@@ -8804,7 +8835,8 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam,wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum efbc05b2e2b9b3c62e742ddcab7af626,3fcb35555fb25d570218d9f3b653fb82
 project wgEncode
 replicate 2
 setType exp
@@ -8825,6 +8857,7 @@ fileName wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 1fa844b95862d91648da5610d9c75eda
 project wgEncode
 setType exp
 subId 7325
@@ -8845,6 +8878,7 @@ fileName wgEncodeOpenChromChipMedulloCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 622afeb1b860c907cac627b9d9c150be
 project wgEncode
 replicate 1
 setType exp
@@ -8865,6 +8899,7 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum abb4603969c7443ad0cd0c334c2376f0
 project wgEncode
 replicate 1
 setType exp
@@ -8884,6 +8919,7 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 8549c0b2ed65a9e16e7b97316fa4402c
 project wgEncode
 replicate 2
 setType exp
@@ -8904,6 +8940,7 @@ fileName wgEncodeOpenChromChipMedulloCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_D721
+md5sum 15ea10fffb285f5bba3d3a8bfc084e96
 project wgEncode
 setType exp
 subId 7325
@@ -8923,7 +8960,8 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloInputAln.bam,wgEncodeOpenChromChipMedulloInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum f49d51dc0c4f9d27a43acdd7edc10f00,fd64a1833d83841e8c4b15aa34ffe2ce
 project wgEncode
 setType input
 subId 7323
@@ -8942,6 +8980,7 @@ dateUnrestricted 2013-04-06
 fileName wgEncodeOpenChromChipMedulloInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum e02fb1268f699cbdabeb0a2156c0112f
 project wgEncode
 setType input
 subId 7323
@@ -8961,6 +9000,7 @@ fileName wgEncodeOpenChromChipMedulloInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 3fc45b2ffa8fcaa55c3f68d8e5b296c3
 project wgEncode
 setType input
 subId 7323
@@ -9318,7 +9358,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipPancreasocInputAln.bam,wgEncodeOpenChromChipPancreasocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum b2b0615289bd62fd19ac48687a773199,26b2eccd2b5c402c9bd678923cfdab05
 project wgEncode
 setType input
 subId 7523
@@ -9337,6 +9378,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipPancreasocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 60338db24c818b8a01a5d096150d2649
 project wgEncode
 setType input
 subId 7523
@@ -9356,6 +9398,7 @@ fileName wgEncodeOpenChromChipPancreasocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 06e0597fbb1f21d23b166f13d444df9f
 project wgEncode
 setType input
 subId 7523
@@ -9700,7 +9743,8 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipSpleenocInputAln.bam,wgEncodeOpenChromChipSpleenocInputAln.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+labVersion align_on_cluster_bwa.pl v 1. first 35bps only
+md5sum 10e74ec3f6a11912efad06d9e288294b,e50941f15a9c09304197b0496841a861
 project wgEncode
 setType input
 subId 7528
@@ -9719,6 +9763,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodeOpenChromChipSpleenocInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+md5sum d8dc9458e16a1ace359c21fba6e63f31
 project wgEncode
 setType input
 subId 7528
@@ -9738,10 +9783,11 @@ fileName wgEncodeOpenChromChipSpleenocInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+md5sum 7532deca62e94ff20d2d4baeb387b1e9
 project wgEncode
 setType input
 subId 7528
 tableName wgEncodeOpenChromChipSpleenocInputSig
 view Signal
 
-# MAGIC: 1098264936
+# MAGIC: 1539038764

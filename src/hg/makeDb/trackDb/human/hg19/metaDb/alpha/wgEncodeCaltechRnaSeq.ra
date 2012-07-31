@@ -2002,7 +2002,7 @@ lab Caltech
 labExpId 02971
 labVersion 02971
 localization cell
-md5sum 41c0d9d4424d12abc7afcd33f62fd623
+md5sum ddbfc402fb4be9a491adc4e0d0962899
 project wgEncode
 readType 2x75
 replicate 2
@@ -2066,18 +2066,23 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-27
-dateUnrestricted 2013-04-27
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 02971
 labVersion 02971
-md5sum a8376441f5942f8bf626ee107e0d1153
+localization cell
+md5sum 7fdee384087bc4dfb129280035dcf644
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 7722
 submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
@@ -2763,6 +2768,7 @@ insertLength 200
 lab Caltech
 labExpId 11039
 localization cell
+md5sum ca1931b862c414f1d7f84435e0f4cedc
 project wgEncode
 readType 2x75
 replicate 1
@@ -2815,7 +2821,7 @@ lab Caltech
 labExpId 02970
 labVersion 02970
 localization cell
-md5sum 16378d66248d2dc77390a6886be8504e
+md5sum 9a78fe7a1607d9485ad713a934dc6671
 project wgEncode
 readType 2x75
 replicate 2
@@ -2868,7 +2874,7 @@ lab Caltech
 labExpId 02973
 labVersion 02973
 localization cell
-md5sum 66fc6a44a6c6f22f24aa57fdb5db64c8
+md5sum 1d4950bb36aa09738ae6dc9d541e280c
 project wgEncode
 readType 2x75
 replicate 3
@@ -2907,15 +2913,22 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-26
-dateUnrestricted 2013-04-26
+dateResubmitted 2012-07-26
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1V2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
+localization cell
+md5sum 3a6446afbd642fd320c2bac7b61268db
 project wgEncode
 readType 2x75
 replicate 1
+rnaExtract longPolyA
 subId 7705
 submittedDataVersion V2 - Removed 424 unpaired reads from fastq files
 view FastqRd2
@@ -2951,18 +2964,23 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-27
-dateUnrestricted 2013-04-27
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 02970
 labVersion 02970
-md5sum 4f4cee3858dfd19c7a72f6563d65d4a4
+localization cell
+md5sum 99f101b7e3304419e971ca069d538855
 project wgEncode
 readType 2x75
 replicate 2
+rnaExtract longPolyA
 subId 7723
 submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
@@ -2998,18 +3016,23 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-27
-dateUnrestricted 2013-04-27
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 02973
 labVersion 02973
-md5sum f43aedaa36bfcb4f20f69d05b42dbe52
+localization cell
+md5sum 35d3b59e962fb365c9c0239154ced940
 project wgEncode
 readType 2x75
 replicate 3
+rnaExtract longPolyA
 subId 7724
 submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
@@ -11709,12 +11732,40 @@ lab Caltech
 labExpId 11007
 localization cell
 md5sum 7702e26590aea4e476047d1e28d73901
+objStatus replaced
 origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1646
+view RawData
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-30
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
+fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2V2.fastq.tgz
+grant Myers
+insertLength None
+lab Caltech
+labExpId 11007
+localization cell
+md5sum 78a0f898277f083d9dec6458c83c7998
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 7726
+submittedDataVersion V2 - Fixed corrupted quality scores
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
@@ -11778,32 +11829,6 @@ subId 3524
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
 view MinusRawSignal
-
-metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaRawDataRep2V2
-objType file
-cell K562
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateResubmitted 2012-07-30
-dateSubmitted 2010-07-14
-dateUnrestricted 2011-04-14
-dccAccession wgEncodeEH000124
-expId 124
-fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaRawDataRep2V2.fastq.tgz
-grant Myers
-insertLength ilNA
-lab Caltech
-labExpId 10517
-localization cell
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 7726
-submittedDataVersion V2 - Fixed corrupted quality scores
-view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
 objType table
@@ -16641,4 +16666,4 @@ submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
 view Signal
 
-# MAGIC: 2030794445
+# MAGIC: 1689532652

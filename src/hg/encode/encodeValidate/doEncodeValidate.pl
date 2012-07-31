@@ -23,7 +23,7 @@ use warnings;
 use warnings FATAL => 'all';
 use strict;
 
-#use DataBrowser qw(browse);
+use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
 use File::Temp qw/ tempfile tempdir /;
@@ -348,6 +348,7 @@ our %formatCheckers = (
     bigBed => \&validateBigBed,
     bam => \&validateBam,
     bed => \&validateBed,
+    bedCluster => \&validateBed,
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
@@ -400,7 +401,8 @@ sub validateBed {
         bedRnaElements => "bed6+3",
         bedLogR => "bed9+1",
         bedRrbs => "bed9+2",
-        gappedPeak => "bed12+3"
+        gappedPeak => "bed12+3",
+        bedCluster => "bed11+1"
     );
     my $paramList = validationSettings("validateFiles","$type");
     my $cmdtype = $type;
