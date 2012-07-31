@@ -478,7 +478,7 @@ geoFor1.perChromTables = no
     ln -s blastz.melGal1.swap lastz.melGal1
 
 ##############################################################################
-# lastz galGal4 Chickent (DONE - 2012-02-30 - Hiram)
+# lastz galGal4 Chicken (DONE - 2012-02-30 - Hiram)
     # original alignment to turkey:
     cd /hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27
     cat fb.galGal4.chainGeoFor1Link.txt
@@ -498,5 +498,198 @@ geoFor1.perChromTables = no
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.galGal4.swap lastz.galGal4
+
+    cat fb.taeGut1.chainGeoFor1Link.txt
+    #   1126123816 bases of 1222864691 (92.089%) in intersection
+
+##############################################################################
+# lastz taeGut1 Finch (DONE - 2012-02-31 - Hiram)
+    # original alignment to turkey:
+    cd /hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28
+    cat fb.taeGut1.chainGeoFor1Link.txt
+    #   1126123816 bases of 1222864691 (92.089%) in intersection
+
+    # and for this swap:
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    102m30.103s
+    cat fb.geoFor1.chainTaeGut1Link.txt
+    #   963520807 bases of 1041286029 (92.532%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.taeGut1.swap lastz.taeGut1
+
+##############################################################################
+## 7-Way Multiz (WORKING - 2012-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+
+    # from the 63-way in the source tree, select out the 7 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg19,mm10,melGal1,melUnd1,galGal4,taeGut1,geoFor1 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/63way.nh > 7way.nh
+
+    # note, newer assemblies: susScr3, dasNov3, felCat5, hetGla2, turTru2,
+    #   nomLeu2, oreNil2
+
+    #	what that looks like:
+    cat 7way.nh
+# ((hg19:0.148845,mm10:0.356483):0.460153,(((melGal1:0.100000,
+# galGal4:0.065536):0.100000,(geoFor1:0.120000,
+# taeGut1:0.121542):0.050000):0.199223,melUnd1:0.100000):0.287514);
+
+    #	rearrange to get geoFor1 on top:
+    cat << '_EOF_' > geoFor1.7way.nh
+((((geoFor1:0.120000,taeGut1:0.121542):0.050000,
+(melGal1:0.100000,galGal4:0.065536):0.100000):0.199223,
+melUnd1:0.100000):0.287514,
+(hg19:0.148845,mm10:0.356483):0.460153);
+'_EOF_'
+    # << happy emacs
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        geoFor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" geoFor1.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+        > geoFor1.7way.commonNames.nh
+((((Medium_ground_finch:0.12,Zebra_finch:0.121542):0.05,
+(Turkey:0.1,Chicken:0.065536):0.1):0.199223,Budgerigar:0.1):0.287514,
+(Human:0.148845,Mouse:0.356483):0.460153);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/geoFor1_7way.png
+
+    /cluster/bin/phast/all_dists geoFor1.7way.nh | grep geoFor1 \
+        | sed -e "s/geoFor1.//" | sort -k2n > 7way.distances.txt
+    #	Use this output to create the table below
+    head 7way.distances.txt
+# taeGut1 0.241542
+# galGal4 0.335536
+# melGal1 0.370000
+# melUnd1 0.469223
+# hg19    1.265735
+# mm10    1.473373
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<7way.distances.txt") or
+        die "can not read 7way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/geoFor1/bed/lastz.$D/fb.geoFor1." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.geoFor1/fb.${D}.chainGeoFor1Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on geoFor1  on other     other species
+# 01  0.2415 (% 92.532) (% 92.089) - Zebra finch taeGut1
+# 02  0.3355 (% 70.718) (% 72.077) - Chicken galGal4
+# 03  0.3700 (% 67.079) (% 72.625) - Turkey melGal1
+# 04  0.4692 (% 80.650) (% 76.598) - Budgerigar melUnd1
+# 05  1.2657 (% 08.504) (% 03.503) - Human hg19
+# 06  1.4734 (% 07.709) (% 03.543) - Mouse mm10
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	geoFor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    #   geoFor1 taeGut1 melGal1 galGal4 melUnd1 hg19 mm10
+
+XXX decide what types to use here
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    export H=/hive/data/genomes/geoFor1/bed
+    mkdir mafLinks
+    for G in `sed -e "s/geoFor1 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/lastz.${G}/mafRBestNet/chr1.maf.gz ]; then
+	    echo "$G - recipBest"
+	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/lastz.${G}/mafSynNet/chr1.maf.gz ]; then
+		echo "$G - synNet"
+		ln -s ${H}/lastz.$G/mafSynNet/*.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/lastz.${G}/mafNet/chr1.maf.gz ]; then
+		    echo "$G - mafNet"
+		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory lastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+
+    #	verify the alignment type is correct:
+    for D in `grep -v geoFor1 /hive/users/hiram/bigWays/geoFor1.7way/ordered.list`
+do
+    ls -l mafLinks/$D/chr1.maf.gz | awk '{print $NF}'
+done
+    #	compare to the list at:
+    #	http://genomewiki.ucsc.edu/index.php/Mm10_Genome_size_statistics
 
 ##############################################################################
