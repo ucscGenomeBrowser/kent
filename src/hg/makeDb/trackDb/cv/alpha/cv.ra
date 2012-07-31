@@ -7416,7 +7416,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_Hardison_protocol.pdf
 
 term G1E-ER4
@@ -7434,7 +7434,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_ER4_E2_Hardison_protocol.pdf
 
 term GenitalFatPad

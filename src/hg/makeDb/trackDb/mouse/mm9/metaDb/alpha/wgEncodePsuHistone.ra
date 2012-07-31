@@ -5747,7 +5747,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5775,7 +5775,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5803,7 +5803,7 @@ md5sum 6a15b2a7f84a6d8f5b0d43a29537ef05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
@@ -5832,7 +5832,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5860,7 +5860,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5889,7 +5889,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5918,7 +5918,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5946,7 +5946,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5974,7 +5974,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -6001,7 +6001,7 @@ md5sum fbdd78417491e80df38aa56e4fdd4196
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
@@ -7940,4 +7940,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -1748693842
+# MAGIC: -1748693622

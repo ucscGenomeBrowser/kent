@@ -137,7 +137,7 @@ wgEncode 1
         parent wgEncodePsuHistoneViewPeaks
         shortLabel G1E-ER4 H3K36me3
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
-        subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=B strain=s129
+        subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
         color 153,38,0
         # subId=5997 dateSubmitted=2012-04-16
@@ -383,7 +383,7 @@ wgEncode 1
         parent wgEncodePsuHistoneViewSignal
         shortLabel G1E-ER4 H3K36me3
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=B strain=s129
+        subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 479.000000
         color 153,38,0
 		viewLimits 2:400
