@@ -124,7 +124,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel H1-hESC Ce PTM
-        longLabel H1-hESC FASP ProtG GENCODE10 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel H1-hESC FASP ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=H1HESC localization=CELL protocol=FASP
         type bigBed 12
         color 0,107,27
