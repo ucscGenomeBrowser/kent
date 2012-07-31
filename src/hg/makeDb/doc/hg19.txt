@@ -19365,3 +19365,92 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# ENCODE Regulation track V2: Track #7526 (In progress 2012-06-20 kate)
+# This version will have:
+#       * Two additional cell lines for Tx and Histones (Hela, HepG2)
+#               - Note Hela & HepG2 already added to Tx track (July2012 release)
+#       * Replace Tx with CSHL stranded data, pooled (JK advising, also AWG use)
+#       * Add latest TF's, and use AWG uniform peak calls for TF's
+#       * Add latest DNase calls (possibly use AWG uniform)
+#          (http://www.uwencode.org/public/rthurman/encode_integrated_open_chrom/data/dataHub)
+#          AWG trackDb: http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
+#               - can use subGroups line to determine cell type, but need to take care
+#                       with treatments, which are in filename but not subGroups
+#               - NOTE: AWG includes Duke data processed like UW.  Where both 
+#                       labs had data, they are merged. View is .01FDR peaks (narrow, bigbed 6+)
+#  Also considering adding new data types from AWG hub:
+#               - Short RNA's
+#               - AWG uniform RNA contigs
+#          (http://www.ebi.ac.uk/~anshul/public/encodeRawData/dcc/hub/awgHub/rna_contigs/)
+#               - Segmentations (chromHMM, segWay, or combined)
+#          (http://www.ebi.ac.uk/~anshul/public/encodeRawData/dcc/hub/awgHub/segmentations)
+#               - FAIRE (cell-specific, union over 25 cell types)
+#          (http://www.ebi.ac.uk/~anshul/public/encodeRawData/dcc/hub/awgHub/faire/bigBed/)
+# NOTE: following Jim's methods from initial version
+
+    # make root dir and link in our bad.bed file for filtering out
+    # blacklisted and multiple mapping regions.
+    cd /hive/data/genomes/hg19/bed
+    mkdir wgEncodeRegV2
+    cd wgEncodeRegV2
+    ln -s /hive/data/genomes/hg19/bed/wgEncodeReg/badRegions.bed .
+    #(was /hive/users/kent/regulate/companion/mapping/bad.bed)
+    ## DONE
+
+    # Handle the RNA seq, starting by pooling it and filtering out multiple
+    # mapping and blacklisted regions.
+    cd /hive/data/genomes/hg19/bed/
+    mkdir -p wgEncodeRegV2/txn/pooled
+    cd wgEncodeRegV2/txn/pooled
+
+cat > poolTx.csh << 'EOF'
+    foreach cell (Gm12878 H1hesc Helas3 Hepg2 Hsmm Huvec K562 Nhek Nhlf)
+      echo "processing ${cell}"
+      bigWigMerge -adjust=-1 \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapMinusRawSigRep1.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapMinusRawSigRep2.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep1.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep2.bigWig \
+          stdout \
+          | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
+    end
+'EOF'
+    csh poolTx.csh >&! poolTx.out &
+#  ~8 minutes per cell type
+# NOTE:  25 chroms in Hepg2, H1hesc, Huvec, Nhlf (male or unknown sex)
+
+    # Now have to normalize.  This takes two passes.  The first just creates
+    # a tab-separated file with normalization values. A batch file is made
+    # by running awk on the tab file, and this batch file executes the
+    # second half, transforming the bedGraphs to normalized values. The
+    # normalization standardizes all files as if the total signal integrated to 10
+    # billion over the genome.
+    rm -f ../norm.tab
+
+cat > makeNorm.csh << 'EOF'
+    foreach i (*SigPooled.bedGraph)
+        echo processing $i
+        echo -n $i " " >> ../norm.tab
+        awk '{sum += $4*($3-$2);} END {print 10000000000/sum}' $i >> ../norm.tab
+    end
+    awk '{printf("colTransform 4 %s 0 %g ../normalized/%s\n", $1, $2, $1);}' ../norm.tab > ../norm.csh
+'EOF'
+    csh makeNorm.csh >&! makeNorm.out &
+# ~2 mins per cell type
+
+    chmod a+x ../norm.csh
+    mkdir ../normalized
+    csh ../norm.csh  >&! norm.out &
+
+    # Create the DNAse peak clusters subtrack.
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
+    mkdir -p dnase/peaks
+    cd dnase/peaks
+    wget -O uniformDnase.txt http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
+    sed -n 's/bigDataUrl /wget /p' uniformDnase.txt > wget.csh
+    csh wget.csh >&! wget.out &
+
+# 125 files (.bb), dated Nov 22, 2011
+
+#######################################################################
