@@ -12694,6 +12694,107 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
 
+
+######## THESE ARE PROVISIONAL AND PLEASE JEFF THEY NEED SOME CLEANING UP
+
+term ZC3H11A_(NB100-74650)
+tag ZC3H11ANB10074650
+type Antibody
+antibodyDescription Rabbit polyclonal antibody. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
+target ZC3H11A
+targetDescription ZC3H11A is a C3H1-type zinc finger protein. ZC3H11A has been identified as a protein that is phosphorylated upon DNA damage by ATM or ATR. The function of ZC3H11A remains uncharacterized.
+vendorName NovusBio
+vendorId NB100-74650
+orderUrl http://www.novusbio.com/ZC3H11A-Antibody_NB100-74650.html
+lab Snyder
+lots A1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZC3H11A&search=zc3h11a
+validation ZC3H11A_(NB100-74650)(missing):human_ZC3H11A_NB100-74650_validation_Snyder.pdf
+
+term ZNF-MIZD-CP1_(ab65767)
+tag ZNFMIZDCP1AB65767
+type Antibody
+antibodyDescription Rabbit Polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+target ZNF-MIZD-CP1
+targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
+vendorName Abcam
+vendorId ab65767
+orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
+lab Snyder
+lots GR30927-1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
+validation ZNF-MIZD-CP1_(ab65767)(missing):human_ZNF-MIZD-CP1_ab65767_validation_Snyder.pdf
+
+term HCFC1_(NB100-68209)
+tag HCFC1NB10068209
+type Antibody
+antibodyDescription Rabbit polyclonalantibody against residue 1700 and 1750 of human host cell factor C1
+target HCFC1
+targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
+vendorName NovusBio
+vendorId NB100-68209
+orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
+lab Snyder
+lots A1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1&search=hcfc1
+validation HCFC1_(NB100-68209)(missing):human_HCFC1_NB100-68209_validation_Snyder.pdf
+
+term ZNF384_(HPA004051)
+tag ZNF384HPA004051
+type Antibody
+antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
+target ZNF384
+targetDescription This gene encodes a C2H2-type zinc finger protein, which may function as a transcription factor. This gene also contains long CAG trinucleotide repeats that encode consecutive glutamine residues. The protein appears to bind and regulate the promoters of the extracellular matrix genes MMP1, MMP3, MMP7 and COL1A1. Studies in mouse suggest that nuclear matrix transcription factors (NP/NMP4) may be part of a general mechanical pathway that couples cell construction and function during extracellular matrix remodeling. Alternative splicing results in multiple transcript variants. Recurrent rearrangements of this gene with the Ewing's sarcoma gene, EWSR1 on chromosome 22, or with the TAF15 gene on chromosome 17, or with the TCF3 (E2A) gene on chromosome 19, have been observed in acute leukemia. A related pseudogene has been identified on chromosome 7.
+vendorName SIGMA
+vendorId HPA004051
+orderUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
+lab Snyder
+lots A57874
+targetId missing
+targetUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
+validation ZNF384_(HPA004051)(missing):human_ZNF384_HPA004051_validation_Snyder.pdf
+
+term CDP_(BioTech)
+tag CDPBIOTECH
+type Antibody
+antibodyDescription CDP (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping at the C-terminus of CDP of mouse origin.
+target CDP
+targetDescription CDP (for CCAAT displacement protein) was identified as a repressor for tran- scription of developmentally regulated genes. It is a homeodomain protein that appears to compete with transcriptional activating proteins for binding to the promoter regions of various genes. CDP contains three cut repeats which function as DNA binding domains. It has been demonstrated that cut repeat domains have the capacity to bind to DNA in conjunction with or independently of homeodomain DNA binding. CDP has been shown to be the DNA-binding subunit of the HiNF-D complex, which contains cyclin A, Cdc2 and an Rb-related protein in addition to CDP. Histone expression is required for the transition to S phase in the cell cycle. The HiNF-D complex regulates the transcription of Histone H4, H3 and H1 genes, allowing cells to progress from G1 to S phase.
+vendorName Santa Cruz
+vendorId BioTech
+orderUrl http://www.scbt.com/datasheet-6327-cdp-c-20-antibody.html
+lab Snyder
+lots E0709
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CUX1&search=cdp
+validation CDP_(BioTech)(missing):human_CDP_BioTech_validation_Snyder.pdf
+##################################################################### ABOVE ARE PROVISIONAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###  Antibodies
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
