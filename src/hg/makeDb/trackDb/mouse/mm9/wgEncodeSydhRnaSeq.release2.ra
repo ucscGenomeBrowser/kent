@@ -1,0 +1,123 @@
+track wgEncodeSydhRnaSeq
+compositeTrack on
+shortLabel Stan/Yale RNA-seq
+longLabel RNA-seq from ENCODE/Stanford/Yale
+group regulation
+subGroup1 view Views Signal=Signal Alignments=Alignments
+subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL ESE14=ES-E14
+subGroup3 treatment Treatment DM2P5D=DMSO_2.0pct NONE=None
+subGroup4 rnaExtract RnaExtract RIBOZEROG=riboZeroGold
+subGroup5 readType ReadType R2X101D=2x101D
+subGroup6 rep Replicate rep1=1  rep2=2
+dimensions dimensionX=cellType dimensionY=treatment
+sortOrder cellType=+ treatment=+ view=+ rep=+
+fileSortOrder cell=Cell_Line treatment=treatment view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=rnaExtract
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+html wgEncodeSydhRnaSeq.release2
+
+	track wgEncodeSydhRnaSeqViewAlignments
+	shortLabel Alignments
+	view Alignments
+	visibility dense
+	subTrack wgEncodeSydhRnaSeq
+	type bam
+	pairEndsByName on
+	showNames off
+	noColorTag .
+	bamColorMode off
+	bamGrayMode aliQual
+	baseColorDefault diffBases
+	baseColorUseSequence lfExtra
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 100
+	maxWindowToDraw 1000000
+
+        track wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel CH12 Aln 1
+        longLabel CH12 RNA-seq Alignments Rep 1 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=CH12 readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep1
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6812 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqCh12RibozerogR2x101dAlnRep2
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel CH12 Aln 2
+        longLabel CH12 RNA-seq Alignments Rep 2 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=CH12 readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep2
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6812 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel ES-E14 Aln 1
+        longLabel ES-E14 RNA-seq Alignments Rep 1 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=ESE14 readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep1
+        type bam
+        origAssembly mm9
+        color 65,105,225
+        # subId=6813 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqEse14RibozerogR2x101dAlnRep2
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel ES-E14 Aln 2
+        longLabel ES-E14 RNA-seq Alignments Rep 2 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=ESE14 readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep2
+        type bam
+        origAssembly mm9
+        color 65,105,225
+        # subId=6813 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel MEL DMSO Aln 1
+        longLabel MEL DMSO 2.0% RNA-seq Alignments Rep 1 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=MEL readType=R2X101D rnaExtract=RIBOZEROG treatment=DM2P5D rep=rep1
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6814 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqMelDm2p5dRibozerogR2x101dAlnRep2
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel MEL DMSO Aln 2
+        longLabel MEL DMSO 2.0% RNA-seq Alignments Rep 2 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=MEL readType=R2X101D rnaExtract=RIBOZEROG treatment=DM2P5D rep=rep2
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6814 dateSubmitted=2012-04-19
+
+        track wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep1
+        parent wgEncodeSydhRnaSeqViewAlignments 
+        shortLabel MEL Aln 1
+        longLabel MEL RNA-seq Alignments Rep 1 from ENCODE/Stanford/Yale
+        subGroups view=Alignments cellType=MEL readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep1
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6815 dateSubmitted=2012-05-01
+
+        track wgEncodeSydhRnaSeqMelRibozerogR2x101dAlnRep2
+        parent wgEncodeSydhRnaSeqViewAlignments
+        shortLabel MEL Aln 2
+        longLabel MEL RNA-seq Alignments Rep 2 from ENCODE/Stanford/Yale 
+        subGroups view=Alignments cellType=MEL readType=R2X101D rnaExtract=RIBOZEROG treatment=NONE rep=rep2
+        type bam
+        origAssembly mm9
+        color 86,180,233
+        # subId=6815 dateSubmitted=2012-05-01
+
+
+
