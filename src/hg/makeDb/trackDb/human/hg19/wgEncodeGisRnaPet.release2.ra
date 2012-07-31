@@ -12,9 +12,9 @@ subGroup6 rank Replicate_rank rank1=1st rank2=2nd none=Pooled
 subGroup7 cloned Library_Prep_Method Free=Clone-free Based=Clone-based
 dimensions dimensionX=localization dimensionY=cellType dimensionB=rank dimensionD=cloned dimensionsC=rnaExtract
 dimensionBchecked rank1,none   
-dimensionDchecked Free,Based
-dimensionCchecked PAP
-filterComposite dimensionB=multi dimensionC=multi dimensionD=multi
+#dimensionDchecked Free,Based
+#dimensionCchecked PAP
+filterComposite dimensionB=multi dimensionC=all dimensionD=all
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract labVersion=Lab_Version replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession seqPlatform=Platform fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ localization=+ cloned=+ view=- rank=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
