@@ -7672,7 +7672,7 @@ orderUrl http://www.genome.gov/10000336
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 86,180,233
-sex F
+sex U
 protocol Hardison:MEP_Hardison_protocol.pdf
 
 term MEF
