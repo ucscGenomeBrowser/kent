@@ -374,7 +374,7 @@ while ((thisRow = slPopHead(mdbPtr)) != NULL)
     AllocVar(leafObj);
     leafObj->obj     = thisRow->obj;
     if ( buildHashes )
-        hashAddUnique(limbVal->objHash, leafObj->obj, leafObj);// Pointer to struct to resolve type!
+        hashAddUnique(limbVal->objHash, leafObj->obj, leafObj);// Pointer to struct to resolve type
     slAddHead(&(limbVal->objs),leafObj);
 
     freeMem(thisRow);
@@ -1105,10 +1105,8 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
                 if (differentString(mdbVar->val,objExists->vars->val))
                     {
                     safef(query, sizeof(query),
-                        "update %s set val = '%s' where obj = '%s' and var = '%s'",
-                            tableName,
-                            sqlEscapeString(mdbVar->val),
-                            mdbObj->obj,mdbVar->var);
+                          "update %s set val = '%s' where obj = '%s' and var = '%s'",
+                          tableName, sqlEscapeString(mdbVar->val), mdbObj->obj, mdbVar->var);
                     verbose(2, "Requesting update of 1 row:\n\t%s;\n",query);
                     if (!testOnly)
                         sqlUpdate(conn, query);
@@ -1120,9 +1118,8 @@ for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             }
         // Finally ready to insert new vars
         safef(query, sizeof(query),
-            "insert into %s set obj='%s', var='%s', val='%s'",
-                tableName,mdbObj->obj,mdbVar->var,
-                sqlEscapeString(mdbVar->val)); // FIXME Strip quotes
+              "insert into %s set obj='%s', var='%s', val='%s'",
+              tableName,mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
         verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
         if (!testOnly)
             sqlUpdate(conn, query);
@@ -2481,7 +2478,7 @@ chopByWhite(varsLine,var,count);
 for (ix=0;ix<count;ix++)
     {
     boolean notEqual = FALSE;
-    char *val = strchr(var[ix],'=');// list may be vars alone! (var1=val1 var2 var3!=val3 var4=None)
+    char *val = strchr(var[ix],'=');// list may be vars alone (var1=val1 var2 var3!=val3 ...)
     if (val != NULL)
         {
         notEqual = (*(val - 1) == '!');
@@ -2503,10 +2500,10 @@ freeMem(varsLine);
 if (returnMatches)
     {
     *pMdbObjs = mdbObjsNoMatch;
-    return  mdbObjsMatch;
+    return mdbObjsMatch;
     }
 *pMdbObjs = mdbObjsMatch;
-return  mdbObjsNoMatch;
+return mdbObjsNoMatch;
 }
 
 struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean tables, boolean files)
@@ -3117,7 +3114,7 @@ while (mdbObjs != NULL)
         {
         printf("Composite%s '%s' has %d recognizable experiment%s with %d objects needing %s",
                (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),
-                expMissing,MDB_VAR_ENCODE_EXP_ID);
+               expMissing,MDB_VAR_ENCODE_EXP_ID);
         if (accMissing > 0)
             printf(" and %d objects needing %s",accMissing,MDB_VAR_DCC_ACCESSION);
         printf(" updated.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",

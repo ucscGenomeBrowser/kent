@@ -233,7 +233,7 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; "
                               "white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' "
                               "style='max-width:600px;'>\n",
-                row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
+                              row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
         struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION,
                                                  FALSE, !fileSearch, fileSearch);
                                                         // not tags, either a file or table search
@@ -301,7 +301,6 @@ if (!strchr(token,'*') && !strchr(token,'?'))
 char wordWild[1024];
 safef(wordWild,sizeof wordWild,"*%s*",token);
 return wildMatch(wordWild, string);
-
 }
 
 boolean searchNameMatches(struct trackDb *tdb, struct slName *wordList)

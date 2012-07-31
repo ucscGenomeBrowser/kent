@@ -27,28 +27,28 @@ boolean isBlue = FALSE;
 int i;
 for (i=0; i<size; ++i)
     {
-      if (r!=NULL && s[i]==r[i])
+    if (r!=NULL && s[i]==r[i])
 	fprintf(f, ".");
-      else
+    else
 	{
-	  char c = s[i];
-	  if (isupper(c))
+	char c = s[i];
+	if (isupper(c))
             {
-              if (!isBlue)
+            if (!isBlue)
                 {
                 fprintf(f, "<span style='color:#0000FF;'>");
-                  isBlue = TRUE;
+                isBlue = TRUE;
                 }
             }
-	  else if (islower(c))
+	else if (islower(c))
             {
-              if (isBlue)
+            if (isBlue)
                 {
                 fprintf(f, "</span>");
-                  isBlue = FALSE;
+                isBlue = FALSE;
                 }
             }
-	  fprintf(f, "%c", c);
+	fprintf(f, "%c", c);
 	}
     }
 
@@ -79,7 +79,7 @@ for (i=0; i<size; i++)
 }
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
-        boolean onlyDiff, int blockNo)
+                  boolean onlyDiff, int blockNo)
 {
 int ii, ch;
 int srcChars = 0;
@@ -203,8 +203,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
             dyStringPrintf(dy, "%s:%d-%d %c %*dbps",chrom, s+1, e, mc->strand,sizeChars, mc->size);
             fprintf(f, "<A TITLE=\"%s\"> %*s </A> ", dy->string, srcChars, org);
 
-            updateSummaryLine(summaryLine, referenceText + lineStart,
-                                    mc->text + lineStart, size);
+            updateSummaryLine(summaryLine, referenceText + lineStart, mc->text + lineStart, size);
             blueCapWrite(f, mc->text + lineStart, size,
 			 (onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL);
 	    fprintf(f, "\n");
@@ -388,8 +387,8 @@ return TRUE;
 }
 
 static void capAliTextOnTrack(struct mafAli *maf,
-        char *db, char *chrom,
-        char *track, boolean onlyCds)
+                              char *db, char *chrom,
+                              char *track, boolean onlyCds)
 /* Capitalize exons in alignment. */
 {
 int rowOffset;
@@ -442,16 +441,15 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
-static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,
-        struct sqlConnection *conn2, struct trackDb *tdb,
-        char *chrom, int start, int end, char *axtOtherDb, char *file)
+static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn,struct sqlConnection *conn2,
+                                            struct trackDb *tdb, char *chrom, int start, int end,
+                                            char *axtOtherDb, char *file)
 {
 if (axtOtherDb != NULL)
     {
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
     struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->table,
-        chrom, start, end,
-	database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
+            chrom, start, end, database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -470,8 +468,7 @@ if (axtOtherDb != NULL)
     {
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
     struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->table,
-        chrom, start, end,
-        database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
+            chrom, start, end, database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -545,7 +542,7 @@ else
         }
 
     mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd,
-        axtOtherDb, fileName);
+                                    axtOtherDb, fileName);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
 
     safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
@@ -766,8 +763,8 @@ else
                 capMafOnTrack(maf, capTrack, onlyCds);
 #endif
             printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
-                ++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size,
-                maf->components->size);
+                   ++aliIx,realCount,maf->components->start + 1,
+                   maf->components->start + maf->components->size, maf->components->size);
             mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
             }
 	mafAliFreeList(&subList);
@@ -811,25 +808,25 @@ for (i=0; i<size; i=i+step)
 	  char c = s[i];
 	  if (isupper(c))
             {
-              if (!isBlue)
+            if (!isBlue)
                 {
                 fprintf(f, "<span style='color:#0000FF;'>");
-                  isBlue = TRUE;
+                isBlue = TRUE;
                 }
             }
-	  else if (islower(c))
+	else if (islower(c))
             {
-              if (isBlue)
+            if (isBlue)
                 {
                 fprintf(f, "</span>");
-                  isBlue = FALSE;
+                isBlue = FALSE;
                 }
             }
           /* look up codon to get AA if it is protein */
         if (isProtein)
+            {
+            if (c != '-')
                 {
-                if (c != '-')
-                    {
 		    c=lookupCodon(s+(long)(i-offset%3));
 		    /* bypass the first partial codon */
 		    if ((i == 0) && (c == 'X')) c= ' ';
@@ -845,7 +842,7 @@ if (isBlue)
 }
 
 void mafPrettyOutGsid(FILE *f, struct mafAli *maf, int lineSize,
-        boolean onlyDiff, int blockNo, boolean isProtein, int mafOrig)
+                      boolean onlyDiff, int blockNo, boolean isProtein, int mafOrig)
 {
 int ii, ch;
 int srcChars = 0;
@@ -945,10 +942,11 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
             fprintf(f, "<A TITLE=\"%s\"> %*s </A> ", dy->string, srcChars, org);
 
             updateSummaryLine(summaryLine, referenceText + lineStart,
-                                    mc->text + lineStart, size);
+                              mc->text + lineStart, size);
             blueCapWriteGsid(f, mc->text + lineStart, size,
-                (onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL, isProtein,
-                 mc->start-mafOrig);
+                             (onlyDiff && mc != maf->components) ? referenceText + lineStart
+                                                                 : NULL, isProtein,
+                             mc->start-mafOrig);
             fprintf(f, "\n");
             }
 	else
@@ -1106,7 +1104,7 @@ else
         }
 
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd,
-        axtOtherDb);
+                                   axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
 
     safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
@@ -1266,8 +1264,8 @@ else
             {
             mafLowerCase(maf);
             printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
-                ++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size,
-                maf->components->size);
+                   ++aliIx,realCount,maf->components->start + 1,
+                   maf->components->start + maf->components->size, maf->components->size);
             if (strstr(tdb->type, "wigMafProt"))
                 {
 		mafPrettyOutGsid(stdout, maf,210,onlyDiff, aliIx, 1, mafOrig);
@@ -1298,7 +1296,7 @@ mafOrAxtClick2(conn, conn2, tdb, NULL, fileName);
 }
 
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb,
-        char *item, int start)
+                     char *item, int start)
 /* Display details for MAF tracks. */
 {
 if (hIsGsidServer())
@@ -1312,7 +1310,7 @@ else
 }
 
 void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb,
-        char *item, int start, char *otherDb)
+                     char *item, int start, char *otherDb)
 /* Display details for AXT tracks. */
 {
 mafOrAxtClick(conn, tdb, otherDb);

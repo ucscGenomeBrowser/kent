@@ -322,7 +322,8 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
  * uses style "normalText" */
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
-    int menuSize, char *checked, char *class, char *style,char *javascript);
+                                                int menuSize, char *checked, char *class,
+                                                char *style,char *javascript);
 /* Make a drop-down list with names, text class, style and javascript. */
 
 void cgiMakeDropListClassWithStyle(char *name, char *menu[],
@@ -338,7 +339,7 @@ void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize,
 /* Make a drop-down list with names and values. */
 
 void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
-    int count, char *selected, char *extra);
+                                     int count, char *selected, char *extra);
 /* Make a drop-down list with both text and values. */
 
 char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,

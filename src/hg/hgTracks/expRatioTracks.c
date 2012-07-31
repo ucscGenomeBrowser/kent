@@ -358,8 +358,8 @@ if(sameString(b->name, "NSCLC"))
 return(strcmp(a->name, b->name));
 }
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database,
-        char *table, int expIndex, char *filter, int filterIndex)
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table,
+                                               int expIndex, char *filter, int filterIndex)
 /* Groups bed expScores in multiple scores bed by the expIndex
  * in the expRecord->extras array. Makes use of hashes to remember
  * numerical index of experiments, as hard to do in a list.
@@ -1038,8 +1038,9 @@ if (val > 0)
         {
         return shadesOfLowe1[9];
         }
-        else if(val == addednumber+2){
-                return  shadesOfLowe2[9];
+    else if (val == addednumber+2)
+        {
+        return  shadesOfLowe2[9];
 	}
 	else if(val == addednumber+3){
 		return shadesOfLowe3[9];
@@ -1226,7 +1227,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     lfs->end = 0;
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
-        if(lf->start < lfs->start)
+        if (lf->start < lfs->start)
             lfs->start = lf->start;
 	if(lf->end > lfs->end)
 	    lfs->end = lf->end;
@@ -1346,9 +1347,9 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 }
 
 void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-        boolean withCenterLabels, MgFont *font,
-        Color color, enum trackVisibility vis)
+                            struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+                            boolean withCenterLabels, MgFont *font,
+                            Color color, enum trackVisibility vis)
 /* Because I want the labels to appear in pack mode, and make the display */
 /* identical to full mode, there's this custom leftLabels function. */
 {
@@ -1562,8 +1563,8 @@ freeMem(pixCountArray);
 }
 
 void expRatioDrawItemsWithExons(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
+                                struct hvGfx *hvg, int xOff, int yOff, int width,
+                                MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements and show exons.  A cart var should be */
 /* on to access this function instead of directly. */
 {
@@ -1582,8 +1583,8 @@ for (item = tg->items; item != NULL; item = item->next)
 }
 
 void expRatioDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
+                       struct hvGfx *hvg, int xOff, int yOff, int width,
+                       MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements, and do it a lot faster than */
 /* genericDrawItems would. */
 {

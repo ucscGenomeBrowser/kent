@@ -1330,8 +1330,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         printf("  ");
     printf( "%4d %-10s %-5s %12d %12d %10d      %c      %-10s %-10s\n",
-        ret.instance, ret.species,ret.chrom, ret.start + 1, ret.end,
-        ret.end - ret.start + 1, ret.strand[0],ret.fivePrime,ret.threePrime);
+            ret.instance, ret.species,ret.chrom, ret.start + 1, ret.end,
+            ret.end - ret.start + 1, ret.strand[0],ret.fivePrime,ret.threePrime);
     }
 printf("</A>");
 sqlFreeResult(&sr);
@@ -1899,25 +1899,25 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-            if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
-                { /*look for start of exon on neg strand */
-                tCoding=TRUE;
-                dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
-                addTag(dyT,exonTag);
+                if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
+                    { /*look for start of exon on neg strand */
+                    tCoding=TRUE;
+                    dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
+                    addTag(dyT,exonTag);
 
-                if (qStopCodon == FALSE)
-                    {
-                    qCoding=TRUE;
-                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
-                        tCodonPos = gp->exonFrames[nextEndIndex]+1;
-                    qCodonPos = tCodonPos; /* put translation back in sync */
-		    qFlip = tFlip;
-		    }
-		}
-	    else if ((tPtr <= nextStart-1) && (tPtr > tStart))
-		{ /* start of UTR 5'*/
-		tClass=UTR5; qClass=UTR5;
-		}
+                    if (qStopCodon == FALSE)
+                        {
+                        qCoding=TRUE;
+                        if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                            tCodonPos = gp->exonFrames[nextEndIndex]+1;
+                        qCodonPos = tCodonPos; /* put translation back in sync */
+                        qFlip = tFlip;
+                        }
+                    }
+                else if ((tPtr <= nextStart-1) && (tPtr > tStart))
+                    { /* start of UTR 5'*/
+                    tClass=UTR5; qClass=UTR5;
+                    }
 	    }
             /* toggle between blue / purple color for exons */
             if (tCoding && tFlip )
@@ -2655,8 +2655,7 @@ if (!foundPep)
             }
         else
             {
-            hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
-                "translate", seqName);
+            hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
             printf("Translated Protein</A> from ");
             if (sameString(geneTable, "refGene") )
                 {
@@ -2779,7 +2778,7 @@ if (oldToNew != NULL && sqlTableExists(conn, oldToNew))
     char query[512];
     safef(query, sizeof(query),
         "select * from %s where oldId = '%s' and oldChrom='%s' and oldStart=%d",
-        oldToNew, item, seqName, start);
+            oldToNew, item, seqName, start);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
@@ -5525,7 +5524,7 @@ if (row != NULL)
         if (hTableExists(database, "rgdEstLink"))
             {
             snprintf(query, sizeof(query),
-                "select id from %s.rgdEstLink where name = '%s';",  database, acc);
+                     "select id from %s.rgdEstLink where name = '%s';",  database, acc);
             if (sqlQuickQuery(conn2, query, rgdEstId, sizeof(rgdEstId)) != NULL)
                 {
                 tdbRgdEst = hashFindVal(trackHash, "rgdEst");
@@ -6705,8 +6704,8 @@ else
 fputs("Click on links in the frame to the left to navigate through "
       "the alignment.\n", f);
 blockCount = pslShowAlignment(psl, qType == gftProt,
-        qName, qSeq, qStart, qEnd,
-        tName, tSeq, tStart, tEnd, f);
+                              qName, qSeq, qStart, qEnd,
+                              tName, tSeq, tStart, tEnd, f);
 freeDnaSeq(&tSeq);
 return blockCount;
 }
@@ -8608,8 +8607,7 @@ if (isEnsembl)
         safef(dbUrl, sizeof(dbUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
     }
 else if (isVega)
-    safef(dbUrl, sizeof(dbUrl), "http://vega.sanger.ac.uk/%s",
-         genomeStrEnsembl);
+    safef(dbUrl, sizeof(dbUrl), "http://vega.sanger.ac.uk/%s", genomeStrEnsembl);
 
 boolean nonCoding = FALSE;
 char query[512];
@@ -11628,11 +11626,11 @@ if (hTableExists(database, "all_mrna"))
                     pg->chromStart, pg->chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
             else
                 {
-                dyStringPrintf(dy,
-                    "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
-                    pg->chromStart, pg->chromEnd, pg->gChrom,
-                    hChromSize(database, pg->gChrom)-(pg->gEnd),
-                    hChromSize(database, pg->gChrom)-(pg->gStart));
+                dyStringPrintf(dy,"tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d "
+                                  "and qStart < %d and qStrand = '-'",
+                               pg->chromStart, pg->chromEnd, pg->gChrom,
+                               hChromSize(database, pg->gChrom)-(pg->gEnd),
+                               hChromSize(database, pg->gChrom)-(pg->gStart));
                 }
             dyStringAppend(dy, " order by qStart");
             sr = sqlGetResult(conn, dy->string);
@@ -14093,7 +14091,8 @@ if (row != NULL)
         sprintf(stsClone, "%d_%s_clone", infoRow->identNo, infoRow->name);
 
         /* find sts in primer alignment info */
-        sprintf(query, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsPrimer, start, end);
+        sprintf(query, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' "
+                "AND tEnd = '%d'",stsPrimer, start, end);
         sr1 = sqlGetResult(conn1, query);
         i = 0;
         pslStart = 0;
@@ -14151,14 +14150,16 @@ if (row != NULL)
             printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
             printf("<TABLE>\n");
             sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
-                "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
-                    table, marker, seqName, start, end);
+                           "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+                           table, marker, seqName, start, end);
             sr = sqlGetResult(conn,query);
             while ((row = sqlNextRow(sr)) != NULL)
-            {
+                {
                 stsMapMouseNewStaticLoad(row, &stsRow);
-                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-                       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&"
+                       "g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+                       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
+                       stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 		}
 	    printf("</TABLE>\n");
 	    }
@@ -16576,16 +16577,16 @@ for (j = 0;  j < alleleCount;  j++)
 	{
 	int diff = alSize - refAlleleSize;
 	if ((diff % 3) != 0)
-	    printf(firstTwoColumnsPctS "frameshift</TD></TR>\n",
-		   geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("frameshift"));
 	else if (diff > 0)
-	    printf(firstTwoColumnsPctS "%sinsertion of %d codon%s</TD></TR>\n",
-		   (snpCodonPos == 0 ? "" : "frameshift and"),
-		   geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
+	    printf(firstTwoColumnsPctS "%s (insertion of %d codon%s)</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("inframe_insertion"),
+		   (int)(diff/3), (diff > 3) ?  "s" : "");
 	else
-	    printf(firstTwoColumnsPctS "%sdeletion of %d codon%s</TD></TR>\n",
-		   (snpCodonPos == 0 ? "" : "frameshift and"),
-		   geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
+	    printf(firstTwoColumnsPctS "%s (deletion of %d codon%s)</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("inframe_deletion"),
+		   (int)(-diff/3), (diff < -3) ?  "s" : "");
 	}
     else if (alSize == 1 && refIsSingleBase)
 	{
@@ -16598,18 +16599,35 @@ for (j = 0;  j < alleleCount;  j++)
 	safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
 	safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
 	if (refAA != snpAA)
-	    printf(firstTwoColumnsPctS "%ssense %c (%s) --> %c (%s)</TD></TR>\n",
-		   geneTrack, geneName,
-		   ((refAA == '*' || snpAA == '*') ? "non" : "mis"),
-		   refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    {
+	    if (refAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else if (snpAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    }
 	else
-	    printf(firstTwoColumnsPctS
-		   "coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
-		   geneTrack, geneName, refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    {
+	    if (refAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    }
 	}
     else
-	printf(firstTwoColumnsPctS "%s --> %s</TD></TR>\n",
-	       geneTrack, geneName, refAllele, al);
+	printf(firstTwoColumnsPctS "%s %s --> %s</TD></TR>\n",
+	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"), refAllele, al);
     }
 }
 
@@ -16633,24 +16651,27 @@ for (i = iStart;  i != iEnd;  i += iIncr)
 	if (snpEnd > cdsStart && snpStart < cdsEnd)
 	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
 	else if (cdsEnd > cdsStart)
-	    printf(firstTwoColumnsPctS "untranslated-%d</TD></TR>\n", geneTrack, geneName,
-		   (geneIsRc ^ (snpEnd < cdsStart)) ? 5 : 3);
+	    {
+	    boolean is5Prime = geneIsRc ^ (snpEnd < cdsStart);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc((is5Prime) ? "untranslated-5" : "untranslated-3"));
+	    }
 	else
-	    printf(firstTwoColumnsPctS "noncoding gene</TD></TR>\n", geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc("ncRNA"));
 	}
     if (i > 0)
 	{
 	int intronStart = gene->exonEnds[i-1], intronEnd = gene->exonStarts[i];
 	if (snpStart < intronStart+2 && snpEnd > intronStart)
-	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
-		   geneTrack, geneName,
-		   (geneIsRc ? 3 : 5));
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc(geneIsRc ? "splice-3" : "splice-5"));
 	else if (snpStart < intronEnd-2 && snpEnd > intronStart+2)
-	    printf(firstTwoColumnsPctS "intron</TD></TR>\n", geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc("intron"));
 	else if (snpStart < intronEnd && snpEnd > intronEnd-2)
-	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
-		   geneTrack, geneName,
-		   (geneIsRc ? 5 : 3));
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc(geneIsRc ? "splice-5" : "splice-3"));
 	}
     }
 }
@@ -16676,9 +16697,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
-    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTrack, geneName, (snpStart - end + 1),
-	   (strand[0] == '-' ? "up" : "down"));
+    boolean isRc = strand[0] == '-';
+    printf(firstTwoColumnsPctS "%s (%d bases %sstream)</TD></TR>\n",
+	   geneTrack, geneName, snpMisoLinkFromFunc(isRc ? "near-gene-5" : "near-gene-3"),
+	   (snpStart - end + 1), (isRc ? "up" : "down"));
     nearCount++;
     }
 sqlFreeResult(&sr);
@@ -16693,9 +16715,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
-    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTrack, geneName, (start - snpEnd + 1),
-	   (strand[0] == '-' ? "down" : "up"));
+    boolean isRc = strand[0] == '-';
+    printf(firstTwoColumnsPctS "%s (%d bases %sstream)</TD></TR>\n",
+	   geneTrack, geneName, snpMisoLinkFromFunc(isRc ? "near-gene-3" : "near-gene-5"),
+	   (start - snpEnd + 1), (isRc ? "down" : "up"));
     nearCount++;
     }
 sqlFreeResult(&sr);
@@ -16794,8 +16817,12 @@ switch (funcCode)
 	return "nonsense";
     case 42:
 	return "missense";
+    case 43:
+	return "stop-loss";
     case 44:
 	return "frameshift";
+    case 45:
+	return "cds-indel";
     default:
 	{
 	static char buf[16];
@@ -16822,7 +16849,11 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 	continue;
     char setting[512];
     safef(setting, sizeof(setting), "codingAnnoLabel_%s", tbl->name);
-    char *label = trackDbSettingOrDefault(tdb, setting, tbl->name);
+    char *label = trackDbSettingOrDefault(tdb, setting, NULL);
+    if (label == NULL && endsWith(tbl->name, "DbSnp"))
+	label = "dbSNP";
+    else
+	label = tbl->name;
     boolean hasBin = hIsBinned(database, tbl->name);
     boolean hasCoords = (sqlFieldIndex(conn, tbl->name, "chrom") != -1);
     int rowOffset = hasBin + (hasCoords ? 3 : 0);
@@ -16848,9 +16879,12 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 	    memSwapChar(anno->peptides[i], strlen(anno->peptides[i]), 'X', '*');
 	    if (anno->funcCodes[i] == 8)
 		continue;
+	    char *txName = anno->transcript;
+	    if (startsWith("NM_", anno->transcript))
+		txName = getSymbolForGeneName("refGene", anno->transcript);
 	    char *func = dbSnpFuncFromInt(anno->funcCodes[i]);
-	    printf("%s: %s ", anno->transcript, func);
-	    if (sameString(func, "frameshift"))
+	    printf("%s: %s ", txName, snpMisoLinkFromFunc(func));
+	    if (sameString(func, "frameshift") || sameString(func, "cds-indel"))
 		{
 		puts("<BR>");
 		continue;
@@ -16965,7 +16999,8 @@ if (version <= 127)
 	   snp->locType);
 printf("<TR><TD><B><A HREF=\"#Class\">Class</A></B></TD><TD>%s</TD></TR>\n", snp->class);
 printf("<TR><TD><B><A HREF=\"#Valid\">Validation</A></B></TD><TD>%s</TD></TR>\n", snp->valid);
-printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n", snp->func);
+printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n",
+       snpMisoLinkFromFunc(snp->func));
 printf("<TR><TD><B><A HREF=\"#MolType\">Molecule Type</A>&nbsp;&nbsp;</B></TD><TD>%s</TD></TR>\n",
        snp->molType);
 if (snp->avHet>0)
@@ -17636,8 +17671,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     ncRna = ncRnaLoad(row);
     printCustomUrl(tdb, item, TRUE);
     printf("<B>Type:</B> %s<BR>", ncRna->type);
-    if (ncRna->extGeneId != NULL)
-    if (!sameWord(ncRna->extGeneId, ""))
+    if (ncRna->extGeneId != NULL
+    &&  !sameWord(ncRna->extGeneId, ""))
         {
         printf("<B>External Gene ID:</B> %s<BR>", ncRna->extGeneId);
         }
@@ -19233,7 +19268,7 @@ for(i = 0; i < length; i++)
             printf("<tr><td align=center>");
 
         /* if we have a url, create a reference */
-        if(differentString(url,""))
+        if (differentString(url,""))
             printf("<a href=\"%s\" TARGET=_BLANK>%c</a>", url, header[i]);
 	else
 	    printf("%c", header[i]);
@@ -20345,14 +20380,14 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 		psl->tStart, psl->tEnd, database,tdb->track, pred);
 	    printf("alignment</A> ");
 	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTable=%s\">",
-		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
-                psl->tStart, psl->tEnd, database,tdb->track);
+	           hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
+                   psl->tStart, psl->tEnd, database,tdb->track);
             printf("peptide</A> ");
             printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
-                100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
-                100.0 * (psl->match + psl->repMatch) / (psl->match + psl->repMatch + psl->misMatch),
-                psl->qStart+1, psl->qEnd,
-                100.0 * (psl->qEnd - psl->qStart) / psl->qSize, psl->strand[1]);
+                   100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
+                   100.0 * (psl->match + psl->repMatch) / (psl->match + psl->repMatch + psl->misMatch),
+                   psl->qStart+1, psl->qEnd,
+                   100.0 * (psl->qEnd - psl->qStart) / psl->qSize, psl->strand[1]);
             printf("<A HREF=\"%s&position=%s:%d-%d&db=%s&ss=%s+%s\">",
                    hgTracksPathAndSettings(),
                    psl->tName, psl->tStart + 1, psl->tEnd, database,
@@ -21723,7 +21758,8 @@ hFreeConn(&conn);
 }
 
 void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart,
-                        int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS, int cdsE)
+                        int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS,
+                        int cdsE)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount = 0, i = 0, j= 0, *exnStarts = NULL, *exnEnds = NULL;
@@ -21807,9 +21843,8 @@ fputs("Click on links in the frame to the left to navigate through "
       "the alignment.\n", body);
 
 safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
-blockCount = pslGenoShowAlignment(psl, qType == gftProt,
-        entryName, qSeq, qStart, qEnd,
-        tName, tSeq, tStart, tEnd, exnStarts, exnEnds, j, body);
+blockCount = pslGenoShowAlignment(psl, qType == gftProt, entryName, qSeq, qStart, qEnd,
+                                  tName, tSeq, tStart, tEnd, exnStarts, exnEnds, j, body);
 freez(&exnStarts);
 freez(&exnEnds);
 freeDnaSeq(&tSeq);
@@ -23218,9 +23253,9 @@ chrom       = row[ii];ii++;
 chromStart  = row[ii];ii++;
 chromEnd    = row[ii];ii++;
 fibroblast  = row[ii];ii++;
-    iPS         = row[ii];ii++;
-    absArea     = row[ii];ii++;
-    gene        = row[ii];ii++;
+iPS         = row[ii];ii++;
+absArea     = row[ii];ii++;
+gene        = row[ii];ii++;
     dist2gene	= row[ii];ii++;
     relation2gene = row[ii];ii++;
     dist2island	= row[ii];ii++;
@@ -23590,9 +23625,9 @@ if (sameString(table, "CGHBreastCancerUCSF") || sameString(table, "expBreastCanc
     printf("<TABLE BORDER=1>\n");
     printf("<TR><TH>Type</TH> <TH>Binary</TH> <TH>Value</TH></TR>\n");
     safef(query, sizeof(query),
-         "select overallBinary, overallTime, diseaseBinary, diseaseTime, "
-         "allrecBinary, allrecTime, distrecBinary, distrecTime from %s where %s = '%s' ",
-         cliniTable, key, item);
+          "select overallBinary, overallTime, diseaseBinary, diseaseTime, "
+          "allrecBinary, allrecTime, distrecBinary, distrecTime from %s where %s = '%s' ",
+          cliniTable, key, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -24947,10 +24982,10 @@ else if (sameWord(table, "transRegCode"))
 else if (sameWord(table, "transRegCodeProbe"))
     {
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
-        "transRegCodeCondition", "growthCondition");
+                        "transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(table, "wgEncodeRegDnaseClustered") ||
-        sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
+else if (sameWord(table, "wgEncodeRegDnaseClustered")
+     ||  sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
     }

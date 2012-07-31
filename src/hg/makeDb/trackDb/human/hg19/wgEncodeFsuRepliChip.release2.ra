@@ -4,10 +4,10 @@ shortLabel FSU Repli-chip
 longLabel Replication Timing by Repli-chip from ENCODE/FSU
 group regulation
 subGroup1 view Views WaveSignal=Wavelet-smoothed_Signal
-subGroup2 cellType Cell_Line t1H1HESC=H1-hESC&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t3BG02ES=BG02ES t3GM06990=GM06990 t3H7HESC=H7-hESC t3H9ES=H9ES t3IPSHFIB2IPS4=iPS_hFib2_iPS4 t3IPSHFIB2IPS5=iPS_hFib2_iPS5
+subGroup2 cellType Cell_Line t1H1HESC=H1-hESC&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t3BG02ES=BG02ES t3GM06990=GM06990 t3H7HESC=H7-hESC t3H9ES=H9-hESC t3IPSHFIB2IPS4=iPS_hFib2_iPS4 t3IPSHFIB2IPS5=iPS_hFib2_iPS5
 subGroup3 rep Rep rep1=1 rep2=2 rep3=3
 dimensions dimensionX=cellType dimensionY=rep
-sortOrder cellType=+ rep=+ view=+
+sortOrder cellType=+ rep=+
 fileSortOrder cell=Cell_Line replicate=Rep view=View platform=Platform labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
