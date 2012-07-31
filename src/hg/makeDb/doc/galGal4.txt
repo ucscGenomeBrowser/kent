@@ -675,9 +675,11 @@ TMPDIR=/scratch/tmp
     doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > do.log 2>&1
-XXX - running 2012-07-27 10:17
+    # the chaining step ran for several days, the longest chain job:
+# Longest finished job:          213567s    3559.45m    59.32h    2.47d
+    #   Elapsed time: 4572m44s
     cat fb.galGal4.chainGeoFor1Link.txt
-    #   1502192631 bases of 2897316137 (51.848%) in intersection
+    #   744451026 bases of 1032854810 (72.077%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/galGal4/bed
@@ -689,10 +691,10 @@ XXX - running 2012-07-27 10:17
 	/hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    103m14.464s
+	> swap.log 2>&1 &
+    #   real    81m0.123s
     cat fb.geoFor1.chainHg19Link.txt
-    #   1455183825 bases of 2392715236 (60.817%) in intersection
+    #   736380222 bases of 1041286029 (70.718%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.galGal4.swap lastz.galGal4

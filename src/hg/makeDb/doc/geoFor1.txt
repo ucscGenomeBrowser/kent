@@ -478,3 +478,25 @@ geoFor1.perChromTables = no
     ln -s blastz.melGal1.swap lastz.melGal1
 
 ##############################################################################
+# lastz galGal4 Chickent (DONE - 2012-02-30 - Hiram)
+    # original alignment to turkey:
+    cd /hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27
+    cat fb.galGal4.chainGeoFor1Link.txt
+    #   744451026 bases of 1032854810 (72.077%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    81m0.123s
+    cat fb.geoFor1.chainHg19Link.txt
+    #   736380222 bases of 1041286029 (70.718%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.galGal4.swap lastz.galGal4
+
+##############################################################################
