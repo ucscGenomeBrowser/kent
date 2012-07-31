@@ -4737,7 +4737,7 @@ lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
-vendorName HSCI iPS Cell Core Facitlity
+vendorName HSCI iPS Cell Core Facility
 vendorId hFib2_iPS4
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
@@ -4756,7 +4756,7 @@ karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
 vendorName HSCI iPS Cell Core Facility
-vendorId hFIB2_iPS5
+vendorId hFib2_iPS5
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
