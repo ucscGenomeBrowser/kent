@@ -305,21 +305,9 @@ struct customTrack *theCtList = NULL;
 /* getDNA stuff actually works when the database doesn't exist! */
 boolean dbIsFound = FALSE;
 
-/* was cartHtmlStart done?  */
-static boolean didCartHtmlStart = FALSE;
-static boolean plainTextDump = FALSE;
-
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
 void doAltGraphXDetails(struct trackDb *tdb, char *item);
-
-void hgcStart(char *title)
-/* Print out header of web page with title.  Set
- * error handler to normal html error handler. */
-{
-cartHtmlStart(title);
-didCartHtmlStart = TRUE;
-}
 
 char* getEntrezNucleotideUrl(char *accession)
 /* get URL for Entrez browser on a nucleotide. free resulting string */
@@ -878,7 +866,6 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
-didCartHtmlStart = TRUE;
 }
 
 static struct dyString *subMulti(char *orig, int subCount,
@@ -4617,9 +4604,8 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // This output probably should be just text/plain but
 // trying to support the fancy warn handler box requires html.
 // But we want to keep it very simple and close to a plain text dump.
-plainTextDump = TRUE;
-puts("<html><head></head><body>\n");
-pushWarnHandler(htmlVaWarn);
+
+cartHtmlStart("DNA");
 hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
@@ -4680,8 +4666,6 @@ if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 
 puts("</PRE>");
-puts("</body></html>\n");
-popWarnHandler();
 }
 
 struct hTableInfo *ctToHti(struct customTrack *ct)
@@ -5328,7 +5312,7 @@ struct dnaSeq *seq = hGenBankGetMrna(database, acc, NULL);
 if (seq == NULL)
     errAbort("mRNA sequence %s not found", acc);
 
-hgcStart("mRNA sequence");
+cartHtmlStart("mRNA sequence");
 printf("<PRE><TT>");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -7895,7 +7879,7 @@ void htcTranslatedProtein(char *pepName)
 char *table = cartString(cart, "o");
 /* checks both gbSeq and table */
 aaSeq *seq = hGenBankGetPep(database, pepName, table);
-hgcStart("Protein Translation");
+cartHtmlStart("Protein Translation");
 if (seq == NULL)
     {
     warn("Predicted peptide %s is not avaliable", pepName);
@@ -7916,7 +7900,7 @@ char where[256];
 char protName[256];
 char *prot = NULL;
 
-hgcStart("Protein Translation from Genome");
+cartHtmlStart("Protein Translation from Genome");
 safef(where, sizeof(where), "name = \"%s\"", geneName);
 gp = genePredReaderLoadQuery(conn, tdb->table, where);
 hFreeConn(&conn);
@@ -7950,7 +7934,7 @@ char *prot = needMem(protBufSize);
 mrna->dna[cds.end] = '\0';
 dnaTranslateSome(mrna->dna+cds.start, prot, protBufSize);
 
-hgcStart("Protein Translation of mRNA");
+cartHtmlStart("Protein Translation of mRNA");
 displayProteinPrediction(acc, prot);
 }
 
@@ -8080,7 +8064,7 @@ struct dnaSeq *seq;
 int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(database, seqName, table);
 
-hgcStart("Predicted mRNA from Genome");
+cartHtmlStart("Predicted mRNA from Genome");
 safef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8112,7 +8096,7 @@ struct dnaSeq *seq = hGenBankGetMrna(database, geneName, "refMrna");
 if (seq == NULL)
     errAbort("RefSeq mRNA sequence %s not found", geneName);
 
-hgcStart("RefSeq mRNA");
+cartHtmlStart("RefSeq mRNA");
 printf("<PRE><TT>");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -12718,7 +12702,7 @@ void htcExtSeq(char *item)
 /* Print out DNA from some external but indexed .fa file. */
 {
 struct dnaSeq *seq;
-hgcStart(item);
+cartHtmlStart(item);
 seq = hExtSeq(database, item);
 printf("<PRE><TT>");
 faWriteNext(stdout, item, seq->dna, seq->size);
@@ -25363,10 +25347,7 @@ else
     }
 /* End of 1000+ line dispatch on table involving 100+ if/elses. */
 
-if (didCartHtmlStart)
-    cartHtmlEnd();
-else if (!plainTextDump)
-    webEnd();
+cartHtmlEnd();
 }
 
 struct hash *orgDbHash = NULL;
