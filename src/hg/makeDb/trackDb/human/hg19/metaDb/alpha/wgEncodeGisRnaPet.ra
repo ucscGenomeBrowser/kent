@@ -74,7 +74,6 @@ fileName wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA009,RHA010
-labProtocolId 087WC+pet,088WC+pet
 labVersion clone-free
 localization cell
 md5sum 5389c1c4d1cad7da294fd38074dbd4c4
@@ -367,7 +366,6 @@ fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA011,RHA012
-labProtocolId 087C+pet,088C+pet
 labVersion clone-free
 localization cytosol
 md5sum b917affee7662ad988b67af280d33aeb
@@ -660,7 +658,6 @@ fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA013,RHA014
-labProtocolId 087N+pet,088N+pet
 labVersion clone-free
 localization nucleus
 md5sum d0c43f00cb45cbeb8bd891621af892ff
@@ -3588,7 +3585,6 @@ fileName wgEncodeGisRnaPetImr90CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI001,RHI002
-labProtocolId 045WC+pet,046WC+pet
 labVersion clone-free
 localization cell
 md5sum ca9c092382b3055faccf13452c226eb9
@@ -3892,7 +3888,6 @@ fileName wgEncodeGisRnaPetImr90CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI003,RHI004
-labProtocolId 045C+pet,046C+pet
 labVersion clone-free
 localization cytosol
 md5sum ddc562fb1312dac43ce66b9b89b0c128
@@ -4196,7 +4191,6 @@ fileName wgEncodeGisRnaPetImr90NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI005,RHI006
-labProtocolId 045N+pet,046N+pet
 labVersion clone-free
 localization nucleus
 md5sum 62119430e017036d6ede9b55fcb70f3a
@@ -5491,7 +5485,6 @@ fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM046,RHM047
-labProtocolId 089WC+pet,090WC+pet
 labVersion iIDR
 localization cell
 md5sum 9429a9022c64788a8ccb48fe0d5e8124
@@ -5784,7 +5777,6 @@ fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM044,RHM045
-labProtocolId 089C+pet,090C+pet
 labVersion clone-free
 localization cytosol
 md5sum 157f067028bf9b6f47e5cdfa40be5f95
@@ -6077,7 +6069,6 @@ fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM054,RHM055
-labProtocolId 089N+pet,090N+pet
 labVersion clone-free
 localization nucleus
 md5sum 7339e29c127c1a17405a6589642f3609
@@ -6895,7 +6886,6 @@ fileName wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS015,RHS016
-labProtocolId 085WC+pet,086WC+pet
 labVersion clone-free
 localization cell
 md5sum e83f2760b330f08d0907be1d11cc769e
@@ -7188,7 +7178,6 @@ fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS017,RHS018
-labProtocolId 085C+pet,086C+pet
 labVersion clone-free
 localization cytosol
 md5sum 2e4a119208b6ac9dcf01d99f9aab944c
@@ -7481,7 +7470,6 @@ fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS019,RHS020
-labProtocolId 085N+pet,086N+pet
 labVersion clone-free
 localization nucleus
 md5sum cdcaa6fc46640cd38a459e2558e1d74c
@@ -7705,4 +7693,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -163309624
+# MAGIC: -486798621
