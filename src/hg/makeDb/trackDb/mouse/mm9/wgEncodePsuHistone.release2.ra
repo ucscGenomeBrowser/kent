@@ -598,7 +598,7 @@ wgEncode 1
         parent wgEncodePsuHistoneViewSignal off
         shortLabel MEL Input
         longLabel MEL C57BL/6 Input Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=M strain=C57BL6
         type bigWig 1.000000 132.000000
         color 86,180,233
         # subId=5240 dateSubmitted=2011-12-17

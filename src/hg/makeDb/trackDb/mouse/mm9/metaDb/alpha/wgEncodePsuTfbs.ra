@@ -6578,7 +6578,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view Alignments
@@ -6606,7 +6606,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view Alignments
@@ -6635,7 +6635,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view RawData
@@ -6664,7 +6664,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view RawData
@@ -6693,7 +6693,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view RepSignal
@@ -6722,7 +6722,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 view RepSignal
@@ -6750,7 +6750,7 @@ md5sum a920b3ea13270fb08a1ac15e1c1afab0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5144
 tableName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig
@@ -6778,7 +6778,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view Alignments
@@ -6805,7 +6805,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view Alignments
@@ -6832,7 +6832,7 @@ md5sum b413fbb66114ec48fe04306e83a1f1dd
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk
@@ -6861,7 +6861,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RawData
@@ -6889,7 +6889,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RawData
@@ -6917,7 +6917,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RepPeaks
@@ -6945,7 +6945,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RepPeaks
@@ -6973,7 +6973,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RepSignal
@@ -7001,7 +7001,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 view RepSignal
@@ -7028,7 +7028,7 @@ md5sum 7cc7fa5e0b35960e12a3d98bf682cdce
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 3048
 tableName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig
@@ -7056,7 +7056,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view Alignments
@@ -7083,7 +7083,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view Alignments
@@ -7110,7 +7110,7 @@ md5sum e8ad33333522132c47c3cdf97430be0a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk
@@ -7139,7 +7139,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RawData
@@ -7167,7 +7167,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RawData
@@ -7195,7 +7195,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RepPeaks
@@ -7223,7 +7223,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RepPeaks
@@ -7251,7 +7251,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RepSignal
@@ -7279,7 +7279,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 view RepSignal
@@ -7306,10 +7306,10 @@ md5sum 2ba6a08bf2ae353781a47168f6d6d2b3
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex U
+sex M
 strain Unknown
 subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1476372391
+# MAGIC: 1476371959

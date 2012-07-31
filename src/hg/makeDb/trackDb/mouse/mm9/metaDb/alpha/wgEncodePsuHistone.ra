@@ -7773,7 +7773,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view Alignments
@@ -7800,7 +7800,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view Alignments
@@ -7827,7 +7827,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RawData
@@ -7854,7 +7854,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RawData
@@ -7881,7 +7881,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RepSignal
@@ -7908,7 +7908,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RepSignal
@@ -7934,10 +7934,10 @@ md5sum a920b3ea13270fb08a1ac15e1c1afab0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -1748693730
+# MAGIC: -1748693842
