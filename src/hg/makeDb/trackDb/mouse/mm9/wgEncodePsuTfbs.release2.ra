@@ -216,7 +216,7 @@ html wgEncodePsuTfbs.release2
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel MEL Pol2-4H8
         longLabel MEL Pol2-4H8 TFBS ChIP-seq Peaks from ENCODE/PSU 
-        subGroups view=Peaks age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Peaks age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
         # subId=3048 dateSubmitted=2011-11-10
@@ -234,7 +234,7 @@ html wgEncodePsuTfbs.release2
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel MEL TAL1
         longLabel MEL TAL1 TFBS ChIP-seq Peaks from ENCODE/PSU 
-        subGroups view=Peaks age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Peaks age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
         # subId=5096 dateSubmitted=2011-11-05
@@ -444,7 +444,7 @@ html wgEncodePsuTfbs.release2
         parent wgEncodePsuTfbsViewSignal off
         shortLabel MEL Pol2-4H8 
         longLabel MEL Pol2-4H8 TFBS ChIP-seq Signal from ENCODE/PSU 
-        subGroups view=Signal age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Signal age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=M strain=C57BL6
         type bigWig 1.000000 186.000000
         color 86,180,233
 		viewLimits 5:50
@@ -464,7 +464,7 @@ html wgEncodePsuTfbs.release2
         parent wgEncodePsuTfbsViewSignal off
         shortLabel MEL TAL1 
         longLabel MEL TAL1 TFBS ChIP-seq Signal from ENCODE/PSU 
-        subGroups view=Signal age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Signal age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=M strain=C57BL6
         type bigWig 1.000000 346.000000
         color 86,180,233
 		viewLimits 2:300
@@ -519,7 +519,7 @@ html wgEncodePsuTfbs.release2
         parent wgEncodePsuTfbsViewSignal off
         shortLabel MEL Input 
         longLabel MEL Input TFBS ChIP-seq Signal from ENCODE/PSU 
-        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=M strain=C57BL6
         type bigWig 1.000000 132.000000
         color 86,180,233
         # subId=5144 dateSubmitted=2011-12-18

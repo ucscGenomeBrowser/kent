@@ -1051,7 +1051,7 @@ tableName wgEncodePsuRnaSeqG1eME0S129R1x55SigRep2
 treatment None
 view Signal
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep1
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1
 objType table
 age E0
 cell G1E
@@ -1060,7 +1060,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1069,14 +1069,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep1
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep2
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2
 objType table
 age E0
 cell G1E
@@ -1085,7 +1085,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1094,14 +1094,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dAlnRep2
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep1
 objType file
 age E0
 cell G1E
@@ -1110,7 +1110,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1119,13 +1119,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep2
 objType file
 age E0
 cell G1E
@@ -1134,7 +1134,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1143,13 +1143,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep1
 objType file
 age E0
 cell G1E
@@ -1158,7 +1158,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1167,13 +1167,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep2
 objType file
 age E0
 cell G1E
@@ -1182,7 +1182,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1191,13 +1191,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1
 objType table
 age E0
 cell G1E
@@ -1206,7 +1206,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1215,14 +1215,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep2
 objType table
 age E0
 cell G1E
@@ -1231,7 +1231,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1240,14 +1240,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep2
 treatment None
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1
 objType table
 age E0
 cell G1E
@@ -1256,7 +1256,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1265,14 +1265,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1
 treatment None
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep2
 objType table
 age E0
 cell G1E
@@ -1281,7 +1281,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-23
 dateUnrestricted 2013-04-22
-fileName wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1290,10 +1290,10 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7565
-tableName wgEncodePsuRnaSeqG1eUE0S129R2x99dPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
@@ -1451,7 +1451,7 @@ tableName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep2
 treatment diffProtD_24hr
 view Signal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1460,7 +1460,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1469,14 +1469,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1485,7 +1485,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1494,14 +1494,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1510,7 +1510,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1519,14 +1519,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1
 treatment diffProtD_14hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1535,7 +1535,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1544,14 +1544,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2
 treatment diffProtD_14hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -1560,7 +1560,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1569,13 +1569,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
 treatment diffProtD_14hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -1584,7 +1584,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1593,13 +1593,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
 treatment diffProtD_14hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -1608,7 +1608,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1617,13 +1617,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
 treatment diffProtD_14hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -1632,7 +1632,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1641,13 +1641,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
 treatment diffProtD_14hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1656,7 +1656,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1665,14 +1665,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep1
 treatment diffProtD_14hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1681,7 +1681,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1690,14 +1690,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep2
 treatment diffProtD_14hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1706,7 +1706,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1715,14 +1715,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep1
 treatment diffProtD_14hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1731,7 +1731,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1740,14 +1740,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7608
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd14hPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep2
 treatment diffProtD_14hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1756,7 +1756,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1765,14 +1765,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1
 treatment diffProtD_24hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1781,7 +1781,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -1790,14 +1790,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2
 treatment diffProtD_24hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -1806,7 +1806,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1815,13 +1815,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
 treatment diffProtD_24hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -1830,7 +1830,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1839,13 +1839,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
 treatment diffProtD_24hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -1854,7 +1854,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1863,13 +1863,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
 treatment diffProtD_24hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -1878,7 +1878,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -1887,13 +1887,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
 treatment diffProtD_24hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1902,7 +1902,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1911,14 +1911,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep1
 treatment diffProtD_24hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1927,7 +1927,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1936,14 +1936,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep2
 treatment diffProtD_24hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -1952,7 +1952,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1961,14 +1961,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep1
 treatment diffProtD_24hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -1977,7 +1977,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -1986,14 +1986,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7659
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd24hPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep2
 treatment diffProtD_24hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2002,7 +2002,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2011,14 +2011,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1
 treatment diffProtD_30hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2027,7 +2027,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2036,14 +2036,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2
 treatment diffProtD_30hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2052,7 +2052,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2061,13 +2061,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
 treatment diffProtD_30hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2076,7 +2076,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2085,13 +2085,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
 treatment diffProtD_30hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2100,7 +2100,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2109,13 +2109,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
 treatment diffProtD_30hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2124,7 +2124,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2133,13 +2133,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
 treatment diffProtD_30hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2148,7 +2148,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2157,14 +2157,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep1
 treatment diffProtD_30hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2173,7 +2173,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2182,14 +2182,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep2
 treatment diffProtD_30hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2198,7 +2198,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2207,14 +2207,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep1
 treatment diffProtD_30hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2223,7 +2223,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-27
 dateUnrestricted 2013-04-27
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2232,14 +2232,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7706
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep2
 treatment diffProtD_30hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2248,7 +2248,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2257,14 +2257,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1
 treatment diffProtD_3hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2273,7 +2273,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2282,14 +2282,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2
 treatment diffProtD_3hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2298,7 +2298,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2307,13 +2307,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
 treatment diffProtD_3hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2322,7 +2322,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2331,13 +2331,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
 treatment diffProtD_3hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2346,7 +2346,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2355,13 +2355,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
 treatment diffProtD_3hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2370,7 +2370,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2379,13 +2379,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
 treatment diffProtD_3hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2394,7 +2394,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2403,14 +2403,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep1
 treatment diffProtD_3hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2419,7 +2419,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2428,14 +2428,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep2
 treatment diffProtD_3hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2444,7 +2444,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2453,14 +2453,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep1
 treatment diffProtD_3hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2469,7 +2469,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2478,14 +2478,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7607
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd3hPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep2
 treatment diffProtD_3hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2494,7 +2494,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep1.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2503,14 +2503,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1
 treatment diffProtD_7hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2519,7 +2519,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep2.bam.bai
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
 localization cell
@@ -2528,14 +2528,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hAlnRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2
 treatment diffProtD_7hr
 view Alignments
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2544,7 +2544,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2553,13 +2553,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
 treatment diffProtD_7hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd1Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2568,7 +2568,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd1Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2577,13 +2577,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
 treatment diffProtD_7hr
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2592,7 +2592,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2601,13 +2601,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
 treatment diffProtD_7hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2616,7 +2616,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2625,13 +2625,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
 treatment diffProtD_7hr
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2640,7 +2640,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2649,14 +2649,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep1
 treatment diffProtD_7hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2665,7 +2665,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2674,14 +2674,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hMinusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep2
 treatment diffProtD_7hr
 view MinusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2690,7 +2690,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2699,14 +2699,14 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep1
 treatment diffProtD_7hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2715,7 +2715,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-24
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2724,14 +2724,14 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7609
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd7hPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep2
 treatment diffProtD_7hr
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd1Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2740,7 +2740,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd1Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2749,37 +2749,13 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
-strain 129
-subId 7606
-treatment None
-view FastqRd1
-
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd1Rep2
-objType file
-age E0
-cell G1E-ER4
-composite wgEncodePsuRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-25
-dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd1Rep2.fastq.gz
-grant Hardison
-lab PSU-m
-localization cell
-project wgEncode
-readType 2x99D
-replicate 2
-rnaExtract polyA
-seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
 treatment None
 view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd2Rep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep2
 objType file
 age E0
 cell G1E-ER4
@@ -2788,22 +2764,22 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd2Rep1.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
 project wgEncode
 readType 2x99D
-replicate 1
+replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
 treatment None
-view FastqRd2
+view FastqRd1
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd2Rep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep1
 objType file
 age E0
 cell G1E-ER4
@@ -2812,23 +2788,23 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dFastqRd2Rep2.fastq.gz
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
 project wgEncode
 readType 2x99D
-replicate 2
+replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
 treatment None
 view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep1
-objType table
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep2
+objType file
 age E0
 cell G1E-ER4
 composite wgEncodePsuRnaSeq
@@ -2836,32 +2812,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep1.bigWig
-grant Hardison
-lab PSU-m
-localization cell
-project wgEncode
-readType 2x99D
-replicate 1
-rnaExtract polyA
-seqPlatform Illumina_HiSeq_2000
-sex U
-strain 129
-subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep1
-treatment None
-view MinusRawSignal
-
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep2
-objType table
-age E0
-cell G1E-ER4
-composite wgEncodePsuRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-25
-dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
@@ -2870,14 +2821,13 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dMinusRawRep2
 treatment None
-view MinusRawSignal
+view FastqRd2
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep1
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1
 objType table
 age E0
 cell G1E-ER4
@@ -2886,7 +2836,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep1.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2895,14 +2845,64 @@ readType 2x99D
 replicate 1
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep1
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep2
+objType table
+age E0
+cell G1E-ER4
+composite wgEncodePsuRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep2.bigWig
+grant Hardison
+lab PSU-m
+localization cell
+project wgEncode
+readType 2x99D
+replicate 2
+rnaExtract polyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+strain 129
+subId 7606
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep2
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep1
+objType table
+age E0
+cell G1E-ER4
+composite wgEncodePsuRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-25
+dateUnrestricted 2013-04-25
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep1.bigWig
+grant Hardison
+lab PSU-m
+localization cell
+project wgEncode
+readType 2x99D
+replicate 1
+rnaExtract polyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+strain 129
+subId 7606
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep1
 treatment None
 view PlusRawSignal
 
-metaObject wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep2
+metaObject wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2
 objType table
 age E0
 cell G1E-ER4
@@ -2911,7 +2911,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-fileName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep2.bigWig
+fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
@@ -2920,10 +2920,10 @@ readType 2x99D
 replicate 2
 rnaExtract polyA
 seqPlatform Illumina_HiSeq_2000
-sex U
+sex M
 strain 129
 subId 7606
-tableName wgEncodePsuRnaSeqG1eer4UE0S129R2x99dPlusRawRep2
+tableName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
@@ -3718,4 +3718,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: -928262267
+# MAGIC: -928264955
