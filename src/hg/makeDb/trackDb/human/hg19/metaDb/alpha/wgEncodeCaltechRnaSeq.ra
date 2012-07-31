@@ -31,7 +31,6 @@ rnaExtract longPolyA
 subId 3448
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
@@ -61,7 +60,6 @@ rnaExtract longPolyA
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1
@@ -88,7 +86,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2
@@ -115,7 +112,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
@@ -147,7 +143,6 @@ rnaExtract longPolyA
 subId 3514
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
@@ -179,7 +174,6 @@ rnaExtract longPolyA
 subId 3515
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
@@ -211,7 +205,6 @@ rnaExtract longPolyA
 subId 3514
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
@@ -243,7 +236,6 @@ rnaExtract longPolyA
 subId 3515
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
@@ -273,7 +265,6 @@ rnaExtract longPolyA
 subId 3448
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
@@ -303,7 +294,6 @@ rnaExtract longPolyA
 subId 3449
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
@@ -334,7 +324,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2926
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
@@ -365,7 +354,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2930
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
@@ -396,7 +384,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2926
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
@@ -427,7 +414,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2930
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4
@@ -457,7 +443,6 @@ sex U
 subId 6348
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4
@@ -487,7 +472,6 @@ sex U
 subId 6349
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4
@@ -517,7 +501,6 @@ sex U
 subId 6348
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4
@@ -547,7 +530,6 @@ sex U
 subId 6349
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
@@ -577,7 +559,6 @@ rnaExtract longPolyA
 subId 3416
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
@@ -607,7 +588,6 @@ rnaExtract longPolyA
 subId 3463
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3
@@ -636,7 +616,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3
@@ -665,7 +644,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1
@@ -692,7 +670,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1647
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2
@@ -720,7 +697,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2
@@ -748,7 +724,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5121
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1
@@ -775,7 +750,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1647
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2
@@ -803,7 +777,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2
@@ -831,7 +804,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5136
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3
@@ -860,7 +832,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3
@@ -889,7 +860,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3
@@ -918,7 +888,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3
@@ -947,7 +916,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3
@@ -976,7 +944,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5279
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3
@@ -1005,7 +972,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5234
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2
@@ -1037,7 +1003,6 @@ rnaExtract longPolyA
 subId 3416
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2
@@ -1069,7 +1034,6 @@ rnaExtract longPolyA
 subId 3463
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2
@@ -1099,7 +1063,6 @@ rnaExtract longPolyA
 subId 3416
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2
@@ -1129,7 +1092,6 @@ rnaExtract longPolyA
 subId 3463
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3
@@ -1158,7 +1120,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3
@@ -1187,7 +1148,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3
@@ -1216,7 +1176,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3
@@ -1245,7 +1204,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3
@@ -1274,7 +1232,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3572
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3
@@ -1303,7 +1260,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3575
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
@@ -1333,7 +1289,6 @@ rnaExtract longPolyA
 subId 3461
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3
@@ -1362,7 +1317,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2
@@ -1390,7 +1344,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1672
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2
@@ -1418,7 +1371,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5137
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2
@@ -1446,7 +1398,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1672
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2
@@ -1474,7 +1425,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5138
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3
@@ -1503,7 +1453,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3
@@ -1532,7 +1481,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3
@@ -1561,7 +1509,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5278
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2
@@ -1593,7 +1540,6 @@ rnaExtract longPolyA
 subId 3461
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2
@@ -1623,7 +1569,6 @@ rnaExtract longPolyA
 subId 3461
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3
@@ -1652,7 +1597,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3
@@ -1681,7 +1625,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3
@@ -1710,7 +1653,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3532
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
@@ -1734,14 +1676,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 94d679e2c13b7fd713a36d03e3d82f35
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1647
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4
@@ -1770,7 +1710,6 @@ rnaExtract longPolyA
 subId 6277
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
@@ -1794,14 +1733,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 83203063ac7e59eae6ce522b6bd10eae
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4
@@ -1830,7 +1767,6 @@ rnaExtract longPolyA
 subId 6276
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
@@ -1861,7 +1797,6 @@ replicate 2
 rnaExtract longPolyA
 subId 1672
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4
@@ -1891,7 +1826,6 @@ sex U
 subId 6243
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
@@ -1912,7 +1846,6 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 8601206e648441dea06b536b97381871,dfd1c803afacdafd96d42e73ee0b0479
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -1920,7 +1853,6 @@ rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
@@ -1941,7 +1873,6 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum b42c65ab6d04eb1000d2eb08987a9056,7393bcc9e383ce072fbce4576db02736
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -1949,7 +1880,6 @@ rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3
@@ -1970,14 +1900,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 622c09da744abb1593af2efcd06c3a38
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3
@@ -1998,14 +1926,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 7aa897ff9b78d05ed1b796ca55061a03
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1
@@ -2025,13 +1951,11 @@ lab Caltech
 labExpId 11038
 localization cell
 md5sum 80c729c4dc51d999b29f160fc0c3c0ed
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3436
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2
@@ -2052,13 +1976,39 @@ labExpId SL2971
 labVersion 02971
 localization cell
 md5sum 4cb30a64d329b94572729973b2b6bf91
-origAssembly hg19
+objectStatus replaced
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 4609
-treatment None
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2
+objType file
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001423
+expId 1423
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02971
+labVersion 02971
+localization cell
+md5sum 41c0d9d4424d12abc7afcd33f62fd623
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 7722
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1
@@ -2078,13 +2028,11 @@ lab Caltech
 labExpId 11038
 localization cell
 md5sum cb57a6acca676e312a685df149895bc5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3436
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2
@@ -2105,13 +2053,33 @@ labExpId SL2971
 labVersion 02971
 localization cell
 md5sum 7ba263090dc325d5422abd68fb363561
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 4609
-treatment None
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2
+objType file
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02971
+labVersion 02971
+md5sum a8376441f5942f8bf626ee107e0d1153
+project wgEncode
+readType 2x75
+replicate 2
+subId 7722
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3
@@ -2132,14 +2100,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 151187a5de7feca4f734a1a5cf284bfe
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3
@@ -2160,14 +2126,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 24757a64ea5c65f871cf06607c68a4a7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3
@@ -2188,14 +2152,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 8e8889ff6bce358b255dd565af7932d7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3
@@ -2216,14 +2178,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 02a0ee3742bea583079a5beb93412f5e
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3
@@ -2245,14 +2205,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum e3647a3f628e18ccfb79db6a94bbb38f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5281
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3
@@ -2274,14 +2232,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum b9b99d291907f4cc40d887a9f3577c34
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5280
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
@@ -2303,7 +2259,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 66bf7283455942fcd9bf748d60673699
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -2311,7 +2266,6 @@ rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
@@ -2333,7 +2287,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 6052488b6f4d0262fad04ef84e7e046b
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -2341,7 +2294,6 @@ rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
@@ -2362,7 +2314,6 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 76bf6fcbc697c870e2871ea7724dfae7,4db2f15ef0a74ac054341164664e6d21
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -2370,7 +2321,6 @@ rnaExtract longPolyA
 subId 3436
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
@@ -2391,7 +2341,6 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum d38a684b10152d9bd28388232be48f44,b133850585aaa3435fd33ff0a8ed9e9c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -2399,7 +2348,6 @@ rnaExtract longPolyA
 subId 3437
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3
@@ -2420,14 +2368,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 7d6fb7764b1903f06c890935a7b9225c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3
@@ -2448,14 +2394,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 6086ee0db8058ab90a5e3ae9f554f413
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3
@@ -2476,14 +2420,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 0411b1e4ca819dcb3bc2b1944da41f3f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3
@@ -2504,14 +2446,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum b7dad9d8354516e7bebd4fed29baf0a1
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3
@@ -2532,14 +2472,12 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum c07c96b550dc2134b1e02e3e1e67960a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3576
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3
@@ -2560,14 +2498,12 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum a99d9505f5503a5c3f8ae99c9008e9c6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4
@@ -2596,7 +2532,6 @@ rnaExtract longPolyA
 subId 6275
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4
@@ -2625,7 +2560,6 @@ rnaExtract longPolyA
 subId 6274
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
@@ -2646,7 +2580,6 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum b875bc2403e407855e14f8307b3689e6,a07562587f280f070de050099db4197a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -2654,7 +2587,6 @@ rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
@@ -2675,7 +2607,6 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum f462987ea29143a367c71750afe06bb1,79b7a9b00dc17c9dfd17fd6b7c2c3f9b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -2683,7 +2614,6 @@ rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
@@ -2704,7 +2634,6 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum e95070c17ae3c7da4ebb738023edba25,316c25d160c62cd4eb714a2a96c37b0c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -2712,7 +2641,6 @@ rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3
@@ -2733,14 +2661,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum a39560ea5caeeebf2a106d5e4c17c6df
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3
@@ -2761,14 +2687,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 09d4c85fc89de3d3880ea4c5f06e106a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3
@@ -2789,14 +2713,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 448e6b34a1642b1c739310634b225a1b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1
@@ -2816,13 +2738,37 @@ lab Caltech
 labExpId 11039
 localization cell
 md5sum 6e8b6989524f88ed18e9211f15644ed4
-origAssembly hg19
+objStatus replaced
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3441
-treatment None
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-26
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
+expId 1424
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11039
+localization cell
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 7705
+submittedDataVersion V2 - Removed 424 unpaired reads from fastq files
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2
@@ -2843,13 +2789,39 @@ labExpId SL2970
 labVersion 02970
 localization cell
 md5sum 41879169ddaff59e75f6c8071709dd3a
-origAssembly hg19
+objStatus replaced
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 4607
-treatment None
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02970
+labVersion 02970
+localization cell
+md5sum 16378d66248d2dc77390a6886be8504e
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 7723
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3
@@ -2870,13 +2842,39 @@ labExpId SL2973
 labVersion 02973
 localization cell
 md5sum 4c8e09f2996b0aa75faacae617408447
-origAssembly hg19
+objStatus replaced
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 4608
-treatment None
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-27
+dateSubmitted 2011-03-14
+dateUnrestricted 2011-12-14
+dccAccession wgEncodeEH001424
+expId 1424
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02973
+labVersion 02973
+localization cell
+md5sum 66fc6a44a6c6f22f24aa57fdb5db64c8
+project wgEncode
+readType 2x75
+replicate 3
+rnaExtract longPolyA
+subId 7724
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1
@@ -2896,13 +2894,30 @@ lab Caltech
 labExpId 11039
 localization cell
 md5sum d20a75deb7ac79d1436c6ef092af6c9f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3441
-treatment None
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+project wgEncode
+readType 2x75
+replicate 1
+subId 7705
+submittedDataVersion V2 - Removed 424 unpaired reads from fastq files
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2
@@ -2923,13 +2938,33 @@ labExpId SL2970
 labVersion 02970
 localization cell
 md5sum 1ed64d59246ea4bd66c8cc1598744d93
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 4607
-treatment None
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02970
+labVersion 02970
+md5sum 4f4cee3858dfd19c7a72f6563d65d4a4
+project wgEncode
+readType 2x75
+replicate 2
+subId 7723
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3
@@ -2950,13 +2985,33 @@ labExpId SL2973
 labVersion 02973
 localization cell
 md5sum c94978a1b5d2846e38b4521b8a029602
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 4608
-treatment None
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2
+objType file
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 02973
+labVersion 02973
+md5sum f43aedaa36bfcb4f20f69d05b42dbe52
+project wgEncode
+readType 2x75
+replicate 3
+subId 7724
+submittedDataVersion V2 - Removed unexpected read indicator before /
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3
@@ -2977,14 +3032,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum dd3aa911617e46c0cfe7dfc4f7216367
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3
@@ -3005,14 +3058,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 239afed59f7f1eff0f8e644e32d7d7fa
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3
@@ -3033,14 +3084,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 5757f581776759f734d89bd4a60da5f2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3
@@ -3061,14 +3110,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 32c468ab639fd1e042dd5ee34878f3d6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3
@@ -3089,14 +3136,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum fc1f369ccfae49bbaafad828e09c1d68
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3
@@ -3117,14 +3162,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 5625be74467636618e7c53be64a6d97d
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3
@@ -3146,14 +3189,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum ece996243adc23bc7ed5b9e849ddd406
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5284
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3
@@ -3175,14 +3216,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 32822e771a2f1f6cc654ee67d81fdd5f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5282
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3
@@ -3204,14 +3243,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 0868d79025e6cd8879fa42cd760bc316
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 5283
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
@@ -3233,7 +3270,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 5c1108a75f664374703c09328e1b349c
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -3241,7 +3277,6 @@ rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
@@ -3263,7 +3298,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 687f03d3c4be21942ed9bdf90cd8db29
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -3271,7 +3305,6 @@ rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
@@ -3293,7 +3326,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum c382c17fa4074ff762eb61cf10122b54
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -3301,7 +3333,6 @@ rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
@@ -3322,7 +3353,6 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum b8a1fdf2698376e417dc1a904188fc39,b7bff76e55856b32e36eebf2fde4361c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -3330,7 +3360,6 @@ rnaExtract longPolyA
 subId 3441
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
@@ -3351,7 +3380,6 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 6f2488d7085d8c13573bce2014dd35ca,5f8338829a1e4cf57c3bf1c05bc676a6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -3359,7 +3387,6 @@ rnaExtract longPolyA
 subId 3438
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
@@ -3380,7 +3407,6 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 95b2c965412f7a1cd35f99e0bba4d3c2,41849a151ca64734fc52b0fdf769c3ac
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -3388,7 +3414,6 @@ rnaExtract longPolyA
 subId 3439
 submittedDataVersion V2 - A better mapping
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3
@@ -3409,14 +3434,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum d48c021246447f5cc3156826c4acade3
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3
@@ -3437,14 +3460,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 9b60fdf3305376edd454cb97de78f2f1
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3
@@ -3465,14 +3486,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 20984e2a00a4c29008e35f1fab4e2b03
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3
@@ -3493,14 +3512,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 7520bfc7a2f20bd4c697ac823e2a6ba4
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3
@@ -3521,14 +3538,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 14b8ed2239bc35f6d94f13d83e6d1ed1
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3
@@ -3549,14 +3564,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum da7c75eeaf1c6f00f858bedf948da344
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3
@@ -3577,14 +3590,12 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 81751f3bb56ca2c1cde24748d125bbe0
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3577
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3
@@ -3605,14 +3616,12 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum b52f71203d9f43a63161bea1324c2bd5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3666
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3
@@ -3633,14 +3642,12 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 6afb939b3589e90afadf56f6ae01ddcf
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3744
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4
@@ -3669,7 +3676,6 @@ rnaExtract longPolyA
 subId 6273
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4
@@ -3698,7 +3704,6 @@ rnaExtract longPolyA
 subId 6272
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4
@@ -3727,7 +3732,6 @@ rnaExtract longPolyA
 subId 6271
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
@@ -3757,7 +3761,6 @@ rnaExtract longPolyA
 subId 3450
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
@@ -3787,7 +3790,6 @@ rnaExtract longPolyA
 subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1
@@ -3814,7 +3816,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1633
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2
@@ -3841,7 +3842,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1874
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
@@ -3873,7 +3873,6 @@ rnaExtract longPolyA
 subId 3516
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
@@ -3905,7 +3904,6 @@ rnaExtract longPolyA
 subId 3520
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
@@ -3937,7 +3935,6 @@ rnaExtract longPolyA
 subId 3516
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
@@ -3969,7 +3966,6 @@ rnaExtract longPolyA
 subId 3520
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
@@ -3999,7 +3995,6 @@ rnaExtract longPolyA
 subId 3450
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
@@ -4029,7 +4024,6 @@ rnaExtract longPolyA
 subId 3451
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
@@ -4060,7 +4054,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2931
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
@@ -4091,7 +4084,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2932
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
@@ -4122,7 +4114,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2931
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
@@ -4153,7 +4144,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2932
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4
@@ -4183,7 +4173,6 @@ sex U
 subId 6350
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4
@@ -4213,7 +4202,6 @@ sex U
 subId 6351
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4
@@ -4243,7 +4231,6 @@ sex U
 subId 6350
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4
@@ -4273,7 +4260,6 @@ sex U
 subId 6351
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
@@ -4303,7 +4289,6 @@ rnaExtract longPolyA
 subId 3464
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
@@ -4333,7 +4318,6 @@ rnaExtract longPolyA
 subId 3409
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
@@ -4363,7 +4347,6 @@ rnaExtract longPolyA
 subId 3417
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
@@ -4393,7 +4376,6 @@ rnaExtract longPolyA
 subId 3410
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3
@@ -4422,7 +4404,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3
@@ -4451,7 +4432,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3
@@ -4480,7 +4460,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3
@@ -4509,7 +4488,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1
@@ -4536,7 +4514,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1670
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2
@@ -4563,7 +4540,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1668
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3
@@ -4590,7 +4566,6 @@ readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 1667
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4
@@ -4617,7 +4592,6 @@ readType 2x75
 replicate 4
 rnaExtract longPolyA
 subId 1666
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1
@@ -4644,7 +4618,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1670
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2
@@ -4671,7 +4644,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1668
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3
@@ -4698,7 +4670,6 @@ readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 1667
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4
@@ -4725,7 +4696,6 @@ readType 2x75
 replicate 4
 rnaExtract longPolyA
 subId 1666
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3
@@ -4754,7 +4724,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3
@@ -4783,7 +4752,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3
@@ -4812,7 +4780,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3
@@ -4841,7 +4808,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3
@@ -4870,7 +4836,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3
@@ -4899,7 +4864,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3
@@ -4928,7 +4892,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3
@@ -4957,7 +4920,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3
@@ -4986,7 +4948,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5287
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3
@@ -5015,7 +4976,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5288
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3
@@ -5044,7 +5004,6 @@ replicate 3
 rnaExtract longPolyA
 subId 5289
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3
@@ -5073,7 +5032,6 @@ replicate 4
 rnaExtract longPolyA
 subId 5285
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2
@@ -5105,7 +5063,6 @@ rnaExtract longPolyA
 subId 3464
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2
@@ -5137,7 +5094,6 @@ rnaExtract longPolyA
 subId 3409
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2
@@ -5169,7 +5125,6 @@ rnaExtract longPolyA
 subId 3417
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2
@@ -5201,7 +5156,6 @@ rnaExtract longPolyA
 subId 3410
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2
@@ -5231,7 +5185,6 @@ rnaExtract longPolyA
 subId 3464
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2
@@ -5261,7 +5214,6 @@ rnaExtract longPolyA
 subId 3409
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2
@@ -5291,7 +5243,6 @@ rnaExtract longPolyA
 subId 3417
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2
@@ -5321,7 +5272,6 @@ rnaExtract longPolyA
 subId 3410
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3
@@ -5350,7 +5300,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3
@@ -5379,7 +5328,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3
@@ -5408,7 +5356,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3
@@ -5437,7 +5384,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3
@@ -5466,7 +5412,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3
@@ -5495,7 +5440,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3
@@ -5524,7 +5468,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3
@@ -5553,7 +5496,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3
@@ -5582,7 +5524,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3578
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3
@@ -5611,7 +5552,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3579
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3
@@ -5640,7 +5580,6 @@ replicate 3
 rnaExtract longPolyA
 subId 3580
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3
@@ -5669,7 +5608,6 @@ replicate 4
 rnaExtract longPolyA
 subId 3581
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
@@ -5699,7 +5637,6 @@ rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3
@@ -5728,7 +5665,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1
@@ -5755,7 +5691,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1669
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1
@@ -5782,7 +5717,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1669
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3
@@ -5811,7 +5745,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3
@@ -5840,7 +5773,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3
@@ -5869,7 +5801,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5286
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
@@ -5901,7 +5832,6 @@ rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
@@ -5931,7 +5861,6 @@ rnaExtract longPolyA
 subId 3462
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3
@@ -5960,7 +5889,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3
@@ -5989,7 +5917,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3
@@ -6018,7 +5945,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3571
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
@@ -6049,7 +5975,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1670
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4
@@ -6078,7 +6003,6 @@ rnaExtract longPolyA
 subId 6269
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
@@ -6109,7 +6033,6 @@ replicate 2
 rnaExtract longPolyA
 subId 1668
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4
@@ -6138,7 +6061,6 @@ rnaExtract longPolyA
 subId 6268
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
@@ -6169,7 +6091,6 @@ replicate 3
 rnaExtract longPolyA
 subId 1667
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4
@@ -6198,7 +6119,6 @@ rnaExtract longPolyA
 subId 6267
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
@@ -6229,7 +6149,6 @@ replicate 4
 rnaExtract longPolyA
 subId 1666
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4
@@ -6258,7 +6177,6 @@ rnaExtract longPolyA
 subId 6266
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
@@ -6289,7 +6207,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1669
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4
@@ -6318,7 +6235,6 @@ rnaExtract longPolyA
 subId 6278
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
@@ -6339,7 +6255,6 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 34a00a4967798a37486729b287154b38,0869164d5f267563bb44d5b27b65159f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -6347,7 +6262,6 @@ rnaExtract longPolyA
 subId 3474
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
@@ -6368,7 +6282,6 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 6ded65a8d81d53743b63158b70893549,c276d637fb757b93bdfd1ebf26e9192f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6376,7 +6289,6 @@ rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3
@@ -6397,14 +6309,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum ebd8989f154e5e34dc7a9aa9e5bf7053
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3
@@ -6425,14 +6335,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum fe95d8b88b21e537ba47029892ee71a6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1
@@ -6452,13 +6360,11 @@ lab Caltech
 labExpId 12096
 localization cell
 md5sum 7be9775795bc68cd82ef5f47a140e7f8
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3474
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2
@@ -6478,13 +6384,11 @@ lab Caltech
 labExpId 12097
 localization cell
 md5sum 4912e2df4569ae27537b53acb6a6aca7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3475
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1
@@ -6504,13 +6408,11 @@ lab Caltech
 labExpId 12096
 localization cell
 md5sum 95ff2bef7738bbcdd506a1c19c0149c2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3474
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2
@@ -6530,13 +6432,11 @@ lab Caltech
 labExpId 12097
 localization cell
 md5sum d0722e6cfcffada8c04b4c93708249bb
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3475
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3
@@ -6557,14 +6457,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum d4dc01a68a78e42af9a25ca12bdba494
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3
@@ -6585,14 +6483,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 463cb8d8bb11a29ea4b4f82f8c7f9921
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3
@@ -6613,14 +6509,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 3c76e402f28536a79c877c0c5aebd9b7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3
@@ -6641,14 +6535,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum bbf8d46a7afa80f70405d0bdcae03d68
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3
@@ -6670,14 +6562,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum ef081675a442b1c18580858672069fd5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5290
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3
@@ -6699,14 +6589,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 0a1bd930f6423e5f800e308a2bee937a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5291
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2
@@ -6728,7 +6616,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 63c5505af9d35ca6a86312980f9989ba
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -6736,7 +6623,6 @@ rnaExtract longPolyA
 subId 3474
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2
@@ -6758,7 +6644,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum de34ec8697426f7334f6193dc2e53d5e
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6766,7 +6651,6 @@ rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
@@ -6787,7 +6671,6 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum b1c98e599d3267d3fc180d398e39b9b0,d679189fca4886cec38d21f75ee99baf
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -6795,7 +6678,6 @@ rnaExtract longPolyA
 subId 3474
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
@@ -6816,7 +6698,6 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum d5c96023912ae5f31817fbfca973e9c0,d67a8c0dab93beff7950d5c70edf704a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6824,7 +6705,6 @@ rnaExtract longPolyA
 subId 3475
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3
@@ -6845,14 +6725,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum c89c6c15ba4079d5e4d208789a47c2f7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3
@@ -6873,14 +6751,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum b724895c48d167025527f04c483b10c1
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3
@@ -6901,14 +6777,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum e8b7053889cb74b52163d39666e0fb2b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3
@@ -6929,14 +6803,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum a16772603e298f0b59e40b849939a173
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3
@@ -6957,14 +6829,12 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum a6113756afa64acd21d081e74569bac5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3582
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3
@@ -6985,14 +6855,12 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 8486af5dc1dc200cb39ad5b2b5ec5a67
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3583
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4
@@ -7021,7 +6889,6 @@ rnaExtract longPolyA
 subId 6265
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4
@@ -7050,7 +6917,6 @@ rnaExtract longPolyA
 subId 6264
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
@@ -7080,7 +6946,6 @@ rnaExtract longPolyA
 subId 3452
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
@@ -7110,7 +6975,6 @@ rnaExtract longPolyA
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1
@@ -7137,7 +7001,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1634
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2
@@ -7164,7 +7027,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1635
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
@@ -7196,7 +7058,6 @@ rnaExtract longPolyA
 subId 3518
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
@@ -7228,7 +7089,6 @@ rnaExtract longPolyA
 subId 3519
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
@@ -7260,7 +7120,6 @@ rnaExtract longPolyA
 subId 3518
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
@@ -7292,7 +7151,6 @@ rnaExtract longPolyA
 subId 3519
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
@@ -7322,7 +7180,6 @@ rnaExtract longPolyA
 subId 3452
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
@@ -7352,7 +7209,6 @@ rnaExtract longPolyA
 subId 3453
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
@@ -7383,7 +7239,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2935
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
@@ -7414,7 +7269,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2936
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
@@ -7445,7 +7299,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2935
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
@@ -7476,7 +7329,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2936
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4
@@ -7506,7 +7358,6 @@ sex U
 subId 6354
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4
@@ -7536,7 +7387,6 @@ sex U
 subId 6355
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4
@@ -7566,7 +7416,6 @@ sex U
 subId 6354
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4
@@ -7596,7 +7445,6 @@ sex U
 subId 6355
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
@@ -7626,7 +7474,6 @@ rnaExtract longPolyA
 subId 3418
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
@@ -7656,7 +7503,6 @@ rnaExtract longPolyA
 subId 3465
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3
@@ -7685,7 +7531,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3
@@ -7714,7 +7559,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1
@@ -7741,7 +7585,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1663
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2
@@ -7768,7 +7611,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1662
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1
@@ -7795,7 +7637,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1663
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2
@@ -7822,7 +7663,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1662
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3
@@ -7851,7 +7691,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3
@@ -7880,7 +7719,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3
@@ -7909,7 +7747,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3
@@ -7938,7 +7775,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3
@@ -7967,7 +7803,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5296
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3
@@ -7996,7 +7831,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5297
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2
@@ -8028,7 +7862,6 @@ rnaExtract longPolyA
 subId 3418
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2
@@ -8060,7 +7893,6 @@ rnaExtract longPolyA
 subId 3465
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2
@@ -8090,7 +7922,6 @@ rnaExtract longPolyA
 subId 3418
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2
@@ -8120,7 +7951,6 @@ rnaExtract longPolyA
 subId 3465
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3
@@ -8149,7 +7979,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3
@@ -8178,7 +8007,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3
@@ -8207,7 +8035,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3
@@ -8236,7 +8063,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3
@@ -8265,7 +8091,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3588
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3
@@ -8294,7 +8119,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3589
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
@@ -8325,7 +8149,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1663
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4
@@ -8354,7 +8177,6 @@ rnaExtract longPolyA
 subId 6259
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
@@ -8385,7 +8207,6 @@ replicate 2
 rnaExtract longPolyA
 subId 1662
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4
@@ -8414,7 +8235,6 @@ rnaExtract longPolyA
 subId 6258
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
@@ -8444,7 +8264,6 @@ rnaExtract longPolyA
 subId 4798
 submittedDataVersion V3 - Replace conflicting md5sums
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
@@ -8474,7 +8293,6 @@ rnaExtract longPolyA
 subId 4797
 submittedDataVersion V3 - Replace conflicting md5sums
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1
@@ -8501,7 +8319,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1636
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2
@@ -8528,7 +8345,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1638
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
@@ -8559,7 +8375,6 @@ rnaExtract longPolyA
 subId 4798
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
@@ -8590,7 +8405,6 @@ rnaExtract longPolyA
 subId 4797
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
@@ -8622,7 +8436,6 @@ rnaExtract longPolyA
 subId 4798
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
@@ -8654,7 +8467,6 @@ rnaExtract longPolyA
 subId 4797
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
@@ -8684,7 +8496,6 @@ rnaExtract longPolyA
 subId 3454
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
@@ -8714,7 +8525,6 @@ rnaExtract longPolyA
 subId 3455
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
@@ -8745,7 +8555,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2937
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
@@ -8776,7 +8585,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2938
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
@@ -8807,7 +8615,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2937
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
@@ -8838,7 +8645,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2938
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4
@@ -8868,7 +8674,6 @@ sex U
 subId 6356
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4
@@ -8898,7 +8703,6 @@ sex U
 subId 6357
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4
@@ -8928,7 +8732,6 @@ sex U
 subId 6356
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4
@@ -8958,7 +8761,6 @@ sex U
 subId 6357
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
@@ -8988,7 +8790,6 @@ rnaExtract longPolyA
 subId 3466
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
@@ -9018,7 +8819,6 @@ rnaExtract longPolyA
 subId 3467
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3
@@ -9047,7 +8847,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3
@@ -9076,7 +8875,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1
@@ -9103,7 +8901,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1661
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2
@@ -9130,7 +8927,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1660
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1
@@ -9157,7 +8953,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1661
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2
@@ -9184,7 +8979,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1660
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3
@@ -9213,7 +9007,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3
@@ -9242,7 +9035,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3
@@ -9271,7 +9063,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3
@@ -9300,7 +9091,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3
@@ -9329,7 +9119,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5298
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3
@@ -9358,7 +9147,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5299
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2
@@ -9390,7 +9178,6 @@ rnaExtract longPolyA
 subId 3466
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2
@@ -9422,7 +9209,6 @@ rnaExtract longPolyA
 subId 3467
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2
@@ -9452,7 +9238,6 @@ rnaExtract longPolyA
 subId 3466
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2
@@ -9482,7 +9267,6 @@ rnaExtract longPolyA
 subId 3467
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3
@@ -9511,7 +9295,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3
@@ -9540,7 +9323,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3
@@ -9569,7 +9351,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3
@@ -9598,7 +9379,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3
@@ -9627,7 +9407,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3590
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3
@@ -9656,7 +9435,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3591
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
@@ -9687,7 +9465,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1661
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4
@@ -9716,7 +9493,6 @@ rnaExtract longPolyA
 subId 6257
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
@@ -9747,7 +9523,6 @@ replicate 2
 rnaExtract longPolyA
 subId 1660
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4
@@ -9776,7 +9551,6 @@ rnaExtract longPolyA
 subId 6256
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
@@ -9797,7 +9571,6 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 76c6099c1ce24acc59335f6e31354698,9bcae5aa5cb93d3a6ea95e2e5d312478
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -9805,7 +9578,6 @@ rnaExtract longPolyA
 subId 3468
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
@@ -9826,7 +9598,6 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 536fc38bd41cd24fba14271a2b9aea57,8da33db226f90653a9c371e246bab4c8
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -9834,7 +9605,6 @@ rnaExtract longPolyA
 subId 3469
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3
@@ -9855,14 +9625,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 45c27016c9041f6398211257a331fd90
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3
@@ -9883,14 +9651,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 84c1b509651697c309858aff394ed582
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1
@@ -9910,13 +9676,11 @@ lab Caltech
 labExpId 11584
 localization cell
 md5sum 70049c16aff4446a473f1bdbbd3a9846
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1907
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2
@@ -9936,13 +9700,11 @@ lab Caltech
 labExpId 11585
 localization cell
 md5sum f09c61a04a82906c092df0437e74c52c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1908
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1
@@ -9962,13 +9724,11 @@ lab Caltech
 labExpId 11584
 localization cell
 md5sum 01ee32f85f02b8e4449075b5ded2f1ac
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1907
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2
@@ -9988,13 +9748,11 @@ lab Caltech
 labExpId 11585
 localization cell
 md5sum 85b8477a09a39f5b620a87132edaaf6b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1908
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3
@@ -10015,14 +9773,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 128b6966045b3703ab4361afa98f81ad
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3
@@ -10043,14 +9799,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 9f78fe778c0b5d6e4c1e17d00abdb1d4
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3
@@ -10071,14 +9825,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 29ed5785f0de73eb60bdc8b9b0b2faf9
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3
@@ -10099,14 +9851,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 47ff0fe86774603a76324509aef0ed5d
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3
@@ -10128,14 +9878,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 4a09c2dd8c9f93cffce7a04a87c93562
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5292
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3
@@ -10157,14 +9905,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 1d9b9bec86c99583b0f57ae381c401f5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5293
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2
@@ -10186,7 +9932,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 585d42e0bd089c9871cb41113d82ebed
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -10194,7 +9939,6 @@ rnaExtract longPolyA
 subId 3468
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2
@@ -10216,7 +9960,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum d658dbe83ca0589d0c5dc533dcd2f860
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -10224,7 +9967,6 @@ rnaExtract longPolyA
 subId 3469
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2
@@ -10245,7 +9987,6 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 21f7b4a09370c7732939c476ebb1a871,659639e302916e6a7c58e7036f592089
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -10253,7 +9994,6 @@ rnaExtract longPolyA
 subId 3468
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2
@@ -10274,7 +10014,6 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 33934ac8aa13e7b38da48a1602328948,792ca88a3ced81e942c6fd24d4e28cbf
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -10282,7 +10021,6 @@ rnaExtract longPolyA
 subId 3469
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3
@@ -10303,14 +10041,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum e1789f8df3101eaeeffd83c390e0d732
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3
@@ -10331,14 +10067,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 0fa074b40317b33111329ee860f45806
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3
@@ -10359,14 +10093,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum bffa02002543426efc1784028793d2f2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3
@@ -10387,14 +10119,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum e8bd486aa37683f133732e34b3c314bd
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3
@@ -10415,14 +10145,12 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum dfc8a56eadec71f012c1ac8dd782d856
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3584
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3
@@ -10443,14 +10171,12 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 1147472b2e7bce92102e9b2b2c8d6f10
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3585
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
@@ -10472,14 +10198,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum e843798f290c555d55deee2fc5684e1c
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1907
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4
@@ -10508,7 +10232,6 @@ rnaExtract longPolyA
 subId 6263
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
@@ -10530,14 +10253,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 46da19a4e47a2907434b0217a87046e3
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1908
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4
@@ -10566,7 +10287,6 @@ rnaExtract longPolyA
 subId 6262
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
@@ -10596,7 +10316,6 @@ rnaExtract longPolyA
 subId 3456
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
@@ -10626,7 +10345,6 @@ rnaExtract longPolyA
 subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1
@@ -10653,7 +10371,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1639
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2
@@ -10680,7 +10397,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1645
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
@@ -10712,7 +10428,6 @@ rnaExtract longPolyA
 subId 3517
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
@@ -10744,7 +10459,6 @@ rnaExtract longPolyA
 subId 3513
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
@@ -10776,7 +10490,6 @@ rnaExtract longPolyA
 subId 3517
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
@@ -10808,7 +10521,6 @@ rnaExtract longPolyA
 subId 3513
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
@@ -10838,7 +10550,6 @@ rnaExtract longPolyA
 subId 3456
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
@@ -10868,7 +10579,6 @@ rnaExtract longPolyA
 subId 3457
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
@@ -10899,7 +10609,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2933
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
@@ -10930,7 +10639,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2934
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
@@ -10961,7 +10669,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2933
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
@@ -10992,7 +10699,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2934
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4
@@ -11022,7 +10728,6 @@ sex U
 subId 6352
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4
@@ -11052,7 +10757,6 @@ sex U
 subId 6353
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4
@@ -11082,7 +10786,6 @@ sex U
 subId 6352
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4
@@ -11112,7 +10815,6 @@ sex U
 subId 6353
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
@@ -11142,7 +10844,6 @@ rnaExtract longPolyA
 subId 3470
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
@@ -11172,7 +10873,6 @@ rnaExtract longPolyA
 subId 3471
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3
@@ -11201,7 +10901,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3
@@ -11230,7 +10929,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1
@@ -11257,7 +10955,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1665
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2
@@ -11284,7 +10981,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1664
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1
@@ -11311,7 +11007,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1665
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2
@@ -11338,7 +11033,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1664
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3
@@ -11367,7 +11061,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3
@@ -11396,7 +11089,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3
@@ -11425,7 +11117,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3
@@ -11454,7 +11145,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3
@@ -11483,7 +11173,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5294
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3
@@ -11512,7 +11201,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5295
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
@@ -11544,7 +11232,6 @@ rnaExtract longPolyA
 subId 3470
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2
@@ -11576,7 +11263,6 @@ rnaExtract longPolyA
 subId 3471
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2
@@ -11606,7 +11292,6 @@ rnaExtract longPolyA
 subId 3470
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2
@@ -11636,7 +11321,6 @@ rnaExtract longPolyA
 subId 3471
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3
@@ -11665,7 +11349,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3
@@ -11694,7 +11377,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3
@@ -11723,7 +11405,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3
@@ -11752,7 +11433,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3
@@ -11781,7 +11461,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3586
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3
@@ -11810,7 +11489,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3587
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
@@ -11841,7 +11519,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1665
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4
@@ -11870,7 +11547,6 @@ rnaExtract longPolyA
 subId 6261
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
@@ -11901,7 +11577,6 @@ replicate 2
 rnaExtract longPolyA
 subId 1664
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4
@@ -11930,7 +11605,6 @@ rnaExtract longPolyA
 subId 6260
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
@@ -11960,7 +11634,6 @@ rnaExtract longPolyA
 subId 3458
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
@@ -11990,7 +11663,6 @@ rnaExtract longPolyA
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep1
@@ -12017,7 +11689,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1874
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dFastqRep2
@@ -12044,7 +11715,6 @@ readType 1x75D
 replicate 2
 rnaExtract longPolyA
 subId 1646
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
@@ -12076,7 +11746,6 @@ rnaExtract longPolyA
 subId 3523
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
@@ -12108,8 +11777,33 @@ rnaExtract longPolyA
 subId 3524
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3
-treatment None
 view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaRawDataRep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-30
+dateSubmitted 2010-07-14
+dateUnrestricted 2011-04-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaRawDataRep2V2.fastq.tgz
+grant Myers
+insertLength ilNA
+lab Caltech
+labExpId 10517
+localization cell
+origAssembly hg18
+project wgEncode
+readType 1x75D
+replicate 2
+rnaExtract longPolyA
+subId 7726
+submittedDataVersion V2 - Fixed corrupted quality scores
+view RawData
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
 objType table
@@ -12140,7 +11834,6 @@ rnaExtract longPolyA
 subId 3523
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
@@ -12172,7 +11865,6 @@ rnaExtract longPolyA
 subId 3524
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
@@ -12202,7 +11894,6 @@ rnaExtract longPolyA
 subId 3458
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
@@ -12232,7 +11923,6 @@ rnaExtract longPolyA
 subId 3459
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
@@ -12263,7 +11953,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2939
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
@@ -12294,7 +11983,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2940
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
@@ -12325,7 +12013,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2939
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
@@ -12356,7 +12043,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2940
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4
@@ -12386,7 +12072,6 @@ sex U
 subId 6358
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4
@@ -12416,7 +12101,6 @@ sex U
 subId 6359
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4
@@ -12446,7 +12130,6 @@ sex U
 subId 6358
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4
@@ -12476,7 +12159,6 @@ sex U
 subId 6359
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
@@ -12506,7 +12188,6 @@ rnaExtract longPolyA
 subId 3419
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
@@ -12536,7 +12217,6 @@ rnaExtract longPolyA
 subId 3472
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3
@@ -12565,7 +12245,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3
@@ -12594,7 +12273,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1
@@ -12622,7 +12300,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2
@@ -12650,7 +12327,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5139
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2
@@ -12677,7 +12353,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2
@@ -12705,7 +12380,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5140
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1
@@ -12733,7 +12407,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2
@@ -12761,7 +12434,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5141
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2
@@ -12788,7 +12460,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2
@@ -12816,7 +12487,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5142
 submittedDataVersion V2 - corrected some bad quality scores in the previous version
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3
@@ -12845,7 +12515,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3
@@ -12874,7 +12543,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3
@@ -12903,7 +12571,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3
@@ -12932,7 +12599,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3
@@ -12961,7 +12627,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5300
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3
@@ -12990,7 +12655,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5301
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2
@@ -13022,7 +12686,6 @@ rnaExtract longPolyA
 subId 3419
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2
@@ -13054,7 +12717,6 @@ rnaExtract longPolyA
 subId 3472
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2
@@ -13084,7 +12746,6 @@ rnaExtract longPolyA
 subId 3419
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2
@@ -13114,7 +12775,6 @@ rnaExtract longPolyA
 subId 3472
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3
@@ -13143,7 +12803,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3
@@ -13172,7 +12831,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3
@@ -13201,7 +12859,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3
@@ -13230,7 +12887,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3
@@ -13259,7 +12915,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3592
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3
@@ -13288,7 +12943,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3593
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
@@ -13312,14 +12966,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 472cfd8f21b77e3e1c0a2eff3c645d7a
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4
@@ -13348,7 +13000,6 @@ rnaExtract longPolyA
 subId 6255
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
@@ -13372,14 +13023,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum f62220dc6a24a6df80cb9ba9fa114e3b
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4
@@ -13408,7 +13057,6 @@ rnaExtract longPolyA
 subId 6254
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
@@ -13430,7 +13078,6 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 34b4380f910b706b1c3def98eeedd73b,5f34d180db34ce346c562c01fcc03d18
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13438,7 +13085,6 @@ rnaExtract longPolyA
 subId 3476
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3
@@ -13460,14 +13106,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 513ac45f0d835dacc94411c87586e7e1
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1
@@ -13488,13 +13132,11 @@ labExpId 11621
 labVersion myoblast
 localization cell
 md5sum 5e4fba08147d0f0f874891f4753d33c9
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3476
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1
@@ -13515,13 +13157,11 @@ labExpId 11621
 labVersion myoblast
 localization cell
 md5sum ff1f9556f455944b96153dfce28e8ca2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3476
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3
@@ -13543,14 +13183,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum cbfe39a5cf10f833f606c842a04baafd
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3
@@ -13572,14 +13210,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 2de2d608155f773a272261a6f9319231
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3
@@ -13602,14 +13238,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 33d0e97c21e1cf0fbf084f365dce1f62
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5302
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
@@ -13631,7 +13265,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum dff28d0040fc6e7a69c7209db0f31bfa,08723fcc237bbc5316b70a49692a833b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13660,7 +13293,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum fdefbc1aa9bd954f86fa5cf7421bd29a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13688,7 +13320,6 @@ labExpId 11622
 labVersion myocyte
 localization cell
 md5sum 8f4b9bb3d698f0fabb7b3a70b6ae4f52
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13715,7 +13346,6 @@ labExpId 11622
 labVersion myocyte
 localization cell
 md5sum 145342d9066eb0555371718ef2f7a87a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13743,7 +13373,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 892bb8b8c7d74b6574e7a4b3c017a5ac
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13772,7 +13401,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 5cbd745d2e1e2cb46fc108c2030bde88
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13802,7 +13430,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 13f6754d928fcdb1f659a70bbc72bd0a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13832,7 +13459,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 150ebbcc928783917a0c494c934b4faa
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13861,7 +13487,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 7046f7c502bd88db1c32a7f114fdf858,7bd4bac910221437abedfa6a5b767fcd
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13890,7 +13515,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 46719f70f2f9133624dc75c189792523
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13919,7 +13543,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 1080c969eb84ab230a888d328ac97e74
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13948,7 +13571,6 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 83c021b2bfed8532039555db2c70a226
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13978,14 +13600,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 4befd19107433f9a45def29778e3f5e2
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 4106
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
@@ -14007,7 +13627,6 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 56674d15b37e7601ac36e58d0d2f9465,2b6a01e0f372efe76c42b838046dae9c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14015,7 +13634,6 @@ rnaExtract longPolyA
 subId 3476
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3
@@ -14037,14 +13655,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum f82df609b36300fcd0fa6ace96ece038
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3
@@ -14066,14 +13682,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum d99631e4fa0e7c197814390ae452fcae
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3
@@ -14095,14 +13709,12 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum decb3b30a4aa3509422bc7cbe6c016a7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4
@@ -14161,7 +13773,6 @@ sex U
 subId 6253
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
@@ -14182,7 +13793,6 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum bf90494743bc9877cc6bc565154485ca,98fd1fd0664b5bdafcd5dada78ec33d3
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14190,7 +13800,6 @@ rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
@@ -14211,7 +13820,6 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 51a067ff282b9061fc39f1a3b98727cd,e60c5c8cb7a63612abe04a6b559657fc
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14219,7 +13827,6 @@ rnaExtract longPolyA
 subId 3412
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
@@ -14240,7 +13847,6 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum d30e635c48943bd85ad061bd5eb7294b,f3eba71c2153f484ca6ad2fa17cdbdd3
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -14248,7 +13854,6 @@ rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3
@@ -14269,14 +13874,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f2d6219c0d86ddf1612a63bd7de51324
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3
@@ -14297,14 +13900,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum bc56498d676d9b01a42a1685bde969ca
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3
@@ -14325,14 +13926,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 786ae20b8d997c3f4637f98395c6b9bf
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1
@@ -14353,13 +13952,11 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum b144ccab25a4ae10596a9b6d95352eb7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3025
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2
@@ -14379,13 +13976,11 @@ lab Caltech
 labExpId 11582
 localization cell
 md5sum 1f39b9e3b818f6da44dbd23ec4dace7c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1904
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3
@@ -14405,13 +14000,11 @@ lab Caltech
 labExpId 12098
 localization cell
 md5sum 914a451ea395a8929789c48d28f976df
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3478
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1
@@ -14432,13 +14025,11 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum bdf0179ed4ecd7c98b4b51da897b0f13
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3025
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2
@@ -14458,13 +14049,11 @@ lab Caltech
 labExpId 11582
 localization cell
 md5sum acd6496ccd6d1785b60ead52e831c67e
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1904
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3
@@ -14484,13 +14073,11 @@ lab Caltech
 labExpId 12098
 localization cell
 md5sum e189d91d06a615de4e18fa8e591386c3
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3478
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3
@@ -14511,14 +14098,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum ebeb0ce2c4f99718e20059f11ca7b791
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3
@@ -14539,14 +14124,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum c86fdfaeb2ef85999cc298a6c0724dbc
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3
@@ -14567,14 +14150,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 87f2b40bf221d6fbfe081a40e0c61cc7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3
@@ -14595,14 +14176,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum dbe0c9d911222cc4f8e928c8b0227cf2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3
@@ -14623,14 +14202,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum afcc36725a0769f8d58acfb31ae630f2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3
@@ -14651,14 +14228,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum ad6b6f82c2f47dfb3517aaab79085c47
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3
@@ -14680,14 +14255,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum d33b46f5840cb2d2d6878ffc0662773e
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5304
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3
@@ -14709,14 +14282,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 743c6c5f06a65b0a0cddb6b1ec9058ff
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5305
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3
@@ -14738,14 +14309,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 589a5a97f52aca270a29d1fb21f122b4
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 5306
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
@@ -14767,7 +14336,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum e107a0fa82bce0044c13a7a8ff1cab31
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14775,7 +14343,6 @@ rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2
@@ -14797,7 +14364,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 0669978e2325c8ccb73da658fd2cb72b
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14805,7 +14371,6 @@ rnaExtract longPolyA
 subId 3412
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2
@@ -14827,7 +14392,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -14835,7 +14399,6 @@ rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
@@ -14856,7 +14419,6 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum de0a84aca83f09e93205822f615cf108,7af9380bedc52b57b29fc33a1c16174d
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14864,7 +14426,6 @@ rnaExtract longPolyA
 subId 3414
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2
@@ -14885,7 +14446,6 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 3b111346ba963eb5b3958e1f7161268b,ae0ad7c3fc1bdffb01a8663c3baf72ef
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14893,7 +14453,6 @@ rnaExtract longPolyA
 subId 3412
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
@@ -14914,7 +14473,6 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum e4454727fe54f4872d50e011278a744f,c20c3a35b5f1f285af2190fcf189ac92
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -14922,7 +14480,6 @@ rnaExtract longPolyA
 subId 3478
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3
@@ -14943,14 +14500,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 075e9986692317fbc3aa4724de9645f8
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3
@@ -14971,14 +14526,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7b9eef2c333c49b9939012f183a2af97
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3
@@ -14999,14 +14552,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum eb72137bc641f3bd682335840a0fe53b
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3
@@ -15027,14 +14578,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f755da2fee8d800221587b17410e747d
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3
@@ -15055,14 +14604,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 50fb1553a8644f2dbe0861885dcbc618
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3
@@ -15083,14 +14630,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum added3851f237dc2abaabb68dfe617b6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3
@@ -15111,14 +14656,12 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum aac13a83da476a5b1c6858abc0e6fa2e
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3596
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3
@@ -15139,14 +14682,12 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum a84de012446172b5e33892a5a9191f83
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3597
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3
@@ -15167,14 +14708,12 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum dff4e802de5b80bbeec6ee4f3492c9c7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
 subId 3598
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
@@ -15197,14 +14736,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 380b66e8b589c3a29b88a61fda477994
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4
@@ -15233,7 +14770,6 @@ rnaExtract longPolyA
 subId 6251
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
@@ -15256,14 +14792,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 6f851490c20b69d2400a1c843b0754fa
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4
@@ -15292,7 +14826,6 @@ rnaExtract longPolyA
 subId 6250
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4
@@ -15321,7 +14854,6 @@ rnaExtract longPolyA
 subId 6249
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
@@ -15351,7 +14883,6 @@ rnaExtract longPolyA
 subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1
@@ -15378,7 +14909,6 @@ readType 1x75D
 replicate 1
 rnaExtract longPolyA
 subId 1483
-treatment None
 view RawData
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
@@ -15410,7 +14940,6 @@ rnaExtract longPolyA
 subId 3525
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
@@ -15442,7 +14971,6 @@ rnaExtract longPolyA
 subId 3525
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
@@ -15472,7 +15000,6 @@ rnaExtract longPolyA
 subId 3460
 submittedDataVersion V2 - A better mapping technique
 tableName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
@@ -15503,7 +15030,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2941
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
@@ -15534,7 +15060,6 @@ replicate 1
 rnaExtract longPolyA
 subId 2941
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4
@@ -15564,7 +15089,6 @@ sex U
 subId 6360
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4
-treatment None
 view MinusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4
@@ -15594,7 +15118,6 @@ sex U
 subId 6360
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4
-treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
@@ -15624,7 +15147,6 @@ rnaExtract longPolyA
 subId 3473
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
@@ -15653,7 +15175,6 @@ rnaExtract longPolyA
 subId 3411
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3
@@ -15682,7 +15203,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3
@@ -15711,7 +15231,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1
@@ -15738,7 +15257,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1493
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2
@@ -15764,7 +15282,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1909
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1
@@ -15791,7 +15308,6 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1493
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2
@@ -15817,7 +15333,6 @@ readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1909
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3
@@ -15846,7 +15361,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3
@@ -15875,7 +15389,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3
@@ -15904,7 +15417,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3
@@ -15933,7 +15445,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3
@@ -15962,7 +15473,6 @@ replicate 1
 rnaExtract longPolyA
 subId 5307
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3
@@ -15991,7 +15501,6 @@ replicate 2
 rnaExtract longPolyA
 subId 5308
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2
@@ -16023,7 +15532,6 @@ rnaExtract longPolyA
 subId 3473
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2
@@ -16054,7 +15562,6 @@ rnaExtract longPolyA
 subId 3411
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2
@@ -16084,7 +15591,6 @@ rnaExtract longPolyA
 subId 3473
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2
@@ -16113,7 +15619,6 @@ rnaExtract longPolyA
 subId 3411
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3
@@ -16142,7 +15647,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3
@@ -16171,7 +15675,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3
@@ -16200,7 +15703,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3
@@ -16229,7 +15731,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3
@@ -16258,7 +15759,6 @@ replicate 1
 rnaExtract longPolyA
 subId 3599
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3
@@ -16287,7 +15787,6 @@ replicate 2
 rnaExtract longPolyA
 subId 3600
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
@@ -16318,7 +15817,6 @@ replicate 1
 rnaExtract longPolyA
 subId 1493
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
@@ -16341,14 +15839,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum 238c4a04a7a1ca06a8516bba446d2d31
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1909
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4
@@ -16378,7 +15874,6 @@ sex U
 subId 6248
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4
@@ -16408,7 +15903,6 @@ sex U
 subId 6247
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
@@ -16429,7 +15923,6 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 562c779768d207625984bf7fb72d149a,fbd5d973c6c8606a71948628431a22a5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -16437,7 +15930,6 @@ rnaExtract longPolyA
 subId 3413
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
@@ -16458,7 +15950,6 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 698eb744de450f19a5859a4b0b31c20e,3a4011ed4bce8f730871979e82e1e6f9
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -16466,7 +15957,6 @@ rnaExtract longPolyA
 subId 3440
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
-treatment None
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3
@@ -16487,14 +15977,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0cebca8f15c7d6aed56ad9033e7ab28f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3
@@ -16515,14 +16003,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum f3da2830e35162d5ca9a311c40dfbca5
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1
@@ -16542,13 +16028,11 @@ lab Caltech
 labExpId 11587
 localization cell
 md5sum 9ad7e3ac8569e7c4b88880dca57a9d48
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1906
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2
@@ -16568,13 +16052,11 @@ lab Caltech
 labExpId 11588
 localization cell
 md5sum 849b263f0ab8b5cc9c09820d90bcb35f
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1905
-treatment None
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1
@@ -16594,13 +16076,11 @@ lab Caltech
 labExpId 11587
 localization cell
 md5sum c50d9844e78a1a66d9e88acaf33e3948
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1906
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2
@@ -16620,13 +16100,11 @@ lab Caltech
 labExpId 11588
 localization cell
 md5sum a5b70601cb79b746d58606f99fd2e9d6
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1905
-treatment None
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3
@@ -16647,14 +16125,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 3174b2bf67e53030b6b962b5b37252d4
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3
@@ -16675,14 +16151,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 47edf03671d311a7ffab28d84417c02a
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3
@@ -16703,14 +16177,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 935e30c092cdb0f5ed48d76ff530f7d3
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3
@@ -16731,14 +16203,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 3c6f8d34d1be105456407328e39751a7
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3
@@ -16760,14 +16230,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 8a8dfa5a844d17c8539cf42c10e4a5e2
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 5309
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3
@@ -16789,14 +16257,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum ffbd43fb174e9481ed382d9f1923843e
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 5310
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2
@@ -16818,7 +16284,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 33a394274d02da08fdf7e8b6f09b6bf2
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -16826,7 +16291,6 @@ rnaExtract longPolyA
 subId 3413
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2
@@ -16848,7 +16312,6 @@ localization cell
 mapAlgorithm TH1014
 md5sum 1b981f54d2b5c0343e1df4f9f18f42d4
 objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -16856,7 +16319,6 @@ rnaExtract longPolyA
 subId 3440
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2
@@ -16877,7 +16339,6 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0819108916df1d413755b208fe988811,fa2fad06ba5c4ff5e93788adfafd0283
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -16885,7 +16346,6 @@ rnaExtract longPolyA
 subId 3413
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2
@@ -16906,7 +16366,6 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 65903ccbdb793fb385541a44782d12d0,623034a1e60a2b5864eebb44a7a0b3bf
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -16914,7 +16373,6 @@ rnaExtract longPolyA
 subId 3440
 submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2
-treatment None
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3
@@ -16935,14 +16393,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 287901b7da02a94b705c6d536abd1581
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3
@@ -16963,14 +16419,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 0206d58bc1036fa8a4cb7ac76bed1864
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3
@@ -16991,14 +16445,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum e21f3d9751d46fd577edec296b7e04ec
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3
@@ -17019,14 +16471,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 03038cc8ea8cbde2480d2073f0d34fde
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3
@@ -17047,14 +16497,12 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 24e4b8522dca509c9dd5f55edc62212c
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3573
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3
@@ -17075,14 +16523,12 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum d7523997e302832a5dbb19aea0728537
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 3574
 submittedDataVersion V3 - New Elements Formats
-treatment None
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
@@ -17104,14 +16550,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum f8852cf441edc07d4012fe2ce73aa986
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1906
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4
@@ -17140,7 +16584,6 @@ rnaExtract longPolyA
 subId 6246
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
@@ -17162,14 +16605,12 @@ localization cell
 mapAlgorithm TH1014
 md5sum bbe87c2af89b7800b39f4d343dd5ef96
 objStatus replaced
-origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
-treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
@@ -17198,7 +16639,6 @@ rnaExtract longPolyA
 subId 6245
 submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
-treatment None
 view Signal
 
-# MAGIC: -297394682
+# MAGIC: 2030794445
