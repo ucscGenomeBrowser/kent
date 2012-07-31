@@ -6,7 +6,7 @@ QA Count Summaries for Release 2:
 Tables: 164
 Files: 301
 Gbdbs: 176
-Supplemental: 0
+Supplemental: 1
 Other: 3
 
 REVOKED:
@@ -18,9 +18,9 @@ Sizes of New:
 Table: 368 MB
 Files: 205131 MB (200 GB)
 Gbdbs: 79960 MB (78 GB)
-Supplemental: 0 MB
+Supplemental: 1 MB
 Other: 1 MB
-Total: 285460 MB (279 GB)
+Total: 285461 MB (279 GB)
 
 
 TABLES:
@@ -749,6 +749,21 @@ Revoked/Replaced/Renamed Gbdb Files (12):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1.bigWig
+
+
+SUPPLEMENTAL FILES:
+New: 1
+Untouched: 0
+Removed: 0
+New + Untouched: 1
+Total: 1
+
+New Supplemental Files (1):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/supplemental/README_Clusters.txt
+
+Untouched Supplemental Files (0):
+
+Removed Supplemental Files (0):
 
 
 
