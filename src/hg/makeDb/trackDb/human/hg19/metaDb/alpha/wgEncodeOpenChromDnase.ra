@@ -764,6 +764,7 @@ fileName wgEncodeOpenChromDnaseCd20ro01794AlnRep1.bam,wgEncodeOpenChromDnaseCd20
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 2115192519d337d712a8ed4b0794ccee,6cecfded01aeb957e16a0cd25a4e3e64
 project wgEncode
 replicate 1
 subId 6861
@@ -781,6 +782,7 @@ fileName wgEncodeOpenChromDnaseCd20ro01794AlnRep2.bam,wgEncodeOpenChromDnaseCd20
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum cdaba6b4f5c9bcfcefdbe403308c559a,97d4386457c062bb728c3cafeea1e408
 project wgEncode
 replicate 2
 subId 6861
@@ -798,6 +800,7 @@ fileName wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 2187e905d3ccda5f0683e839d32cc378
 project wgEncode
 subId 6861
 tableName wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal
@@ -815,6 +818,7 @@ fileName wgEncodeOpenChromDnaseCd20ro01794Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 8577d24b2b2fcf7e963f8a44e19c41ea
 project wgEncode
 subId 6861
 tableName wgEncodeOpenChromDnaseCd20ro01794Pk
@@ -831,6 +835,7 @@ dateUnrestricted 2013-01-25
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 1f53f4102f7ac554ddcd234b759e4fc2
 project wgEncode
 replicate 1
 subId 6861
@@ -847,6 +852,7 @@ dateUnrestricted 2013-01-25
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 4db5ace8f49881d1c5a513b0f14a28dd
 project wgEncode
 replicate 2
 subId 6861
@@ -864,6 +870,7 @@ fileName wgEncodeOpenChromDnaseCd20ro01794Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum a9f32113fd90c829366a5404e3db115a
 project wgEncode
 subId 6861
 tableName wgEncodeOpenChromDnaseCd20ro01794Sig
@@ -880,7 +887,8 @@ dateUnrestricted 2013-04-09
 fileName wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 1eb6c1f3f7efb2891ee38ca907fce553,ab88e0751c6e6b8818cf32946a32094e
 project wgEncode
 replicate 1
 subId 7340
@@ -897,7 +905,8 @@ dateUnrestricted 2013-04-09
 fileName wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 8fe835dfbc321fcfe89b5c23c9592b1f,ca6dac9262e4d00ae362e1fd6df0af0d
 project wgEncode
 replicate 2
 subId 7340
@@ -915,6 +924,7 @@ fileName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum aa07418ffd75b7921dac9bce791297ac
 project wgEncode
 subId 7340
 tableName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal
@@ -932,6 +942,7 @@ fileName wgEncodeOpenChromDnaseCerebellumocPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum d0bb9497ea14ebfbf974905d38515b0b
 project wgEncode
 subId 7340
 tableName wgEncodeOpenChromDnaseCerebellumocPk
@@ -948,6 +959,7 @@ dateUnrestricted 2013-04-09
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum c52b82cfdad2ddfb527c9af06f498969
 project wgEncode
 replicate 1
 subId 7340
@@ -964,6 +976,7 @@ dateUnrestricted 2013-04-09
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum dd52d222e13fc5c5217ad037ee9faf27
 project wgEncode
 replicate 2
 subId 7340
@@ -981,6 +994,7 @@ fileName wgEncodeOpenChromDnaseCerebellumocSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 05eac036c9cd74cedfafa15b20c5ec9e
 project wgEncode
 subId 7340
 tableName wgEncodeOpenChromDnaseCerebellumocSig
@@ -997,7 +1011,8 @@ dateUnrestricted 2013-04-07
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 1cba68dd60c492210175032d31950530,10f5b4517460a23cee63d70b72d1fbd1
 project wgEncode
 replicate 1
 subId 7339
@@ -1014,7 +1029,8 @@ dateUnrestricted 2013-04-07
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum c5ca757775e4ffa990aa738f8663373d,0d2984c12f6d7ecd97d997ae6e074e81
 project wgEncode
 replicate 2
 subId 7339
@@ -1032,6 +1048,7 @@ fileName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum e56c5c266bd8bb2fd84ab3388819eeb8
 project wgEncode
 subId 7339
 tableName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal
@@ -1049,6 +1066,7 @@ fileName wgEncodeOpenChromDnaseCerebrumfrontalocPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum e65f4625c297e64b96d6c45f168d7443
 project wgEncode
 subId 7339
 tableName wgEncodeOpenChromDnaseCerebrumfrontalocPk
@@ -1065,6 +1083,7 @@ dateUnrestricted 2013-04-07
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 1cdf7ab014347ef3ac44a6efc90afe7c
 project wgEncode
 replicate 1
 subId 7339
@@ -1081,6 +1100,7 @@ dateUnrestricted 2013-04-07
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 0f8c2ce4280865662b1a5f7125dad867
 project wgEncode
 replicate 2
 subId 7339
@@ -1098,6 +1118,7 @@ fileName wgEncodeOpenChromDnaseCerebrumfrontalocSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum a4f334bbf2d8f8d1d8f60233be5da657
 project wgEncode
 subId 7339
 tableName wgEncodeOpenChromDnaseCerebrumfrontalocSig
@@ -2012,6 +2033,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep1.bam,wgEncodeOpenChromDnaseF
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 71257b60fdd283c7e392e55b227087df,fca2f85869698bf81a213d5dd9d1086a
 project wgEncode
 replicate 1
 subId 7312
@@ -2029,6 +2051,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep2.bam,wgEncodeOpenChromDnaseF
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 7e1a1a60736333307e3a99c0efc3ed07,2af4381a9bc8593306d81384bd37120e
 project wgEncode
 replicate 2
 subId 7312
@@ -2046,6 +2069,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 0e2567e767afbf9c753eeb4ee8652158
 project wgEncode
 subId 7312
 tableName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal
@@ -2063,6 +2087,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1.bam,wgEncodeOpenChr
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 0d152dc969e9ec2fee913af03c437a3f,c983a1f3aa8db9e7f4aa3fead7fa6a31
 project wgEncode
 replicate 1
 subId 7310
@@ -2081,6 +2106,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2.bam,wgEncodeOpenChr
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 9bc9cb8a4645610de94321ecb5e00dca,b39a4c253619f55b2b2cfc5be1aa6692
 project wgEncode
 replicate 2
 subId 7310
@@ -2099,6 +2125,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 98dd797aa83f049ea3b3b1c1d1879adb
 project wgEncode
 subId 7310
 tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal
@@ -2117,6 +2144,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum ed73a860f7892762ef975be6f036b6aa
 project wgEncode
 subId 7310
 tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk
@@ -2134,6 +2162,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 73264db0ccd068f590d9baf4cc8ec512
 project wgEncode
 replicate 1
 subId 7310
@@ -2151,6 +2180,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 0e515f6da0584a1bcfeddc9a207e7ad3
 project wgEncode
 replicate 2
 subId 7310
@@ -2169,6 +2199,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 2ce1b2ef79d897fcbef7e32e4969b305
 project wgEncode
 subId 7310
 tableName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig
@@ -2187,6 +2218,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1.bam,wgEncodeOpenCh
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum db299014f351ff9a59e3d91ade6196ac,41228859ef9477c37bb5b840f7250d7b
 project wgEncode
 replicate 1
 subId 7311
@@ -2205,6 +2237,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2.bam,wgEncodeOpenCh
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 52c09532f0ea76ec6978fc7a866d970e,b9bf627f2d702186dd9d5b93d30fcbdf
 project wgEncode
 replicate 2
 subId 7311
@@ -2223,6 +2256,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum d2d7804a8bde5b1294a1f67321296b98
 project wgEncode
 subId 7311
 tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal
@@ -2241,6 +2275,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 251e1c50fc6ab26bfba3619130f945b5
 project wgEncode
 subId 7311
 tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk
@@ -2258,6 +2293,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum eff59dde4fa2ad05ded35c5b861064f5
 project wgEncode
 replicate 1
 subId 7311
@@ -2275,6 +2311,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 41c6230dfd67855385583d61c230c55a
 project wgEncode
 replicate 2
 subId 7311
@@ -2293,6 +2330,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum fe66a4bbbc8821ef820ad6e84ca93662
 project wgEncode
 subId 7311
 tableName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig
@@ -2311,6 +2349,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum fcc175fc49bc1b3ae286cb7a4cdc1875
 project wgEncode
 subId 7312
 tableName wgEncodeOpenChromDnaseFibroblgm03348Pk
@@ -2327,6 +2366,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 4742a053abe67d36eb330e98a26e28d5
 project wgEncode
 replicate 1
 subId 7312
@@ -2343,6 +2383,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 536ce8cff68fcbd562e6328e0aaa28be
 project wgEncode
 replicate 2
 subId 7312
@@ -2360,6 +2401,7 @@ fileName wgEncodeOpenChromDnaseFibroblgm03348Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum bd330ca6a4f08e96bc666ba85f2a48ba
 project wgEncode
 subId 7312
 tableName wgEncodeOpenChromDnaseFibroblgm03348Sig
@@ -3091,6 +3133,7 @@ fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep1.bam,wgEncodeOpenChromDnase
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum f5d7d116be0ffdb83b725a6147321d19,a3b43575ee930011625ed125609ef157
 project wgEncode
 replicate 1
 subId 7137
@@ -3108,6 +3151,7 @@ fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep2.bam,wgEncodeOpenChromDnase
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 8facea09a078c182ea4d2cdaa5a42bb6,ffcb9f1509e8141dd96fb3da694832c1
 project wgEncode
 replicate 2
 subId 7137
@@ -3125,6 +3169,7 @@ fileName wgEncodeOpenChromDnaseFrontalcortexocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 7e1c06786be78f3916ebb297a16dda47
 project wgEncode
 subId 7137
 tableName wgEncodeOpenChromDnaseFrontalcortexocBaseOverlapSignal
@@ -3142,6 +3187,7 @@ fileName wgEncodeOpenChromDnaseFrontalcortexocPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum c94d2fcd036c2732896c1faa48f1fa3b
 project wgEncode
 subId 7137
 tableName wgEncodeOpenChromDnaseFrontalcortexocPk
@@ -3158,6 +3204,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum ef22aa416b716332ba43851d740ac250
 project wgEncode
 replicate 1
 subId 7137
@@ -3174,6 +3221,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum b662efd05da3f6208f013d1cc4d72a0f
 project wgEncode
 replicate 2
 subId 7137
@@ -3191,6 +3239,7 @@ fileName wgEncodeOpenChromDnaseFrontalcortexocSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum e703ab71e1ffa62102185782718026dc
 project wgEncode
 subId 7137
 tableName wgEncodeOpenChromDnaseFrontalcortexocSig
@@ -3208,6 +3257,7 @@ fileName wgEncodeOpenChromDnaseGcbcellAlnRep1.bam,wgEncodeOpenChromDnaseGcbcellA
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 2497fe6aa04d282404f3538aedb5ac62,362712bed91d20e3740e8dad9b2c304e
 project wgEncode
 replicate 1
 subId 7308
@@ -3225,6 +3275,7 @@ fileName wgEncodeOpenChromDnaseGcbcellAlnRep2.bam,wgEncodeOpenChromDnaseGcbcellA
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 0694e2dd6dd41d5ff0d1a9bd60bab43a,9537a7e2d40a8993c056f77be1c81402
 project wgEncode
 replicate 2
 subId 7308
@@ -3242,6 +3293,7 @@ fileName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 8bbc9dc4d4c3f0eff0fd0c1ed1d08f51
 project wgEncode
 subId 7308
 tableName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal
@@ -3259,6 +3311,7 @@ fileName wgEncodeOpenChromDnaseGcbcellPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum fec69afbbbbb7a7b73f321c09c099d40
 project wgEncode
 subId 7308
 tableName wgEncodeOpenChromDnaseGcbcellPk
@@ -3275,6 +3328,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 59e44151bf7883caab20521069deb097
 project wgEncode
 replicate 1
 subId 7308
@@ -3291,6 +3345,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum b676e983bb7aabfd4329c8a95c1c6b1c
 project wgEncode
 replicate 2
 subId 7308
@@ -3308,6 +3363,7 @@ fileName wgEncodeOpenChromDnaseGcbcellSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 0dc37f6934c93135efdd0c84b2c02fab
 project wgEncode
 subId 7308
 tableName wgEncodeOpenChromDnaseGcbcellSig
@@ -3490,7 +3546,8 @@ dateUnrestricted 2013-04-19
 fileName wgEncodeOpenChromDnaseGm10248AlnRep1.bam,wgEncodeOpenChromDnaseGm10248AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 73f3ad5d5c0acde777a05e62304e999a,65f81492da63fb2bea36461b52592a79
 project wgEncode
 replicate 1
 subId 7511
@@ -3507,7 +3564,8 @@ dateUnrestricted 2013-04-19
 fileName wgEncodeOpenChromDnaseGm10248AlnRep2.bam,wgEncodeOpenChromDnaseGm10248AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 5991fe8d0c0b61713b02fb8c583b2f34,4aa0b05f335b6ce2e4e87639ce6b00ad
 project wgEncode
 replicate 2
 subId 7511
@@ -3525,6 +3583,7 @@ fileName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 2350c2c23078a299b8dd7acd0285cd5c
 project wgEncode
 subId 7511
 tableName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal
@@ -3542,6 +3601,7 @@ fileName wgEncodeOpenChromDnaseGm10248Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 812c17dcab9181cdaea54b21b8b8a1f8
 project wgEncode
 subId 7511
 tableName wgEncodeOpenChromDnaseGm10248Pk
@@ -3558,6 +3618,7 @@ dateUnrestricted 2013-04-19
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum e1769b4651971e99e3d79c8f35c1223b
 project wgEncode
 replicate 1
 subId 7511
@@ -3574,6 +3635,7 @@ dateUnrestricted 2013-04-19
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum c607cf4199eea4407fc6df2074796f1f
 project wgEncode
 replicate 2
 subId 7511
@@ -3591,6 +3653,7 @@ fileName wgEncodeOpenChromDnaseGm10248Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 587309f3b7bd8eb5056c5c8a9bba514f
 project wgEncode
 subId 7511
 tableName wgEncodeOpenChromDnaseGm10248Sig
@@ -3607,7 +3670,8 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm10266AlnRep1.bam,wgEncodeOpenChromDnaseGm10266AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 0f054863b63155d279357ebecb91f163,009d1990a13f7bd70cb6fc9ee3f77dfe
 project wgEncode
 replicate 1
 subId 7400
@@ -3624,7 +3688,8 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm10266AlnRep2.bam,wgEncodeOpenChromDnaseGm10266AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum a43d23209eef32d1bdeb1f97755fc13d,e3f146bd586096e6521d0605d2ca401f
 project wgEncode
 replicate 2
 subId 7400
@@ -3642,6 +3707,7 @@ fileName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 48464ce44d2850afebf3b650fa99dceb
 project wgEncode
 subId 7400
 tableName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal
@@ -3659,6 +3725,7 @@ fileName wgEncodeOpenChromDnaseGm10266Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 899eb44ee6d8760ce24f8cba11487553
 project wgEncode
 subId 7400
 tableName wgEncodeOpenChromDnaseGm10266Pk
@@ -3675,6 +3742,7 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 77040ec52611ee66056db3ccc297d791
 project wgEncode
 replicate 1
 subId 7400
@@ -3691,6 +3759,7 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 663779f0788c696ccbe7ec392ecdfdae
 project wgEncode
 replicate 2
 subId 7400
@@ -3708,6 +3777,7 @@ fileName wgEncodeOpenChromDnaseGm10266Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 1ad38473feb170531ed7dee578340749
 project wgEncode
 subId 7400
 tableName wgEncodeOpenChromDnaseGm10266Sig
@@ -4409,7 +4479,8 @@ dateUnrestricted 2013-04-16
 fileName wgEncodeOpenChromDnaseGm13976AlnRep1.bam,wgEncodeOpenChromDnaseGm13976AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum ed1c43f2fbd448450abca4cc6e1769d9,6fc6ac164e64a5256140a9020010e378
 project wgEncode
 replicate 1
 subId 7500
@@ -4426,7 +4497,8 @@ dateUnrestricted 2013-04-16
 fileName wgEncodeOpenChromDnaseGm13976AlnRep2.bam,wgEncodeOpenChromDnaseGm13976AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 39fabd8d08aa28db87142eabb3a4abb9,d9865a89da3745176fc40b601974b8f5
 project wgEncode
 replicate 2
 subId 7500
@@ -4444,6 +4516,7 @@ fileName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 2a90270596d8b7794202508f331bc6d9
 project wgEncode
 subId 7500
 tableName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal
@@ -4461,6 +4534,7 @@ fileName wgEncodeOpenChromDnaseGm13976Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 63fdda6e8c3ea4a7a2dd322d4eef8407
 project wgEncode
 subId 7500
 tableName wgEncodeOpenChromDnaseGm13976Pk
@@ -4477,6 +4551,7 @@ dateUnrestricted 2013-04-16
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum eb01af31153230f6f8fa7a5e5fc9f055
 project wgEncode
 replicate 1
 subId 7500
@@ -4493,6 +4568,7 @@ dateUnrestricted 2013-04-16
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum d08fcfdcdbf3f7695ec99c21c8257c65
 project wgEncode
 replicate 2
 subId 7500
@@ -4510,6 +4586,7 @@ fileName wgEncodeOpenChromDnaseGm13976Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 14ef8a69aacc2cabc549b3fc14f697d7
 project wgEncode
 subId 7500
 tableName wgEncodeOpenChromDnaseGm13976Sig
@@ -5307,7 +5384,8 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm20000AlnRep1.bam,wgEncodeOpenChromDnaseGm20000AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum ddf0187c0066061b34eaa7e0e9c15abb,5d6c86983edb5ac0212f9c0533d0f2b1
 project wgEncode
 replicate 1
 subId 7399
@@ -5324,7 +5402,8 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm20000AlnRep2.bam,wgEncodeOpenChromDnaseGm20000AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum cc45446cc7f9da4f8bf64479c0f23885,8eee13b5db6d126d8ee208013ac19b76
 project wgEncode
 replicate 2
 subId 7399
@@ -5342,6 +5421,7 @@ fileName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum f99dd66e4c34e9b9b081602bc20cc4cd
 project wgEncode
 subId 7399
 tableName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal
@@ -5359,6 +5439,7 @@ fileName wgEncodeOpenChromDnaseGm20000Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 8312b9572ae888c04ea5538d73d032ec
 project wgEncode
 subId 7399
 tableName wgEncodeOpenChromDnaseGm20000Pk
@@ -5375,6 +5456,7 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum efe9e466a09bc7347e20c007c1cf1bb0
 project wgEncode
 replicate 1
 subId 7399
@@ -5391,6 +5473,7 @@ dateUnrestricted 2013-04-15
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 531be71b44867abe0708ca77445d1079
 project wgEncode
 replicate 2
 subId 7399
@@ -5408,6 +5491,7 @@ fileName wgEncodeOpenChromDnaseGm20000Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum da3e26871486efab9f059dda4a8712af
 project wgEncode
 subId 7399
 tableName wgEncodeOpenChromDnaseGm20000Sig
@@ -5953,6 +6037,7 @@ fileName wgEncodeOpenChromDnaseHeartocAlnRep1.bam,wgEncodeOpenChromDnaseHeartocA
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 4adee70a22a00d00aa2debbc0e429f54,98bdea0577072e19377976f6ebb4ed6b
 project wgEncode
 replicate 1
 subId 7321
@@ -5970,6 +6055,7 @@ fileName wgEncodeOpenChromDnaseHeartocAlnRep2.bam,wgEncodeOpenChromDnaseHeartocA
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 2725ec307d56eededc5b64e2d3faad5c,e01bff02274e4627e4e1263636019410
 project wgEncode
 replicate 2
 subId 7321
@@ -5987,6 +6073,7 @@ fileName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum f9b868726646523f7a2369e990fbf66b
 project wgEncode
 subId 7321
 tableName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal
@@ -6004,6 +6091,7 @@ fileName wgEncodeOpenChromDnaseHeartocPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 093781d8e9e62ec9ae65f73d08a2ee15
 project wgEncode
 subId 7321
 tableName wgEncodeOpenChromDnaseHeartocPk
@@ -6020,6 +6108,7 @@ dateUnrestricted 2013-04-05
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 5c54475f7f70170bed9b3958755aa255
 project wgEncode
 replicate 1
 subId 7321
@@ -6036,6 +6125,7 @@ dateUnrestricted 2013-04-05
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 4c0cb2461a9dcc11d15aa6ffb329de85
 project wgEncode
 replicate 2
 subId 7321
@@ -6053,6 +6143,7 @@ fileName wgEncodeOpenChromDnaseHeartocSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum c682c8cd1976ec79cda7dc24f3a6fa03
 project wgEncode
 subId 7321
 tableName wgEncodeOpenChromDnaseHeartocSig
@@ -8571,7 +8662,8 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseImr90AlnRep1.bam,wgEncodeOpenChromDnaseImr90AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 8ec887a39b84e777f2c755231b408c96,da187291674f3b7df07a5c8aa799606f
 project wgEncode
 replicate 1
 subId 7397
@@ -8588,7 +8680,8 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseImr90AlnRep2.bam,wgEncodeOpenChromDnaseImr90AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum b37dfe74042ec0782acd9db2b02e1bf1,1cd44555848df1ea46b28a131dec95ee
 project wgEncode
 replicate 2
 subId 7397
@@ -8606,6 +8699,7 @@ fileName wgEncodeOpenChromDnaseImr90BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 3629ee41c3ac5e82f843f267f8e54f61
 project wgEncode
 subId 7397
 tableName wgEncodeOpenChromDnaseImr90BaseOverlapSignal
@@ -8623,6 +8717,7 @@ fileName wgEncodeOpenChromDnaseImr90Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 58f7b23762347a0c80e116cf6404767f
 project wgEncode
 subId 7397
 tableName wgEncodeOpenChromDnaseImr90Pk
@@ -8639,6 +8734,7 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseImr90RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 01403a7390c8603753c1c7ca051aa36b
 project wgEncode
 replicate 1
 subId 7397
@@ -8655,6 +8751,7 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseImr90RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 48b469963dc56da3c910971feacf9855
 project wgEncode
 replicate 2
 subId 7397
@@ -8672,6 +8769,7 @@ fileName wgEncodeOpenChromDnaseImr90Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 65ef421ce2ce2021081be62e6e8e107f
 project wgEncode
 subId 7397
 tableName wgEncodeOpenChromDnaseImr90Sig
@@ -9812,6 +9910,7 @@ fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep1.bam,wgEncodeOpenChromDnaseK562
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 7aadba540bc5efc3ab93271f22358fb3,73129f9182a68e4b96f16b0ff0664478
 project wgEncode
 replicate 1
 subId 7133
@@ -9830,6 +9929,7 @@ fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep2.bam,wgEncodeOpenChromDnaseK562
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum e34c9b07d77e329581e5be1c393955f9,bf7d5c47c3351de4590b9f47fe62d260
 project wgEncode
 replicate 2
 subId 7133
@@ -9848,6 +9948,7 @@ fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep3.bam,wgEncodeOpenChromDnaseK562
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 4510a2f16bbed61cc7c5307634873aac,5feafd37be7a0f4700bdd472e4ecaa13
 project wgEncode
 replicate 3
 subId 7133
@@ -9866,6 +9967,7 @@ fileName wgEncodeOpenChromDnaseK562G1phaseBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum bbb190a82608e05864bfa962fbd0043f
 project wgEncode
 subId 7133
 tableName wgEncodeOpenChromDnaseK562G1phaseBaseOverlapSignal
@@ -9884,6 +9986,7 @@ fileName wgEncodeOpenChromDnaseK562G1phasePk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 580381acc78f88955a2c70e70e2aee0a
 project wgEncode
 subId 7133
 tableName wgEncodeOpenChromDnaseK562G1phasePk
@@ -9901,6 +10004,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 24b9c6fc6400d5ae36f074681b5ea72d
 project wgEncode
 replicate 1
 subId 7133
@@ -9918,6 +10022,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 780431663723e65b8a5c46cd740da289
 project wgEncode
 replicate 2
 subId 7133
@@ -9935,6 +10040,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum a40b8244d9fda2a62a60263e2e3d8d37
 project wgEncode
 replicate 3
 subId 7133
@@ -9953,6 +10059,7 @@ fileName wgEncodeOpenChromDnaseK562G1phaseSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
+md5sum 3d4076ea0a75067afa2b93e94e84f5c9
 project wgEncode
 subId 7133
 tableName wgEncodeOpenChromDnaseK562G1phaseSig
@@ -9971,6 +10078,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep1.bam,wgEncodeOpenChromDnaseK56
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 25757d6e9379d24678265c7e91c1c2a3,1f1bb6f25878a5b0cbd59c928a75ec38
 project wgEncode
 replicate 1
 subId 7138
@@ -9989,6 +10097,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep2.bam,wgEncodeOpenChromDnaseK56
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum c3c796553559b761d371f682018737ea,3a9cad7127dde4531a33519de7b036a4
 project wgEncode
 replicate 2
 subId 7138
@@ -10007,6 +10116,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep3.bam,wgEncodeOpenChromDnaseK56
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum b0c8f59153513866a3d03be74d6b3dc2,e6ca24279b8003fa5f1ceddcf11ca6d1
 project wgEncode
 replicate 3
 subId 7138
@@ -10025,6 +10135,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphaseBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 99fb8b53e421519165296aa1ea1d88bf
 project wgEncode
 subId 7138
 tableName wgEncodeOpenChromDnaseK562G2mphaseBaseOverlapSignal
@@ -10043,6 +10154,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphasePk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum e19ba77761cad0973cd2c8cd9a48e021
 project wgEncode
 subId 7138
 tableName wgEncodeOpenChromDnaseK562G2mphasePk
@@ -10060,6 +10172,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 95103e37f50caa9c49d925e53c23a41d
 project wgEncode
 replicate 1
 subId 7138
@@ -10077,6 +10190,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum e7d5ddf357b9b078f796b720a81ebf4b
 project wgEncode
 replicate 2
 subId 7138
@@ -10094,6 +10208,7 @@ dateUnrestricted 2013-03-27
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum 2ab731aae71ce0e039ef64bde8a35f88
 project wgEncode
 replicate 3
 subId 7138
@@ -10112,6 +10227,7 @@ fileName wgEncodeOpenChromDnaseK562G2mphaseSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
+md5sum f3164288771e5e721872e7be5b27bfa6
 project wgEncode
 subId 7138
 tableName wgEncodeOpenChromDnaseK562G2mphaseSig
@@ -11004,6 +11120,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep1.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 97b6f5e5324157fbbb571ea22c1200ee,969f388433bf4a7f97788f0d368b1141
 project wgEncode
 replicate 1
 subId 6919
@@ -11022,6 +11139,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep2.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum b19842103e40f6768ef125ac87ed5e88,6a4dbee88e42ce5a9ba26f53e7cfb990
 project wgEncode
 replicate 2
 subId 6919
@@ -11040,6 +11158,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep3.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 7a09a443b00fd0206abf421e14310b06,020e3bdf0e3281b05f258cd8b0c72f18
 project wgEncode
 replicate 3
 subId 6919
@@ -11058,6 +11177,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 8b5334e7f213ff7b23b94df3aec4d4d5
 project wgEncode
 subId 6919
 tableName wgEncodeOpenChromDnaseMcf7CtcfshrnaBaseOverlapSignal
@@ -11076,6 +11196,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum ad29ece51b872527d30be6b4b9c96979
 project wgEncode
 subId 6919
 tableName wgEncodeOpenChromDnaseMcf7CtcfshrnaPk
@@ -11093,6 +11214,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum cd367b150d2fb30fe4b2e25af94d979c
 project wgEncode
 replicate 1
 subId 6919
@@ -11110,6 +11232,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum b765407b6d423fe85fbfa8ca8f2e1408
 project wgEncode
 replicate 2
 subId 6919
@@ -11127,6 +11250,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum c701b01932179b28b7b10fe968ab6a30
 project wgEncode
 replicate 3
 subId 6919
@@ -11145,6 +11269,7 @@ fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
+md5sum 84ce497a41ce1c64cbaafae04046cac4
 project wgEncode
 subId 6919
 tableName wgEncodeOpenChromDnaseMcf7CtcfshrnaSig
@@ -11315,6 +11440,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep1.bam,wgEncodeOpenChromDnase
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum acfe594ffe2f263ee4a3069dfee6f6f4,50cd296cd70d6e2384eb96a50ab8c6d9
 project wgEncode
 replicate 1
 subId 7134
@@ -11333,6 +11459,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep2.bam,wgEncodeOpenChromDnase
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 13efc2a1136fad22e8f23ab4c03f344f,8282ebf3c2968183e6cbf6d91bb13a4e
 project wgEncode
 replicate 2
 subId 7134
@@ -11351,6 +11478,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacconBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 7f0ae06fd5a6ceec1534bdfa9f630aa9
 project wgEncode
 subId 7134
 tableName wgEncodeOpenChromDnaseMcf7HypoxlacconBaseOverlapSignal
@@ -11369,6 +11497,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacconPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 5232eb9b3c30535233ece0961a3058dd
 project wgEncode
 subId 7134
 tableName wgEncodeOpenChromDnaseMcf7HypoxlacconPk
@@ -11386,6 +11515,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 575deb1cb105871a2baad5a925f9d77b
 project wgEncode
 replicate 1
 subId 7134
@@ -11403,6 +11533,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum d266ae33813dbb62bf969dfa9ced39a1
 project wgEncode
 replicate 2
 subId 7134
@@ -11421,6 +11552,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacconSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
+md5sum a45a3c3fb8e0df61f7dcc2663f72a515
 project wgEncode
 subId 7134
 tableName wgEncodeOpenChromDnaseMcf7HypoxlacconSig
@@ -11464,6 +11596,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep1.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum f0e70188d22229de6f03fa9e32694960,701a17d8cbd5285193ae6d71f244b9aa
 project wgEncode
 replicate 1
 subId 6920
@@ -11482,6 +11615,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep2.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 42a508e4882767df0f1c6a154223e89b,7feb7cb68d6fc727bad66331a0d6240e
 project wgEncode
 replicate 2
 subId 6920
@@ -11500,6 +11634,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep3.bam,wgEncodeOpenChromDnaseMc
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 45b3604625556f6d145e6363fdc20251,373808556234ed0308a40089bc185ece
 project wgEncode
 replicate 3
 subId 6920
@@ -11518,6 +11653,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum d86f6fb2a51fcff4504ae8401df5cded
 project wgEncode
 subId 6920
 tableName wgEncodeOpenChromDnaseMcf7RandshrnaBaseOverlapSignal
@@ -11536,6 +11672,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 73893849223b4044509698f0cffe8915
 project wgEncode
 subId 6920
 tableName wgEncodeOpenChromDnaseMcf7RandshrnaPk
@@ -11553,6 +11690,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 021d37235970ab2a73219daa502bfdb9
 project wgEncode
 replicate 1
 subId 6920
@@ -11570,6 +11708,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum e98df272de5650e6319222b5928b64a7
 project wgEncode
 replicate 2
 subId 6920
@@ -11587,6 +11726,7 @@ dateUnrestricted 2013-02-02
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum 8a52f56398513604b1bd5e8ef930f1e0
 project wgEncode
 replicate 3
 subId 6920
@@ -11605,6 +11745,7 @@ fileName wgEncodeOpenChromDnaseMcf7RandshrnaSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
+md5sum 3c86915e32f557d953329c5c614e435e
 project wgEncode
 subId 6920
 tableName wgEncodeOpenChromDnaseMcf7RandshrnaSig
@@ -12305,6 +12446,7 @@ fileName wgEncodeOpenChromDnaseMonocd14AlnRep1.bam,wgEncodeOpenChromDnaseMonocd1
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 03ce301ad2f3ad93003b7ec44440a927,ce3307148a5ce4adda453cf9433fe39a
 project wgEncode
 replicate 1
 subId 6860
@@ -12322,6 +12464,7 @@ fileName wgEncodeOpenChromDnaseMonocd14AlnRep2.bam,wgEncodeOpenChromDnaseMonocd1
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum c5b34408f5e3c48e5cfff96fc7930120,794d92b8629e7e021365db21ddf58712
 project wgEncode
 replicate 2
 subId 6860
@@ -12339,6 +12482,7 @@ fileName wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 55c85b5b30b778e5c22af2e2707d03bd
 project wgEncode
 subId 6860
 tableName wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal
@@ -12356,6 +12500,7 @@ fileName wgEncodeOpenChromDnaseMonocd14Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 538c87e3456355b6ebfedf1fcda403a9
 project wgEncode
 subId 6860
 tableName wgEncodeOpenChromDnaseMonocd14Pk
@@ -12372,6 +12517,7 @@ dateUnrestricted 2013-01-25
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum e418f54e1f06e5d458ec26c7eb14badc
 project wgEncode
 replicate 1
 subId 6860
@@ -12388,6 +12534,7 @@ dateUnrestricted 2013-01-25
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum c7d9940ea8bc5ac1f58f6dae8990b2e9
 project wgEncode
 replicate 2
 subId 6860
@@ -12405,6 +12552,7 @@ fileName wgEncodeOpenChromDnaseMonocd14Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_CD14_monocytes
+md5sum 884c677f8643233ebae1bd181f268317
 project wgEncode
 subId 6860
 tableName wgEncodeOpenChromDnaseMonocd14Sig
@@ -12548,6 +12696,7 @@ fileName wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam,wgEncodeOpenChromDnaseNaive
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 8230c90f50b1eb3d9fa20ae013c2baa9,d0e06fb715aca8a249646200f0400a85
 project wgEncode
 replicate 1
 subId 7313
@@ -12565,6 +12714,7 @@ fileName wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam,wgEncodeOpenChromDnaseNaive
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 45c659a7e281b32ba8025180929be039,9af98526830828e16631ce2c90df1d22
 project wgEncode
 replicate 2
 subId 7313
@@ -12582,6 +12732,7 @@ fileName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 8aa4bf2a4ea0f9d8055fe9e1c2685010
 project wgEncode
 subId 7313
 tableName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal
@@ -12599,6 +12750,7 @@ fileName wgEncodeOpenChromDnaseNaivebcellPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 3a903a8662e24fc5bb30cfe04fa05b18
 project wgEncode
 subId 7313
 tableName wgEncodeOpenChromDnaseNaivebcellPk
@@ -12615,6 +12767,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 51c77ec8973e74a66f4edb09f92b074e
 project wgEncode
 replicate 1
 subId 7313
@@ -12631,6 +12784,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 700bd3e0f89fd2874c1a9ca4c216bf77
 project wgEncode
 replicate 2
 subId 7313
@@ -12648,6 +12802,7 @@ fileName wgEncodeOpenChromDnaseNaivebcellSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 04b3e076707589879c2ea9beec4bada5
 project wgEncode
 subId 7313
 tableName wgEncodeOpenChromDnaseNaivebcellSig
@@ -12858,6 +13013,7 @@ fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep1.bam,wgEncodeOpenChromDnaseO
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 7c840e1c80b7eed2dfae3c9bdbc102ac,2c2d41759757daa688e4396db1a740bb
 project wgEncode
 replicate 1
 subId 7309
@@ -12875,6 +13031,7 @@ fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep2.bam,wgEncodeOpenChromDnaseO
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 3b5ddc0c74ee9955b596165df123b55a,44355b3b331e5bd7fa542d8912eee507
 project wgEncode
 replicate 2
 subId 7309
@@ -12892,6 +13049,7 @@ fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep3.bam,wgEncodeOpenChromDnaseO
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 6bd32d3a31947dfa4597ad5c6a268e27,181028502d989c3424f0eccf24d97de5
 project wgEncode
 replicate 3
 subId 7309
@@ -12909,6 +13067,7 @@ fileName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 0ceb700be703a64f208f34c549c42d94
 project wgEncode
 subId 7309
 tableName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal
@@ -12926,6 +13085,7 @@ fileName wgEncodeOpenChromDnaseOlfneurospherePk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 3b15c6dace4bcb361445e4fb9e0411d2
 project wgEncode
 subId 7309
 tableName wgEncodeOpenChromDnaseOlfneurospherePk
@@ -12942,6 +13102,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 4080128c48a952334c83f480da9df2da
 project wgEncode
 replicate 1
 subId 7309
@@ -12958,6 +13119,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum c67f11fc12e2925635fe7cbe3299c52b
 project wgEncode
 replicate 2
 subId 7309
@@ -12974,6 +13136,7 @@ dateUnrestricted 2013-04-02
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum db546421aaa60935c93cd776bebf7d52
 project wgEncode
 replicate 3
 subId 7309
@@ -12991,6 +13154,7 @@ fileName wgEncodeOpenChromDnaseOlfneurosphereSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 47c073ec505a722e7ed7fff42c6b15f1
 project wgEncode
 subId 7309
 tableName wgEncodeOpenChromDnaseOlfneurosphereSig
@@ -13926,7 +14090,8 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseSknshAlnRep1.bam,wgEncodeOpenChromDnaseSknshAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 39033f826dfad8e143f835af16c19e08,8d81068166c85c1e67d09209af68650e
 project wgEncode
 replicate 1
 subId 7398
@@ -13943,7 +14108,8 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseSknshAlnRep2.bam,wgEncodeOpenChromDnaseSknshAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 34eb9109a0dc298b113574eaddfa2c60,e20f8dc76fc08c332b9301284b3b007c
 project wgEncode
 replicate 2
 subId 7398
@@ -13961,6 +14127,7 @@ fileName wgEncodeOpenChromDnaseSknshBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 463d1648a71c2a5d537b12eb2783647c
 project wgEncode
 subId 7398
 tableName wgEncodeOpenChromDnaseSknshBaseOverlapSignal
@@ -13978,6 +14145,7 @@ fileName wgEncodeOpenChromDnaseSknshPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum cb9cc607c7332ad6470f667bc8983ea6
 project wgEncode
 subId 7398
 tableName wgEncodeOpenChromDnaseSknshPk
@@ -13994,6 +14162,7 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseSknshRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 1435db158da2837e3b9d1035e58bd2c0
 project wgEncode
 replicate 1
 subId 7398
@@ -14010,6 +14179,7 @@ dateUnrestricted 2013-04-14
 fileName wgEncodeOpenChromDnaseSknshRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum feeaee518d43415f384c3d91c572dc61
 project wgEncode
 replicate 2
 subId 7398
@@ -14027,6 +14197,7 @@ fileName wgEncodeOpenChromDnaseSknshSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 4e227d7fd575a5866af7ea3ee23332f5
 project wgEncode
 subId 7398
 tableName wgEncodeOpenChromDnaseSknshSig
@@ -15159,4 +15330,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1049507995
+# MAGIC: -1525525746
