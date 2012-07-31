@@ -732,6 +732,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -759,6 +761,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqBladderAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -786,6 +790,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -812,6 +818,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -837,6 +845,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -863,6 +873,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -889,6 +901,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -915,6 +929,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -941,6 +957,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -967,6 +985,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -992,6 +1012,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1018,6 +1040,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -1044,6 +1068,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1071,6 +1097,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1098,6 +1126,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1125,6 +1155,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1152,6 +1184,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1177,6 +1211,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1203,6 +1239,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -1230,6 +1268,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqCbellumAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -1257,6 +1297,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -1283,6 +1325,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1308,6 +1352,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1334,6 +1380,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1360,6 +1408,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1386,6 +1436,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1412,6 +1464,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1438,6 +1492,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1463,6 +1519,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1489,6 +1547,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -1515,6 +1575,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1542,6 +1604,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1569,6 +1633,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1596,6 +1662,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -1623,6 +1691,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1648,6 +1718,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1674,6 +1746,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfAlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE11halfAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -1701,6 +1775,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfAlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE11halfAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -1728,6 +1804,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -1754,6 +1832,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1779,6 +1859,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1805,6 +1887,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1831,6 +1915,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1857,6 +1943,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1883,6 +1971,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -1909,6 +1999,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1934,6 +2026,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -1960,6 +2054,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -1986,6 +2082,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2013,6 +2111,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2040,6 +2140,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2067,6 +2169,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2094,6 +2198,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2119,6 +2225,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2145,6 +2253,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14AlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE14AlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -2172,6 +2282,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14AlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE14AlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -2199,6 +2311,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -2225,6 +2339,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14ExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2250,6 +2366,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14ExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2276,6 +2394,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2302,6 +2422,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2328,6 +2450,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2354,6 +2478,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2380,6 +2506,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14GeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2405,6 +2533,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14GeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2431,6 +2561,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -2457,6 +2589,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2484,6 +2618,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2511,6 +2647,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2538,6 +2676,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2565,6 +2705,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14TranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2590,6 +2732,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14TranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2616,6 +2760,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18AlnRep1.bam,wgEncodeCshlLongRnaSeqCnsE18AlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -2643,6 +2789,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18AlnRep2.bam,wgEncodeCshlLongRnaSeqCnsE18AlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -2670,6 +2818,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -2696,6 +2846,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18ExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2721,6 +2873,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18ExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2747,6 +2901,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2773,6 +2929,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2799,6 +2957,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2825,6 +2985,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -2851,6 +3013,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18GeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2876,6 +3040,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18GeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -2902,6 +3068,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -2928,6 +3096,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2955,6 +3125,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -2982,6 +3154,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -3009,6 +3183,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -3036,6 +3212,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18TranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -3061,6 +3239,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18TranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -3805,6 +3985,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -3832,6 +4014,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqCortexAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -3859,6 +4043,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -3885,6 +4071,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -3910,6 +4098,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -3936,6 +4126,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -3962,6 +4154,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -3988,6 +4182,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -4014,6 +4210,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -4040,6 +4238,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -4065,6 +4265,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -4091,6 +4293,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -4117,6 +4321,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -4144,6 +4350,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -4171,6 +4379,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -4198,6 +4408,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -4225,6 +4437,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -4250,6 +4464,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -4994,6 +5210,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -5021,6 +5239,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqFlobeAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -5048,6 +5268,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -5074,6 +5296,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -5099,6 +5323,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -5125,6 +5351,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -5151,6 +5379,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -5177,6 +5407,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -5203,6 +5435,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -5229,6 +5463,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -5254,6 +5490,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -5280,6 +5518,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -5306,6 +5546,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -5333,6 +5575,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -5360,6 +5604,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -5387,6 +5633,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -5414,6 +5662,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -5439,6 +5689,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8337,6 +8589,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqLimbE14halfAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -8364,6 +8618,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqLimbE14halfAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -8391,6 +8647,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -8417,6 +8675,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8442,6 +8702,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8468,6 +8730,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -8494,6 +8758,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -8520,6 +8786,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -8546,6 +8814,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -8572,6 +8842,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8597,6 +8869,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8623,6 +8897,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -8649,6 +8925,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -8676,6 +8954,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -8703,6 +8983,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -8730,6 +9012,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -8757,6 +9041,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -8782,6 +9068,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9526,6 +9814,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14AlnRep1.bam,wgEncodeCshlLongRnaSeqLiverE14AlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -9553,6 +9843,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14AlnRep2.bam,wgEncodeCshlLongRnaSeqLiverE14AlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -9580,6 +9872,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -9606,6 +9900,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14ExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9631,6 +9927,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14ExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9657,6 +9955,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -9683,6 +9983,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -9709,6 +10011,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -9735,6 +10039,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -9761,6 +10067,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14GeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9786,6 +10094,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14GeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9812,6 +10122,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -9838,6 +10150,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -9865,6 +10179,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -9892,6 +10208,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -9919,6 +10237,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -9946,6 +10266,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14TranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9971,6 +10293,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14TranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -9997,6 +10321,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqLiverE14halfAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -10024,6 +10350,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqLiverE14halfAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -10051,6 +10379,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -10077,6 +10407,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10102,6 +10434,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10128,6 +10462,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10154,6 +10490,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10180,6 +10518,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10206,6 +10546,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10232,6 +10574,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10257,6 +10601,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10283,6 +10629,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-11
 dateUnrestricted 2013-04-11
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -10309,6 +10657,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10336,6 +10686,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10363,6 +10715,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10390,6 +10744,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10417,6 +10773,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10442,6 +10800,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10468,6 +10828,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18AlnRep1.bam,wgEncodeCshlLongRnaSeqLiverE18AlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -10495,6 +10857,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18AlnRep2.bam,wgEncodeCshlLongRnaSeqLiverE18AlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -10522,6 +10886,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18Contigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -10548,6 +10914,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18ExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10573,6 +10941,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18ExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10599,6 +10969,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10625,6 +10997,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10651,6 +11025,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10677,6 +11053,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18FastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -10703,6 +11081,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18GeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10728,6 +11108,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18GeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10754,6 +11136,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18Junctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -10780,6 +11164,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18MinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10807,6 +11193,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18MinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10834,6 +11222,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18PlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10861,6 +11251,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18PlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -10888,6 +11280,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18TranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -10913,6 +11307,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18TranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13093,6 +13489,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -13120,6 +13518,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqPlacAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -13147,6 +13547,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -13173,6 +13575,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13198,6 +13602,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13224,6 +13630,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -13250,6 +13658,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -13276,6 +13686,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -13302,6 +13714,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -13328,6 +13742,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13353,6 +13769,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13379,6 +13797,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -13405,6 +13825,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -13432,6 +13854,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -13459,6 +13883,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -13486,6 +13912,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -13513,6 +13941,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -13538,6 +13968,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -17872,6 +18304,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
 dateUnrestricted 2013-04-12
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep1.bam,wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep1.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -17899,6 +18333,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep2.bam,wgEncodeCshlLongRnaSeqWbrainE14halfAlnRep2.bam.bai
 grant Gingeras
 lab CSHL-m
@@ -17926,6 +18362,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -17952,6 +18390,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfExonsDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -17977,6 +18417,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfExonsEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -18003,6 +18445,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
 dateUnrestricted 2013-04-12
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -18029,6 +18473,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd1Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -18055,6 +18501,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
 dateUnrestricted 2013-04-12
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -18081,6 +18529,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfFastqRd2Rep2.fastq.gz
 grant Gingeras
 lab CSHL-m
@@ -18107,6 +18557,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfGeneDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -18132,6 +18584,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfGeneEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -18158,6 +18612,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfJunctions.bedRnaElements.gz
 grant Gingeras
 lab CSHL-m
@@ -18184,6 +18640,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
 dateUnrestricted 2013-04-12
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -18211,6 +18669,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -18238,6 +18698,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
 dateUnrestricted 2013-04-12
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL-m
@@ -18265,6 +18727,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL-m
@@ -18292,6 +18756,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfTranscriptDeNovo.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -18317,6 +18783,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfTranscriptEnsV65IAcuff.gtf.gz
 grant Gingeras
 lab CSHL-m
@@ -18333,4 +18801,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: 39282885
+# MAGIC: -765522815
