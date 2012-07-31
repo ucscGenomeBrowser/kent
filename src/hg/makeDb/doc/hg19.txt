@@ -19076,7 +19076,9 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (137) (DONE 7/11/12 angie)
+# DBSNP CODING ANNOTATIONS (137) (DONE 7/30/12 angie)
+    # Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
+    # NULL frame caused us to lose 45 (cds-indel) too.
     cd /hive/data/outside/dbSNP/137/human
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # For anything except an insertion (0 bases between flanks),
@@ -19089,7 +19091,7 @@ EOF
     | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
               while (<$IDS>) { chomp; $ids{$_} = 1; } \
               close($IDS); \
-              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 44=>1, 45=>1); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
               while (<>) { \
                 chomp;  @w = split("\t"); # id, ctg, start, end, ... \
                 next unless $coding{$w[5]}; \
@@ -19105,7 +19107,7 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#4911699 ncbiCodingAnnotations.txt
+#4912900 ncbiCodingAnnotations.txt
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
@@ -19113,6 +19115,7 @@ EOF
 #2915183 8   (cds-reference -- ignored)
 #  36027 41  (nonsense)
 #1210823 42  (missense)
+#   1201 43  (stop-loss)
 #  41918 44  (frameshift)
 #  15414 45  (cds-indel)
     # Lots of new 8's (reference) -- now including non-coding (frame = NULL),
@@ -19121,7 +19124,7 @@ EOF
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     perl -e  'while (<>) { chomp; \
                 my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
-                next if ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL"); \
+                next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
                 if (defined $lastRs && \
                     ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
                      $lastTx ne $txId || $lastFrm ne $frm)) { \
@@ -19129,8 +19132,10 @@ EOF
                     $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
                     $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
                   } \
-                  print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                  $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
                         "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                  $lineOut =~ s@NULL@n/a@g; \
+                  print $lineOut; \
                   $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
                 } \
                 ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
@@ -19146,14 +19151,16 @@ EOF
                 $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
                 $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
               } \
-              print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
-                    "$count\t$fxns\t$nts\t$codons\t$aas\n";' \
+              $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                    "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+              $lineOut =~ s@NULL@n/a@g; \
+              print $lineOut;' \
       ncbiCodingAnnotations.txt \
     | liftUp snp137CodingDbSnp.bed /hive/data/genomes/hg19/jkStuff/liftContigs.lft warn stdin
     hgLoadBed hg19 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp137CodingDbSnp.bed
-#Read 1947961 elements of size 11 from snp137CodingDbSnp.bed
+#Read 1959839 elements of size 11 from snp137CodingDbSnp.bed
 
 
 ############################################################################

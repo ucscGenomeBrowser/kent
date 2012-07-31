@@ -100,12 +100,17 @@ extern int snp125ValidArraySize;
 
 /****** Func related controls *******/
 
+char *snpMisoLinkFromFunc(char *funcTerm);
+/* If we can map funcTerm to a Sequence Ontology term, return a link to the MISO SO browser;
+ * otherwise just return the same term. */
+
 extern char *snp125FuncLabels[];
 extern char *snp125FuncOldColorVars[];
 extern char *snp125FuncDataName[];
 extern char *snp125FuncDefault[];
 extern char **snp125FuncDataSynonyms[];
 extern int snp125FuncArraySize;
+
 
 /****** LocType related controls *******/
 /* unknown, range, exact, between,
