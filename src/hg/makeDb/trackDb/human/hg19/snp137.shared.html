@@ -1,13 +1,13 @@
 The remainder of this page is identical on the following tracks:
 <UL>
   <LI>Common SNPs(137) - SNPs with >= 1% minor allele frequency (MAF), mapping 
-     only once to reference assembly.
+     only once to reference assembly.</LI>
   <LI>Flagged SNPs(137) - SNPs < 1% minor allele frequency (MAF) (or unknown), 
      mapping only once to reference assembly, 
      flagged in dbSnp as "clinically associated" 
-     -- <em>not necessarily a risk allele!</em>
-  <LI>Mult. SNPs(137) - SNPs mapping in more than one place on reference assembly.
-  <LI>All SNPs(137) - all SNPs from dbSNP mapping to reference assembly.
+     -- <em>not necessarily a risk allele!</em></LI>
+  <LI>Mult. SNPs(137) - SNPs mapping in more than one place on reference assembly.</LI>
+  <LI>All SNPs(137) - all SNPs from dbSNP mapping to reference assembly.</LI>
 
 </UL>
 
@@ -33,17 +33,17 @@ display according to several attributes:
       <B>Class</B>: Describes the observed alleles<BR>
       <UL>
         <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
-	    (can have 2, 3 or 4 alleles)
-        <LI><B>In-del</B> - insertion/deletion
-        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
-        <LI><B>Microsatellite</B> - the observed allele from dbSNP is a variation in counts of short tandem repeats
-        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name instead of raw sequence, e.g., (Alu)/-
-        <LI><B>No Variation</B> - the submission reports an invariant region in the surveyed sequence
-        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
-        <LI><B>Multiple Nucleotide Polymorphism (MNP)</B> - the alleles are all of the same length, and length > 1
-        <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
-        <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly
-        <LI><B>Unknown</B> - no classification provided by data contributor
+	    (can have 2, 3 or 4 alleles)</LI>
+        <LI><B>In-del</B> - insertion/deletion</LI>
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'</LI>
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is a variation in counts of short tandem repeats</LI>
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name instead of raw sequence, e.g., (Alu)/-</LI>
+        <LI><B>No Variation</B> - the submission reports an invariant region in the surveyed sequence</LI>
+        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes</LI>
+        <LI><B>Multiple Nucleotide Polymorphism (MNP)</B> - the alleles are all of the same length, and length > 1</LI>
+        <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly</LI>
+        <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly</LI>
+        <LI><B>Unknown</B> - no classification provided by data contributor</LI>
       </UL>
     </LI>
 
@@ -54,46 +54,109 @@ display according to several attributes:
 	target="_blank">Validation</A></B>: Method used to validate
 	the variant (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
-        <LI><B>By Frequency</B> - at least one submitted SNP in cluster has frequency data submitted
-        <LI><B>By Cluster</B> - cluster has at least 2 submissions, with at least one submission assayed with a non-computational method
-        <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay
-        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in at least 2 chromosomes
+        <LI><B>By Frequency</B> - at least one submitted SNP in cluster has frequency data submitted</LI>
+        <LI><B>By Cluster</B> - cluster has at least 2 submissions, with at least one submission assayed with a non-computational method</LI>
+        <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay</LI>
+        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in at least 2 chromosomes</LI>
         <LI><B>By HapMap</B> - submitted by <A HREF="http://hapmap.ncbi.nlm.nih.gov/" 
-	    target="_blank">HapMap</A> project (human only)
+	    target="_blank">HapMap</A> project (human only)</LI>
         <LI><B>By 1000Genomes</B> - submitted by <A HREF="http://1000genomes.org/"
-	    target="_blank">1000Genomes</A> project (human only)
-        <LI><B>Unknown</B> - no validation has been reported for this variant
+	    target="_blank">1000Genomes</A> project (human only)</LI>
+        <LI><B>Unknown</B> - no validation has been reported for this variant</LI>
       </UL>
     </LI>
     <LI>
       <A name="Func"></A>
-      <B>Function</B>: Predicted functional role 
-	(<I>each variant may have more than one functional role</I>)<BR>
+      <B>Function</B>: dbSNP's predicted functional effect of variant on RefSeq transcripts,
+      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*,
+      not shown in UCSC Genome Browser).
+      Each variant may have more than one predicted effect.
+      These terms and definitions are from the <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology (SO)<A>; click on a term to view it in the
+      <A HREF="http://sequenceontology.org/browser/browser/obob.cgi?release=current_release"
+      TARGET=_BLANK>MISO Sequence Ontology Browser</A>.<BR>
       <UL>
-        <LI><B>Locus Region</B> - variation is 3' to and within 500  bases of a
-          transcript, or is 5' to and within 2000 bases of a transcript
-          (<TT>near-gene-3</TT>, <TT>near-gene-5</TT>)
-        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with 
-	    respect to the reference assembly (<TT>coding-synon</TT>)
-        <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with 
-	    respect to the reference assembly (<TT>nonsense</TT>, <TT>missense</TT>, 
-            <TT>frameshift</TT>, <TT>cds-indel</TT>, <TT>coding-synonymy-unknown</TT>)
-        <LI><B>Untranslated</B> - variation is in a transcript, but not in a coding 
-	    region interval (<TT>untranslated-3</TT>, <TT>untranslated-5</TT>)
-        <LI><B>Intron</B> - variation is in an intron, but not in the first two or
-          last two bases of the intron
-        <LI><B>Splice Site</B> - variation is in the first two or last two bases
-          of an intron (<TT>splice-3</TT>, <TT>splice-5</TT>)
-        <LI><B>Unknown</B> - no known functional classification
+        <LI><B>Unknown</B> - no functional classification provided (possibly intergenic)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+	    TARGET=_BLANK>synonymous_variant</A></B> -
+	    A sequence variant where there is no resulting change to the encoded amino acid
+	    (replaces internal term <TT>coding-synon</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+	    TARGET=_BLANK>intron_variant</A></B> -
+	    A transcript variant occurring within an intron
+	    (replaces internal term <TT>intron</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+	    TARGET=_BLANK>downstream_gene_variant</A></B> -
+	    A sequence variant located 3' of a gene
+	    (replaces internal term <TT>near-gene-3</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+	    TARGET=_BLANK>upstream_gene_variant</A></B> -
+	    A sequence variant located 5' of a gene
+	    (replaces internal term <TT>near-gene-5</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
+	    TARGET=_BLANK>nc_transcript_variant</A></B> -
+	    A transcript variant of a non coding RNA gene
+	    (replaces internal term <TT>ncRNA</TT>)</LI>
+	 <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+	    TARGET=_BLANK>stop_gained</A></B> -
+	    A sequence variant whereby at least one base of a codon is changed, resulting in
+	    a premature stop codon, leading to a shortened transcript
+	    (replaces internal term <TT>nonsense</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+	    TARGET=_BLANK>missense_variant</A></B> -
+	    A sequence variant, where the change may be longer than 3 bases, and at least
+	    one base of a codon is changed resulting in a codon that encodes for a
+	    different amino acid
+	    (replaces internal term <TT>missense</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+	    TARGET=_BLANK>stop_lost</A></B> -
+	    A sequence variant where at least one base of the terminator codon (stop)
+	    is changed, resulting in an elongated transcript
+	    (replaces internal term <TT>stop-loss</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+	    TARGET=_BLANK>frameshift_variant</A></B> -
+	    A sequence variant which causes a disruption of the translational reading frame,
+	    because the number of nucleotides inserted or deleted is not a multiple of three
+	    (replaces internal term <TT>frameshift</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001820"
+	    TARGET=_BLANK>inframe_indel</A></B> -
+	    A coding sequence variant where the change does not alter the frame
+	    of the transcript
+	    (replaces internal term <TT>cds-indel</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+	    TARGET=_BLANK>3_prime_UTR_variant</A></B> -
+	    A UTR variant of the 3' UTR
+	    (replaces internal term <TT>untranslated-3</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+	    TARGET=_BLANK>5_prime_UTR_variant</A></B> -
+	    A UTR variant of the 5' UTR
+	    (replaces internal term <TT>untranslated-5</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+	    TARGET=_BLANK>splice_acceptor_variant</A></B> -
+	    A splice variant that changes the 2 base region at the 3' end of an intron
+	    (replaces internal term <TT>splice-3</TT>)</LI>
+        <LI><B>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+	    TARGET=_BLANK>splice_donor_variant</A></B> -
+	    A splice variant that changes the2 base region at the 5' end of an intron
+	    (replaces internal term <TT>splice-5</TT>)</LI>
       </UL>
     </LI>
     <LI>
       <A name="MolType"></A>
       <B>Molecule Type</B>: Sample used to find this variant<BR>
       <UL>
-        <LI><B>Genomic</B> - variant discovered using a genomic template
-        <LI><B>cDNA</B> - variant discovered using a cDNA template
-        <LI><B>Unknown</B> - sample type not known
+        <LI><B>Genomic</B> - variant discovered using a genomic template</LI>
+        <LI><B>cDNA</B> - variant discovered using a cDNA template</LI>
+        <LI><B>Unknown</B> - sample type not known</LI>
       </UL>
     </LI>
     <LI>
@@ -216,18 +279,18 @@ display according to several attributes:
       Heterozygosity and Standard Error for dbSNP RefSNP Clusters</A>.
       <UL>
       <LI> Average heterozygosity should not exceed 0.5 for bi-allelic 
-           single-base substitutions.
+           single-base substitutions.</LI>
       </UL>
     </LI>
     <LI>
       <A name="Weight"></A>
       <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
       <UL>
-      <LI>Weight can be 0, 1, 2, 3 or 10.   
-      <LI>Weight = 1 are the highest quality alignments.
-      <LI>Weight = 0 and weight = 10 are excluded from the data set.
+      <LI>Weight can be 0, 1, 2, 3 or 10.</LI>
+      <LI>Weight = 1 are the highest quality alignments.</LI>
+      <LI>Weight = 0 and weight = 10 are excluded from the data set.</LI>
       <LI>A filter on maximum weight value is supported, which defaults to 1
-        on all tracks except the Mult. SNPs track, which defaults to 3.
+        on all tracks except the Mult. SNPs track, which defaults to 3.</LI>
       </UL>
     </LI>
     <LI>
