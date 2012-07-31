@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 2.1 $
+# Data Agreement File for PET Ditag project $Revision: 2.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -49,7 +49,8 @@ hasReplicates    yes
 required         no 
 
 view             Clusters
-type             bed 12
+type             bedClusters
+sql              bedClusters
 hasReplicates    no 
 required         no
 

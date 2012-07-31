@@ -39,9 +39,8 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
  * somehow can't be moved effectively into doMiddle. */
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
-char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE);
-if (link)
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link
+if (link)                                                                  // wrapped in html
     htmlSetStyle(link);
 
 oldVars = hashNew(10);

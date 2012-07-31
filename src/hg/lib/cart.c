@@ -579,7 +579,7 @@ return cart;
 }
 
 struct cart *cartNew(unsigned int userId, unsigned int sessionId,
-        char **exclude, struct hash *oldVars)
+                     char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
@@ -704,7 +704,7 @@ if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
 else
     {
     fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
-        encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
+            encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
     /* Do increment the useCount so that cookie-users don't get stuck here: */
     updateOne(conn, "userDb", cart->userInfo, "", 0);
     }
@@ -1194,7 +1194,7 @@ if (asTable)
     if (width<100)
         width = 100;
     cgiMakeTextVarWithExtraHtml(hel->name, val, width,
-           "onchange='setCartVar(this.name,this.value);'");
+                                "onchange='setCartVar(this.name,this.value);'");
     printf("</TD></TR>\n");
     }
 else
@@ -1362,7 +1362,7 @@ if(geoMirrorEnabled())
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
-        struct hash *oldVars)
+                            struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
 int hguid = getCookieId(cookieName);
@@ -1378,7 +1378,7 @@ return cart;
 }
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
-        struct hash *oldVars, boolean doContentType)
+                                   struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
@@ -1399,7 +1399,7 @@ return cart;
 }
 
 struct cart *cartAndCookie(char *cookieName, char **exclude,
-        struct hash *oldVars)
+                           struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write cookie and
  * content-type part HTTP preamble to web page.  Don't write any HTML though. */
 {
@@ -1407,7 +1407,7 @@ return cartAndCookieWithHtml(cookieName, exclude, oldVars, TRUE);
 }
 
 struct cart *cartAndCookieNoContent(char *cookieName, char **exclude,
-        struct hash *oldVars)
+                                    struct hash *oldVars)
 /* Load cart from cookie and session cgi variable. Don't write out
  * content type or any HTML. */
 {
@@ -1415,7 +1415,7 @@ return cartAndCookieWithHtml(cookieName, exclude, oldVars, FALSE);
 }
 
 static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
-        struct cart *cart)
+                             struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
 int status = setjmp(htmlRecover);
@@ -1530,42 +1530,35 @@ void setThemeFromCart(struct cart *cart)
 // Get theme from cart and use it to get background file from config;
 // format is browser.theme.<name>=<stylesheet>[,<background>]
 
-char **options;
-int optionCount;
 char *cartTheme = cartOptionalString(cart, "theme");
-if (cartTheme==NULL)
-    return;
 
-char *themeKey = catTwoStrings("browser.theme.", cartTheme);
-char *themeDefLine = cfgOption(themeKey);
-freez(&themeKey);
-if (themeDefLine == NULL)
-    return;
+// XXXX which setting should take precedence? Currently browser.theme does.
 
-sqlStringDynamicArray(themeDefLine, &options, &optionCount);
-if(options == NULL)
-    return;
-
-char *styleFile = options[0];
-if(isNotEmpty(styleFile))
+char *styleFile = cfgOption("browser.style");
+if(styleFile != NULL)
     {
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile,TRUE); // resource file link wrapped in html
-    if (link)
+    char buf[512];
+    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    char *copy = cloneString(buf);
+    htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
+    webSetStyle(copy);       // for web.c, used by hgc
+    }
+
+if(isNotEmpty(cartTheme))
+    {
+    char *themeKey = catTwoStrings("browser.theme.", cartTheme);
+    styleFile = cfgOption(themeKey);
+    freeMem(themeKey);
+    if (isEmpty(styleFile))
+        return;
+
+    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
+    if (link != NULL)
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc
         }
     }
-
-if(optionCount >= 2)
-    {
-    char *background = options[1];
-    if(isNotEmpty(background))
-        htmlSetBackground(cloneString(background));
-    }
-
-freeMem(options[0]);
-freez(&options);
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
@@ -1610,7 +1603,7 @@ cartFooter();
 }
 
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
-        char **exclude, struct hash *oldVars)
+                    char **exclude, struct hash *oldVars)
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
  * cartHtmlEnd(), as well as writing the body of the HTML.
@@ -1671,7 +1664,7 @@ cartFooter();
 }
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
-        char *cookieName, char **exclude, struct hash *oldVars)
+                   char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
  * preamble, call doMiddle with cart, and write end of web-page.
  * Exclude may be NULL.  If it exists it's a comma-separated list of
@@ -2371,7 +2364,7 @@ if (hasViews)
         enum trackVisibility visOrig = tdbVisLimitedByAncestry(cart, tdbContainer, FALSE);
         cartSetString(cart,tdbContainer->track,"full");    // Now set composite to full.
         if (visOrig == tvHide && tdbIsSuperTrackChild(tdbContainer))
-            cartTdbOverrideSuperTracks(cart,tdbContainer,FALSE);// deal with superTrack vis! cleanup
+            cartTdbOverrideSuperTracks(cart,tdbContainer,FALSE);// deal with superTrack vis cleanup
         }
     }
 else // If no views then composite is not set to fuul but to max of subtracks

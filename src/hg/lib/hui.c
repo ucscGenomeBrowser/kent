@@ -439,13 +439,6 @@ else
 return cfgOptionDefault("browser.cgiRoot", defaultDir);
 }
 
-char *hBackgroundImage()
-/* get the path to the configured background image to use, or the default */
-{
-
-return cfgOptionDefault("browser.background", DEFAULT_BACKGROUND);
-}
-
 /******  Some stuff for tables of controls ******/
 
 struct controlGrid *startControlGrid(int columns, char *align)
@@ -3337,13 +3330,13 @@ if (colonPairToStrings(colonPair,&a,&b))
 return FALSE;
 }
 
-filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name)
+filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *name, char *subName, char *settingName)
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 {
 filterBy_t *filterBySet = NULL;
 
-char *setting = trackDbSettingClosestToHome(tdb, FILTER_BY);
-if (setting == NULL)
+char *setting = trackDbSettingClosestToHome(tdb, settingName);
+if(setting == NULL)
     return NULL;
 if ( name == NULL )
     name = tdb->track;
@@ -3362,14 +3355,14 @@ for (ix=0;ix<filterCount;ix++)
     if (first != NULL)
         *first = '\0';
     else
-        errAbort("filterBySetGet() expected ':' divider between table column and label.");
+        errAbort("filterBySetGet() expected ':' divider between table column and label: %s", filters[ix]);
     filterBy->column = filter;
     filter += strlen(filter) + 1;
     first = strchr(filter,'=');
     if (first != NULL)
         *first = '\0';
     else
-        errAbort("filterBySetGet() expected '=' divider between table column and options list.");
+        errAbort("filterBySetGet() expected '=' divider between table column and options list: %s", filters[ix]);
     filterBy->title = strSwapChar(filter,'_',' '); // Title does not have underscores
     filter += strlen(filter) + 1;
 
@@ -3436,7 +3429,7 @@ for (ix=0;ix<filterCount;ix++)
     if (cart != NULL)
         {
         char suffix[256];
-        safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
+        safef(suffix, sizeof(suffix), "%s.%s", subName, filterBy->column);
         boolean parentLevel = isNameAtParentLevel(tdb,name);
         if (cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
             {
@@ -3448,11 +3441,23 @@ for (ix=0;ix<filterCount;ix++)
     // Note: cannot use found name above because that may be at a higher (composite/view) level
     int len = strlen(name) + strlen(filterBy->column) + 15;
     filterBy->htmlName = needMem(len);
-    safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
+    safef(filterBy->htmlName, len, "%s.%s.%s", name,subName,filterBy->column);
     }
 freeMem(setting);
 
 return filterBySet;
+}
+
+filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name)
+/* Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found */
+{
+return filterBySetGetGuts(tdb, cart, name, "filterBy", FILTER_BY);
+}
+
+filterBy_t *highlightBySetGet(struct trackDb *tdb, struct cart *cart, char *name)
+/* Gets one or more "highlightBy" settings (ClosestToHome).  returns NULL if not found */
+{
+return filterBySetGetGuts(tdb, cart, name, "highlightBy", HIGHLIGHT_BY);
 }
 
 void filterBySetFree(filterBy_t **filterBySet)
@@ -3512,7 +3517,7 @@ return dyStringCannibalize(&dyClause);
 char *filterByClause(filterBy_t *filterBy)
 // returns the SQL where clause for a single filterBy struct
 {
-if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
+if (filterByAllChosen(filterBy))
     return NULL;
 else
     return filterByClauseStd(filterBy);
@@ -3579,9 +3584,46 @@ if (dyStringLen(dyClause) == 0)
 return dyStringCannibalize(&dyClause);
 }
 
-void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-                      filterBy_t *filterBySet, boolean onOneLine)
-// Does the UI for a list of filterBy structure
+void filterBySetCfgUiOption(filterBy_t *filterBy, struct slName *slValue, int ix)
+/* output one option for filterBy UI  */
+{
+char varName[32];
+char *label = NULL;
+char *name = NULL;
+if (filterBy->useIndex)
+    {
+    safef(varName, sizeof(varName), "%d",ix);
+    name = varName;
+    label = slValue->name;
+    }
+else
+    {
+    label = (filterBy->valueAndLabel? slValue->name + strlen(slValue->name)+1: slValue->name);
+    name = slValue->name;
+    }
+printf("<OPTION");
+if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,name))
+    printf(" SELECTED");
+if (filterBy->useIndex || filterBy->valueAndLabel)
+    printf(" value='%s'",name);
+if (filterBy->styleFollows)
+    {
+    char *styler = label + strlen(label)+1;
+    if (*styler != '\0')
+        {
+        if (*styler == '#') // Legacy: just the color that follows
+            printf(" style='color: %s;'",styler);
+        else
+            printf(" style='%s'",styler);
+        }
+    }
+printf(">%s</OPTION>\n",label);
+}
+
+void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
+                          filterBy_t *filterBySet, boolean onOneLine,
+                          char *filterTypeTitle, char *selectIdPrefix, char *allLabel)
+// Does the UI for a list of filterBy structure for either filterBy or highlightBy controls
 {
 if (filterBySet == NULL)
     return;
@@ -3603,24 +3645,21 @@ if (cartOptionalString(cart, "ajax") == NULL)
     }
 
 int ix=0;
-for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     {
     puts("<TD>");
-    if (count == 1)
-        printf("<B>Filter by %s</B> (select multiple items - %s)",
-               filterBy->title,FILTERBY_HELP_LINK);
+    if(count == 1)
+        printf("<B>%s by %s</B> (select multiple items - %s)",filterTypeTitle,filterBy->title,FILTERBY_HELP_LINK);
     else
         printf("<B>%s</B>",filterBy->title);
     printf("<BR>\n");
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none; " \
-                             "font-size:.9em;' class='filterBy'><BR>\n"
-    printf(FILTER_BY_FORMAT,ix,filterBy->htmlName);
-    ix++;
-    printf("<OPTION%s>All</OPTION>\n",
-           (filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All") ? " SELECTED"
-                                                                                   : ""));
+    #define FILTER_BY_FORMAT "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
+    printf(FILTER_BY_FORMAT,selectIdPrefix,ix,filterBy->htmlName);
+
+    // value is always "All", even if label is different, to simplify javascript code
+    printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
     struct slName *slValue;
 
     int ix=1;
@@ -3663,8 +3702,20 @@ for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
 printf("</SELECT>\n");
 
 puts("</TR></TABLE>");
+}
 
-return;
+void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
+                      filterBy_t *filterBySet, boolean onOneLine)
+/* Does the filter UI for a list of filterBy structure */
+{
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All");
+}
+
+void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
+                         filterBy_t *filterBySet, boolean onOneLine)
+/* Does the highlight UI for a list of filterBy structure */
+{
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None");
 }
 
 #define COLOR_BG_DEFAULT_IX     0
@@ -5729,6 +5780,13 @@ if (filterBySet != NULL)
     filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
     filterBySetFree(&filterBySet);
     }
+filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
+if (highlightBySet != NULL)
+    {
+    printf("<BR>");
+    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE);
+    filterBySetFree(&highlightBySet);
+    }
 
 cfgEndBox(boxed);
 }
@@ -7729,8 +7787,7 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
-        sqlUnixTimeToDate(timep, FALSE));
+    printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
 
 #ifdef EXTRA_FIELDS_SUPPORT

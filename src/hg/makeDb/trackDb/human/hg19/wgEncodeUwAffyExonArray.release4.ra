@@ -1,0 +1,1515 @@
+# U. Washington Affy Exon (wrangler: Andy, Brian, Cricket for hg19))
+track wgEncodeUwAffyExonArray
+compositeTrack on
+shortLabel UW Affy Exon
+longLabel Affymetrix Exon Array from ENCODE/University of Washington
+group expression
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3CACO2=Caco-2 t3CMK=CMK t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3NB4=NB4 t3NHA=NH-A t3NHBE=NHBE t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3TH1=Th1 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
+subGroup2 rep Rep rep1=1 rep2=2
+subGroup3 treatment Treatment aNone=None OHTAM=4-OHTAM_20_nM_72_hr DIFFA2D=Differentiated_2_d DIFFA5D=Differentiated_5_d DIFFA9D=Differentiated_9_d DIFFA14D=Differentiated_14_d
+dimensions dimensionX=treatment dimensionY=cellType dimensionZ=rep
+filterComposite dimZ
+sortOrder cellType=+ rep=+
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+dragAndDrop subTracks
+visibility hide
+boxedCfg on
+canPack On
+priority 0
+type bed 6 +
+wgEncode 1
+superTrack wgEncodeExonArraySuper dense
+html wgEncodeUwAffyExonArray.release4
+
+    track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel Caco-2 1
+    longLabel Caco-2 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3CACO2 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472900
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayGm06990SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel GM06990 1
+    longLabel GM06990 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3GM06990 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472903
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel GM06990 2
+    longLabel GM06990 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3GM06990 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472904
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHepg2SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HepG2 1
+    longLabel HepG2 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t2HEPG2 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472906
+    color 189,0,157
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HepG2 2
+    longLabel HepG2 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t2HEPG2 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472907
+    color 189,0,157
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHl60SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HL-60 1
+    longLabel HL-60 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HL60 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472908
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySkmcSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SKMC 2
+    longLabel SKMC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3SKMC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472911
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySknshraSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SK-N-SH_RA 2
+    longLabel SK-N-SH_RA Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3SKNSHRA rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472912
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySknshraSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SK-N-SH_RA 1
+    longLabel SK-N-SH_RA Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3SKNSHRA rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472913
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel Th1 1
+    longLabel Th1 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3TH1 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472914
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHelas3SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HeLa-S3 1
+    longLabel HeLa-S3 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t2HELAS3 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472916
+    color 0,119,158
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHreSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRE 2
+    longLabel HRE Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HRE rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472918
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHreSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRE 1
+    longLabel HRE Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HRE rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472919
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHrceSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRCEpiC 1
+    longLabel HRCEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HRCEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472920
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHrceSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRCEpiC 2
+    longLabel HRCEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HRCEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472921
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySaecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SAEC 2
+    longLabel SAEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3SAEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472922
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySaecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SAEC 1
+    longLabel SAEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3SAEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472923
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayBjSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel BJ 1
+    longLabel BJ Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3BJ rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472924
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayBjSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel BJ 2
+    longLabel BJ Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3BJ rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472925
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayK562SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray on
+    shortLabel K562 1
+    longLabel K562 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t1K562 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472926
+    color 46,0,184
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayK562SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray on
+    shortLabel K562 2
+    longLabel K562 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t1K562 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472927
+    color 46,0,184
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel Jurkat 1
+    longLabel Jurkat Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3JURKAT rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472928
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray on
+    shortLabel GM12878 1
+    longLabel GM12878 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t1GM12878 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472931
+    color 153,38,0
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHelas3SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HeLa-S3 2
+    longLabel HeLa-S3 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t2HELAS3 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472932
+    color 0,119,158
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel Caco-2 2
+    longLabel Caco-2 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3CACO2 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472933
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMEC 1
+    longLabel HMEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472934
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HUVEC 1
+    longLabel HUVEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t2HUVEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472935
+    color 224,75,0
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel MCF-7 1
+    longLabel MCF-7 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t2MCF7 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472936
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhekSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHEK 1
+    longLabel NHEK Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NHEK rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472937
+    color 179,0,134
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel PANC-1 2
+    longLabel PANC-1 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3PANC1 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472938
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel PANC-1 1
+    longLabel PANC-1 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3PANC1 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472939
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHgfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HGF 1
+    longLabel HGF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HGF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM472940
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHgfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HGF 2
+    longLabel HGF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HGF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472941
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHl60SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HL-60 2
+    longLabel HL-60 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HL60 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM472942
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArraySkmcSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SKMC 1
+    longLabel SKMC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3SKMC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510509
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel MCF-7 2
+    longLabel MCF-7 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t2MCF7 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510510
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel Jurkat 2
+    longLabel Jurkat Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3JURKAT rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510511
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNb4SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NB4 1
+    longLabel NB4 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NB4 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510512
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNb4SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NB4 2
+    longLabel NB4 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3NB4 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510513
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRPEpiC 1
+    longLabel HRPEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HRPEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510514
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRPEpiC 2
+    longLabel HRPEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HRPEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510515
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHaeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HAEpiC 1
+    longLabel HAEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HAEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510516
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHaeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HAEpiC 2
+    longLabel HAEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HAEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510517
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHipeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HIPEpiC 1
+    longLabel HIPEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HIPEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510518
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHipeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HIPEpiC 2
+    longLabel HIPEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HIPEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510519
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG10803 1
+    longLabel AG10803 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AG10803 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510520
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG10803 2
+    longLabel AG10803 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AG10803 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510521
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG09309 1
+    longLabel AG09309 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AG09309 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510522
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG09309 2
+    longLabel AG09309 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AG09309 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510525
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG04449 1
+    longLabel AG04449 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AG04449 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510528
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG04449 2
+    longLabel AG04449 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AG04449 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510530
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG04450 1
+    longLabel AG04450 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AG04450 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510532
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg04450SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG04450 2
+    longLabel AG04450 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AG04450 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510534
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG09319 1
+    longLabel AG09319 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AG09319 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510536
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAg09319SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AG09319 2
+    longLabel AG09319 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AG09319 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510538
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCF 1
+    longLabel HCF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510542
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCF 2
+    longLabel HCF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510545
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcpeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCPEpiC 1
+    longLabel HCPEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCPEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510547
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcpeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCPEpiC 2
+    longLabel HCPEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCPEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510551
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHDF-neo 1
+    longLabel NHDF-neo Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NHDFNEO rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510554
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHDF-neo 2
+    longLabel NHDF-neo Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3NHDFNEO rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510557
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHnpceSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HNPCEpiC 1
+    longLabel HNPCEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HNPCEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510560
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HNPCEpiC 2
+    longLabel HNPCEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HNPCEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510564
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcmSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCM 1
+    longLabel HCM Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCM rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510566
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcmSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCM 2
+    longLabel HCM Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCM rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510569
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHeeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HEEpiC 1
+    longLabel HEEpiC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HEEPIC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510571
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHeeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HEEpiC 2
+    longLabel HEEpiC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HEEPIC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510574
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHLF 1
+    longLabel NHLF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NHLF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510577
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHLF 2
+    longLabel NHLF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3NHLF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM510579
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayH7esSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 1
+    longLabel H7-hESC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3H7HESC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510581
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayCmkSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel CMK 1
+    longLabel CMK Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3CMK rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM510583
+    # subId=2110 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayH7esSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 2
+    longLabel H7-hESC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3H7HESC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580005
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMEC 2
+    longLabel HMEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580006
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHconfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HConF 1
+    longLabel HConF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCONF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580007
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHconfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HConF 2
+    longLabel HConF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCONF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580008
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-LLy 1
+    longLabel HMVEC-LLy Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECLLY rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580009
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-LLy 2
+    longLabel HMVEC-LLy Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECLLY rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580010
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dLy-Neo 1
+    longLabel HMVEC-dLy-Neo Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECDLYNEO rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580011
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dLy-Neo 2
+    longLabel HMVEC-dLy-Neo Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECDLYNEO rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580012
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dLy-Ad 2
+    longLabel HMVEC-dLy-Ad Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECDLYAD rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580013
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dLy-Ad 1
+    longLabel HMVEC-dLy-Ad Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECDLYAD rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580014
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dNeo 1
+    longLabel HMVEC-dNeo Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECDNEO rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580015
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dNeo 2
+    longLabel HMVEC-dNeo Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECDNEO rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580016
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHDF-Ad 1
+    longLabel NHDF-Ad Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NHDFAD rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580017
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHDF-Ad 2
+    longLabel NHDF-Ad Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3NHDFAD rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580018
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-LBl 1
+    longLabel HMVEC-LBl Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECLBL rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580019
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-LBl 2
+    longLabel HMVEC-LBl Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECLBL rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580020
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dBl-Ad 1
+    longLabel HMVEC-dBl-Ad Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECDBLAD rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580021
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dBl-Ad 2
+    longLabel HMVEC-dBl-Ad Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECDBLAD rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580022
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dBl-Neo 1
+    longLabel HMVEC-dBl-Neo Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMVECDBLNEO rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580023
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dBl-Neo 2
+    longLabel HMVEC-dBl-Neo Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMVECDBLNEO rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580024
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPdLF 1
+    longLabel HPdLF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HPDLF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580025
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPdLF 2
+    longLabel HPdLF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HPDLF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580026
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHek293SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HEK293 1
+    longLabel HEK293 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HEK293 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580027
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHek293SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HEK293 2
+    longLabel HEK293 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HEK293 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580028
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAoafSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AoAF 1
+    longLabel AoAF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3AOAF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580029
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayAoafSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel AoAF 2
+    longLabel AoAF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3AOAF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580030
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCFaa 1
+    longLabel HCFaa Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCFAA rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580031
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCFaa 2
+    longLabel HCFaa Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCFAA rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580032
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpafSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPAF 1
+    longLabel HPAF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HPAF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580033
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpafSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPAF 2
+    longLabel HPAF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HPAF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580034
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPF 1
+    longLabel HPF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HPF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580035
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHpfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPF 2
+    longLabel HPF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HPF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580036
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HVMF 1
+    longLabel HVMF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HVMF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580037
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HVMF 2
+    longLabel HVMF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HVMF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580038
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHct116SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCT-116 1
+    longLabel HCT-116 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HCT116 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580039
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHct116SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HCT-116 2
+    longLabel HCT-116 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HCT116 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580040
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmfSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMF 1
+    longLabel HMF Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HMF rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580041
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHmfSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMF 2
+    longLabel HMF Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HMF rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580042
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhaSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NH-A 1
+    longLabel NH-A Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3NHA rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580043
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayNhaSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NH-A 2
+    longLabel NH-A Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3NHA rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM580044
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HBMEC 1
+    longLabel HBMEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HBMEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM580045
+    # subId=2109 dateSubmitted=2010-08-19
+
+    track wgEncodeUwAffyExonArrayA549SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel A549 1
+    longLabel A549 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t2A549 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651560
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayA549SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel A549 2
+    longLabel A549 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t2A549 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651561
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHaspSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HA-sp 1
+    longLabel HA-sp Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HASP rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651562
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHaspSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HA-sp 2
+    longLabel HA-sp Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HASP rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651563
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HBMEC 2
+    longLabel HBMEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HBMEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651564
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayRptecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel RPTEC 1
+    longLabel RPTEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3RPTEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651565
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayRptecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel RPTEC 2
+    longLabel RPTEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3RPTEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651566
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel BE2_C 1
+    longLabel BE2_C Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3BE2C rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651567
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel BE2_C 2
+    longLabel BE2_C Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3BE2C rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651568
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHacSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HAc 1
+    longLabel HAc Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HAC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651569
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHacSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HAc 2
+    longLabel HAc Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HAC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651570
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRGEC 1
+    longLabel HRGEC Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HRGEC rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651572
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HRGEC 2
+    longLabel HRGEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HRGEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651573
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HSMM 1
+    longLabel HSMM Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HSMM rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651574
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HSMM 2
+    longLabel HSMM Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3HSMM rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651575
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HSMMtube 1
+    longLabel HSMMtube Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3HSMMTUBE rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651576
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HUVEC 2
+    longLabel HUVEC Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t2HUVEC rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651577
+    color 224,75,0
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayLncapSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel LNCaP 1
+    longLabel LNCaP Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3LNCAP rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651578
+    color 0,119,158
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayLncapSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel LNCaP 2
+    longLabel LNCaP Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3LNCAP rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651579
+    color 0,119,158
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayWi38SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel WI-38 1
+    longLabel WI-38 Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3WI38 rep=rep1 treatment=aNone
+    type broadPeak
+    #accession GSM651580
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel WI-38 2
+    longLabel WI-38 Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3WI38 rep=rep2 treatment=aNone
+    type broadPeak
+    #accession GSM651581
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel WI-38 tam 1
+    longLabel WI-38 (tamoxifen) Exon array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3WI38 rep=rep1 treatment=OHTAM
+    type broadPeak
+    #accession GSM651582
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel WI-38 tam 2
+    longLabel WI-38 (tamoxifen) Exon array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3WI38 rep=rep2 treatment=OHTAM
+    type broadPeak
+    #accession GSM651583
+    # subId=3216 dateSubmitted=2011-01-11
+
+    track wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HBVSMC 1
+    longLabel HBVSMC Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HBVSMC  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5009 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HBVSMC 2
+    longLabel HBVSMC Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HBVSMC  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dAd 1
+    longLabel HMVEC-dAd Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HMVECDAD  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HMVEC-dAd 2
+    longLabel HMVEC-dAd Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HMVECDAD  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHBE 1
+    longLabel NHBE Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3NHBE  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NHBE 2
+    longLabel NHBE Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3NHBE  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NT2-D1 1
+    longLabel NT2-D1 Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3NT2D1  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel NT2-D1 2
+    longLabel NT2-D1 Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3NT2D1  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayPrecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel PrEC 1
+    longLabel PrEC Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3PREC  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayPrecSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel PrEC 2
+    longLabel PrEC Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3PREC  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HBVP 1
+    longLabel HBVP Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HBVP  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HPAEC 1
+    longLabel HPAEC Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HPAEC  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HSMMtube 2
+    longLabel HSMMtube Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HSMMTUBE  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHahSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HA-h 1
+    longLabel HA-h Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HAH  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHahSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HA-h 2
+    longLabel HA-h Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HAH  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHffSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HFF 1
+    longLabel HFF Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HFF  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHffSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HFF 2
+    longLabel HFF Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HFF  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HFF-Myc 1
+    longLabel HFF-Myc Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3HFFMYC  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel HFF-Myc 2
+    longLabel HFF-Myc Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3HFFMYC  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArraySknmcSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SK-N-MC 1
+    longLabel SK-N-MC Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3SKNMC  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArraySknmcSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel SK-N-MC 2
+    longLabel SK-N-MC Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3SKNMC  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel WERI-Rb-1 1
+    longLabel WERI-Rb-1 Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3WERIRB1  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel GM12864 1
+    longLabel GM12864 Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3GM12864  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel GM12865 1
+    longLabel GM12865 Exon-array Signal Rep 1 from ENCODE/UW
+    subGroups  cellType=t3GM12865  rep=rep1 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel GM12865 2
+    longLabel GM12865 Exon-array Signal Rep 2 from ENCODE/UW
+    subGroups  cellType=t3GM12865  rep=rep2 treatment=aNone
+    type broadPeak
+    # subId=5011 dateSubmitted=2011-10-24
+
+    track wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 2d 1
+    longLabel H7-hESC differentiated 2 d Exon Array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA2D rep=rep1
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 2d 2
+    longLabel H7-hESC differentiated 2 d Exon Array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA2D rep=rep2
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 5d 1
+    longLabel H7-hESC differentiated 5 d Exon Array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA5D rep=rep1
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 5d 2
+    longLabel H7-hESC differentiated 5 d Exon Array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA5D rep=rep2
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 9d 1
+    longLabel H7-hESC differentiated 9 d Exon Array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA9D rep=rep1
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 9d 2
+    longLabel H7-hESC differentiated 9 d Exon Array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA9D rep=rep2
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 14d 1
+    longLabel H7-hESC differentiated 14 d Exon Array Signal Rep 1 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA14D rep=rep1
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+
+    track wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2
+    parent wgEncodeUwAffyExonArray off
+    shortLabel H7-hESC 14d 2
+    longLabel H7-hESC differentiated 14 d Exon Array Signal Rep 2 from ENCODE/UW
+    subGroups cellType=t3H7HESC treatment=DIFFA14D rep=rep2
+    type broadPeak
+    # subId=7725 dateSubmitted=2012-07-27
+

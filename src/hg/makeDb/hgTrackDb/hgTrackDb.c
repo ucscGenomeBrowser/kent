@@ -471,7 +471,38 @@ struct hash *nameHash;   /* hash of subGroup names */
 struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
-static struct hash *buildCompositeHash(struct trackDb *tdbList)
+static void validateTag(char *database,struct trackDb *tdb,char *type,char *tag,
+                        boolean firstIsDigitWarning)
+// Determines if tag is conforming to rules:
+// 1) must exist
+// 2) cannot be all numeric.
+// 3) Contains only letters, numbers, '_', '-'
+// 4) Begins with a letter
+// Aborts on 1-3 and optionally warns on 4
+{
+char *c = tag;
+if (*c == '\0')
+    errAbort("Track %s.%s has no '%s' tag",database,tdb->track,type);
+
+if (!isalpha(*c))
+    {
+    if (countLeadingDigits(tag) == strlen(tag))
+        errAbort("Track %s.%s has all numeric '%s' tag '%s'",database,tdb->track,type,tag);
+    if (!firstIsDigitWarning)
+        return;
+
+    warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
+            database,tdb->track,type,tag);
+    }
+for (c++;*c != '\0';c++)
+    {
+    if (!isalnum(*c) && *c != '_' && *c != '-')
+        errAbort("Track %s.%s has non-conforming '%s' tag '%s' (contains unsupported characters)",
+                database,tdb->track,type,tag);
+    }
+}
+
+static struct hash *buildCompositeHash(char *database,struct trackDb *tdbList)
 /* Create a hash of all composite tracks.  This is keyed by their name with
  * subGroupData values. */
 {
@@ -498,16 +529,18 @@ for (td = tdbList; td != NULL; td = tdNext)
 	    if (!sgSetting)
 		break;
             sgSetting = cloneString(sgSetting);
-	    char *sgWord = sgSetting;
-	    char *sgName = nextWord(&sgWord);
-	    nextWord(&sgWord);  /* skip word not used */
-	    struct hash *subGroupHash = newHash(3);
-	    struct slPair *slPair, *slPairList = slPairFromString(sgWord);
+            char *sgWord = sgSetting;
+            char *sgName = nextWord(&sgWord);
+            validateTag(database,td,subGroupName,sgName,TRUE);
+            nextWord(&sgWord);  /* skip word not used */
+            struct hash *subGroupHash = newHash(3);
+            struct slPair *slPair, *slPairList = slPairListFromString(sgWord,TRUE); // respect ""
             for (slPair = slPairList; slPair; slPair = slPair->next)
-		{
-		hashAdd(subGroupHash, slPair->name, slPair->val);
-		}
-	    if (sgd->nameHash == NULL)
+                {
+                validateTag(database,td,sgName,slPair->name,TRUE);
+                hashAdd(subGroupHash, slPair->name, slPair->val);
+                }
+            if (sgd->nameHash == NULL)
 		sgd->nameHash = newHash(3);
 	    verbose(3,"   adding group %s\n", sgName);
 	    hashAdd(sgd->nameHash, sgName, subGroupHash);
@@ -596,14 +629,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    assert(sgd != NULL);
 	    checkOneSubGroups(tdb->track, childTdb, sgd);
 	    }
-	}
+        }
     }
 }
 
-static void checkSubGroups(struct trackDb *tdbList)
+static void checkSubGroups(char *database,struct trackDb *tdbList)
 /* Check integrity of subGroup clauses */
 {
-struct hash *compositeHash = buildCompositeHash(tdbList);
+struct hash *compositeHash = buildCompositeHash(database,tdbList);
 
 verifySubTracks(tdbList, compositeHash);
 }
@@ -694,7 +727,7 @@ if (strict)
     tdbList = pruneStrict(tdbList, database);
 
 tdbList = pruneEmptyContainers(tdbList);
-checkSubGroups(tdbList);
+checkSubGroups(database,tdbList);
 trackDbPrioritizeContainerItems(tdbList);
 return tdbList;
 }
@@ -788,7 +821,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
         if (isEmpty(td->html))
 	    {
 	    if (strict && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
-	    	!sameString(td->track,"cytoBandIdeo"))
+	        !sameString(td->track,"cytoBandIdeo"))
 		{
 		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->track, td->shortLabel);
 		}
@@ -801,7 +834,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    {
 	    char *settings = settingsFromHash(td->settingsHash);
 	    updateBigTextField(conn, trackDbName, "tableName", td->track,
-	    	"settings", settings);
+	        "settings", settings);
 	    if (showSettings)
 		{
 		verbose(1, "%s: type='%s';", td->track, td->type);

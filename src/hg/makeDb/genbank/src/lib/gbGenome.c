@@ -85,6 +85,7 @@ static char *xenTroNames[] = {"Xenopus tropicalis",
 static char *anoCarNames[] = {"Anolis carolinensis", NULL};
 static char *gasAcuNames[] = {"Gasterosteus aculeatus", NULL};
 static char *oryLatNames[] = {"Oryzias latipes", NULL};
+static char *chiLanNames[] = {"Chinchilla lanigera", NULL};
 static char *equCabNames[] = {"Equus caballus", NULL};
 static char *oviAriNames[] = {"Ovis aries", NULL};
 static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa domesticus",
@@ -109,6 +110,7 @@ static char *turTruNames[] = {"Tursiops truncatus", NULL};
 static char *eriEurNames[] = {"Erinaceus europaeus", NULL};
 static char *gadMorNames[] = {"Gadus morhua", NULL};
 static char *latChaNames[] = {"Latimeria chalumnae", NULL};
+static char *geoForNames[] = {"Geospiza fortis", NULL};
 static char *melUndNames[] = {"Melopsittacus undulatus", NULL};
 static char *micMurNames[] = {"Microcebus murinus", NULL};
 static char *ochPriNames[] = {"Ochotona princeps", NULL};
@@ -186,6 +188,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"anoCar", anoCarNames},
     {"gasAcu", gasAcuNames},
     {"oryLat", oryLatNames},
+    {"chiLan", chiLanNames},
     {"ornAna", ornAnaNames},
     {"petMar", petMarNames},
     {"braFlo", braFloNames},
@@ -207,6 +210,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"eriEur", eriEurNames},
     {"gadMor", gadMorNames},
     {"latCha", latChaNames},
+    {"geoFor", geoForNames},
     {"melUnd", melUndNames},
     {"micMur", micMurNames},
     {"ochPri", ochPriNames},

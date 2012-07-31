@@ -549,3 +549,20 @@ oreNil2.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chrLG5:26068730-26095423" where name="oreNil2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/pushQ
+    cd /hive/data/genomes/oreNil2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl oreNil2 2> stderr.txt | grep -v transMap > oreNil2.sql
+    #   real    3m31.947s
+
+    scp -p oreNil2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/oreNil2.sql"
+
+############################################################################

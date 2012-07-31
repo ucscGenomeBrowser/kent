@@ -53,7 +53,7 @@ cgiName += 1;
 htmlName += 1;
 boolean addDot = (*suffix != '.');
 safef(cgiName, strlen(cgiName), "%s%s%s", base, (addDot?".":""),suffix);// There is room, since
-safef(htmlName,strlen(htmlName),"%s%s%s", base, (addDot?".":""),suffix);// tempName is base_*.suffix
+safef(htmlName,strlen(htmlName),"%s%s%s", base, (addDot?".":""),suffix);// tempName: base_*.suffix
 
 // exists?
 return fileExists(tn->forCgi);

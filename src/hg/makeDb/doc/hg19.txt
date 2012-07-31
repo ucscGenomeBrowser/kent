@@ -19076,7 +19076,9 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (137) (DONE 7/11/12 angie)
+# DBSNP CODING ANNOTATIONS (137) (DONE 7/30/12 angie)
+    # Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
+    # NULL frame caused us to lose 45 (cds-indel) too.
     cd /hive/data/outside/dbSNP/137/human
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # For anything except an insertion (0 bases between flanks),
@@ -19089,7 +19091,7 @@ EOF
     | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
               while (<$IDS>) { chomp; $ids{$_} = 1; } \
               close($IDS); \
-              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 44=>1, 45=>1); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
               while (<>) { \
                 chomp;  @w = split("\t"); # id, ctg, start, end, ... \
                 next unless $coding{$w[5]}; \
@@ -19105,7 +19107,7 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#4911699 ncbiCodingAnnotations.txt
+#4912900 ncbiCodingAnnotations.txt
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
@@ -19113,6 +19115,7 @@ EOF
 #2915183 8   (cds-reference -- ignored)
 #  36027 41  (nonsense)
 #1210823 42  (missense)
+#   1201 43  (stop-loss)
 #  41918 44  (frameshift)
 #  15414 45  (cds-indel)
     # Lots of new 8's (reference) -- now including non-coding (frame = NULL),
@@ -19121,7 +19124,7 @@ EOF
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     perl -e  'while (<>) { chomp; \
                 my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
-                next if ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL"); \
+                next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
                 if (defined $lastRs && \
                     ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
                      $lastTx ne $txId || $lastFrm ne $frm)) { \
@@ -19129,8 +19132,10 @@ EOF
                     $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
                     $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
                   } \
-                  print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                  $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
                         "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                  $lineOut =~ s@NULL@n/a@g; \
+                  print $lineOut; \
                   $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
                 } \
                 ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
@@ -19146,14 +19151,16 @@ EOF
                 $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
                 $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
               } \
-              print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
-                    "$count\t$fxns\t$nts\t$codons\t$aas\n";' \
+              $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                    "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+              $lineOut =~ s@NULL@n/a@g; \
+              print $lineOut;' \
       ncbiCodingAnnotations.txt \
     | liftUp snp137CodingDbSnp.bed /hive/data/genomes/hg19/jkStuff/liftContigs.lft warn stdin
     hgLoadBed hg19 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp137CodingDbSnp.bed
-#Read 1947961 elements of size 11 from snp137CodingDbSnp.bed
+#Read 1959839 elements of size 11 from snp137CodingDbSnp.bed
 
 
 ############################################################################
@@ -19294,3 +19301,67 @@ Old length: 136638
 Percent bed overlap with previous version: 100.00%
 Number of deleted IDs: 4
 Number of added IDs: 29530
+
+############################################################################
+# lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S hg19
+    mkdir /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+    cd /hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+
+    cat << '_EOF_' > DEF
+# Human vs. medium ground finch
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Medium Ground Finch GeoFor1
+SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
+SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   real    238m6.827s
+    cat fb.hg19.chainGeoFor1Link.txt
+    #   101503916 bases of 2897316137 (3.503%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzGeoFor1.2012-07-29 lastz.geoFor1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    9m10.240s
+    cat  fb.geoFor1.chainHg19Link.txt
+    #	88547518 bases of 1041286029 (8.504%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################

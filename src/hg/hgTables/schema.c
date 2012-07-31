@@ -74,7 +74,7 @@ return list;
 }
 
 void describeFields(char *db, char *table,
-        struct asObject *asObj, struct sqlConnection *conn)
+                    struct asObject *asObj, struct sqlConnection *conn)
 /* Print out an HTML table showing table fields and types, and optionally
  * offering histograms for the text/enum fields. */
 {
@@ -343,7 +343,8 @@ if (tdb != NULL && isNotEmpty(tdb->html))
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts(tdb->html);
     else
-    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",tdb->html);
+        printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+               tdb->html);
     }
 }
 
@@ -415,13 +416,11 @@ if (jpList != NULL)
 	    }
 	else if (aViaIndex)
 	    {
-            hPrintf("(which is an array index into %s.%s)",
-	        jp->a->table, jp->a->field);
+            hPrintf("(which is an array index into %s.%s)", jp->a->table, jp->a->field);
 	    }
 	else if (bViaIndex)
 	    {
-            hPrintf("(%s.%s is an array index into %s.%s)",
-		jp->a->table, jp->a->field,
+            hPrintf("(%s.%s is an array index into %s.%s)", jp->a->table, jp->a->field,
 	        jp->b->table, jp->b->field);
 	    }
 	else

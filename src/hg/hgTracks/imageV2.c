@@ -390,7 +390,7 @@ else
 }
 
 struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
-                                    int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, 
+                                    int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
                                     char *id)
 // Finds or adds the map item
 {
@@ -1058,7 +1058,7 @@ for (slice = imgTrack->slices;slice != NULL;slice=slice->next)
             count++;
             }
         else
-        {  // NOTE: This assumes that if there is no map then the entire slice should get the link!
+            {  // NOTE: This assumes that if there is no map, the entire slice should get the link!
             char * name = (imgTrack->name != NULL ? imgTrack->name
                                                   : imgTrack->tdb != NULL ? imgTrack->tdb->track
                                                                           : imgFile);
@@ -1896,20 +1896,16 @@ if (imgBox->showPortal)
     jsonObjectAdd(jsonForClient,"imgBoxPortalWidth", newJsonNumber(imgBox->portalWidth));
     jsonObjectAdd(jsonForClient,"imgBoxLeftLabel", newJsonNumber(imgBox->plusStrand ?
                                                                  imgBox->sideLabelWidth : 0));
-    jsonObjectAdd(jsonForClient,"imgBoxPortalOffsetX",
-                                  newJsonNumber((long)(  (imgBox->portalStart - imgBox->chromStart)
-                                                       / imgBox->basesPerPixel)));
+    jsonObjectAdd(jsonForClient,"imgBoxPortalOffsetX", newJsonNumber(
+                  (long)((imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel)));
     jsonObjectAdd(jsonForClient,"imgBoxBasesPerPixel", newJsonDouble(imgBox->basesPerPixel));
     }
 else
     jsonObjectAdd(jsonForClient,"imgBoxPortal", newJsonBoolean(FALSE));
 
-hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);
-                                                        //COLOR_RED); // Use RED to help find bugs
-hPrintf(" width=%d",imgBox->showPortal ? (imgBox->portalWidth+imgBox->sideLabelWidth)
-                                       : imgBox->width);
-hPrintf(" class='tableWithDragAndDrop'");
-hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
+hPrintf("<TABLE id='imgTbl' cellspacing='0' cellpadding='0'");
+hPrintf(" width='%d'",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
+hPrintf(" class='tableWithDragAndDrop'>\n");
 
 struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 jsonTdbSettingsInit(jsonTdbVars);

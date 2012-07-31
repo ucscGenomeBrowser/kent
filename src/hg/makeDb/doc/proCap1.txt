@@ -318,3 +318,27 @@ proCap1.perChromTables = no
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_15515:19471-24894" where name="proCap1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/proCap1/pushQ
+    cd /hive/data/genomes/proCap1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl proCap1 2> stderr.txt | grep -v transMap > proCap1.sql
+    #   real    3m42.061s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/proCap1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/proCap1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/proCap1/bbi/quality.bw
+# WARNING: proCap1 does not have seq
+# WARNING: proCap1 does not have extFile
+# WARNING: proCap1 does not have estOrientInfo
+
+    scp -p proCap1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/proCap1.sql"
+
+############################################################################

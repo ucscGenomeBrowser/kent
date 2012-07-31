@@ -226,8 +226,8 @@ void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpV
 {
 if (bumpVar)
     bumpColList(bumpVar, &colList);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 makeTitle("Configure Gene Sorter", "hgNearHelp.html#Configure");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 configControlPanel();
 cartSaveSession(cart);
 

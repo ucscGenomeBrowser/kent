@@ -1670,7 +1670,6 @@ if (track != NULL)
 	!cartVarExists(cart, "gvDisclaimer"))
 	{
 	/* display disclaimer and add flag to cart, program exits from here */
-	htmlSetBackground(hBackgroundImage());
 	htmlStart("Table Browser");
 	gvDisclaimer();
 	}

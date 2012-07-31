@@ -903,6 +903,7 @@ grant Snyder
 lab Stanford-m
 localization cell
 md5sum 32d377d85596d8b81f5852270f867fd1
+objStatus replaced - 1 bigWig contained in tar ball was empty
 origAssembly mm9
 project wgEncode
 readType 2x101D
@@ -915,4 +916,35 @@ subId 6815
 treatment None
 view Signal
 
-# MAGIC: -235216997
+metaObject wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep2V2
+objType file
+age immortalized
+attic auxSup
+cell MEL
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-30
+dateSubmitted 2012-05-01
+dateUnrestricted 2013-02-01
+dccAccession wgEncodeEM001999
+expId 1999
+fileName wgEncodeSydhRnaSeqMelRibozerogR2x101dSigRep2V2.document.tgz
+grant Snyder
+lab Stanford-m
+localization cell
+md5sum de1be7f32e3a525d2749e954b67f78d5
+origAssembly mm9
+project wgEncode
+readType 2x101D
+replicate 2
+rnaExtract riboZeroGold
+seqPlatform Illumina_HiSeq_2000
+sex M
+strain Unknown
+subId 7813
+submittedDataVersion V2 - Replaced initial submission that contained an empty bigWig
+treatment None
+view Signal
+
+# MAGIC: 1405191091

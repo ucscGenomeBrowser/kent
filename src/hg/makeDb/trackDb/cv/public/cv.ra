@@ -1964,6 +1964,23 @@ sex U
 tier 3
 protocol Crawford:D54_Crawford_protocol.pdf
 
+term Fibrobl_GM03348
+tag FIBROBLGM03348
+type Cell Line
+tier 3
+organism human
+description skin fibroblast
+karyotype normal
+sex M
+tissue skin
+vendorName Coriell
+vendorId GM03348
+orderUrl http://ccr.coriell.org/
+termId BTO:0001255
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255
+lab Crawford
+protocol Crawford:FibroblGM03348_Crawford_protocol.pdf
+
 term GM04503
 tag GM04503
 type Cell Line
@@ -4356,10 +4373,11 @@ sex M
 tissue bone marrow
 vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
 vendorId HS27a
+orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
-protocol missing 
+protocol missing
 
 term bone_marrow_HS5
 tag HS5
@@ -4372,6 +4390,24 @@ sex M
 tissue bone marrow
 vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
 vendorId HS5
+orderUrl http://cceh.fhcrc.org/
+termId BTO:0000141
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
+lab Stam
+protocol missing
+
+term bone_marrow_MSC
+tag MSC
+type Cell Line
+tier 3
+organism human
+description These cells are primary fibroblastoid cells obtained from human bone marrow of normal donors as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005.
+karyotype normal
+sex M
+tissue bone marrow
+vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorId MSC
+orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
@@ -5295,22 +5331,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 lab Crawford
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 
-term bone_marrow_MSC
-tag MSC
-type Cell Line
-tier 3
-organism human
-description These cells are primary fibroblastoid cells obtained from human bone marrow of normal donors as described in Roecklein and Torok-Storb, 1995 Blood 85:997-1005.
-karyotype normal
-sex M
-tissue bone marrow
-vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
-vendorId MSC
-termId BTO:0000141
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
-lab Stam
-protocol missing
-
 term Myometr
 tag MYOMETR
 type Cell Line
@@ -5615,7 +5635,7 @@ description Primary frozen pancreas tissue from NCTC donor IDs 09-0144A (Rep B1)
 karyotype normal
 sex M
 tissue pancreas
-vendorName  NCTC
+vendorName NCTC
 vendorId 09-0144A; 10-0021A
 orderUrl http://www.ecu.edu/cs-dhs/med/NcTissueConsortium.cfm
 termId BTO:0000988
@@ -7051,6 +7071,38 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 sex M
 protocol missing
 
+term ES-WW6
+tag ESWW6
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells isolated from mix of ~20% C57/B6J, ~75% 129/Sv and ~5% SJL strains
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F4WT
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_Stam_protocol.pdf
+
+term ES-WW6_F1KO
+tag ESWW6KO
+type Cell Line
+organism mouse
+category primaryCells
+description Histone H1c, H1d, H1e triple null mouse embryonic stem cell line derived from ES-WW6 cells.
+age E0
+strain Unknown
+vendorName A. Skoultchi Lab
+vendorId WW6_F1KO
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol Stam:ES-WW6_F1K0_Stam_protocol.pdf
+
 term Erythrobl
 tag ERYTHROBL
 type Cell Line
@@ -7674,6 +7726,24 @@ color 105,105,105
 sex U
 protocol Stam:Retina_Stam_protocol.pdf
 
+term Skin
+tag SKIN
+type Cell Line
+organism mouse
+tissue skin
+category Tissue
+age ageUnkown
+strain Unknown
+description Skin
+vendorName LICR lab
+vendorId Skin
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4556
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4556
+color  204,121,167
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term SkMuscle
 tag SKMUSCLE
 type Cell Line
@@ -7713,6 +7783,24 @@ protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_pr
 label Small Intestine
 #Shortened term
 
+term SpinalCord
+tag SPC
+type Cell Line
+organism mouse
+tissue spinal cord
+category Tissue
+age ageUnknown
+strain Unknown
+description Spinal Cord, part of the CNS
+vendorName LICR lab
+vendorId Spinal Cord
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 4521
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4521
+color 105,105,105
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
+
 term Spleen
 tag SPL
 type Cell Line
@@ -7740,14 +7828,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Stomach
-vendorName CSHL lab
-vendorId Stomach
-orderUrl http://gingeraslab.cshl.edu/
+vendorName 1) CSHL lab; 2) LICR lab
+vendorId Stomach; Stomach
+orderUrl http://gingeraslab.cshl.edu/;  http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
 sex U
-protocol Gingeras:Stomach_Gingeras_protocol.pdf
+protocol Gingeras:Stomach_Gingeras_protocol.pdf Ren:Tissue_Ren_protocol.pdf
 
 term SubcFatPad
 tag SFAT
@@ -7875,6 +7963,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 86,180,233
 sex U
 protocol Stam:TReg_Stam_protocol.pdf
+
+term UpperLegMuscle
+tag ULMUS
+type Cell Line
+organism mouse
+tissue upper leg muscle
+category Tissue
+age ageUnknown
+strain Unkown
+description Upper leg muscle
+vendorName LICR lab
+vendorId Thigh Muscle
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 11033
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=11033
+color 139,69,19
+sex U
+protocol Ren:Tissue_Ren_protocol.pdf
 
 term WholeBrain
 tag WBRAIN
@@ -9237,6 +9343,22 @@ targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 label EZH2 (39875)
+
+term FLI1_(sc-356)
+tag FLI1SC365
+type Antibody
+antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
+target FLI1
+targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
+vendorName Santa Cruz Biotech
+vendorId sc-356
+orderUrl http://www.scbt.com/datasheet-356-fli-1-c-19-antibody.html
+lab Hardison
+lots E1211
+targetId GeneCard:FLI1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
+validation FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+label FLI1 (sc-356)
 
 term  FOSL1_(SC-183)
 tag FOSL1
@@ -13561,6 +13683,18 @@ tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
 type treatment
 
+term G1_phase
+tag G1PHASE
+description Cells were synchronized and subjected to FACS sorting based on DNA content with the peak of the single DNA content peak taken as G1 cells. The intermediate DNA content cells between G2-M and G1 phases were excluded. (Crawford)
+type treatment
+#Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content
+
+term G2-M_phase
+tag G2MPHASE
+description Cells were synchronized and subjected to FACS sorting based on DNA content with the peak of double DNA content taken as G2 and M cells. The intermediate DNA content cells between G2-M and G1 phases were excluded. (Crawford)
+type treatment
+#Cells were grown up in 10% FBS RPMI 1640 media vehicle treated with .5% DMSO for 24 hours, then 70 uL per 100 mL media of 10 mg per mL Hoechst 33342 dye was added to the media and the cells were placed back at 37 degrees for 45 minutes in the incubator. The cells were then spun down, resuspended in 2% FBS RPMI1640 placed on ice and then subjected to FACS sorting based on DNA content
+
 term Genistein_100nM
 tag GEN1H
 description 1 h with 100 nM Genistein   (Myers)
@@ -16072,6 +16206,7 @@ validate none
 priority 355
 #label Control ID - Specific dataset used as the control
 #This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
+#This is difficult to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 
 term dataGroup
 tag DATAGROUP
@@ -16451,6 +16586,16 @@ validate list: wgEncode
 priority 010
 # Only one so far: all encode is under single project='wgEncode' (11/3/10)
 
+term promoter
+tag PROMOTER
+type typeOfTerm
+label Promoter
+description Target Promoter
+searchable no
+cvDefined yes
+validate cv
+priority 500
+
 term protocol
 tag PROTOCOL
 type typeOfTerm
@@ -16700,6 +16845,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 

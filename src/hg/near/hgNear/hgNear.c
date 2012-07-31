@@ -157,15 +157,12 @@ while ((c = *s) != 0)
 }
 
 void makeTitle(char *title, char *helpName)
-/* Make title bar. */
+/* Print main menu and the title bar. */
 {
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER style='color:#FFFFFF;'><span style='font-size:large;'>%s</span></TD>", 
-        title);
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
-	helpName, wrapWhiteFont("Help"));
-hPrintf("</TR></TABLE>");
+char buf[1024];
+safef(buf, sizeof(buf), "../goldenPath/help/%s", helpName);
+setContextSpecificHelp(buf, NULL);
+cartWebStart(cart, database, "%s", title);
 }
 
 /* ---- Some helper routines for order methods. ---- */
@@ -1658,10 +1655,8 @@ void doMainDisplay(struct sqlConnection *conn,
 /* Put up the main gene sorter display - a control panel followed by
  * a big table. */
 {
-char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Sorter", genome);
+cartWebStart(cart, database, "UCSC %s Gene Sorter", genome);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
-makeTitle(buf, "hgNearHelp.html");
 cartSaveSession(cart);
 mainControlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
@@ -1748,6 +1743,7 @@ else
     if (gp) geneList = getOrderedList(ord, colList, conn, displayCount);
     doMainDisplay(conn, ord, ordList, colList, geneList);
     }
+cartWebEnd();
 }
 
 static struct genePos *curGenePos()
@@ -2004,6 +2000,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldVars = hashNew(10);
-cartHtmlShell("Gene Sorter v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
