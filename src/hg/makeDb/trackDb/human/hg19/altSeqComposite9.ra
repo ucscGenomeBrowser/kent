@@ -64,7 +64,7 @@ dataVersion GRCh37 Patch 9 update, July 2012
     pslSequence no
     baseColorUseSequence extFile seqHg19Patch9 extHg19Patch9
 
-	track altSeqLiftOverPslP9
+	track altSeqLiftOverPsl
         parent altSeqCompositeViewpsl9
         subGroups view=psl
 	shortLabel Alignment
