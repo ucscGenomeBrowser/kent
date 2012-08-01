@@ -13,8 +13,8 @@ subGroup5 age Age E0=E0
 subGroup6 treatment Treatment NONE=None DIFFD24H=Estradiol_24hr
 subGroup7 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
-sortOrder cellType=+ rep=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line strain=Strain age=Age treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ treatment=+ rep=+ view=+
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex age=age treatment=treatment
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
@@ -76,7 +76,7 @@ wgEncode 1
     minLimit 0
     maxLimit 9016
     autoScale off
-    maxHeightPixels 100:32:16
+    maxHeightPixels 100:50:16
     windowingFunction mean+whiskers
 
         track wgEncodePsuDnaseG1eS129ME0SigRep1
