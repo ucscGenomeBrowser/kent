@@ -33,8 +33,8 @@ include wgEncodeLicrTfbs.release2.ra beta,public
 include wgEncodeLicrTfbs.release3.ra alpha
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
-include wgEncodeSydhRnaSeq.ra beta,public
-include wgEncodeSydhRnaSeq.release2.ra alpha
+include wgEncodeSydhRnaSeq.ra public
+include wgEncodeSydhRnaSeq.release2.ra alpha,beta
 
 # Licr RNA-Seq (wrangler: Fang)
 include wgEncodeLicrRnaSeq.release2.ra
