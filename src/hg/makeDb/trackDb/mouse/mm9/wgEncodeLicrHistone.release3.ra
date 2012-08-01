@@ -489,7 +489,7 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel Bn 14.5 H3K4m3 
-        longLabel WBrain E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        longLabel Brain E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type broadPeak
         color 105,105,105
