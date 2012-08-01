@@ -19367,10 +19367,17 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # ENCODE Regulation track V2: Track #7526 (In progress 2012-06-20 kate)
 # This version will have:
-#       * Two additional cell lines for Tx and Histones (Hela, HepG2)
+#       * Two additional cell lines for Histones (Hela, HepG2)
 #               - Note Hela & HepG2 already added to Tx track (July2012 release)
+#       * Possibly a 10th cell type (HMEC) for Tx and Histone
 #       * Replace Tx with CSHL stranded data, pooled (JK advising, also AWG use)
-#       * Add latest TF's, and use AWG uniform peak calls for TF's
+#              http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformRNASignal.txt 
+#              These are from DCC wgEncodeCshlLongRnaSeq downloads (Long polyA+),
+#               AWG did not pool reps or plus/minus for their hub (but we will)
+#       * Histones from uniform processing: H3K4me1, H3K4me3, H3K27ac
+#             (http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/) 
+#                       wgEncodeBroadHistone{cell}{histone}StdAln_?Reps.norm5.rawsignal.bw
+#       * Add latest TF's, and use AWG uniform peak calls
 #       * Add latest DNase calls (possibly use AWG uniform)
 #          (http://www.uwencode.org/public/rthurman/encode_integrated_open_chrom/data/dataHub)
 #          AWG trackDb: http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
@@ -19395,10 +19402,11 @@ TMPDIR=/scratch/tmp
     cd wgEncodeRegV2
     ln -s /hive/data/genomes/hg19/bed/wgEncodeReg/badRegions.bed .
     #(was /hive/users/kent/regulate/companion/mapping/bad.bed)
-    ## DONE
 
+    ######
     # Handle the RNA seq, starting by pooling it and filtering out multiple
     # mapping and blacklisted regions.
+    ######
     cd /hive/data/genomes/hg19/bed/
     mkdir -p wgEncodeRegV2/txn/pooled
     cd wgEncodeRegV2/txn/pooled
@@ -19433,24 +19441,72 @@ cat > makeNorm.csh << 'EOF'
         echo -n $i " " >> ../norm.tab
         awk '{sum += $4*($3-$2);} END {print 10000000000/sum}' $i >> ../norm.tab
     end
-    awk '{printf("colTransform 4 %s 0 %g ../normalized/%s\n", $1, $2, $1);}' ../norm.tab > ../norm.csh
+    awk '{printf("echo %s; colTransform 4 %s 0 %g ../normalized/%s\n", $1, $1, $2, $1);}' ../norm.tab > ../norm.csh
 'EOF'
     csh makeNorm.csh >&! makeNorm.out &
 # ~2 mins per cell type
 
-    chmod a+x ../norm.csh
     mkdir ../normalized
-    csh ../norm.csh  >&! norm.out &
+    csh ../norm.csh  >&! ../norm.out &
 
+    ######
     # Create the DNAse peak clusters subtrack.
+    ######
 
     cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
     mkdir -p dnase/peaks
     cd dnase/peaks
-    wget -O uniformDnase.txt http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
+    wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
     sed -n 's/bigDataUrl /wget /p' uniformDnase.txt > wget.csh
     csh wget.csh >&! wget.out &
-
 # 125 files (.bb), dated Nov 22, 2011
+
+    # Datasets with treated cells (hints from long label)
+    grep '(' uniformDnase.txt | grep longLabel > treated.txt
+    wc -l treated.txt
+# 7 datasets
+
+    ######
+    # Uniform histone signal for overlay wiggles
+    # Note: there are UW signal files as well -- omitting these for consistency,
+    # Check if merging would be a better option
+    ######
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
+    mkdir -p histone/signal
+    cd histone/signal
+
+cat > getHistones.csh << 'EOF'
+    foreach cell (Gm12878 H1hesc Helas3 Hepg2 Hsmm Huvec K562 Nhek Nhlf Hmec)
+        foreach histone (H3k4me1 H3k4me3 H3k27ac)
+            set var = "wgEncodeBroadHistone${cell}${histone}"
+            echo $var
+            curl -O http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/${var}StdAln_\[1-3\]Reps.norm5.rawsignal.bw
+        end
+    end
+'EOF'
+    csh getHistones.csh >&! getHistones.out &
+
+    # save real files (>1k size)
+    mkdir sav
+    find . -name '*.bw' -a -size +1k -exec mv '{}' sav \;
+    rm *.bw
+    mv sav/* .
+    rmdir sav
+
+    # note: missing Hela and HepG2 H3K4me1 - these have different filename pattern (check with Anshul why)
+    wget http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHelas3H3k4me1Std_1Reps.norm5.rawsignal.bw
+    wget http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHepg2H3k4me1Std_1Reps.norm5.rawsignal.bw
+
+    ######
+    # TFBS
+    ######
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
+    mkdir -p tfbs/peaks
+    cd tfbs/peaks
+
+    wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformTfbs_nocontrols.txt 
+    sed -n 's/bigDataUrl /wget /p' uniformTfbs_nocontrols.txt | grep Tfbs > wget.csh
+    perl -wpe 's/wget \S+(spp.optimal.)(wgEncode\S+)(_VS\S+)/mv $1$2$3 $2.bb/' wget.csh > rename.csh
+    csh rename.csh >&! rename.out &
 
 #######################################################################
