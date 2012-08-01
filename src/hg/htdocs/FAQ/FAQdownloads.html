@@ -1733,64 +1733,8 @@
 			database rather than using the Table Browser interface?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			In response to requests from Genome Browser users, we have set up a MySQL
-			database for public access at genome-mysql.cse.ucsc.edu.  This new server
-			allows MySQL access to the same set of data currently available on our
-			public Genome Browser site. The data are synchronized weekly with the main
-			databases on our public site.
-			During this synchronization period, the MySQL server can be
-			intermittently out of sync with the main website for a short period. 
-			The weekly synchronization takes place on Monday mornings
-			from 4:00 am to 9:00 am Pacific Time.
-			<P>
-			To connect to the database, you must use a computer on which the MySQL
-			client libraries have been installed. We recommend you use the most current 
-			version of v5.0 MySQL clients, which may be downloaded from
-			<A HREF="http://dev.mysql.com/downloads/mysql/5.0.html" 
-		   	TARGET=_blank>http://dev.mysql.com/downloads/mysql/5.0.html</A>. 
-			Connect to the MySql server
-			using the command: 
-			<BR>
-			<PRE>
-    <TT>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</TT></PRE>
-			The <em>-A</em> flag is optional but is recommended for speed.
-			<P>
-			Once connected to the database, you may use a wide range of MySQL commands
-			to query the database. 
-			As a courtesy to others, please observe the following
-			guidelines when using the database:
-			<UL>
-			<LI>
-			Avoid excessive or heavy queries that may impact the server performance.
-			Inappropriate query use will result in a restriction of access. If you plan
-			to execute a query that you think may be excessive, contact UCSC first to
-			avoid the possibility of having your access blocked.
-			<LI>
-			Bot access and excessive program-driven use are not permitted.
-			<LI>
-			Attachments by local mirror sites are prohibited.
-			</UL>
-			<P>
-			The MySQL database can also be used by the numerous utilities
-			in the <A HREF="FAQlicense.html#license3">kent source</A> tree.  Add the following
-			specifications to your $HOME/.hg.conf file (remember to 			chmod your .hg.conf file to 600 permissions):
-			<PRE>
-    db.host=genome-mysql.cse.ucsc.edu
-    db.user=genomep
-    db.password=password </PRE> 
-			<P>
-			If you prefer a more structured graphical interface to the UCSC database
-			tables, use the 
-			<A HREF="../cgi-bin/hgTables">Table Browser</A>.
-			<P>
-			System problems should be reported to 
-			<A HREF="mailto:genome-www@soe.ucsc.edu">genome-www@soe.ucsc.edu</A>.  
-			Send questions regarding the database contents or queries to 
-			<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>.
-			<B>Messages sent to this address will be posted to the 
-			moderated genome mailing list, which is archived on a public 
-			Web-accessible pipermail archive.</B>  This archive may be 
-			indexed by non-UCSC sites such as Google.
+			<p>Yes. See our documentaion on <a href="../goldenPath/help/mysql.html">Downloading Data
+			 using MySQL</a>.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
