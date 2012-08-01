@@ -135,7 +135,8 @@ pushWarnHandler(ignoreEm);
 vcfParseGenotypes(rec);
 popWarnHandler();
 // Tally genotypes and alleles for summary:
-int refs = 0, alts = 0, refRefs = 0, refAlts = 0, altAlts = 0, gtOther = 0, phasedGts = 0;
+int refs = 0, alts = 0, unks = 0;
+int refRefs = 0, refAlts = 0, altAlts = 0, gtUnk = 0, gtOther = 0, phasedGts = 0;
 int i;
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
@@ -146,12 +147,16 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	refs++;
     else if (gt->hapIxA > 0)
 	alts++;
+    else
+	unks++;
     if (!gt->isHaploid)
 	{
 	if (gt->hapIxB == 0)
 	    refs++;
 	else if (gt->hapIxB > 0)
 	    alts++;
+	else
+	    unks++;
 	if (gt->hapIxA == 0 && gt->hapIxB == 0)
 	    refRefs++;
 	else if (gt->hapIxA == 1 && gt->hapIxB == 1)
@@ -159,21 +164,35 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	else if ((gt->hapIxA == 1 && gt->hapIxB == 0) ||
 		 (gt->hapIxA == 0 && gt->hapIxB == 1))
 	    refAlts++;
+	else if (gt->hapIxA < 0 || gt->hapIxB < 0)
+	    gtUnk++;
 	else
 	    gtOther++;
 	}
     }
-printf("<B>Genotype count:</B> %d (%d phased)<BR>\n", vcff->genotypeCount, phasedGts);
-double refAf = (double)refs/(2*vcff->genotypeCount);
-double altAf = (double)alts/(2*vcff->genotypeCount);
-printf("<B>Alleles:</B> %s: %d (%.3f%%); %s: %d (%.3f%%)<BR>\n",
+printf("<B>Genotype count:</B> %d", vcff->genotypeCount);
+if (differentString(seqName, "chrY"))
+    printf(" (%d phased)", phasedGts);
+else
+    printf(" (haploid)");
+puts("<BR>");
+int totalAlleles = refs + alts + unks;
+double refAf = (double)refs/totalAlleles;
+double altAf = (double)alts/totalAlleles;
+printf("<B>Alleles:</B> %s: %d (%.3f%%); %s: %d (%.3f%%)",
        rec->alleles[0], refs, 100*refAf,  rec->alleles[1], alts, 100*altAf);
-if (vcff->genotypeCount > 1)
+if (unks > 0)
+    printf("; unknown: %d (%.3f%%)", unks, 100 * (double)unks/totalAlleles);
+puts("<BR>");
+// Should be a better way to detect haploid chromosomes than comparison with "chrY":
+if (vcff->genotypeCount > 1 && differentString(seqName, "chrY"))
     {
     printf("<B>Genotypes:</B> %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%)",
 	   rec->alleles[0], rec->alleles[0], refRefs, 100*(double)refRefs/vcff->genotypeCount,
 	   rec->alleles[0], rec->alleles[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
 	   rec->alleles[1], rec->alleles[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
+    if (gtUnk > 0)
+	printf("; unknown: %d (%.3f%%)", gtUnk, 100*(double)gtUnk/vcff->genotypeCount);
     if (gtOther > 0)
 	printf("; other: %d (%.3f%%)", gtOther, 100*(double)gtOther/vcff->genotypeCount);
     printf("<BR>\n");
@@ -216,10 +235,10 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     if (gt->hapIxA >= 0)
 	hapA = rec->alleles[(unsigned char)gt->hapIxA];
     if (gt->isHaploid)
-	hapB = NA;
+	hapB = "";
     else if (gt->hapIxB >= 0)
 	hapB = rec->alleles[(unsigned char)gt->hapIxB];
-    char sep = gt->isPhased ? '|' : '/';
+    char sep = gt->isHaploid ? ' ' : gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
 	   hapA, sep, hapB, phasing);

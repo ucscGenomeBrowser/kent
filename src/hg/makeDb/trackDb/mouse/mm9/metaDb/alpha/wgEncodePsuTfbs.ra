@@ -1,7 +1,7 @@
 metaObject wgEncodePsuTfbs
 objType composite
 composite wgEncodePsuTfbs
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,treatment
 geoSeriesAccession GSE36029
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
@@ -3879,6 +3879,32 @@ subId 7775
 treatment diffProtD_14hr
 view RawData
 
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/diffProtD_14hr/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1
+treatment diffProtD_14hr
+view Signal
+
 metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hAlnRep1
 objType file
 age E0
@@ -3928,6 +3954,32 @@ strain 129
 subId 7778
 treatment diffProtD_24hr
 view RawData
+
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/diffProtD_24hr/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1
+treatment diffProtD_24hr
+view Signal
 
 metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hAlnRep1
 objType file
@@ -3979,6 +4031,32 @@ subId 7776
 treatment diffProtD_30hr
 view RawData
 
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/diffProtD_30hr/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1
+treatment diffProtD_30hr
+view Signal
+
 metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hAlnRep1
 objType file
 age E0
@@ -4028,6 +4106,32 @@ strain 129
 subId 7780
 treatment diffProtD_3hr
 view RawData
+
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/diffProtD_3hr/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1
+treatment diffProtD_3hr
+view Signal
 
 metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hAlnRep1
 objType file
@@ -4079,6 +4183,32 @@ subId 7781
 treatment diffProtD_7hr
 view RawData
 
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/diffProtD_7hr/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1
+treatment diffProtD_7hr
+view Signal
+
 metaObject wgEncodePsuTfbsG1eer4InputME0S129InputRawDataRep1
 objType file
 age E0
@@ -4103,6 +4233,32 @@ strain 129
 subId 7779
 treatment None
 view RawData
+
+metaObject wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1
+objType table
+age E0
+antibody Input
+cell G1E-ER4
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4/None/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-01
+dateUnrestricted 2013-05-01
+fileName wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 7851
+tableName wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1
+treatment None
+view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1
 objType file
@@ -8224,4 +8380,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1860196171
+# MAGIC: -2083513714

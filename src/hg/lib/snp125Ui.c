@@ -353,6 +353,7 @@ static struct snpFuncSO snpFuncToSO[] = {
     { "inframe_insertion", "inframe_insertion", "SO:0001821" },
     { "inframe_deletion", "inframe_deletion", "SO:0001822" },
     { "stop_retained_variant", "stop_retained_variant", "SO:0001567" },
+    { "splice_region_variant", "splice_region_variant", "SO:0001630" },
     { NULL, NULL, NULL }
 };
 

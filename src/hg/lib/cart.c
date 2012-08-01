@@ -1459,12 +1459,14 @@ popWarnHandler();
 }
 
 static boolean inWeb = FALSE;
+static boolean didCartHtmlStart = FALSE;
 
 void cartHtmlStart(char *title)
 /* Write HTML header and put in normal error handler. */
 {
 pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
+didCartHtmlStart = TRUE;
 }
 
 void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
@@ -1517,8 +1519,10 @@ void cartHtmlEnd()
 {
 if (inWeb)
     webEnd();	/*	this does googleAnalytics for a lot of CGIs	*/
-else
+else if (didCartHtmlStart)
     cartFooter();
+else
+    return;
 popWarnHandler();
 }
 
