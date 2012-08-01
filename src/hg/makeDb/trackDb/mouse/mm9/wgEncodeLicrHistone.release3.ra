@@ -1978,7 +1978,7 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneMelH3k27me3MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K27m3
-        longLabel MEL Histone Modifications by H3K27me3 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K27ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 35.549999
         color 86,180,233
@@ -2216,7 +2216,7 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneBcellcd43nInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel BcelCD43- Input Sig
-        longLabel BcelCD43- adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        longLabel BcelCD43- 8w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=1ADLT8W factor=INPUT cellType=0BCELLCD43N control=STD sex=M strain=C57BL6
         type bigWig 0.140000 36.529999
         color 86,180,233
