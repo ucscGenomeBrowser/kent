@@ -1,7 +1,7 @@
 metaObject wgEncodePsuRnaSeq
 objType composite
 composite wgEncodePsuRnaSeq
-expVars lab,dataType,cell,treatment
+expVars lab,dataType,cell,treatment,readType
 localization cell
 rnaExtract polyA
 
@@ -3718,4 +3718,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: -928266779
+# MAGIC: 1675867208
