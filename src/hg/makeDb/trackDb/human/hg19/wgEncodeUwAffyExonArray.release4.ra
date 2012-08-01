@@ -6,10 +6,10 @@ longLabel Affymetrix Exon Array from ENCODE/University of Washington
 group expression
 subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3AG04449=AG04449 t3AG04450=AG04450 t3AG09309=AG09309 t3AG09319=AG09319 t3AG10803=AG10803 t3AOAF=AoAF t3BE2C=BE2_C t3BJ=BJ t3CACO2=Caco-2 t3CMK=CMK t3GM06990=GM06990 t3GM12864=GM12864 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAC=HAc t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HBMEC=HBMEC t3HBVP=HBVP t3HBVSMC=HBVSMC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCONF=HConF t3HCPEPIC=HCPEpiC t3HCT116=HCT-116 t3HEEPIC=HEEpiC t3HEK293=HEK293 t3HFF=HFF t3HFFMYC=HFF-Myc t3HGF=HGF t3HIPEPIC=HIPEpiC t3HL60=HL-60 t3HMEC=HMEC t3HMF=HMF t3HMVECDAD=HMVEC-dAd t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYAD=HMVEC-dLy-Ad t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECDNEO=HMVEC-dNeo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HNPCEPIC=HNPCEpiC t3HPAEC=HPAEC t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HRE=HRE t3HRGEC=HRGEC t3HRPEPIC=HRPEpiC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3HVMF=HVMF t3JURKAT=Jurkat t3LNCAP=LNCaP t3NB4=NB4 t3NHA=NH-A t3NHBE=NHBE t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHEK=NHEK t3NHLF=NHLF t3NT2D1=NT2-D1 t3PANC1=PANC-1 t3PREC=PrEC t3RPTEC=RPTEC t3SAEC=SAEC t3SKMC=SkMC t3SKNMC=SK-N-MC t3SKNSHRA=SK-N-SH_RA t3TH1=Th1 t3WERIRB1=WERI-Rb-1 t3WI38=WI-38
 subGroup2 rep Rep rep1=1 rep2=2
-subGroup3 treatment Treatment aNone=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr 
+subGroup3 treatment Treatment aNone=None OHTAM=4-OHTAM_20_nM_72_hr DIFFA2D=Differentiated_2_d DIFFA5D=Differentiated_5_d DIFFA9D=Differentiated_9_d DIFFA14D=Differentiated_14_d
 dimensions dimensionX=treatment dimensionY=cellType dimensionZ=rep
 filterComposite dimZ
-sortOrder cellType=+ treatment=+  rep=+
+sortOrder cellType=+ rep=+
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
@@ -1452,7 +1452,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 2d 1
-    longLabel H7-hESC diffProtA 2d Exon Array Signal Rep 1 from ENCODE/UW
+    longLabel H7-hESC differentiated 2 d Exon Array Signal Rep 1 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA2D rep=rep1
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1460,7 +1460,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 2d 2
-    longLabel H7-hESC diffProtA 2d Exon Array Signal Rep 2 from ENCODE/UW
+    longLabel H7-hESC differentiated 2 d Exon Array Signal Rep 2 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA2D rep=rep2
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1468,7 +1468,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 5d 1
-    longLabel H7-hESC diffProtA 5d Exon Array Signal Rep 1 from ENCODE/UW
+    longLabel H7-hESC differentiated 5 d Exon Array Signal Rep 1 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA5D rep=rep1
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1476,7 +1476,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 5d 2
-    longLabel H7-hESC diffProtA 5d Exon Array Signal Rep 2 from ENCODE/UW
+    longLabel H7-hESC differentiated 5 d Exon Array Signal Rep 2 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA5D rep=rep2
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1484,7 +1484,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 9d 1
-    longLabel H7-hESC diffProtA 9 d Exon Array Signal Rep 1 from ENCODE/UW
+    longLabel H7-hESC differentiated 9 d Exon Array Signal Rep 1 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA9D rep=rep1
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1492,7 +1492,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 9d 2
-    longLabel H7-hESC diffProtA 9 d Exon Array Signal Rep 2 from ENCODE/UW
+    longLabel H7-hESC differentiated 9 d Exon Array Signal Rep 2 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA9D rep=rep2
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1500,7 +1500,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 14d 1
-    longLabel H7-hESC diffProtA 14 d Exon Array Signal Rep 1 from ENCODE/UW
+    longLabel H7-hESC differentiated 14 d Exon Array Signal Rep 1 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA14D rep=rep1
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27
@@ -1508,7 +1508,7 @@ html wgEncodeUwAffyExonArray.release4
     track wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2
     parent wgEncodeUwAffyExonArray off
     shortLabel H7-hESC 14d 2
-    longLabel H7-hESC diffProtA 14 d Exon Array Signal Rep 2 from ENCODE/UW
+    longLabel H7-hESC differentiated 14 d Exon Array Signal Rep 2 from ENCODE/UW
     subGroups cellType=t3H7HESC treatment=DIFFA14D rep=rep2
     type broadPeak
     # subId=7725 dateSubmitted=2012-07-27

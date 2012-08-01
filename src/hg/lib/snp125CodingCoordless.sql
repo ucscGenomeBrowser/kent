@@ -7,7 +7,7 @@
 CREATE TABLE snp125CodingCoordless (
     name varchar(255) not null,	# Reference SNP identifier
     transcript varchar(255) not null,	# Accession of the transcript modified by SNP
-    frame enum("1", "2", "3")  not null,	# Frame of transcript's codon modified by SNP
+    frame enum("1", "2", "3", "n/a")  not null,	# Frame of transcript's codon modified by SNP
     alleleCount int not null,	# Number of annotated alleles for SNP
     funcCodes longblob not null,	# dbSNP function codes (e.g. 42=missense)
     alleles longblob not null,	# Observed nucleotide alleles corresponding to funcCodes

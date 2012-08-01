@@ -556,7 +556,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -583,7 +583,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -775,7 +775,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -802,7 +802,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1564,7 +1564,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1591,7 +1591,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1783,7 +1783,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1810,7 +1810,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1837,7 +1837,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1864,7 +1864,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2056,7 +2056,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2083,7 +2083,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2110,7 +2110,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2137,7 +2137,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2329,7 +2329,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2356,7 +2356,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2383,7 +2383,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2410,7 +2410,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2602,7 +2602,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2629,7 +2629,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2656,7 +2656,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2683,7 +2683,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2875,7 +2875,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2902,7 +2902,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3176,7 +3176,7 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 547f82f1a8862d4ed92ae46d28e8e473
+md5sum ffa498b4a6c54f68b9060d649d00f78f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3651,7 +3651,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3677,7 +3677,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3862,7 +3862,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3888,7 +3888,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4632,7 +4632,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4659,7 +4659,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4851,7 +4851,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4878,7 +4878,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5185,7 +5185,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5212,7 +5212,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5404,7 +5404,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5431,7 +5431,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5747,7 +5747,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5775,7 +5775,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5803,7 +5803,7 @@ md5sum 6a15b2a7f84a6d8f5b0d43a29537ef05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
@@ -5832,7 +5832,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5860,7 +5860,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5889,7 +5889,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5918,7 +5918,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5946,7 +5946,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5974,7 +5974,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -6001,7 +6001,7 @@ md5sum fbdd78417491e80df38aa56e4fdd4196
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
@@ -6749,7 +6749,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6776,7 +6776,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6968,7 +6968,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6995,7 +6995,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7022,7 +7022,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7049,7 +7049,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7241,7 +7241,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7268,7 +7268,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7295,7 +7295,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7322,7 +7322,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7514,7 +7514,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7541,7 +7541,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7773,7 +7773,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view Alignments
@@ -7800,7 +7800,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view Alignments
@@ -7827,7 +7827,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RawData
@@ -7854,7 +7854,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RawData
@@ -7881,7 +7881,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RepSignal
@@ -7908,7 +7908,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 view RepSignal
@@ -7934,10 +7934,10 @@ md5sum a920b3ea13270fb08a1ac15e1c1afab0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
-sex U
+sex M
 strain Unknown
 subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1429301323
+# MAGIC: -1747689318

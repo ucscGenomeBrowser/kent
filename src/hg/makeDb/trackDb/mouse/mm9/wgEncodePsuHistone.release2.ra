@@ -46,6 +46,7 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
+html wgEncodePsuHistone.release2
 
 	#####Peak Tracks###########
 	track wgEncodePsuHistoneViewPeaks
@@ -63,7 +64,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E H3K27me3
+        shortLabel G1E H3K27m3
         longLabel G1E H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1E control=INPUT sex=M strain=s129
         type broadPeak
@@ -72,7 +73,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E-ER4 H3K27me3
+        shortLabel G1E-ER H3K27m3 24
         longLabel G1E-ER4 H3K27me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
@@ -81,7 +82,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel CH12 H3K27me3
+        shortLabel CH12 H3K27m3
         longLabel CH12 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=IMMORTAL factor=H3K27ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type broadPeak
@@ -90,7 +91,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E-ER4 H3K4me3
+        shortLabel G1E-ER H3K4m3 24
         longLabel G1E-ER4 H3K4me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
@@ -99,7 +100,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E H3K4me3
+        shortLabel G1E H3K4m3
         longLabel G1E H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1E control=INPUT sex=M strain=s129
         type broadPeak
@@ -108,7 +109,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks 
-        shortLabel G1E H3K4me1
+        shortLabel G1E H3K4m1
         longLabel G1E H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=s129
         type broadPeak
@@ -117,7 +118,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E H3K36me3
+        shortLabel G1E H3K36m3
         longLabel G1E H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1E control=INPUT sex=M strain=s129
         type broadPeak
@@ -126,7 +127,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel CH12 H3K36me3
+        shortLabel CH12 H3K36m3
         longLabel CH12 H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=IMMORTAL factor=H3K36ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type broadPeak
@@ -135,16 +136,16 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E-ER4 H3K36me3
+        shortLabel G1E-ER H3K36m3 24
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
-        subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=B strain=s129
+        subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
         color 153,38,0
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel CH12 H3K4me3
+        shortLabel CH12 H3K4m3
         longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type broadPeak
@@ -153,7 +154,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Megakary H3K4me1
+        shortLabel Megakary H3K4m1
         longLabel Megakaryocyte H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
@@ -162,7 +163,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Megakary H3K4me3
+        shortLabel Megakary H3K4m3
         longLabel Megakaryocyte H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
@@ -171,7 +172,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel CH12 H3K4me1
+        shortLabel CH12 H3K4m1
         longLabel CH12 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME1 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type broadPeak
@@ -180,7 +181,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E-ER4 H3K4me1
+        shortLabel G1E-ER H3K4m1 24
         longLabel G1E-ER4 H3K4me1 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
@@ -189,7 +190,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Erythrob H3K27me3
+        shortLabel Erythrob H3K27m3
         longLabel Erythroblast H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K27ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
@@ -198,7 +199,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel CH12 H3K9me3
+        shortLabel CH12 H3K9m3
         longLabel CH12 H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=IMMORTAL factor=H3K09ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type broadPeak
@@ -207,7 +208,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E H3K9me3
+        shortLabel G1E H3K9m3
         longLabel G1E H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1E control=INPUT sex=M strain=s129
         type broadPeak
@@ -216,7 +217,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Erythrob H3K9me3
+        shortLabel Erythrob H3K9m3
         longLabel Erythroblast H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K09ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
@@ -225,7 +226,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Megakary H3K9me3
+        shortLabel Megakary H3K9m3
         longLabel Megakaryocyte H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K09ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
@@ -234,7 +235,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Megakary H3K36me3
+        shortLabel Megakary H3K36m3
         longLabel Megakaryocyte H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K36ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
@@ -243,7 +244,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Erythrob H3K36me3
+        shortLabel Erythrob H3K36m3
         longLabel Erythroblast H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K36ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
@@ -252,7 +253,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Erythrob H3K4me1
+        shortLabel Erythrob H3K4m1
         longLabel Erythroblast H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
@@ -261,7 +262,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel G1E-ER4 H3K9me3
+        shortLabel G1E-ER H3K9m3 24
         longLabel G1E-ER4 H3K9me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type broadPeak
@@ -270,7 +271,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Erythrob H3K4me3
+        shortLabel Erythrob H3K4m3
         longLabel Erythroblast H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
@@ -279,7 +280,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
-        shortLabel Megakary H3K27me3
+        shortLabel Megakary H3K27m3
         longLabel Megakaryocyte H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E14HALF factor=H3K27ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
@@ -301,7 +302,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K27me3
+        shortLabel G1E H3K27m3
         longLabel G1E H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K27ME3 cellType=G1E control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -311,7 +312,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E-ER4 H3K27me3
+        shortLabel G1E-ER H3K27m3 24
         longLabel G1E-ER4 H3K27me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K27ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -321,7 +322,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel CH12 H3K27me3
+        shortLabel CH12 H3K27m3
         longLabel CH12 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=IMMORTAL factor=H3K27ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type bigWig 1.000000 480.000000
@@ -331,7 +332,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E-ER4 H3K4me3
+        shortLabel G1E-ER H3K4m3 24
         longLabel G1E-ER4 H3K4me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -341,7 +342,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K4me3
+        shortLabel G1E H3K4m3
         longLabel G1E H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME3 cellType=G1E control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -351,7 +352,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K4me1
+        shortLabel G1E H3K4m1
         longLabel G1E H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=s129
         type bigWig 1.000000 479.000000
@@ -361,7 +362,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K36me3
+        shortLabel G1E H3K36m3
         longLabel G1E H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1E control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -371,7 +372,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel CH12 H3K36me3
+        shortLabel CH12 H3K36m3
         longLabel CH12 H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=IMMORTAL factor=H3K36ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type bigWig 1.000000 480.000000
@@ -381,9 +382,9 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E-ER4 H3K36me3
+        shortLabel G1E-ER H3K36m3 24
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=B strain=s129
+        subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 479.000000
         color 153,38,0
 		viewLimits 2:400
@@ -391,7 +392,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel CH12 H3K4me3
+        shortLabel CH12 H3K4m3
         longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=IMMORTAL factor=H3K04ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type bigWig 1.000000 480.000000
@@ -401,7 +402,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Megakary H3K4me1
+        shortLabel Megakary H3K4m1
         longLabel Megakaryocyte H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -411,7 +412,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Megakary H3K4me3
+        shortLabel Megakary H3K4m3
         longLabel Megakaryocyte H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -421,7 +422,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel CH12 H3K4me1
+        shortLabel CH12 H3K4m1
         longLabel CH12 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=IMMORTAL factor=H3K04ME1 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type bigWig 1.000000 479.000000
@@ -431,7 +432,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E-ER4 H3K4me1
+        shortLabel G1E-ER H3K4m1 24
         longLabel G1E-ER4 H3K4me1 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -441,7 +442,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Erythrob H3K27me3
+        shortLabel Erythrob H3K27m3
         longLabel Erythroblast H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K27ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -451,7 +452,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel CH12 H3K9me3
+        shortLabel CH12 H3K9m3
         longLabel CH12 H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=IMMORTAL factor=H3K09ME3 cellType=CH12 control=INPUT sex=F strain=s2A4B
         type bigWig 1.000000 480.000000
@@ -461,7 +462,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eH3k09me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K9me3
+        shortLabel G1E H3K9m3
         longLabel G1E H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K09ME3 cellType=G1E control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -471,7 +472,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Erythrob H3K9me3
+        shortLabel Erythrob H3K9m3
         longLabel Erythroblast H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K09ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -481,7 +482,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Megakary H3K9me3
+        shortLabel Megakary H3K9m3
         longLabel Megakaryocyte H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K09ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -491,7 +492,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Megakary H3K36me3
+        shortLabel Megakary H3K36m3
         longLabel Megakaryocyte H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K36ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -501,7 +502,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Erythrob H3K36me3
+        shortLabel Erythrob H3K36m3
         longLabel Erythroblast H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K36ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -511,7 +512,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Erythrob H3K4me1
+        shortLabel Erythrob H3K4m1
         longLabel Erythroblast H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -521,7 +522,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E-ER4 H3K9me3
+        shortLabel G1E-ER H3K9m3 24
         longLabel G1E-ER4 H3K9me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K09ME3 cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 480.000000
@@ -531,7 +532,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Erythrob H3K4me3
+        shortLabel Erythrob H3K4m3
         longLabel Erythroblast H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -541,7 +542,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig
         parent wgEncodePsuHistoneViewSignal
-        shortLabel Megakary H3K27me3
+        shortLabel Megakary H3K27m3
         longLabel Megakaryocyte H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E14HALF factor=H3K27ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type bigWig 1.000000 480.000000
@@ -578,7 +579,7 @@ wgEncode 1
 
         track wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
         parent wgEncodePsuHistoneViewSignal off
-        shortLabel G1E-ER4 Input
+        shortLabel G1E-ER Input
         longLabel G1E-ER4 Input Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4 control=INPUT sex=M strain=s129
         type bigWig 1.000000 158.000000
@@ -598,7 +599,7 @@ wgEncode 1
         parent wgEncodePsuHistoneViewSignal off
         shortLabel MEL Input
         longLabel MEL C57BL/6 Input Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
+        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=M strain=C57BL6
         type bigWig 1.000000 132.000000
         color 86,180,233
         # subId=5240 dateSubmitted=2011-12-17

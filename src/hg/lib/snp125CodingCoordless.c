@@ -10,7 +10,7 @@
 
 
 /* definitions for frame column */
-static char *values_frame[] = {"1", "2", "3", NULL};
+static char *values_frame[] = {"1", "2", "3", "n/a", NULL};
 static struct hash *valhash_frame = NULL;
 
 struct snp125CodingCoordless *snp125CodingCoordlessLoad(char **row)

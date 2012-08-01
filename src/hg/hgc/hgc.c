@@ -305,21 +305,9 @@ struct customTrack *theCtList = NULL;
 /* getDNA stuff actually works when the database doesn't exist! */
 boolean dbIsFound = FALSE;
 
-/* was cartHtmlStart done?  */
-static boolean didCartHtmlStart = FALSE;
-static boolean plainTextDump = FALSE;
-
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
 void doAltGraphXDetails(struct trackDb *tdb, char *item);
-
-void hgcStart(char *title)
-/* Print out header of web page with title.  Set
- * error handler to normal html error handler. */
-{
-cartHtmlStart(title);
-didCartHtmlStart = TRUE;
-}
 
 char* getEntrezNucleotideUrl(char *accession)
 /* get URL for Entrez browser on a nucleotide. free resulting string */
@@ -878,7 +866,6 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
-didCartHtmlStart = TRUE;
 }
 
 static struct dyString *subMulti(char *orig, int subCount,
@@ -4617,9 +4604,8 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // This output probably should be just text/plain but
 // trying to support the fancy warn handler box requires html.
 // But we want to keep it very simple and close to a plain text dump.
-plainTextDump = TRUE;
-puts("<html><head></head><body>\n");
-pushWarnHandler(htmlVaWarn);
+
+cartHtmlStart("DNA");
 hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
@@ -4680,8 +4666,6 @@ if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 
 puts("</PRE>");
-puts("</body></html>\n");
-popWarnHandler();
 }
 
 struct hTableInfo *ctToHti(struct customTrack *ct)
@@ -5328,7 +5312,7 @@ struct dnaSeq *seq = hGenBankGetMrna(database, acc, NULL);
 if (seq == NULL)
     errAbort("mRNA sequence %s not found", acc);
 
-hgcStart("mRNA sequence");
+cartHtmlStart("mRNA sequence");
 printf("<PRE><TT>");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -7895,7 +7879,7 @@ void htcTranslatedProtein(char *pepName)
 char *table = cartString(cart, "o");
 /* checks both gbSeq and table */
 aaSeq *seq = hGenBankGetPep(database, pepName, table);
-hgcStart("Protein Translation");
+cartHtmlStart("Protein Translation");
 if (seq == NULL)
     {
     warn("Predicted peptide %s is not avaliable", pepName);
@@ -7916,7 +7900,7 @@ char where[256];
 char protName[256];
 char *prot = NULL;
 
-hgcStart("Protein Translation from Genome");
+cartHtmlStart("Protein Translation from Genome");
 safef(where, sizeof(where), "name = \"%s\"", geneName);
 gp = genePredReaderLoadQuery(conn, tdb->table, where);
 hFreeConn(&conn);
@@ -7950,7 +7934,7 @@ char *prot = needMem(protBufSize);
 mrna->dna[cds.end] = '\0';
 dnaTranslateSome(mrna->dna+cds.start, prot, protBufSize);
 
-hgcStart("Protein Translation of mRNA");
+cartHtmlStart("Protein Translation of mRNA");
 displayProteinPrediction(acc, prot);
 }
 
@@ -8080,7 +8064,7 @@ struct dnaSeq *seq;
 int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(database, seqName, table);
 
-hgcStart("Predicted mRNA from Genome");
+cartHtmlStart("Predicted mRNA from Genome");
 safef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8112,7 +8096,7 @@ struct dnaSeq *seq = hGenBankGetMrna(database, geneName, "refMrna");
 if (seq == NULL)
     errAbort("RefSeq mRNA sequence %s not found", geneName);
 
-hgcStart("RefSeq mRNA");
+cartHtmlStart("RefSeq mRNA");
 printf("<PRE><TT>");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -12718,7 +12702,7 @@ void htcExtSeq(char *item)
 /* Print out DNA from some external but indexed .fa file. */
 {
 struct dnaSeq *seq;
-hgcStart(item);
+cartHtmlStart(item);
 seq = hExtSeq(database, item);
 printf("<PRE><TT>");
 faWriteNext(stdout, item, seq->dna, seq->size);
@@ -16577,16 +16561,16 @@ for (j = 0;  j < alleleCount;  j++)
 	{
 	int diff = alSize - refAlleleSize;
 	if ((diff % 3) != 0)
-	    printf(firstTwoColumnsPctS "frameshift</TD></TR>\n",
-		   geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("frameshift"));
 	else if (diff > 0)
-	    printf(firstTwoColumnsPctS "%sinsertion of %d codon%s</TD></TR>\n",
-		   (snpCodonPos == 0 ? "" : "frameshift and"),
-		   geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
+	    printf(firstTwoColumnsPctS "%s (insertion of %d codon%s)</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("inframe_insertion"),
+		   (int)(diff/3), (diff > 3) ?  "s" : "");
 	else
-	    printf(firstTwoColumnsPctS "%sdeletion of %d codon%s</TD></TR>\n",
-		   (snpCodonPos == 0 ? "" : "frameshift and"),
-		   geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
+	    printf(firstTwoColumnsPctS "%s (deletion of %d codon%s)</TD></TR>\n",
+		   geneTrack, geneName, snpMisoLinkFromFunc("inframe_deletion"),
+		   (int)(-diff/3), (diff < -3) ?  "s" : "");
 	}
     else if (alSize == 1 && refIsSingleBase)
 	{
@@ -16599,18 +16583,35 @@ for (j = 0;  j < alleleCount;  j++)
 	safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
 	safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
 	if (refAA != snpAA)
-	    printf(firstTwoColumnsPctS "%ssense %c (%s) --> %c (%s)</TD></TR>\n",
-		   geneTrack, geneName,
-		   ((refAA == '*' || snpAA == '*') ? "non" : "mis"),
-		   refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    {
+	    if (refAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else if (snpAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    }
 	else
-	    printf(firstTwoColumnsPctS
-		   "coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
-		   geneTrack, geneName, refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    {
+	    if (refAA == '*')
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    else
+		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)</TD></TR>\n",
+		       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
+		       refAA, refCodonHtml, snpAA, snpCodonHtml);
+	    }
 	}
     else
-	printf(firstTwoColumnsPctS "%s --> %s</TD></TR>\n",
-	       geneTrack, geneName, refAllele, al);
+	printf(firstTwoColumnsPctS "%s %s --> %s</TD></TR>\n",
+	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"), refAllele, al);
     }
 }
 
@@ -16634,24 +16635,27 @@ for (i = iStart;  i != iEnd;  i += iIncr)
 	if (snpEnd > cdsStart && snpStart < cdsEnd)
 	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
 	else if (cdsEnd > cdsStart)
-	    printf(firstTwoColumnsPctS "untranslated-%d</TD></TR>\n", geneTrack, geneName,
-		   (geneIsRc ^ (snpEnd < cdsStart)) ? 5 : 3);
+	    {
+	    boolean is5Prime = geneIsRc ^ (snpEnd < cdsStart);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc((is5Prime) ? "untranslated-5" : "untranslated-3"));
+	    }
 	else
-	    printf(firstTwoColumnsPctS "noncoding gene</TD></TR>\n", geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc("ncRNA"));
 	}
     if (i > 0)
 	{
 	int intronStart = gene->exonEnds[i-1], intronEnd = gene->exonStarts[i];
 	if (snpStart < intronStart+2 && snpEnd > intronStart)
-	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
-		   geneTrack, geneName,
-		   (geneIsRc ? 3 : 5));
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc(geneIsRc ? "splice-3" : "splice-5"));
 	else if (snpStart < intronEnd-2 && snpEnd > intronStart+2)
-	    printf(firstTwoColumnsPctS "intron</TD></TR>\n", geneTrack, geneName);
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc("intron"));
 	else if (snpStart < intronEnd && snpEnd > intronEnd-2)
-	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
-		   geneTrack, geneName,
-		   (geneIsRc ? 5 : 3));
+	    printf(firstTwoColumnsPctS "%s</TD></TR>\n", geneTrack, geneName,
+		   snpMisoLinkFromFunc(geneIsRc ? "splice-5" : "splice-3"));
 	}
     }
 }
@@ -16677,9 +16681,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
-    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTrack, geneName, (snpStart - end + 1),
-	   (strand[0] == '-' ? "up" : "down"));
+    boolean isRc = strand[0] == '-';
+    printf(firstTwoColumnsPctS "%s (%d bases %sstream)</TD></TR>\n",
+	   geneTrack, geneName, snpMisoLinkFromFunc(isRc ? "near-gene-5" : "near-gene-3"),
+	   (snpStart - end + 1), (isRc ? "up" : "down"));
     nearCount++;
     }
 sqlFreeResult(&sr);
@@ -16694,9 +16699,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
-    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTrack, geneName, (start - snpEnd + 1),
-	   (strand[0] == '-' ? "down" : "up"));
+    boolean isRc = strand[0] == '-';
+    printf(firstTwoColumnsPctS "%s (%d bases %sstream)</TD></TR>\n",
+	   geneTrack, geneName, snpMisoLinkFromFunc(isRc ? "near-gene-3" : "near-gene-5"),
+	   (start - snpEnd + 1), (isRc ? "down" : "up"));
     nearCount++;
     }
 sqlFreeResult(&sr);
@@ -16795,8 +16801,12 @@ switch (funcCode)
 	return "nonsense";
     case 42:
 	return "missense";
+    case 43:
+	return "stop-loss";
     case 44:
 	return "frameshift";
+    case 45:
+	return "cds-indel";
     default:
 	{
 	static char buf[16];
@@ -16823,7 +16833,11 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 	continue;
     char setting[512];
     safef(setting, sizeof(setting), "codingAnnoLabel_%s", tbl->name);
-    char *label = trackDbSettingOrDefault(tdb, setting, tbl->name);
+    char *label = trackDbSettingOrDefault(tdb, setting, NULL);
+    if (label == NULL && endsWith(tbl->name, "DbSnp"))
+	label = "dbSNP";
+    else
+	label = tbl->name;
     boolean hasBin = hIsBinned(database, tbl->name);
     boolean hasCoords = (sqlFieldIndex(conn, tbl->name, "chrom") != -1);
     int rowOffset = hasBin + (hasCoords ? 3 : 0);
@@ -16849,9 +16863,12 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 	    memSwapChar(anno->peptides[i], strlen(anno->peptides[i]), 'X', '*');
 	    if (anno->funcCodes[i] == 8)
 		continue;
+	    char *txName = anno->transcript;
+	    if (startsWith("NM_", anno->transcript))
+		txName = getSymbolForGeneName("refGene", anno->transcript);
 	    char *func = dbSnpFuncFromInt(anno->funcCodes[i]);
-	    printf("%s: %s ", anno->transcript, func);
-	    if (sameString(func, "frameshift"))
+	    printf("%s: %s ", txName, snpMisoLinkFromFunc(func));
+	    if (sameString(func, "frameshift") || sameString(func, "cds-indel"))
 		{
 		puts("<BR>");
 		continue;
@@ -16966,7 +16983,8 @@ if (version <= 127)
 	   snp->locType);
 printf("<TR><TD><B><A HREF=\"#Class\">Class</A></B></TD><TD>%s</TD></TR>\n", snp->class);
 printf("<TR><TD><B><A HREF=\"#Valid\">Validation</A></B></TD><TD>%s</TD></TR>\n", snp->valid);
-printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n", snp->func);
+printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n",
+       snpMisoLinkFromFunc(snp->func));
 printf("<TR><TD><B><A HREF=\"#MolType\">Molecule Type</A>&nbsp;&nbsp;</B></TD><TD>%s</TD></TR>\n",
        snp->molType);
 if (snp->avHet>0)
@@ -25329,10 +25347,7 @@ else
     }
 /* End of 1000+ line dispatch on table involving 100+ if/elses. */
 
-if (didCartHtmlStart)
-    cartHtmlEnd();
-else if (!plainTextDump)
-    webEnd();
+cartHtmlEnd();
 }
 
 struct hash *orgDbHash = NULL;
