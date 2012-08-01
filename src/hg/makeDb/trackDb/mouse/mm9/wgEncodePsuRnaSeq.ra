@@ -4,16 +4,17 @@ shortLabel PSU RnaSeq
 longLabel ENCODE PSU Hardison RnaSeq
 group regulation
 subGroup1 view Views Signal=Signal MinusRawSignal=Minus_Raw_Signal PlusRawSignal=Plus_Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 FVP=FV-progenitor FVLS=FVL-stem MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
+subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) FVP=FV-progenitor FVLS=FVL-stem MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
 subGroup3 sex Sex F=F M=M U=U B=B
 subGroup4 age Age E0=E0 E14HALF=E14.5 IMMORTAL=immortalized ADULT810WKS=adult-10-12wks ADULT5WKS=adult-5wks
 subGroup5 strain Strain s129=129 s2A4B=B10.H-2aH-4bp/Wts BALBCJ=BALB/cJ CD1=CD-1 C57BL6J=C57BL/6J UKN=Unknown
 subGroup6 readType ReadType R1X36=1x36  R1X41=1x41 R1X45=1x45 R1X55=1x55 R2X99D=2x99D
-subGroup7 treatment Treatment NONE=None DM2P5D=DMSO_2.0pct DIFFD3H=Estradiol_3hr DIFFD7H=Estradiol_7hr DIFFD14H=Estradiol_14hr DIFFD24H=Estradiol_24hr DIFFD30H=Estradiol_30hr 
+subGroup7 treatment Treatment aNONE=None bDM2P5D=DMSO_2.0pct cDIFFD3H=Estradiol_3hr dDIFFD7H=Estradiol_7hr eDIFFD14H=Estradiol_14hr fDIFFD24H=Estradiol_24hr gDIFFD30H=Estradiol_30hr 
 subGroup8 rep Replicate rep1=1 rep2=2
-filterComposite dimZ=multi dimA=all
+filterComposite dimZ=all dimA=multi
+dimensionAchecked R1X41,R1X45,R1X55,R2X99D
 dimensions dimensionX=cellType dimensionY=rep dimensionZ=treatment dimensionA=readType
-sortOrder cellType=+ strain=+ sex=+ readType=+ treatment=+ rep=+ view=+
+sortOrder cellType=+ treatment=+ readType=+ rep=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type rep=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex treatment=treatment age=age
 dragAndDrop subTracks
@@ -27,17 +28,17 @@ noInherit on
     view PlusRawSignal
     visibility full
     subTrack wgEncodePsuRnaSeq
-    viewLimits 0:50
+    viewLimits 1:5000
     autoScale off
     transformFunc NONE
     windowingFunction mean+whiskers
-    maxHeightPixels 100:24:16
+    maxHeightPixels 100:50:16
 
         track wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1
-        parent wgEncodePsuRnaSeqViewPlusRawSignal off
+        parent wgEncodePsuRnaSeqViewPlusRawSignal
         shortLabel G1E + 1
         longLabel G1E 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 1696370.000000
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -47,7 +48,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E + 2
         longLabel G1E 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig 1.000000 1180106.000000
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -57,7 +58,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel FVL-stem + 2
         longLabel FVL-stem 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bigWig 1.000000 2349197.000000
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -66,7 +67,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel FVL-stem + 1
         longLabel FVL-stem 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bigWig 1.000000 685909.000000
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -75,7 +76,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel FV-progenitor + 1
         longLabel FV-progenitor 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bigWig 1.000000 1818803.000000
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
@@ -84,16 +85,16 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel FV-progenitor + 2
         longLabel FV-progenitor 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bigWig 1.000000 1269997.000000
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
 
         track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1
-        parent wgEncodePsuRnaSeqViewPlusRawSignal off
+        parent wgEncodePsuRnaSeqViewPlusRawSignal
         shortLabel Erythroblast + 1
         longLabel Erythroblast 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bigWig 1.000000 23295684.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
@@ -103,7 +104,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Erythroblast + 2
         longLabel Erythroblast 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bigWig 1.000000 23344592.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
@@ -113,16 +114,16 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel MEP + 2
         longLabel MEP 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep2
         type bigWig 1.000000 1251896.000000
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
 
         track wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep1
-        parent wgEncodePsuRnaSeqViewPlusRawSignal off
+        parent wgEncodePsuRnaSeqViewPlusRawSignal
         shortLabel MEP + 1
         longLabel MEP 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep1
         type bigWig 1.000000 1133190.000000
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
@@ -131,7 +132,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 + 2
         longLabel G1E-ER4 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig 1.000000 766123.000000
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -141,7 +142,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 + 1
         longLabel G1E-ER4 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 1255930.000000
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -151,7 +152,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 3 + 1
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep1
         type bigWig 1.000000 1780000.000000
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -161,7 +162,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 3 + 2
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep2
         type bigWig 1.000000 1022279.000000
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -171,7 +172,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 14 + 1
         longLabel G1E-ER4 Estradiol 14hr 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep1
         type bigWig 1.000000 1384730.000000
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -181,7 +182,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 14 + 2
         longLabel G1E-ER4 Estradiol 14hr 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bigWig 1.000000 1053911.000000
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -191,7 +192,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 7 + 1
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep1
         type bigWig 1.000000 1100778.000000
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -201,7 +202,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 7 + 2
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep2
         type bigWig 1.000000 1463770.000000
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -211,7 +212,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 24 + 2
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep2
         type bigWig 1.000000 1174207.000000
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -221,7 +222,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 24 + 1
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep1
         type bigWig 1.000000 3903140.000000
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -231,7 +232,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 30 + 1
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep1
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep1
         type bigWig 1.000000 4327197.000000
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
@@ -241,17 +242,17 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel G1E-ER4 E2 30 + 2
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep2
+        subGroups view=PlusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep2
         type bigWig 1.000000 3705780.000000
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
         # was wgEncodePsuRnaSeqG1eer4UE0S129R2x99dDiffd30hPlusRawRep2 vsmalladi Tue Jul 31 13:15:19 2012
 
         track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1
-        parent wgEncodePsuRnaSeqViewPlusRawSignal off
+        parent wgEncodePsuRnaSeqViewPlusRawSignal
         shortLabel Megakaryocyte + 1
         longLabel Megakaryocyte 2x99D RNA-seq Plus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bigWig 1.000000 2187658.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
@@ -261,7 +262,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewPlusRawSignal off
         shortLabel Megakaryocyte + 2
         longLabel Megakaryocyte 2x99D RNA-seq Plus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bigWig 1.000000 301191.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
@@ -272,17 +273,17 @@ noInherit on
     view MinusRawSignal
     visibility full
     subTrack wgEncodePsuRnaSeq
-    viewLimits 0:50
+    viewLimits -5000:-1
     autoScale off
     transformFunc NONE
     windowingFunction mean+whiskers
-    maxHeightPixels 100:24:16
+    maxHeightPixels 100:50:16
 
         track wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1
-        parent wgEncodePsuRnaSeqViewMinusRawSignal off
+        parent wgEncodePsuRnaSeqViewMinusRawSignal
         shortLabel G1E - 1
         longLabel G1E 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig -3176578.000000 -1.000000
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -292,7 +293,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E - 2
         longLabel G1E 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig -1930728.000000 -1.000000
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -302,7 +303,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel FVL-stem - 1
         longLabel FVL-stem 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bigWig -683959.000000 -1.000000
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -311,7 +312,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel FVL-stem - 2
         longLabel FVL-stem 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bigWig -2309090.000000 -1.000000
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -320,7 +321,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel FV-progenitor - 2
         longLabel FV-progenitor 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bigWig -641807.000000 -1.000000
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
@@ -329,16 +330,16 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel FV-progenitor - 1
         longLabel FV-progenitor 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bigWig -1556197.000000 -1.000000
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
 
         track wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1
-        parent wgEncodePsuRnaSeqViewMinusRawSignal off
+        parent wgEncodePsuRnaSeqViewMinusRawSignal
         shortLabel Erythroblast - 1
         longLabel Erythroblast 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bigWig -26949678.000000 -1.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
@@ -348,17 +349,17 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Erythroblast - 2
         longLabel Erythroblast 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bigWig -21627596.000000 -1.000000
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
         # was wgEncodePsuRnaSeqErythroblUE14halfCd1R2x99dMinusRawRep2 vsmalladi Tue Jul 31 14:29:08 2012
 
         track wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep1
-        parent wgEncodePsuRnaSeqViewMinusRawSignal off
+        parent wgEncodePsuRnaSeqViewMinusRawSignal
         shortLabel MEP - 1
         longLabel MEP 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep1
         type bigWig -1321352.000000 -1.000000
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
@@ -367,7 +368,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel MEP - 2
         longLabel MEP 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep2
         type bigWig -2408713.000000 -1.000000
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
@@ -376,7 +377,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 - 2
         longLabel G1E-ER4 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig -1193225.000000 -1.000000
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -386,7 +387,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 - 1
         longLabel G1E-ER4 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig -1764097.000000 -1.000000
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -396,7 +397,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 3 - 1
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep1
         type bigWig -2498335.000000 -1.000000
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -406,7 +407,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 3 - 2
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep2
         type bigWig -2055533.000000 -1.000000
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -416,7 +417,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 14 - 2
         longLabel G1E-ER4 Estrdiol 14hr 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bigWig -1798329.000000 -1.000000
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -426,7 +427,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 14 - 1
         longLabel G1E-ER4 Estradiol 14hr 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep1
         type bigWig -2862238.000000 -1.000000
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -436,7 +437,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 7 - 1
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep1
         type bigWig -979957.000000 -1.000000
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -446,7 +447,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 7 - 2
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep2
         type bigWig -2091379.000000 -1.000000
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -456,7 +457,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 24 - 2
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep2
         type bigWig -2109241.000000 -1.000000
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -466,7 +467,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 24 - 1
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep1
         type bigWig -5729287.000000 -1.000000
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -476,7 +477,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 30 - 2
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep2
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep2
         type bigWig -4813498.000000 -1.000000
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
@@ -486,7 +487,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel G1E-ER4 E2 30 - 1
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep1
+        subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep1
         type bigWig -7733400.000000 -1.000000
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
@@ -496,17 +497,17 @@ noInherit on
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
         shortLabel Megakaryocyte - 2
         longLabel Megakaryocyte  2x99D RNA-seq Minus Raw Signal Rep 2 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bigWig -278887.000000 -1.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
         # was wgEncodePsuRnaSeqMegakaryoUE14halfCd1R2x99dMinusRawRep2 vsmalladi Tue Jul 31 14:29:07 2012
 
         track wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1
-        parent wgEncodePsuRnaSeqViewMinusRawSignal off
+        parent wgEncodePsuRnaSeqViewMinusRawSignal
         shortLabel Megakaryocyte - 1
         longLabel Megakaryocyte 2x99D RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
-        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bigWig -4032882.000000 -1.000000
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
@@ -517,17 +518,17 @@ noInherit on
 	view Signal
 	visibility full
 	subTrack wgEncodePsuRnaSeq
-	viewLimits 0:50
+	viewLimits 0:5000
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
-	maxHeightPixels 100:24:16
+	maxHeightPixels 100:50:16
 
         track wgEncodePsuRnaSeqG1eME0S129R1x36SigRep1
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E S 1
         longLabel G1E 1x36 RNA-seq Signal Rep 1 from ENCODE/PSU
-        subGroups view=Signal age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=Signal age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 48059.000000
         color 153,38,0
         # subId=6543 dateSubmitted=2012-03-28
@@ -536,7 +537,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E S 2
         longLabel G1E 1x55 RNA-seq Signal Rep 2 from ENCODE/PSU
-        subGroups view=Signal age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=Signal age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig 1.000000 272937.000000
         color 153,38,0
         # subId=6543 dateSubmitted=2012-03-28
@@ -545,7 +546,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E-ER4 E2 24 S 1
         longLabel G1E-ER4 Estradiol 24hr 1x36 RNA-seq Signal Rep 1 from ENCODE/PSU
-        subGroups view=Signal age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=DIFFD24H rep=rep1
+        subGroups view=Signal age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=fDIFFD24H rep=rep1
         type bigWig 1.000000 167377.000000
         color 153,38,0
         # subId=6539 dateSubmitted=2012-03-28
@@ -554,16 +555,16 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E-ER4 E2 24 S 2
         longLabel G1E-ER4 Estradiol 24hr 1x36 RNA-seq Signal Rep 2 from ENCODE/PSU
-        subGroups view=Signal age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=DIFFD24H rep=rep2
+        subGroups view=Signal age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=fDIFFD24H rep=rep2
         type bigWig 1.000000 162011.000000
         color 153,38,0
         # subId=6539 dateSubmitted=2012-03-28
 
         track wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep1
-        parent wgEncodePsuRnaSeqViewSignal off
+        parent wgEncodePsuRnaSeqViewSignal
         shortLabel CH12 S 1
         longLabel CH12 1x41 RNA-seq Signal Rep 1 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=NONE rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=aNONE rep=rep1
         type bigWig 1.000000 28931.000000
         color 86,180,233
         # subId=6538 dateSubmitted=2012-03-28
@@ -572,16 +573,16 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel CH12 S 2
         longLabel CH12 1x41 RNA-seq Signal Rep 2 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=NONE rep=rep2
+        subGroups view=Signal age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=aNONE rep=rep2
         type bigWig 1.000000 54769.000000
         color 86,180,233
         # subId=6538 dateSubmitted=2012-03-28
 
         track wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dSigRep1
-        parent wgEncodePsuRnaSeqViewSignal off
+        parent wgEncodePsuRnaSeqViewSignal
         shortLabel MEL DMSO 2% S 1
         longLabel MEL DMSO 2.0pct 1x45 RNA-seq Signal Rep 1 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=DM2P5D rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=bDM2P5D rep=rep1
         type bigWig 1.000000 1357689.000000
         color 86,180,233
         # subId=7703 dateSubmitted=2012-07-26
@@ -591,17 +592,17 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel MEL DMSO 2% S 2
         longLabel MEL DMSO 2.0pct 1x45 RNA-seq Signal Rep 2 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=DM2P5D rep=rep2
+        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=bDM2P5D rep=rep2
         type bigWig 1.000000 758536.000000
         color 86,180,233
         # subId=7703 dateSubmitted=2012-07-26
         # was wgEncodePsuRnaSeqMelMImmortalC57bl6R1x45Dm2p5dSigRep2 vsmalladi Mon Jul 30 09:20:39 2012
 
         track wgEncodePsuRnaSeqMelMImmortalUknR1x45SigRep1
-        parent wgEncodePsuRnaSeqViewSignal off
+        parent wgEncodePsuRnaSeqViewSignal
         shortLabel MEL S 1
         longLabel MEL 1x45 RNA-seq Signal Rep 1 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=NONE rep=rep1
+        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=aNONE rep=rep1
         type bigWig 1.000000 308139.000000
         color 86,180,233
         # subId=7704 dateSubmitted=2012-07-26
@@ -611,7 +612,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel MEL S 2
         longLabel MEL 1x45 RNA-seq Signal Rep 2 from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=NONE rep=rep2
+        subGroups view=Signal age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=aNONE rep=rep2
         type bigWig 1.000000 424496.000000
         color 86,180,233
         # subId=7704 dateSubmitted=2012-07-26
@@ -640,7 +641,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 1
         longLabel G1E 1x36 RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=6543 dateSubmitted=2012-03-28
@@ -649,7 +650,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 2
         longLabel G1E 1x55 RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=6543 dateSubmitted=2012-03-28
@@ -658,7 +659,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 24 A 1
         longLabel G1E-ER4 Estradiol 24hr 1x36 RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=DIFFD24H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=fDIFFD24H rep=rep1
         type bam
         color 153,38,0
         # subId=6539 dateSubmitted=2012-03-28
@@ -667,7 +668,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 24 A 2
         longLabel G1E-ER4 Estradiol 24hr 1x36 RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=DIFFD24H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R1X36 sex=M strain=s129 treatment=fDIFFD24H rep=rep2
         type bam
         color 153,38,0
         # subId=6539 dateSubmitted=2012-03-28
@@ -676,7 +677,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel CH12 A 1
         longLabel CH12 1x41 RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=NONE rep=rep1
+        subGroups view=Alignments age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=aNONE rep=rep1
         type bam
         color 86,180,233
         # subId=6538 dateSubmitted=2012-03-28
@@ -685,7 +686,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel CH12 A 2
         longLabel CH12 1x41 RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=NONE rep=rep2
+        subGroups view=Alignments age=IMMORTAL cellType=CH12 readType=R1X41 sex=F strain=s2A4B treatment=aNONE rep=rep2
         type bam
         color 86,180,233
         # subId=6538 dateSubmitted=2012-03-28
@@ -694,7 +695,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 2
         longLabel G1E 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -704,7 +705,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 1
         longLabel G1E 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1E readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=7565 dateSubmitted=2012-07-23
@@ -714,7 +715,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel FVL-stem A 1
         longLabel FVL-stem 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=Alignments age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -723,7 +724,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel FVL-stem A 2
         longLabel FVL-stem 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=Alignments age=ADULT810WKS cellType=FVLS readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=7566 dateSubmitted=2012-07-23
@@ -732,7 +733,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel FV-progenitor A 2
         longLabel FV-progenitor 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep2
+        subGroups view=Alignments age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
@@ -741,7 +742,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel FV-progenitor A 1
         longLabel FV-progenitor 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=NONE rep=rep1
+        subGroups view=Alignments age=ADULT810WKS cellType=FVP readType=R2X99D sex=B strain=BALBCJ treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=7567 dateSubmitted=2012-07-20
@@ -750,7 +751,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Erythroblast A 2
         longLabel Erythroblast 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
@@ -760,7 +761,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Erythroblast A 1
         longLabel Erythroblast 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=ERYTHROBL readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=7568 dateSubmitted=2012-07-20
@@ -770,7 +771,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEP A 2
         longLabel MEP 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep2
+        subGroups view=Alignments age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep2
         type bam
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
@@ -779,7 +780,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEP A 1
         longLabel MEP 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=NONE rep=rep1
+        subGroups view=Alignments age=ADULT5WKS cellType=MEP readType=R2X99D sex=F strain=C57BL6J treatment=aNONE rep=rep1
         type bam
         color 86,180,233
         # subId=7570 dateSubmitted=2012-07-23
@@ -788,7 +789,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 A 2
         longLabel G1E-ER4 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep2
         type bam
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -798,7 +799,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 A 1
         longLabel G1E-ER4 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bam
         color 153,38,0
         # subId=7606 dateSubmitted=2012-07-25
@@ -808,7 +809,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 3 A 2
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep2
         type bam
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -818,7 +819,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 3 A 1
         longLabel G1E-ER4 Estradiol 3hr 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD3H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=cDIFFD3H rep=rep1
         type bam
         color 153,38,0
         # subId=7607 dateSubmitted=2012-07-25
@@ -828,7 +829,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 14 A 2
         longLabel G1E-ER4 Estradiol 14hr 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bam
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -838,7 +839,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 14 A 1
         longLabel G1E-ER4 Estradiol 14hr 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD14H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep1
         type bam
         color 153,38,0
         # subId=7608 dateSubmitted=2012-07-25
@@ -848,7 +849,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 7 A 2
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep2
         type bam
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -858,7 +859,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 7 A 1
         longLabel G1E-ER4 Estradiol 7hr 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD7H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=dDIFFD7H rep=rep1
         type bam
         color 153,38,0
         # subId=7609 dateSubmitted=2012-07-25
@@ -868,7 +869,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 24 A 2
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep2
         type bam
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -878,7 +879,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 24 A 1
         longLabel G1E-ER4 Estradiol 24hr 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU 
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD24H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=fDIFFD24H rep=rep1
         type bam
         color 153,38,0
         # subId=7659 dateSubmitted=2012-07-26
@@ -888,7 +889,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEL DMSO 2% A 1
         longLabel MEL DMSO 2.0pct 1x45 RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=DM2P5D rep=rep1
+        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=bDM2P5D rep=rep1
         type bam
         color 86,180,233
         # subId=7703 dateSubmitted=2012-07-26
@@ -899,7 +900,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEL DMSO 2% A 2
         longLabel MEL DMSO 2.0pct 1x45 RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=DM2P5D rep=rep2
+        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=bDM2P5D rep=rep2
         type bam
         color 86,180,233
         # subId=7703 dateSubmitted=2012-07-26
@@ -909,7 +910,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEL A 1
         longLabel MEL 1x45 RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=NONE rep=rep1
+        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=aNONE rep=rep1
         type bam
         color 86,180,233
         # subId=7704 dateSubmitted=2012-07-26
@@ -919,7 +920,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel MEL A 2
         longLabel MEL 1x45 RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=NONE rep=rep2
+        subGroups view=Alignments age=IMMORTAL cellType=MEL readType=R1X45 sex=M strain=UKN treatment=aNONE rep=rep2
         type bam
         color 86,180,233
         # subId=7704 dateSubmitted=2012-07-26
@@ -929,7 +930,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 30 A 1
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep1
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep1
         type bam
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
@@ -939,7 +940,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 E2 30 A 2
         longLabel G1E-ER4 Estradiol 30hr 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E0 cellType=G1EER4 readType=R2X99D sex=M strain=s129 treatment=DIFFD30H rep=rep2
+        subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=gDIFFD30H rep=rep2
         type bam
         color 153,38,0
         # subId=7706 dateSubmitted=2012-07-27
@@ -949,7 +950,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Megakaryocyte A 1
         longLabel Megakaryocyte 2x99D RNA-seq Alignments Rep 1 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep1
         type bam
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
@@ -959,7 +960,7 @@ noInherit on
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel Megakaryocyte A 2
         longLabel Megakaryocyte 2x99D RNA-seq Alignments Rep 2 from ENCODE/PSU
-        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=NONE rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=MEGAKARYO readType=R2X99D sex=B strain=CD1 treatment=aNONE rep=rep2
         type bam
         color 86,180,233
         # subId=7733 dateSubmitted=2012-07-28
