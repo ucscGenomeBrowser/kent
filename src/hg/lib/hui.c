@@ -3633,8 +3633,8 @@ int count = slCount(filterBySet);
 if (count == 1)
     puts("<TABLE cellpadding=3><TR valign='top'>");
 else
-    printf("<B>Filter items by:</B> (select multiple categories and items - %s)"
-           "<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
+    printf("<B>%s items by:</B> (select multiple categories and items - %s)"
+           "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
 if (cartOptionalString(cart, "ajax") == NULL)

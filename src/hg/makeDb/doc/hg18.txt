@@ -32089,3 +32089,13 @@ ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
     
 
 #############################################################################
+2012-06-25 markd
+
+discovered that:
+   /hive/data/genomes/gs.19/build36/bed/blastz.tupBel1/axtChain/hg18.tupBel1.net.gz
+
+was not actually compressed
+   mv hg18.tupBel1.net.gz hg18.tupBel1.net
+   gzip  hg18.tupBel1.net
+
+#############################################################################
