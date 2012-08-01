@@ -1901,7 +1901,7 @@
     displayed. Otherwise, a database table with a single column <code>fileName</code>
     can specify the location of a local file or a URL.
     If the database table includes a column <code>seqName</code>, a different
-    VCF file or URL can be specified for each assembly sequence.</P>
+    BAM file or URL can be specified for each assembly sequence.</P>
     <P><em>Example can be found below.</em></P>
 </DIV>
 
@@ -2875,14 +2875,14 @@
 
 <DIV class="codingAnnoLabel_table"><span class="types snp"></span>
 <div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
-    <P><B>Deprecated; will probably be removed.</B>
+    <P><I>Deprecated; will probably be removed.</I>
     This specifies a text label for display of &lt;table&gt;'s
     predictions of a SNP's effect on a protein coding gene.</P>
 </DIV>
 
 <DIV class="codingAnnotations"><span class="types snp"></span>
 <div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
-    <P><B>Deprecated; will probably be removed.</B>
+    <P><I>Deprecated; will probably be removed.</I>
     This specifies one or more tables containing predictions of SNPs'
     effects on protein coding coding genes.</P>
 </DIV>
@@ -2963,19 +2963,19 @@
 <DIV class="snp_example"><span class="types snp"></span>
 <div class="format"><B>Example of a SNP track:</B></div>
     <pre>
-track snp135Common
-shortLabel Common SNPs(135)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
-group varRep
-priority 99.0911
-visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp135Seq
-snpExceptionDesc snp135ExceptionDesc
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
+    track snp135Common
+    shortLabel Common SNPs(135)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
+    group varRep
+    priority 99.0911
+    visibility dense
+    url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+    urlLabel dbSNP: 
+    snpSeq snp135Seq
+    snpExceptionDesc snp135ExceptionDesc
+    defaultGeneTracks knownGene
+    maxWindowToDraw 10000000
+    type bed 6 +
     </pre>
     <P>This track displays variants from dbSNP build 135 with Minor Allele Frequency (MAF)
     of at least 1%.  Flanking sequence file offsets come from the snp135Seq table,
