@@ -7075,7 +7075,7 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || sameString("altSeqLiftOverPsl", aliTable))
+    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
 	{
         rnaSeq = NULL;
 	char *trackName = hGetTrackForTable(database, aliTable);
