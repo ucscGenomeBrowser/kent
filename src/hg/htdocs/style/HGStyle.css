@@ -367,15 +367,6 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
         padding: 5px; 
-        background-color: #E0E0E0; 
-        -moz-border-radius: 3px; 
-        border-radius: 3px;
-        border: gray 1px solid;
-}
-
-body.hgGateway .positionDisplay {
-        padding: 5px; 
-        background-color: inherit;
         border: lightgray 1px solid;
 }
 
