@@ -2313,6 +2313,7 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=E14 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
         type bigWig 0.110000 65.769997
         color 65,105,225
+        viewLimits 0.2:10
         # subId=7123 dateSubmitted=2012-06-24
 
         track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdSig
@@ -2322,6 +2323,7 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=E14 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=C57BL6
         type bigWig 0.130000 33.009998
         color 65,105,225
+        viewLimits 0.2:3
         # subId=7122 dateSubmitted=2012-06-23
 
         track wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdSig
@@ -2331,6 +2333,7 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=IMMORTAL factor=H3K79ME2 cellType=CH12 control=STD sex=F strain=C57BL6
         type bigWig 0.140000 89.820000
         color 86,180,233
+        viewLimits 0.2:3
         # subId=7121 dateSubmitted=2012-06-23
 
         track wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdSig
@@ -2350,6 +2353,7 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=IMMORTAL factor=H3K04ME3 cellType=CH12 control=STD sex=F strain=C57BL6
         type bigWig 0.120000 42.500000
         color 86,180,233
+        viewLimits 0.2:10
         # subId=7118 dateSubmitted=2012-06-22
 
         track wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdSig
@@ -2378,5 +2382,6 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=IMMORTAL factor=H3K04ME1 cellType=CH12 control=STD sex=F strain=C57BL6
         type bigWig 0.130000 18.420000
         color 86,180,233
+        viewLimits 0.2:3
         # subId=7115 dateSubmitted=2012-06-20
 
