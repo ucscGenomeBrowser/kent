@@ -91,8 +91,8 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1 Hot
-        longLabel Th1 DNaseI DGF Hotspots from ENCODE/UW
+        shortLabel Th1 Hot 1
+        longLabel Th1 DNaseI DGF Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots cellType=t3TH01 treatment=aNONE rep=rep1
         type broadPeak
         # subId=1816 dateSubmitted=2010-06-21
@@ -471,7 +471,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1HotspotsRep2
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1 2 Hot
+        shortLabel Th1 Hot 2
         longLabel Th1 DNaseI DGF Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots cellType=t3TH01 treatment=aNONE rep=rep2
         type broadPeak
@@ -557,8 +557,8 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Th1 Pk
-        longLabel Th1 DNaseI DGF Peaks from ENCODE/UW
+        shortLabel Th1 Pk 1
+        longLabel Th1 DNaseI DGF Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=t3TH01 treatment=aNONE rep=rep1
         type narrowPeak
         # subId=1816 dateSubmitted=2010-06-21
@@ -1030,8 +1030,8 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Th1 Sig
-        longLabel Th1 DNaseI DGF Per-base Signal from ENCODE/UW
+        shortLabel Th1 Sig 1
+        longLabel Th1 DNaseI DGF Per-base Signal Rep 1 from ENCODE/UW
         subGroups view=Signal cellType=t3TH01 treatment=aNONE rep=rep1
         type bigWig 1.000000 15550.000000
         # subId=1816 dateSubmitted=2010-06-21
@@ -1496,8 +1496,8 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1 Raw
-        longLabel Th1 DNaseI DGF Raw Signal from ENCODE/UW
+        shortLabel Th1 Raw 1
+        longLabel Th1 DNaseI DGF Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRaw cellType=t3TH01 treatment=aNONE rep=rep1
         type bigWig 1.000000 108696.000000
         # subId=1816 dateSubmitted=2010-06-21
