@@ -4732,7 +4732,7 @@ tag IPSHFIB2IPS4
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell line 4 derived from skin fibroblast
+description induced pluripotent stem cell line 4 derived from skin fibroblast of a 30 year old donor, same donor as iPS_hFib2_iPS5
 lineage missing
 karyotype normal
 sex M
@@ -4750,7 +4750,8 @@ tag IPSHFIB2IPS5
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell line 5 derived from skin fibroblast
+description induced pluripotent stem cell line 5 derived from skin fibroblast of
+ a 30 year old donor, same donor as iPS_hFib2_iPS4
 lineage missing
 karyotype normal
 sex M

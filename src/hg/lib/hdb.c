@@ -2166,37 +2166,6 @@ hDisconnectCentral(&conn);
 return ok;
 }
 
-boolean hgPbOk(char *database)
-/* Return TRUE if ok to put up Proteome Browser (pbTracks)
- * on this database. */
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[256];
-char **row;
-struct sqlResult *sr = NULL;
-boolean ok;
-boolean dbDbHasPbOk;
-
-dbDbHasPbOk = FALSE;
-safef(query, sizeof(query), "describe dbDb");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameWord(row[0], "hgPbOk"))
-        {
-        dbDbHasPbOk = TRUE;
-        }
-    }
-sqlFreeResult(&sr);
-if (!dbDbHasPbOk) return(FALSE);
-
-safef(query, sizeof(query),
-        "select hgPbOk from dbDb where name = '%s'", database);
-ok = sqlQuickNum(conn, query);
-hDisconnectCentral(&conn);
-return ok;
-}
-
 boolean hgPcrOk(char *database)
 /* Return TRUE if ok to put up hgPcr on this database. */
 {

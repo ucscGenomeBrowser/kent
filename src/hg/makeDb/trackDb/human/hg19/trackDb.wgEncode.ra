@@ -38,8 +38,8 @@ include wgEncodeFsuRepliChip.release2.ra
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra beta,public
-include wgEncodeGisRnaPet.release2.ra alpha
+include wgEncodeGisRnaPet.ra public
+include wgEncodeGisRnaPet.release2.ra alpha,beta
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -93,8 +93,8 @@ include wgEncodeOpenChromDnase.release3.ra alpha
 include wgEncodeUwDnase.release6.ra
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra beta,public
-include wgEncodeUwDgf.release4.ra alpha
+include wgEncodeUwDgf.release3.ra public
+include wgEncodeUwDgf.release4.ra alpha,beta
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
