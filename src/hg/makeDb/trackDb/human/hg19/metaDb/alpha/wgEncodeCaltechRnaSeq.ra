@@ -2003,7 +2003,7 @@ labExpId SL2971
 labVersion 02971
 localization cell
 md5sum 4cb30a64d329b94572729973b2b6bf91
-objectStatus replaced
+objStatus replaced
 project wgEncode
 readType 2x75
 replicate 2
@@ -16989,4 +16989,4 @@ submittedDataVersion V4 - Previous version off by one base
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
 view Signal
 
-# MAGIC: 349736041
+# MAGIC: -245781715
