@@ -84,7 +84,7 @@ html wgEncodeGisRnaPet.release2
         track wgEncodeGisRnaPetProstateCellPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel Pros cell pA+ 1
-        longLabel Prostate whole cell polyA+ clone-based RNA PET Clusters Pooled Rep 1 from ENCODE/GIS
+        longLabel Prostate whole cell polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=cPROSTATE cloned=Based localization=cell rnaExtract=PAP rep=rep1 rank=rank1
         type bed 6 +
         # subId=1989 dateSubmitted=2010-07-22
@@ -806,7 +806,7 @@ html wgEncodeGisRnaPet.release2
         track wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel Pros cell pA+ - 1
-        longLabel Prostate whole cell polyA+ clone-based RNA PET Minus signal Rep 1 from ENCODE/GIS
+        longLabel Prostate whole cell polyA+ clone-based RNA PET Minus sig Rep 1 from ENCODE/GIS
         subGroups view=MinusRawSignal cellType=cPROSTATE cloned=Based localization=cell rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 47234.000000
         # subId=1989 dateSubmitted=2010-07-22
