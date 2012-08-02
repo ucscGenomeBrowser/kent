@@ -267,16 +267,18 @@ double weight = 1; // start at center: alpha to the 0th power
 int i;
 for (i=helper->center;  i >= 0;  i--)
     {
-    if (isRef(kid1, i) != isRef(kid2, i))
+    if (hasUnk(kid1, i) != hasUnk(kid2, i))
+	; // no penalty!
+    else if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
-    else if (hasUnk(kid1, i) != hasUnk(kid2, i))
-	distance += weight/2;
     weight *= helper->alpha;
     }
 weight = helper->alpha; // start at center+1: alpha to the 1st power
 for (i=helper->center+1;  i < helper->len;  i++)
     {
-    if (isRef(kid1, i) != isRef(kid2, i))
+    if (hasUnk(kid1, i) != hasUnk(kid2, i))
+	; // no penalty!
+    else if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
     weight *= helper->alpha;
     }
@@ -408,17 +410,20 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	    {
 	    // first chromosome:
 	    c1->leafCount = 1;
-	    c1->gtHapIx = gtIx << 1;
 	    if (gt->hapIxA < 0)
 		c1->unkCounts[countIx] = 1;
 	    else if (gt->hapIxA == 0)
 		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
+		{
 		haveHaploid = TRUE;
+		c1->gtHapIx = gtIx;
+		}
 	    else
 		{
-		c2->leafCount = 1;
+		c1->gtHapIx = gtIx << 1;
 		c2->gtHapIx = (gtIx << 1) | 1;
+		c2->leafCount = 1;
 		if (gt->hapIxB < 0)
 		    c2->unkCounts[countIx] = 1;
 		else if (gt->hapIxB == 0)
@@ -443,7 +448,8 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	    {
 	    if (c->next->leafCount == 0)
 		c->next = c->next->next;
-	    c = c->next;
+	    else
+		c = c->next;
 	    }
 	}
     }
@@ -481,7 +487,7 @@ if (rec->alleleCount < 2)
     return;
     }
 const struct vcfFile *vcff = rec->file;
-int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtOtherCount = 0;
+int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtUnkCount = 0, gtOtherCount = 0;
 int i;
 for (i=0;  i < vcff->genotypeCount;  i++)
     {
@@ -492,6 +498,8 @@ for (i=0;  i < vcff->genotypeCount;  i++)
 	gtAltAltCount++;
     else if ((gt->hapIxA == 0 && gt->hapIxB == 1) || (gt->hapIxA == 1 && gt->hapIxB == 0))
 	gtRefAltCount++;
+    else if (gt->hapIxA < 0 || gt->hapIxB < 0)
+	gtUnkCount++;
     else
 	gtOtherCount++;
     }
@@ -501,9 +509,15 @@ if (revCmplDisp)
     for (i=0;  i < rec->alleleCount;  i++)
 	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
     }
-dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->alleles[0], rec->alleles[0], gtRefRefCount,
-	       rec->alleles[0], rec->alleles[1], gtRefAltCount,
-	       rec->alleles[1], rec->alleles[1], gtAltAltCount);
+if (sameString(chromName, "chrY"))
+    dyStringPrintf(dy, "%s:%d %s:%d",
+		   rec->alleles[0], gtRefRefCount, rec->alleles[1], gtRefAltCount);
+else
+    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->alleles[0], rec->alleles[0], gtRefRefCount,
+		   rec->alleles[0], rec->alleles[1], gtRefAltCount,
+		   rec->alleles[1], rec->alleles[1], gtAltAltCount);
+if (gtUnkCount > 0)
+    dyStringPrintf(dy, " unknown:%d", gtUnkCount);
 if (gtOtherCount > 0)
     dyStringPrintf(dy, " other:%d", gtOtherCount);
 // Restore original values of pooled strings.
@@ -628,17 +642,30 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
     for (gtHapOrderIx = gtHapOrderIxStart;  gtHapOrderIx < gtHapOrderIxEnd;  gtHapOrderIx++)
 	{
 	int gtHapIx = gtHapOrder[gtHapOrderIx];
-	int hapIx = gtHapIx & 1;
-	int gtIx = gtHapIx >>1;
+	int ploidy = (sameString(chromName, "chrY")) ? 1 : 2;
+	int hapIx = (ploidy == 1) ? 0 : gtHapIx & 1;
+	int gtIx = (ploidy == 1) ? gtHapIx : gtHapIx >>1;
 	struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
-	if (!gt->isPhased && gt->hapIxA != gt->hapIxB)
-	    unks++;
+	if (ploidy == 2)
+	    {
+	    if (!gt->isPhased && gt->hapIxA != gt->hapIxB)
+		unks++;
+	    else
+		{
+		int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
+		if (alIx < 0)
+		    unks++;
+		else if (alIx > 0)
+		    alts++;
+		else
+		    refs++;
+		}
+	    }
 	else
 	    {
-	    int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-	    if (alIx < 0)
+	    if (gt->hapIxA < 0)
 		unks++;
-	    else if (alIx > 0)
+	    else if (gt->hapIxA > 0)
 		alts++;
 	    else
 		refs++;
