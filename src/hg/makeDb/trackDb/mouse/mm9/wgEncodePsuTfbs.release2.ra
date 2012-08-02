@@ -272,7 +272,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 14hr
-        longLabel G1E-ER4 GATA1 Estradiol 14 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU 
+        longLabel G1E-ER4 GATA1 Estradiol 14 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU 
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=dDIFFD14H rep=rep1
         type broadPeak
         color 153,38,0
@@ -281,7 +281,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 30hr
-        longLabel G1E-ER4 GATA1 Estradiol 30 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 30 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=fDIFFD30H rep=rep1
         type broadPeak
         color 153,38,0
@@ -290,7 +290,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 24hr
-        longLabel G1E-ER4 GATA1 Estradiol 24 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 24 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=eDIFFD24H rep=rep1
         type broadPeak
         color 153,38,0
@@ -299,7 +299,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 0hr
-        longLabel G1E-ER4 GATA1 Estradiol 0 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 0 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=aNONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -308,7 +308,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 3hr
-        longLabel G1E-ER4 GATA1 Estradiol 3 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 3 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=bDIFFD3H rep=rep1
         type broadPeak
         color 153,38,0
@@ -317,7 +317,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hPkRep1
         parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E-ER GATA1 7hr
-        longLabel G1E-ER4 GATA1 Estradiol 7 hr Time Course TFBS ChIP-seq Peaks from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 7 hr TC TFBS ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=cDIFFD7H rep=rep1
         type broadPeak
         color 153,38,0
@@ -611,7 +611,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 14hr
-        longLabel G1E-ER4 GATA1 Estradiol 14 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 14 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=dDIFFD14H rep=rep1
         type bigWig 1.000000 214.000000
         color 153,38,0
@@ -620,7 +620,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 30hr
-        longLabel G1E-ER4 GATA1 Estradiol 30 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 30 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=fDIFFD30H rep=rep1
         type bigWig 1.000000 230.000000
         color 153,38,0
@@ -629,7 +629,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 24hr
-        longLabel G1E-ER4 GATA1 Estradiol 24 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 24 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=eDIFFD24H rep=rep1
         type bigWig 1.000000 166.000000
         color 153,38,0
@@ -638,7 +638,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 0hr
-        longLabel G1E-ER4 GATA1 Estradiol 0 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 0 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 298.000000
         color 153,38,0
@@ -647,7 +647,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 3hr
-        longLabel G1E-ER4 GATA1 Estradiol 3 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 3 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=bDIFFD3H rep=rep1
         type bigWig 1.000000 268.000000
         color 153,38,0
@@ -656,7 +656,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER GATA1 7hr
-        longLabel G1E-ER4 GATA1 Estradiol 7 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 GATA1 Estradiol 7 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=cDIFFD7H rep=rep1
         type bigWig 1.000000 276.000000
         color 153,38,0
@@ -665,7 +665,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 30hr
-        longLabel G1E-ER4 Input Estradiol 30 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 30 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=fDIFFD30H rep=rep1
         type bigWig 1.000000 114.000000
         color 153,38,0
@@ -674,7 +674,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 0hr
-        longLabel G1E-ER4 Input Estradiol 0 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 0 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 106.000000
         color 153,38,0
@@ -683,7 +683,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 3hr
-        longLabel G1E-ER4 Input Estradiol 3 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 3 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=bDIFFD3H rep=rep1
         type bigWig 1.000000 90.000000
         color 153,38,0
@@ -692,7 +692,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 7hr
-        longLabel G1E-ER4 Input Estradiol 7 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 7 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=cDIFFD7H rep=rep1
         type bigWig 1.000000 112.000000
         color 153,38,0
@@ -701,7 +701,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 14hr
-        longLabel G1E-ER4 Input Estradiol 14 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 14 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=dDIFFD14H rep=rep1
         type bigWig 1.000000 114.000000
         color 153,38,0
@@ -710,7 +710,7 @@ html wgEncodePsuTfbs.release2
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1
         parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E-ER Input 24hr
-        longLabel G1E-ER4 Input Estradiol 24 hr Time Course TFBS ChIP-seq Signal from ENCODE/PSU
+        longLabel G1E-ER4 Input Estradiol 24 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=eDIFFD24H rep=rep1
         type bigWig 1.000000 120.000000
         color 153,38,0

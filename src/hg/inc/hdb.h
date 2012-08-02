@@ -189,10 +189,6 @@ boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear)
  * on this database. */
 
-boolean hgPbOk(char *database);
-/* Return TRUE if ok to put up Proteome Browser (pbTracks)
- * on this database. */
-
 boolean hgPcrOk(char *database);
 /* Return TRUE if ok to put up hgPcr on this database. */
 
