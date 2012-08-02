@@ -11,10 +11,7 @@ subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
 subGroup6 rank Replicate_rank rank1=1st rank2=2nd none=Pooled
 subGroup7 cloned Library_Prep_Method Free=Clone-free Based=Clone-based
 dimensions dimensionX=localization dimensionY=cellType dimensionB=rank dimensionD=cloned dimensionsC=rnaExtract
-dimensionBchecked rank1,none   
-#dimensionDchecked Free,Based
-#dimensionCchecked PAP
-filterComposite dimensionB=multi dimensionC=all dimensionD=all
+filterComposite dimensionB=all dimensionC=all dimensionD=all
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract labVersion=Lab_Version replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession seqPlatform=Platform fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ localization=+ cloned=+ view=- rank=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -155,13 +152,14 @@ html wgEncodeGisRnaPet.release2
         color 179,0,134
         # subId=4026 dateSubmitted=2011-05-05
 
-        track wgEncodeGisRnaPetHelas3CellPapClustersRep2
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel HeLa cell pA+ 2
-        longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Clusters Rep 2 from ENCODE/GIS
-        subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
-        type bed 6 +
-        color 0,119,158
+        # Revoked
+        # track wgEncodeGisRnaPetHelas3CellPapClustersRep2
+        # parent wgEncodeGisRnaPetViewClusters off
+        # shortLabel HeLa cell pA+ 2
+        # longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Clusters Rep 2 from ENCODE/GIS
+        # subGroups view=Clusters cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
+        # type bed 6 +
+        # color 0,119,158
         # subId=4029 dateSubmitted=2011-04-29
 
         track wgEncodeGisRnaPetHelas3CellPapClustersRep1
@@ -444,13 +442,14 @@ html wgEncodeGisRnaPet.release2
         color 46,0,184
         # subId=1984 dateSubmitted=2010-08-18
 
-        track wgEncodeGisRnaPetHelas3CellPapAlnRep2
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel HeLa cell pA+ A 2
-        longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Alignments Rep 2 from ENCODE/GIS
-        subGroups view=Alignments cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
-        type bam
-        color 0,119,158
+        #REVOKED
+        #track wgEncodeGisRnaPetHelas3CellPapAlnRep2
+        #parent wgEncodeGisRnaPetViewAlignments off
+        #shortLabel HeLa cell pA+ A 2
+        #longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Alignments Rep 2 from ENCODE/GIS
+        #subGroups view=Alignments cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
+        #type bam
+        #color 0,119,158
         # subId=4029 dateSubmitted=2011-04-29
 
         track wgEncodeGisRnaPetHelas3CellPapAlnRep1
@@ -884,13 +883,14 @@ html wgEncodeGisRnaPet.release2
         color 179,0,134
         # subId=4026 dateSubmitted=2010-10-09
 
-        track wgEncodeGisRnaPetHelas3CellPapMinusRawRep2
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel HeLa cell pA+ - 2
-        longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Minus Signal Rep 2 from ENCODE/GIS
-        subGroups view=MinusRawSignal cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
-        type bigWig 1.000000 1358239.000000
-        color 0,119,158
+        #REVOKED
+        #track wgEncodeGisRnaPetHelas3CellPapMinusRawRep2
+        #parent wgEncodeGisRnaPetViewMinusRawSig off
+        #shortLabel HeLa cell pA+ - 2
+        #longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Minus Signal Rep 2 from ENCODE/GIS
+        #subGroups view=MinusRawSignal cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
+        #type bigWig 1.000000 1358239.000000
+        #color 0,119,158
         # subId=4029 dateSubmitted=2011-04-29
 
         track wgEncodeGisRnaPetHelas3CellPapMinusRawRep1
@@ -1306,13 +1306,14 @@ html wgEncodeGisRnaPet.release2
         # subId=4026 dateSubmitted=2011-05-05
         # subId=2120 dateSubmitted=2010-10-09
 
-        track wgEncodeGisRnaPetHelas3CellPapPlusRawRep2
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel HeLa cell pA+ + 2
-        longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Plus Signal Rep 2 from ENCODE/GIS
-        subGroups view=PlusRawSignal cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
-        type bigWig 1.000000 906404.000000
-        color 0,119,158
+        #REVOKED
+        #track wgEncodeGisRnaPetHelas3CellPapPlusRawRep2
+        #parent wgEncodeGisRnaPetViewPlusRawSig off
+        #shortLabel HeLa cell pA+ + 2
+        #longLabel HeLa-S3 whole cell polyA+ clone-free RNA PET Plus Signal Rep 2 from ENCODE/GIS
+        #subGroups view=PlusRawSignal cellType=bHELAS3 cloned=Free localization=cell rnaExtract=PAP rep=rep2 rank=rank2
+        #type bigWig 1.000000 906404.000000
+        #color 0,119,158
         # subId=4029 dateSubmitted=2011-04-29
 
         track wgEncodeGisRnaPetHelas3CellPapPlusRawRep1
