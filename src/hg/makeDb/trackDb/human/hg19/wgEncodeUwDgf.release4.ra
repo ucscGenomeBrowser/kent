@@ -384,7 +384,7 @@ wgEncode 1
         track wgEncodeUwDgfLhcnm2Diff4dHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel LHCNM2 DIFF4d Hot
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Hotspots from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type broadPeak
         # subId=6421 dateSubmitted=2012-03-28
@@ -857,7 +857,7 @@ wgEncode 1
         track wgEncodeUwDgfLhcnm2Diff4dPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel LHCNM2 DIFF4d Pk
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Peaks from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type narrowPeak
         # subId=6421 dateSubmitted=2012-03-28
@@ -1323,7 +1323,7 @@ wgEncode 1
         track wgEncodeUwDgfLhcnm2Diff4dSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel LHCNM2 DIFF4d Sig
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Per-base Signal from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type bigWig 1.000000 102421.000000
         # subId=6421 dateSubmitted=2012-03-28
@@ -1789,7 +1789,7 @@ wgEncode 1
         track wgEncodeUwDgfLhcnm2Diff4dRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel LHCNM2 DIFF4d Raw
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Raw Signal from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type bigWig 1.000000 591867.000000
         # subId=6421 dateSubmitted=2012-03-28
