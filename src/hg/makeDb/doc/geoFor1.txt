@@ -357,9 +357,9 @@ geoFor1.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to RHO gene displays  (DONE - 2012-07-27 - Hiram)
+# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="JH740102:562849-570462" where name="geoFor1";' \
+'update dbDb set defaultPos="JH739914:135428-435957" where name="geoFor1";' \
 	hgcentraltest
 
 ############################################################################
@@ -958,7 +958,7 @@ popd > /dev/null
 
     cat  << '_EOF_' > template
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/maf/$(root1)}
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/maf/$(root1).maf}
 #ENDLOOP
 '_EOF_'
 # << happy emacs
@@ -969,5 +969,46 @@ popd > /dev/null
     # the tac reverses the list to get the small jobs first
     gensub2 maf.list single template stdout | tac > jobList
     para -ram=8g create jobList
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      61884s    1031.39m    17.19h    0.72d  0.002 y
+# IO & Wait Time:                  5543s      92.39m     1.54h    0.06d  0.000 y
+# Average job time:                 263s       4.39m     0.07h    0.00d
+# Longest finished job:            2861s      47.68m     0.79h    0.03d
+# Submission to last job:          2901s      48.35m     0.81h    0.03d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r--  1 1524521286 Sep 28 13:28 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    mkdir /gbdb/geoFor1/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/geoFor1/multiz7way
+    cd /scratch/tmp
+    time nice -n +17 hgLoadMaf geoFor1 multiz7way
+    #   Loaded 3644965 mafs in 1 files from /gbdb/geoFor1/multiz7way
+    #   real    7m16.829s
+
+    time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 geoFor1 multiz7waySummary \
+	/gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   Created 328866 summary blocks from 10230752 components and 3644965
+    #   mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   real    5m11.041s
+
+    wc -l multiz7way*.tab
+    #   3644965 multiz7way.tab
+    #   328866 multiz7waySummary.tab
+    #   3973831 total
+
+    rm multiz7way*.tab
 
 ##############################################################################
