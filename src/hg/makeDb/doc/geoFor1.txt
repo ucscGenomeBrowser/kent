@@ -411,6 +411,34 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.melUnd1.swap lastz.melUnd1
 
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    time doRecipBest.pl geoFor1 melUnd1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    31m15.597s
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.melUnd1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMelUnd1 rbest.link.bed
+    #   Read 16927102 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMelUnd1
+    #   799972446 bases of 1041286029 (76.825%) in intersection
+    #   real    1m42.662s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melUnd1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMelUnd1 syntenic.link.bed
+    #   Read 16427533  elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMelUnd1
+    #   787091148 bases of 1041286029 (75.588%) in intersection
+    #   real    1m35.489s
+    # cleanup
+    hgsql -e "drop table tLinkMelUnd1;" geoFor1
+    rm chain.tab bed.tab
+
 ##############################################################################
 # lastz hg19 Human (DONE - 2012-02-29 - Hiram)
     # original alignment to human
@@ -432,6 +460,43 @@ geoFor1.perChromTables = no
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.hg19.swap lastz.hg19
+
+    # lets see what synNets look like:
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m28.817s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time doRecipBest.pl geoFor1 hg19 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    8m27.775s
+    # to measure the chain coverage, this test load leaves the file link.tab;
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainHg19RBest geoFor1.hg19.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkHg19 rbest.link.bed
+    #   Read 2323598 elements of size 5 from link.bed
+    time featureBits geoFor1 tLinkHg19
+    #   83552974 bases of 1041286029 (8.024%) in intersection
+    #   real    0m20.469s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainHg19RBest geoFor1.hg19.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkHg19 syntenic.link.bed
+    #   Read 2012071 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkHg19
+    #   74395958 bases of 1041286029 (7.145%) in intersection
+    #   real    0m20.854s
+    # cleanup
+    hgsql -e "drop table tLinkHg19;" geoFor1
+    rm chain.tab bed.tab
 
 #########################################################################
 # lastz mm10 Mouse (DONE - 2012-02-29 - Hiram)
@@ -455,6 +520,44 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+    # lets see what synNets look like:
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m7.016s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    time doRecipBest.pl geoFor1 mm10 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    11m32.814s
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMm10RBest geoFor1.mm10.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMm10 rbest.link.bed
+    #   Read 1956367 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMm10
+    #   72866028 bases of 1041286029 (6.998%) in intersection
+    #   real    0m18.893s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMm10RBest geoFor1.mm10.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMm10 syntenic.link.bed
+    #   Read 1572202 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMm10
+    #   61422245 bases of 1041286029 (5.899%) in intersection
+    #   real    0m15.096s
+
+    # cleanup
+    hgsql -e "drop table tLinkMm10;" geoFor1
+    rm chain.tab bed.tab
+
 #########################################################################
 # lastz melGal1 Turkey (DONE - 2012-02-29 - Hiram)
     # original alignment to turkey:
@@ -477,6 +580,33 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.melGal1.swap lastz.melGal1
 
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap
+    time doRecipBest.pl geoFor1 melGal1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    27m31.386s
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melGal1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMelGal1 rbest.link.bed
+    #   Read 17557206 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMelGal1
+    #   665947116 bases of 1041286029 (63.954%) in intersection
+    #   real    1m43.702s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melGal1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMelGal1 syntenic.link.bed
+    #   Read 17106461 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMelGal1
+    #   653147512 bases of 1041286029 (62.725%) in intersection
+    #   real    1m42.611s
+    # cleanup
+    hgsql -e "drop table tLinkMelGal1;" geoFor1
+    rm chain.tab bed.tab
+
 ##############################################################################
 # lastz galGal4 Chicken (DONE - 2012-02-30 - Hiram)
     # original alignment to turkey:
@@ -493,14 +623,39 @@ geoFor1.perChromTables = no
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #   real    81m0.123s
-    cat fb.geoFor1.chainHg19Link.txt
+    cat fb.geoFor1.chainGalGal4Link.txt 
     #   736380222 bases of 1041286029 (70.718%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.galGal4.swap lastz.galGal4
 
-    cat fb.taeGut1.chainGeoFor1Link.txt
-    #   1126123816 bases of 1222864691 (92.089%) in intersection
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    time doRecipBest.pl geoFor1 galGal4 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    46m34.879s
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.galGal4.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkGalGal4 rbest.link.bed
+    #   Read 18093500 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkGalGal4
+    #   702254321 bases of 1041286029 (67.441%) in intersection
+    #   real    1m44.816s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.galGal4.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkGalGal4 syntenic.link.bed
+    #   Read 17708098 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkGalGal4
+    #   692412176 bases of 1041286029 (66.496%) in intersection
+    #   real    1m44.363s
+    # cleanup
+    hgsql -e "drop table tLinkGalGal4;" geoFor1
+    rm chain.tab bed.tab
 
 ##############################################################################
 # lastz taeGut1 Finch (DONE - 2012-02-31 - Hiram)
@@ -523,6 +678,33 @@ geoFor1.perChromTables = no
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.taeGut1.swap lastz.taeGut1
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    time doRecipBest.pl geoFor1 taeGut1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    50m20.041s
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.taeGut1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkTaeGut1 rbest.link.bed
+    #   Read 8455294 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkTaeGut1
+    #   922278077 bases of 1041286029 (88.571%) in intersection
+    #   real    1m3.219s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.taeGut1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkTaeGut1 syntenic.link.bed
+    #   Read 8190644 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkTaeGut1
+    #   914125880 bases of 1041286029 (87.788%) in intersection
+    #   real    0m52.942s
+    # cleanup
+    hgsql -e "drop table tLinkTaeGut1;" geoFor1
+    rm chain.tab bed.tab
 
 ##############################################################################
 ## 7-Way Multiz (WORKING - 2012-07-31 - Hiram)
@@ -666,16 +848,19 @@ XXX decide what types to use here
     for G in `sed -e "s/geoFor1 //" species.list`
     do
 	mkdir mafLinks/$G
-	if [ -s ${H}/lastz.${G}/mafRBestNet/chr1.maf.gz ]; then
+	if [ -s ${H}/lastz.${G}/mafRBestNet/geoFor1.${G}.rbest.maf.gz ]; then
 	    echo "$G - recipBest"
+	    echo ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
 	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
 	else
-	    if [ -s ${H}/lastz.${G}/mafSynNet/chr1.maf.gz ]; then
+	    if [ -s ${H}/lastz.${G}/axtChain/geoFor1.${G}.synNet.maf.gz ]; then
 		echo "$G - synNet"
-		ln -s ${H}/lastz.$G/mafSynNet/*.maf.gz ./mafLinks/$G
+		echo ln -s ${H}/lastz.$G/axtChain/geoFor1.${G}.synNet.maf.gz ./mafLinks/$G
+		ln -s ${H}/lastz.$G/axtChain/geoFor1.${G}.synNet.maf.gz ./mafLinks/$G
 	    else
-		if [ -s ${H}/lastz.${G}/mafNet/chr1.maf.gz ]; then
+		if [ -s ${H}/lastz.${G}/mafNet/geoFor1.${G}.net.maf.gz ]; then
 		    echo "$G - mafNet"
+		    echo ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
 		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
 		else
 		    echo "missing directory lastz.${G}/*Net"
@@ -683,13 +868,106 @@ XXX decide what types to use here
 	    fi
 	fi
     done
+    # would like to use the synNets for the other birds, and recip best
+    #   to human and mouse
+ln -s /hive/data/genomes/geoFor1/bed/lastz.taeGut1/axtChain/geoFor1.taeGut1.synNet.maf.gz ./mafLinks/taeGut1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.melGal1/axtChain/geoFor1.melGal1.synNet.maf.gz ./mafLinks/melGal1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.galGal4/axtChain/geoFor1.galGal4.synNet.maf.gz ./mafLinks/galGal4
+ln -s /hive/data/genomes/geoFor1/bed/lastz.melUnd1/axtChain/geoFor1.melUnd1.synNet.maf.gz ./mafLinks/melUnd1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.hg19/mafRBestNet/geoFor1.hg19.rbest.maf.gz ./mafLinks/hg19
+ln -s /hive/data/genomes/geoFor1/bed/lastz.mm10/mafRBestNet/geoFor1.mm10.rbest.maf.gz ./mafLinks/mm10
 
     #	verify the alignment type is correct:
     for D in `grep -v geoFor1 /hive/users/hiram/bigWays/geoFor1.7way/ordered.list`
 do
-    ls -l mafLinks/$D/chr1.maf.gz | awk '{print $NF}'
+    ls -l mafLinks/$D/*.maf.gz | awk '{print $NF}'
 done
     #	compare to the list at:
-    #	http://genomewiki.ucsc.edu/index.php/Mm10_Genome_size_statistics
+    #	http://genomewiki.ucsc.edu/index.php/GeoFor1_Genome_size_statistics
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+    for D in `sed -e "s/geoFor1 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1294
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/splitRun
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = geoFor1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/maf/$(root1)}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobList
 
 ##############################################################################

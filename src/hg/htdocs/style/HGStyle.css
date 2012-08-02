@@ -15,6 +15,18 @@ body.hgTracks {
 
 a:link {color: #121E9A;}
 
+pre.code {
+    font-family: Monaco,'andale mono','lucida console',monospace;
+    font-size: 0.8em;
+    width:800px;
+    margin-left: 40px;
+    overflow:auto;
+    background-color: rgb(255,255,250);
+    border: 1px dashed rgb(230,230,230);
+    color: rgb(17,17,17);
+    padding:5px;
+}
+
 .topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
                 color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
