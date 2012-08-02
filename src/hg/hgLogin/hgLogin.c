@@ -594,11 +594,12 @@ char msg[4096];
 char activateURL[256];
 char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
+char *urlEncodedUsername=replaceChars(username," ","%20");
 
 safef(activateURL, sizeof(activateURL),
     "http://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
     sqlEscapeString(hgLoginHost),
-    sqlEscapeString(username),
+    sqlEscapeString(urlEncodedUsername),
     sqlEscapeString(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
 safef(msg, sizeof(msg),
