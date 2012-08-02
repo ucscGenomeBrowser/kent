@@ -28,7 +28,7 @@
 href="ftp://hgdownload.cse.ucsc.edu/">ftp://hgdownload.cse.ucsc.edu/</a>, particularly if you plan
 to download multiple files or files of large size.</p> 
 
-    <p>To FTP:</p>
+    <h3>FTP from the Command Line</h3>
     
     <pre class="code">
 $ ftp hgdownload.cse.ucsc.edu
@@ -40,7 +40,8 @@ ftp&gt; cd &lt;data directory&gt; (e.g., liftOver)</pre>
 
 
 	<p>To download multiple files from the UNIX ftp command line, use the "mget" command. You may
-want to use the &quot;prompt&quot; command to toggle the interactive mode if you do not want to be
+want to use the <span class="inlineCode">prompt</span> command to toggle the interactive mode if you
+do not want to be
 prompted for each file that you download.</p>
 
 	
@@ -51,7 +52,21 @@ ftp&gt; mget [filename1] [filename2] ...</pre>
 
     <pre class="code">
 ftp&gt; mget -a</pre>
-	
+
+
+    <h3>FTP from a Web Browser</h3>
+
+    <p>Most modern web browsers have FTP capabilities built-in. In your browser's url field, enter:
+    </p>
+    
+    <pre class="code">
+ftp://hgdownload.cse.ucsc.edu/goldenPath/</pre>
+
+    <h4>A note about Safari</h4>
+    
+    <p>Safari does not support FTP inside the browser. When you enter an FTP URL you will be asked
+to sign in. Select "Guest" and Submit. The FTP file system will open in a window on your
+desktop.</p> 
       
     </div><!-- .sectionContent --> 
 </div><!-- .section -->

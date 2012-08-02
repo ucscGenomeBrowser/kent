@@ -104,7 +104,6 @@ print FH '<TR><TD COLSPAN=2 HEIGHT=40><!-- This file generates the top menu bar 
 	  <A HREF="/cgi-bin/hgNear" class="topbar">Gene Sorter</A>&nbsp;&nbsp;-&nbsp;&nbsp; 
 	  <A HREF="/cgi-bin/hgPcr?command=start" class="topbar">PCR</A>&nbsp;&nbsp;-&nbsp;&nbsp; 
 	  <A HREF="/cgi-bin/hgVisiGene?command=start" class="topbar">VisiGene</A>&nbsp;&nbsp;-&nbsp;&nbsp; 
-	  <A HREF="/cgi-bin/pbGateway?command=start" class="topbar">Proteome</A>&nbsp;&nbsp;-&nbsp;&nbsp; 
 	  <A HREF="/FAQ/" class="topbar">FAQ</A>&nbsp;&nbsp;-&nbsp;&nbsp; 
 	  <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
 
