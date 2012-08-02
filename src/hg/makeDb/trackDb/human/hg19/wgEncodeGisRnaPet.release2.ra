@@ -13,7 +13,7 @@ subGroup7 cloned Library_Prep_Method Free=Clone-free Based=Clone-based
 dimensions dimensionX=localization dimensionY=cellType dimensionB=rank dimensionD=cloned dimensionsC=rnaExtract
 filterComposite dimensionB=all dimensionC=all dimensionD=all
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract labVersion=Lab_Version replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession seqPlatform=Platform fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-sortOrder cellType=+ localization=+ cloned=+ view=- rank=+
+sortOrder cellType=+ localization=+ cloned=+ view=+ rank=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 priority 0
@@ -24,7 +24,7 @@ html wgEncodeGisRnaPet.release2
 
     track wgEncodeGisRnaPetViewClusters
     shortLabel Clusters
-    view Clusters
+    view v1Clusters
     visibility full
     type bed 6
     parent wgEncodeGisRnaPet
@@ -345,7 +345,7 @@ html wgEncodeGisRnaPet.release2
 
     track wgEncodeGisRnaPetViewAlignments
     shortLabel Alignments
-    view Alignments
+    view v3Alignments
     visibility hide
     subTrack wgEncodeGisRnaPet
     type bam
@@ -775,7 +775,7 @@ html wgEncodeGisRnaPet.release2
     # These settings are all copied from Riken Cage I am not sure if they are right
     track wgEncodeGisRnaPetViewMinusRawSig
     shortLabel MinusRawSig
-    view MinusRawSignal
+    view v2MinusRawSignal
     visibility full
     subTrack wgEncodeGisRnaPet
     maxHeightPixels 100:24:16
@@ -1197,7 +1197,7 @@ html wgEncodeGisRnaPet.release2
 
     track wgEncodeGisRnaPetViewPlusRawSig
     shortLabel PlusRawSig
-    view PlusRawSignal
+    view v2PlusRawSignal
     visibility full
     subTrack wgEncodeGisRnaPet
     maxHeightPixels 100:24:16
