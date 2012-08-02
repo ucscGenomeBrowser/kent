@@ -1443,4 +1443,24 @@ done
     #   real    4m37.709s
     #   real    30m32.453s
 
+    grep TREE all.mod | sed -e 's/TREE: //' > all.nh
+    # this corrected tree changes the order based on distance from
+    #   what we had before:
+    /cluster/bin/phast/all_dists all.nh |grep geoFor1 | sort -k3n \
+        | sed -e "s/geoFor1.//"
+    #   taeGut1 0.075718
+    #   melUnd1 0.231202
+    #   galGal4 0.282317
+    #   melGal1 0.284436
+    #   hg19    0.722487
+    #   mm10    0.799329
+
+    # this was before:
+    # taeGut1 0.241542
+    # galGal4 0.335536
+    # melGal1 0.370000
+    # melUnd1 0.469223
+    # hg19    1.265735
+    # mm10    1.473373
+
 #########################################################################
