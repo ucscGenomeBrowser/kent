@@ -66,8 +66,9 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
@@ -358,8 +359,9 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
@@ -650,8 +652,9 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
@@ -3582,8 +3585,9 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
@@ -3885,8 +3889,9 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-28
-dateUnrestricted 2013-03-28
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
@@ -4188,8 +4193,9 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
@@ -5483,8 +5489,9 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
@@ -5775,8 +5782,9 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
@@ -6067,8 +6075,9 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
@@ -6884,8 +6893,9 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
@@ -7176,8 +7186,9 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
@@ -7468,8 +7479,9 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
@@ -7699,4 +7711,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -1116155199
+# MAGIC: -260826711
