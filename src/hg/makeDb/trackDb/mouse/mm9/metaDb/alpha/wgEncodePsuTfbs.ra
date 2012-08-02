@@ -1,7 +1,7 @@
 metaObject wgEncodePsuTfbs
 objType composite
 composite wgEncodePsuTfbs
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,treatment
 geoSeriesAccession GSE36029
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
@@ -8380,4 +8380,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1609868619
+# MAGIC: -2083513714
