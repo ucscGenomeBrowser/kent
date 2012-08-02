@@ -31,12 +31,12 @@ priority 103.29
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault mm10
+        speciesCodonDefault geoFor1
         speciesGroups Birds Vertebrate
         sGroup_Birds taeGut1 galGal4 melGal1 melUnd1
         sGroup_Vertebrate hg19 mm10
         itemFirstCharCase noChange
-        treeImage phylo/mm10_7way.png
+        treeImage phylo/geoFor1_7way.png
         priority 100
 
     # PhyloP conservation

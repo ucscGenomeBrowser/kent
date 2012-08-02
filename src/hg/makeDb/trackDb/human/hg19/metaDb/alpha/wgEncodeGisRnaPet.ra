@@ -1815,6 +1815,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum ae0a825480b3d4550a05a3ba2ce80d0a,69bf52628a799552960639f49fe0f25c
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1871,6 +1872,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum a436b1d295aa2985d20c1db445e59482
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1924,6 +1926,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum 7e1a4068b0dd8a19958ce3cb44a7185e
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1976,6 +1979,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum c26479c9bcf4db5a9f5199bba84c80e4
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -2030,6 +2034,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum 8ab3d8fc65849e6be478ae818f4c5e68
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -2086,6 +2091,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum ac92109f47476f7cca2bbd65c185472b
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -7693,4 +7699,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -486798621
+# MAGIC: -1116155199
