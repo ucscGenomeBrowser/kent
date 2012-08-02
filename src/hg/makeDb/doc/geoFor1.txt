@@ -717,20 +717,16 @@ geoFor1.perChromTables = no
         --prune-all-but hg19,mm10,melGal1,melUnd1,galGal4,taeGut1,geoFor1 \
         /cluster/home/hiram/kent/src/hg/utils/phyloTrees/63way.nh > 7way.nh
 
-    # note, newer assemblies: susScr3, dasNov3, felCat5, hetGla2, turTru2,
-    #   nomLeu2, oreNil2
-
     #	what that looks like:
     cat 7way.nh
-# ((hg19:0.148845,mm10:0.356483):0.460153,(((melGal1:0.100000,
-# galGal4:0.065536):0.100000,(geoFor1:0.120000,
-# taeGut1:0.121542):0.050000):0.199223,melUnd1:0.100000):0.287514);
+# ((hg19:0.148845,mm10:0.356483):0.460153,
+# (((geoFor1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+# (galGal4:0.032946,melGal1:0.035065):0.106045):0.198405);
 
     #	rearrange to get geoFor1 on top:
     cat << '_EOF_' > geoFor1.7way.nh
-((((geoFor1:0.120000,taeGut1:0.121542):0.050000,
-(melGal1:0.100000,galGal4:0.065536):0.100000):0.199223,
-melUnd1:0.100000):0.287514,
+((((geoFor1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+(galGal4:0.0329457,melGal1:0.035065):0.106045):0.198405,
 (hg19:0.148845,mm10:0.356483):0.460153);
 '_EOF_'
     # << happy emacs
@@ -751,9 +747,10 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
     /cluster/bin/phast/tree_doctor --rename \
     "`cat db.to.name.txt`" geoFor1.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
         > geoFor1.7way.commonNames.nh
-((((Medium_ground_finch:0.12,Zebra_finch:0.121542):0.05,
-(Turkey:0.1,Chicken:0.065536):0.1):0.199223,Budgerigar:0.1):0.287514,
-(Human:0.148845,Mouse:0.356483):0.460153);
+# ((((Medium_ground_finch:0.041261,Zebra_finch:0.034457):0.102066,
+# Budgerigar:0.076985):0.224703,
+# (Chicken:0.032946,Turkey:0.035065):0.106045):0.198405,
+# (Human:0.148845,Mouse:0.356483):0.460153);
 
     #	Use this specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
@@ -763,12 +760,12 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
         | sed -e "s/geoFor1.//" | sort -k2n > 7way.distances.txt
     #	Use this output to create the table below
     head 7way.distances.txt
-# taeGut1 0.241542
-# galGal4 0.335536
-# melGal1 0.370000
-# melUnd1 0.469223
-# hg19    1.265735
-# mm10    1.473373
+# taeGut1 0.075718
+# melUnd1 0.220312
+# galGal4 0.507021
+# melGal1 0.509140
+# hg19    1.175433
+# mm10    1.383071
 
     cat << '_EOF_' > sizeStats.pl
 #!/usr/bin/env perl
@@ -823,12 +820,12 @@ close (FH);
 #       featureBits chainLink measures
 #               chainLink
 #  N distance  on geoFor1  on other     other species
-# 01  0.2415 (% 92.532) (% 92.089) - Zebra finch taeGut1
-# 02  0.3355 (% 70.718) (% 72.077) - Chicken galGal4
-# 03  0.3700 (% 67.079) (% 72.625) - Turkey melGal1
-# 04  0.4692 (% 80.650) (% 76.598) - Budgerigar melUnd1
-# 05  1.2657 (% 08.504) (% 03.503) - Human hg19
-# 06  1.4734 (% 07.709) (% 03.543) - Mouse mm10
+# 01  0.0757 (% 92.532) (% 92.089) - Zebra finch taeGut1
+# 02  0.2203 (% 80.650) (% 76.598) - Budgerigar melUnd1
+# 03  0.5070 (% 70.718) (% 72.077) - Chicken galGal4
+# 04  0.5091 (% 67.079) (% 72.625) - Turkey melGal1
+# 05  1.1754 (% 08.504) (% 03.503) - Human hg19
+# 06  1.3831 (% 07.709) (% 03.543) - Mouse mm10
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
@@ -838,7 +835,7 @@ close (FH);
 	geoFor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
 
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
-    #   geoFor1 taeGut1 melGal1 galGal4 melUnd1 hg19 mm10
+    #   geoFor1 taeGut1 melUnd1 galGal4 melGal1 hg19 mm10
 
     #	bash shell syntax here ...
     cd /hive/data/genomes/geoFor1/bed/multiz7way
@@ -968,6 +965,7 @@ popd > /dev/null
     # the tac reverses the list to get the small jobs first
     gensub2 maf.list single template stdout | tac > jobList
     para -ram=8g create jobList
+XXX - running - Thu Aug  2 16:12:37 PDT 2012
 # Completed: 256 of 256 jobs
 # CPU time in finished jobs:      61884s    1031.39m    17.19h    0.72d  0.002 y
 # IO & Wait Time:                  5543s      92.39m     1.54h    0.06d  0.000 y
