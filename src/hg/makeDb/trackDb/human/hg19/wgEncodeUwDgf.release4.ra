@@ -487,7 +487,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh2wb54553204Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th2_Wb54553204 Hot
+        shortLabel Th2 Hot
         longLabel Th2 Wb54553204 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type broadPeak
@@ -960,7 +960,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh2wb54553204Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Th2_Wb54553204 Pk
+        shortLabel Th2 Pk
         longLabel Th2 Wb54553204 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type narrowPeak
@@ -1426,7 +1426,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh2wb54553204Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Th2_Wb54553204 Sig
+        shortLabel Th2 Sig
         longLabel Th2 Wb54553204 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type bigWig 1.000000 59281.000000
@@ -1892,7 +1892,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh2wb54553204Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th2_Wb54553204 Raw
+        shortLabel Th2 Raw
         longLabel Th2 Wb54553204 DNaseI DGF Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type bigWig 1.000000 263364.000000
