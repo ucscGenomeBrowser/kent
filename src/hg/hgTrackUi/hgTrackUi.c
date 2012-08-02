@@ -2835,14 +2835,14 @@ if (sameWord(tdb->track,"ensGene"))
     else
         safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
 
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
     {
     if (trackDbSetting(tdb, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }
 /* Print link for parent track */
@@ -2851,7 +2851,7 @@ if (!ajax)
     if (tdb->parent)
         {
         char *encodedMapName = cgiEncode(tdb->parent->track);
-        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>"
+        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
                "(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'>"
                "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
@@ -2865,7 +2865,7 @@ if (!ajax)
             {
             if (sameString(grp->name,tdb->grp))
                 {
-                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>"
+                printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
                        "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",

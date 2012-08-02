@@ -199,7 +199,8 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL00000
 color 0,107,27
 sex M
 tier 1
-protocol ENCODE:H1_ES_protocol.pdf
+protocol ENCODE:missing
+#Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol. 
 
 term H1-neurons
 tag H1NEURONS
@@ -371,7 +372,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 label T_cells_CD4+_naive_adult
 
 term Adult_CD4_Th0
@@ -413,7 +414,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:HumanTh1_Th2_Th17_NaiveCD4_SOP_v1b_1.pdf
 label T_cells_CD4+_Th1_adult
 
 term AoAF
@@ -1408,7 +1409,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb11970640_Stam_protocol.pdf
+protocol Crawford_Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term CD4+_Naive_Wb78495824
 tag CD4NAIVEWB78495824
@@ -1426,7 +1427,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0000782
 lab Stam
-protocol Stam:CD4NaiveWb78495824_Stam_protocol.pdf
+protocol Crawford_Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term GC_B_cell
 tag GCBCELL
@@ -1599,7 +1600,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+protocol Crawford_Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 label T_cells_CD4+_naive_cord_blood
 
 term Cord_CD4_Th0
@@ -1641,7 +1642,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+protocol Crawford_Stam:HumanTh1_Th2_Th17_NaiveCD4_SOP_v1b_1.pdf
 label T_cells_CD4+_Th1_cord_blood
 
 term Decidua
@@ -1921,7 +1922,7 @@ organism human
 description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype normal 
-sex F
+sex M
 tissue blood
 vendorName Coriell
 vendorId GM10248
@@ -1939,7 +1940,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM10266
@@ -2542,7 +2543,7 @@ organism human
 description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
 lineage mesoderm
 karyotype affected 
-sex F
+sex M
 tissue blood
 vendorName Coriell 
 vendorId GM20000
@@ -4279,6 +4280,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS27a_Stam_protocol.pdf
 
 term bone_marrow_HS5
@@ -4296,6 +4298,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:HS5_Stam_protocol.pdf
 
 term bone_marrow_MSC
@@ -4313,6 +4316,7 @@ orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
+label Bone Marrow HS27a
 protocol Stam:MSC_Stam_protocol.pdf
 
 term HSaVEC
@@ -4728,12 +4732,12 @@ tag IPSHFIB2IPS4
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 4 derived from skin fibroblast
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
-vendorName HSCI iPS Cell Core Facitlity
+vendorName HSCI iPS Cell Core Facility
 vendorId hFib2_iPS4
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
@@ -4746,13 +4750,13 @@ tag IPSHFIB2IPS5
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 5 derived from skin fibroblast
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
 vendorName HSCI iPS Cell Core Facility
-vendorId hFIB2_iPS5
+vendorId hFib2_iPS5
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -5611,6 +5615,7 @@ orderUrl http://www.griffith.edu.au/professional-page/professor-alan-mackay-sim
 termId termId BTO:0000961
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000961
 lab Crawford
+label Olfactory neurosphere
 protocol Crawford:Olfneurosphere_Crawford_protocol.pdf
 
 term Osteobl
@@ -5863,6 +5868,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
+label Prostate
 protocol Gingeras:Prostate_Gingeras_protocol.pdf
 
 term Prostate_OC
@@ -6219,7 +6225,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex B
 tier 3
 lab Crawford
-protocol Crawford:AdultCD4naive_Crawford_protocol.pdf Crawford:AdultCD4Th0_Crawford_protocol.pdf Crawford:AdultCD4Th1_Crawford_protocol.pdf Crawford:CordCD4naive_Crawford_protocol.pdf Crawford:CordCD4Th0_Crawford_protocol.pdf Crawford:CordCD4Th1_Crawford_protocol.pdf 
+protocol Crawford_Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 label T_cells_CD4+
 
 term T98G
@@ -6969,8 +6975,98 @@ color 230,159,0
 sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
+term EPC_(CD117+,CD71-,TER119-)
+tag EPCPMM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71-,TER119- #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71-,TER119-
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117+,CD71+,TER119-)
+tag EPCPPM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71+,TER119- #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71+,TER119-
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117-,CD71+,TER119+)
+tag EPCMPP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117-,CD71+,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117-,CD71+,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117-,CD71-,TER119+)
+tag EPCMMP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117-,CD71-,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117-,CD71-,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
+term EPC_(CD117+,CD71+,TER119+)
+tag EPCPPP
+type Cell Line
+organism mouse
+tissue blood
+category primaryCell
+age ageUnknown
+strain Unknown
+description liver fraction CD117+,CD71+,TER119+ #PROVISIONAL
+vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
+vendorId CD117+,CD71+,TER119+
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 153,38,0
+sex U
+protocol UW:EPC_Stam_protocol.pdf
+
 term EpiSC-5
-tag EpiSC5
+tag EPISC5
 type Cell Line
 organism mouse
 category primaryCells
@@ -6987,7 +7083,7 @@ sex M
 protocol missing
 
 term EpiSC-7
-tag EpiSC7
+tag EPISC7
 type Cell Line
 organism mouse
 category primaryCells
@@ -7103,6 +7199,25 @@ color 65,105,225
 sex U
 protocol missing
 
+term ES-neurons
+tag ESNEURON
+type Cell Line
+organism mouse
+tissue nerve
+category primaryCells
+description neurons derived from mouse embryonic stem cells by treatment of retinoic acid #PROVISIONAL
+age E3.5
+strain 129S4/SvJae
+vendorName LICR lab
+vendorId mESC-neurons
+orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
+termId 15148
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
+color 105,105,105
+sex M
+label ES-neurons
+protocol Ren:ES-neurons_Ren_protocol.pdf 
+
 term ES-TT2
 tag ESTT2
 type Cell Line
@@ -7130,6 +7245,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F4WT
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -7146,6 +7262,7 @@ age E0
 strain Unknown
 vendorName A. Skoultchi Lab
 vendorId WW6_F1KO
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
@@ -7235,7 +7352,7 @@ tissue frontal lobe
 category Tissue
 age ageUnknown
 strain Unknown
-description Frontal Lobe PROVSIONAL
+description Frontal Lobe #PROVISIONAL
 vendorName CSHL lab
 vendorId Frontal Lobe
 orderUrl  http://gingeraslab.cshl.edu/
@@ -7245,6 +7362,44 @@ color 105,105,105
 sex U
 protocol Gingeras:FrontalLobe_Gingeras_protocol.pdf
 label Frontal Lobe
+
+term FVLstem
+tag FVLS
+type Cell Line
+organism mouse
+tissue spleen
+category primaryCells
+age ageUnknown
+strain Unknown
+description Friend virus infected murine CD34+,CD133+,Kit+,Sca1+ Leukemia stem cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+vendorName Paulson Lab
+vendorId FVLstem
+orderUrl http://vbs.psu.edu/research/labs/paulson
+color 153,38,0
+termId 15212
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+sex U
+protocol Hardison:FVLstem_Hardison_protocol.pdf
+label FVL-stem
+
+term FVprogenitor
+tag FVP
+type Cell Line
+organism mouse
+tissue spleen
+category primaryCells
+age ageUnknown
+strain Unknown
+description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+vendorName Paulson Lab
+vendorId FVprogenitor
+orderUrl http://vbs.psu.edu/research/labs/paulson
+color 153,38,0
+termId 15212
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15212
+sex U
+protocol Hardison:FVprogenitor_Hardison_protocol.pdf
+label FV-progenitor
 
 term G1E
 tag G1E
@@ -7261,7 +7416,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_Hardison_protocol.pdf
 
 term G1E-ER4
@@ -7279,7 +7434,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_ER4_E2_Hardison_protocol.pdf
 
 term GenitalFatPad
@@ -7517,7 +7672,7 @@ orderUrl http://www.genome.gov/10000336
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 86,180,233
-sex F
+sex U
 protocol Hardison:MEP_Hardison_protocol.pdf
 
 term MEF
@@ -8028,7 +8183,7 @@ term UpperLegMuscle
 tag ULMUS
 type Cell Line
 organism mouse
-tissue upper leg muscle
+tissue muscle
 category Tissue
 age ageUnknown
 strain Unkown
@@ -8576,6 +8731,38 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation Human_-_:missing Mouse_-_:missing
 label c-Myc (sc-764)
 
+term CBX2
+tag CBX2
+type Antibody
+target CBX2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Chromobox protein homolog 2 is a component of the polycomb group (PcG) multiprotein PRC1 complex, a complex required to maintain the transcriptionally repressive state of many genes, including Hox genes, throughout development. [taken from the Universal Protein Resource (UniProt) www.uniprot.org/uniprot/P19474]
+vendorName Bethyl
+vendorId A302-524A
+orderUrl http://www.bethyl.com/product/A302-524A
+lab Epstein
+lots A302-524A-1
+targetId GeneCard:CBX2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
+validation Human_-_CBX2_(A302-524A)(ChIP,WesternBlot):human_CBX2_validation_Epstein.pdf
+label CBX2 (A302-524A)
+
+term CBX8
+tag CBX8
+type Antibody
+target CBX8
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription CBX8 is part of the polycomb group of proteins that are important in embryogenesis and human tumorigenesis and regulates a number of genes involved in cell growth and survival. There are at least 5 CBX proteins in mammals. CBX proteins associate with the core polycomb repressive complex 1 (PRC1) that functions to maintain the transcriptionally repressive state of genes during development.
+vendorName Bethyl
+vendorId A300-882A
+orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
+lab Epstein
+lots A300-882A-1
+targetId GeneCard:CBX8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
+validation Human_-_CBX8_(A300-882A)(ChIP,WesternBlot):human_CBX8_validation_Epstein.pdf
+label CBX8 (A300-882A)
+
 term CCNT2
 tag CCNT2
 type Antibody
@@ -8719,6 +8906,38 @@ targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation Human_-_:missing Mouse_-_:missing
 label CHD2 (ab68301)
+
+term CHD4_Mi2
+tag CHD4MI2
+type Antibody
+target CHD4_Mi2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
+vendorName Bethyl
+vendorId A301-081A
+orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
+lab Epstein
+lots A301-081A-1
+targetId GeneCard:CHD4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
+validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
+label CHD4 (A301-081A)
+
+term CHD7_(A301-223A-1)
+tag CHD7A301223A1
+type Antibody
+antibodyDescription rabbit polyclonal antigen affinity purified, unconjugated, liquid
+target CHD7
+targetDescription CHD7 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription.
+vendorName Bethyl
+vendorId A301-223A
+orderUrl http://www.bethyl.com/product/A301-223A
+lab Bernstein
+lots A301-223A-1
+targetId GeneCards:CHD7
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
+validation CHD7_(A301-223A-1)(ChIP,WesternBlot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
+label CHD7 (A301-223A-1)
 
 term CREB1_(06-863)
 tag CREB106863
@@ -9367,6 +9586,22 @@ lab Snyder
 validation Human_-_ERRA(Western_blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
 label ERRA (sc-66882)
 
+term ESET_(166621)
+tag ESET166621
+type Antibody
+antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET
+target ESET
+targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family.  ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
+vendorName Santa Cruz Biotechnology
+vendorId 166621
+orderUrl http://www.scbt.com/datasheet-166621-eset-a-1-antibody.html
+lab Bernstein
+lots H2009
+targetId GeneCards:SETDB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
+validation ESET_(166621)(ChIP,WesternBlot):human_ESET_166621_validation_Bernstein.pdf
+label ESET (166621)
+
 term ETS1
 tag ETS1
 type Antibody
@@ -9401,7 +9636,7 @@ validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bern
 label EZH2 (39875)
 
 term FLI1_(sc-356)
-tag FLI1SC365
+tag FLI1SC356
 type Antibody
 antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin.
 target FLI1
@@ -9566,7 +9801,7 @@ targetDescription GATA-1 is a transcriptional activator which probably serves as
 antibodyDescription Anti-GATA-1 rabbit polyclonal antibody was generated by using a purified GST fusion to amino acids 1-89 of mouse GATA-1. Antibody Target: GATA1
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId GATA-1
-orderUrl http://stemcells.wisc.edu/faculty/bresnick.html
+orderUrl http://stemcells.wisc.edu/node/101
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
@@ -9612,7 +9847,7 @@ targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId GATA-2
-orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
+orderUrl http://stemcells.wisc.edu/node/101
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
@@ -10291,6 +10526,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 label HNF4G (sc-6558)
 
+term HP1gamma_(ab10480)
+tag HP1GAMMAAB10480
+type Antibody
+antibodyDescription Rabbit polyclonal to a synthetic peptide conjugated to KLH, derived from within residues 1 - 100 of Mouse HP1 gamma
+target HP1gamma
+targetDescription CBX3 seems to be involved in transcriptional silencing in heterochromatin-like complexes. It recognizes and binds histone H3 tails methylated at Lys-9, leading to epigenetic repression. It may contribute to the association of the heterochromatin with the inner nuclear membrane through its interaction with lamin B receptor (LBR).
+vendorName Abcam
+vendorId ab10480
+orderUrl http://www.abcam.com/HP1-gamma-antibody-ab10480.html
+lab Bernstein
+lots GR22075-1
+targetId GeneCards:CBX3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
+validation HP1gamma_(ab10480)(ChIP,WesternBlot):human_HP1gamma_ab10480_validation_Bernstein.pdf
+label HP1gamma (ab10480)
+
 term HSF1
 tag HSF1
 type Antibody
@@ -10416,6 +10667,22 @@ validation Human_-_JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validat
 label JARID1A (ab26049)
 # JARID1A is an aliase for KDM5A in genecards.org
 
+term JMJD2A_(A300-861A-1)
+tag JMJD2AA300861A1
+type Antibody
+antibodyDescription rabbit polyclonal antigen affinity purified, unconjugated, liquid
+target JMJD2A
+targetDescription JMJD2A is a member of the jumonji (jmj) domain containing gene family of histone demethylases that plays a role in chromatin regulation and influences transcriptional activation and suppression.  JMJD2A is a trimethylation-specific demethylase and functions as a transcriptional repressor.
+vendorName Bethyl
+vendorId A300-861A
+orderUrl http://www.bethyl.com/product/A300-861A
+lab Bernstein
+lots A300-861A-1
+targetId GeneCards:KDM4A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
+validation JMJD2A_(A300-861A-1)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+label JMJD2A (A300-861A-1)
+
 term JunD
 tag JUND
 type Antibody
@@ -10446,6 +10713,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 label KAP1 (ab10483)
 
+term KAT3A_(ab2832)
+tag KAT3AAB2832
+type Antibody
+antibodyDescription rabbit polyclonal to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP.
+target KAT3A
+targetDescription Cyclic AMP-responsive enhancer binding protein (CREB) binding protein (CBP) and p300 are closely related transcriptional coactivators that have been shown to directly interact with many different DNA-binding transcription factors.  Both CBP and p300 have been shown to display histone acetyltransferase (HAT) activity, capable of acetylating all four core histone particles in nucleosomes.
+vendorName Abcam
+vendorId ab2832
+orderUrl http://www.abcam.com/KAT3A--CBP-antibody-ChIP-Grade-ab2832.html
+lab Bernstein
+lots NA
+targetId GeneCards:CREBBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
+validation KAT3A_(ab2832)(ChIP,WesternBlot):human_KAT3A_ab2832_validation_Bernstein.pdf
+label KAT3A (ab2832)
+
 term LEF1_(SC-8592)
 tag LEF1
 type Antibody
@@ -10460,6 +10743,22 @@ targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation Human_-_LEF1_(SC-8592)(Immunoprecipitation-Western_blot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 label LEF1 (sc-8592)
+
+term LSD1
+tag LSD1
+type Antibody
+target LSD1
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
+vendorName Bethyl
+vendorId A300-215A
+orderUrl http://www.bethyl.com/product/A300-215A/
+lab Epstein
+lots A300-215A-1
+targetId GeneCard:KDM1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
+validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+label LSD1_KDM1A (A300-215A)
 
 term MafF_(M8194)
 tag MAFF
@@ -10699,6 +10998,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation Human_-_NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 label NANOG (sc-33759)
 
+term NCoR
+tag NCOR
+type Antibody
+target NCoR
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors.  NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
+vendorName Bethyl
+vendorId A301-145A
+orderUrl http://www.bethyl.com/product/A301-145A/
+lab Epstein
+lots A301-145A-1
+targetId GeneCard:NCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
+validation Human_-_NCoR_(A301-145A)(ChIP,WesternBlot):human_NCoR_validation_Epstein.pdf
+label NCoR (A301-145A)
+
 term NELFe
 tag NELFE
 type Antibody
@@ -10884,6 +11199,23 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2F2
 validation Human_-_NR2F2_(sc-271940)(Western_blot,IP-Mass_spec):human_NR2F2_SC-271940_validation_Myers.pdf
 label NR2F2 (sc-271940)
 
+
+term NSD2_(ab75359)
+tag NSD2AB75359
+type Antibody
+antibodyDescription mouse monoclonal, raised against a fusion protein, corresponding to amino acids 1-647 of Human GST-WHSC1/NSD2.
+target NSD2
+targetDescription This is a probable histone methyltransferase, which may act as a transcription regulator that binds DNA and suppresses IL5 transcription.
+vendorName Abcam
+vendorId ab75359
+orderUrl http://www.abcam.com/WHSC1NSD2-antibody-29D1-ab75359.html
+lab Bernstein
+lots GR47579-1
+targetId GeneCards:WHSC1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WHSC1
+validation NSD2_(ab75359)(ChIP,WesternBlot):human_NSD2_ab75359_validation_Bernstein.pdf
+label NSD2 (ab75359)
+
 term p300
 tag P300
 type Antibody
@@ -10898,6 +11230,22 @@ targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
 label P300 (sc-585)
+
+term P300_KAT3B
+tag P300KAT3B
+type Antibody
+target P300_KAT3B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
+vendorName Bethyl
+vendorId A300-358A
+orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
+lab Epstein
+lots A300-358A-1
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
+validation Human_-_P300_KAT3B_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
+label P300_KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
@@ -10988,6 +11336,22 @@ targetId GeneCard:PBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
 validation Human_-_:missing
 label PBX3 (sc-891)
+
+term PCAF
+tag PCAF
+type Antibody
+target PCAF_KAT2B
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
+vendorName Bethyl
+vendorId A301-666A
+orderUrl http://www.bethyl.com/product/A301-666A/PCAF_Antibody?referrer=search_default
+lab Epstein
+lots A301-666A-1
+targetId GeneCard:KAT2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
+validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+label PCAF_KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -11239,20 +11603,37 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
 validation Human_-_RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
 label RBBP5 (A300-109A)
 
-term RPC155
-tag RPC155
+term REST
+tag REST
 type Antibody
-target RPC155
-antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
-targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
-vendorId 1900
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
-lab Struhl
-targetId GeneCard:POLR3A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
-label RPC155 (1900)
+target GST fusion amino acids 801-1097 of human REST
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes.
+vendorName Millipore
+vendorId 17-641
+orderUrl http://www.millipore.com/catalogue/item/17-641
+lab Epstein
+lots JH1786670
+targetId GeneCard:REST
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
+validation Human_-_REST_(17-641)(ChIP,WesternBlot):human_REST_validation_Epstein.pdf
+label REST (17-641)
+
+term RNF2
+tag RNF2
+type Antibody
+target RNF2
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+targetDescription Ring finger protein 2 (RNF2) is a polycomb group (PcG) protein. RNF2 has been shown to interact with, and suppress the activity of, transcription factor CP2 (TFCP2/CP2).
+vendorName Bethyl
+vendorId A302-869A
+orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
+lab Epstein
+lots A302-869A-1
+targetId GeneCard:RNF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
+validation Human_-_RNF2_(A302-869A)(ChIP,WesternBlot):human_RNF2_validation_Epstein.pdf
+label RNF2 (A302-869A)
 
 term RFX5_(200-401-194)
 tag RFX5
@@ -11268,6 +11649,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_validation_Snyder.pdf
 label RFX5 (200-401-194)
+
+term RPC155
+tag RPC155
+type Antibody
+target RPC155
+antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
+targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
+vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorId 1900
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+lab Struhl
+targetId GeneCard:POLR3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
+validation Human_-_:missing
+label RPC155 (1900)
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -11392,6 +11788,22 @@ targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
 validation Human_-_:missing
 label SIRT6 (ab48192)
+
+term SIRT6_(ab62739)
+tag SIRT6AB62739
+type Antibody
+antibodyDescription Rabbit polyclonal, raised against a synthetic peptide: GLPEIFDPPEELERK conjugated to KLH by a Cysteine residue linker, corresponding to N terminal amino acids 19-33 of Human SIRT6
+target SIRT6
+targetDescription NAD-dependent protein deacetylase. Has deacetylase activity towards Lys-9 and Lys-56 of histone H3. Modulates acetylation of histone H3 in telomeric chromatin during the S-phase of the cell cycle. Deacetylates Lys-9 of histone H3 at NF-kappa-B target promoters and may down-regulate the expression of a subset of NF-kappa-B target genes.
+vendorName Abcam
+vendorId ab62739
+orderUrl http://www.abcam.com/SIRT6-antibody-ab62739.html
+lab Bernstein
+lots GR24519-2
+targetId GeneCards:SIRT6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
+validation SIRT6_(ab62739)(ChIP,WesternBlot):human_SIRT6_ab62739_validation_Bernstein.pdf
+label SIRT6 (ab62739)
 
 term SIX5
 tag SIX5
@@ -12282,6 +12694,107 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
 
+
+######## THESE ARE PROVISIONAL AND PLEASE JEFF THEY NEED SOME CLEANING UP
+
+term ZC3H11A_(NB100-74650)
+tag ZC3H11ANB10074650
+type Antibody
+antibodyDescription Rabbit polyclonal antibody. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
+target ZC3H11A
+targetDescription ZC3H11A is a C3H1-type zinc finger protein. ZC3H11A has been identified as a protein that is phosphorylated upon DNA damage by ATM or ATR. The function of ZC3H11A remains uncharacterized.
+vendorName NovusBio
+vendorId NB100-74650
+orderUrl http://www.novusbio.com/ZC3H11A-Antibody_NB100-74650.html
+lab Snyder
+lots A1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZC3H11A&search=zc3h11a
+validation ZC3H11A_(NB100-74650)(missing):human_ZC3H11A_NB100-74650_validation_Snyder.pdf
+
+term ZNF-MIZD-CP1_(ab65767)
+tag ZNFMIZDCP1AB65767
+type Antibody
+antibodyDescription Rabbit Polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+target ZNF-MIZD-CP1
+targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
+vendorName Abcam
+vendorId ab65767
+orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
+lab Snyder
+lots GR30927-1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
+validation ZNF-MIZD-CP1_(ab65767)(missing):human_ZNF-MIZD-CP1_ab65767_validation_Snyder.pdf
+
+term HCFC1_(NB100-68209)
+tag HCFC1NB10068209
+type Antibody
+antibodyDescription Rabbit polyclonalantibody against residue 1700 and 1750 of human host cell factor C1
+target HCFC1
+targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
+vendorName NovusBio
+vendorId NB100-68209
+orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
+lab Snyder
+lots A1
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1&search=hcfc1
+validation HCFC1_(NB100-68209)(missing):human_HCFC1_NB100-68209_validation_Snyder.pdf
+
+term ZNF384_(HPA004051)
+tag ZNF384HPA004051
+type Antibody
+antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
+target ZNF384
+targetDescription This gene encodes a C2H2-type zinc finger protein, which may function as a transcription factor. This gene also contains long CAG trinucleotide repeats that encode consecutive glutamine residues. The protein appears to bind and regulate the promoters of the extracellular matrix genes MMP1, MMP3, MMP7 and COL1A1. Studies in mouse suggest that nuclear matrix transcription factors (NP/NMP4) may be part of a general mechanical pathway that couples cell construction and function during extracellular matrix remodeling. Alternative splicing results in multiple transcript variants. Recurrent rearrangements of this gene with the Ewing's sarcoma gene, EWSR1 on chromosome 22, or with the TAF15 gene on chromosome 17, or with the TCF3 (E2A) gene on chromosome 19, have been observed in acute leukemia. A related pseudogene has been identified on chromosome 7.
+vendorName SIGMA
+vendorId HPA004051
+orderUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
+lab Snyder
+lots A57874
+targetId missing
+targetUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
+validation ZNF384_(HPA004051)(missing):human_ZNF384_HPA004051_validation_Snyder.pdf
+
+term CDP_(BioTech)
+tag CDPBIOTECH
+type Antibody
+antibodyDescription CDP (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping at the C-terminus of CDP of mouse origin.
+target CDP
+targetDescription CDP (for CCAAT displacement protein) was identified as a repressor for tran- scription of developmentally regulated genes. It is a homeodomain protein that appears to compete with transcriptional activating proteins for binding to the promoter regions of various genes. CDP contains three cut repeats which function as DNA binding domains. It has been demonstrated that cut repeat domains have the capacity to bind to DNA in conjunction with or independently of homeodomain DNA binding. CDP has been shown to be the DNA-binding subunit of the HiNF-D complex, which contains cyclin A, Cdc2 and an Rb-related protein in addition to CDP. Histone expression is required for the transition to S phase in the cell cycle. The HiNF-D complex regulates the transcription of Histone H4, H3 and H1 genes, allowing cells to progress from G1 to S phase.
+vendorName Santa Cruz
+vendorId BioTech
+orderUrl http://www.scbt.com/datasheet-6327-cdp-c-20-antibody.html
+lab Snyder
+lots E0709
+targetId missing
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CUX1&search=cdp
+validation CDP_(BioTech)(missing):human_CDP_BioTech_validation_Snyder.pdf
+##################################################################### ABOVE ARE PROVISIONAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###  Antibodies
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
@@ -12618,7 +13131,7 @@ targetDescription  Transcriptional repressor. Binds with MAX to form recognize t
 antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: Mxi1
 vendorName R&D Systems
 vendorId AF4185
-orderUrl http://www.rndsystems.com/
+orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
 lab Snyder
 lots ZIJ01
 targetId GeneCard:MXI1
@@ -13544,29 +14057,34 @@ description 120 hour differentiation time point of mG/ER cells towards red blood
 label 120 hour diff protocol C
 
 term diffProtD_3hr
-tag DIFFD3h
+tag DIFFD3H
 description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
+label Estradiol 3 hour
 
 term diffProtD_7hr
 tag DIFFD7H
 description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
+label Estradiol 7 hour
 
 term diffProtD_14hr
 tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
+label Estradiol 14 hour
 
 term diffProtD_24hr
 tag DIFFD24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
+label Estradiol 24 hour
 
 term diffProtD_30hr
 tag DIFFD30H
 description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
+label Estradiol 30 hour
 
 term diffProtE_3d
 tag DIFFE3D
@@ -13845,6 +14363,18 @@ label Randomized shRNA control
 description Cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
 type treatment
 
+term SAHA_1uM_72hr
+tag SAHA1U72HR
+label SAHA 1uM 72hr
+description Cells grown with 1 uM suberoylanilide hydroxamic acid (SAHA) dissolved in DMSO supplementing RPMI1640 + 10% FBS media for 72 hours (SAHA vehicle volume is ~ .05% of the total media volume). SAHA was provided by Cayman Chemical, item # 10009929.
+type treatment
+
+term SAHA_ctrl
+tag SAHACTRL
+label SAHA control
+description Cells grown with DMSO supplementing RPMI1640 + 10% FBS media for 72 hours (DMSO volume is ~ .05% of the total media volume). This is an untreated control.
+type treatment
+
 term serum_free_media
 tag SERUMFREE
 description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
@@ -13896,56 +14426,67 @@ label Vehicle
 term ZNF_knockout_2C10_C5
 tag ZNF2C10C5
 description beta-globin LCR deletion (18Kb), homozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_4C50_C4
 tag ZNF4C50C4
 description beta-globin LCR deletion (18Kb), homozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_4G7_D3
 tag ZNF4G7D3
 description beta-globin LCR deletion (18Kb), homozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_A4.1-C6
 tag ZNFA41C6
 description off-target control (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_A4.1-E2
 tag ZNFA41E2
 description off-target control (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_B3.4-A8
 tag ZNFB34A8
 description beta-globin LCR inversion, heterozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_E10.3-C6
 tag ZNFE103C6
 description beta-globin LCR inversion, heterozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_E6.1-A1
 tag ZNFE61A1
 description beta-globin LCR deletion (18Kb), heterozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_F4.1-B2
 tag ZNFF41B2
 description beta-globin LCR deletion (18Kb), heterozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_G5.4-A11
 tag ZNFG54A11
 description beta-globin LCR deletion (18Kb), heterozygous (Stam)
+deprecated data withdrawn
 type treatment
 
 term ZNF_knockout_P5
 tag ZNFP5
 description Parental K562 (Stam)
+deprecated data withdrawn
 type treatment
 
 
@@ -14359,25 +14900,25 @@ description unfiltered peptide mapping results based on the mapping scores or fa
 term pepMapGcFt
 tag PEPMAPGCFT
 type view
-label Peptide Mapping Gencode Filtered
+label Peptide Genome and Gencode Mapping Filtered
 description filtered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
 
 term pepMapGcUnFt
 tag PEPMAPGCUNFT
 type view
-label Peptide Mapping Gencode unFiltered
+label Peptide Genome and Gencode Mapping unFiltered
 description unfiltered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
 
 term mPepMapGcFt
 tag MPEPMAPGCFT
 type view
-label Modified Peptide Mapping Gencode Filtered
+label Modified Peptide Genome and Gencode Mapping Filtered
 description filtered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
 
 term mPepMapGcUnFt
 tag MPEPMAPGCUNFT
 type view
-label Modified Peptide Mapping Gencode unFiltered
+label Modified Peptide Genome and Gencode Mapping unFiltered
 description unfiltered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
 
 term PrimerPeaks
@@ -14656,6 +15197,7 @@ type dataType
 label CAGE
 description CAGE 5' RNA Tags
 dataGroup RNA Profiling
+#Provisional, shouldn't the description be Cap analysis gene (CAGE) is a technique used to sequence the 5' end of a sample's population of messenger RNA
 
 term ChipSeq
 tag CHIPSEQ
@@ -14912,6 +15454,11 @@ tag B6CBAF1J
 type strain
 description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
 
+term BALB/cJ
+tag BALBCJ
+type strain
+description A common inbred strain of laboratory mouse. #PROVISIONAL
+
 term BALB/cAnN
 tag BALBCANN
 type strain
@@ -14966,6 +15513,12 @@ type strain
 description Strain 129, has widely available embryonic stem cells
 label 129
 
+term 129.DLCR/DLCR
+tag 129DLCR
+type strain
+description 129 strain mouse with homozygous deletion of the beta-globin LCR region, see Bender et. al. (2000). Beta-globin gene switching and DNase I sensitivity of the endogenous beta-globin locus in mice do not require the locus control region. #PROVISIONAL
+label 129.&#916;LCR/&#916;LCR
+
 term 129/Ola
 tag 129OLA
 type strain
@@ -14981,6 +15534,11 @@ term 129S2/SvPas
 tag 129S2
 type strain
 description The mice have white (or light)-bellied agouti.
+
+term 129S4/SvJae
+tag 129S4
+type strain
+description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines #PROVISIONAL 
 
 term Spretus.BL6-Xist
 tag SPBL6
@@ -15011,6 +15569,13 @@ type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
 label Embryonic day 0 (stem cell)
+
+term E3.5
+tag E3HALF
+type age
+stage Embryonic
+description Embryonic day 3.5 #PROVISIONAL
+label Embryonic day 3.5
 
 term E11.5
 tag E11HALF
@@ -15088,6 +15653,13 @@ type age
 stage Adult
 description Adult 8 weeks
 label Adult 8 weeks
+
+term adult-10-12wks
+tag ADULT810WKS
+type age
+stage Adult
+description Adult between 8-10 weeks #PROVISIONAL
+label Adult 8-10 weeks
 
 term adult-24wks
 tag ADULT24WKS
@@ -16092,11 +16664,11 @@ projectName FSU
 #	Experiment defining:
 #  	  100s: expId:100 cellType:110 strain:120 sex:130 age:140 localization:150 rnaExtract:160 readType:165 insertLength:166 phase:170 treatment:180 Antibody:190 attic:190
 #	Undefine:
-#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 rank:242 submittedDataVersion:250
+#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 submittedDataVersion:250
 #	DCC descriptive:
 #  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
 #	Lab descriptive:
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
+#  	  400s: labExpId:410 bioRep:415 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 promoter:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
@@ -16153,6 +16725,7 @@ validate list: manual,automatic
 deprecated No longer neede by GENCODE
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
 optionalVars label,validation,targetUrl,lots,displayName,deprecated
+# Used on hg18 in SangerGencode
 
 term Antibody
 tag ANTIBODY
@@ -16356,7 +16929,7 @@ term dccInternalNotes
 tag DCCINTERNALNOTES
 type typeOfTerm
 label Internal DCC Notes
-description Notes about tracks that are internal to the DCC.
+description Notes about tracks that are internal to the DCC. RELOAD will be used to indicate that the table was reloaded with the same content, but with a corrected .as file.
 searchable no
 cvDefined no
 validate none
@@ -16577,6 +17150,7 @@ priority 590
 deprecated no longer needed by GENCODE
 requiredVars term,tag,type,description
 optionalVars label,deprecated
+#Used on 1 track on hg18 SangerGencode
 
 term localization
 tag LOCALIZATION
@@ -16730,19 +17304,6 @@ cvDefined yes
 validate cv or None
 priority 200
 # Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
-requiredVars term,tag,type,description
-optionalVars label,deprecated
-
-term rank
-tag RANK
-type typeOfTerm
-label Rank of replicate
-description Experiments with multiple replicates may declare a preferred replicate for visualization.
-searchable no
-cvDefined no
-validate list: 1st,2nd,3rd
-priority 242
-# Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 requiredVars term,tag,type,description
 optionalVars label,deprecated
 

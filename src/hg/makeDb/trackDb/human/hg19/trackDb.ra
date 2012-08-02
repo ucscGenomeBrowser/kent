@@ -1174,7 +1174,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken fZebra_Finch=Zebra_Finch gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbZebra_Finch=Zebra_Finch gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -1236,9 +1236,17 @@ html hg19vertChainNet
         type chain galGal3
         otherDb galGal3
 
+        track chainGeoFor1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain geoFor1
+        otherDb geoFor1
+
         track chainTaeGut1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=fZebra_Finch clade=bDino
+        subGroups view=chain species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain taeGut1
@@ -1354,9 +1362,17 @@ html hg19vertChainNet
         type netAlign galGal3 chainGalGal3
         otherDb galGal3
 
+        track netGeoFor1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign geoFor1 chainGeoFor1
+        otherDb geoFor1
+
         track netTaeGut1
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=fZebra_Finch clade=bDino
+        subGroups view=net species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign taeGut1 chainTaeGut1
@@ -2036,8 +2052,9 @@ shortLabel 1000Genomes Ph 1
 longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
 type vcfTabix
 group varRep
-priority 101.5
+priority 99.1
 visibility hide
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 searchTable nscanGene
 searchType genePred
@@ -2283,7 +2300,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-include altSeqComposite5.ra
+#include altSeqComposite5.ra
 
 include altSeqComposite9.ra
 

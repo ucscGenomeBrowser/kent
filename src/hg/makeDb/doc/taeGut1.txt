@@ -790,9 +790,11 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > do.log 2>&1
-XXX - running - Sat Jul 28 14:53:13 PDT 2012
+    #   real    3641m55.514s
+    # several chain jobs went for several days:
+# Submission to last job:        205474s    3424.57m    57.08h    2.38d
     cat fb.taeGut1.chainGeoFor1Link.txt
-    #   1502192631 bases of 2897316137 (51.848%) in intersection
+    #   1126123816 bases of 1222864691 (92.089%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/taeGut1/bed
@@ -804,10 +806,10 @@ XXX - running - Sat Jul 28 14:53:13 PDT 2012
 	/hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    103m14.464s
-    cat fb.geoFor1.chainHg19Link.txt
-    #   1455183825 bases of 2392815236 (60.817%) in intersection
+	> swap.log 2>&1 &
+    #   real    102m30.103s
+    cat fb.geoFor1.chainTaeGut1Link.txt
+    #   963520807 bases of 1041286029 (92.532%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.taeGut1.swap lastz.taeGut1
