@@ -5203,7 +5203,7 @@ if (((position == NULL) || sameString(position, "default"))
     position = cloneString(defaultPosition);
 if (sameString(position, ""))
     {
-    hUserAbort("Please go back and enter a coordinate rangeor a search term in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+    hUserAbort("Please go back and enter a coordinate range or a search term in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
 chromName = NULL;

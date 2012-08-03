@@ -136,24 +136,6 @@ if (sameString(link->name, "family"))
     if (!hgNearOk(database))
         return NULL;
     }
-if (sameString(link->name, "protBrowser"))
-    {
-    if (!hgPbOk(database))
-        return NULL;
-    /* special processing for PB, since we need the protein ID, instead everything key off from gene ID */
-    /* use UniProt accession instead of displayID, because display ID sometimes changes */
-    if (swissProtAcc == NULL || swissProtAcc[0] == 0)
-        return NULL;
-    if (isRgdGene(conn))
-    	{
-	safef(query, sizeof(query), "../cgi-bin/pbGlobal?proteinID=%s", swissProtAcc);
-    	}
-    else
-	{
-    	safef(query, sizeof(query), "../cgi-bin/pbTracks?db=%s&proteinID=%s", database, swissProtAcc);
-    	}
-    return(cloneString(query));
-    }
 if (sameString(link->name, "tbSchema"))
     {
     char *geneTable = genomeSetting("knownGene");
