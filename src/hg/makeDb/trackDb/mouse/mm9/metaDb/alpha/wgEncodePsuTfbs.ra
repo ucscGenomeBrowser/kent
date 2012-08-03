@@ -1,7 +1,7 @@
 metaObject wgEncodePsuTfbs
 objType composite
 composite wgEncodePsuTfbs
-expVars lab,dataType,cell,antibody,treatment
+expVars lab,dataType,cell,antibody,treatment,labExpId
 geoSeriesAccession GSE36029
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
@@ -3207,6 +3207,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3232,6 +3233,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3257,6 +3259,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3283,6 +3286,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3308,6 +3312,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3334,6 +3339,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3359,6 +3365,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3385,6 +3392,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3410,6 +3418,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3436,6 +3445,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3461,6 +3471,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3487,6 +3498,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3512,6 +3524,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3538,6 +3551,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3563,6 +3577,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3589,6 +3604,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3614,6 +3630,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3640,6 +3657,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hAlnRep1.bam,wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3665,6 +3683,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3691,6 +3710,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3716,6 +3736,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3742,6 +3763,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputPkRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3768,6 +3790,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3793,6 +3816,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3819,6 +3843,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3844,6 +3869,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3869,6 +3895,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3894,6 +3921,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3920,6 +3948,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3945,6 +3974,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3970,6 +4000,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3996,6 +4027,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4021,6 +4053,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4046,6 +4079,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4072,6 +4106,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4097,6 +4132,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4122,6 +4158,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4148,6 +4185,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hAlnRep1.bam,wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4173,6 +4211,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4198,6 +4237,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4224,6 +4264,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4249,6 +4290,7 @@ dateUnrestricted 2013-05-01
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId Timecourse
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8380,4 +8422,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -2083513714
+# MAGIC: -567601053
