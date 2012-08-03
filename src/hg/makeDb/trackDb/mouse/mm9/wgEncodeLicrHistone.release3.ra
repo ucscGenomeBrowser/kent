@@ -1602,7 +1602,7 @@ html wgEncodeLicrHistone.release3
         longLabel Kidney 8w H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=A1DLT8W factor=H3K27AC cellType=KIDNEY control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 37.259998
-        color 204,121,16
+        color 204,121,167
         viewLimits 0.2:5
         # subId=5378 dateSubmitted=2011-12-24
 
