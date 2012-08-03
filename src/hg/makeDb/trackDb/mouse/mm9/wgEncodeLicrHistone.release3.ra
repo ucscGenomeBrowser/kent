@@ -34,7 +34,7 @@ subGroup2 cellType Cell_Line   B0CELLCD43N=B-cell_(CD43-) B1MARROW=Bone_Marrow B
 subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09ME3=H3K9me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H3K09AC=H3K9ac H3K27AC=H3K27ac INPUT=Input
 subGroup4 sex Sex M=M F=F U=U
 subGroup5 age Age A1DLT8W=Adult_8_weeks A2DULT24WKS=Adult_24_weeks E0=Embryonic_day_0 E14=Embryonic_day_14 E14HALF=Embryonic_day_14.5 IMMORTAL=Immortal_cells
-subGroup6 strain Strain C57BL6=C57BL/6
+subGroup6 strain Strain C57BL6=C57BL/6 A129Ola=129/Ola
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor dimensionA=age 
 dimensionAchecked 1ADLT8W,IMMORTAL
@@ -949,7 +949,7 @@ html wgEncodeLicrHistone.release3
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K36m3 
         longLabel ES-E14 E0 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
-        subGroups view=Peaks age=E14 factor=H3K36ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
+        subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=ESE14 control=STD sex=M strain=A129Ola
         type broadPeak
         color 65,105,225
         # subId=7126 dateSubmitted=2012-06-26
@@ -957,8 +957,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K27a 
-        longLabel ES-E14 E14 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
-        subGroups view=Peaks age=E14 factor=H3K27AC cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=E0 factor=H3K27AC cellType=ESE14 control=STD sex=M strain=A129Ola
         type broadPeak
         color 65,105,225
         # subId=7125 dateSubmitted=2012-06-26
@@ -966,8 +966,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K9a 
-        longLabel ES-E14 E14 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
-        subGroups view=Peaks age=E14 factor=H3K09AC cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=E0 factor=H3K09AC cellType=ESE14 control=STD sex=M strain=A129Ola
         type broadPeak
         color 65,105,225
         # subId=7124 dateSubmitted=2012-06-25
@@ -975,8 +975,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K4m3 
-        longLabel ES-E14 E14 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
-        subGroups view=Peaks age=E14 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=A129Ola
         type broadPeak
         color 65,105,225
         # subId=7123 dateSubmitted=2012-06-24
@@ -984,8 +984,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K4m1 
-        longLabel ES-E14 E14 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
-        subGroups view=Peaks age=E14 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=A129Ola
         type broadPeak
         color 65,105,225
         # subId=7122 dateSubmitted=2012-06-23
@@ -2279,8 +2279,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K36m3 
-        longLabel ES-E14 E14  H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
-        subGroups view=Signal age=E14 factor=H3K36ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=E0 factor=H3K36ME3 cellType=ESE14 control=STD sex=M strain=A129Ola
         type bigWig 0.110000 39.830002
         color 65,105,225
         viewLimits 0.2:2
@@ -2289,8 +2289,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K27a 
-        longLabel ES-E14 E14 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=E14 factor=H3K27AC cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=E0 factor=H3K27AC cellType=ESE14 control=STD sex=M strain=A129Ola
         type bigWig 0.140000 38.610001
         color 65,105,225
         viewLimits 0.2:5
@@ -2299,8 +2299,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K9a
-        longLabel ES-E14 E14 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
-        subGroups view=Signal age=E14 factor=H3K09AC cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=E0 factor=H3K09AC cellType=ESE14 control=STD sex=M strain=A129Ola
         type bigWig 0.150000 39.680000
         color 65,105,225
         viewLimits 0.2:5
@@ -2309,8 +2309,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K4m3
-        longLabel ES-E14 E14 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
-        subGroups view=Signal age=E14 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=E0 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=A129Ola
         type bigWig 0.110000 65.769997
         color 65,105,225
         viewLimits 0.2:10
@@ -2319,8 +2319,8 @@ html wgEncodeLicrHistone.release3
         track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K4m1 
-        longLabel ES-E14 E14 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
-        subGroups view=Signal age=E14 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=C57BL6
+        longLabel ES-E14 E0 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=E0 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=A129Ola
         type bigWig 0.130000 33.009998
         color 65,105,225
         viewLimits 0.2:3
