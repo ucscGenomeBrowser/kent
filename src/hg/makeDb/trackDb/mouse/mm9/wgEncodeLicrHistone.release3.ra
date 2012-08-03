@@ -2178,7 +2178,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneSmintH3k36me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel SI 8w H3K36me3
+        shortLabel SI 8w H3K36m3
         longLabel SmInt 8w H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K36ME3 cellType=SMINT control=STD sex=M strain=C57BL6
         type bigWig 0.120000 19.320000
