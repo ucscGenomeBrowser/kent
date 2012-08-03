@@ -1,7 +1,7 @@
 metaObject wgEncodePsuRnaSeq
 objType composite
 composite wgEncodePsuRnaSeq
-expVars lab,dataType,cell,treatment,readType
+expVars lab,dataType,cell,treatment,labExpId
 
 metaObject wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1
 objType table
@@ -15,6 +15,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1.bam,wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum b008209c8ea2903cc102c9821617af63,2b4c297c616fc6c92fcf356e4af15bbb
 project wgEncode
@@ -41,6 +42,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep2.bam,wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 823dad184a4afb76312d469bf23fe088,dbcb89e90c3d4054a4d33e3538393a8b
 project wgEncode
@@ -67,6 +69,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum edd6abdc1d1d01033185c89250e60528
 project wgEncode
@@ -92,6 +95,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum edd6abdc1d1d01033185c89250e60528
 project wgEncode
@@ -117,6 +121,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 42502db4cc09db7f3560648ef669acb2
 project wgEncode
@@ -143,6 +148,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum e00f8215e8c22a0053e5d27b8686df46
 project wgEncode
@@ -169,6 +175,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -194,6 +201,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -219,6 +227,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -243,6 +252,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -267,6 +277,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -291,6 +302,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -315,6 +327,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -340,6 +353,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -365,6 +379,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -390,6 +405,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -415,6 +431,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dAlnRep1.bam,wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -440,6 +457,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dAlnRep2.bam,wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -465,6 +483,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -489,6 +508,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -513,6 +533,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -537,6 +558,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -561,6 +583,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -586,6 +609,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -611,6 +635,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -636,6 +661,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -661,6 +687,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dAlnRep1.bam,wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -686,6 +713,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dAlnRep2.bam,wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -711,6 +739,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -735,6 +764,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -759,6 +789,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -783,6 +814,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -807,6 +839,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -832,6 +865,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -857,6 +891,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -882,6 +917,7 @@ dateUnrestricted 2013-04-20
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -907,6 +943,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x36AlnRep1.bam,wgEncodePsuRnaSeqG1eME0S129R1x36AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 903e982787f84747d8a94f4388831055,799356e15d12423112e10f6432f21a7c
 project wgEncode
@@ -933,6 +970,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x36RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum b3f96e43188e79b6c252ec1b2cf58e21
 project wgEncode
@@ -958,6 +996,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x36SigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 0abda22c5b47d8267366d6d1bb882616
 project wgEncode
@@ -984,6 +1023,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x55AlnRep2.bam,wgEncodePsuRnaSeqG1eME0S129R1x55AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 4e7219708e0c2bb39331f092ab33ad26,2de641196f1e956d38f9defd203b53ad
 project wgEncode
@@ -1010,6 +1050,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x55RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 3dd60c6cec7eeabe1c8b70b4c45c36b2
 project wgEncode
@@ -1035,6 +1076,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eME0S129R1x55SigRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 42e8092be7e13a5e97a0e5a78a1180e4
 project wgEncode
@@ -1061,6 +1103,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1086,6 +1129,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eME0S129R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1111,6 +1155,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1135,6 +1180,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1159,6 +1205,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1183,6 +1230,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1207,6 +1255,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1232,6 +1281,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1257,6 +1307,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1282,6 +1333,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1307,6 +1359,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 46a0ea35a3cc27a334978506a7bec7db,4b34a985e001676588848236f25fb381
 project wgEncode
@@ -1333,6 +1386,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum b72913711f7d2f15c760289396b6dc38,3c64a5550a3d874a313fbb84ea3fb577
 project wgEncode
@@ -1359,6 +1413,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum e1c6c0108e43d28852cf257e6a36b701
 project wgEncode
@@ -1384,6 +1439,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum 49a386e81120c19c1a79889066bdb0aa
 project wgEncode
@@ -1409,6 +1465,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum ad4d2a6443f6f071d212e97eeb879571
 project wgEncode
@@ -1435,6 +1492,7 @@ dateUnrestricted 2012-12-28
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 md5sum da09912372b2b628aa39d6e851156b44
 project wgEncode
@@ -1461,6 +1519,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1486,6 +1545,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1511,6 +1571,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1536,6 +1597,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1561,6 +1623,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1585,6 +1648,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1609,6 +1673,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1633,6 +1698,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1657,6 +1723,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1682,6 +1749,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1707,6 +1775,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1732,6 +1801,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1757,6 +1827,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1782,6 +1853,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1807,6 +1879,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1831,6 +1904,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1855,6 +1929,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1879,6 +1954,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1903,6 +1979,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1928,6 +2005,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1953,6 +2031,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -1978,6 +2057,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2003,6 +2083,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2028,6 +2109,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2053,6 +2135,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2077,6 +2160,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2101,6 +2185,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2125,6 +2210,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2149,6 +2235,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2174,6 +2261,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2199,6 +2287,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2224,6 +2313,7 @@ dateUnrestricted 2013-04-27
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2249,6 +2339,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2274,6 +2365,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2299,6 +2391,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2323,6 +2416,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2347,6 +2441,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2371,6 +2466,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2395,6 +2491,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2420,6 +2517,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2445,6 +2543,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2470,6 +2569,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2495,6 +2595,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2520,6 +2621,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2.bam,wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2545,6 +2647,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2569,6 +2672,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2593,6 +2697,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2617,6 +2722,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2641,6 +2747,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2666,6 +2773,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2691,6 +2799,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2716,6 +2825,7 @@ dateUnrestricted 2013-04-24
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2741,6 +2851,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2765,6 +2876,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2789,6 +2901,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2813,6 +2926,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2837,6 +2951,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2862,6 +2977,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2887,6 +3003,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2912,6 +3029,7 @@ dateUnrestricted 2013-04-25
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2937,6 +3055,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1.bam,wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -2962,6 +3081,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2.bam,wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
 project wgEncode
@@ -2988,6 +3108,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3012,6 +3133,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3036,6 +3158,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3060,6 +3183,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3084,6 +3208,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3109,6 +3234,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
 project wgEncode
@@ -3135,6 +3261,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3160,6 +3287,7 @@ dateUnrestricted 2013-04-28
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
 project wgEncode
@@ -3186,6 +3314,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45AlnRep1.bam,wgEncodePsuRnaSeqMelMImmortalUknR1x45AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3211,6 +3340,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45AlnRep2.bam,wgEncodePsuRnaSeqMelMImmortalUknR1x45AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3236,6 +3366,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dAlnRep1.bam,wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3261,6 +3392,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dAlnRep2.bam,wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3286,6 +3418,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3310,6 +3443,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3334,6 +3468,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dSigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3359,6 +3494,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dSigRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3384,6 +3520,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3408,6 +3545,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3432,6 +3570,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45SigRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3457,6 +3596,7 @@ dateUnrestricted 2013-04-26
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45SigRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId single
 localization cell
 project wgEncode
 readType 1x45
@@ -3482,6 +3622,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dAlnRep1.bam,wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3507,6 +3648,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dAlnRep2.bam,wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3532,6 +3674,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd1Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3556,6 +3699,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd1Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3580,6 +3724,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd2Rep1.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3604,6 +3749,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd2Rep2.fastq.gz
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3628,6 +3774,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3653,6 +3800,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3678,6 +3826,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep1.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3703,6 +3852,7 @@ dateUnrestricted 2013-04-22
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2.bigWig
 grant Hardison
 lab PSU-m
+labExpId paired-end
 localization cell
 project wgEncode
 readType 2x99D
@@ -3716,4 +3866,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: 1032645219
+# MAGIC: 1651240993
