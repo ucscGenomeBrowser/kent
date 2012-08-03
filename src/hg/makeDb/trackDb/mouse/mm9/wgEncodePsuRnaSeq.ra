@@ -531,7 +531,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eME0S129R1x36SigRep1
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E S 1
-        longLabel G1E 1x36 RNA-seq Signal Rep 1 from ENCODE/PSU
+        longLabel G1E single read (1x36) RNA-seq Signal Rep 1 from ENCODE/PSU
         subGroups view=Signal age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 48059.000000
         color 153,38,0
@@ -540,7 +540,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eME0S129R1x55SigRep2
         parent wgEncodePsuRnaSeqViewSignal off
         shortLabel G1E S 2
-        longLabel G1E 1x55 RNA-seq Signal Rep 2 from ENCODE/PSU
+        longLabel G1E single read (1x55) RNA-seq Signal Rep 2 from ENCODE/PSU
         subGroups view=Signal age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=aNONE rep=rep2
         type bigWig 1.000000 272937.000000
         color 153,38,0
@@ -644,7 +644,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eME0S129R1x36AlnRep1
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 1
-        longLabel G1E 1x36 RNA-seq Alignments Rep 1 from ENCODE/PSU
+        longLabel G1E single read (1x36) RNA-seq Alignments Rep 1 from ENCODE/PSU
         subGroups view=Alignments age=E0 cellType=G1E readType=R1X36 sex=M strain=s129 treatment=aNONE rep=rep1
         type bam
         color 153,38,0
@@ -653,7 +653,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eME0S129R1x55AlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E A 2
-        longLabel G1E 1x55 RNA-seq Alignments Rep 2 from ENCODE/PSU
+        longLabel G1E single read (1x55) RNA-seq Alignments Rep 2 from ENCODE/PSU
         subGroups view=Alignments age=E0 cellType=G1E readType=R1X55 sex=M strain=s129 treatment=aNONE rep=rep2
         type bam
         color 153,38,0
