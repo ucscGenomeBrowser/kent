@@ -39,7 +39,7 @@ subGroup7 control Control INPUT=Input
 subGroup8 treatment Treatment aNONE=None DIFFD24H=Estradiol_24hr
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ treatment=+ factor=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target replicate=Replicate view=View controlId=Control_ID dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target replicate=Replicate view=View controlId=Control_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=pack Signal=full
@@ -64,7 +64,7 @@ html wgEncodePsuHistone.release2
 	qValueFilterLimits 0:320
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K27m3
         longLabel G1E H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -73,7 +73,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E-ER H3K27m3 24
         longLabel G1E-ER4 H3K27me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -91,7 +91,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E-ER H3K4m3 24
         longLabel G1E-ER4 H3K4me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -100,7 +100,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k04me3ME0S129InputP
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K4m3
         longLabel G1E H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -109,7 +109,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks 
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K4m1
         longLabel G1E H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -118,7 +118,7 @@ html wgEncodePsuHistone.release2
         # subId=6862 dateSubmitted=2012-04-25
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K36m3
         longLabel G1E H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -136,7 +136,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E-ER H3K36m3 24
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -181,7 +181,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E-ER H3K4m1 24
         longLabel G1E-ER4 H3K4me1 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -208,7 +208,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K9m3
         longLabel G1E H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -262,7 +262,7 @@ html wgEncodePsuHistone.release2
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks
+        parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E-ER H3K9m3 24
         longLabel G1E-ER4 H3K9me3 Estradiol 24 hr Histone Mods by ChIP-seq Peaks from ENCODE/PSU
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -302,7 +302,7 @@ html wgEncodePsuHistone.release2
 	windowingFunction mean+whiskers
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E H3K27m3
         longLabel G1E H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K27ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -312,7 +312,7 @@ html wgEncodePsuHistone.release2
         # subId=3047 dateSubmitted=2011-09-30
 
         track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E-ER H3K27m3 24
         longLabel G1E-ER4 H3K27me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K27ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -332,7 +332,7 @@ html wgEncodePsuHistone.release2
         # subId=4876 dateSubmitted=2011-09-23
 
         track wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E-ER H3K4m3 24
         longLabel G1E-ER4 H3K4me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -342,7 +342,7 @@ html wgEncodePsuHistone.release2
         # subId=3041 dateSubmitted=2011-10-26
 
         track wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E H3K4m3
         longLabel G1E H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -352,7 +352,7 @@ html wgEncodePsuHistone.release2
         # subId=3042 dateSubmitted=2011-10-27
 
         track wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E H3K4m1
         longLabel G1E H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -362,7 +362,7 @@ html wgEncodePsuHistone.release2
         # subId=3043 dateSubmitted=2011-10-31
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E H3K36m3
         longLabel G1E H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -382,7 +382,7 @@ html wgEncodePsuHistone.release2
         # subId=5013 dateSubmitted=2011-10-25
 
         track wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E-ER H3K36m3 24
         longLabel G1E-ER4 H3K36me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -432,7 +432,7 @@ html wgEncodePsuHistone.release2
         # subId=5039 dateSubmitted=2011-10-31
 
         track wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E-ER H3K4m1 24
         longLabel G1E-ER4 H3K4me1 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129
@@ -462,7 +462,7 @@ html wgEncodePsuHistone.release2
         # subId=5108 dateSubmitted=2011-11-11
 
         track wgEncodePsuHistoneG1eH3k09me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E H3K9m3
         longLabel G1E H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K09ME3 cellType=G1E control=INPUT treatment=aNONE sex=M strain=s129
@@ -522,7 +522,7 @@ html wgEncodePsuHistone.release2
         # subId=5105 dateSubmitted=2011-11-15
 
         track wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
+        parent wgEncodePsuHistoneViewSignal off
         shortLabel G1E-ER H3K9m3 24
         longLabel G1E-ER4 H3K9me3 Estradiol 24 hr Histone Mods by ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=H3K09ME3 cellType=G1EER4 control=INPUT treatment=DIFFD24H sex=M strain=s129

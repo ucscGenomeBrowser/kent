@@ -2,8 +2,6 @@ metaObject wgEncodePsuRnaSeq
 objType composite
 composite wgEncodePsuRnaSeq
 expVars lab,dataType,cell,treatment,readType
-localization cell
-rnaExtract polyA
 
 metaObject wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1
 objType table
@@ -3718,4 +3716,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: 1675867208
+# MAGIC: 1032645219
