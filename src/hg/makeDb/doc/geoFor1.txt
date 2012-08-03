@@ -965,24 +965,25 @@ popd > /dev/null
     # the tac reverses the list to get the small jobs first
     gensub2 maf.list single template stdout | tac > jobList
     para -ram=8g create jobList
-XXX - running - Thu Aug  2 16:12:37 PDT 2012
 # Completed: 256 of 256 jobs
-# CPU time in finished jobs:      61884s    1031.39m    17.19h    0.72d  0.002 y
-# IO & Wait Time:                  5543s      92.39m     1.54h    0.06d  0.000 y
-# Average job time:                 263s       4.39m     0.07h    0.00d
-# Longest finished job:            2861s      47.68m     0.79h    0.03d
-# Submission to last job:          2901s      48.35m     0.81h    0.03d
+# CPU time in finished jobs:      59583s     993.04m    16.55h    0.69d  0.002 y
+# IO & Wait Time:                  6044s     100.74m     1.68h    0.07d  0.000 y
+# Average job time:                 256s       4.27m     0.07h    0.00d
+# Longest finished job:            2781s      46.35m     0.77h    0.03d
+# Submission to last job:          2858s      47.63m     0.79h    0.03d
 
-    # assemble into a single maf file
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
     cd /hive/data/genomes/geoFor1/bed/multiz7way
     head -1 splitRun/maf/001.maf > multiz7way.maf
     for F in splitRun/maf/*.maf
 do
+    echo "${F}" 1>&2
     egrep -v "^#" ${F}
 done >> multiz7way.maf
     tail -1 splitRun/maf/001.maf >> multiz7way.maf
 
-# -rw-rw-r--  1 1524521286 Sep 28 13:28 multiz7way.maf
+# -rw-rw-r-- 1 5674242413 Aug  3 08:03 multiz7way.maf
+# -rw-rw-r-- 1 5670181186 Aug  1 14:41 multiz7way.maf.0
 
     # Load into database
     ssh hgwdev
@@ -991,20 +992,20 @@ done >> multiz7way.maf
     ln -s `pwd`/multiz7way.maf /gbdb/geoFor1/multiz7way
     cd /scratch/tmp
     time nice -n +17 hgLoadMaf geoFor1 multiz7way
-    #   Loaded 3644965 mafs in 1 files from /gbdb/geoFor1/multiz7way
-    #   real    7m16.829s
+    #   Loaded 3644645 mafs in 1 files from /gbdb/geoFor1/multiz7way
+    #   real    3m40.564s
 
     time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 geoFor1 multiz7waySummary \
 	/gbdb/geoFor1/multiz7way/multiz7way.maf
-    #   Created 328866 summary blocks from 10230752 components and 3644965
-    #   mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
-    #   real    5m11.041s
+    #   Created 328873 summary blocks from 10243549 components
+    #   and 3644645 mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   real    4m12.044s
 
     wc -l multiz7way*.tab
-    #   3644965 multiz7way.tab
-    #   328866 multiz7waySummary.tab
-    #   3973831 total
+    #   3644645 multiz7way.tab
+    #   328873 multiz7waySummary.tab
+    #   3973518 total
 
     rm multiz7way*.tab
 
@@ -1019,6 +1020,10 @@ done >> multiz7way.maf
 
     time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
         /dev/null . ../../multiz7way.maf
+    #   real    2m49.680s
+
+    find . -type f | wc -l
+    #   2944
 
     # check for N.bed files everywhere:
     cd /hive/data/genomes/geoFor1/bed/multiz7way/anno
@@ -1067,15 +1072,17 @@ mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/geoFor1/geoFor1.2b
     para -ram=8g create jobList
     para try ... check ... push ...
 # Completed: 2944 of 2944 jobs
-# CPU time in finished jobs:        567s       9.45m     0.16h    0.01d  0.000 y
-# IO & Wait Time:                  8069s     134.48m     2.24h    0.09d  0.000 y
+# CPU time in finished jobs:        560s       9.33m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                  8374s     139.57m     2.33h    0.10d  0.000 y
 # Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:              12s       0.20m     0.00h    0.00d
-# Submission to last job:           166s       2.77m     0.05h    0.00d
+# Longest finished job:              14s       0.23m     0.00h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
 
     # verify all result files have some content, look for 0 size files:
     find ./result -type f -size 0
     # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
 
     # combine into one file  (the 1>&2 redirect sends the echo to stderr)
     head -q -n 1 result/0/JH739903.maf > geoFor1.7way.maf
@@ -1090,7 +1097,7 @@ done >> geoFor1.7way.maf
     # How about an official end marker:
     echo "##eof maf" >> geoFor1.7way.maf
     ls -og
-# -rw-rw-r--  1 6484750298 Aug  2 11:25 geoFor1.7way.maf
+# -rw-rw-r--  1 6488856099 Aug  3 09:02 geoFor1.7way.maf
     du -hsc geoFor1.7way.maf
     #   6.1G    geoFor1.7way.maf
 
@@ -1102,24 +1109,23 @@ done >> geoFor1.7way.maf
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/geoFor1/multiz7way \
         geoFor1 multiz7way
-    #   Loaded 3782881 mafs in 1 files from /gbdb/geoFor1/multiz7way
-    #   real    5m21.955s
+    #   Loaded 3783877 mafs in 1 files from /gbdb/geoFor1/multiz7way
+    #   real    3m9.770s
 
     time hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 geoFor1 multiz7waySummary \
         /gbdb/geoFor1/multiz7way/multiz7way.maf
-    #   Created 328866 summary blocks from 10230752 components and 3782881
+    #   Created 328873 summary blocks from 10243549 components and 3783877
     #   mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
-    #   real    4m40.876s
+    #   real    3m36.650s
 
-
-    #   -rw-rw-r--  1  189688234 Aug  2 11:33 multiz7way.tab
-    #   -rw-rw-r--  1   15807499 Aug  2 11:48 multiz7waySummary.tab
+    #   -rw-rw-r--  1  189735418 Aug  3 09:07 multiz7way.tab
+    #   -rw-rw-r--  1   15808340 Aug  3 09:11 multiz7waySummary.tab
 
     rm multiz7way*.tab
 
-#######################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2012-08-02 - Hiram)
+w######################################################################
+w MULTIZ7WAY MAF FRAMES (DONE - 2012-08-02 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/geoFor1/bed/multiz7way/frames
     cd /hive/data/genomes/geoFor1/bed/multiz7way/frames
@@ -1211,26 +1217,27 @@ done
 	| nice -n +19 genePredToMafFrames geoFor1 stdin stdout \
 	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
 		| gzip > multiz7wayFrames.bed.gz)
-    #	real    1m46.191s
+    #   real    3m19.528s
 
     # verify there are frames on everything, should be 7 species:
-    zcat multiz7way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
-# 140139 galGal4
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+# 140156 galGal4
 # 146124 geoFor1
-# 183985 hg19
-# 171698 melGal1
-# 141047 melUnd1
-# 203615 mm10
-# 149890 taeGut1
+# 183760 hg19
+# 171778 melGal1
+# 140917 melUnd1
+# 203418 mm10
+# 149897 taeGut1
+
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/geoFor1/bed/multiz7way/frames
     time hgLoadMafFrames geoFor1 multiz7wayFrames multiz7wayFrames.bed.gz
-    #   real    0m9.903s
+    #   real    0m9.574s
     time featureBits -countGaps geoFor1 multiz7wayFrames
-    #   26484788 bases of 1065292181 (2.486%) in intersection
-    #   real    0m13.820s
+    #   26482387 bases of 1065292181 (2.486%) in intersection
+    #   real    0m13.589s
 
     #   enable the trackDb entries:
 # frames multiz7wayFrames
@@ -1257,7 +1264,8 @@ done
     cd annoSplit
     time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
         /dev/null . ../../anno/geoFor1.7way.maf 
-
+    find . -type f | wc -l
+    #   2944
     ssh encodek
     mkdir /hive/data/genomes/geoFor1/bed/multiz7way/4d/run
     cd /hive/data/genomes/geoFor1/bed/multiz7way/4d/run
@@ -1288,9 +1296,7 @@ endif
     # << happy emacs
     chmod +x 4d.csh
 
-    ls -1S /hive/data/genomes/geoFor1/bed/multiz7way/anno/result/*.maf \
-	| sed -e "s#.*multiz7way/anno/result/##" \
-	> maf.list
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
 
     cat << '_EOF_' > template
 #LOOP
@@ -1305,11 +1311,11 @@ endif
     para time
 # Completed: 2774 of 2944 jobs
 # Crashed: 170 jobs
-# CPU time in finished jobs:        464s       7.73m     0.13h    0.01d  0.000 y
-# IO & Wait Time:                  7056s     117.60m     1.96h    0.08d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:              15s       0.25m     0.00h    0.00d
-# Submission to last job:           429s       7.15m     0.12h    0.00d
+# CPU time in finished jobs:        818s      13.63m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  8636s     143.93m     2.40h    0.10d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:             184s       3.07m     0.05h    0.00d
+# Submission to last job:           624s      10.40m     0.17h    0.01d
 
     # not all of them work perfectly.  I checked one of the failures,
     #   the SS file had no contents beyond the header
@@ -1329,8 +1335,14 @@ endif
 	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
     # check they are all in there:
-    grep "^>" 4d.all.mfa | wc -l
-    #   7
+    grep "^>" 4d.all.mfa
+    #   >geoFor1
+    #   >taeGut1
+    #   >melUnd1
+    #   >galGal4
+    #   >melGal1
+    #   >hg19
+    #   >mm10
 
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 	../geoFor1.7way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
@@ -1341,12 +1353,14 @@ endif
 	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree_commas.nh 4d.all.mfa
-    #   real    0m6.779s
+    #   real    0m3.872s
 
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
-# TREE: ((((geoFor1:0.0412605,taeGut1:0.0344574):0.102066,(melGal1:0.0350646,galGal4:0.0329457):0.106045):0.0108906,melUnd1:0.0769852):0.224703,(hg19:0.118864,mm10:0.195706):0.224703);
+# TREE:
+# ((((geoFor1:0.0413091,taeGut1:0.0343957):0.101451,melUnd1:0.0837731):0.0304192,(galGal4:0.0329708,melGal1:0.0350493):0.079828):0.218721,(hg19:0.118822,mm10:0.19572):0.218721);
+
 
     #   manually constructed two different subset lists:
     #  geoFor1 is on each list since it is the reference and is needed for
@@ -1436,29 +1450,15 @@ do
     mv phyloFit.mod ${N}.mod
     grep TREE ${N}.mod | sed 's/TREE\:\ //' > ${N}.Nway.nh
 done
-    #   real    0m24.600s
-    #   real    0m27.249s
-    #   real    4m37.709s
-    #   real    30m32.453s
 
     grep TREE all.mod | sed -e 's/TREE: //' > all.nh
-    # this corrected tree changes the order based on distance from
-    #   what we had before:
     /cluster/bin/phast/all_dists all.nh |grep geoFor1 | sort -k3n \
         | sed -e "s/geoFor1.//"
-    #   taeGut1 0.075718
-    #   melUnd1 0.231202
-    #   galGal4 0.282317
-    #   melGal1 0.284436
-    #   hg19    0.722487
-    #   mm10    0.799329
-
-    # this was before:
-    # taeGut1 0.241542
-    # galGal4 0.335536
-    # melGal1 0.370000
-    # melUnd1 0.469223
-    # hg19    1.265735
-    # mm10    1.473373
+    #   taeGut1 0.075705
+    #   melUnd1 0.226533
+    #   galGal4 0.285978
+    #   melGal1 0.288057
+    #   hg19    0.729443
+    #   mm10    0.806341
 
 #########################################################################
