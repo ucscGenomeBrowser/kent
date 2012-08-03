@@ -361,7 +361,7 @@ html wgEncodePsuTfbs.release2
         longLabel G1E-ER4 GATA1 Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4 control=INPUT treatment=eDIFFD24H rep=repP sex=M strain=s129
         type bigWig 1.000000 212.000000
-        color 153,38,0i
+        color 153,38,0
 		viewLimits 2:150
         # subId=4723 dateSubmitted=2011-08-09
         # was wgEncodePsuTfbsG1eer4e2Gata1aME0S129Sig vsmalladi Thu Nov  3 15:06:55 2011
@@ -614,7 +614,8 @@ html wgEncodePsuTfbs.release2
         longLabel G1E-ER4 GATA1 Estradiol 14 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=dDIFFD14H rep=rep1
         type bigWig 1.000000 214.000000
-        color 153,38,0
+        viewLimits 1:100
+		color 153,38,0
         # subId=7775 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hSigRep1
@@ -623,7 +624,8 @@ html wgEncodePsuTfbs.release2
         longLabel G1E-ER4 GATA1 Estradiol 30 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=fDIFFD30H rep=rep1
         type bigWig 1.000000 230.000000
-        color 153,38,0
+        viewLimits 1:100
+		color 153,38,0
         # subId=7776 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hSigRep1
@@ -632,7 +634,8 @@ html wgEncodePsuTfbs.release2
         longLabel G1E-ER4 GATA1 Estradiol 24 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=eDIFFD24H rep=rep1
         type bigWig 1.000000 166.000000
-        color 153,38,0
+        viewLimits 1:30
+		color 153,38,0
         # subId=7778 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputSigRep1
@@ -641,7 +644,8 @@ html wgEncodePsuTfbs.release2
         longLabel G1E-ER4 GATA1 Estradiol 0 hr TC TFBS ChIP-seq Signal from ENCODE/PSU
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig 1.000000 298.000000
-        color 153,38,0
+        viewLimits 1:100
+		color 153,38,0
         # subId=7779 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hSigRep1
@@ -651,6 +655,7 @@ html wgEncodePsuTfbs.release2
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=bDIFFD3H rep=rep1
         type bigWig 1.000000 268.000000
         color 153,38,0
+		viewLimits 1:100
         # subId=7780 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hSigRep1
@@ -660,6 +665,7 @@ html wgEncodePsuTfbs.release2
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4T control=INPUT sex=M strain=s129 treatment=cDIFFD7H rep=rep1
         type bigWig 1.000000 276.000000
         color 153,38,0
+		viewLimits 1:100
         # subId=7781 dateSubmitted=2012-07-31
 
         track wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1

@@ -82,7 +82,7 @@ html wgEncodeBroadHistone.release3
     shortLabel Peaks
     view Peaks
     visibility pack
-    viewUi on
+    #viewUi off
     parent wgEncodeBroadHistone
     scoreFilter 0
     scoreFilterLimits 0:1000

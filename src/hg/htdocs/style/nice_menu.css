@@ -466,10 +466,10 @@ a:link {color: #121E9A;}
 
 /* Below are all the styles used by the superfish plugin
 I need SOME of these for the arrows in the dropdown menu. I'll
-end up deleting any I don't need
+end up deleting any I don't need */
 
 
-/*** arrows **/
+/* arrows */
 .sf-menu a.sf-with-ul {
 	padding-right: 	2.25em;
 	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
