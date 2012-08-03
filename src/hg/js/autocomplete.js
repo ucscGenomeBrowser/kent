@@ -17,7 +17,7 @@ var suggestBox = {
             if(cache[key] == null) {
                 $.ajax({
                            url: "../cgi-bin/hgSuggest",
-                           data: "db=" + db + "&prefix=" + key,
+                           data: "db=" + db + "&prefix=" + encodeURIComponent(key),
                            // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
                            trueSuccess: function (response, status) {
                                // We get a lot of duplicate requests (especially the first letters of words),
