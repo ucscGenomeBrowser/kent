@@ -230,8 +230,10 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
-static char *getSetFieldValStr(struct sqlFieldInfo *fi, char *table)
-/* Destructively prepare fi->type for chopCommas, making sure it looks like a set() def. */
+static char *commaSepFromSqlSetTypeDecl(struct sqlFieldInfo *fi, char *table)
+/* Destructively prepare fi->type for chopCommas: strip initial "set(" and final ")",
+ * informatively errAborting if not found, and strip the single-quote characters
+ * that mysql puts around each field. */
 {
 if (!startsWith("set(", fi->type))
     errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
@@ -259,18 +261,17 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
     {
     if (sameString(fi->field, "func"))
 	{
-	char *vals = getSetFieldValStr(fi, tdb->table);
-	char *values[128];
+	char *vals = commaSepFromSqlSetTypeDecl(fi, tdb->table);
+	char *values[128]; // 22 values as of snp137
 	int valCount = chopCommas(vals, values);
 	char *labels[valCount];
 	int i;
 	for (i = 0;  i < valCount;  i++)
 	    {
-	    char *val = values[i];
-	    if (sameString(val, "unknown"))
+	    if (sameString(values[i], "unknown"))
 		labels[i] = "Unknown";
 	    else
-		labels[i] = snpMisoLinkFromFunc(val);
+		labels[i] = snpMisoLinkFromFunc(values[i]);
 	    }
 	snp125PrintFilterControls(tdb->track, "Function", "func", labels, values, valCount);
 	return;;

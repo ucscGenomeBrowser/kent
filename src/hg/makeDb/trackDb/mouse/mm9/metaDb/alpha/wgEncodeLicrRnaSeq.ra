@@ -3,7 +3,6 @@ objType composite
 composite wgEncodeLicrRnaSeq
 expVars lab,dataType,cell,age
 geoSeriesAccession GSE36026
-readType 1x36
 
 metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
 objType table
@@ -4009,4 +4008,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 2013961179
+# MAGIC: 2011540500
