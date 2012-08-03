@@ -23,6 +23,7 @@ errAbort(
   "        uw01 - From UW DNase file names for hg18\n"
   "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
   "        enh01 - From enhancer picks\n"
+  "        awgDnase01 - AWG uniform dnase peaks, named wgEncodeAwgDnase<lab><cell>Peak.bigBed from Jan 2011 ENCODE freeze\n"
   "options:\n"
   "    scoreColIx=N (default %d) Index (1 based) of score column in files.  Use 5 for bed,\n"
   "               7 for narrowPeak"
@@ -135,6 +136,12 @@ if (v != NULL)
     *v = 0;
 
 fprintf(f, "\t%s\t%s", cell, rep);
+}
+
+void awgDnase01MetaOut(FILE *f, char *midString)
+/* uw02MetaOut - Version of function used for AWG. Doesn't include metadata */
+{
+fprintf(f, "\t.");
 }
 
 char *findKnownPrefix(char *s, char **prefixes)
@@ -263,6 +270,8 @@ for (in = inList; in != NULL; in = in->next)
 	ans01MetaOut(f, midString);
     else if (sameString(type, "enh01"))
         enh01MetaOut(f, midString);
+    else if (sameString(type, "awgDnase01"))
+        awgDnase01MetaOut(f, midString);
     else
 	errAbort("Unknown type '%s' in first command line parameter.", type);
     freez(&midString);

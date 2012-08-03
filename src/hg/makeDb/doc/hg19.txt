@@ -19477,11 +19477,51 @@ cat > makeNorm.csh << 'EOF'
     sed -n 's/bigDataUrl /wget /p' uniformDnase.txt > wget.csh
     csh wget.csh >&! wget.out &
 # 125 files (.bb), dated Nov 22, 2011
+# Sample case had ~150K peaks (by bigBedInfo)
+# These are narrowPeak (by bigBedSummary) w/ position & signalVal, no name, score or stats
+#$ bigBedToBed wgEncodeUwDnaseSKNMC.fdr01peaks.hg19.bb stdout | head
+chr1    10180   10330   .       0       .       26.000000       -1      -1      -1
+# NOTE: Steve Wilder is planning to add scores and make formats of these files more uniform
+
+    # rename to UCSC style: wgEncodeAwgDnase<lab><cell>Peak.bigBed
+    ls *.fdr01peaks.hg19.bb | \
+        perl -wpe 's/(wgEncode)(\S+)(Dnase)(\S+)(.fdr01peaks.hg19.bb)/bigBedToBed $1$2$3$4$5 $1Awg$3\u\L$2\E\u\L$4\EPeak.bed/' > unbig.csh
+    # convert to bed and rename
+    csh unbig.csh >&! unbig.out
+    # udc couldn't read 4 bytes from wgEncodeUWDukeDnaseHepG2.fdr01peaks.hg19.bb, did read 0
+    #  This dataset was truncated
+    ls -1 *.bed > peak.lst
+    grep -v Hepg2 peak.lst > peak.fixed.lst
 
     # Datasets with treated cells (hints from long label)
     grep '(' uniformDnase.txt | grep longLabel > treated.txt
     wc -l treated.txt
 # 7 datasets
+    # Tamoxifen -> Tam10030 (Duke) or 40HAM20nM72hr (UW), Estradiol -> Est10nm30m, Ifna4h, Andro, Hypox
+    # TODO: Edit to rename
+
+    # Cluster table:  wgEncodeRegDnaseClusteredV2 (bed5, with name=#datasets represented in cluster)
+
+    regClusterMakeTableOfTables awgDnase01 peak.fixed.lst peak.table -verbose=3 >&! regTable.out &
+    regCluster peak.table /dev/null peak.bed
+    # 2229038 singly-linked clusters, 2338570 clusters in 24 chromosomes
+
+    # filter out low scoring, single peaks in cluster
+    awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV2.bed
+    wc -l wgEncodeRegDnaseClusteredV2.bed
+    # 1277312 wgEncodeRegDnaseClusteredV2.bed
+
+    hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
+
+    #  NOTE: V1 had ~1M clusters.  Perhaps should be bigBed now.
+    # Other data tables: Need to load the peak files as they are used by hgc
+    #   These should probably also be subtracks.
+    # It would be nice if hgc sorted datasets by signal or cellType
+    # Create metadata table:  wgEncodeRegV2DnaseClusteredInputs (inputTrackTable setting)
+    #  was: objName, cellType, treatment, replicate, lab, dateUnrestricted
+    # For V2, AWG is providing pooled replicates, and sometimes pooled labs.  Also,
+    #   this data has all passed timestamp restriction, so don't need to show
+    #      objName, cellType, treatment, lab(s)
 
     ######
     # Uniform histone signal for overlay wiggles

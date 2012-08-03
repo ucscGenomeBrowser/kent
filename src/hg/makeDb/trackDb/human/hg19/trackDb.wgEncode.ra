@@ -26,6 +26,9 @@ include wgEncodeUncBsuProtGenc.release1.ra alpha
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.release3.ra
 
+# Integrated Regulation from AWG uniform processing (Jan 2011 data) (wrangler: kate)
+include wgEncodeRegV2.ra
+
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
 
