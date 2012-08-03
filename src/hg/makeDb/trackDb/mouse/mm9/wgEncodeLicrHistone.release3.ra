@@ -1532,7 +1532,7 @@ html wgEncodeLicrHistone.release3
         longLabel Limb E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.120000 48.669998
-        color 102,50,20
+        color 102,50,200
         viewLimits 0.2:5
         # subId=5370 dateSubmitted=2011-12-23
 
