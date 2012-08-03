@@ -758,7 +758,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneWbrainH3k09me3ME14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Brain H3K9me3 Pk
+        shortLabel Bn 14.5 H3K9m3 
         longLabel Brain E14.5 H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K09ME3 cellType=WBRAIN control=STD sex=M strain=C57BL6
         type broadPeak
@@ -767,7 +767,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneThymusH3k27me3MAdlt8wC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Thymus H3K27me3 Pk
+        shortLabel Thm 8w H3K27m3
         longLabel Thymus 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=THYMUS control=STD sex=M strain=C57BL6
         type broadPeak
@@ -776,7 +776,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneSpleenH3k27me3MAdlt8wC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Spleen H3K27me3 Pk
+        shortLabel Sp 8w H3K27m3 
         longLabel Spleen 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=SPLEEN control=STD sex=M strain=C57BL6
         type broadPeak
@@ -785,7 +785,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneTestisH3k27me3MAdlt8wC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Testis H3K27me3 Pk
+        shortLabel Ts 8w H3K27m3
         longLabel Testis 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=TESTIS control=STD sex=M strain=C57BL6
         type broadPeak
@@ -794,7 +794,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBcellcd43nH3k36me3MAdlt8wC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BcelCD43- H3K36me3 Pk
+        shortLabel BCD43- 8w H3K36m3 
         longLabel BcelCD43- 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=B0CELLCD43N control=STD sex=M strain=C57BL6
         type broadPeak
@@ -803,7 +803,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBcellcd43nH3k27me3MAdlt8wC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BcelCD43- H3K27me3 Pk
+        shortLabel BCD43- 8w H3K27m3 
         longLabel BcelCD43- 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=B0CELLCD43N control=STD sex=M strain=C57BL6
         type broadPeak
@@ -812,7 +812,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneWbrainH3k27me3ME14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Brain H3K27me3 Pk
+        shortLabel Bn 14.5 H3K27m3 
         longLabel Brain E14.5 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K27ME3 cellType=WBRAIN control=STD sex=M strain=C57BL6
         type broadPeak
@@ -821,7 +821,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k36me3FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K36me3 Pk
+        shortLabel CH12 H3K36m3 
         longLabel CH12 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K36ME3 cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -830,7 +830,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEsb4H3k27me3ME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-Bruce4 H3K27me3 Pk
+        shortLabel ESB4 0 H3K27m3 
         longLabel ES-Bruce4 E0 H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -839,7 +839,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEsb4H3k36me3ME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-Bruce4 H3K36me3 Pk
+        shortLabel ESB4 0 H3K36m3 
         longLabel ES-Bruce4 E0 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -848,7 +848,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneWbrainH3k36me3ME14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Brain H3K36me3 Pk
+        shortLabel Bn 14.5 H3K36m3 
         longLabel Brain E14.5 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K36ME3 cellType=WBRAIN control=STD sex=M strain=C57BL6
         type broadPeak
@@ -857,7 +857,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneKidneyH3k27me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Kidney H3K27me3 Pk
+        shortLabel Kdy 8w H3K27m3 
         longLabel Kidney 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6
         type broadPeak
@@ -866,7 +866,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCbellumH3k27me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Cerebellum H3K27me3 Pk
+        shortLabel Cb 8w H3K27m3 
         longLabel Cerebellum 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=CBELLUM control=STD sex=M strain=C57BL6
         type broadPeak
@@ -875,7 +875,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneSmintH3k36me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel SmIntestine H3K36me3 Pk
+        shortLabel SI 8w H3K36m3
         longLabel SmInt 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=SMINT control=STD sex=M strain=C57BL6
         type broadPeak
@@ -884,7 +884,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneKidneyH3k36me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Kidney H3K36me3 Pk
+        shortLabel Kdy 8w H3K36m3
         longLabel Kidney 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6
         type broadPeak
@@ -893,7 +893,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneTestisH3k36me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Testis H3K36me3 Pk
+        shortLabel Ts 8w H3K36m3 
         longLabel Testis 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=TESTIS control=STD sex=M strain=C57BL6
         type broadPeak
@@ -902,7 +902,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneThymusH3k36me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Thymus H3K36me3 Pk
+        shortLabel Thm 8w H3K36m3 
         longLabel Thymus 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=THYMUS control=STD sex=M strain=C57BL6
         type broadPeak
@@ -911,7 +911,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneSpleenH3k36me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Spleen H3K36me3 Pk
+        shortLabel Sp 8w H3K36m3
         longLabel Spleen 8w H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K36ME3 cellType=SPLEEN control=STD sex=M strain=C57BL6
         type broadPeak
@@ -920,7 +920,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneSmintH3k27me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel SmIntestine H3K27me3 Pk
+        shortLabel SI 8w H3K27m3 
         longLabel SmInt 8w H3K27me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27ME3 cellType=SMINT control=STD sex=M strain=C57BL6
         type broadPeak
@@ -929,7 +929,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEsb4H3k09me3ME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-Bruce4 H3K9me3 Pk
+        shortLabel ESB4 0 H3K9m3
         longLabel ES-Bruce4 E0 H3K9me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -938,7 +938,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-Bruce4 H3K9ac Pk
+        shortLabel ESB4 0 H3K9a 
         longLabel ES-Bruce4 E0 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E0 factor=H3K09AC cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -947,8 +947,8 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-E14 H3K36me3 Pk
-        longLabel ES-E14 E14 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        shortLabel ES-E14 0 H3K36m3 
+        longLabel ES-E14 E0 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14 factor=H3K36ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -956,7 +956,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-E14 H3K27ac Pk
+        shortLabel ES-E14 0 H3K27a 
         longLabel ES-E14 E14 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14 factor=H3K27AC cellType=ESE14 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -965,7 +965,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-E14 H3K9ac Pk
+        shortLabel ES-E14 0 H3K9a 
         longLabel ES-E14 E14 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14 factor=H3K09AC cellType=ESE14 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -974,7 +974,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-E14 H3K4me3 Pk
+        shortLabel ES-E14 0 H3K4m3 
         longLabel ES-E14 E14 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14 factor=H3K04ME3 cellType=ESE14 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -983,7 +983,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ES-E14 H3K4me1 Pk
+        shortLabel ES-E14 0 H3K4m1 
         longLabel ES-E14 E14 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14 factor=H3K04ME1 cellType=ESE14 control=STD sex=M strain=C57BL6
         type broadPeak
@@ -992,7 +992,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K79me2 Pk
+        shortLabel CH12 H3K79m2 
         longLabel CH12 H3K79me2 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K79ME2 cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -1001,7 +1001,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K27ac Pk
+        shortLabel CH12 H3K27a 
         longLabel CH12 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K27AC cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -1010,7 +1010,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K4me3 Pk
+        shortLabel CH12 H3K4m3 
         longLabel CH12 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME3 cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -1019,7 +1019,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K9ac Pk
+        shortLabel CH12 H3K9a 
         longLabel CH12 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K09AC cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -1028,7 +1028,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K4me2 Pk
+        shortLabel CH12 H3K4m2 
         longLabel CH12 H3K4me2 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME2 cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
@@ -1037,7 +1037,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel CH12 H3K4me1 Pk
+        shortLabel CH12 H3K4m1 
         longLabel CH12 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME1 cellType=CH12 control=STD sex=F strain=C57BL6
         type broadPeak
