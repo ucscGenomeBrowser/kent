@@ -21,8 +21,15 @@ int dsPrintOpen(int initialBufSize);
 int dsPrintf(char *format, ...);
 // Prints into end of the top ds buffer, and return resulting string length
 // If there is no current buffer, this acts like a simple printf and returns -1
-#define dsPrintPuts(str) dsPrintf("%s\n",str)
-#define dsPrintPutc(chr) dsPrintf("%c",chr)
+#define dsPuts(str) dsPrintf("%s\n",str)
+#define dsPutc(chr) dsPrintf("%c",chr)
+#define SWAP_PRINTF
+#ifdef SWAP_PRINTF
+#define printf dsPrintf
+#define puts dsPuts
+#undef putc
+#define putc dsPutc
+#endif//def SWAP_PRINTF
 
 int dsPrintDirectly(int token,FILE *file);
 // Prints the contents of the top buffer directly to a file.
@@ -89,12 +96,13 @@ char *dsPrintCannibalizeAndCloseAll();
 // Tests of dsPrint functions
 
 /* Next steps:
- * 1) in cheapCgi.c replace all printfs with dsPrintf
- * 2) in hui.c replace all printfs with dsPrintf
- * 3) in hgTrackUi replace all printfs with dsPrintf
- * 4) After 1-3, add opens and closes to hgTrackUi
- * 5) Handle isConfigurable tests with dsPrintf and throw away results
- * 5) Handle boxing cfg with dsPrintf
+ * 1) DONE WITH MACROS: in cheapCgi.c replace all printfs with dsPrintf
+ * 2) DONE WITH MACROS: in hui.c replace all printfs with dsPrintf
+ * 3) DONE WITH MACROS: in hgTrackUi replace all printfs with dsPrintf
+ * 4) DONE: After 1-3, add opens and closes to hgTrackUi
+ * 5) DONE: Handle boxing cfg with dsPrintf (note existing cfgs that support boxing still do it)
+ * 6) Handle isConfigurable tests with dsPrintf and throw away results
+ *    This one will require making hgTrackUi Cfgs all lib code.
  */
 
 #endif /* DSPRINT_H */

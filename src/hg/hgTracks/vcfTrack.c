@@ -246,12 +246,6 @@ unsigned short altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varI
 return (c->refCounts[varIx] >= altCount);
 }
 
-INLINE boolean hasUnk(const struct hapCluster *c, int varIx)
-// Return TRUE if at least one haplotype in this cluster has an unknown/unphased value at varIx.
-{
-return (c->unkCounts[varIx] > 0);
-}
-
 static double cwaDistance(const struct slList *item1, const struct slList *item2, void *extraData)
 /* Center-weighted alpha sequence distance function for hacTree clustering of haplotype seqs */
 // This is inner-loop so I am not doing defensive checks.  Caller must ensure:
@@ -267,18 +261,14 @@ double weight = 1; // start at center: alpha to the 0th power
 int i;
 for (i=helper->center;  i >= 0;  i--)
     {
-    if (hasUnk(kid1, i) != hasUnk(kid2, i))
-	; // no penalty!
-    else if (isRef(kid1, i) != isRef(kid2, i))
+    if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
     weight *= helper->alpha;
     }
 weight = helper->alpha; // start at center+1: alpha to the 1st power
 for (i=helper->center+1;  i < helper->len;  i++)
     {
-    if (hasUnk(kid1, i) != hasUnk(kid2, i))
-	; // no penalty!
-    else if (isRef(kid1, i) != isRef(kid2, i))
+    if (isRef(kid1, i) != isRef(kid2, i))
 	distance += weight;
     weight *= helper->alpha;
     }
@@ -770,9 +760,8 @@ if (theImgBox && curImgTrack)
 	char *allele = isRef(c, i) ? helper->refs[i] : helper->alts[i];
 	if (isCenter)
 	    dyStringAppendC(dy, '[');
-	if (hasUnk(c, i))
-	    dyStringAppendC(dy, '?');
-	else if (c->refCounts[i] > 0 && c->refCounts[i] < c->leafCount)
+	int altCount = c->leafCount - c->refCounts[i] - c->unkCounts[i];
+	if (c->refCounts[i] > 0 && altCount > 0)
 	    dyStringAppendC(dy, '*');
 	else if (strlen(allele) == 1)
 	    dyStringAppendC(dy, allele[0]);
