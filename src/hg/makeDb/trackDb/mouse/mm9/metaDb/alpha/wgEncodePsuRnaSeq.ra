@@ -105,7 +105,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
-md5sum edd6abdc1d1d01033185c89250e60528
+md5sum f6e6bbc7cb601433db65690b662dd4dd
 project wgEncode
 readType 1x41
 replicate 2
@@ -4298,4 +4298,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: 2055461316
+# MAGIC: -1218450874
