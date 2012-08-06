@@ -19483,7 +19483,7 @@ cat > makeNorm.csh << 'EOF'
 chr1    10180   10330   .       0       .       26.000000       -1      -1      -1
 # NOTE: Steve Wilder is planning to add scores and make formats of these files more uniform
 
-    # rename to UCSC style: wgEncodeAwgDnase<lab><cell>Peak.bigBed
+    # rename to UCSC style and convert to bed: wgEncodeAwgDnase<lab><cell>Peak
     ls *.fdr01peaks.hg19.bb | \
         perl -wpe 's/(wgEncode)(\S+)(Dnase)(\S+)(.fdr01peaks.hg19.bb)/bigBedToBed $1$2$3$4$5 $1Awg$3\u\L$2\E\u\L$4\EPeak.bed/' > unbig.csh
     # convert to bed and rename
@@ -19522,6 +19522,9 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
     # For V2, AWG is providing pooled replicates, and sometimes pooled labs.  Also,
     #   this data has all passed timestamp restriction, so don't need to show
     #      objName, cellType, treatment, lab(s)
+    # DISPLAY: Consider item name change to % assays represented instead of count.
+    #  Also, could color item name label to highlight ubiquitous vs. cell-type-specific
+    #  (top quartile -> color indicating high expression (red/orange) ?, bottom green/blue ?)
 
     ######
     # Uniform histone signal for overlay wiggles
@@ -19557,13 +19560,62 @@ cat > getHistones.csh << 'EOF'
     ######
     # TFBS
     ######
+    # The TFBS track is a specialized type:  factorSource.  Requires 3 tables:
+    #   track table: wgEncodeRegTfbsClustered (bed15)
+    #   source table: wgEncodeRegTfbsCells
+    #          Maps cell type (including treatment) to single letter
+    #          Currently, there are fixed unique assignments for Tier1 and 2.
+    #           There are all upper case.
+    #           Tier 3 just use first char of cell name, lower-cased.  Not unique at all!
+    # Looks like only rows 2 and 3 of the table are actually used/informative
+    # Ex. row         0 G     GM12878 n/a     n/a     n/a     3       n/a,n/a/,GM12878,
+    #   inputTrack (metadata) table: wgEncodeRegTfbsClusteredInputs
+    # DISPLAY: Better with target protein instead of antibody ?
+    # DISPLAY: Consider item showing letter for all experiments, with name colored (brown ?) if this peak
+    #           found it the cell type
+    # DISPLAY: fix ordering of cell letters -- they should be sorted 
+    #   (in cellLetter.tab first, so Exps files has correct id's)
+
     cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
     mkdir -p tfbs/peaks
     cd tfbs/peaks
 
     wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformTfbs_nocontrols.txt 
+    # this file has metadata
+    # there are 3 'method' values:  SPP, PeakSeq, wiggler
+    # there are 2 'quality' values:  Good, Caution
+    # There are 144 antibodies (for 122 factors), 75 cell types, 95 cell types plus treatments, 457 datasets
+    # Version 1 of this track had 148 antibodies, 67 cell types, 95 cell type+treatments, 486 datasets
+    # -> basically the same data, but cleaned up
+
     sed -n 's/bigDataUrl /wget /p' uniformTfbs_nocontrols.txt | grep Tfbs > wget.csh
-    perl -wpe 's/wget \S+(spp.optimal.)(wgEncode\S+)(_VS\S+)/mv $1$2$3 $2.bb/' wget.csh > rename.csh
-    csh rename.csh >&! rename.out &
+    sed -n 's/bigDataUrl /wget /p' uniformTfbs_nocontrols.txt | grep -v Tfbs > wget2.csh
+    csh wget.csh >&! wget.out &
+    # 416 files
+    csh wget2.csh >&! wget2.out &
+    # 41 (have Histone in filename)
+    # sample filename: spp.optimal.wgEncodeUwTfbsHcfaaCtcfStdAlnRep1_VS_wgEncodeUwTfbsHcfaaInputStdAlnRep1.bb
+    # from hub trackDb, metadata is in subGroups line:
+    #  subGroups tier=3 cellType=HCFaa factor=CTCF antibody=CTCF lab=UW treatment=None protocol=Std quality=Good method=SPP
+    # Note 'quality'.  Think about dropping those with quality='Caution'. Unfortunately some
+    #  Tier1 , esp. Pol2 are only available with this quality
+    # Q: What does Rep1 mean ?  Most are 'Rep0'
+    # (Jim's methods exluded those not based on 2 replicates)
+    # Q: Why are some datasets 'StdAln' and some are 'Aln' ?
+    # Q: How is quality assigned ?
+
+    # rename to UCSC style and convert to bed: wgEncodeAwgDnase<lab><cell>Peak
+        #perl -wpe 's/(wgEncode)(\S+)(Dnase)(\S+)(.fdr01peaks.hg19.bb)/bigBedToBed $1$2$3$4$5 $1Awg$3\u\L$2\E\u\L$4\EPeak.bed/' 
+    cd ..
+    ls peaks/spp.optimal.*.bb | \
+        perl -wpe 's^peaks/(spp.optimal.)(wgEncode)(\S+)(Tfbs)(\S+)(StdAln|Aln)(Rep\d_VS\S+)^bigBedToBed peaks/$1$2$3$4$5$6$7 peaks/$2Awg$4$3$5Peak.bed^' > unbig.csh
+    # convert to bed and rename
+    csh unbig.csh >&! unbig.out &
+
+    # NOTE: ~10% (49 of 457 total) are dupes from different labs
+    # Factors are:  CFOS, CMYC, CTCF, E2F6, EBF1F FOXA1, GATA2, JUND, MAFK
+    # MAX, POL2, RAD21, SRF, YY1
+
+    ls -1 peaks/*.bed > peak.lst
 
 #######################################################################
