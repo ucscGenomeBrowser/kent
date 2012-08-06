@@ -1,0 +1,100 @@
+# ENCODE Integrated Regulation Track (wrangler Kate)
+
+track wgEncodeRegV2
+superTrack on show
+shortLabel ENCODE Reg V2
+longLabel Integrated Regulation from ENCODE V2 (Jan 2011 Freeze, Integrated Analysis)
+wgEncode 1
+group regulation
+priority 1
+canPack On
+
+    track wgEncodeRegDnaseClusteredV2
+    shortLabel Unif DNase Clusters
+    longLabel AWG Uniform Digital DNaseI Hypersensitivity Clusters from ENCODE
+    type bed 5 .
+    superTrack wgEncodeRegV2 dense
+    # TODO: V2 Inputs
+    inputTrackTable wgEncodeRegDnaseClusteredInputs
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment lab 
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    track wgEncodeRegTxnV2
+    container multiWig
+    noInherit on
+    type bigWig 0 65500
+    superTrack wgEncodeRegV2 hide
+    shortLabel Transcription
+    longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines (V2) from ENCODE
+    visibility full
+    maxHeightPixels 100:30:11
+    showSubtrackColorOnUi on
+    aggregate transparentOverlay
+    transformFunc LOG
+    viewLimits 0:8
+    priority 1.1
+    dragAndDrop subTracks
+    allButtonPair on
+
+        track wgEncodeRegTxnCshlLongRnaSeqGm12878CellPapRawSigPooled
+        shortLabel GM12878
+        longLabel Transcription of GM12878 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 1
+        color 255,128,128
+
+       track wgEncodeRegTxnCshlLongRnaSeqH1hescCellPapRawSigPooled
+        shortLabel H1-hESC
+        longLabel Transcription of H1-hESC cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 2
+        color 255,212,128
+
+        track wgEncodeRegTxnCshlLongRnaSeqHsmmCellPapRawSigPooled
+        shortLabel HSMM
+        longLabel Transcription of HSMM cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 5
+        color 128,255,242
+
+        track wgEncodeRegTxnCshlLongRnaSeqHuvecCellPapRawSigPooled
+        shortLabel HUVEC
+        longLabel Transcription of HUVEC cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 6
+        color 128,199,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqK562CellPapRawSigPooled
+        shortLabel K562
+        longLabel Transcription of K562 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 7
+        color 149,128,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqNhekCellPapRawSigPooled
+        shortLabel NHEK
+        longLabel Transcription of NHEK cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 8
+        color 227,128,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqNhlfCellPapRawSigPooled
+        shortLabel NHLF
+        longLabel Transcription of NHLF cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 9
+        color 255,128,212
+

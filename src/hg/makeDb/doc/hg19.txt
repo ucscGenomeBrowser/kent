@@ -19466,6 +19466,23 @@ cat > makeNorm.csh << 'EOF'
     mkdir ../normalized
     csh ../norm.csh  >&! ../norm.out &
 
+    # make bigWigs
+cat > big.csh << 'EOF'
+    foreach i (*.bedGraph)
+        echo processing $i
+        bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
+    end
+'EOF'
+    csh big.csh >&! big.out &
+
+    # add to database
+    set dir = /gbdb/hg19/bbi/encodeRegV2
+    mkdir $dir
+    ln -s `pwd`/*.bw $dir
+    foreach i (*.bw)
+        hgBbiDbLink hg19 $i:r $dir/$i
+    end
+
     ######
     # Create the DNAse peak clusters subtrack.
     ######
@@ -19546,7 +19563,7 @@ cat > getHistones.csh << 'EOF'
 'EOF'
     csh getHistones.csh >&! getHistones.out &
 
-    # save real files (>1k size)
+    # save real files (>1k size) as curl creates info files when match used
     mkdir sav
     find . -name '*.bw' -a -size +1k -exec mv '{}' sav \;
     rm *.bw
@@ -19554,7 +19571,10 @@ cat > getHistones.csh << 'EOF'
     rmdir sav
 
     # note: missing Hela and HepG2 H3K4me1 - these have different filename pattern (check with Anshul why)
-    wget http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHelas3H3k4me1Std_1Reps.norm5.rawsignal.bw
+    # use curl to retrieve by pattern match as we don't have read perms on directory.  Then remove non-useful files
+    curl -O http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHelas3H3k4me1Std_\[1-3]Reps.norm5.rawsignal.bw
+    # good one is '*Std_1Rep', remove 2Rep and 3Rep
+    rm *Hela*Std_[2-3]*
     wget http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHepg2H3k4me1Std_1Reps.norm5.rawsignal.bw
 
     ######
