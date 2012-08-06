@@ -15,7 +15,7 @@ filterComposite dimZ=all dimA=multi
 dimensionAchecked R1X41,R1X45,R1X55,R2X99D
 dimensions dimensionX=cellType dimensionY=rep dimensionZ=treatment dimensionA=readType
 sortOrder cellType=+ treatment=+ readType=+ rep=+ view=-
-fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type rep=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex treatment=treatment age=age
 dragAndDrop subTracks
 priority 0
