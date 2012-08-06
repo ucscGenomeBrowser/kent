@@ -62,8 +62,8 @@ longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20=B_cells_CD20+&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3DND41=Dnd41 t3HMEC=HMEC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3NHA=NH-A t3NHDFAD=NHDF-Ad t3NHEK=NHEK t3NHLF=NHLF t3OSTEOBLASTS=Osteoblasts
-subGroup3 factor Antibody CHD1A301218A=CHD1_(A301-218A) CHD7A301223A1=CHD7_(A301-223A-1) CBPSC369=CBP_(SC-369) CBX2=CBX2 CBX3SC101004=CBX3_(SC-101004) CBX8=CBX8 CHD4MI2=CHD4_Mi2 CTCF=CTCF EZH239875=EZH2_(39875) JARID1AAB26049=JARID1A_(ab26049) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) HDAC6A301341A=HDAC6_(A301-341A) JMJD2AA300861A1=JMJD2A_(A300-861A-1) LSD1=LSD1 NCOR=NCoR NSD2AB75359=NSD2_(ab75359) P300=P300 P300KAT3B=P300_KAT3B PCAF=PCAF PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) REST=REST RNF2=RNF2 RNF2=RNF2 SAP3039731=SAP30_(39731) SETDB1=SETDB1 SIRT6=SIRT6 SUZ12051317=SUZ12_(05-1317) zCTRL=Input_Control
-subGroup4 treatment Treatment DEX100NM=DEX_100nM ETOH02=EtOH_0.02pct zNONE=None
+subGroup3 factor Antibody CBPSC369=CBP_(SC-369) CBX2=CBX2 CBX3SC101004=CBX3_(SC-101004) CBX8=CBX8 CHD1A301218A=CHD1_(A301-218A) CHD4MI2=CHD4_Mi2 CHD7A301223A1=CHD7_(A301-223A-1) CTCF=CTCF EZH239875=EZH2_(39875) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) HDAC6A301341A=HDAC6_(A301-341A) JARID1AAB26049=JARID1A_(ab26049) JMJD2AA300861A1=JMJD2A_(A300-861A-1) LSD1=LSD1 NCOR=NCoR NSD2AB75359=NSD2_(ab75359) P300=P300 P300KAT3B=P300_KAT3B PCAF=PCAF PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) REST=REST RNF2=RNF2 RNF2=RNF2 SAP3039731=SAP30_(39731) SETDB1=SETDB1 SIRT6=SIRT6 SUZ12051317=SUZ12_(05-1317) zCTRL=Input_Control
+subGroup4 treatment Treatment DEX100NM=DEX_100_nM ETOH02=EtOH_0.02% zNONE=None
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -1136,7 +1136,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl CTCF
-        longLabel Osteoblast CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2986 dateSubmitted=2010-11-16
@@ -1144,7 +1144,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H2A.Z
-        longLabel Osteoblast H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2987 dateSubmitted=2010-11-16
@@ -1152,7 +1152,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K27ac
-        longLabel Osteoblast H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27AC cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2988 dateSubmitted=2010-11-16
@@ -1160,7 +1160,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K36me3
-        longLabel Osteoblast H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2989 dateSubmitted=2010-11-16
@@ -1168,7 +1168,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K4me1
-        longLabel Osteoblast H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME1 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2990 dateSubmitted=2010-11-16
@@ -1176,7 +1176,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K4me2
-        longLabel Osteoblast H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME2 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2991 dateSubmitted=2010-11-16
@@ -1184,7 +1184,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k9me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K9me3
-        longLabel Osteoblast H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         # subId=2992 dateSubmitted=2010-11-16
@@ -1297,8 +1297,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562P300StdPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel K562 p300
-        longLabel K562 p300 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel K562 P300
+        longLabel K562 P300 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=P300 cellType=t1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -1597,7 +1597,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k27me3Pk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K27me3
-        longLabel Osteoblast H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -1624,7 +1624,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH4k20me1Pk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H4K20me1
-        longLabel Osteoblast H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20ME1 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -1863,7 +1863,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k79me2Pk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K79me2
-        longLabel Osteoblast H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79ME2 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -1952,8 +1952,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me3Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me3
-        longLabel A549 EtOH 0.02pct H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me3
+        longLabel A549 EtOH 0.02% H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME3 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -1973,8 +1973,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me3Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me3
-        longLabel A549 DEX 100nM H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K4me3
+        longLabel A549 DEX 100 nM H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME3 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -1983,8 +1983,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k79me2Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K79me2
-        longLabel A549 DEX 100nM H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K79me2
+        longLabel A549 DEX 100 nM H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79ME2 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -1993,8 +1993,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k09acEtoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K9ac
-        longLabel A549 EtOH 0.02pct H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K9ac
+        longLabel A549 EtOH 0.02% H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09AC cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2089,7 +2089,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k04me3Pk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl H3K4me3
-        longLabel Osteobl H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -2109,7 +2109,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746H3k04me2Pk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel CD14+ H3K4me2
-        longLabel Monocytes-CD14+ RO01746 H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Monocytes-CD14+ H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME2 cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -2119,7 +2119,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746H3k09acPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel CD14+ H3K9ac
-        longLabel Monocytes-CD14+ RO01746 H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Monocytes-CD14+ H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09AC cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -2168,7 +2168,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746CtcfPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel CD14+ CTCF
-        longLabel Monocytes-CD14+ RO01746 CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Monocytes-CD14+ CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -2176,7 +2176,7 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Chd4mi2Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel K562 CHD4_Mi2
+        shortLabel K562 CHD4 Mi2
         longLabel K562 CHD4 Mi2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CHD4MI2 cellType=t1K562 treatment=zNONE
         type broadPeak
@@ -2196,8 +2196,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k79me2Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K79me2
-        longLabel A549 EtOH 0.02pct H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K79me2
+        longLabel A549 EtOH 0.02% H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79ME2 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2255,7 +2255,7 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Cbpsc369Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel K562 CBP_(sc-369)
+        shortLabel K562 CBP (SC-369)
         longLabel K562 CBP (sc-369) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CBPSC369 cellType=t1K562 treatment=zNONE
         type broadPeak
@@ -2265,8 +2265,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me2Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me2
-        longLabel A549 DEX 100nM H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K4me2
+        longLabel A549 DEX 100 nM H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME2 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2295,7 +2295,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoP300kat3bPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Osteobl P300
-        longLabel Osteobl P300 KAT3B Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        longLabel Osteoblasts P300 KAT3B Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=P300KAT3B cellType=t3OSTEOBLASTS treatment=zNONE
         type broadPeak
         origAssembly hg19
@@ -2373,8 +2373,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549CtcfDex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 CTCF
-        longLabel A549 DEX 100nM CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX CTCF
+        longLabel A549 DEX 100 nM CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2382,8 +2382,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H2azDex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H2A.Z
-        longLabel A549 DEX 100nM H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H2A.Z
+        longLabel A549 DEX 100 nM H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2391,8 +2391,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27me3Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K27me3
-        longLabel A549 DEX 100nM H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K27me3
+        longLabel A549 DEX 100 nM H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ME3 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2400,8 +2400,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549CtcfEtoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 CTCF
-        longLabel A549 EtOH 0.02pct CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH CTCF
+        longLabel A549 EtOH 0.02% CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2409,8 +2409,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H2azEtoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H2A.Z
-        longLabel A549 EtOH 0.02pct H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H2A.Z
+        longLabel A549 EtOH 0.02% H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2418,8 +2418,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27acEtoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K27ac
-        longLabel A549 EtOH 0.02pct H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K27ac
+        longLabel A549 EtOH 0.02% H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27AC cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2427,8 +2427,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27me3Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K27me3
-        longLabel A549 EtOH 0.02pct H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K27me3
+        longLabel A549 EtOH 0.02% H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ME3 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2436,8 +2436,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k36me3Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K36me3
-        longLabel A549 EtOH 0.02pct H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K36me3
+        longLabel A549 EtOH 0.02% H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36ME3 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2445,8 +2445,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me1Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me1
-        longLabel A549 EtOH 0.02pct H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me1
+        longLabel A549 EtOH 0.02% H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME1 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2454,8 +2454,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k09me3Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K9me3
-        longLabel A549 EtOH 0.02pct H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K9me3
+        longLabel A549 EtOH 0.02% H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ME3 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2463,8 +2463,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H4k20me1Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H4K20me1
-        longLabel A549 EtOH 0.02pct H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H4K20me1
+        longLabel A549 EtOH 0.02% H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20ME1 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2567,8 +2567,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27acDex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K27ac
-        longLabel A549 DEX 100nM H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K27ac
+        longLabel A549 DEX 100 nM H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27AC cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2576,8 +2576,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me1Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me1
-        longLabel A549 DEX 100nM H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K4me1
+        longLabel A549 DEX 100 nM H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME1 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -2585,8 +2585,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me2Etoh02Pk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K4me2
-        longLabel A549 EtOH 0.02pct H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me2
+        longLabel A549 EtOH 0.02% H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04ME2 cellType=t2A549 treatment=ETOH02
         type broadPeak
         origAssembly hg19
@@ -2594,8 +2594,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k36me3Dex100nmPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel A549 H3K36me3
-        longLabel A549 DEX 100nM H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        shortLabel A549 DEX H3K36me3
+        longLabel A549 DEX 100 nM H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36ME3 cellType=t2A549 treatment=DEX100NM
         type broadPeak
         origAssembly hg19
@@ -3769,7 +3769,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl CTCF
-        longLabel Osteoblast CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 13777.519531
         # subId=2986 dateSubmitted=2010-11-16
@@ -3777,7 +3777,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H2A.Z
-        longLabel Osteoblast H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 56248.921875
         # subId=2987 dateSubmitted=2010-11-16
@@ -3785,7 +3785,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K27ac
-        longLabel Osteoblast H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27AC cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 10683.360352
         # subId=2988 dateSubmitted=2010-11-16
@@ -3793,7 +3793,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K36me3
-        longLabel Osteoblast H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 31413.000000
         # subId=2989 dateSubmitted=2010-11-16
@@ -3801,7 +3801,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K4me1
-        longLabel Osteoblast H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME1 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 12418.000000
         # subId=2990 dateSubmitted=2010-11-16
@@ -3809,7 +3809,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K4me2
-        longLabel Osteoblast H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME2 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 13407.240234
         # subId=2991 dateSubmitted=2010-11-16
@@ -3817,7 +3817,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblH3k9me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K9me3
-        longLabel Osteoblast H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 82158.562500
         # subId=2992 dateSubmitted=2010-11-16
@@ -3881,7 +3881,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoblControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl Input
-        longLabel Osteoblast Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 32139.839844
         # subId=3073 dateSubmitted=2010-12-06
@@ -3946,8 +3946,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562P300StdSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 p300
-        longLabel K562 p300 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel K562 P300
+        longLabel K562 P300 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=P300 cellType=t1K562  treatment=zNONE
         type bigWig 0.040000 96892.500000
         origAssembly hg19
@@ -4256,7 +4256,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k27me3Sig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K27me3
-        longLabel Osteoblast H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 14695.000000
         origAssembly hg19
@@ -4283,7 +4283,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH4k20me1Sig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H4K20me1
-        longLabel Osteoblast H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20ME1 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 14205.599609
         origAssembly hg19
@@ -4522,7 +4522,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k79me2Sig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K79me2
-        longLabel Osteoblast H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79ME2 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 20036.480469
         origAssembly hg19
@@ -4611,8 +4611,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me3Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me3
-        longLabel A549 EtOH 0.02pct H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me3
+        longLabel A549 EtOH 0.02% H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME3 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 65926.320312
         origAssembly hg19
@@ -4632,8 +4632,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me3Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me3
-        longLabel A549 DEX 100nM H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K4me3
+        longLabel A549 DEX 100 nM H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME3 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 27848.640625
         origAssembly hg19
@@ -4642,8 +4642,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k79me2Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K79me2
-        longLabel A549 DEX 100nM H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K79me2
+        longLabel A549 DEX 100 nM H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79ME2 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 7271.000000
         origAssembly hg19
@@ -4652,8 +4652,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549ControlDex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 Control
-        longLabel A549 DEX 100nM Control Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX Control
+        longLabel A549 DEX 100 nM Control Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 41124.078125
         origAssembly hg19
@@ -4662,8 +4662,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k09acEtoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K9ac
-        longLabel A549 EtOH 0.02pct H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K9ac
+        longLabel A549 EtOH 0.02% H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09AC cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 14415.719727
         origAssembly hg19
@@ -4758,7 +4758,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoH3k04me3Sig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl H3K4me3
-        longLabel Osteobl H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME3 cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 34642.640625
         origAssembly hg19
@@ -4778,7 +4778,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746H3k04me2Sig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel CD14+ H3K4me2
-        longLabel Monocytes-CD14+ RO01746 H3K4me2 Histone Mods by ChIPseq Signal from ENCODE/Broad
+        longLabel Monocytes-CD14+ H3K4me2 Histone Mods by ChIPseq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME2 cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type bigWig 0.040000 4909.040039
         origAssembly hg19
@@ -4788,7 +4788,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746H3k09acSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel CD14+ H3K9ac
-        longLabel Monocytes-CD14+ RO01746 H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Monocytes-CD14+ H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09AC cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type bigWig 0.040000 5969.040039
         origAssembly hg19
@@ -4797,8 +4797,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549ControlEtoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 Control
-        longLabel A549 EtOH 0.02pct Control Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH Control
+        longLabel A549 EtOH 0.02% Control Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 125654.882812
         origAssembly hg19
@@ -4847,7 +4847,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746CtcfSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel CD14+ CTCF
-        longLabel Monocytes-CD14+ RO01746 CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Monocytes-CD14+ CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type bigWig 0.040000 705.440002
         origAssembly hg19
@@ -4855,7 +4855,7 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Chd4mi2Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 CHD4_Mi2
+        shortLabel K562 CHD4 Mi2
         longLabel K562 CHD4 Mi2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CHD4MI2 cellType=t1K562 treatment=zNONE
         type bigWig 0.040000 347.640015
@@ -4875,8 +4875,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k79me2Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K79me2
-        longLabel A549 EtOH 0.02pct H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K79me2
+        longLabel A549 EtOH 0.02% H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79ME2 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 642.719971
         origAssembly hg19
@@ -4934,7 +4934,7 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Cbpsc369Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 CBP_(sc-369)
+        shortLabel K562 CBP (SC-369)
         longLabel K562 CBP (sc-369) Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CBPSC369 cellType=t1K562 treatment=zNONE
         type bigWig 0.040000 400.000000
@@ -4944,8 +4944,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me2Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me2
-        longLabel A549 DEX 100nM H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K4me2
+        longLabel A549 DEX 100 nM H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME2 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 624.520020
         origAssembly hg19
@@ -4974,7 +4974,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneOsteoP300kat3bSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Osteobl P300
-        longLabel Osteobl P300 KAT3B Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        longLabel Osteoblasts P300 KAT3B Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=P300KAT3B cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.040000 688.840027
         origAssembly hg19
@@ -5052,8 +5052,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549CtcfDex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 CTCF
-        longLabel A549 DEX 100nM CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX CTCF
+        longLabel A549 DEX 100 nM CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 711.840027
         origAssembly hg19
@@ -5061,8 +5061,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H2azDex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H2A.Z
-        longLabel A549 DEX 100nM H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H2A.Z
+        longLabel A549 DEX 100 nM H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 743.719971
         origAssembly hg19
@@ -5070,8 +5070,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27me3Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K27me3
-        longLabel A549 DEX 100nM H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K27me3
+        longLabel A549 DEX 100 nM H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ME3 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 648.280029
         origAssembly hg19
@@ -5079,8 +5079,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549CtcfEtoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 CTCF
-        longLabel A549 EtOH 0.02pct CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH CTCF
+        longLabel A549 EtOH 0.02% CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 722.280029
         origAssembly hg19
@@ -5088,8 +5088,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H2azEtoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H2A.Z
-        longLabel A549 EtOH 0.02pct H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H2A.Z
+        longLabel A549 EtOH 0.02% H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 734.479980
         origAssembly hg19
@@ -5097,8 +5097,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27acEtoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K27ac
-        longLabel A549 EtOH 0.02pct H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K27ac
+        longLabel A549 EtOH 0.02% H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27AC cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 734.320007
         origAssembly hg19
@@ -5106,8 +5106,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27me3Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K27me3
-        longLabel A549 EtOH 0.02pct H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K27me3
+        longLabel A549 EtOH 0.02% H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ME3 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 724.080017
         origAssembly hg19
@@ -5115,8 +5115,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k36me3Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K36me3
-        longLabel A549 EtOH 0.02pct H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K36me3
+        longLabel A549 EtOH 0.02% H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36ME3 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 744.280029
         origAssembly hg19
@@ -5124,8 +5124,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me1Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me1
-        longLabel A549 EtOH 0.02pct H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me1
+        longLabel A549 EtOH 0.02% H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME1 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 704.159973
         origAssembly hg19
@@ -5133,8 +5133,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k09me3Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K9me3
-        longLabel A549 EtOH 0.02pct H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K9me3
+        longLabel A549 EtOH 0.02% H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ME3 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 785.440002
         origAssembly hg19
@@ -5142,8 +5142,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H4k20me1Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H4K20me1
-        longLabel A549 EtOH 0.02pct H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H4K20me1
+        longLabel A549 EtOH 0.02% H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20ME1 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 701.760010
         origAssembly hg19
@@ -5202,7 +5202,7 @@ html wgEncodeBroadHistone.release3
         track wgEncodeBroadHistoneMonocd14ro1746ControlSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel CD14+ Control
-        longLabel Monocytes-CD14+ RO01746 Control Histone Mods by ChIPseq Signal from ENCODE/Broad
+        longLabel Monocytes-CD14+ Control Histone Mods by ChIPseq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=t2MONOCYTESCD14RO01746 treatment=zNONE
         type bigWig 0.040000 746.119995
         origAssembly hg19
@@ -5263,8 +5263,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k27acDex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K27ac
-        longLabel A549 DEX 100nM H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K27ac
+        longLabel A549 DEX 100 nM H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27AC cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 741.359985
         origAssembly hg19
@@ -5272,8 +5272,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me1Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me1
-        longLabel A549 DEX 100nM H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K4me1
+        longLabel A549 DEX 100 nM H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME1 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 693.880005
         origAssembly hg19
@@ -5281,8 +5281,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k04me2Etoh02Sig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K4me2
-        longLabel A549 EtOH 0.02pct H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 EtOH H3K4me2
+        longLabel A549 EtOH 0.02% H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04ME2 cellType=t2A549 treatment=ETOH02
         type bigWig 0.040000 719.159973
         origAssembly hg19
@@ -5290,8 +5290,8 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneA549H3k36me3Dex100nmSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel A549 H3K36me3
-        longLabel A549 DEX 100nM H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        shortLabel A549 DEX H3K36me3
+        longLabel A549 DEX 100 nM H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36ME3 cellType=t2A549 treatment=DEX100NM
         type bigWig 0.040000 752.440002
         origAssembly hg19

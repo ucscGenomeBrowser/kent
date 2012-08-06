@@ -13422,19 +13422,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label insert len 400
+label 400 base pairs
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label insert len 200
+label 200 base pairs
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label insert len N/A
+label N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
