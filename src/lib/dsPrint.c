@@ -298,7 +298,7 @@ dsPrintf("9      2:%d No flush yet   len1:%d  len2:%d  lenAll:%d  prev7:[%s]\n",
          dsPrintStackDepth(),dsPrintSize(token1),dsPrintSize(token2),dsPrintSizeAll(),content);
 freez(&content);
 int token3 = dsPrintOpen(256);
-dsPrintPuts("10  Open:3 Line doubled and out of turn due to dsPrintDirectly()");
+dsPuts("10  Open:3 Line doubled and out of turn due to dsPrintDirectly()");
 dsPrintDirectly(token3,stdout);
 dsPrintf("11     3:%d Just prior to closing all.  len1:%d  len2:%d  len3:%d  lenAll:%d",
          dsPrintStackDepth(),
@@ -306,8 +306,8 @@ dsPrintf("11     3:%d Just prior to closing all.  len1:%d  len2:%d  len3:%d  len
 int token4 = dsPrintOpen(256);
 dsPrintf("12  Open:4 Opened  stack:%d  WILL ABANDON\n",dsPrintStackDepth());
 dsPrintAbandon(token4);
-dsPrintPutc('\n');
-dsPrintPuts("13  Puts:  Added last '\\n' with dsPrintPutc(), this with dsPrintPuts().");
+dsPutc('\n');
+dsPuts("13  Puts:  Added last '\\n' with dsPutc(), this with dsPuts().");
 dsPrintf("14     3:%d Last line!  Expect 7 & 12 missing, 10 dupped.  lenAll:%d  Bye.\n",
          dsPrintStackDepth(),dsPrintSizeAll());
 dsPrintFlushAndCloseAll();
