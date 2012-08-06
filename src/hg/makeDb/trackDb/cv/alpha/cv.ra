@@ -7390,7 +7390,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
 vendorName Paulson Lab
 vendorId FVprogenitor
 orderUrl http://vbs.psu.edu/research/labs/paulson
