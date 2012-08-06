@@ -5,7 +5,6 @@
 BROWSER_BINS=hgLogin cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
         hgGateway hgGene hgGenome hgPcr hgSession hgSuggest hgTables hgTracks \
 	hgTrackUi hgc hgApi cartDump near/hgNear \
-	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
@@ -145,7 +144,6 @@ UTIL_DIRS = \
 	orthoMap \
 	patCount \
 	perf \
-	protein \
 	pslCDnaFilter \
 	pslCat \
 	pslCheck \
@@ -212,7 +210,6 @@ all::    cgi utils
 hgLib:
 	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
-	cd protein/lib && ${MAKE}
 
 utils: $(USE_DIRS:%=%.utils)
 %.utils: hgLib
