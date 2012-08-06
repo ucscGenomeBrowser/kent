@@ -6419,7 +6419,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Stam
-protocol Stam:missing
+protocol missing
 
 term Treg_Wb78495824
 tag TREGWB78495824
