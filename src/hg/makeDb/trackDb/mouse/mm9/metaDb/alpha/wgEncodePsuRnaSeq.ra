@@ -191,6 +191,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 3b8511e048d6ade5f7682b8507b38ddb,fb11f06d4bdfcb4f06858c7c6e36352f
 project wgEncode
 readType 2x99D
 replicate 1
@@ -219,6 +220,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 889564d13b2b3aef854ae05a38205869,3eafdc35cce37bb20e68808ca371a9ec
 project wgEncode
 readType 2x99D
 replicate 2
@@ -247,6 +249,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 881ad974ebc53930f560b8bcab641217
 project wgEncode
 readType 2x99D
 replicate 1
@@ -274,6 +277,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 925c8faf45f68466209e96532120f65a
 project wgEncode
 readType 2x99D
 replicate 2
@@ -301,6 +305,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum c82658420d1afeccc5ea95325939da11
 project wgEncode
 readType 2x99D
 replicate 1
@@ -328,6 +333,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum c19351ca25b281c923656b437ce8e934
 project wgEncode
 readType 2x99D
 replicate 2
@@ -355,6 +361,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum b3c4fe7bdd421efb7fff821a3a9e2c37
 project wgEncode
 readType 2x99D
 replicate 1
@@ -383,6 +390,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum dea8aace883ab000d983cb7d274850ca
 project wgEncode
 readType 2x99D
 replicate 2
@@ -411,6 +419,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 2fe82954134c210d8fb9ec90967bf006
 project wgEncode
 readType 2x99D
 replicate 1
@@ -439,6 +448,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum a715148dc7c7136c5e08e0335fd35cbc
 project wgEncode
 readType 2x99D
 replicate 2
@@ -467,6 +477,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 2c60661c710aa32e1b0df07d99bc7081,c367b1db32e08b094f10e6c87aa684e6
 project wgEncode
 readType 2x99D
 replicate 1
@@ -495,6 +506,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 3dc391ad637a8f7cf24a8ad80d6562b1,a5db31c5d021821a2188b4f88954150c
 project wgEncode
 readType 2x99D
 replicate 2
@@ -523,6 +535,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 8d94d447a6713bcfd38058834f171d5a
 project wgEncode
 readType 2x99D
 replicate 1
@@ -550,6 +563,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 64ff4cb5f5b5a619b1344849a31631ae
 project wgEncode
 readType 2x99D
 replicate 2
@@ -577,6 +591,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1aec70a7429429427ac75136bbb93fc8
 project wgEncode
 readType 2x99D
 replicate 1
@@ -604,6 +619,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 05a61b46030e309e5261715926889479
 project wgEncode
 readType 2x99D
 replicate 2
@@ -631,6 +647,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1f52683e84287ec7e9c40ae9dccabb3c
 project wgEncode
 readType 2x99D
 replicate 1
@@ -659,6 +676,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ce3cd6c450d7f332c99ac7369d5e3e19
 project wgEncode
 readType 2x99D
 replicate 2
@@ -687,6 +705,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ee1f80c99ad010166381d667d1fc4a68
 project wgEncode
 readType 2x99D
 replicate 1
@@ -715,6 +734,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 19fa72b6e859d29eeacd70303e6ed042
 project wgEncode
 readType 2x99D
 replicate 2
@@ -743,6 +763,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum a5fef839302b001783b1a6ae91bf6808,f218f71cb74ec01179672344274095df
 project wgEncode
 readType 2x99D
 replicate 1
@@ -771,6 +792,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum e27fccf49ff3e0504f04c55051d036d8,6f354e11ab2150cbc2b3723a7f96ec7e
 project wgEncode
 readType 2x99D
 replicate 2
@@ -799,6 +821,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 19f5de202f572a3fde2f64b65b94fd60
 project wgEncode
 readType 2x99D
 replicate 1
@@ -826,6 +849,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 45c3efd9bb4da8c00c5f5f47c68189e6
 project wgEncode
 readType 2x99D
 replicate 2
@@ -853,6 +877,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum db03c673c9c1a5e938121fb74cb12098
 project wgEncode
 readType 2x99D
 replicate 1
@@ -880,6 +905,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 20c0ee14317cf9eef59b336a4374d68f
 project wgEncode
 readType 2x99D
 replicate 2
@@ -907,6 +933,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 30a781dd3bff0c2bb876d9f55303bb2d
 project wgEncode
 readType 2x99D
 replicate 1
@@ -935,6 +962,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 253e593017e6e987f76d914f82fe22d0
 project wgEncode
 readType 2x99D
 replicate 2
@@ -963,6 +991,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 2aa817cdcf2bffac843214ec7c177b01
 project wgEncode
 readType 2x99D
 replicate 1
@@ -991,6 +1020,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 9874f50fb4bbca48e5f5f52d6836ef15
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1191,6 +1221,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 6e5f2905b534305cdbb6e78d37f5a7df,612a4d0cc24821d34276d94cd568d399
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1219,6 +1250,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 4903e8b35f0a893cb45811d65ab591ab,101bcde53a22683d261700b245485614
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1247,6 +1279,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 256450e57836172017d9351c81a32980
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1274,6 +1307,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 417a592bf291c95f5c109c9188c7aaf5
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1301,6 +1335,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 4d713b1d3b9e319995688f8c55650317
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1328,6 +1363,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum d035c93db3f22e2e0e63315cccb78a6f
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1355,6 +1391,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 71b550a69082207aa3c211a22efebde6
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1383,6 +1420,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1b85f4a548bc730b4194db1ff71637f0
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1411,6 +1449,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 2ee4664b77361932331098baa2d1ad75
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1439,6 +1478,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 63b6436326c62ac88771f20fb7c1a8f3
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1639,6 +1679,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum e18849447d5fecde4c7875678780677c,c54a855e8e4a4a66602994f6d446716f
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1667,6 +1708,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ea016b2c02a49fa980eb542993d71aff,3cf06079bbf5867f8b5dd4299131aad2
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1695,6 +1737,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum fe2ad4c75174e2d620d4a30ed243acb8,5352ef19735657144cbb6a84a105c6c6
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1723,6 +1766,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 18f2ce1352f87315f62460494cca6f33,4914db1ddebe7f985d5a004f66e2f778
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1751,6 +1795,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 0bb647bcff23b4874270e5d306aa6325
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1778,6 +1823,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum e9eb990df149024ab6cd7b40b285cd6b
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1805,6 +1851,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 18410a8f0b113d866babc9c079f072b6
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1832,6 +1879,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 5f44345097f84e25fc0a8c45064e3e45
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1859,6 +1907,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 41421ae2ec682553f2f64f3d58c1b503
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1887,6 +1936,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 41795840d7756788b95637f6b0ce9c4a
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1915,6 +1965,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum b44dc499ab93c29d80d9520f098f053a
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1943,6 +1994,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 0bacab82371b9cf067c3131c9b2b94ac
 project wgEncode
 readType 2x99D
 replicate 2
@@ -1971,6 +2023,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ee4590c9afa38678f47f67261b6e4c1f,6004736744999f204f913975162b1143
 project wgEncode
 readType 2x99D
 replicate 1
@@ -1999,6 +2052,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 7ed0adccc4e4c1b1a979f0ed9c065b26,203985b73c5e494a43f1063458ca3e7b
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2027,6 +2081,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ddbe8e536b10636fe5ac460a793a944d
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2054,6 +2109,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 6e5187e3e37a601086f64ae770e3e861
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2081,6 +2137,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 3edc0220f48b85b8d223a43b01cb7d03
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2108,6 +2165,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 55a181fd6fe4ab3241923f87d8924192
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2135,6 +2193,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 61dc0500382e05c5e9daef70ab292ea6
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2163,6 +2222,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum cbc8533419d799428550d946a09f0c4f
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2191,6 +2251,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 86cd556f80800f89248f726d8591ce90
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2219,6 +2280,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum a390811bd61873a15d64c3eed9af0b93
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2247,6 +2309,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 10d48ecb323d0189200d9c09f4d3ba13,a9d159b1429d193029550bc1b4d8be36
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2275,6 +2338,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 5210abff62b23b82aa9b68ec9af98f90,780e2223081db08d16e93557c77d373e
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2303,6 +2367,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum ba9e32fb2ab8e7001fb0b6219bb0bc24
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2330,6 +2395,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 23890cd2dc5c9dcb2f62a90d61b8cfcb
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2357,6 +2423,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 21842d6404af8d53311fd15cf8fed67f
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2384,6 +2451,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 5a1bd64d116753dc669c629a532e6eaf
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2411,6 +2479,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1597189280e2613d8ec93408961e87fa
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2439,6 +2508,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum f08b47f86e20f076495d7aabd8b00eb1
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2467,6 +2537,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 9b22c5026cf52867a48e8d6027654053
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2495,6 +2566,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 343fadd51f92de9ab9c9bf32483f30ad
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2523,6 +2595,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 943915cff286dcae07c241be8aa3a295,fcaf4188246fb8f5d75d7a5e136ffe2e
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2551,6 +2624,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 3c63d365b1f2fbf3f0f31468e47ee738,878f93fb5087617b26534b34eb274543
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2579,6 +2653,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 53f28b241b6fbed1d680c4e65750b463
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2606,6 +2681,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum d7a67116fca92e9c8080404e9ca4ceb5
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2633,6 +2709,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 7391bdaba3637b9064207310436cc733
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2660,6 +2737,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 7a65b8ae6745c78e52766f75adc84470
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2687,6 +2765,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1fc2778b8b2fb3da9b28b991ca94bb29
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2715,6 +2794,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum dbd0ca7964e087b3cbac921434d55f41
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2743,6 +2823,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum eba711a8a3b798fcad16d8a71e6d7d27
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2771,6 +2852,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 3e1a895a977784dee0307231fc2559d0
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2799,6 +2881,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum c4b58c29728588f0d56c20f236e6ca1a,6f351ac19871c54ea547b832aa50420d
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2827,6 +2910,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 5ab117266e75275ebdcb8995797deacc,3e31129001eadd040d82a6d4323c9b80
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2855,6 +2939,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 08be4fbf00ce748493c6429aaddee34c
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2882,6 +2967,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum dea0b651e3c48e305e88800915356de5
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2909,6 +2995,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum c370ebc90e69b5d2e2f9de3f4d3555e3
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2936,6 +3023,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 55fc05b8f952f9f8783c05f11154151c
 project wgEncode
 readType 2x99D
 replicate 2
@@ -2963,6 +3051,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 45646ea8a14821480c26161df7c3bd01
 project wgEncode
 readType 2x99D
 replicate 1
@@ -2991,6 +3080,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 0cb80d0857e12309b2ac4be810f79793
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3019,6 +3109,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 99ba5d135d5a6116dcf73e2b63797221
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3047,6 +3138,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum f40e0c23ac2b75a21a037a52baacf498
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3075,6 +3167,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1e8f8ef33bc9d9d044c59282c637f0a3
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3102,6 +3195,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 4a078c19f4f74061ec036ec8783cca9f
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3129,6 +3223,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 7c7864a5c1ac6f995f2bd343a63642fd
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3156,6 +3251,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 72a95f07a91e230d22e4e340ceebd07e
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3183,6 +3279,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1d2055795f8d41fb4b0c465fa7f8dc4e
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3211,6 +3308,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1e466fc66e5f7fda7acaf242326e32a4
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3239,6 +3337,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 2c6649351a7bbe4a3673db8feb0f9a7e
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3267,6 +3366,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 26481c79a8d6926ef4ec4ab8bfcb3198
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3295,6 +3395,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1e11f1f89b709bdf1d51e2f15f4601a3,16be0a08b7129cadd21ea15352e5448d
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3324,6 +3425,7 @@ lab PSU-m
 labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
+md5sum 07e981ea128b032b24f6520bdedd44b1,5ffbcfb26b33df4ba1ac4fb85cacbbca
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3352,6 +3454,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 1d12c5e10cfe8de7bd6e6e146fbd77d7
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3379,6 +3482,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum b80ec3211de222adf357131047bf2e6e
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3406,6 +3510,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 67c8f6d5b0f55f30b977189743f25be8
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3433,6 +3538,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum f72bcf53c166a4ae23e65a4f04c80144
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3460,6 +3566,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 9b60c5b61311b8ddd7e500137d100b53
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3489,6 +3596,7 @@ lab PSU-m
 labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
+md5sum 4ae9b0cd696132e935569fd74b8e134d
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3517,6 +3625,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 52c3bcf22d7d612baff161beaf29aeb8
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3546,6 +3655,7 @@ lab PSU-m
 labExpId paired-end
 labVersion Only ~2x3.5M reads mapped out of 2x101M total (low map %). But the coverage tracks resemble those of Megakaryo RNA Rep1, so this dataset was submitted
 localization cell
+md5sum 9efcecb26bd3635d7a3badc4e40c7846
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3574,6 +3684,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 2aeebf3bfde81d478595e11878c9e268,3f9395935d018834f6a00d1b6d228ad3
 project wgEncode
 readType 1x45
 replicate 1
@@ -3602,6 +3713,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 1f7b502b99d0aeb81a2dac02b46e539d,d4f300b0a89548519d0b3e942a2905c9
 project wgEncode
 readType 1x45
 replicate 2
@@ -3630,6 +3742,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 3876ab0a173929be16b1d38359625264,1d3c0a9f937d70c14d8c59da10185848
 project wgEncode
 readType 1x45
 replicate 1
@@ -3658,6 +3771,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum a1e916513586d5feeeb8b360041b0b95,870dd5ea1ab6635f659c5aa11104d0c8
 project wgEncode
 readType 1x45
 replicate 2
@@ -3686,6 +3800,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 627391b37e2008157085e9758e451126
 project wgEncode
 readType 1x45
 replicate 1
@@ -3713,6 +3828,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 92cf304183c7879cc88ffcde18325ba4
 project wgEncode
 readType 1x45
 replicate 2
@@ -3740,6 +3856,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum fdf77155c3dd160c522ca6693628f7de
 project wgEncode
 readType 1x45
 replicate 1
@@ -3768,6 +3885,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 64588a3bc96cc0adbd644c61713af7ca
 project wgEncode
 readType 1x45
 replicate 2
@@ -3796,6 +3914,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum a5ae63f90092cd6029fef34cf64a0dca
 project wgEncode
 readType 1x45
 replicate 1
@@ -3823,6 +3942,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum c5be231c0cf3fdc4ff99405d65bbbd9a
 project wgEncode
 readType 1x45
 replicate 2
@@ -3850,6 +3970,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 5083bf561dbc7fc1103725ad0d801db1
 project wgEncode
 readType 1x45
 replicate 1
@@ -3878,6 +3999,7 @@ grant Hardison
 lab PSU-m
 labExpId single
 localization cell
+md5sum 79871a48eb1c17fb6ab8bde3fd3fa044
 project wgEncode
 readType 1x45
 replicate 2
@@ -3906,6 +4028,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 169f35bc39efb309f6cf6cbd8773eab1,29482a30ed943ee66ef28dc065cc472b
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3934,6 +4057,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 7564ca82378687bad7ebf3b678a6f14c,7ac9a0918759e4bb6dc1289852f42c3a
 project wgEncode
 readType 2x99D
 replicate 2
@@ -3962,6 +4086,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 6d4bd3be4463be6de38e5f2ebca7a2af
 project wgEncode
 readType 2x99D
 replicate 1
@@ -3989,6 +4114,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 41c2f53181098fb315865c605065d0f9
 project wgEncode
 readType 2x99D
 replicate 2
@@ -4016,6 +4142,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 0822f8bd386f2c800577f4ae130082a5
 project wgEncode
 readType 2x99D
 replicate 1
@@ -4043,6 +4170,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum a22236cf0776b17032f46c0466f2f004
 project wgEncode
 readType 2x99D
 replicate 2
@@ -4070,6 +4198,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum cb99071d8420aeb888198ea97b0e4fad
 project wgEncode
 readType 2x99D
 replicate 1
@@ -4098,6 +4227,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 9e9247d937dd2ee7c25d4d7f8de6b641
 project wgEncode
 readType 2x99D
 replicate 2
@@ -4126,6 +4256,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 005793e843ecb1331a762434a68ea178
 project wgEncode
 readType 2x99D
 replicate 1
@@ -4154,6 +4285,7 @@ grant Hardison
 lab PSU-m
 labExpId paired-end
 localization cell
+md5sum 24fd2956c19b04a9aea7e70447a01e7f
 project wgEncode
 readType 2x99D
 replicate 2
@@ -4166,4 +4298,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: -626688691
+# MAGIC: 2055461316
