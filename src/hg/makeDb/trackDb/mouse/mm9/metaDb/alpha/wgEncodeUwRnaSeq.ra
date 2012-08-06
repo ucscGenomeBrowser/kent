@@ -2,7 +2,6 @@ metaObject wgEncodeUwRnaSeq
 objType composite
 composite wgEncodeUwRnaSeq
 expVars lab,dataType,cell,age,strain
-readType 1x50
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
 objType table
@@ -6120,4 +6119,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1698144779
+# MAGIC: -1700565456

@@ -6,7 +6,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade birds=Birds vert=Vertebrate all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility full
+visibility hide
 type bed 4
 group compGeno
 priority 103.29
@@ -33,7 +33,7 @@ priority 103.29
         type wigMaf 0.0 1.0
         speciesCodonDefault geoFor1
         speciesGroups Birds Vertebrate
-        sGroup_Birds taeGut1 galGal4 melGal1 melUnd1
+        sGroup_Birds taeGut1 melUnd1 galGal4 melGal1
         sGroup_Vertebrate hg19 mm10
         itemFirstCharCase noChange
         treeImage phylo/geoFor1_7way.png

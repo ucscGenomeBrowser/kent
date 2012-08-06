@@ -4750,8 +4750,7 @@ tag IPSHFIB2IPS5
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell line 5 derived from skin fibroblast of
- a 30 year old donor, same donor as iPS_hFib2_iPS4
+description induced pluripotent stem cell line 5 derived from skin fibroblast of a 30 year old donor, same donor as iPS_hFib2_iPS4
 lineage missing
 karyotype normal
 sex M
@@ -7391,7 +7390,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
 vendorName Paulson Lab
 vendorId FVprogenitor
 orderUrl http://vbs.psu.edu/research/labs/paulson

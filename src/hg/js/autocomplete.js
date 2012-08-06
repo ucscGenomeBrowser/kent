@@ -17,7 +17,7 @@ var suggestBox = {
             if(cache[key] == null) {
                 $.ajax({
                            url: "../cgi-bin/hgSuggest",
-                           data: "db=" + db + "&prefix=" + key,
+                           data: "db=" + db + "&prefix=" + encodeURIComponent(key),
                            // dataType: "json",  // XXXX this doesn't work under IE, so we retrieve as text and do an eval to force to an object.
                            trueSuccess: function (response, status) {
                                // We get a lot of duplicate requests (especially the first letters of words),
@@ -67,14 +67,14 @@ var suggestBox = {
     // selectCallback(item): called when the user selects a new genomic position from the list
     // clickCallback(position): called when the user clicks on positionDisplay
         var lastSelected = null;    // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
-        var str;
+        var waterMark;
         if(assemblySupportsGeneSuggest) {
-            str = "enter position, gene symbol or search terms";
+            waterMark = "enter position, gene symbol or search terms";
         } else {
-            str = "enter position or search terms";
+            waterMark = "enter position or search terms";
         }
         $('#positionInput').val("");
-        $('#positionInput').Watermark(str, '#686868');
+        $('#positionInput').Watermark(waterMark, '#686868');
         if(assemblySupportsGeneSuggest) {
             $('#positionInput').autocomplete({
                 delay: 500,
@@ -110,7 +110,11 @@ var suggestBox = {
                                        if(!lastSelected || lastSelected != $('#positionInput').val()) {
                                            // This handles case where user typed or edited something rather than choosing from a suggest list;
                                            // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
-                                           $('#position').val($('#positionInput').val());
+                                           var val = $('#positionInput').val();
+                                           if(!val || val.length == 0 || val == waterMark)
+                                               // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
+                                               val = $('#positionDisplay').text();
+                                           $('#position').val(val);
                                            suggestBox.clearFindMatches();
                                        }
                                    });

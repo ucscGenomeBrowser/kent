@@ -29,8 +29,8 @@ longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washingt
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t3AG10803=AG10803 t3AOAF=AoAF t3CD4NAIVEWB11970640=CD4+_Naive_Wb11970640 t3GM06990=GM06990 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAEPIC=HAEpiC t3HAH=HA-h t3HASP=HA-sp t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCPEPIC=HCPEpiC t3HEEPIC=HEEpiC t3HFF=HFF t3HGF=HGF t3HIPEPIC=HIPEpiC t3HMF=HMF t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HSMM=HSMM t3HVMF=HVMF t3M059J=M059J t3NB4=NB4 t3NHA=NH-A t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHLF=NHLF t3RPMI7951=RPMI-7951 t3SAEC=SAEC t3SKMC=SkMC t3SKNSHRA=SK-N-SH_RA t3T47D=T-47D t3TH1=Th1 t3TH1WB33676984=Th1_Wb33676984 t3TH2=Th2 t3TH2WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824
-subGroup3 treatment Treatment aNONE=None DIFF4D=DIFF&#95;4d ZNFA41C6=ZNF&#95;knockout&#95;A4.1-C6 ZNFP5=ZNF&#95;knockout&#95;P5
+subGroup2 cellType Cell_Line t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01778=B_cells_CD20+_RO01778&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2LHCNM2=LHCN-M2&nbsp;(Tier_2) t3AG10803=AG10803 t3AOAF=AoAF t3CD4NAIVEWB11970640=CD4+_Naive_Wb11970640 t3GM06990=GM06990 t3GM12865=GM12865 t3H7HESC=H7-hESC t3HAAH=HA-h t3HAASP=HA-sp t3HAEPIC=HAEpiC t3HCF=HCF t3HCFAA=HCFaa t3HCM=HCM t3HCPEPIC=HCPEpiC t3HEEPIC=HEEpiC t3HFF=HFF t3HGF=HGF t3HIPEPIC=HIPEpiC t3HMF=HMF t3HMVECDBLAD=HMVEC-dBl-Ad t3HMVECDBLNEO=HMVEC-dBl-Neo t3HMVECDLYNEO=HMVEC-dLy-Neo t3HMVECLBL=HMVEC-LBl t3HMVECLLY=HMVEC-LLy t3HPAF=HPAF t3HPDLF=HPdLF t3HPF=HPF t3HRCEPIC=HRCEpiC t3HSMM=HSMM t3HVMF=HVMF t3M059J=M059J t3NB4=NB4 t3NHA=NH-A t3NHDFAD=NHDF-Ad t3NHDFNEO=NHDF-neo t3NHLF=NHLF t3RPMI7951=RPMI-7951 t3SAEC=SAEC t3SKANSHRA=SK-N-SH_RA t3SKMC=SkMC t3T47D=T-47D t3TH01=Th1 t3TH01WB33676984=Th1_Wb33676984 t3TH02=Th2 t3TH02WB54553204=Th2_Wb54553204 t3TH17=Th17 t3TREGWB78495824=Treg_Wb78495824
+subGroup3 treatment Treatment aNONE=None DIFF4D=DIFF_4_d
 subGroup4 rep Replicate rep1=rep1 rep2=rep2
 dimensions dimensionY=cellType dimensionX=treatment
 sortOrder cellType=+ view=+
@@ -53,7 +53,7 @@ wgEncode 1
     scoreFilter 100
     scoreFilterLimits 100:1000
     minGrayLevel 2
-    maxWindowToDraw 10000000
+    maxWindowToDraw 250000000
 
         track wgEncodeUwDgfGm06990Hotspots
         parent wgEncodeUwDgfViewHotspots off
@@ -67,7 +67,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel SK-N-SH_RA Hot
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t3SKNSHRA treatment=aNONE rep=rep1
+        subGroups view=Hotspots cellType=t3SKANSHRA treatment=aNONE rep=rep1
         type broadPeak
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -91,9 +91,9 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1 Hot
-        longLabel Th1 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t3TH1 treatment=aNONE rep=rep1
+        shortLabel Th1 Hot 1
+        longLabel Th1 DNaseI DGF Hotspots Rep 1 from ENCODE/UW
+        subGroups view=Hotspots cellType=t3TH01 treatment=aNONE rep=rep1
         type broadPeak
         # subId=1816 dateSubmitted=2010-06-21
 
@@ -174,7 +174,7 @@ wgEncode 1
         track wgEncodeUwDgfHpdlfHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HPdLF Hot
-        longLabel HPdLf DNaseI DGF Hotspots from ENCODE/UW
+        longLabel HPdLF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HPDLF treatment=aNONE rep=rep1
         type broadPeak
         origAssembly hg19
@@ -219,10 +219,9 @@ wgEncode 1
         track wgEncodeUwDgfCd20ro01778Hotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel CD20+ Hot
-        longLabel CD20+ DNaseI DGF Hotspots from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2BCELLSCD20RO01778 treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4884 dateSubmitted=2011-09-27
         # was wgEncodeUwDgfCd20Hotspots wong Tue Oct  4 15:18:45 2011
         # was wgEncodeUwDgfCD20ro01778Hotspots wong Tue Oct  4 15:22:54 2011
@@ -233,7 +232,6 @@ wgEncode 1
         longLabel AG10803 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3AG10803 treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4883 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfGm12865Hotspots
@@ -242,7 +240,6 @@ wgEncode 1
         longLabel GM12865 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3GM12865 treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4886 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHcfHotspots
@@ -251,7 +248,6 @@ wgEncode 1
         longLabel HCF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HCF treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4887 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHipeHotspots
@@ -260,7 +256,6 @@ wgEncode 1
         longLabel HIPEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HIPEPIC treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4888 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecfHotspots
@@ -269,7 +264,6 @@ wgEncode 1
         longLabel HMVEC-dLy-Neo DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HMVECDLYNEO treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4889 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecdHotspots
@@ -278,7 +272,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Neo DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HMVECDBLNEO treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4890 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecbHotspots
@@ -287,7 +280,6 @@ wgEncode 1
         longLabel HMVEC-LLy DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HMVECLLY treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4891 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHffHotspots
@@ -296,7 +288,6 @@ wgEncode 1
         longLabel HFF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HFF treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4892 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfNb4Hotspots
@@ -305,7 +296,6 @@ wgEncode 1
         longLabel NB4 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3NB4 treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4893 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHsmmHotspots
@@ -314,17 +304,15 @@ wgEncode 1
         longLabel HSMM DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HSMM treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4894 dateSubmitted=2011-09-27
 
         #bad peaks, lab wanted revoke
         #track wgEncodeUwDgfMonocd14ro1746Hotspots
         #parent wgEncodeUwDgfViewHotspots off
-        #shortLabel Monocytes-CD14+
+        #shortLabel Monocytes-CD14+ Hot
         #longLabel Monocytes-CD14+ DNaseI DGF Hotspots from ENCODE/UW
         #subGroups view=Hotspots cellType=MONOCD14 treatment=aNONE rep=rep1
         #type broadPeak
-        #origAssembly Illumina_HiSeq_2000
         # subId=4885 dateSubmitted=2011-09-29
         # was wgEncodeUwDgfMonocd14Hotspots zwzhang Tue Oct  4 16:20:13 2011
 
@@ -332,9 +320,8 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HA-h Hot
         longLabel HA-h DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t3HAH treatment=aNONE rep=rep1
+        subGroups view=Hotspots cellType=t3HAAH treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHvmfHotspots
@@ -343,7 +330,6 @@ wgEncode 1
         longLabel HVMF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HVMF treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4896 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhdfneoHotspots
@@ -352,7 +338,6 @@ wgEncode 1
         longLabel NHDF-neo DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3NHDFNEO treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4897 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHeeHotspots
@@ -361,7 +346,6 @@ wgEncode 1
         longLabel HEEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HEEPIC treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4898 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHcmHotspots
@@ -370,7 +354,6 @@ wgEncode 1
         longLabel HCM DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HCM treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4899 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhlfHotspots
@@ -379,16 +362,14 @@ wgEncode 1
         longLabel NHLF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3NHLF treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4900 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHaspHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HA-sp Hot
         longLabel HA-sp DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=t3HASP treatment=aNONE rep=rep1
+        subGroups view=Hotspots cellType=t3HAASP treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecHotspots
@@ -397,18 +378,15 @@ wgEncode 1
         longLabel HUVEC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2HUVEC treatment=aNONE rep=rep1
         type broadPeak
-        origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfLhcnm2Diff4dHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel LHCNM2 DIFF4d Hot
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Hotspots from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6421 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHgfHotspots
@@ -417,8 +395,6 @@ wgEncode 1
         longLabel HGF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HGF treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6417 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHmvechHotspots
@@ -427,8 +403,6 @@ wgEncode 1
         longLabel HMVEC-LBl DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HMVECLBL treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfA549Hotspots
@@ -437,8 +411,6 @@ wgEncode 1
         longLabel A549 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2A549 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6415 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfHcfaaHotspots
@@ -447,8 +419,6 @@ wgEncode 1
         longLabel HCFaa DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3HCFAA treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6416 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfLhcnm2Hotspots
@@ -457,8 +427,6 @@ wgEncode 1
         longLabel LHCN-M2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t2LHCNM2 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6422 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfM059jHotspots
@@ -467,8 +435,6 @@ wgEncode 1
         longLabel M059J DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3M059J treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6423 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfRpmi7951Hotspots
@@ -477,88 +443,70 @@ wgEncode 1
         longLabel RPMI-7951 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3RPMI7951 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6424 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfCd4naivewb11970640Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel CD4+_Naive_Wb11970640
-        longLabel CD4+ Naive Wb11970640 DNase-DGF Hotspots from ENCODE/UW #autogenerated
+        shortLabel CD4+_Naive Hot
+        longLabel CD4+ Naive Wb11970640 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3CD4NAIVEWB11970640 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7349 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfT47dHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel T-47D
-        longLabel T-47D DNase-DGF Hotspots from ENCODE/UW #autogenerated
+        shortLabel T-47D Hot
+        longLabel T-47D DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3T47D treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7350 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh17Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th17
-        longLabel Th17 DNase-DGF Hotspots from ENCODE/UW #autogenerated
+        shortLabel Th17 Hot
+        longLabel Th17 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3TH17 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7351 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh1HotspotsRep2
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1 2
-        longLabel Th1 DNase-DGF Hotspots Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Hotspots cellType=t3TH1 treatment=aNONE rep=rep2
+        shortLabel Th1 Hot 2
+        longLabel Th1 DNaseI DGF Hotspots Rep 2 from ENCODE/UW
+        subGroups view=Hotspots cellType=t3TH01 treatment=aNONE rep=rep2
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7352 dateSubmitted=2012-07-16
 
         track wgEncodeUwDgfTh1wb33676984Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1_Wb33676984
-        longLabel Th1 Wb33676984 DNase-DGF Hotspots from ENCODE/UW #autogenerated
-        subGroups view=Hotspots cellType=t3TH1WB33676984 treatment=aNONE rep=rep1
+        shortLabel Th1 33676984 Hot
+        longLabel Th1 Wb33676984 DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=t3TH01WB33676984 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7353 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2wb54553204Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th2_Wb54553204
-        longLabel Th2 Wb54553204 DNase-DGF Hotspots from ENCODE/UW #autogenerated
-        subGroups view=Hotspots cellType=t3TH2WB54553204 treatment=aNONE rep=rep1
+        shortLabel Th2 54553204 Hot
+        longLabel Th2 Wb54553204 DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7354 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTregwb78495824Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Treg_Wb78495824
-        longLabel Treg Wb78495824 DNase-DGF Hotspots from ENCODE/UW #autogenerated
+        shortLabel Treg Hot
+        longLabel Treg Wb78495824 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=t3TREGWB78495824 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7355 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th2
-        longLabel Th2 DNase-DGF Hotspots from ENCODE/UW #autogenerated
-        subGroups view=Hotspots cellType=t3TH2 treatment=aNONE rep=rep1
+        shortLabel Th2 Hot
+        longLabel Th2 DNaseI DGF Hotspots from ENCODE/UW
+        subGroups view=Hotspots cellType=t3TH02 treatment=aNONE rep=rep1
         type broadPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7356 dateSubmitted=2012-07-13
 
     track wgEncodeUwDgfViewPeaks
@@ -570,7 +518,7 @@ wgEncode 1
     pValueFilterLimits 1:324
     scoreFilter 100
     scoreFilterLimits 100:1000
-    maxWindowToDraw 10000000
+    maxWindowToDraw 250000000
     minGrayLevel 3
 
         track wgEncodeUwDgfGm06990Pk
@@ -585,7 +533,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel SK-N-SH_RA Pk
         longLabel SK-N-SH_RA DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t3SKNSHRA treatment=aNONE rep=rep1
+        subGroups view=Peaks cellType=t3SKANSHRA treatment=aNONE rep=rep1
         type narrowPeak
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -609,9 +557,9 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Th1 Pk
-        longLabel Th1 DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t3TH1 treatment=aNONE rep=rep1
+        shortLabel Th1 Pk 1
+        longLabel Th1 DNaseI DGF Peaks Rep 1 from ENCODE/UW
+        subGroups view=Peaks cellType=t3TH01 treatment=aNONE rep=rep1
         type narrowPeak
         # subId=1816 dateSubmitted=2010-06-21
 
@@ -744,10 +692,9 @@ wgEncode 1
         track wgEncodeUwDgfCd20ro01778Pk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel CD20+ Pk
-        longLabel CD20+ DNaseI DGF Peaks from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2BCELLSCD20RO01778 treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4884 dateSubmitted=2011-09-27
         # was wgEncodeUwDgfCd20Pk wong Tue Oct  4 15:18:45 2011
         # was wgEncodeUwDgfCD20ro01778Pk wong Tue Oct  4 15:22:54 2011
@@ -758,7 +705,6 @@ wgEncode 1
         longLabel AG10803 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3AG10803 treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4883 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfGm12865Pk
@@ -767,7 +713,6 @@ wgEncode 1
         longLabel GM12865 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3GM12865 treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4886 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHcfPk
@@ -776,7 +721,6 @@ wgEncode 1
         longLabel HCF DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HCF treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4887 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHipePk
@@ -785,7 +729,6 @@ wgEncode 1
         longLabel HIPEpiC DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HIPEPIC treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4888 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecfPk
@@ -794,7 +737,6 @@ wgEncode 1
         longLabel HMVEC-dLy-Neo DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HMVECDLYNEO treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4889 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecdPk
@@ -803,7 +745,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Neo DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HMVECDBLNEO treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4890 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecbPk
@@ -812,7 +753,6 @@ wgEncode 1
         longLabel HMVEC-LLy DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HMVECLLY treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4891 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHffPk
@@ -821,7 +761,6 @@ wgEncode 1
         longLabel HFF DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HFF treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4892 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfNb4Pk
@@ -830,7 +769,6 @@ wgEncode 1
         longLabel NB4 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3NB4 treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4893 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHsmmPk
@@ -839,7 +777,6 @@ wgEncode 1
         longLabel HSMM DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HSMM treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4894 dateSubmitted=2011-09-27
 
         #lab wanted revoked, bad peaks
@@ -849,7 +786,6 @@ wgEncode 1
         #longLabel Monocytes-CD14+ DNaseI DGF Peaks from ENCODE/UW
         #subGroups view=Peaks cellType=MONOCD14 treatment=aNONE rep=rep1
         #type narrowPeak
-        #origAssembly Illumina_HiSeq_2000
         # subId=4885 dateSubmitted=2011-09-29
         # was wgEncodeUwDgfMonocd14Pk zwzhang Tue Oct  4 16:20:49 2011
 
@@ -857,9 +793,8 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HA-h Pk
         longLabel HA-h DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t3HAH treatment=aNONE rep=rep1
+        subGroups view=Peaks cellType=t3HAAH treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHvmfPk
@@ -868,7 +803,6 @@ wgEncode 1
         longLabel HVMF DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HVMF treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4896 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhdfneoPk
@@ -877,7 +811,6 @@ wgEncode 1
         longLabel NHDF-neo DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3NHDFNEO treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4897 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHeePk
@@ -886,7 +819,6 @@ wgEncode 1
         longLabel HEEpiC DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HEEPIC treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4898 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHcmPk
@@ -895,7 +827,6 @@ wgEncode 1
         longLabel HCM DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HCM treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4899 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhlfPk
@@ -904,16 +835,14 @@ wgEncode 1
         longLabel NHLF DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3NHLF treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=4900 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHaspPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HA-sp Pk
         longLabel HA-sp DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=t3HASP treatment=aNONE rep=rep1
+        subGroups view=Peaks cellType=t3HAASP treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecPk
@@ -922,18 +851,15 @@ wgEncode 1
         longLabel HUVEC DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2HUVEC treatment=aNONE rep=rep1
         type narrowPeak
-        origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfLhcnm2Diff4dPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel LHCNM2 DIFF4d Pk
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Peaks from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6421 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHgfPk
@@ -942,8 +868,6 @@ wgEncode 1
         longLabel HGF DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HGF treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6417 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHmvechPk
@@ -952,8 +876,6 @@ wgEncode 1
         longLabel HMVEC-LBl DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HMVECLBL treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfA549Pk
@@ -962,8 +884,6 @@ wgEncode 1
         longLabel A549 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2A549 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6415 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfHcfaaPk
@@ -972,8 +892,6 @@ wgEncode 1
         longLabel HCFaa DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3HCFAA treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6416 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfLhcnm2Pk
@@ -982,8 +900,6 @@ wgEncode 1
         longLabel LHCN-M2 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t2LHCNM2 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6422 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfM059jPk
@@ -992,8 +908,6 @@ wgEncode 1
         longLabel M059J DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3M059J treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6423 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfRpmi7951Pk
@@ -1002,88 +916,70 @@ wgEncode 1
         longLabel RPMI-7951 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3RPMI7951 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6424 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfCd4naivewb11970640Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel CD4+_Naive_Wb11970640 Pk
-        longLabel CD4+ Naive Wb11970640 DNase-DGF Peaks from ENCODE/UW #autogenerated
+        shortLabel CD4+_Naive Pk
+        longLabel CD4+ Naive Wb11970640 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3CD4NAIVEWB11970640 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7349 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfT47dPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel T-47D Pk
-        longLabel T-47D DNase-DGF Peaks from ENCODE/UW #autogenerated
+        longLabel T-47D DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3T47D treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7350 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh17Pk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Th17 Pk
-        longLabel Th17 DNase-DGF Peaks from ENCODE/UW #autogenerated
+        longLabel Th17 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3TH17 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7351 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh1PkRep2
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Th1 Pk 2
-        longLabel Th1 DNase-DGF Peaks Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Peaks cellType=t3TH1 treatment=aNONE rep=rep2
+        longLabel Th1 DNaseI DGF Peaks Rep 2 from ENCODE/UW
+        subGroups view=Peaks cellType=t3TH01 treatment=aNONE rep=rep2
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7352 dateSubmitted=2012-07-16
 
         track wgEncodeUwDgfTh1wb33676984Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Th1_Wb33676984 Pk
-        longLabel Th1 Wb33676984 DNase-DGF Peaks from ENCODE/UW #autogenerated
-        subGroups view=Peaks cellType=t3TH1WB33676984 treatment=aNONE rep=rep1
+        shortLabel Th1 33676984 Pk
+        longLabel Th1 Wb33676984 DNaseI DGF Peaks from ENCODE/UW
+        subGroups view=Peaks cellType=t3TH01WB33676984 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7353 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2wb54553204Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Th2_Wb54553204 Pk
-        longLabel Th2 Wb54553204 DNase-DGF Peaks from ENCODE/UW #autogenerated
-        subGroups view=Peaks cellType=t3TH2WB54553204 treatment=aNONE rep=rep1
+        shortLabel Th2 54553204 Pk
+        longLabel Th2 Wb54553204 DNaseI DGF Peaks from ENCODE/UW
+        subGroups view=Peaks cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7354 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTregwb78495824Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel Treg_Wb78495824 Pk
-        longLabel Treg Wb78495824 DNase-DGF Peaks from ENCODE/UW #autogenerated
+        shortLabel Treg Pk
+        longLabel Treg Wb78495824 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=t3TREGWB78495824 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7355 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2Pk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Th2 Pk
-        longLabel Th2 DNase-DGF Peaks from ENCODE/UW #autogenerated
-        subGroups view=Peaks cellType=t3TH2 treatment=aNONE rep=rep1
+        longLabel Th2 DNaseI DGF Peaks from ENCODE/UW
+        subGroups view=Peaks cellType=t3TH02 treatment=aNONE rep=rep1
         type narrowPeak
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7356 dateSubmitted=2012-07-13
 
     track wgEncodeUwDgfViewSignal
@@ -1110,7 +1006,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel SK-N-SH_RA Sig
         longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t3SKNSHRA treatment=aNONE rep=rep1
+        subGroups view=Signal cellType=t3SKANSHRA treatment=aNONE rep=rep1
         type bigWig 1.000000 6713.000000
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -1134,9 +1030,9 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Th1 Sig
-        longLabel Th1 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t3TH1 treatment=aNONE rep=rep1
+        shortLabel Th1 Sig 1
+        longLabel Th1 DNaseI DGF Per-base Signal Rep 1 from ENCODE/UW
+        subGroups view=Signal cellType=t3TH01 treatment=aNONE rep=rep1
         type bigWig 1.000000 15550.000000
         # subId=1816 dateSubmitted=2010-06-21
 
@@ -1262,10 +1158,9 @@ wgEncode 1
         track wgEncodeUwDgfCd20ro01778Sig
         parent wgEncodeUwDgfViewSignal off
         shortLabel CD20+ Sig
-        longLabel CD20+ DNaseI DGF Per-base Signal from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2BCELLSCD20RO01778 treatment=aNONE rep=rep1
         type bigWig 1.000000 28523.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4884 dateSubmitted=2011-09-27
         # was wgEncodeUwDgfCd20Sig wong Tue Oct  4 15:18:46 2011
         # was wgEncodeUwDgfCD20ro01778Sig wong Tue Oct  4 15:22:54 2011
@@ -1276,7 +1171,6 @@ wgEncode 1
         longLabel AG10803 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3AG10803 treatment=aNONE rep=rep1
         type bigWig 1.000000 106260.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4883 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfGm12865Sig
@@ -1285,7 +1179,6 @@ wgEncode 1
         longLabel GM12865 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3GM12865 treatment=aNONE rep=rep1
         type bigWig 1.000000 20476.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4886 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHcfSig
@@ -1294,7 +1187,6 @@ wgEncode 1
         longLabel HCF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HCF treatment=aNONE rep=rep1
         type bigWig 1.000000 110210.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4887 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHipeSig
@@ -1303,7 +1195,6 @@ wgEncode 1
         longLabel HIPEpiC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HIPEPIC treatment=aNONE rep=rep1
         type bigWig 1.000000 125548.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4888 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecfSig
@@ -1312,7 +1203,6 @@ wgEncode 1
         longLabel HMVEC-dLy-Neo DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HMVECDLYNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 18816.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4889 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecdSig
@@ -1321,7 +1211,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Neo DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HMVECDBLNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 38790.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4890 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecbSig
@@ -1330,7 +1219,6 @@ wgEncode 1
         longLabel HMVEC-LLy DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HMVECLLY treatment=aNONE rep=rep1
         type bigWig 1.000000 108345.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4891 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHffSig
@@ -1339,7 +1227,6 @@ wgEncode 1
         longLabel HFF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HFF treatment=aNONE rep=rep1
         type bigWig 1.000000 25572.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4892 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfNb4Sig
@@ -1348,7 +1235,6 @@ wgEncode 1
         longLabel NB4 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3NB4 treatment=aNONE rep=rep1
         type bigWig 1.000000 50365.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4893 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHsmmSig
@@ -1357,7 +1243,6 @@ wgEncode 1
         longLabel HSMM DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HSMM treatment=aNONE rep=rep1
         type bigWig 1.000000 119349.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4894 dateSubmitted=2011-09-27
 
         #bad peaks, lab wanted revoked
@@ -1367,7 +1252,6 @@ wgEncode 1
         #longLabel Monocytes-CD14+ DNaseI DGF Per-base Signal from ENCODE/UW
         #subGroups view=Signal cellType=MONOCD14 treatment=aNONE rep=rep1
         #type bigWig 1.000000 24837.000000
-        #origAssembly Illumina_HiSeq_2000
         # subId=4885 dateSubmitted=2011-09-29
         # was wgEncodeUwDgfMonocd14Sig zwzhang Tue Oct  4 16:32:06 2011
 
@@ -1375,9 +1259,8 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel HA-h Sig
         longLabel HA-h DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t3HAH treatment=aNONE rep=rep1
+        subGroups view=Signal cellType=t3HAAH treatment=aNONE rep=rep1
         type bigWig 1.000000 63740.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHvmfSig
@@ -1386,7 +1269,6 @@ wgEncode 1
         longLabel HVMF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HVMF treatment=aNONE rep=rep1
         type bigWig 1.000000 47081.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4896 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhdfneoSig
@@ -1395,7 +1277,6 @@ wgEncode 1
         longLabel NHDF-neo DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3NHDFNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 90640.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4897 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHeeSig
@@ -1404,7 +1285,6 @@ wgEncode 1
         longLabel HEEpiC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HEEPIC treatment=aNONE rep=rep1
         type bigWig 1.000000 120281.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4898 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHcmSig
@@ -1413,7 +1293,6 @@ wgEncode 1
         longLabel HCM DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HCM treatment=aNONE rep=rep1
         type bigWig 1.000000 45232.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4899 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhlfSig
@@ -1422,16 +1301,14 @@ wgEncode 1
         longLabel NHLF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3NHLF treatment=aNONE rep=rep1
         type bigWig 1.000000 53849.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4900 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHaspSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel HA-sp Sig
         longLabel HA-sp DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=t3HASP treatment=aNONE rep=rep1
+        subGroups view=Signal cellType=t3HAASP treatment=aNONE rep=rep1
         type bigWig 1.000000 92887.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecSig
@@ -1440,18 +1317,15 @@ wgEncode 1
         longLabel HUVEC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2HUVEC treatment=aNONE rep=rep1
         type bigWig 1.000000 72607.000000
-        origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfLhcnm2Diff4dSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel LHCNM2 DIFF4d Sig
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Per-base Signal from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type bigWig 1.000000 102421.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6421 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHgfSig
@@ -1460,8 +1334,6 @@ wgEncode 1
         longLabel HGF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HGF treatment=aNONE rep=rep1
         type bigWig 1.000000 63610.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6417 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHmvechSig
@@ -1470,8 +1342,6 @@ wgEncode 1
         longLabel HMVEC-LBl DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HMVECLBL treatment=aNONE rep=rep1
         type bigWig 1.000000 41385.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfA549Sig
@@ -1480,8 +1350,6 @@ wgEncode 1
         longLabel A549 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2A549 treatment=aNONE rep=rep1
         type bigWig 1.000000 139167.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6415 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfHcfaaSig
@@ -1490,8 +1358,6 @@ wgEncode 1
         longLabel HCFaa DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3HCFAA treatment=aNONE rep=rep1
         type bigWig 1.000000 62515.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6416 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfLhcnm2Sig
@@ -1500,8 +1366,6 @@ wgEncode 1
         longLabel LHCN-M2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t2LHCNM2 treatment=aNONE rep=rep1
         type bigWig 1.000000 65022.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6422 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfM059jSig
@@ -1510,8 +1374,6 @@ wgEncode 1
         longLabel M059J DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3M059J treatment=aNONE rep=rep1
         type bigWig 1.000000 19308.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6423 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfRpmi7951Sig
@@ -1520,88 +1382,70 @@ wgEncode 1
         longLabel RPMI-7951 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3RPMI7951 treatment=aNONE rep=rep1
         type bigWig 1.000000 50651.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6424 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfCd4naivewb11970640Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel CD4+_Naive_Wb11970640 Sig
-        longLabel CD4+ Naive Wb11970640 DNase-DGF Signal from ENCODE/UW #autogenerated
+        shortLabel CD4+_Naive Sig
+        longLabel CD4+ Naive Wb11970640 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3CD4NAIVEWB11970640 treatment=aNONE rep=rep1
         type bigWig 1.000000 31841.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7349 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfT47dSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel T-47D Sig
-        longLabel T-47D DNase-DGF Signal from ENCODE/UW #autogenerated
+        longLabel T-47D DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3T47D treatment=aNONE rep=rep1
         type bigWig 1.000000 49279.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7350 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh17Sig
         parent wgEncodeUwDgfViewSignal off
         shortLabel Th17 Sig
-        longLabel Th17 DNase-DGF Signal from ENCODE/UW #autogenerated
+        longLabel Th17 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3TH17 treatment=aNONE rep=rep1
         type bigWig 1.000000 19243.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7351 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh1SigRep2
         parent wgEncodeUwDgfViewSignal off
         shortLabel Th1 Sig 2
-        longLabel Th1 DNase-DGF Signal Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=Signal cellType=t3TH1 treatment=aNONE rep=rep2
+        longLabel Th1 DNaseI DGF Per-base Signal Rep 2 from ENCODE/UW
+        subGroups view=Signal cellType=t3TH01 treatment=aNONE rep=rep2
         type bigWig 1.000000 13082.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7352 dateSubmitted=2012-07-16
 
         track wgEncodeUwDgfTh1wb33676984Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Th1_Wb33676984 Sig
-        longLabel Th1 Wb33676984 DNase-DGF Signal from ENCODE/UW #autogenerated
-        subGroups view=Signal cellType=t3TH1WB33676984 treatment=aNONE rep=rep1
+        shortLabel Th1 33676984 Sig
+        longLabel Th1 Wb33676984 DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=t3TH01WB33676984 treatment=aNONE rep=rep1
         type bigWig 1.000000 16995.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7353 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2wb54553204Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Th2_Wb54553204 Sig
-        longLabel Th2 Wb54553204 DNase-DGF Signal from ENCODE/UW #autogenerated
-        subGroups view=Signal cellType=t3TH2WB54553204 treatment=aNONE rep=rep1
+        shortLabel Th2 54553204 Sig
+        longLabel Th2 Wb54553204 DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type bigWig 1.000000 59281.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7354 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTregwb78495824Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel Treg_Wb78495824 Sig
-        longLabel Treg Wb78495824 DNase-DGF Signal from ENCODE/UW #autogenerated
+        shortLabel Treg Sig
+        longLabel Treg Wb78495824 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=t3TREGWB78495824 treatment=aNONE rep=rep1
         type bigWig 1.000000 25769.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7355 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2Sig
         parent wgEncodeUwDgfViewSignal off
         shortLabel Th2 Sig
-        longLabel Th2 DNase-DGF Signal from ENCODE/UW #autogenerated
-        subGroups view=Signal cellType=t3TH2 treatment=aNONE rep=rep1
+        longLabel Th2 DNaseI DGF Per-base Signal from ENCODE/UW
+        subGroups view=Signal cellType=t3TH02 treatment=aNONE rep=rep1
         type bigWig 1.000000 47082.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7356 dateSubmitted=2012-07-13
 
     track wgEncodeUwDgfViewzRaw
@@ -1628,7 +1472,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel SK-N-SH_RA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=t3SKNSHRA treatment=aNONE rep=rep1
+        subGroups view=zRaw cellType=t3SKANSHRA treatment=aNONE rep=rep1
         type bigWig 1.000000 36298.000000
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -1652,9 +1496,9 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1 Raw
-        longLabel Th1 DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=t3TH1 treatment=aNONE rep=rep1
+        shortLabel Th1 Raw 1
+        longLabel Th1 DNaseI DGF Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRaw cellType=t3TH01 treatment=aNONE rep=rep1
         type bigWig 1.000000 108696.000000
         # subId=1816 dateSubmitted=2010-06-21
 
@@ -1780,10 +1624,9 @@ wgEncode 1
         track wgEncodeUwDgfCd20ro01778Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel CD20+ Raw
-        longLabel CD20+ DNaseI DGF Raw Signal from ENCODE/UW
+        longLabel B cells CD20+ RO01778 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2BCELLSCD20RO01778 treatment=aNONE rep=rep1
         type bigWig 1.000000 112816.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4884 dateSubmitted=2011-09-27
         # was wgEncodeUwDgfCd20Raw wong Tue Oct  4 15:18:46 2011
         # was wgEncodeUwDgfCD20ro01778Raw wong Tue Oct  4 15:22:54 2011
@@ -1794,7 +1637,6 @@ wgEncode 1
         longLabel AG10803 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3AG10803 treatment=aNONE rep=rep1
         type bigWig 1.000000 335063.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4883 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfGm12865Raw
@@ -1803,7 +1645,6 @@ wgEncode 1
         longLabel GM12865 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3GM12865 treatment=aNONE rep=rep1
         type bigWig 1.000000 134427.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4886 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHcfRaw
@@ -1812,7 +1653,6 @@ wgEncode 1
         longLabel HCF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HCF treatment=aNONE rep=rep1
         type bigWig 1.000000 314066.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4887 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHipeRaw
@@ -1821,7 +1661,6 @@ wgEncode 1
         longLabel HIPEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HIPEPIC treatment=aNONE rep=rep1
         type bigWig 1.000000 217432.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4888 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecfRaw
@@ -1830,7 +1669,6 @@ wgEncode 1
         longLabel HMVEC-dLy-Neo DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HMVECDLYNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 130546.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4889 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecdRaw
@@ -1839,7 +1677,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Neo DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HMVECDBLNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 178579.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4890 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHmvecbRaw
@@ -1848,7 +1685,6 @@ wgEncode 1
         longLabel HMVEC-LLy DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HMVECLLY treatment=aNONE rep=rep1
         type bigWig 1.000000 348513.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4891 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHffRaw
@@ -1857,7 +1693,6 @@ wgEncode 1
         longLabel HFF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HFF treatment=aNONE rep=rep1
         type bigWig 1.000000 274268.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4892 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfNb4Raw
@@ -1866,7 +1701,6 @@ wgEncode 1
         longLabel NB4 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3NB4 treatment=aNONE rep=rep1
         type bigWig 1.000000 174943.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4893 dateSubmitted=2011-09-27
 
         track wgEncodeUwDgfHsmmRaw
@@ -1875,7 +1709,6 @@ wgEncode 1
         longLabel HSMM DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HSMM treatment=aNONE rep=rep1
         type bigWig 1.000000 273155.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4894 dateSubmitted=2011-09-27
 
         #revoked, lab wanted to, bad peaks
@@ -1885,7 +1718,6 @@ wgEncode 1
         #longLabel Monocytes-CD14+ DNaseI DGF Raw Signal from ENCODE/UW
         #subGroups view=zRaw cellType=MONOCD14 treatment=aNONE rep=rep1
         #type bigWig 1.000000 134359.000000
-        #origAssembly Illumina_HiSeq_2000
         # subId=4885 dateSubmitted=2011-09-29
         # was wgEncodeUwDgfMonocd14Raw zwzhang Tue Oct  4 16:31:43 2011
 
@@ -1893,9 +1725,8 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HA-h Raw
         longLabel HA-h DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=t3HAH treatment=aNONE rep=rep1
+        subGroups view=zRaw cellType=t3HAAH treatment=aNONE rep=rep1
         type bigWig 1.000000 318524.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHvmfRaw
@@ -1904,7 +1735,6 @@ wgEncode 1
         longLabel HVMF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HVMF treatment=aNONE rep=rep1
         type bigWig 1.000000 145787.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4896 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhdfneoRaw
@@ -1913,7 +1743,6 @@ wgEncode 1
         longLabel NHDF-neo DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3NHDFNEO treatment=aNONE rep=rep1
         type bigWig 1.000000 314874.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4897 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHeeRaw
@@ -1922,7 +1751,6 @@ wgEncode 1
         longLabel HEEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HEEPIC treatment=aNONE rep=rep1
         type bigWig 1.000000 408862.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4898 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHcmRaw
@@ -1931,7 +1759,6 @@ wgEncode 1
         longLabel HCM DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HCM treatment=aNONE rep=rep1
         type bigWig 1.000000 290539.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4899 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfNhlfRaw
@@ -1940,16 +1767,14 @@ wgEncode 1
         longLabel NHLF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3NHLF treatment=aNONE rep=rep1
         type bigWig 1.000000 337474.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=4900 dateSubmitted=2011-09-29
 
         track wgEncodeUwDgfHaspRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HA-sp Raw
         longLabel HA-sp DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=t3HASP treatment=aNONE rep=rep1
+        subGroups view=zRaw cellType=t3HAASP treatment=aNONE rep=rep1
         type bigWig 1.000000 218346.000000
-        origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecRaw
@@ -1958,167 +1783,134 @@ wgEncode 1
         longLabel HUVEC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2HUVEC treatment=aNONE rep=rep1
         type bigWig 1.000000 242408.000000
-        origAssembly Illumina_HiSeq_2000
         color 224,75,0
         # subId=5233 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfLhcnm2Diff4dRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel LHCNM2 DIFF4d Raw
-        longLabel LHCN-M2 DIFF 4d DNaseI DGF Raw signal from ENCODE/UW
+        longLabel LHCN-M2 DIFF 4 d DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2LHCNM2 treatment=DIFF4D rep=rep1
         type bigWig 1.000000 591867.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6421 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHgfRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HGF Raw
-        longLabel HGF DNaseI DGF Raw signal from ENCODE/UW
+        longLabel HGF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HGF treatment=aNONE rep=rep1
         type bigWig 1.000000 302143.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6417 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfHmvechRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HMVEC-LBl Raw
-        longLabel HMVEC-LBl DNaseI DGF Raw signal from ENCODE/UW
+        longLabel HMVEC-LBl DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HMVECLBL treatment=aNONE rep=rep1
         type bigWig 1.000000 224166.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6418 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfA549Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel A549 Raw
-        longLabel A549 DNaseI DGF Raw signal from ENCODE/UW
+        longLabel A549 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2A549 treatment=aNONE rep=rep1
         type bigWig 1.000000 784854.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6415 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfHcfaaRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HCFaa Raw
-        longLabel HCFaa DNaseI DGF Raw signal from ENCODE/UW
+        longLabel HCFaa DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3HCFAA treatment=aNONE rep=rep1
         type bigWig 1.000000 301616.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6416 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfLhcnm2Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel LHCNM2 Raw
-        longLabel LHCN-M2 DNaseI DGF Raw signal from ENCODE/UW
+        longLabel LHCN-M2 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t2LHCNM2 treatment=aNONE rep=rep1
         type bigWig 1.000000 308025.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6422 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfM059jRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel M059J Raw
-        longLabel M059J DNaseI DGF Raw signal from ENCODE/UW
+        longLabel M059J DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3M059J treatment=aNONE rep=rep1
         type bigWig 1.000000 196777.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6423 dateSubmitted=2012-03-28
 
         track wgEncodeUwDgfRpmi7951Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel RPMI-7951 Raw
-        longLabel RPMI-7951 DNaseI DGF Raw signal from ENCODE/UW
+        longLabel RPMI-7951 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3RPMI7951 treatment=aNONE rep=rep1
         type bigWig 1.000000 217968.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=6424 dateSubmitted=2012-03-27
 
         track wgEncodeUwDgfCd4naivewb11970640Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel CD4+_Naive_Wb11970640 Raw
-        longLabel CD4+ Naive Wb11970640 DNase-DGF Raw signal from ENCODE/UW #autogenerated
+        shortLabel CD4+_Naive Raw
+        longLabel CD4+ Naive Wb11970640 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3CD4NAIVEWB11970640 treatment=aNONE rep=rep1
         type bigWig 1.000000 200613.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7349 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfT47dRaw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel T-47D Raw
-        longLabel T-47D DNase-DGF Raw signal from ENCODE/UW #autogenerated
+        longLabel T-47D DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3T47D treatment=aNONE rep=rep1
         type bigWig 1.000000 526380.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7350 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh17Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel Th17 Raw
-        longLabel Th17 DNase-DGF Raw signal from ENCODE/UW #autogenerated
+        longLabel Th17 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3TH17 treatment=aNONE rep=rep1
         type bigWig 1.000000 139611.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7351 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh1RawRep2
         parent wgEncodeUwDgfViewzRaw off
         shortLabel Th1 Raw 2
-        longLabel Th1 DNase-DGF Raw signal Rep 2 from ENCODE/UW #autogenerated
-        subGroups view=zRaw cellType=t3TH1 treatment=aNONE rep=rep2
+        longLabel Th1 DNaseI DGF Raw Signal Rep 2 from ENCODE/UW
+        subGroups view=zRaw cellType=t3TH01 treatment=aNONE rep=rep2
         type bigWig 1.000000 181173.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7352 dateSubmitted=2012-07-16
 
         track wgEncodeUwDgfTh1wb33676984Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1_Wb33676984 Raw
-        longLabel Th1 Wb33676984 DNase-DGF Raw signal from ENCODE/UW #autogenerated
-        subGroups view=zRaw cellType=t3TH1WB33676984 treatment=aNONE rep=rep1
+        shortLabel Th1 33676984 Raw
+        longLabel Th1 Wb33676984 DNaseI DGF Raw Signal from ENCODE/UW
+        subGroups view=zRaw cellType=t3TH01WB33676984 treatment=aNONE rep=rep1
         type bigWig 1.000000 138057.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7353 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2wb54553204Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th2_Wb54553204 Raw
-        longLabel Th2 Wb54553204 DNase-DGF Raw signal from ENCODE/UW #autogenerated
-        subGroups view=zRaw cellType=t3TH2WB54553204 treatment=aNONE rep=rep1
+        shortLabel Th2 54553204 Raw
+        longLabel Th2 Wb54553204 DNaseI DGF Raw Signal from ENCODE/UW
+        subGroups view=zRaw cellType=t3TH02WB54553204 treatment=aNONE rep=rep1
         type bigWig 1.000000 263364.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7354 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTregwb78495824Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Treg_Wb78495824 Raw
-        longLabel Treg Wb78495824 DNase-DGF Raw signal from ENCODE/UW #autogenerated
+        shortLabel Treg Raw
+        longLabel Treg Wb78495824 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=t3TREGWB78495824 treatment=aNONE rep=rep1
         type bigWig 1.000000 146038.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7355 dateSubmitted=2012-07-12
 
         track wgEncodeUwDgfTh2Raw
         parent wgEncodeUwDgfViewzRaw off
         shortLabel Th2 Raw
-        longLabel Th2 DNase-DGF Raw signal from ENCODE/UW #autogenerated
-        subGroups view=zRaw cellType=t3TH2 treatment=aNONE rep=rep1
+        longLabel Th2 DNaseI DGF Raw Signal from ENCODE/UW
+        subGroups view=zRaw cellType=t3TH02 treatment=aNONE rep=rep1
         type bigWig 1.000000 337233.000000
-        accession hg19
-        origAssembly Illumina_HiSeq_2000
         # subId=7356 dateSubmitted=2012-07-13
 

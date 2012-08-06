@@ -587,7 +587,7 @@ int maxToReturn = 500;
 
 if (slCount(tsrList) > maxToReturn)
     {
-    warn("Search terms are not very specific, only showing first %d matching known genes.",
+    warn("Search terms are not very specific, only showing first %d matching UCSC Genes.",
     	maxToReturn);
     tsr = slElementFromIx(tsrList, maxToReturn-1);
     tsr->next = NULL;

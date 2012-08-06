@@ -3400,8 +3400,6 @@ struct tfbsConsFactors *tfbsConsFactor;
 struct tfbsConsFactors *tfbsConsFactorList = NULL;
 boolean firstTime = TRUE;
 char *mappedId = NULL;
-char protMapTable[256];
-char *factorDb;
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -3469,21 +3467,6 @@ if (tfbsConsFactorList)
 	    printf("<BR><B>Factor:</B> %s<BR>\n", tfbsConsFactor->factor);
 	    printf("<B>Species:</B> %s<BR>\n", tfbsConsFactor->species);
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbsConsFactor->id, "N")? "unknown": tfbsConsFactor->id);
-
-	    factorDb = hDefaultDbForGenome(tfbsConsFactor->species);
-	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
-
-	    /* Only display link if entry exists in protein browser */
-	    if (hTableExists(database, protMapTable))
-		{
-		sprintf(query, "select * from %s where qName = '%s'", protMapTable, tfbsConsFactor->id );
-                sr = sqlGetResult(conn, query);
-                if ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    printf("<A HREF=\"../cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Proteome Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
-                    sqlFreeResult(&sr);
-		    }
-		}
 	    }
 	}
     }
@@ -3570,9 +3553,6 @@ for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
 
 if (printFactors)
     {
-    char protMapTable[256];
-    char *factorDb;
-
     htmlHorizontalLine();
     printf("<B style='font-size:large;'>Transcription Factors known to bind to this site:</B><BR><BR>");
     for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
@@ -3587,20 +3567,6 @@ if (printFactors)
 	    printf("<B>Species:</B> %s<BR>\n", tfbs->species);
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
 
-	    factorDb = hDefaultDbForGenome(tfbs->species);
-	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
-
-	    /* Only display link if entry exists in protein browser */
-	    if (hTableExists(database, protMapTable))
-		{
-		sprintf(query, "select * from %s where qName = '%s';", protMapTable, tfbs->id );
-                sr = sqlGetResult(conn, query);
-                if ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    printf("<A HREF=\"../cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Proteome Browser</B></A><BR><BR>",  tfbs->id);
-                    sqlFreeResult(&sr);
-		    }
-		}
 	    }
 	}
     }
@@ -16637,7 +16603,8 @@ for (i = iStart;  i != iEnd;  i += iIncr)
 	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
 	else if (cdsEnd > cdsStart)
 	    {
-	    boolean is5Prime = geneIsRc ^ (snpEnd < cdsStart);
+	    boolean is5Prime = ((geneIsRc && (snpStart >= cdsEnd)) ||
+				(!geneIsRc && (snpEnd < cdsStart)));
 	    printf(firstTwoColumnsPctS "%s\n", geneTrack, geneName,
 		   snpMisoLinkFromFunc((is5Prime) ? "untranslated-5" : "untranslated-3"));
 	    }
