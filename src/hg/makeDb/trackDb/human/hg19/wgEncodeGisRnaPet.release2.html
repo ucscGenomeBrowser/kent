@@ -9,8 +9,8 @@ from different
 localizations</A> 
 in different 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
-The RNA-PET information provided in this track is composed of two different PET length versions based on how the PETs were extracted.  The cloning-based PET (18 bp and 16 bp) is an earlier version and detailed information can be found from reference (Ng et al. 2006).  The cloning-free PET (25 bp and 25 bp) is a recently modified version which uses Type II enzyme EcoP15I to generate a longer length of PET (unpublished), which results in a significant enhancement in both library construction and mapping efficiency.
-Both versions of PET templates were sequenced by Illumina platform at 2 x 36 bp Paired End sequencing.
+The RNA-PET information provided in this track is composed of two different PET length versions based on how the PETs were extracted.  The cloning-based PET (18 bp and 16 bp) is an earlier version and detailed information can be found from reference (Ng et al. 2006).  The cloning-free PET (25 bp and 25 bp) is a recently modified version which uses enzyme EcoP15I to generate a longer length of PET (unpublished), which results in a significant enhancement in both library construction and mapping efficiency.
+Both versions of PET templates were sequenced by Illumina platform at 2 x 36 bp paired-end sequencing.
 See the Methods and References sections below for more details.
 </P>
 
@@ -50,13 +50,12 @@ Cells were grown according to the approved
 <A HREF="/ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture
 protocols</A>.
 Two different GIS RNA-PET protocols were used to generate the full length transcriptome PETs: one is based on a cloning-free RNA-PET library construction and sequencing strategy
-(unpublished), and the other is a cloning-based library construction (Ng <i>et al.</i>
-2005) and recent Illumina paired end sequencing.
+(unpublished), and the other is a cloning-based library construction (Ng et al. 2005) and recent Illumina paired-end sequencing.
 </P>
 <h3>Cloning-free RNA-PET (50 bp reads, 25 bp and 25 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-free RNA-PET libraries were generated from polyA mRNA samples and constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified with a MACs polyT column to obtain full length polyA mRNAs. Approximately 5 micrograms of enriched polyA mRNA was used for reverse transcription to convert polyA mRNA to full length cDNA. Specific linker sequences were ligated to the full length cDNA. The modified cDNA was circularized by ligation generating circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by type II enzyme EcoP15I digestion. The resulting PETs were ligated with sequencing adaptors at the both ends, amplified by PCR, and further purified as complex templates for paired end (PE) sequencing using Illumina platforms.
+The cloning-free RNA-PET libraries were generated from polyA mRNA samples and constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified with a MACs polyT column to obtain full length polyA mRNAs. Approximately 5 micrograms of enriched polyA mRNA was used for reverse transcription to convert polyA mRNA to full length cDNA. Specific linker sequences were ligated to the full length cDNA. The modified cDNA was circularized by ligation generating circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by enzyme EcoP15I digestion. The resulting PETs were ligated with sequencing adaptors at the both ends, amplified by PCR, and further purified as complex templates for paired-end (PE) sequencing using Illumina platforms.
 </P>
 <P>
 <B>Data:</B>
@@ -66,11 +65,11 @@ The sequenced RNA-PETs resulted in paired 2x25 bp reads from 5' and 3' ends of a
 <h3>Cloning-based RNA-PET (34 bp reads, 18 bp and 16 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples and constructed using the protocol described by Ng et al. (2005). Total RNA in good quality was used as starting material and further purified with a MACs polyT column to enrich polyA mRNA. Approximately 10 micrograms of polyA enriched mRNA was reverse transcribed resulting in full length cDNA. The obtained full length cDNA was modified with specific linker sequences and ligated to a GIS-developed (pGIS4) vector. The resulting plasmids form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Illumina Paired End sequencing. 
+The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples and constructed using the protocol described by Ng et al. 2005. Total RNA in good quality was used as starting material and further purified with a MACs polyT column to enrich polyA mRNA. Approximately 10 micrograms of polyA enriched mRNA was reverse transcribed resulting in full length cDNA. The obtained full length cDNA was modified with specific linker sequences and ligated to a GIS-developed (pGIS4) vector. The resulting plasmids form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Illumina paired-end sequencing. 
 </P>
 
 <p><b>Data:</b>Sequencing of clone-based RNA-pets resulted in paired reads of 18bp and 16bp corresponding to the 5' and 3' end of each cDNA, respectively. The redundant reads were filtered out and unique reads were included for analysis. PET sequences 
-were then mapped to (GRCh37, hg19, excluding mitochondirion, haplotypes, randoms and chromosome Y) reference genome using 
+were then mapped to (GRCh37, hg19, excluding mitochondrion, haplotypes, randoms and chromosome Y) reference genome using 
 the following specific criteria (Ruan et al. 2007): </p>
 <ul>
 <li>A minimal continuous 16 bp match must exist for the 5' signature; the 3' signature must have a minimal continuous 14 bp match</li>

@@ -99,7 +99,7 @@ html wgEncodePsuHistone.release2
         color 153,38,0
         # subId=5997 dateSubmitted=2012-04-16
 
-        track wgEncodePsuHistoneG1eH3k04me3ME0S129InputP
+        track wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks off
         shortLabel G1E H3K4m3
         longLabel G1E H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
