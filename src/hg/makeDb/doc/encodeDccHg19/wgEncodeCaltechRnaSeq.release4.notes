@@ -1,17 +1,17 @@
 mkChangeNotes v2
 hg19 wgEncodeCaltechRnaSeq Release 4 vs Release 3
-2012-07-31
+2012-08-06
 
 QA Count Summaries for Release 4:
 Tables: 154
-Files: 572
+Files: 571
 Gbdbs: 248
 Supplemental: 0
 Other: 3
 
 REVOKED:
 Tables: 110
-Files: 122
+Files: 123
 Gbdbs: 110
 
 Sizes of New:
@@ -303,9 +303,9 @@ wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 
 DOWNLOAD FILES:
 New: 9
-Untouched: 563
-Revoked/Replaced/Renamed: 122
-New + Untouched: 572
+Untouched: 562
+Revoked/Replaced/Renamed: 123
+New + Untouched: 571
 Total (New + Untouched + Revoked/Replaced/Renamed): 694
 
 New Download Files (9):
@@ -317,9 +317,9 @@ New Download Files (9):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1V2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2V2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3V2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqK562R1x75dNaIlnaRawDataRep2V2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqK562R1x75dFastqRep2V2.fastq.tgz
 
-Untouched Download Files (563):
+Untouched Download Files (562):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
@@ -383,7 +383,6 @@ Untouched Download Files (563):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3.gtf.gz
@@ -884,7 +883,7 @@ Untouched Download Files (563):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4.bigWig
 
-Revoked/Replaced/Renamed Download Files (122):
+Revoked/Replaced/Renamed Download Files (123):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
@@ -903,6 +902,7 @@ Revoked/Replaced/Renamed Download Files (122):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release4/wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.tgz
