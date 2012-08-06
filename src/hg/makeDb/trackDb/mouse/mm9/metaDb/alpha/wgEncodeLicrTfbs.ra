@@ -2102,7 +2102,6 @@ grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-6
 md5sum 137be8b67e4459a5f3b29413373da7a5
-e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2130,7 +2129,6 @@ grant Ren
 lab LICR-m
 labVersion Pooled & normalized
 md5sum 8c4671ec882cdead6236d794876f15ac
-e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -11648,4 +11646,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -403169440
+# MAGIC: -1625644955
