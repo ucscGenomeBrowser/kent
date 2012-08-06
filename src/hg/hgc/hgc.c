@@ -16603,7 +16603,8 @@ for (i = iStart;  i != iEnd;  i += iIncr)
 	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
 	else if (cdsEnd > cdsStart)
 	    {
-	    boolean is5Prime = geneIsRc ^ (snpEnd < cdsStart);
+	    boolean is5Prime = ((geneIsRc && (snpStart >= cdsEnd)) ||
+				(!geneIsRc && (snpEnd < cdsStart)));
 	    printf(firstTwoColumnsPctS "%s\n", geneTrack, geneName,
 		   snpMisoLinkFromFunc((is5Prime) ? "untranslated-5" : "untranslated-3"));
 	    }
