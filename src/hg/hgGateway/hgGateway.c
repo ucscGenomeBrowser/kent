@@ -186,14 +186,6 @@ cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display",
                      "Configure track selections and browser display");
 puts("</TD>");
 
-// clear possition button
-puts("<TD VALIGN=\"TOP\">");
-if(supportsSuggest)
-    cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('positionInput').value='';", "clear position");
-else
-    cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
-puts("</TD>");
-
 puts("</TR></TABLE>");
 
 puts("</CENTER>\n"
