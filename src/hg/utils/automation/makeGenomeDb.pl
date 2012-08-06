@@ -1019,8 +1019,9 @@ keywords from the GenBank description of an mRNA.
 <A HREF="../goldenPath/help/query.html">More information</A>, including sample
 queries.
 <LI>
-<B>By gene name: </B> Type a gene name into the &quot;gene&quot; box to
-go directly to the assembly location associated with a gene.
+<B>By gene name: </B> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+directly to the assembly location associated with that gene.
 <A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
 <LI>
 <B>By track type: </B> Click the &quot;track search&quot; button
