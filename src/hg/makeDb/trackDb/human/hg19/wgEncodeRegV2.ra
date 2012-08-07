@@ -58,6 +58,22 @@ canPack On
         priority 2
         color 255,212,128
 
+        track wgEncodeRegTxnCshlLongRnaSeqHelas3CellPapRawSigPooled
+        shortLabel HeLa-S3
+        longLabel Transcription of HeLa-S3 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 3
+        color 227,255,128
+    
+        track wgEncodeRegTxnCshlLongRnaSeqHepg2CellPapRawSigPooled
+        shortLabel HepG2
+        longLabel Transcription of HepG2 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 4
+        color 128,255,149
+
         track wgEncodeRegTxnCshlLongRnaSeqHsmmCellPapRawSigPooled
         shortLabel HSMM
         longLabel Transcription of HSMM cells from ENCODE
