@@ -2454,3 +2454,146 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# construct download files for 7-way (WORKING - 2012-08-07 - Hiram)
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/maf
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/alignments
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/downloads
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    mkdir maf alignments
+    cd maf
+    time cp -p ../../../anno/geoFor1.7way.maf .
+    #   real    9m1.872s
+    time gzip *.maf
+    #   real    23m59.878s
+    time md5sum *.maf.gz > md5sum.txt
+    #   real    1m55.317s
+    ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/maf
+    cd ..
+    du -hsc maf ../../anno/geoFor1.7way.maf
+    #   1.5G    maf
+    #   6.1G    ../../anno/geoFor1.7way.maf
+    #   7.6G    total
+
+    ln -s ../../geoFor1.7way.nh .
+    ln -s ../../geoFor1.7way.commonNames.nh .
+    ln -s `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+
+    #####################################################################
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/phastCons7way
+    mkdir birds vertebrate geoFor1.7way.phastCons
+    cd birds
+    ln -s ../../../cons/birds/downloads/phastCons7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m36.881s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/birds
+    cd ../vertebrate
+    ln -s ../../../cons/vertebrate/downloads/phastCons7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    real    0m10.940s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/vertebrate
+    cd ../geoFor1.7way.phastCons
+    ln -s ../../../cons/all/downloads/phastCons7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m24.173s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons
+    cd ..
+    ln -s ../../cons/all/all.mod geoFor1.7way.phastCons.mod
+    ln -s ../../cons/birds/birds.mod geoFor1.7way.phastCons.birds.mod
+    ln -s ../../cons/vertebrate/vertebrate.mod geoFor1.7way.phastCons.vertebrate.mod
+    ln -s ../../cons/all/phastCons7way.bw geoFor1.7way.phastCons.bw
+    ln -s ../../cons/birds/phastCons7wayBirds.bw \
+        geoFor1.7way.phastCons7wayBirds.bw
+    ln -s ../../cons/vertebrate/phastCons7wayVertebrate.bw \
+        geoFor1.7way.phastCons7wayVertebrate.bw
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    7m35.579s
+    # obtain the README.txt from mm10/phastCons60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way
+
+    #####################################################################
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/phyloP7way
+    mkdir birds vertebrate geoFor1.7way.phyloP7way
+    cd birds
+    ln -s ../../../consPhyloP/birds/downloads/phyloP7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m51.913s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/birds
+    cd ../vertebrate
+    ln -s ../../../consPhyloP/vertebrate/downloads/phyloP7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    0m29.125s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/vertebrate
+    cd ../geoFor1.7way.phyloP7way
+    ln -s ../../../consPhyloP/all/downloads/phyloP7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m56.253s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way
+
+    cd ..
+    ln -s ../../consPhyloP/run.phyloP/all.mod geoFor1.7way.phyloP7way.mod
+    ln -s ../../consPhyloP/run.phyloP/birds.mod ./geoFor1.7way.phyloP.birds.mod
+    ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./geoFor1.7way.phyloP.vertebrate.mod
+
+    ln -s ../../consPhyloP/all/phyloP7way.bw geoFor1.7way.phyloP7way.bw
+    ln -s ../../consPhyloP/birds/phyloP7wayBirds.bw \
+        geoFor1.7way.phyloP7wayBirds.bw 
+    ln -s ../../consPhyloP/vertebrate/phyloP7wayVertebrate.bw \
+        geoFor1.7way.phyloP7wayVertebrate.bw
+
+    time md5sum *.mod *.bw > md5sum.txt &
+    #   real    7m36.111s
+
+    # obtain the README.txt from mm10/phyloP60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way
+
+    ###########################################################################
+    ## create upstream refGene maf files XXX - there is no appropriate gene
+    ## track yet
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits geoFor1 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags geoFor1 multiz7way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/geoFor1/bed/multiz7way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+    #   real    199m45.558s
+
+    md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    27m59.778s
+
+    # obtain the README.txt from mm10/multiz60way and update for this
+    #   situation
+    ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+
+#############################################################################
