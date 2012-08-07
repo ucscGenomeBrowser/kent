@@ -1272,7 +1272,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel LHCN 2x75 Sg 1
-        longLabel LHCN-M2 Myoblast paired read 200 bp RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.016100 286176.343750
         # subId=6253 dateSubmitted=2012-03-26
@@ -1280,7 +1280,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel LHCND 2x75 Sg 1
-        longLabel LHCN-M2 Myocyte 7 d paired read 200 bp RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bigWig 0.018100 253052.171875
         # subId=6252 dateSubmitted=2012-03-26
