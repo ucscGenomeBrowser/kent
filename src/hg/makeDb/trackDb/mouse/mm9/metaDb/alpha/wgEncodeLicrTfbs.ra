@@ -2102,6 +2102,7 @@ grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-6
 md5sum 137be8b67e4459a5f3b29413373da7a5
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2129,6 +2130,7 @@ grant Ren
 lab LICR-m
 labVersion Pooled & normalized
 md5sum 8c4671ec882cdead6236d794876f15ac
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -5050,7 +5052,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5108,7 +5110,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5197,7 +5199,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5256,7 +5258,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5373,7 +5375,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -5462,7 +5464,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -5550,7 +5552,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5608,7 +5610,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5697,7 +5699,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5756,7 +5758,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -8800,7 +8802,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -9275,7 +9277,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -9366,7 +9368,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -9426,7 +9428,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -9608,7 +9610,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -10889,7 +10891,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -10947,7 +10949,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11036,7 +11038,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11095,7 +11097,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11212,7 +11214,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11301,7 +11303,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11389,7 +11391,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11447,7 +11449,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11536,7 +11538,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11595,7 +11597,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
