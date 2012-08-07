@@ -531,13 +531,15 @@ for (td = tdbList; td != NULL; td = tdNext)
             sgSetting = cloneString(sgSetting);
             char *sgWord = sgSetting;
             char *sgName = nextWord(&sgWord);
-            validateTag(database,td,subGroupName,sgName,TRUE,strict);
+            if (!strict)
+                validateTag(database,td,subGroupName,sgName,TRUE,strict);
             nextWord(&sgWord);  /* skip word not used */
             struct hash *subGroupHash = newHash(3);
             struct slPair *slPair, *slPairList = slPairListFromString(sgWord,TRUE); // respect ""
             for (slPair = slPairList; slPair; slPair = slPair->next)
                 {
-                validateTag(database,td,sgName,slPair->name,TRUE,strict);
+                if (!strict)
+                    validateTag(database,td,sgName,slPair->name,TRUE,strict);
                 hashAdd(subGroupHash, slPair->name, slPair->val);
                 }
             if (sgd->nameHash == NULL)
