@@ -1,7 +1,7 @@
 track wgEncodeGisRnaPet
 compositeTrack on
 shortLabel GIS RNA PET
-longLabel RNA Sub-cellular Localization by Paired End diTag Sequencing from ENCODE/GIS
+longLabel RNA Sub-cellular Localization by Paired-end diTag Sequencing from ENCODE/GIS
 group expression
 subGroup1 view Views v1Clusters=Clusters v2PlusRawSignal=Plus_Raw_Signal v2MinusRawSignal=Minus_Raw_Signal v3Alignments=Alignments
 subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1HESC=H1-hESC&nbsp;(Tier_1) aK562=K562&nbsp;(Tier_1) bA549=A549&nbsp;(Tier_2) bHELAS3=HeLa-S3&nbsp;(Tier_2) bHEPG2=HepG2&nbsp;(Tier_2) bHUVEC=HUVEC&nbsp;(Tier_2) bIMR90=IMR90&nbsp;(Tier_2) bMCF7=MCF-7&nbsp;(Tier_2) bSKNSH=SK-N-SH&nbsp;(Tier_2) cNHEK=NHEK cPROSTATE=Prostate
