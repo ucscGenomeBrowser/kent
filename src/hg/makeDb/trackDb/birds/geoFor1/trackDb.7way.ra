@@ -48,16 +48,16 @@ priority 103.29
     viewLimits -20.0:7.532
     viewLimitsMax -20:7.532
 
-        track phyloP7wayGlire
+        track phyloP7wayBirds
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP clade=birds
-        shortLabel Glire Cons
-        longLabel Glire Basewise Conservation by PhyloP
+        shortLabel Birds Cons
+        longLabel Birds Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.728 1.271
+        type wig -4.169 0.508
         maxHeightPixels 100:50:11
-        viewLimits -3:1.271
+        viewLimits -3.08:0.508
         autoScale off
         spanList 1
         windowingFunction mean
@@ -69,12 +69,12 @@ priority 103.29
         subTrack cons7wayViewphyloP on
         subGroups view=phyloP clade=vert
         shortLabel Vertebrate Cons
-        longLabel Vertebrate Basewise Conservation by PhyloP
+        longLabel Vertebrate Basewise Conservation by PhyloP (human, mouse, finch)
         noInherit on
         configurable on
-        type wig -5.566 4.914
+        type wig -1.282 0.673
         maxHeightPixels 100:50:11
-        viewLimits -2.3:2.48
+        viewLimits -0.91:0.673
         autoScale off
         spanList 1
         windowingFunction mean
@@ -82,16 +82,16 @@ priority 103.29
         altColor 120,40,40
         priority 3
 
-        track phyloP7wayAll
+        track phyloP7way
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP clade=all
         shortLabel 7 vertebrates Cons
         longLabel 7 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -20 7.532
+        type wig -4.711 0.934
         maxHeightPixels 100:50:11
-        viewLimits -4.5:4.5
+        viewLimits -3.107:0.934
         autoScale off
         spanList 1
         windowingFunction mean
@@ -106,11 +106,11 @@ priority 103.29
     visibility hide
     subTrack cons7way
 
-        track phastCons7wayGlire
+        track phastCons7wayBirds
         subTrack cons7wayViewphastcons off
         subGroups view=phastcons clade=birds
-        shortLabel Glire Cons
-        longLabel Glire Conservation by PhastCons
+        shortLabel Birds Cons
+        longLabel Birds Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -126,7 +126,7 @@ priority 103.29
         subTrack cons7wayViewphastcons on
         subGroups view=phastcons clade=vert
         shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
+        longLabel Vertebrate Conservation by PhastCons (human, mouse, finch)
         noInherit on
         configurable on
         type wig 0 1
@@ -161,7 +161,7 @@ priority 103.29
     visibility hide
     subTrack cons7way
 
-        track phastConsElements7wayGlire
+        track phastConsElements7wayBirds
         subTrack cons7wayViewelements off
         subGroups view=elements clade=birds
         shortLabel Bird El
@@ -175,7 +175,7 @@ priority 103.29
         subTrack cons7wayViewelements on
         subGroups view=elements clade=vert
         shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
+        longLabel Vertebrate Conserved Elements (human, mouse, finch)
         noInherit on
         type bed 5 .
         color 130,30,60
