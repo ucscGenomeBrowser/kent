@@ -45,8 +45,8 @@ priority 103.29
     view phyloP
     visibility full
     subTrack cons7way
-    viewLimits -20.0:7.532
-    viewLimitsMax -20:7.532
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
 
         track phyloP7wayBirds
         subTrack cons7wayViewphyloP off
@@ -103,11 +103,11 @@ priority 103.29
     track cons7wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility hide
+    visibility full
     subTrack cons7way
 
         track phastCons7wayBirds
-        subTrack cons7wayViewphastcons off
+        subTrack cons7wayViewphastcons on
         subGroups view=phastcons clade=birds
         shortLabel Birds Cons
         longLabel Birds Conservation by PhastCons
@@ -123,7 +123,7 @@ priority 103.29
         priority 10
 
         track phastCons7wayVertebrate
-        subTrack cons7wayViewphastcons on
+        subTrack cons7wayViewphastcons off
         subGroups view=phastcons clade=vert
         shortLabel Vertebrate Cons
         longLabel Vertebrate Conservation by PhastCons (human, mouse, finch)
@@ -162,7 +162,7 @@ priority 103.29
     subTrack cons7way
 
         track phastConsElements7wayBirds
-        subTrack cons7wayViewelements off
+        subTrack cons7wayViewelements on
         subGroups view=elements clade=birds
         shortLabel Bird El
         longLabel Birds Conserved Elements
@@ -182,7 +182,7 @@ priority 103.29
         priority 22
 
         track phastConsElements7way
-        subTrack cons7wayViewelements off
+        subTrack cons7wayViewelements on
         subGroups view=elements clade=all
         shortLabel 7 vertebrates El
         longLabel 7 vertebrates Conserved Elements
