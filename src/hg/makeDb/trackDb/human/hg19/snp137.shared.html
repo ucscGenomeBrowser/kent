@@ -68,9 +68,10 @@ display according to several attributes:
     <LI>
       <A name="Func"></A>
       <B>Function</B>: dbSNP's predicted functional effect of variant on RefSeq transcripts,
-      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*,
-      not shown in UCSC Genome Browser).
-      Each variant may have more than one predicted effect.
+      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*),
+      not shown in UCSC Genome Browser.
+      A variant may have more than one functional role if it overlaps
+      multiple transcripts.
       These terms and definitions are from the <A HREF="http://sequenceontology.org/"
       TARGET=_BLANK>Sequence Ontology (SO)<A>; click on a term to view it in the
       <A HREF="http://sequenceontology.org/browser/browser/obob.cgi?release=current_release"
@@ -377,7 +378,11 @@ TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
       b137_ContigInfo.bcp.gz.</LI>
   <LI>b137_SNPMapInfo.bcp.gz provided the alignment weights.
   <LI>Functional classification was obtained from 
-      b137_SNPContigLocusId.bcp.gz.</LI>
+      b137_SNPContigLocusId.bcp.gz. The internal database representation
+      uses dbSNP's function terms, but for display in SNP details pages,
+      these are translated into
+      <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology</A> terms.</LI>
   <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.</LI>
   <LI>SNPAlleleFreq.bcp.gz and ../shared/Allele.bcp.gz provided allele frequencies.
       For the human assembly, allele frequencies were also taken from
