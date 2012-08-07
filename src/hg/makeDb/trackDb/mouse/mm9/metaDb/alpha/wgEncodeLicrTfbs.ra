@@ -8587,6 +8587,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum f231ffb8c9dc1ec2e222bb93041097ed,6264d991b8ebdf0ebd0427773e8a2e14
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8616,6 +8617,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 42edbb82dc96a37ef2571d24767d1958,87321416ccf0aec973cb3444393a47c1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8646,6 +8648,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum d78be60ce4073b12151aed92856d34fc
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8676,6 +8679,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 717f817d91049541fb6d4289e225d5b1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8706,6 +8710,7 @@ grant Ren
 lab LICR-m
 labVersion Pooled & filtered
 md5sum 0ceca399c1aaf77cb69661bf34df4d69
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -11718,4 +11723,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -2014417945
+# MAGIC: -1823836636
