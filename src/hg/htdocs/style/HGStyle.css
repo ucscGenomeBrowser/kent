@@ -44,7 +44,7 @@ span.inlineCode {
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
-.topbar { white-space: nowrap; padding: 0px 10px; height: 24px;}
+.topbar { white-space: nowrap; padding: 0px 10px;}
 A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
 A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
 A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, sans-serif; color: #E0F0F0; font-size: 15px; }
@@ -455,8 +455,6 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 label small {
     font-style: italic;
     font-size: 0.9em;}
-.topBarContainer { /* only needed for login screens */
-    padding: 6px 0;}
 .highlightBox { /* combine with classes error, alert, or highlight */
 	border: 2px solid;
     padding: 10px;}

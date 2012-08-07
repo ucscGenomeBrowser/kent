@@ -39,7 +39,7 @@ dimensions dimensionX=cellType dimensionY=factor dimensionA=age
 dimensionAchecked 1ADULT8WKS,IMMORTAL
 filterComposite dimensionA=multi
 sortOrder cellType=+ factor=+ view=+ age=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full

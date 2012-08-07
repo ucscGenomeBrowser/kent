@@ -93,8 +93,7 @@ include wgEncodeOpenChromDnase.release3.ra alpha
 include wgEncodeUwDnase.release6.ra
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra public
-include wgEncodeUwDgf.release4.ra alpha,beta
+include wgEncodeUwDgf.release4.ra
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -113,8 +112,8 @@ include wgEncodeCshlShortRnaSeq.release3.ra
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.release3.ra beta,public
-include wgEncodeCaltechRnaSeq.release4.ra alpha
+include wgEncodeCaltechRnaSeq.release3.ra public
+include wgEncodeCaltechRnaSeq.release4.ra alpha,beta
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.release2.ra beta,public
@@ -151,8 +150,7 @@ include wgEncodeHaibMethylWgbs.ra alpha
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Matt and Venkat)
-include wgEncodeBroadHistone.release3.ra alpha,beta
-include wgEncodeBroadHistone.release2.ra public
+include wgEncodeBroadHistone.release3.ra
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra

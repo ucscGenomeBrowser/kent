@@ -29,7 +29,7 @@ enrichment may deviate from the background more significantly than a short
 region with high signal.)
 </DD>
 <DT><EM>Signal</EM></DT><DD> Density graph (wiggle) of signal enrichment.
-At each base-pair position the density is calculated as the number of sequenced
+At each base-pair position, the density is calculated as the number of sequenced
 tags overlapping a 25 bp window centered at that position.</DD>
 </DL>
 </P>
@@ -45,7 +45,7 @@ sequence and alignment files for each replicate are available for
 Cells were fixed in 1% formaldehyde and resuspended in lysis buffer. Chromatin
 was sheared to 200-700 bp using a Diagenode Bioruptor. Solubilized chromatin was
 immunoprecipitated with antibodies against each of the histone antibodies
-listed above. Antibody-chromatin complexes were pulled-down using protein
+listed above. Antibody-chromatin complexes were pulled down using protein
 A-sepharose (or anti-IgM-conjugated agarose for RNA polymerase II), washed and
 then eluted. After cross-link reversal and proteinase K treatment,
 immunoprecipitated DNA was extracted with phenol-chloroform, ethanol
@@ -57,9 +57,9 @@ recommended by the manufacturer.</p>
 human reference genome (<B>GRCh37/hg19</B>) using
 <a href="http://maq.sourceforge.net/" title='http://maq.sourceforge.net/' TARGET = _BLANK>MAQ</a>
 with default parameters, except '<code>-C 11</code>' and
-'<code>-H output_file</code>' were added, which added outputs up to 11 additional best matches
+'<code>-H output_file</code>' were added. These options output up to 11 additional best matches
 for each read (if any are found) to a file. This information was used to filter
-out any read that had more than 10 best matches on the genome.  Note: It is
+out any read that had more than 10 best matches on the genome.  Note that it is
 likely that instances where multiple reads align to the same position and with
 the same orientation are due to enhanced PCR amplification of a single DNA
 fragment. No attempt has been made, however, to remove such artifacts from the
@@ -77,10 +77,10 @@ from the UCSC Kent software package.</p>
 <P><B><em>Peaks</em></B>: Discrete intervals of ChIP-seq fragment enrichment were
 identified using <a href="http://www.broadinstitute.org/software/scripture/" title='http://www.broadinstitute.org/software/scripture/' TARGET = _BLANK>Scripture</a>,
 a scan statistics approach, under the assumption of uniform background signal.
-All data sets where processed with '<code>-task chip</code>', and with
-'<code>-windows 100,200,500,1000,5000,10000,100000</code>'. (No mask file nor
-the '<code>-trim</code>' option have been used.) The resulting called segments
-were then further filtered to remove intervals that are significantly enriched
+All data sets were processed with '<code>-task chip</code>', and with
+'<code>-windows 100,200,500,1000,5000,10000,100000</code>' (no mask file nor
+the '<code>-trim</code>' option have been used). The resulting called segments
+were then further filtered to remove intervals that were significantly enriched
 only because they contain smaller enriched intervals within them. This
 post-processing step has been implemented using <code>Matlab</code>. The use of the
 post-processing step allowed very large enriched intervals (of the order of
@@ -91,10 +91,8 @@ based on prior expectations.
 <h2>Release Notes</h2>
 
 <p>
-<ul>
-<li>This is Release 2 (Mar 2012). It contains 64 new experiments including 1 new cell line (Dnd41) and 10 new antibodies.</li>
-<li>Three data sets have added additional data: GM12878/H3K27me3 (UCSC Accession: wgEncodeEH000031), GM12878/H3K4me1 (UCSC Accession: wgEncodeEH000033) and GM12878/H3K4me3 (UCSC Accession: wgEncodeEH000028). Files that have been reanalyzed have a version number appended to the name, <i>e.g.</i>V2. </li>
-</ul>
+This is Release 3 (Aug 2012). It contains 83 new experiments including 6 new cell lines and 25 new antibodies.
+
 </p>
 
 
@@ -103,10 +101,10 @@ based on prior expectations.
  <a href="http://www.broadinstitute.org/science/projects/epigenomics/epigenomics-initiative" title="http://www.broad.mit.edu" target="_blank">
  Broad Institute</a> and in the
  <a href="https://csb.mgh.harvard.edu/bradley_bernstein" title="https://csb.mgh.harvard.edu/bradley_bernstein" target="_blank">
- Bradley E. Bernstein lab</a> at the Massachusetts General Hospital/Harvard Medical School.
+Bernstein lab</a> at the Massachusetts General Hospital/Harvard Medical School.
   &nbsp;&nbsp;
 
-<p>Data generation and analysis was supported by funds from the NHGRI, the
+<p>Data generation and analysis were supported by funds from the NHGRI, the
 Burroughs Wellcome Fund, Massachusetts General Hospital and the Broad Institute.
 </p>
 

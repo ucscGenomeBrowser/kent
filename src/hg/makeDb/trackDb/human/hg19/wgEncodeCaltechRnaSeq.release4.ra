@@ -13,7 +13,7 @@ subGroup6 treatment Treatment aNone=None bDIFF7D=DIFF_7d
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1,rep2
 sortOrder cellType=+ readType=+ view=+ rep=+
-fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length treatment=Treatment view=View replicate=Rep labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length treatment=Treatment view=View replicate=Rep labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength treatment=Treatment
 dragAndDrop subTracks
 priority 0
@@ -446,7 +446,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel LHCN-M2 Myoblast paired read 200 bp RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel LHCN 2x75 Sp 1
         subGroups view=Splices cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -454,7 +454,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel LHCN-M2 Myocyte 7 d paired read 200 bp RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel LHCND 2x75 Sp 1
         subGroups view=Splices cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bam
@@ -917,7 +917,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel LHCN-M2 Myoblast paired read 200 bp RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel LHCN 2x75 A 1
         subGroups view=Aligns cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -926,7 +926,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel LHCN-M2 Myocyte 7d paired read 200bp RNA-seq Alignment Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte paired read (200 bp) RNA-seq Alignment Rep 1 from ENCODE/Caltech
         shortLabel LHCND 2x75 A 1
         subGroups view=Aligns cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bam

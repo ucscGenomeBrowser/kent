@@ -678,7 +678,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -707,7 +707,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -736,7 +736,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -765,7 +765,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -794,7 +794,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -823,7 +823,7 @@ antibody H3K27me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -852,7 +852,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -881,7 +881,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -910,7 +910,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -939,7 +939,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -968,7 +968,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -997,7 +997,7 @@ antibody H3K36me3
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -1026,7 +1026,7 @@ antibody Input
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
@@ -1055,7 +1055,7 @@ antibody Input
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
@@ -1084,7 +1084,7 @@ antibody Input
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
@@ -1113,7 +1113,7 @@ antibody Input
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
@@ -1142,7 +1142,7 @@ antibody Input
 cell B-cell_(CD43-)
 composite wgEncodeLicrHistone
 control std
-controlId B-cell_(CD43-)/Input/std
+controlId wgEncodeEM003163
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
@@ -2713,7 +2713,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -2742,7 +2742,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -2771,7 +2771,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -2800,7 +2800,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -2829,7 +2829,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -2858,7 +2858,7 @@ antibody H3K27me3
 cell Cerebellum
 composite wgEncodeLicrHistone
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -3414,7 +3414,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3442,7 +3442,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3470,7 +3470,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3498,7 +3498,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3526,7 +3526,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3554,7 +3554,7 @@ antibody H3K4me1
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-20
@@ -3582,7 +3582,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3610,7 +3610,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3638,7 +3638,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3666,7 +3666,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3694,7 +3694,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3722,7 +3722,7 @@ antibody H3K4me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-21
@@ -3750,7 +3750,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3778,7 +3778,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3806,7 +3806,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3834,7 +3834,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3862,7 +3862,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3890,7 +3890,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3918,7 +3918,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3946,7 +3946,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -3974,7 +3974,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4002,7 +4002,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4030,7 +4030,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4058,7 +4058,7 @@ antibody H3K9ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4086,7 +4086,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4114,7 +4114,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4142,7 +4142,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4170,7 +4170,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4198,7 +4198,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4226,7 +4226,7 @@ antibody H3K27ac
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-22
@@ -4254,7 +4254,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4283,7 +4283,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4312,7 +4312,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4341,7 +4341,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4370,7 +4370,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4399,7 +4399,7 @@ antibody H3K36me3
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -4428,7 +4428,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4456,7 +4456,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4484,7 +4484,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4512,7 +4512,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4540,7 +4540,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4568,7 +4568,7 @@ antibody H3K79me2
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-23
@@ -4596,7 +4596,7 @@ antibody Input
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -4625,7 +4625,7 @@ antibody Input
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -4654,7 +4654,7 @@ antibody Input
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -4683,7 +4683,7 @@ antibody Input
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -4712,7 +4712,7 @@ antibody Input
 cell CH12
 composite wgEncodeLicrHistone
 control std
-controlId CH12/Input/std
+controlId wgEncodeEM003164
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -5442,7 +5442,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5470,7 +5470,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5498,7 +5498,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5526,7 +5526,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5554,7 +5554,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5582,7 +5582,7 @@ antibody H3K9ac
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
@@ -5610,7 +5610,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5639,7 +5639,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5668,7 +5668,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5697,7 +5697,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5726,7 +5726,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5755,7 +5755,7 @@ antibody H3K9me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -5958,7 +5958,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -5987,7 +5987,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6016,7 +6016,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6045,7 +6045,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6074,7 +6074,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6103,7 +6103,7 @@ antibody H3K27me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6132,7 +6132,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6161,7 +6161,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6190,7 +6190,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6219,7 +6219,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6248,7 +6248,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -6277,7 +6277,7 @@ antibody H3K36me3
 cell ES-Bruce4
 composite wgEncodeLicrHistone
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -9948,7 +9948,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -9977,7 +9977,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10006,7 +10006,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10035,7 +10035,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10064,7 +10064,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10093,7 +10093,7 @@ antibody H3K27me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10122,7 +10122,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10151,7 +10151,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10180,7 +10180,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10209,7 +10209,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10238,7 +10238,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10267,7 +10267,7 @@ antibody H3K36me3
 cell Kidney
 composite wgEncodeLicrHistone
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -10890,7 +10890,7 @@ antibody H3K4me1
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -10950,7 +10950,7 @@ antibody H3K4me1
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -11039,7 +11039,7 @@ antibody H3K4me1
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -11099,7 +11099,7 @@ antibody H3K4me1
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
@@ -11188,7 +11188,7 @@ antibody H3K4me3
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11306,7 +11306,7 @@ antibody H3K4me3
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11627,7 +11627,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -11716,7 +11716,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrHistone
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -17881,7 +17881,7 @@ antibody H3K4me1
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -18317,7 +18317,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18346,7 +18346,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18375,7 +18375,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18404,7 +18404,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18433,7 +18433,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18462,7 +18462,7 @@ antibody H3K27me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18491,7 +18491,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18520,7 +18520,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18549,7 +18549,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18578,7 +18578,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18607,7 +18607,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18636,7 +18636,7 @@ antibody H3K36me3
 cell SmIntestine
 composite wgEncodeLicrHistone
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -18810,7 +18810,7 @@ antibody H3K4me1
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -18840,7 +18840,7 @@ antibody H3K4me1
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -18870,7 +18870,7 @@ antibody H3K4me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -18900,7 +18900,7 @@ antibody H3K4me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -19104,7 +19104,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19133,7 +19133,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19162,7 +19162,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19191,7 +19191,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19220,7 +19220,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19249,7 +19249,7 @@ antibody H3K27me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -19278,7 +19278,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19307,7 +19307,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19336,7 +19336,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19365,7 +19365,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19394,7 +19394,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19423,7 +19423,7 @@ antibody H3K36me3
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -19953,7 +19953,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrHistone
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -20536,7 +20536,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20565,7 +20565,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20594,7 +20594,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20623,7 +20623,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20652,7 +20652,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20681,7 +20681,7 @@ antibody H3K27me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -20710,7 +20710,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -20739,7 +20739,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -20768,7 +20768,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -20797,7 +20797,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -20826,7 +20826,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -20855,7 +20855,7 @@ antibody H3K36me3
 cell Testis
 composite wgEncodeLicrHistone
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21551,7 +21551,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21580,7 +21580,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21609,7 +21609,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21638,7 +21638,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21667,7 +21667,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21696,7 +21696,7 @@ antibody H3K27me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -21725,7 +21725,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21754,7 +21754,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21783,7 +21783,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21812,7 +21812,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21841,7 +21841,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -21870,7 +21870,7 @@ antibody H3K36me3
 cell Thymus
 composite wgEncodeLicrHistone
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -22074,7 +22074,7 @@ antibody H3K4me1
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22134,7 +22134,7 @@ antibody H3K4me1
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22223,7 +22223,7 @@ antibody H3K4me1
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22283,7 +22283,7 @@ antibody H3K4me1
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22372,7 +22372,7 @@ antibody H3K4me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22490,7 +22490,7 @@ antibody H3K4me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -22578,7 +22578,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22607,7 +22607,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22636,7 +22636,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22665,7 +22665,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22694,7 +22694,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22723,7 +22723,7 @@ antibody H3K9me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22926,7 +22926,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22955,7 +22955,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -22984,7 +22984,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -23013,7 +23013,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -23042,7 +23042,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -23071,7 +23071,7 @@ antibody H3K27me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
@@ -23100,7 +23100,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23129,7 +23129,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23158,7 +23158,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23187,7 +23187,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23216,7 +23216,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23245,7 +23245,7 @@ antibody H3K36me3
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-30
@@ -23333,7 +23333,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
@@ -23422,7 +23422,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrHistone
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
