@@ -1,33 +1,33 @@
 mkChangeNotes v2
 hg19 wgEncodeGisRnaPet Release 2 vs Release 1
-2012-06-14
+2012-08-02
 
 QA Count Summaries for Release 2:
-Tables: 164
-Files: 301
-Gbdbs: 176
-Supplemental: 0
+Tables: 160
+Files: 294
+Gbdbs: 172
+Supplemental: 1
 Other: 3
 
 REVOKED:
-Tables: 12
-Files: 21
-Gbdbs: 12
+Tables: 16
+Files: 28
+Gbdbs: 16
 
 Sizes of New:
-Table: 335 MB
-Files: 205125 MB (200 GB)
+Table: 360 MB
+Files: 205131 MB (200 GB)
 Gbdbs: 79960 MB (78 GB)
-Supplemental: 0 MB
+Supplemental: 1 MB
 Other: 1 MB
-Total: 285421 MB (279 GB)
+Total: 285453 MB (279 GB)
 
 
 TABLES:
 New: 96
-Untouched: 68
-Revoked/Replaced/Renamed: 12
-New + Untouched: 164
+Untouched: 64
+Revoked/Replaced/Renamed: 16
+New + Untouched: 160
 Total (New + Untouched + Revoked/Replaced/Renamed): 176
 
 New Tables (96):
@@ -128,7 +128,7 @@ wgEncodeGisRnaPetSknshNucleusPapMinusRawRep4
 wgEncodeGisRnaPetSknshNucleusPapPlusRawRep3
 wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 
-Untouched Tables (68):
+Untouched Tables (64):
 wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
 wgEncodeGisRnaPetGm12878NucleusPapClustersRep1
 wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
@@ -138,13 +138,9 @@ wgEncodeGisRnaPetH1hescCellPapClustersRep1
 wgEncodeGisRnaPetH1hescCellPapMinusRawRep1
 wgEncodeGisRnaPetH1hescCellPapPlusRawRep1
 wgEncodeGisRnaPetHelas3CellPapAlnRep1
-wgEncodeGisRnaPetHelas3CellPapAlnRep2
 wgEncodeGisRnaPetHelas3CellPapClustersRep1
-wgEncodeGisRnaPetHelas3CellPapClustersRep2
 wgEncodeGisRnaPetHelas3CellPapMinusRawRep1
-wgEncodeGisRnaPetHelas3CellPapMinusRawRep2
 wgEncodeGisRnaPetHelas3CellPapPlusRawRep1
-wgEncodeGisRnaPetHelas3CellPapPlusRawRep2
 wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
 wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
 wgEncodeGisRnaPetHelas3CytosolPapMinusRawRep1
@@ -198,11 +194,15 @@ wgEncodeGisRnaPetProstateCellPapClustersRep1
 wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
 wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 
-Revoked/Replaced/Renamed Tables (12):
+Revoked/Replaced/Renamed Tables (16):
 wgEncodeGisRnaPetGm12878CytosolPapAlnFree
 wgEncodeGisRnaPetGm12878CytosolPapClustersFree
 wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
 wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
+wgEncodeGisRnaPetHelas3CellPapAlnRep2
+wgEncodeGisRnaPetHelas3CellPapClustersRep2
+wgEncodeGisRnaPetHelas3CellPapMinusRawRep2
+wgEncodeGisRnaPetHelas3CellPapPlusRawRep2
 wgEncodeGisRnaPetHelas3NucleusPapAlnRep1
 wgEncodeGisRnaPetHelas3NucleusPapClustersRep1
 wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1
@@ -215,9 +215,9 @@ wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1
 
 DOWNLOAD FILES:
 New: 177
-Untouched: 124
-Revoked/Replaced/Renamed: 21
-New + Untouched: 301
+Untouched: 117
+Revoked/Replaced/Renamed: 28
+New + Untouched: 294
 Total (New + Untouched + Revoked/Replaced/Renamed): 322
 
 New Download Files (177):
@@ -225,7 +225,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CellPapFastqRd2Rep3.fastq.gz
@@ -238,7 +238,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549CytosolPapFastqRd2Rep3.fastq.gz
@@ -251,7 +251,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetA549NucleusPapFastqRd2Rep3.fastq.gz
@@ -285,7 +285,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapFastqRd1Rep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapFastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CellPapFastqRd2Rep1.fastq.gz
@@ -298,7 +298,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90CytosolPapFastqRd2Rep1.fastq.gz
@@ -311,7 +311,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetImr90NucleusPapFastqRd2Rep1.fastq.gz
@@ -324,7 +324,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CellPapFastqRd2Rep3.fastq.gz
@@ -337,7 +337,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7CytosolPapFastqRd2Rep3.fastq.gz
@@ -350,7 +350,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetMcf7NucleusPapFastqRd2Rep3.fastq.gz
@@ -363,7 +363,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCellPapFastqRd2Rep3.fastq.gz
@@ -376,7 +376,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshCytosolPapFastqRd2Rep3.fastq.gz
@@ -389,7 +389,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapAlnRep4.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapClusters.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep4.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapFastqRd2Rep3.fastq.gz
@@ -399,7 +399,7 @@ New Download Files (177):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapPlusRawRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4.bigWig
 
-Untouched Download Files (124):
+Untouched Download Files (117):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed.gz
@@ -423,18 +423,11 @@ Untouched Download Files (124):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetH1hescCellPapPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapClustersRep1.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapClustersRep2.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapMinusRawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapPlusRawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapPlusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CytosolPapClustersRep1.bed.gz
@@ -525,7 +518,7 @@ Untouched Download Files (124):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
 
-Revoked/Replaced/Renamed Download Files (21):
+Revoked/Replaced/Renamed Download Files (28):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapClustersFree.bed.gz
@@ -533,6 +526,13 @@ Revoked/Replaced/Renamed Download Files (21):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Free.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapClustersRep2.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapMinusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3CellPapPlusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed.gz
@@ -551,9 +551,9 @@ Revoked/Replaced/Renamed Download Files (21):
 
 GBDBS:
 New: 108
-Untouched: 68
-Revoked/Replaced/Renamed: 12
-New + Untouched: 176
+Untouched: 64
+Revoked/Replaced/Renamed: 16
+New + Untouched: 172
 Total (New + Untouched + Revoked/Replaced/Renamed): 188
 
 New Gbdb Files (108):
@@ -666,7 +666,7 @@ New Gbdb Files (108):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetSknshNucleusPapPlusRawRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4.bigWig
 
-Untouched Gbdb Files (68):
+Untouched Gbdb Files (64):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
@@ -677,12 +677,8 @@ Untouched Gbdb Files (68):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetH1hescCellPapPlusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapMinusRawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapMinusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapPlusRawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapMinusRawRep1.bigWig
@@ -736,11 +732,15 @@ Untouched Gbdb Files (68):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
 
-Revoked/Replaced/Renamed Gbdb Files (12):
+Revoked/Replaced/Renamed Gbdb Files (16):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1.bigWig
@@ -749,6 +749,21 @@ Revoked/Replaced/Renamed Gbdb Files (12):
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1.bigWig
+
+
+SUPPLEMENTAL FILES:
+New: 1
+Untouched: 0
+Removed: 0
+New + Untouched: 1
+Total: 1
+
+New Supplemental Files (1):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release2/supplemental/README_Clusters.txt
+
+Untouched Supplemental Files (0):
+
+Removed Supplemental Files (0):
 
 
 

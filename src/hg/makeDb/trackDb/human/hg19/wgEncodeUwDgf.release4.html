@@ -9,7 +9,7 @@ zinc-finger proteins, hormone-receptor complexes, and other
 chromatin-modulating factors like CTCF.  The technique depends upon the
 strength and tight nature of protein-DNA interactions. In their native chromatin
 state, DNA sequences that interact directly with DNA-binding proteins are
-relatively protected from DNA degrading endonucleases, while the exposed/unbound
+relatively protected from DNA-degrading endonucleases, while the exposed/unbound
 portions are readily degraded by such endonucleases. A massively parallel
 next-generation sequencing technique to define the DNase hypersensitive sites
 in the genome was adopted. The DNase samples were sequenced using next-generation
@@ -20,8 +20,7 @@ upon the nature and the specificity of interaction of the DNA with the
 regulatory/modulatory proteins binding at specific loci in the genome; thus
 they represent the native chromatin state of the genome under investigation.
 The deep sequencing approach has been used to define the footprint landscape of
-the genome by identifying DNA motifs that interact with known or novel DNA
-binding proteins.
+the genome by identifying DNA motifs that interact with known or novel DNA-binding proteins.
 <P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -73,23 +72,24 @@ within each density track as colored red subregions.</P>
 <H2>Methods</H2> 
 
 Cells were grown according to the approved <A TARGET=_BLANK
-HREF="/ENCODE/cellTypes.html" TARGET=_BLANK>ENCODE cell culture
+HREF="/ENCODE/protocols/cell/" TARGET=_BLANK>ENCODE cell culture
 protocols</A>.  Digital DNaseI was performed by DNaseI digestion of
-intact nuclei, followed by isolating DNaseI 'double-hit' fragments as
+intact nuclei, followed by isolation of DNaseI 'double-hit' fragments as
 described in Sabo <EM>et al.</EM> (2006), and direct sequencing of
 fragment ends (which correspond to <EM>in vivo</EM> DNaseI cleavage
 sites) using the Solexa platform (27 bp reads).  High-quality reads were
-mapped to the GRCh37/hg19 human genome using Bowtie 0.12.5 (Eland was used to map to NCBI36/hg18);
+mapped to the GRCh37/hg19 human genome using <a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie 0.12.5</a> 
+(Eland was used to map to NCBI36/hg18);
 only unique mappings were kept. DNaseI sensitivity is directly reflected 
 in raw tag density (<I>Signal</I>), which is shown
 in the track as density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).  DNaseI hypersensitive zones
 (<I>HotSpots</I>) were identified using the HotSpot algorithm
 described in Sabo <EM>et al.</EM> (2004).  False discovery rate thresholds 
-of 1.0% (FDR 0.01) were computed for each cell type by applying
+of 1.0% (FDR 1.0%) were computed for each cell type by applying
 the HotSpot algorithm to an equivalent number of random uniquely
 mapping 36-mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
-were identified as signal peaks within 1.0% (FDR 0.01) hypersensitive zones
+were identified as signal peaks within 1.0% (FDR 1.0%) hypersensitive zones
 using a peak-finding algorithm.  Only DNase Solexa libraries from unique
 cell types producing the highest quality data, as defined by Percent
 Tags in Hotspots (PTIH ~40%), were designated for deep sequencing to a depth
@@ -118,7 +118,7 @@ blotting methods.
 <H2>Release Notes</H2>
 
 <P>
-This is Release 4 (April 2012) of this track, which includes 10 new experiments across 8 cell lines.
+This is Release 4 (August 2012) of this track, which includes 10 new experiments across 8 cell lines.
 </P>
 <P>
 A number of previously released Peaks have been replaced by updated versions.
@@ -157,7 +157,5 @@ Genome-scale mapping of DNase I sensitivity in vivo using tiling DNA microarrays
 
 <H2>Data Release Policy</H2>
 
-Data users may freely use ENCODE data, but may not, without prior consent, submit publications that use an 
-unpublished ENCODE dataset until nine months following the release of the dataset. This date is listed in 
-the <em>Restricted Until</em> column on the track configuration page and the download page. 
+Data users may freely use ENCODE data, but may not, without prior consent, submit publications that use an unpublished ENCODE dataset until nine months following the release of the dataset. This date is listed in the Restricted Until column, above.
 The full data release policy for ENCODE is available <a href="/ENCODE/terms.html" target="_blank">here</a>.

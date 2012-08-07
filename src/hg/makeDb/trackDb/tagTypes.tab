@@ -268,6 +268,7 @@ qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
+sGroup_Birds wigMaf
 sGroup_Chimp wigMaf
 sGroup_Glire wigMaf
 sGroup_Glires wigMaf

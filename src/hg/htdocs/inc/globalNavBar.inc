@@ -38,7 +38,8 @@
 	<li class="first"><a href="http://hgdownload.cse.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
 	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
-	<li class="last"><a href="ftp://hgdownload.soe.ucsc.edu/goldenPath">FTP/MySQL Access</a></li>
+	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
+	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
 	</ul>
 </li>
 <li class="menuparent"><span>My Data</span>

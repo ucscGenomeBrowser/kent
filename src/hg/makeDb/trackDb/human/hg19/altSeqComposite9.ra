@@ -1,6 +1,6 @@
 track altSeqComposite9
 compositeTrack on
-shortLabel GRC Patch 9
+shortLabel GRC Patch Release
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
@@ -64,7 +64,7 @@ dataVersion GRCh37 Patch 9 update, July 2012
     pslSequence no
     baseColorUseSequence extFile seqHg19Patch9 extHg19Patch9
 
-	track altSeqLiftOverPslP9
+	track altSeqLiftOverPsl
         parent altSeqCompositeViewpsl9
         subGroups view=psl
 	shortLabel Alignment

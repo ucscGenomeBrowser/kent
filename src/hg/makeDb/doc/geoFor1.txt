@@ -357,9 +357,9 @@ geoFor1.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to RHO gene displays  (DONE - 2012-07-27 - Hiram)
+# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="JH740102:562849-570462" where name="geoFor1";' \
+'update dbDb set defaultPos="JH739914:135428-435957" where name="geoFor1";' \
 	hgcentraltest
 
 ############################################################################
@@ -411,6 +411,34 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.melUnd1.swap lastz.melUnd1
 
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    time doRecipBest.pl geoFor1 melUnd1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    31m15.597s
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.melUnd1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMelUnd1 rbest.link.bed
+    #   Read 16927102 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMelUnd1
+    #   799972446 bases of 1041286029 (76.825%) in intersection
+    #   real    1m42.662s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melUnd1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMelUnd1 syntenic.link.bed
+    #   Read 16427533  elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMelUnd1
+    #   787091148 bases of 1041286029 (75.588%) in intersection
+    #   real    1m35.489s
+    # cleanup
+    hgsql -e "drop table tLinkMelUnd1;" geoFor1
+    rm chain.tab bed.tab
+
 ##############################################################################
 # lastz hg19 Human (DONE - 2012-02-29 - Hiram)
     # original alignment to human
@@ -432,6 +460,43 @@ geoFor1.perChromTables = no
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.hg19.swap lastz.hg19
+
+    # lets see what synNets look like:
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/hg19/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m28.817s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.hg19.swap
+    time doRecipBest.pl geoFor1 hg19 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    8m27.775s
+    # to measure the chain coverage, this test load leaves the file link.tab;
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainHg19RBest geoFor1.hg19.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkHg19 rbest.link.bed
+    #   Read 2323598 elements of size 5 from link.bed
+    time featureBits geoFor1 tLinkHg19
+    #   83552974 bases of 1041286029 (8.024%) in intersection
+    #   real    0m20.469s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainHg19RBest geoFor1.hg19.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkHg19 syntenic.link.bed
+    #   Read 2012071 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkHg19
+    #   74395958 bases of 1041286029 (7.145%) in intersection
+    #   real    0m20.854s
+    # cleanup
+    hgsql -e "drop table tLinkHg19;" geoFor1
+    rm chain.tab bed.tab
 
 #########################################################################
 # lastz mm10 Mouse (DONE - 2012-02-29 - Hiram)
@@ -455,6 +520,44 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+    # lets see what synNets look like:
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzGeoFor1.2012-07-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -continue=syntenicNet -chainMinScore=5000 -chainLinearGap=loose \
+        > synNet.log 2>&1 &
+    #   real    2m7.016s
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap
+    time doRecipBest.pl geoFor1 mm10 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    11m32.814s
+    cd /hive/data/genomes/geoFor1/bed/blastz.mm10.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMm10RBest geoFor1.mm10.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMm10 rbest.link.bed
+    #   Read 1956367 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMm10
+    #   72866028 bases of 1041286029 (6.998%) in intersection
+    #   real    0m18.893s
+
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMm10RBest geoFor1.mm10.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMm10 syntenic.link.bed
+    #   Read 1572202 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMm10
+    #   61422245 bases of 1041286029 (5.899%) in intersection
+    #   real    0m15.096s
+
+    # cleanup
+    hgsql -e "drop table tLinkMm10;" geoFor1
+    rm chain.tab bed.tab
+
 #########################################################################
 # lastz melGal1 Turkey (DONE - 2012-02-29 - Hiram)
     # original alignment to turkey:
@@ -477,4 +580,885 @@ geoFor1.perChromTables = no
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.melGal1.swap lastz.melGal1
 
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap
+    time doRecipBest.pl geoFor1 melGal1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    27m31.386s
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melGal1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkMelGal1 rbest.link.bed
+    #   Read 17557206 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkMelGal1
+    #   665947116 bases of 1041286029 (63.954%) in intersection
+    #   real    1m43.702s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainMelGal1RBest geoFor1.melGal1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkMelGal1 syntenic.link.bed
+    #   Read 17106461 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkMelGal1
+    #   653147512 bases of 1041286029 (62.725%) in intersection
+    #   real    1m42.611s
+    # cleanup
+    hgsql -e "drop table tLinkMelGal1;" geoFor1
+    rm chain.tab bed.tab
+
 ##############################################################################
+# lastz galGal4 Chicken (DONE - 2012-02-30 - Hiram)
+    # original alignment to turkey:
+    cd /hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27
+    cat fb.galGal4.chainGeoFor1Link.txt
+    #   744451026 bases of 1032854810 (72.077%) in intersection
+
+    # and this swap:
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal4/bed/lastzGeoFor1.2012-07-27/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    81m0.123s
+    cat fb.geoFor1.chainGalGal4Link.txt 
+    #   736380222 bases of 1041286029 (70.718%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.galGal4.swap lastz.galGal4
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap
+    time doRecipBest.pl geoFor1 galGal4 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    46m34.879s
+    cd /hive/data/genomes/geoFor1/bed/blastz.galGal4.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.galGal4.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkGalGal4 rbest.link.bed
+    #   Read 18093500 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkGalGal4
+    #   702254321 bases of 1041286029 (67.441%) in intersection
+    #   real    1m44.816s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.galGal4.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkGalGal4 syntenic.link.bed
+    #   Read 17708098 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkGalGal4
+    #   692412176 bases of 1041286029 (66.496%) in intersection
+    #   real    1m44.363s
+    # cleanup
+    hgsql -e "drop table tLinkGalGal4;" geoFor1
+    rm chain.tab bed.tab
+
+##############################################################################
+# lastz taeGut1 Finch (DONE - 2012-02-31 - Hiram)
+    # original alignment to turkey:
+    cd /hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28
+    cat fb.taeGut1.chainGeoFor1Link.txt
+    #   1126123816 bases of 1222864691 (92.089%) in intersection
+
+    # and for this swap:
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/taeGut1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #   real    102m30.103s
+    cat fb.geoFor1.chainTaeGut1Link.txt
+    #   963520807 bases of 1041286029 (92.532%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.taeGut1.swap lastz.taeGut1
+
+    # lets see what recipBest looks like
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap
+    time doRecipBest.pl geoFor1 taeGut1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #   real    50m20.041s
+    cd /hive/data/genomes/geoFor1/bed/blastz.taeGut1.swap/axtChain
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.taeGut1.rbest.chain.gz
+    # which can be measured with featureBits:
+    mv link.tab rbest.link.bed
+    hgLoadBed geoFor1 tLinkTaeGut1 rbest.link.bed
+    #   Read 8455294 elements of size 5 from rbest.link.bed
+    time featureBits geoFor1 tLinkTaeGut1
+    #   922278077 bases of 1041286029 (88.571%) in intersection
+    #   real    1m3.219s
+    hgLoadChain -test -noBin -tIndex geoFor1 \
+        chainTestRBest geoFor1.taeGut1.syn.chain.gz
+    mv link.tab syntenic.link.bed
+    hgLoadBed geoFor1 tLinkTaeGut1 syntenic.link.bed
+    #   Read 8190644 elements of size 5 from syntenic.link.bed
+    time featureBits geoFor1 tLinkTaeGut1
+    #   914125880 bases of 1041286029 (87.788%) in intersection
+    #   real    0m52.942s
+    # cleanup
+    hgsql -e "drop table tLinkTaeGut1;" geoFor1
+    rm chain.tab bed.tab
+
+##############################################################################
+## 7-Way Multiz (WORKING - 2012-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+
+    # from the 63-way in the source tree, select out the 7 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg19,mm10,melGal1,melUnd1,galGal4,taeGut1,geoFor1 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/63way.nh > 7way.nh
+
+    #	what that looks like:
+    cat 7way.nh
+# ((hg19:0.148845,mm10:0.356483):0.460153,
+# (((geoFor1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+# (galGal4:0.032946,melGal1:0.035065):0.106045):0.198405);
+
+    #	rearrange to get geoFor1 on top:
+    cat << '_EOF_' > geoFor1.7way.nh
+((((geoFor1:0.041261,taeGut1:0.034457):0.102066,melUnd1:0.076985):0.224703,
+(galGal4:0.0329457,melGal1:0.035065):0.106045):0.198405,
+(hg19:0.148845,mm10:0.356483):0.460153);
+'_EOF_'
+    # << happy emacs
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        geoFor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" geoFor1.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+        > geoFor1.7way.commonNames.nh
+# ((((Medium_ground_finch:0.041261,Zebra_finch:0.034457):0.102066,
+# Budgerigar:0.076985):0.224703,
+# (Chicken:0.032946,Turkey:0.035065):0.106045):0.198405,
+# (Human:0.148845,Mouse:0.356483):0.460153);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/geoFor1_7way.png
+
+    /cluster/bin/phast/all_dists geoFor1.7way.nh | grep geoFor1 \
+        | sed -e "s/geoFor1.//" | sort -k2n > 7way.distances.txt
+    #	Use this output to create the table below
+    head 7way.distances.txt
+# taeGut1 0.075718
+# melUnd1 0.220312
+# galGal4 0.507021
+# melGal1 0.509140
+# hg19    1.175433
+# mm10    1.383071
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<7way.distances.txt") or
+        die "can not read 7way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/geoFor1/bed/lastz.$D/fb.geoFor1." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.geoFor1/fb.${D}.chainGeoFor1Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on geoFor1  on other     other species
+# 01  0.0757 (% 92.532) (% 92.089) - Zebra finch taeGut1
+# 02  0.2203 (% 80.650) (% 76.598) - Budgerigar melUnd1
+# 03  0.5070 (% 70.718) (% 72.077) - Chicken galGal4
+# 04  0.5091 (% 67.079) (% 72.625) - Turkey melGal1
+# 05  1.1754 (% 08.504) (% 03.503) - Human hg19
+# 06  1.3831 (% 07.709) (% 03.543) - Mouse mm10
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	geoFor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    #   geoFor1 taeGut1 melUnd1 galGal4 melGal1 hg19 mm10
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    export H=/hive/data/genomes/geoFor1/bed
+    mkdir mafLinks
+    for G in `sed -e "s/geoFor1 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/lastz.${G}/mafRBestNet/geoFor1.${G}.rbest.maf.gz ]; then
+	    echo "$G - recipBest"
+	    echo ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/lastz.${G}/axtChain/geoFor1.${G}.synNet.maf.gz ]; then
+		echo "$G - synNet"
+		echo ln -s ${H}/lastz.$G/axtChain/geoFor1.${G}.synNet.maf.gz ./mafLinks/$G
+		ln -s ${H}/lastz.$G/axtChain/geoFor1.${G}.synNet.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/lastz.${G}/mafNet/geoFor1.${G}.net.maf.gz ]; then
+		    echo "$G - mafNet"
+		    echo ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory lastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+    # would like to use the synNets for the other birds, and recip best
+    #   to human and mouse
+ln -s /hive/data/genomes/geoFor1/bed/lastz.taeGut1/axtChain/geoFor1.taeGut1.synNet.maf.gz ./mafLinks/taeGut1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.melGal1/axtChain/geoFor1.melGal1.synNet.maf.gz ./mafLinks/melGal1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.galGal4/axtChain/geoFor1.galGal4.synNet.maf.gz ./mafLinks/galGal4
+ln -s /hive/data/genomes/geoFor1/bed/lastz.melUnd1/axtChain/geoFor1.melUnd1.synNet.maf.gz ./mafLinks/melUnd1
+ln -s /hive/data/genomes/geoFor1/bed/lastz.hg19/mafRBestNet/geoFor1.hg19.rbest.maf.gz ./mafLinks/hg19
+ln -s /hive/data/genomes/geoFor1/bed/lastz.mm10/mafRBestNet/geoFor1.mm10.rbest.maf.gz ./mafLinks/mm10
+
+    #	verify the alignment type is correct:
+    for D in `grep -v geoFor1 /hive/users/hiram/bigWays/geoFor1.7way/ordered.list`
+do
+    ls -l mafLinks/$D/*.maf.gz | awk '{print $NF}'
+done
+    #	compare to the list at:
+    #	http://genomewiki.ucsc.edu/index.php/GeoFor1_Genome_size_statistics
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+    for D in `sed -e "s/geoFor1 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1294
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/splitRun
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = geoFor1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/geoFor1/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobList
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      59583s     993.04m    16.55h    0.69d  0.002 y
+# IO & Wait Time:                  6044s     100.74m     1.68h    0.07d  0.000 y
+# Average job time:                 256s       4.27m     0.07h    0.00d
+# Longest finished job:            2781s      46.35m     0.77h    0.03d
+# Submission to last job:          2858s      47.63m     0.79h    0.03d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r-- 1 5674242413 Aug  3 08:03 multiz7way.maf
+# -rw-rw-r-- 1 5670181186 Aug  1 14:41 multiz7way.maf.0
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way
+    mkdir /gbdb/geoFor1/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/geoFor1/multiz7way
+    cd /scratch/tmp
+    time nice -n +17 hgLoadMaf geoFor1 multiz7way
+    #   Loaded 3644645 mafs in 1 files from /gbdb/geoFor1/multiz7way
+    #   real    3m40.564s
+
+    time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 geoFor1 multiz7waySummary \
+	/gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   Created 328873 summary blocks from 10243549 components
+    #   and 3644645 mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   real    4m12.044s
+
+    wc -l multiz7way*.tab
+    #   3644645 multiz7way.tab
+    #   328873 multiz7waySummary.tab
+    #   3973518 total
+
+    rm multiz7way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2012-08-02 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/geoFor1/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/anno/mafSplit
+
+    time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    2m49.680s
+
+    find . -type f | wc -l
+    #   2944
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S geoFor1      # use a screen to control this longish job
+    ssh swarm
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/anno
+    mkdir result
+    for D in `ls mafSplit`
+do
+    echo mkdir result/${D}
+    mkdir result/${D}
+done
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/geoFor1/geoFor1.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 2944 of 2944 jobs
+# CPU time in finished jobs:        560s       9.33m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                  8374s     139.57m     2.33h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              14s       0.23m     0.00h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/JH739903.maf > geoFor1.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> geoFor1.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/JH739903.maf >> geoFor1.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> geoFor1.7way.maf
+    ls -og
+# -rw-rw-r--  1 6488856099 Aug  3 09:02 geoFor1.7way.maf
+    du -hsc geoFor1.7way.maf
+    #   6.1G    geoFor1.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/geoFor1/multiz7way/multiz7way.maf   # remove previous results
+    ln -s `pwd`/geoFor1.7way.maf /gbdb/geoFor1/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/geoFor1/multiz7way \
+        geoFor1 multiz7way
+    #   Loaded 3783877 mafs in 1 files from /gbdb/geoFor1/multiz7way
+    #   real    3m9.770s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 geoFor1 multiz7waySummary \
+        /gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   Created 328873 summary blocks from 10243549 components and 3783877
+    #   mafs from /gbdb/geoFor1/multiz7way/multiz7way.maf
+    #   real    3m36.650s
+
+    #   -rw-rw-r--  1  189735418 Aug  3 09:07 multiz7way.tab
+    #   -rw-rw-r--  1   15808340 Aug  3 09:11 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+w######################################################################
+w MULTIZ7WAY MAF FRAMES (DONE - 2012-08-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/frames
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# geoFor1: xenoRefGene: 288791, Mrnas: 1
+# taeGut1: ensGene: 19297, refGene: 1176, xenoRefGene: 179552, Mrnas: 98382
+# melGal1: ensGene: 17373, xenoRefGene: 203867, Mrnas: 17703
+# galGal4: refGene: 5666, xenoRefGene: 192547, Mrnas: 636086
+# melUnd1: xenoRefGene: 301402, Mrnas: 26
+# hg19: ensGene: 181648, knownGene: 80922, mgcGenes: 31383, refGene: 43528, xenoRefGene: 150519, Mrnas: 10660434
+# mm10: ensGene: 95533, knownGene: 59121, mgcGenes: 26768, refGene: 30588, xenoRefGene: 147579, Mrnas: 5216433
+    #   real    1m24.097s
+
+    # from that summary, use these gene sets:
+    # xenoRefGene - geoFor1 galGal4 melUnd1
+    # ensGene - taeGut1 melGal1
+    # knownGene - hg19 mm10
+
+    mkdir genes
+    #   1. knownGene: hg19 mma0
+    for DB in hg19 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in taeGut1 melGal1
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. xenoRefGene:
+    for DB in geoFor1 galGal4 melUnd1
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/galGal4.gp.gz: 13101
+# genes/geoFor1.gp.gz: 14809
+# genes/hg19.gp.gz: 20718
+# genes/melGal1.gp.gz: 14050
+# genes/melUnd1.gp.gz: 15306
+# genes/mm10.gp.gz: 20985
+# genes/taeGut1.gp.gz: 17343
+
+    time (cat ../anno/geoFor1.7way.maf \
+	| nice -n +19 genePredToMafFrames geoFor1 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    3m19.528s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+# 140156 galGal4
+# 146124 geoFor1
+# 183760 hg19
+# 171778 melGal1
+# 140917 melUnd1
+# 203418 mm10
+# 149897 taeGut1
+
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/frames
+    time hgLoadMafFrames geoFor1 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m9.574s
+    time featureBits -countGaps geoFor1 multiz7wayFrames
+    #   26482387 bases of 1065292181 (2.486%) in intersection
+    #   real    0m13.589s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 60-way (DONE - 2012-08-02 - Hiram)
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/4d
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/geoFor1.7way.maf
+
+    # using xenoRefGene for geoFor1, only transcribed genes
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene where cdsEnd > cdsStart" geoFor1 \
+        > xenoRefGene.gp
+
+    genePredSingleCover xenoRefGene.gp stdout | sort > xenoRefGeneNR.gp
+    wc -l xenoRefGeneNR.gp
+    #	15328 xenoRefGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/geoFor1.7way.maf 
+    find . -type f | wc -l
+    #   2944
+    ssh encodek
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/4d/run
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/geoFor1/bed/multiz7way"
+set c = $1
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/xenoRefGeneNR.gp | sed -e "s/\t$c\t/\tgeoFor1.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 2774 of 2944 jobs
+# Crashed: 170 jobs
+# CPU time in finished jobs:        818s      13.63m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  8636s     143.93m     2.40h    0.10d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:             184s       3.07m     0.05h    0.00d
+# Submission to last job:           624s      10.40m     0.17h    0.01d
+
+    # not all of them work perfectly.  I checked one of the failures,
+    #   the SS file had no contents beyond the header
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #   >geoFor1
+    #   >taeGut1
+    #   >melUnd1
+    #   >galGal4
+    #   >melGal1
+    #   >hg19
+    #   >mm10
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../geoFor1.7way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    #   ((((geoFor1,taeGut1),(melGal1,galGal4)),melUnd1),(hg19,mm10))
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m3.872s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+# ((((geoFor1:0.0413091,taeGut1:0.0343957):0.101451,melUnd1:0.0837731):0.0304192,(galGal4:0.0329708,melGal1:0.0350493):0.079828):0.218721,(hg19:0.118822,mm10:0.19572):0.218721);
+
+
+    #   manually constructed two different subset lists:
+    #  geoFor1 is on each list since it is the reference and is needed for
+    #   everything to work.
+    paste birds.list vertebrate.list
+# geoFor1 geoFor1
+# taeGut1 hg19
+# melGal1 mm10
+# galGal4 
+# melUnd1 
+
+    # on organisms that do not have all species in all files, the file names
+    #	need to be filtered.  Using this perl script to extract from
+    # the full mfa files, only the subset of species from the four lists:
+    cat << '_EOF_' > filterMfa.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: filterMfa.pl <subset.list>\n";
+    exit 255;
+}
+
+my %dbList;
+my $file = shift;
+open (FH, "<$file") or die "can not read $file";
+printf STDERR "using list: $file\n";
+while (my $db = <FH>) {
+    chomp $db;
+    $dbList{$db} = 1;
+}
+close (FH);
+
+my $speciesName = $file;
+$speciesName =~ s/.list//;
+
+$file = "4d.all.mfa";
+#    printf STDERR "processing: %s into %s/%s\n", $file, $speciesName
+open (FH, "<$file") or die "can not read $file";
+open (OF, ">$speciesName.subset.mfa") or die "can not write to $speciesName.subset.mfa";
+my $inGroup = 0;
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+      chomp $line;
+      my $faDbName = $line;
+      $faDbName =~ s/^>//;
+      if (exists($dbList{$faDbName})) {
+          $inGroup = 1;
+            printf OF "> %s\n", $faDbName;
+      } else {
+          $inGroup = 0;
+      }
+    } elsif ($inGroup) {
+        printf OF "%s", $line;
+    }
+}
+close (FH);
+close (OF);
+'_EOF_'
+    # << happy emacs
+    chmod +x filterMfa.pl
+
+    # extract each set from the full mfa files, run msa_view on
+    #   each subset and construct .nh tree for that subset
+    for N in birds vertebrate
+do
+    ./filterMfa.pl ${N}.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ${N}.list|xargs echo`" ${N}.subset.mfa \
+        | sed s/"> "/">"/ > 4d.${N}.mfa
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/tree_doctor \
+        --no-branchlen --prune-all-but="`cat ${N}.list|xargs echo`" \
+        tree_commas.nh > tree_commas.${N}.nh
+done
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    for N in birds vertebrate
+do
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ./tree_commas.${N}.nh 4d.${N}.mfa
+    mv phyloFit.mod ${N}.mod
+    grep TREE ${N}.mod | sed 's/TREE\:\ //' > ${N}.Nway.nh
+done
+
+    grep TREE all.mod | sed -e 's/TREE: //' > all.nh
+    /cluster/bin/phast/all_dists all.nh |grep geoFor1 | sort -k3n \
+        | sed -e "s/geoFor1.//"
+    #   taeGut1 0.075705
+    #   melUnd1 0.226533
+    #   galGal4 0.285978
+    #   melGal1 0.288057
+    #   hg19    0.729443
+    #   mm10    0.806341
+
+#########################################################################

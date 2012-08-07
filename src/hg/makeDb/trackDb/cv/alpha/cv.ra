@@ -4732,12 +4732,12 @@ tag IPSHFIB2IPS4
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 4 derived from skin fibroblast of a 30 year old donor, same donor as iPS_hFib2_iPS5
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
-vendorName HSCI iPS Cell Core Facitlity
+vendorName HSCI iPS Cell Core Facility
 vendorId hFib2_iPS4
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
@@ -4750,13 +4750,13 @@ tag IPSHFIB2IPS5
 type Cell Line
 tier 3
 organism human
-description induced pluripotent stem cell derived from skin fibroblast
+description induced pluripotent stem cell line 5 derived from skin fibroblast of a 30 year old donor, same donor as iPS_hFib2_iPS4
 lineage missing
 karyotype normal
 sex M
 tissue induced pluripotent cell (iPS)
 vendorName HSCI iPS Cell Core Facility
-vendorId hFIB2_iPS5
+vendorId hFib2_iPS5
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -5065,7 +5065,7 @@ tissue brain
 lineage ectoderm
 karyotype cancer
 vendorName Darrell Bigner, Duke University Medical Center
-orderUrl http://cmb.duke.edu/faculty/bigner.html
+orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359
 sex U
@@ -6277,7 +6277,7 @@ termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678
 sex U
 tier 3
-protocol Stam:Stam_15_protocols.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th1_Wb33676984
 tag TH1WB33676984
@@ -6295,7 +6295,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
 lab Stam
-protocol Stam:Th1Wb33676984_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th1_Wb54553204
 tag TH1WB54553204
@@ -6313,7 +6313,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
 lab Stam
-protocol Stam:Th1Wb54553204_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th17
 tag TH17
@@ -6331,7 +6331,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002417
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002417
 lab Stam
-protocol Stam:Th17_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2
 tag TH2
@@ -6348,7 +6348,7 @@ termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679
 sex U
 tier 3
-protocol Stam:Th2_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2_Wb33676984
 tag TH2WB33676984
@@ -6366,7 +6366,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
 lab Stam
-protocol Stam:Th2Wb33676984_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2_Wb54553204
 tag TH2WB54553204
@@ -6384,7 +6384,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
 lab Stam
-protocol Stam:Th2Wb54553204_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term T-47D
 tag T47D
@@ -6419,7 +6419,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Stam
-protocol Stam:TL010_Stam_protocol.pdf
+protocol missing
 
 term Treg_Wb78495824
 tag TREGWB78495824
@@ -6437,7 +6437,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
 lab Stam
-protocol Stam:TregWb78495824_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Treg_Wb83319432
 tag TREGWB83319432
@@ -6455,7 +6455,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
 lab Stam
-protocol Stam:TregWb83319432_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Urothelia
 tag UROTHEL
@@ -7109,7 +7109,7 @@ age E0
 strain 129
 vendorName Smith lab
 vendorId ES-46C
-orderUrl http://www.cscr.cam.ac.uk/research/principal-investigators/pressor-austin-smith
+orderUrl http://www.bioc.cam.ac.uk/uto/smitha.html
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 color 65,105,225
@@ -7390,7 +7390,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
 vendorName Paulson Lab
 vendorId FVprogenitor
 orderUrl http://vbs.psu.edu/research/labs/paulson
@@ -7416,7 +7416,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_Hardison_protocol.pdf
 
 term G1E-ER4
@@ -7434,7 +7434,7 @@ orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
-sex U
+sex M
 protocol Hardison:G1E_ER4_E2_Hardison_protocol.pdf
 
 term GenitalFatPad
@@ -7672,7 +7672,7 @@ orderUrl http://www.genome.gov/10000336
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 86,180,233
-sex F
+sex U
 protocol Hardison:MEP_Hardison_protocol.pdf
 
 term MEF
@@ -8794,6 +8794,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDK9&search=cdk9
 validation Human_-_CDK9_(ab75898)(Western_blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
 label CDK9 (ab75898)
 
+term CDP_(sc-6327)
+tag CDPSC6327
+type Antibody
+antibodyDescription CDP (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping at the C-terminus of CDP of mouse origin.
+target CDP
+targetDescription CDP (for CCAAT displacement protein) was identified as a repressor for tran- scription of developmentally regulated genes. It is a homeodomain protein that appears to compete with transcriptional activating proteins for binding to the promoter regions of various genes. CDP contains three cut repeats which function as DNA binding domains. It has been demonstrated that cut repeat domains have the capacity to bind to DNA in conjunction with or independently of homeodomain DNA binding. CDP has been shown to be the DNA-binding subunit of the HiNF-D complex, which contains cyclin A, Cdc2 and an Rb-related protein in addition to CDP. Histone expression is required for the transition to S phase in the cell cycle. The HiNF-D complex regulates the transcription of Histone H4, H3 and H1 genes, allowing cells to progress from G1 to S phase.
+vendorName Santa Cruz Biotechnology
+vendorId sc-6327
+orderUrl http://www.scbt.com/datasheet-6327-cdp-c-20-antibody.html
+lab Snyder
+lots E0709
+targetId GeneCard:CUX1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CUX1&search=cdp
+validation CDP_(sc-6327)(Immunoprecipitation,IP-Mass_Spec):human_CDP_BioTech_validation_Snyder.pdf
+label CDP (sc-6327)
+
 term CEBPB
 tag CEBPB
 type Antibody
@@ -9753,7 +9769,7 @@ target FOXM1
 targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 vendorName Santa Cruz Biotech
 vendorId sc-502
-orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
+orderUrl http://datasheets.scbt.com/sc-502.pdf
 lab Myers
 lots C1909
 targetId GeneCard:FOXM1
@@ -10382,6 +10398,21 @@ targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation Human_-_HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 label HA-E2F1 (MMS-101P)
+
+term HCFC1_(NB100-68209)
+tag HCFC1NB10068209
+type Antibody
+antibodyDescription Rabbit polyclonalantibody against residue 1700 and 1750 of human host cell factor C1
+target HCFC1
+targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
+vendorName NovusBio
+vendorId NB100-68209
+orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
+lab Snyder
+lots A1
+targetId GeneCard:HCFC1 
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1
+validation HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):human_HCFC1_NB100-68209_validation_Snyder.pdf
 
 term HDAC1_(SC-6298)
 tag HDAC1SC6298
@@ -11408,7 +11439,7 @@ target PLU1
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 vendorName YangShi lab
 vendorId PLU1
-orderUrl http://www.shilab.info/ShiLab/Welcome.html
+orderUrl http://cellbio.med.harvard.edu/faculty/shi/ 
 lab Bernstein
 lots missing
 targetId GeneCard:KDM5B
@@ -12568,6 +12599,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
 validation Human_-_ZBTB7A_SC-34508(Immunoprecipitation-Western_blot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 label  ZBTB7A (sc-34508)
 
+term ZC3H11A_(NB100-74650)
+tag ZC3H11ANB10074650
+type Antibody
+antibodyDescription Rabbit polyclonal antibody. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
+target ZC3H11A
+targetDescription ZC3H11A is a C3H1-type zinc finger protein. ZC3H11A has been identified as a protein that is phosphorylated upon DNA damage by ATM or ATR. The function of ZC3H11A remains uncharacterized.
+vendorName NovusBio
+vendorId NB100-74650
+orderUrl http://www.novusbio.com/ZC3H11A-Antibody_NB100-74650.html
+lab Snyder
+lots A1
+targetId GeneCard:ZC3H11A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZC3H11A&search=zc3h11a
+validation ZC3H11A_(NB100-74650)(Immunoprecipitation,IP-Mass_Spec):human_ZC3H11A_NB100-74650_validation_Snyder.pdf
+
 term ZEB1_(SC-25388)
 tag ZEB1
 type Antibody
@@ -12615,6 +12661,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation Human_-_:missing
 label Znf143 (16618-1-AP)
 #lots
+
+term ZNF-MIZD-CP1_(ab65767)
+tag ZNFMIZDCP1AB65767
+type Antibody
+antibodyDescription Rabbit Polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+target ZNF-MIZD-CP1
+targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
+vendorName Abcam
+vendorId ab65767
+orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
+lab Snyder
+lots GR30927-1
+targetId GeneCard:ZMIZ1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
+validation ZNF-MIZD-CP1_(ab65767)(Immunoprecipitation,IP-Mass_Spec):human_ZNF-MIZD-CP1_ab65767_validation_Snyder.pdf
 
 term ZNF217
 tag ZNF217
@@ -12679,6 +12740,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation Human_-_ZNF274_(M01)(Western_blot,ChIPseq):human_ZNF274_M01_validation_Farnham.pdf
 label ZNF274 (H00010782-M01)
 
+term ZNF384_(HPA004051)
+tag ZNF384HPA004051
+type Antibody
+antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
+target ZNF384
+targetDescription This gene encodes a C2H2-type zinc finger protein, which may function as a transcription factor. This gene also contains long CAG trinucleotide repeats that encode consecutive glutamine residues. The protein appears to bind and regulate the promoters of the extracellular matrix genes MMP1, MMP3, MMP7 and COL1A1. Studies in mouse suggest that nuclear matrix transcription factors (NP/NMP4) may be part of a general mechanical pathway that couples cell construction and function during extracellular matrix remodeling. Alternative splicing results in multiple transcript variants. Recurrent rearrangements of this gene with the Ewing's sarcoma gene, EWSR1 on chromosome 22, or with the TAF15 gene on chromosome 17, or with the TCF3 (E2A) gene on chromosome 19, have been observed in acute leukemia. A related pseudogene has been identified on chromosome 7.
+vendorName SIGMA
+vendorId HPA004051
+orderUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
+lab Snyder
+lots A57874
+targetId GeneCard:ZNF384
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF384
+validation ZNF384_(HPA004051)(Immunoprecipitation,IP-Mass_Spec):human_ZNF384_HPA004051_validation_Snyder.pdf
+
 term ZZZ3
 tag ZZZ3
 type Antibody
@@ -12693,6 +12769,7 @@ targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
+
 
 ###  Antibodies
 ### These are all for the  experiments.
@@ -12808,7 +12885,6 @@ targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
 validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
 label COREST (sc30189)
-
 # lots
 ##This does not appear in metaDb
 
@@ -13346,19 +13422,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label insert len 400
+label 400 base pairs
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label insert len 200
+label 200 base pairs
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label insert len N/A
+label N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 

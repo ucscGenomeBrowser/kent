@@ -230,8 +230,10 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
-static char *getSetFieldValStr(struct sqlFieldInfo *fi, char *table)
-/* Destructively prepare fi->type for chopCommas, making sure it looks like a set() def. */
+static char *commaSepFromSqlSetTypeDecl(struct sqlFieldInfo *fi, char *table)
+/* Destructively prepare fi->type for chopCommas: strip initial "set(" and final ")",
+ * informatively errAborting if not found, and strip the single-quote characters
+ * that mysql puts around each field. */
 {
 if (!startsWith("set(", fi->type))
     errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
@@ -259,18 +261,17 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
     {
     if (sameString(fi->field, "func"))
 	{
-	char *vals = getSetFieldValStr(fi, tdb->table);
-	char *values[128];
+	char *vals = commaSepFromSqlSetTypeDecl(fi, tdb->table);
+	char *values[128]; // 22 values as of snp137
 	int valCount = chopCommas(vals, values);
 	char *labels[valCount];
 	int i;
 	for (i = 0;  i < valCount;  i++)
 	    {
-	    char *val = values[i];
-	    if (sameString(val, "unknown"))
+	    if (sameString(values[i], "unknown"))
 		labels[i] = "Unknown";
 	    else
-		labels[i] = snpMisoLinkFromFunc(val);
+		labels[i] = snpMisoLinkFromFunc(values[i]);
 	    }
 	snp125PrintFilterControls(tdb->track, "Function", "func", labels, values, valCount);
 	return;;
@@ -2835,14 +2836,14 @@ if (sameWord(tdb->track,"ensGene"))
     else
         safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
 
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
     {
     if (trackDbSetting(tdb, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }
 /* Print link for parent track */
@@ -2851,7 +2852,7 @@ if (!ajax)
     if (tdb->parent)
         {
         char *encodedMapName = cgiEncode(tdb->parent->track);
-        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>"
+        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
                "(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'>"
                "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
@@ -2865,7 +2866,7 @@ if (!ajax)
             {
             if (sameString(grp->name,tdb->grp))
                 {
-                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>"
+                printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
                        "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",

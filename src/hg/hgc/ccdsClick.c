@@ -251,24 +251,17 @@ static void ccdsKnownGenesRows(struct sqlConnection *conn, char *ccdsId)
 {
 struct ccdsGeneMap *ccdsKgs = ccdsGetGenes(conn, "ccdsKgMap", ccdsId);
 struct ccdsGeneMap *ccdsKg;
-boolean havePb = hgPbOk(database);
 for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
     {
     char *spId = kgIdToSpId(conn, ccdsKg->geneId);
     printf("<TR>");
     if (ccdsKg == ccdsKgs)
-        printf("<TH ROWSPAN=%d>%s", slCount(ccdsKgs),
-               (havePb ? "UCSC Genes/<br>Proteome Browser"
-                : "UCSC Genes"));
+        printf("<TH ROWSPAN=%d>%s", slCount(ccdsKgs), "UCSC Genes");
     printf("<TD><A HREF=\"");
     printCcdsHgGeneUrl(conn, ccdsId, ccdsKg->geneId);
     printf("\" TARGET=_blank>%s</A>", ccdsKg->geneId);
 
-    if (havePb)
-        printf("<TD><A HREF=\"../cgi-bin/pbTracks?proteinID=%s&db=%s\""
-               " TARGET=_blank>%s</A>", spId, database, spId);
-    else
-        printf("<TD>&nbsp;");
+    printf("<TD>&nbsp;");
     freez(&spId);
 
     printf("</TR>\n");

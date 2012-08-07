@@ -68,9 +68,10 @@ display according to several attributes:
     <LI>
       <A name="Func"></A>
       <B>Function</B>: dbSNP's predicted functional effect of variant on RefSeq transcripts,
-      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*,
-      not shown in UCSC Genome Browser).
-      Each variant may have more than one predicted effect.
+      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*),
+      not shown in UCSC Genome Browser.
+      A variant may have more than one functional role if it overlaps
+      multiple transcripts.
       These terms and definitions are from the <A HREF="http://sequenceontology.org/"
       TARGET=_BLANK>Sequence Ontology (SO)<A>; click on a term to view it in the
       <A HREF="http://sequenceontology.org/browser/browser/obob.cgi?release=current_release"
@@ -81,73 +82,73 @@ display according to several attributes:
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
 	    TARGET=_BLANK>synonymous_variant</A></B> -
 	    A sequence variant where there is no resulting change to the encoded amino acid
-	    (replaces internal term <TT>coding-synon</TT>)</LI>
+	    (dbSNP term: <TT>coding-synon</TT>)</LI>
         <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
 	    TARGET=_BLANK>intron_variant</A></B> -
 	    A transcript variant occurring within an intron
-	    (replaces internal term <TT>intron</TT>)</LI>
+	    (dbSNP term: <TT>intron</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
 	    TARGET=_BLANK>downstream_gene_variant</A></B> -
 	    A sequence variant located 3' of a gene
-	    (replaces internal term <TT>near-gene-3</TT>)</LI>
+	    (dbSNP term: <TT>near-gene-3</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
 	    TARGET=_BLANK>upstream_gene_variant</A></B> -
 	    A sequence variant located 5' of a gene
-	    (replaces internal term <TT>near-gene-5</TT>)</LI>
+	    (dbSNP term: <TT>near-gene-5</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
 	    TARGET=_BLANK>nc_transcript_variant</A></B> -
 	    A transcript variant of a non coding RNA gene
-	    (replaces internal term <TT>ncRNA</TT>)</LI>
+	    (dbSNP term: <TT>ncRNA</TT>)</LI>
 	 <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
 	    TARGET=_BLANK>stop_gained</A></B> -
 	    A sequence variant whereby at least one base of a codon is changed, resulting in
 	    a premature stop codon, leading to a shortened transcript
-	    (replaces internal term <TT>nonsense</TT>)</LI>
+	    (dbSNP term: <TT>nonsense</TT>)</LI>
         <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
 	    TARGET=_BLANK>missense_variant</A></B> -
 	    A sequence variant, where the change may be longer than 3 bases, and at least
 	    one base of a codon is changed resulting in a codon that encodes for a
 	    different amino acid
-	    (replaces internal term <TT>missense</TT>)</LI>
+	    (dbSNP term: <TT>missense</TT>)</LI>
         <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
 	    TARGET=_BLANK>stop_lost</A></B> -
 	    A sequence variant where at least one base of the terminator codon (stop)
 	    is changed, resulting in an elongated transcript
-	    (replaces internal term <TT>stop-loss</TT>)</LI>
+	    (dbSNP term: <TT>stop-loss</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
 	    TARGET=_BLANK>frameshift_variant</A></B> -
 	    A sequence variant which causes a disruption of the translational reading frame,
 	    because the number of nucleotides inserted or deleted is not a multiple of three
-	    (replaces internal term <TT>frameshift</TT>)</LI>
+	    (dbSNP term: <TT>frameshift</TT>)</LI>
         <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001820"
 	    TARGET=_BLANK>inframe_indel</A></B> -
 	    A coding sequence variant where the change does not alter the frame
 	    of the transcript
-	    (replaces internal term <TT>cds-indel</TT>)</LI>
+	    (dbSNP term: <TT>cds-indel</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
 	    TARGET=_BLANK>3_prime_UTR_variant</A></B> -
 	    A UTR variant of the 3' UTR
-	    (replaces internal term <TT>untranslated-3</TT>)</LI>
+	    (dbSNP term: <TT>untranslated-3</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
 	    TARGET=_BLANK>5_prime_UTR_variant</A></B> -
 	    A UTR variant of the 5' UTR
-	    (replaces internal term <TT>untranslated-5</TT>)</LI>
+	    (dbSNP term: <TT>untranslated-5</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
 	    TARGET=_BLANK>splice_acceptor_variant</A></B> -
 	    A splice variant that changes the 2 base region at the 3' end of an intron
-	    (replaces internal term <TT>splice-3</TT>)</LI>
+	    (dbSNP term: <TT>splice-3</TT>)</LI>
         <LI><B>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
 	    TARGET=_BLANK>splice_donor_variant</A></B> -
 	    A splice variant that changes the2 base region at the 5' end of an intron
-	    (replaces internal term <TT>splice-5</TT>)</LI>
+	    (dbSNP term: <TT>splice-5</TT>)</LI>
       </UL>
     </LI>
     <LI>
@@ -377,7 +378,11 @@ TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
       b137_ContigInfo.bcp.gz.</LI>
   <LI>b137_SNPMapInfo.bcp.gz provided the alignment weights.
   <LI>Functional classification was obtained from 
-      b137_SNPContigLocusId.bcp.gz.</LI>
+      b137_SNPContigLocusId.bcp.gz. The internal database representation
+      uses dbSNP's function terms, but for display in SNP details pages,
+      these are translated into
+      <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology</A> terms.</LI>
   <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.</LI>
   <LI>SNPAlleleFreq.bcp.gz and ../shared/Allele.bcp.gz provided allele frequencies.
       For the human assembly, allele frequencies were also taken from

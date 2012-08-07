@@ -14,6 +14,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapAlnRep3.bam,wgEncodeGisRnaPetA549CellPapAlnRep3.bam.bai
 grant Gingeras
@@ -40,6 +41,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapAlnRep4.bam,wgEncodeGisRnaPetA549CellPapAlnRep4.bam.bai
 grant Gingeras
@@ -64,14 +66,15 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA009,RHA010
-labProtocolId 087WC+pet,088WC+pet
 labVersion clone-free
 localization cell
 md5sum 5389c1c4d1cad7da294fd38074dbd4c4
@@ -92,6 +95,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -117,6 +121,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -142,6 +147,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -167,6 +173,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -192,6 +199,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapMinusRawRep3.bigWig
 grant Gingeras
@@ -218,6 +226,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapMinusRawRep4.bigWig
 grant Gingeras
@@ -244,6 +253,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapPlusRawRep3.bigWig
 grant Gingeras
@@ -270,6 +280,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapPlusRawRep4.bigWig
 grant Gingeras
@@ -296,6 +307,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapAlnRep3.bam,wgEncodeGisRnaPetA549CytosolPapAlnRep3.bam.bai
 grant Gingeras
@@ -322,6 +334,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapAlnRep4.bam,wgEncodeGisRnaPetA549CytosolPapAlnRep4.bam.bai
 grant Gingeras
@@ -346,14 +359,15 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA011,RHA012
-labProtocolId 087C+pet,088C+pet
 labVersion clone-free
 localization cytosol
 md5sum b917affee7662ad988b67af280d33aeb
@@ -374,6 +388,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -399,6 +414,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -424,6 +440,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -449,6 +466,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -474,6 +492,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapMinusRawRep3.bigWig
 grant Gingeras
@@ -500,6 +519,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapMinusRawRep4.bigWig
 grant Gingeras
@@ -526,6 +546,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapPlusRawRep3.bigWig
 grant Gingeras
@@ -552,6 +573,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapPlusRawRep4.bigWig
 grant Gingeras
@@ -578,6 +600,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapAlnRep3.bam,wgEncodeGisRnaPetA549NucleusPapAlnRep3.bam.bai
 grant Gingeras
@@ -604,6 +627,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapAlnRep4.bam,wgEncodeGisRnaPetA549NucleusPapAlnRep4.bam.bai
 grant Gingeras
@@ -628,14 +652,15 @@ cell A549
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHA013,RHA014
-labProtocolId 087N+pet,088N+pet
 labVersion clone-free
 localization nucleus
 md5sum d0c43f00cb45cbeb8bd891621af892ff
@@ -656,6 +681,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -681,6 +707,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -706,6 +733,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -731,6 +759,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -756,6 +785,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapMinusRawRep3.bigWig
 grant Gingeras
@@ -782,6 +812,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapMinusRawRep4.bigWig
 grant Gingeras
@@ -808,6 +839,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapPlusRawRep3.bigWig
 grant Gingeras
@@ -834,6 +866,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapPlusRawRep4.bigWig
 grant Gingeras
@@ -1785,6 +1818,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum ae0a825480b3d4550a05a3ba2ce80d0a,69bf52628a799552960639f49fe0f25c
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1841,6 +1875,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum a436b1d295aa2985d20c1db445e59482
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1894,6 +1929,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum 7e1a4068b0dd8a19958ce3cb44a7185e
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -1946,6 +1982,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum c26479c9bcf4db5a9f5199bba84c80e4
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -2000,6 +2037,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum 8ab3d8fc65849e6be478ae818f4c5e68
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -2056,6 +2094,7 @@ labExpId RHH015
 labVersion clone-free
 localization cell
 md5sum ac92109f47476f7cca2bbd65c185472b
+objStatus revoked - poor quality
 project wgEncode
 readType 2x36
 replicate 2
@@ -3492,6 +3531,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapAlnRep1.bam,wgEncodeGisRnaPetImr90CellPapAlnRep1.bam.bai
@@ -3519,6 +3559,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapAlnRep2.bam,wgEncodeGisRnaPetImr90CellPapAlnRep2.bam.bai
@@ -3544,15 +3585,16 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI001,RHI002
-labProtocolId 045WC+pet,046WC+pet
 labVersion clone-free
 localization cell
 md5sum ca9c092382b3055faccf13452c226eb9
@@ -3573,6 +3615,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd1Rep1.fastq.gz
@@ -3599,6 +3642,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd1Rep2.fastq.gz
@@ -3625,6 +3669,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd2Rep1.fastq.gz
@@ -3651,6 +3696,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd2Rep2.fastq.gz
@@ -3677,6 +3723,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapMinusRawRep1.bigWig
@@ -3704,6 +3751,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapMinusRawRep2.bigWig
@@ -3731,6 +3779,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapPlusRawRep1.bigWig
@@ -3758,6 +3807,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapPlusRawRep2.bigWig
@@ -3785,6 +3835,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapAlnRep1.bam,wgEncodeGisRnaPetImr90CytosolPapAlnRep1.bam.bai
@@ -3812,6 +3863,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapAlnRep2.bam,wgEncodeGisRnaPetImr90CytosolPapAlnRep2.bam.bai
@@ -3837,15 +3889,16 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-28
-dateUnrestricted 2013-03-28
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI003,RHI004
-labProtocolId 045C+pet,046C+pet
 labVersion clone-free
 localization cytosol
 md5sum ddc562fb1312dac43ce66b9b89b0c128
@@ -3866,6 +3919,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep1.fastq.gz
@@ -3892,6 +3946,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep2.fastq.gz
@@ -3918,6 +3973,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd2Rep1.fastq.gz
@@ -3944,6 +4000,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd2Rep2.fastq.gz
@@ -3970,6 +4027,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapMinusRawRep1.bigWig
@@ -3997,6 +4055,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapMinusRawRep2.bigWig
@@ -4024,6 +4083,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapPlusRawRep1.bigWig
@@ -4051,6 +4111,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapPlusRawRep2.bigWig
@@ -4078,6 +4139,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapAlnRep1.bam,wgEncodeGisRnaPetImr90NucleusPapAlnRep1.bam.bai
@@ -4105,6 +4167,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapAlnRep2.bam,wgEncodeGisRnaPetImr90NucleusPapAlnRep2.bam.bai
@@ -4130,15 +4193,16 @@ cell IMR90
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHI005,RHI006
-labProtocolId 045N+pet,046N+pet
 labVersion clone-free
 localization nucleus
 md5sum 62119430e017036d6ede9b55fcb70f3a
@@ -4159,6 +4223,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep1.fastq.gz
@@ -4185,6 +4250,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep2.fastq.gz
@@ -4211,6 +4277,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd2Rep1.fastq.gz
@@ -4237,6 +4304,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd2Rep2.fastq.gz
@@ -4263,6 +4331,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapMinusRawRep1.bigWig
@@ -4290,6 +4359,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapMinusRawRep2.bigWig
@@ -4317,6 +4387,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapPlusRawRep1.bigWig
@@ -4344,6 +4415,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapPlusRawRep2.bigWig
@@ -5365,6 +5437,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapAlnRep3.bam,wgEncodeGisRnaPetMcf7CellPapAlnRep3.bam.bai
 grant Gingeras
@@ -5391,6 +5464,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapAlnRep4.bam,wgEncodeGisRnaPetMcf7CellPapAlnRep4.bam.bai
 grant Gingeras
@@ -5415,13 +5489,15 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
+expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM046,RHM047
-labProtocolId 089WC+pet,090WC+pet
 labVersion iIDR
 localization cell
 md5sum 9429a9022c64788a8ccb48fe0d5e8124
@@ -5442,6 +5518,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -5467,6 +5544,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -5492,6 +5570,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -5517,6 +5596,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -5542,6 +5622,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapMinusRawRep3.bigWig
 grant Gingeras
@@ -5568,6 +5649,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapMinusRawRep4.bigWig
 grant Gingeras
@@ -5594,6 +5676,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapPlusRawRep3.bigWig
 grant Gingeras
@@ -5620,6 +5703,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapPlusRawRep4.bigWig
 grant Gingeras
@@ -5646,6 +5730,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapAlnRep3.bam,wgEncodeGisRnaPetMcf7CytosolPapAlnRep3.bam.bai
 grant Gingeras
@@ -5672,6 +5757,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapAlnRep4.bam,wgEncodeGisRnaPetMcf7CytosolPapAlnRep4.bam.bai
 grant Gingeras
@@ -5696,14 +5782,15 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM044,RHM045
-labProtocolId 089C+pet,090C+pet
 labVersion clone-free
 localization cytosol
 md5sum 157f067028bf9b6f47e5cdfa40be5f95
@@ -5724,6 +5811,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -5749,6 +5837,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -5774,6 +5863,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -5799,6 +5889,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -5824,6 +5915,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapMinusRawRep3.bigWig
 grant Gingeras
@@ -5850,6 +5942,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapMinusRawRep4.bigWig
 grant Gingeras
@@ -5876,6 +5969,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapPlusRawRep3.bigWig
 grant Gingeras
@@ -5902,6 +5996,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapPlusRawRep4.bigWig
 grant Gingeras
@@ -5928,6 +6023,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapAlnRep3.bam,wgEncodeGisRnaPetMcf7NucleusPapAlnRep3.bam.bai
 grant Gingeras
@@ -5954,6 +6050,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapAlnRep4.bam,wgEncodeGisRnaPetMcf7NucleusPapAlnRep4.bam.bai
 grant Gingeras
@@ -5978,14 +6075,15 @@ cell MCF-7
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHM054,RHM055
-labProtocolId 089N+pet,090N+pet
 labVersion clone-free
 localization nucleus
 md5sum 7339e29c127c1a17405a6589642f3609
@@ -6006,6 +6104,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -6031,6 +6130,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -6056,6 +6156,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -6081,6 +6182,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -6106,6 +6208,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapMinusRawRep3.bigWig
 grant Gingeras
@@ -6132,6 +6235,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapMinusRawRep4.bigWig
 grant Gingeras
@@ -6158,6 +6262,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapPlusRawRep3.bigWig
 grant Gingeras
@@ -6184,6 +6289,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapPlusRawRep4.bigWig
 grant Gingeras
@@ -6735,6 +6841,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapAlnRep3.bam,wgEncodeGisRnaPetSknshCellPapAlnRep3.bam.bai
 grant Gingeras
@@ -6761,6 +6868,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapAlnRep4.bam,wgEncodeGisRnaPetSknshCellPapAlnRep4.bam.bai
 grant Gingeras
@@ -6785,14 +6893,15 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS015,RHS016
-labProtocolId 085WC+pet,086WC+pet
 labVersion clone-free
 localization cell
 md5sum e83f2760b330f08d0907be1d11cc769e
@@ -6813,6 +6922,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -6838,6 +6948,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -6863,6 +6974,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -6888,6 +7000,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -6913,6 +7026,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapMinusRawRep3.bigWig
 grant Gingeras
@@ -6939,6 +7053,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapMinusRawRep4.bigWig
 grant Gingeras
@@ -6965,6 +7080,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapPlusRawRep3.bigWig
 grant Gingeras
@@ -6991,6 +7107,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapPlusRawRep4.bigWig
 grant Gingeras
@@ -7017,6 +7134,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapAlnRep3.bam,wgEncodeGisRnaPetSknshCytosolPapAlnRep3.bam.bai
 grant Gingeras
@@ -7043,6 +7161,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapAlnRep4.bam,wgEncodeGisRnaPetSknshCytosolPapAlnRep4.bam.bai
 grant Gingeras
@@ -7067,14 +7186,15 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS017,RHS018
-labProtocolId 085C+pet,086C+pet
 labVersion clone-free
 localization cytosol
 md5sum 2e4a119208b6ac9dcf01d99f9aab944c
@@ -7095,6 +7215,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -7120,6 +7241,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -7145,6 +7267,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -7170,6 +7293,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -7195,6 +7319,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapMinusRawRep3.bigWig
 grant Gingeras
@@ -7221,6 +7346,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapMinusRawRep4.bigWig
 grant Gingeras
@@ -7247,6 +7373,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapPlusRawRep3.bigWig
 grant Gingeras
@@ -7273,6 +7400,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapPlusRawRep4.bigWig
 grant Gingeras
@@ -7299,6 +7427,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapAlnRep3.bam,wgEncodeGisRnaPetSknshNucleusPapAlnRep3.bam.bai
 grant Gingeras
@@ -7325,6 +7454,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapAlnRep4.bam,wgEncodeGisRnaPetSknshNucleusPapAlnRep4.bam.bai
 grant Gingeras
@@ -7349,14 +7479,15 @@ cell SK-N-SH
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-29
-dateUnrestricted 2013-03-29
+dateResubmitted 2012-06-29
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
 grant Gingeras
 lab GIS
 labExpId RHS019,RHS020
-labProtocolId 085N+pet,086N+pet
 labVersion clone-free
 localization nucleus
 md5sum cdcaa6fc46640cd38a459e2558e1d74c
@@ -7377,6 +7508,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep3.fastq.gz
 grant Gingeras
@@ -7402,6 +7534,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep4.fastq.gz
 grant Gingeras
@@ -7427,6 +7560,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd2Rep3.fastq.gz
 grant Gingeras
@@ -7452,6 +7586,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd2Rep4.fastq.gz
 grant Gingeras
@@ -7477,6 +7612,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapMinusRawRep3.bigWig
 grant Gingeras
@@ -7503,6 +7639,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapMinusRawRep4.bigWig
 grant Gingeras
@@ -7529,6 +7666,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep3.bigWig
 grant Gingeras
@@ -7555,6 +7693,7 @@ dataType RnaPet
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-27
 dateUnrestricted 2012-12-27
+dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4.bigWig
 grant Gingeras
@@ -7572,4 +7711,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -1243070258
+# MAGIC: -260826711
