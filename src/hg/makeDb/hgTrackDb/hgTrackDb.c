@@ -472,7 +472,7 @@ struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
 static void validateTag(char *database,struct trackDb *tdb,char *type,char *tag,
-                        boolean firstIsDigitWarning)
+                        boolean firstIsDigitWarning,boolean silent)
 // Determines if tag is conforming to rules:
 // 1) must exist
 // 2) cannot be all numeric.
@@ -490,9 +490,9 @@ if (!isalpha(*c))
         errAbort("Track %s.%s has all numeric '%s' tag '%s'",database,tdb->track,type,tag);
     if (!firstIsDigitWarning)
         return;
-
-    warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
-            database,tdb->track,type,tag);
+    if (!silent)
+        warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
+             database,tdb->track,type,tag);
     }
 for (c++;*c != '\0';c++)
     {
@@ -502,7 +502,7 @@ for (c++;*c != '\0';c++)
     }
 }
 
-static struct hash *buildCompositeHash(char *database,struct trackDb *tdbList)
+static struct hash *buildCompositeHash(char *database,struct trackDb *tdbList,boolean strict)
 /* Create a hash of all composite tracks.  This is keyed by their name with
  * subGroupData values. */
 {
@@ -531,13 +531,15 @@ for (td = tdbList; td != NULL; td = tdNext)
             sgSetting = cloneString(sgSetting);
             char *sgWord = sgSetting;
             char *sgName = nextWord(&sgWord);
-            validateTag(database,td,subGroupName,sgName,TRUE);
+            if (!strict)
+                validateTag(database,td,subGroupName,sgName,TRUE,strict);
             nextWord(&sgWord);  /* skip word not used */
             struct hash *subGroupHash = newHash(3);
             struct slPair *slPair, *slPairList = slPairListFromString(sgWord,TRUE); // respect ""
             for (slPair = slPairList; slPair; slPair = slPair->next)
                 {
-                validateTag(database,td,sgName,slPair->name,TRUE);
+                if (!strict)
+                    validateTag(database,td,sgName,slPair->name,TRUE,strict);
                 hashAdd(subGroupHash, slPair->name, slPair->val);
                 }
             if (sgd->nameHash == NULL)
@@ -633,10 +635,10 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-static void checkSubGroups(char *database,struct trackDb *tdbList)
+static void checkSubGroups(char *database,struct trackDb *tdbList, boolean strict)
 /* Check integrity of subGroup clauses */
 {
-struct hash *compositeHash = buildCompositeHash(database,tdbList);
+struct hash *compositeHash = buildCompositeHash(database,tdbList,strict);
 
 verifySubTracks(tdbList, compositeHash);
 }
@@ -727,7 +729,7 @@ if (strict)
     tdbList = pruneStrict(tdbList, database);
 
 tdbList = pruneEmptyContainers(tdbList);
-checkSubGroups(database,tdbList);
+checkSubGroups(database,tdbList,strict);
 trackDbPrioritizeContainerItems(tdbList);
 return tdbList;
 }

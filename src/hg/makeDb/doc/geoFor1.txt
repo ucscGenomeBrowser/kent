@@ -387,6 +387,18 @@ geoFor1.perChromTables = no
     scp -p geoFor1.sql hgwbeta:/tmp
     ssh hgwbeta "hgsql qapushq < /tmp/geoFor1.sql"
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("geoFor1", "blat4d", "17806", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("geoFor1", "blat4d", "17807", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
 ############################################################################
 # lastz melUnd1 Budgerigar (DONE - 2012-02-29 - Hiram)
     # original alignment
@@ -1462,3 +1474,1126 @@ done
     #   mm10    0.806341
 
 #########################################################################
+# phastCons 7-way (DONE - 2012-08-03 - Hiram)
+    # split 7way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/geoFor1/bed/multiz7way/cons/SS
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/geoFor1/bed/multiz7way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/geoFor1/bed/multiz7way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+
+# Completed: 2944 of 2944 jobs
+# CPU time in finished jobs:        748s      12.47m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                  8590s     143.16m     2.39h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             110s       1.83m     0.03h    0.00d
+# Submission to last job:           518s       8.63m     0.14h    0.01d
+
+    # not all of them produce results
+    #	 there isn't much aligned in these MAF files
+    find ./result -type f | wc -l
+    #	 1342
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/geoFor1/bed/multiz7way/cons/run.cons
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/run.cons
+
+    #	there are going to be two phastCon runs using this same script.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+# ../run.cons/doPhast.csh JH741347.1-6434 0/JH741347 JH741347.1-6434.ss
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/geoFor1/bed/multiz7way/cons
+set tmp = $cons/tmp/$d
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       3368s      56.13m     0.94h    0.04d  0.000 y
+# IO & Wait Time:                 12327s     205.46m     3.42h    0.14d  0.000 y
+# Average job time:                  12s       0.19m     0.00h    0.00d
+# Longest finished job:             327s       5.45m     0.09h    0.00d
+# Submission to last job:          1427s      23.78m     0.40h    0.02d
+
+
+    # create Most Conserved track
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/all
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    #   -rw-rw-r--  1 14833537 Aug  3 13:28 tmpMostConserved.bed
+    #   -rw-rw-r--  1 15224375 Aug  3 13:36 mostConserved.bed
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/all
+    time nice -n +19 hgLoadBed geoFor1 phastConsElements7way mostConserved.bed
+    #   Read 427825 elements of size 5 from mostConserved.bed
+    #   real    0m6.364s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits geoFor1 -enrichment xenoRefGene:cds phastConsElements7way
+    #   xenoRefGene:cds 1.907%, phastConsElements7way 5.423%, both 1.370%,
+    #   cover 71.82%, enrich 13.24x
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.wigFix.gz)
+    #   real    14m1.183s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/geoFor1/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=620: VmPeak:      11016124 kB
+    #   real    14m51.983s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,504,251,616
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.097493
+# min: 0.000000
+# max: 1.000000
+# std: 0.228025
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    6m5.520s
+
+    du -hsc *.wi?
+    #   929M    phastCons7way.wib
+    #   102M    phastCons7way.wig
+    #   1.1G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons7way.wib /gbdb/geoFor1/multiz7way/phastCons7way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way \
+	geoFor1 phastCons7way phastCons7way.wig
+    #   real    0m37.431s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh geoFor1 phastCons7way
+# db.table      min max mean count sumData stdDev
+# viewLimits
+# geoFor1.phastCons7way   0 1 0.0974934 974030471 9.49615e+07 0.228025
+# viewLimits=0:1
+
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=geoFor1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    3m26.324s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #########################################################################
+    ### Create a phastCons data set for Birds
+
+    # setup birds-only run
+    ssh encode
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+
+    # birds-only: get the birds only tree from the 4d directory
+    cp -p ../../4d/birds.mod ./birds.mod
+    # the others become the non-informative list for phastCons to ignore
+    echo "hg19,mm10" > birds.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2553s      42.55m     0.71h    0.03d  0.000 y
+# IO & Wait Time:                  8862s     147.70m     2.46h    0.10d  0.000 y
+# Average job time:                   9s       0.14m     0.00h    0.00d
+# Longest finished job:              35s       0.58m     0.01h    0.00d
+# Submission to last job:           827s      13.78m     0.23h    0.01d
+
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+    # create Most Conserved track
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+    time nice -n +19 hgLoadBed geoFor1 phastConsElements7wayBirds \
+	mostConserved.bed
+    #   Read 330827 elements of size 5 from mostConserved.bed
+    #   real    0m2.449s
+
+    # verify coverage
+    featureBits geoFor1 phastConsElements7wayBirds
+    #   57341045 bases of 1041286029 (5.507%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits geoFor1 -enrichment xenoRefGene:cds phastConsElements7wayBirds
+    #   xenoRefGene:cds 1.907%, phastConsElements7wayBirds 5.507%,
+    #   both 1.154%, cover 60.52%, enrich 10.99x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order
+    #  for wigEncode
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+    mkdir downloads
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.birds.wigFix.gz) &
+    #   real    11m12.204s
+
+    #	encode to bigWig
+    #	(warning wigToBigWig process grows to about 36 Gb)
+    #	in bash, to avoid the 32 Gb memory limit:
+    time (zcat downloads/phastCons7way.birds.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons7wayBirds.bw)
+    #   real    15m43.842s
+
+    bigWigInfo phastCons7wayBirds.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,510,189,951
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.099020
+# min: 0.000000
+# max: 0.998000
+# std: 0.228021
+
+    # Create merged posterier probability file and wiggle track data files
+    time (zcat downloads/phastCons7way.birds.wigFix.gz \
+	 | wigEncode stdin phastCons7wayBirds.wig phastCons7wayBirds.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    4m52.174s
+
+    #	if desired to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phastCons7wayBirds.bw /gbdb/geoFor1/bbi
+    hgsql geoFor1 -e 'drop table if exists phastCons7wayBirds; \
+            create table phastCons7wayBirds \
+		(fileName varchar(255) not null); \
+            insert into phastCons7wayBirds values
+	("/gbdb/geoFor1/bbi/phastCons7wayBirds.bw");'
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/birds
+    ln -s `pwd`/phastCons7wayBirds.wib \
+	/gbdb/geoFor1/multiz7way/phastCons7wayBirds.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way geoFor1 \
+	phastCons7wayBirds phastCons7wayBirds.wig
+    #   real    0m13.364s
+
+    wigTableStats.sh geoFor1 phastCons7wayBirds
+# db.table      min max mean count sumData
+# geoFor1.phastCons7wayBirds      0 0.998 0.0990203 974030471 9.64488e+07
+#	stdDev viewLimits
+# 0.228021 viewLimits=0:0.998
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=geoFor1 phastCons7wayBirds  > histogram.data 2>&1
+    #   real    1m42.507s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phastCons7wayBirds track"
+set xlabel " phastCons7wayBirds score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #########################################################################
+    ### Create a phastCons data set for Vertebrate
+
+    # setup vertebrate-only run
+    ssh encode
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+
+    # vertebrate-only: get the vertebrate only tree from the 4d directory
+    cp -p ../../4d/vertebrate.mod ./vertebrate.mod
+    # the remainders become the non-informative list for phastCons to ignore
+    echo "taeGut1,melUnd1,galGal4,melGal1" > vertebrate.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2228s      37.14m     0.62h    0.03d  0.000 y
+# IO & Wait Time:                 10120s     168.66m     2.81h    0.12d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:             337s       5.62m     0.09h    0.00d
+# Submission to last job:        239952s    3999.20m    66.65h    2.78d
+
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+    # create Most Conserved track
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    #   real    5m4.064s
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+    time nice -n +19 hgLoadBed geoFor1 phastConsElements7wayVertebrate \
+	mostConserved.bed
+    #   Read 188142 elements of size 5 from mostConserved.bed
+    #   real    0m1.034s
+
+    # verify coverage
+    featureBits geoFor1 phastConsElements7wayVertebrate
+    #   27126923 bases of 1041286029 (2.605%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits geoFor1 -enrichment xenoRefGene:cds \
+        phastConsElements7wayVertebrate
+    #   xenoRefGene:cds 1.907%, phastConsElements7wayVertebrate 2.605%,
+    #   both 1.246%, cover 65.30%, enrich 25.07x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order
+    #  for wigEncode
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+    mkdir downloads
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.vertebrate.wigFix.gz) &
+    #   real    8m46.342s
+
+    #	encode to bigWig
+    time (zcat downloads/phastCons7way.vertebrate.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons7wayVertebrate.bw)
+    #   real    7m5.428s.842s
+
+    bigWigInfo phastCons7wayVertebrate.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 280,864,441
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.032686
+# min: 0.000000
+# max: 1.000000
+# std: 0.157933
+
+    # Create merged posterier probability file and wiggle track data files
+    time (zcat downloads/phastCons7way.vertebrate.wigFix.gz \
+	 | wigEncode stdin phastCons7wayVertebrate.wig \
+        phastCons7wayVertebrate.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    2m57.533s
+
+    #	if desired to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phastCons7wayVertebrate.bw /gbdb/geoFor1/bbi
+    hgsql geoFor1 -e 'drop table if exists phastCons7wayVertebrate; \
+            create table phastCons7wayVertebrate \
+		(fileName varchar(255) not null); \
+            insert into phastCons7wayVertebrate values
+	("/gbdb/geoFor1/bbi/phastCons7wayVertebrate.bw");'
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/cons/vertebrate
+    ln -s `pwd`/phastCons7wayVertebrate.wib \
+	/gbdb/geoFor1/multiz7way/phastCons7wayVertebrate.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way geoFor1 \
+	phastCons7wayVertebrate phastCons7wayVertebrate.wig
+    #   real    0m9.678s
+
+    wigTableStats.sh geoFor1 phastCons7wayVertebrate
+# db.table      min max mean count sumData
+# geoFor1.phastCons7wayVertebrate 0 1 0.0326863 974030471 3.18374e+07
+#	stdDev viewLimits
+#       0.157933 viewLimits=0:0.822352
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=geoFor1 phastCons7wayVertebrate  > histogram.data 2>&1
+    #   real    1m36.253s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phastCons7wayVertebrate track"
+set xlabel " phastCons7wayVertebrate score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 7-way (DONE - 2012-08-03 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/geoFor1/bed/multiz7way/consPhyloP
+    cd /cluster/data/geoFor1/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.485
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.485 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod 
+    #   BACKGROUND: 0.257500 0.242500 0.242500 0.257500
+    grep BACKGROUND ../../cons/vertebrate/vertebrate.mod \
+        | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.513
+    grep BACKGROUND ../../cons/birds/birds.mod \
+        | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.475
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/birds/birds.mod 0.475 > birds.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK birds.mod 
+    #   BACKGROUND: 0.262500 0.237500 0.237500 0.262500
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/vertebrate/vertebrate.mod 0.513 > vertebrate.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK vertebrate.mod 
+    #   BACKGROUND: 0.243500 0.256500 0.256500 0.243500 
+
+0/JH741347/JH741347.1-6434 wigFix/0/JH741347/JH741347.1-6434.wigFix
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/geoFor1/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	5690 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2832s      47.20m     0.79h    0.03d  0.000 y
+# IO & Wait Time:                  9087s     151.45m     2.52h    0.11d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              58s       0.97m     0.02h    0.00d
+# Submission to last job:           629s      10.48m     0.17h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #   real    12m29.754s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/geoFor1/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=9538: VmPeak:     11016120 kB
+    #   real    15m27.107s
+
+    bigWigInfo phyloP7way.bw 
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,473,509,141
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: -0.001963
+# min: -4.711000
+# max: 0.934000
+# std: 0.621009
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #   Converted stdin, upper limit 0.93, lower limit -4.71
+    #   real     5m2.710s
+
+    du -hsc *.wi?
+    #	193M    phyloP7way.wib
+    #	43M     phyloP7way.wig
+    #	236M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/geoFor1/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way geoFor1 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh geoFor1 phyloP7way
+# db.table      min max mean count sumData
+# geoFor1.phyloP7way      -4.711 0.934 -0.00196263 974030471 -1.91166e+06
+#       stdDev viewLimits
+#       0.621009 viewLimits=-3.10701:0.934
+
+    #	that range is: 0.934+4.711 = 5.645 for hBinSize=0.005645
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.005645 -hBinCount=1000 -hMinVal=-4.711 -verbose=2 \
+	    -db=geoFor1 phyloP7way > histogram.data 2>&1
+    #   real    2m8.166s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000005
+# median 0.000077
+# Q3 0.000478
+# average 0.001038
+# min 0.000000
+# max 0.057772
+# count 963
+# total 1.000007
+# standard deviation 0.003958
+
+XXX - to be checked
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ######################   Running the birds subset  #######################
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/birds
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/birds
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       2076s      34.60m     0.58h    0.02d  0.000 y
+# IO & Wait Time:                  8982s     149.70m     2.49h    0.10d  0.000 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              24s       0.40m     0.01h    0.00d
+# Submission to last job:           616s      10.27m     0.17h    0.01d
+
+    cd /cluster/data/geoFor1/bed/multiz7way/consPhyloP/birds
+    mkdir downloads
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.birds.wigFix.gz) &
+    #   real    11m58.034s
+
+    # verify data integrity with the bigWig converter:
+    time (zcat downloads/phyloP7way.birds.wigFix.gz \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP7wayBirds.bw) &
+    #   real    14m41.297s
+
+    bigWigInfo phyloP7wayBirds.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,417,786,751
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: -0.017750
+# min: -4.169000
+# max: 0.508000
+# std: 0.612359
+
+    time (zcat downloads/phyloP7way.birds.wigFix.gz \
+	| wigEncode stdin phyloP7wayBirds.wig phyloP7wayBirds.wib \
+	> wigEncode.log 2>&1) &
+    #   real    12m41.561s
+    #	Converted stdin, upper limit 0.51, lower limit -4.17
+
+    #	if you wanted to use the bigWig data for the track, load bigWig table:
+    ln -s `pwd`/phyloP7wayBirds.bw /gbdb/geoFor1/bbi
+    hgsql geoFor1 -e 'drop table if exists phyloP7wayBirds; \
+            create table phyloP7wayBirds \
+		(fileName varchar(255) not null); \
+            insert into phyloP7wayBirds values
+	("/gbdb/geoFor1/bbi/phyloP7wayBirds.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP7wayBirds.wib /gbdb/geoFor1/multiz7way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way geoFor1 \
+	phyloP7wayBirds phyloP7wayBirds.wig
+    #   real    0m20.548s
+
+    wigTableStats.sh geoFor1 phyloP7wayBirds
+# db.table      min max mean count sumData stdDev viewLimits
+# geoFor1.phyloP7wayBirds -4.169 0.508 -0.0177497 974030471 -1.72888e+07
+#	stdDev viewLimits
+# 0.612359 viewLimits=-3.07955:0.508
+
+    #	that range is: 0.508+4.169 = 4.677 for hBinSize=0.004677
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.004677 -hBinCount=1000 -hMinVal=-4.169 -verbose=2 \
+	    -db=geoFor1 phyloP7wayBirds > histogram.data 2>&1
+    #   real    2m44.184s
+    # to see yrange:
+    grep -v "^#" histogram.data | ave -col=5 stdin
+    #   max 0.038837
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phyloP7wayBirds track"
+set xlabel " phyloP7wayBirds score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.0388]
+set xrange [-2.5:0.6]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ######################   Running the vertebrate  #######################
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/vertebrate
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/consPhyloP/vertebrate
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 1342 of 1342 jobs
+# CPU time in finished jobs:       1126s      18.77m     0.31h    0.01d  0.000 y
+# IO & Wait Time:                  9076s     151.26m     2.52h    0.11d  0.000 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:        233870s    3897.83m    64.96h    2.71d
+
+    cd /cluster/data/geoFor1/bed/multiz7way/consPhyloP/vertebrate
+    mkdir downloads
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.vertebrate.wigFix.gz) &
+    #   real     5m47.255
+
+    # verify data integrity with the bigWig encoder:
+    time (zcat downloads/phyloP7way.vertebrate.wigFix.gz \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP7wayVertebrate.bw) &
+    #   real      9m24.019s
+    #   real    15m28.263s
+    bigWigInfo phyloP7wayVertebrate.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 367,058,938
+# primaryIndexSize: 33,232,748
+# zoomLevels: 10
+# chromCount: 1321
+# basesCovered: 974,030,471
+# mean: 0.018190
+# min: -1.282000
+# max: 0.673000
+# std: 0.184936
+
+    #	if you wanted to use the bigWig data, load bigWig table:
+    ln -s `pwd`/phyloP7wayVertebrate.bw /gbdb/geoFor1/bbi
+    hgsql geoFor1 -e 'drop table if exists phyloP7wayVertebrate; \
+            create table phyloP7wayVertebrate \
+		(fileName varchar(255) not null); \
+            insert into phyloP7wayVertebrate values
+	("/gbdb/geoFor1/bbi/phyloP7wayVertebrate.bw");'
+
+    time (zcat downloads/phyloP7way.vertebrate.wigFix.gz \
+	| wigEncode stdin phyloP7wayVertebrate.wig phyloP7wayVertebrate.wib \
+	> wigEncode.log 2>&1) &
+    #   real      3m20.803s
+    #   Converted stdin, upper limit 0.67, lower limit -1.28
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP7wayVertebrate.wib /gbdb/geoFor1/multiz7way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/geoFor1/multiz7way geoFor1 \
+	phyloP7wayVertebrate phyloP7wayVertebrate.wig
+    #   real    0m25.361s
+
+    wigTableStats.sh geoFor1 phyloP7wayVertebrate
+# db.table      min max mean count sumData stdDev viewLimits
+# geoFor1.phyloP7wayVertebrate    -1.282 0.673 0.0181897 974030471 1.77173e+07
+#	stdDev viewLimits
+#       0.184936 viewLimits=-0.906489:0.673
+
+    #	that range is: 0.673+1.282 = 1.955 for hBinSize=0.001955
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001955 -hBinCount=1000 -hMinVal=-1.282 -verbose=2 \
+	    -db=geoFor1 phyloP7wayVertebrate > histogram.data 2>&1
+    #   real    3m5.929s
+    # to see yrange:
+    grep -v "^#" histogram.data | ave -col=5 stdin
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medium ground finch geoFor1 Histogram phyloP7wayVertebrate track"
+set xlabel " phyloP7wayVertebrate score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.753]
+set xrange [-0.5:0.5]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# construct download files for 7-way (WORKING - 2012-08-07 - Hiram)
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/maf
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/alignments
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/birds
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/vertebrate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way
+    mkdir /hive/data/genomes/geoFor1/bed/multiz7way/downloads
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    mkdir maf alignments
+    cd maf
+    time cp -p ../../../anno/geoFor1.7way.maf .
+    #   real    9m1.872s
+    time gzip *.maf
+    #   real    23m59.878s
+    time md5sum *.maf.gz > md5sum.txt
+    #   real    1m55.317s
+    ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way/maf
+    cd ..
+    du -hsc maf ../../anno/geoFor1.7way.maf
+    #   1.5G    maf
+    #   6.1G    ../../anno/geoFor1.7way.maf
+    #   7.6G    total
+
+    ln -s ../../geoFor1.7way.nh .
+    ln -s ../../geoFor1.7way.commonNames.nh .
+    ln -s `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+
+    #####################################################################
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/phastCons7way
+    mkdir birds vertebrate geoFor1.7way.phastCons
+    cd birds
+    ln -s ../../../cons/birds/downloads/phastCons7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m36.881s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/birds
+    cd ../vertebrate
+    ln -s ../../../cons/vertebrate/downloads/phastCons7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    real    0m10.940s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/vertebrate
+    cd ../geoFor1.7way.phastCons
+    ln -s ../../../cons/all/downloads/phastCons7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m24.173s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons
+    cd ..
+    ln -s ../../cons/all/all.mod geoFor1.7way.phastCons.mod
+    ln -s ../../cons/birds/birds.mod geoFor1.7way.phastCons.birds.mod
+    ln -s ../../cons/vertebrate/vertebrate.mod geoFor1.7way.phastCons.vertebrate.mod
+    ln -s ../../cons/all/phastCons7way.bw geoFor1.7way.phastCons.bw
+    ln -s ../../cons/birds/phastCons7wayBirds.bw \
+        geoFor1.7way.phastCons7wayBirds.bw
+    ln -s ../../cons/vertebrate/phastCons7wayVertebrate.bw \
+        geoFor1.7way.phastCons7wayVertebrate.bw
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    7m35.579s
+    # obtain the README.txt from mm10/phastCons60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phastCons7way
+
+    #####################################################################
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/phyloP7way
+    mkdir birds vertebrate geoFor1.7way.phyloP7way
+    cd birds
+    ln -s ../../../consPhyloP/birds/downloads/phyloP7way.birds.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m51.913s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/birds
+    cd ../vertebrate
+    ln -s ../../../consPhyloP/vertebrate/downloads/phyloP7way.vertebrate.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    0m29.125s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/vertebrate
+    cd ../geoFor1.7way.phyloP7way
+    ln -s ../../../consPhyloP/all/downloads/phyloP7way.wigFix.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m56.253s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way
+
+    cd ..
+    ln -s ../../consPhyloP/run.phyloP/all.mod geoFor1.7way.phyloP7way.mod
+    ln -s ../../consPhyloP/run.phyloP/birds.mod ./geoFor1.7way.phyloP.birds.mod
+    ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./geoFor1.7way.phyloP.vertebrate.mod
+
+    ln -s ../../consPhyloP/all/phyloP7way.bw geoFor1.7way.phyloP7way.bw
+    ln -s ../../consPhyloP/birds/phyloP7wayBirds.bw \
+        geoFor1.7way.phyloP7wayBirds.bw 
+    ln -s ../../consPhyloP/vertebrate/phyloP7wayVertebrate.bw \
+        geoFor1.7way.phyloP7wayVertebrate.bw
+
+    time md5sum *.mod *.bw > md5sum.txt &
+    #   real    7m36.111s
+
+    # obtain the README.txt from mm10/phyloP60way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/md5sum.txt `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way
+
+    ###########################################################################
+    ## create upstream refGene maf files XXX - there is no appropriate gene
+    ## track yet
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/maf
+    # bash script
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits geoFor1 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags geoFor1 multiz7way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/geoFor1/bed/multiz7way/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+    #   real    199m45.558s
+
+    md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    27m59.778s
+
+    # obtain the README.txt from mm10/multiz60way and update for this
+    #   situation
+    ln -s `pwd`/*.nh `pwd`/*.maf.gz `pwd`/*.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/multiz7way
+
+#############################################################################
