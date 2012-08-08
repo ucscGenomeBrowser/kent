@@ -4,7 +4,7 @@ include ../../inc/common.mk
 # make SCRIPTS=/cluster/bin/scripts
 
 install:
-	${GIT} pull
+	@echo Reminder: is your sandbox up to date?
 	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
@@ -128,6 +128,7 @@ install:
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 	cp -p --remove-destination whoMadeIt.csh           ${SCRIPTS}
+	@echo Reminder: was your sandbox up to date?
 
 clean::
 	@echo nothing to clean in src/utils/qa/
