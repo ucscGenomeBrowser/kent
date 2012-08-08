@@ -579,6 +579,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhHistEse14H3k09me3StdAlnRep1.bam,wgEncodeSydhHistEse14H3k09me3StdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum fef8b468ab3a73104ece1749c13ce37b,f98b9821dd55541520a8b7669d16430f
 project wgEncode
 replicate 1
 setType exp
@@ -603,6 +604,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhHistEse14H3k09me3StdAlnRep2.bam,wgEncodeSydhHistEse14H3k09me3StdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 60f78ac3d44381787131ef85f31b8c14,165fccec7188c82c103f1a9df9740888
 project wgEncode
 replicate 2
 setType exp
@@ -628,6 +630,7 @@ fileName wgEncodeSydhHistEse14H3k09me3StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum aca5f387c0f088269fafc7e11d8b435e
 project wgEncode
 setType exp
 sex M
@@ -652,6 +655,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhHistEse14H3k09me3StdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 52e761a29ce671f9561645b1ddb48162
 project wgEncode
 replicate 1
 setType exp
@@ -676,6 +680,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhHistEse14H3k09me3StdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 7e8127788e7bf60476e5ab1ac656a857
 project wgEncode
 replicate 2
 setType exp
@@ -701,6 +706,7 @@ fileName wgEncodeSydhHistEse14H3k09me3StdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 0bb16c3509034ef80abd3b4e546ce391
 project wgEncode
 setType exp
 sex M
@@ -877,6 +883,7 @@ dateUnrestricted 2013-02-10
 fileName wgEncodeSydhHistMelH3k04me1IggrabAlnRep1.bam,wgEncodeSydhHistMelH3k04me1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 2eb9776774d89eaff1df335c66087cfc,1f47700c85fa586678809a470966e1ec
 project wgEncode
 replicate 1
 setType exp
@@ -901,6 +908,7 @@ dateUnrestricted 2013-02-10
 fileName wgEncodeSydhHistMelH3k04me1IggrabAlnRep2.bam,wgEncodeSydhHistMelH3k04me1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum fd0f3cdbd71aecd6b8edb0b4cdb4d5ad,4662f4de7b089bdd4db3c3b135c62637
 project wgEncode
 replicate 2
 setType exp
@@ -926,6 +934,7 @@ fileName wgEncodeSydhHistMelH3k04me1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 1203fb94cb886bd6b8ddf9825bd89f69
 project wgEncode
 setType exp
 sex M
@@ -950,6 +959,7 @@ dateUnrestricted 2013-02-10
 fileName wgEncodeSydhHistMelH3k04me1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 54a03da9f937c4ddfb9d063991eaa51b
 project wgEncode
 replicate 1
 setType exp
@@ -974,6 +984,7 @@ dateUnrestricted 2013-02-10
 fileName wgEncodeSydhHistMelH3k04me1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum ec65759b5eeb5fe25e5520111e29cbe5
 project wgEncode
 replicate 2
 setType exp
@@ -999,6 +1010,7 @@ fileName wgEncodeSydhHistMelH3k04me1IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 1d8c0e4e353a764222648b47f1f479cb
 project wgEncode
 setType exp
 sex M
@@ -1569,6 +1581,156 @@ tableName wgEncodeSydhHistMelH3k04me3IggyalePk
 treatment None
 view Peaks
 
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep1
+objType file
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep1.bam,wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+md5sum da1e89cdf570bc78e9ad3f71749f0a75,45aa2e07c52dcba5d747763d7f77cf4e
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7811
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep2
+objType file
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep2.bam,wgEncodeSydhHistMelH3k09me3Dm2p5dStdAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+md5sum 8b675176e538eb76284ca8f7de4ddc5a,2746875d063289ea6e614465fad30939
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7811
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdPk
+objType table
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+md5sum 6b0e543208512118ab13ec22fa5ce91c
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7811
+tableName wgEncodeSydhHistMelH3k09me3Dm2p5dStdPk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdRawDataRep1
+objType file
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+md5sum df740d5a81706638dfcf29350a368cbb
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 7811
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdRawDataRep2
+objType file
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+md5sum 838d15def32b8b19f133d7f90263e5d0
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 7811
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k09me3Dm2p5dStdSig
+objType table
+age immortalized
+antibody H3K9me3
+cell MEL
+composite wgEncodeSydhHist
+control std
+controlId MEL/DMSO_2.0pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeSydhHistMelH3k09me3Dm2p5dStdSig.bigWig
+grant Snyder
+lab Stanford
+md5sum 2f59e86a48a214c592f4df05ba9a8ddd
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 7811
+tableName wgEncodeSydhHistMelH3k09me3Dm2p5dStdSig
+treatment DMSO_2.0pct
+view Signal
+
 metaObject wgEncodeSydhHistMelH3k09me3IggrabAlnRep1
 objType file
 age immortalized
@@ -1888,6 +2050,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1.bam,wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum e1b5644879f9a10cc4148e05788e87cd,312fec0fff8952b1fad5b47b646859a7
 project wgEncode
 replicate 1
 setType exp
@@ -1912,6 +2075,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep2.bam,wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 66a1261377718711e4fd68a392a672b9,b169fde561b220b41368d8096d0750b9
 project wgEncode
 replicate 2
 setType exp
@@ -1936,6 +2100,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum b03d27146c7ed9d7e161ec172c39c1b1
 project wgEncode
 setType exp
 sex M
@@ -1960,6 +2125,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 956fdc6aa0daf8c366a043165199f38c
 project wgEncode
 replicate 1
 setType exp
@@ -1984,6 +2150,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum a611139ef75bc3c2851fdbe29750f638
 project wgEncode
 replicate 2
 setType exp
@@ -2008,6 +2175,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford
+md5sum 5fafaa1c3b95baa7af28912094018f3a
 project wgEncode
 setType exp
 sex M
@@ -2032,6 +2200,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep1.bam,wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum ca3869a94e6aee845cfcbf2eba657a5d,43268032f3061ad4c3c02052b341bef8
 project wgEncode
 replicate 1
 setType exp
@@ -2056,6 +2225,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep2.bam,wgEncodeSydhHistMelH3k36me3bDm2p5dStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 74cb77f55f7276e61ea17e70f7402e47,ab1f6d0760ddccb057a9a4e197c3deac
 project wgEncode
 replicate 2
 setType exp
@@ -2080,6 +2250,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum 8e2bf7aadd5c2c908576e6b4b178b05e
 project wgEncode
 setType exp
 sex M
@@ -2104,6 +2275,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 88fe042cebb93c2e0a91c2c02d609b39
 project wgEncode
 replicate 1
 setType exp
@@ -2128,6 +2300,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 040b63cd20b6977ec833a665efd32eae
 project wgEncode
 replicate 2
 setType exp
@@ -2152,6 +2325,7 @@ dateUnrestricted 2013-03-28
 fileName wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford
+md5sum 565eca9143e36a9d5bb155adeeab1302
 project wgEncode
 setType exp
 sex M
@@ -2419,4 +2593,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 2087903626
+# MAGIC: 1836350921

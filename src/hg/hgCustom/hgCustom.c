@@ -14,10 +14,10 @@
 #include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
+#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
+#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "jsHelper.h"
 #include <signal.h>
 
