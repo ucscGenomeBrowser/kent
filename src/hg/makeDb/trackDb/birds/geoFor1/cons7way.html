@@ -5,7 +5,7 @@ evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>, for
-all species and two subsets (birds, and vertebrates).
+all seven species and two subsets (birds, and vertebrates).
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/"
 TARGET=_blank>Penn State Bioinformatics</A>
@@ -56,14 +56,17 @@ by regions of yellow when zoomed out and Ns displayed at base
 level (see <EM>Gap Annotation</EM>, below). </P>
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
-<TR><TH COLSPAN=5>Birds subset</TH></TR>
+<TR><TH COLSPAN=5>Reference species Medium ground finch</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
-<TR ALIGN=left><TD>Medium ground finch</TD><TD>Geospiza fortis</TD><TD>Apr. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=geoFor1"    TARGET=_blank>BGI/geoFor1</A></TD><TD>reference species</TD></TR>
-<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/melUnd1"    TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4"    TARGET=_blank>ICGSC Gallus_gallus-4.0/galGal4</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Turkey</TD><TD>Meleagris gallopavo</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=melGal1"    TARGET=_blank>TGC Turkey_2.01/melGal1</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Feb. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19"    TARGET=_blank>GRCh37/hg19</A></TD><TD>Reciprocal best</TD></TR>
-<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm10"    TARGET=_blank>GRCm38/mm10</A></TD><TD>Reciprocal best</TD></TR>
+<TR ALIGN=left><TD>Medium ground finch</TD><TD>Geospiza fortis</TD><TD>Apr. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=geoFor1" TARGET=_blank>BGI/geoFor1</A></TD><TD>reference species</TD></TR>
+<TR><TH COLSPAN=5>Birds subset</TH></TR>
+<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/melUnd1" TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Zebra finch</TD><TD>Taeniopygia guttata</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=taeGut1" TARGET=_blank>WUGSC 3.2.4/taeGut1</A></TD><TD>Net</TD></TR>
+<TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4" TARGET=_blank>ICGSC Gallus_gallus-4.0/galGal4</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Turkey</TD><TD>Meleagris gallopavo</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=melGal1" TARGET=_blank>TGC Turkey_2.01/melGal1</A></TD><TD>Syntenic net</TD></TR>
+<TR><TH COLSPAN=5>Vertebrates subset</TH></TR>
+<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Feb. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19" TARGET=_blank>GRCh37/hg19</A></TD><TD>Reciprocal best</TD></TR>
+<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm10" TARGET=_blank>GRCm38/mm10</A></TD><TD>Reciprocal best</TD></TR>
 </TABLE><BR>
 <B>Table 1.</B> <EM>Genome assemblies included in the 7-way Conservation track.</EM><BR>
 * Data download only, browser not available.
@@ -85,7 +88,7 @@ The track configuration options allow the user to display the three different
 sets of scores, all, birds or vertebrate, individually or all simultaneously.
 In full and pack display modes, conservation scores are displayed as a
 <EM>wiggle track</EM> (histogram) in which the height reflects the
-size of the score.
+value of the score.
 The conservation wiggles can be configured in a variety of ways to
 highlight different aspects of the displayed information.
 Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html"
@@ -190,18 +193,9 @@ translation, depending on the species chosen (<B>Table 2</B>).
 
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Known Genes</TD><TD>human</TD></TR>
-<TR ALIGN=left><TD>RefSeq Genes</TD><TD>chicken, cow, mouse, pig, rat, rhesus,
-frog(x. tropicalis), zebrafish</TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes v65</TD><TD>alpaca, chimp, elephant, fugu,
-gorilla, guinea pig, hedgehog, horse, kangaroo rat, lizard, marmoset, medaka,
-megabat, microbat, mouse lemur, opossum, orangutan, panda, pika, platypus,
-rabbit, rock hyrax shrew, sloth, stickleback, tarsier, tenrec, tetraodon,
-tree shrew, turkey, zebra finch</TD></TR>
-<TR ALIGN=left><TD>Xeno RefGene</TD><TD>armadillo, baboon, bushbaby, cat,
-coelacanth, dog, gibbon, lamprey, manatee, naked mole-rat, painted turtle,
-sheep, squirrel, monkey, tasmanian devil, wallaby</TD></TR>
-<TR ALIGN=left><TD>Genscan</TD><TD>atlantic cod, budgerigar, dolphin, nile tilapia, squirrel</TD></TR>
+<TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse</TD></TR>
+<TR ALIGN=left><TD>Xeno RefGene</TD><TD>medium ground finch, chicken, budgerigar</TD></TR>
+<TR ALIGN=left><TD>Ensembl Genes v65</TD><TD>zebra finch, turkey</TD></TR>
 </TD></TR>
 </TABLE>
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
@@ -209,9 +203,8 @@ sheep, squirrel, monkey, tasmanian devil, wallaby</TD></TR>
 
 <H2>Methods</H2>
 <P>
-Pairwise alignments with the human genome were generated for
-each species using blastz from repeat-masked genomic sequence.
-Lineage-specific repeats were removed prior to alignment, then reinserted.
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
@@ -262,21 +255,22 @@ generated using the <em>phyloFit</em> program from the PHAST package
 (msa_view).  The 4d sites were derived from the Xeno RefSeq gene set,
 filtered to select single-coverage long transcripts.  The
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.birds.mod"
-TARGET=_blank >birds</A>,
+TARGET=_blank >birds</A> and
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.vertebrate.mod"
 TARGET=_blank >vertebrate</A> subset tree models
-were extracted from the vertebrate model.  Note, the mouse/geoFor1 is included in
-each of the tree models since it is the reference species.
+were extracted from the full 7-way model.  Note, the
+medium ground finch/geoFor1 is included in
+each of the tree models since it is the reference alignment species.
 </P>
 <P>
 These same tree models were used in the phyloP calculations, however their
 background frequencies were modfied to maintain reversibility.
 The resulting tree models:
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.phyloP.7way.mod"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way.mod"
 TARGET=_blank>all species</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.phyloP.birds.mod"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP.birds.mod"
 TARGET=_blank >birds</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.phyloP.vertebrate.mod"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7wayVertebrate.mod"
 TARGET=_blank >vertebrate</A> subsets.
 </P>
 <h3> PhastCons Conservation </h3>
@@ -312,8 +306,7 @@ to produce separate scores at each base (--wig-scores option), considering
 all branches of the phylogeny rather than a particular subtree or lineage
 (i.e., the --subtree option was not used).  The scores were computed by
 performing a likelihood ratio test at each alignment column (--method LRT),
-and scores for both conservation and acceleration were produced (--mode
-CONACC).
+and scores for both conservation and acceleration were produced (--mode CONACC).
 </P>
 <h3> Conserved Elements </h3>
 <P>

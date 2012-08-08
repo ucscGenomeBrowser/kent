@@ -10,6 +10,7 @@ wgEncodeLicrTfbs.ra \
 wgEncodeMapability.ra \
 wgEncodeNhgriBip.ra \
 wgEncodePsuHistone.ra \
+wgEncodePsuRnaSeq.ra \
 wgEncodePsuTfbs.ra \
 wgEncodeSydhHist.ra \
 wgEncodeSydhRnaSeq.ra \
