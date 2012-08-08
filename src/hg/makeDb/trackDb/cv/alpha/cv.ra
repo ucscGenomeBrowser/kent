@@ -5065,7 +5065,7 @@ tissue brain
 lineage ectoderm
 karyotype cancer
 vendorName Darrell Bigner, Duke University Medical Center
-orderUrl http://cmb.duke.edu/faculty/bigner.html
+orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359
 sex U
@@ -6277,7 +6277,7 @@ termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678
 sex U
 tier 3
-protocol Stam:Stam_15_protocols.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th1_Wb33676984
 tag TH1WB33676984
@@ -6295,7 +6295,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
 lab Stam
-protocol Stam:Th1Wb33676984_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th1_Wb54553204
 tag TH1WB54553204
@@ -6313,7 +6313,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001678
 lab Stam
-protocol Stam:Th1Wb54553204_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th17
 tag TH17
@@ -6331,7 +6331,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002417
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002417
 lab Stam
-protocol Stam:Th17_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2
 tag TH2
@@ -6348,7 +6348,7 @@ termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679
 sex U
 tier 3
-protocol Stam:Th2_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2_Wb33676984
 tag TH2WB33676984
@@ -6366,7 +6366,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
 lab Stam
-protocol Stam:Th2Wb33676984_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Th2_Wb54553204
 tag TH2WB54553204
@@ -6384,7 +6384,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0001679
 lab Stam
-protocol Stam:Th2Wb54553204_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term T-47D
 tag T47D
@@ -6419,7 +6419,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Stam
-protocol Stam:TL010_Stam_protocol.pdf
+protocol missing
 
 term Treg_Wb78495824
 tag TREGWB78495824
@@ -6437,7 +6437,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
 lab Stam
-protocol Stam:TregWb78495824_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Treg_Wb83319432
 tag TREGWB83319432
@@ -6455,7 +6455,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0004520
 lab Stam
-protocol Stam:TregWb83319432_Stam_protocol.pdf
+protocol Stam:AdultCD4naiveTcell_Crawford.v2_PlusStam.v1_SOP.pdf
 
 term Urothelia
 tag UROTHEL
@@ -7109,7 +7109,7 @@ age E0
 strain 129
 vendorName Smith lab
 vendorId ES-46C
-orderUrl http://www.cscr.cam.ac.uk/research/principal-investigators/pressor-austin-smith
+orderUrl http://www.bioc.cam.ac.uk/uto/smitha.html
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 color 65,105,225
@@ -7390,7 +7390,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34+,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
 vendorName Paulson Lab
 vendorId FVprogenitor
 orderUrl http://vbs.psu.edu/research/labs/paulson
@@ -9769,7 +9769,7 @@ target FOXM1
 targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 vendorName Santa Cruz Biotech
 vendorId sc-502
-orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
+orderUrl http://datasheets.scbt.com/sc-502.pdf
 lab Myers
 lots C1909
 targetId GeneCard:FOXM1
@@ -11439,7 +11439,7 @@ target PLU1
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 vendorName YangShi lab
 vendorId PLU1
-orderUrl http://www.shilab.info/ShiLab/Welcome.html
+orderUrl http://cellbio.med.harvard.edu/faculty/shi/ 
 lab Bernstein
 lots missing
 targetId GeneCard:KDM5B
@@ -13422,19 +13422,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label insert len 400
+label 400 base pairs
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label insert len 200
+label 200 base pairs
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label insert len N/A
+label N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 

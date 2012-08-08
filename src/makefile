@@ -22,7 +22,6 @@ hgLib:
 	cd hg/lib && ${MAKE}
 
 libs: topLibs hgLib
-	cd hg/protein/lib && ${MAKE}
 
 cgi: libs
 	cd hg && ${MAKE} cgi

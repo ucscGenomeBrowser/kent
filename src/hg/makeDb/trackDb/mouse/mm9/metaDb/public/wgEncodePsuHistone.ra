@@ -74,6 +74,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk.broadPeak.gz
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum 191309278da41e2f8f0ca13b1c064e20
@@ -101,6 +102,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep1.fastq.gz
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum ed8d902e7d8dbc1aa5b47210ea403880
@@ -128,6 +130,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep2.fastq.gz
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum 75fd2c3afd73a2b8bcf4b67b845d3f51
@@ -156,6 +159,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum b45352d1573cb05c3f3af731435bfe1e
@@ -184,6 +188,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum 02613b67e5b605236ead0defbd3e651c
@@ -211,6 +216,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum b70958b766ea64cdac6ed106fdff28e9
@@ -238,6 +244,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum dd93ac7483ea3eab134700317ad7df61
@@ -265,6 +272,7 @@ dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
 expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946546
 grant Hardison
 lab PSU-m
 md5sum 143eea6c1012208ab8c7960891e8694c
@@ -347,6 +355,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk.broadPeak.gz
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 02f057a645c451691451d3669f0c32cc
@@ -374,6 +383,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep1.fastq.gz
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 04d8145db29e94322b6e1ee6d4e307fb
@@ -401,6 +411,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep2.fastq.gz
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 7a2a3d4fc2ed925517cd042cd37f9f30
@@ -429,6 +440,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 6dbf561b352ae95a62b3565cb9a33c1e
@@ -457,6 +469,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 0d86e22dfbf099b1cbc8adbc24da36b1
@@ -484,6 +497,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum f338c5489c6560d73c7596da808ef29c
@@ -511,6 +525,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum 4b6b283d8f7974f415848d8bcd8eff1f
@@ -538,6 +553,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
 expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946528
 grant Hardison
 lab PSU-m
 md5sum e50de18e819667c45da5410c697205b3
@@ -556,7 +572,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -583,7 +599,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -620,6 +636,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk.broadPeak.gz
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 86d264cc1e5407fdd7a7f72299fa33e8
@@ -648,6 +665,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 9becc98d9e41a72630a69bd7f98aa100
@@ -676,6 +694,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 142206f7953b4785b76a2387e1066c50
@@ -703,6 +722,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 434303cd44a4f237a26ec6ecf8323ab5
@@ -730,6 +750,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 43beeee0446807299aeda957441b2c4a
@@ -757,6 +778,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum d67e25643b7b5d76bbec245abd6d6e53
@@ -775,7 +797,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -784,6 +806,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bRawDataRep1.fastq.gz
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 25bd9d6f001c64428b0b3c526ded227f
@@ -802,7 +825,7 @@ age immortalized
 antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -811,6 +834,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
 expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bRawDataRep2.fastq.gz
+geoSampleAccession GSM946548
 grant Hardison
 lab PSU-m
 md5sum 815ff032ce35118333162e59e67d0803
@@ -893,6 +917,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk.broadPeak.gz
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 1a69534e5aceb9215e993aacf5532a54
@@ -920,6 +945,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep1.fastq.gz
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum f29b6bb6bd41da9463821a980cf4f6e1
@@ -947,6 +973,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep2.fastq.gz
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 7f94062151806c1bde21d5ce5ea075f8
@@ -975,6 +1002,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum b22e1e7bf814543fb9fafedad1a732e2
@@ -1003,6 +1031,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 01562b3870caac196b27c6359d638eb8
@@ -1030,6 +1059,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 25095ff3e11ca657eb5880bba6394ff0
@@ -1057,6 +1087,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 42403e71e6750308cf9794627636f20b
@@ -1084,6 +1115,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
 expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946532
 grant Hardison
 lab PSU-m
 md5sum 6d6f3f2ff91cec090b3748f67166f5ed
@@ -1166,6 +1198,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk.broadPeak.gz
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 14805e857c7088b116ac4413799b53cd
@@ -1193,6 +1226,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep1.fastq.gz
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum e10c44f6443aec1664296090437a96ca
@@ -1220,6 +1254,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep2.fastq.gz
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 9030eb6ba79ceb54aa852fdc2bb9ee45
@@ -1248,6 +1283,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 19c6e61d2cb02d9f1da29345c80af4ab
@@ -1276,6 +1312,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 566d50a8361a653b7520e0a0ed3ca94d
@@ -1303,6 +1340,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 729564ff1615646ce49c8e748dd5c512
@@ -1330,6 +1368,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 2c7fd7f088814aad49260ab9b5cea769
@@ -1357,6 +1396,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
 expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946530
 grant Hardison
 lab PSU-m
 md5sum 6ca230f6caf6dd3776107e191986249b
@@ -1438,6 +1478,7 @@ dateUnrestricted 2012-09-15
 dccAccession wgEncodeEM001923
 expId 1923
 fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep1.fastq.gz
+geoSampleAccession GSM946521
 grant Hardison
 lab PSU-m
 md5sum d84da8dc33495fe3d7493aea31bce1e3
@@ -1465,6 +1506,7 @@ dateUnrestricted 2012-09-15
 dccAccession wgEncodeEM001923
 expId 1923
 fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
+geoSampleAccession GSM946521
 grant Hardison
 lab PSU-m
 md5sum 3e35831996260ced688daac3c021a131
@@ -1492,6 +1534,7 @@ dateUnrestricted 2012-09-15
 dccAccession wgEncodeEM001923
 expId 1923
 fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM946521
 grant Hardison
 lab PSU-m
 md5sum a02c9860c09456e200ec00fbed66b503
@@ -1519,6 +1562,7 @@ dateUnrestricted 2012-09-15
 dccAccession wgEncodeEM001923
 expId 1923
 fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep2.bigWig
+geoSampleAccession GSM946521
 grant Hardison
 lab PSU-m
 md5sum f3da921afc1b1c1261153355a9d4fa57
@@ -1546,6 +1590,7 @@ dateUnrestricted 2012-09-15
 dccAccession wgEncodeEM001923
 expId 1923
 fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputSig.bigWig
+geoSampleAccession GSM946521
 grant Hardison
 lab PSU-m
 md5sum fe9c00a1e26cda9b6f62815981c71d52
@@ -1564,7 +1609,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1591,7 +1636,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1628,6 +1673,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum d2029f507b9f28c015369513e61bf6de
@@ -1656,6 +1702,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum 4531c0e01a949cd1b274d00bb4fd4f15
@@ -1684,6 +1731,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum 0a6dec9ece7fbadf2897f28ed4e8ad81
@@ -1711,6 +1759,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum 96bcd1d7c869909dbb6b4334c5817378
@@ -1738,6 +1787,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum 64fd448f6173c467ac44bd88d96e0461
@@ -1765,6 +1815,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum ff686c3db1d6527336b2e3ff5ea0c211
@@ -1783,7 +1834,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1792,6 +1843,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum 9f8c8931a7a78118b08a731afa468956
@@ -1810,7 +1862,7 @@ age E14.5
 antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1819,6 +1871,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
 expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946536
 grant Hardison
 lab PSU-m
 md5sum a48983a35352bc6c3a5f2a78e87f3a2c
@@ -1837,7 +1890,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1864,7 +1917,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -1901,6 +1954,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum b09b43755eb2cd0b5a4fbbb64b4c878e
@@ -1929,6 +1983,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum e432c01c4e38d6402e402f4415faef77
@@ -1957,6 +2012,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum 0c2400376a914097498825227ef2ae99
@@ -1984,6 +2040,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum 7269ce8894c5af61747fc4ee6ae844fe
@@ -2011,6 +2068,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum be9f84de8696ff22cf0b0306c7ce875c
@@ -2038,6 +2096,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum 7a9c3233c81a8a2bfe12091fcb5502f9
@@ -2056,7 +2115,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2065,6 +2124,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum 19a947c5bd3d33bf7bd56ea209c7dd6a
@@ -2083,7 +2143,7 @@ age E14.5
 antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2092,6 +2152,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
 expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946524
 grant Hardison
 lab PSU-m
 md5sum ba89ebd60035d80fa9cb6d3ff7dc2fed
@@ -2110,7 +2171,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2137,7 +2198,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2174,6 +2235,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum 76d64b5f5f3b9b458c2fbd4a31c1d35e
@@ -2202,6 +2264,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum 208d7e0889b62a2bc4d8f82a3bc9004d
@@ -2230,6 +2293,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum e9562592b10ad9fad550e388006f4acd
@@ -2257,6 +2321,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum 46e5a21e5d7d2e4fffee0ad21198626e
@@ -2284,6 +2349,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum 026c2b8c256d2ee496104bf265c79363
@@ -2311,6 +2377,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum f879052384a138c2aef1162199dbd497
@@ -2329,7 +2396,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2338,6 +2405,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum f7203c69a798a61cb6474f6d5177ae08
@@ -2356,7 +2424,7 @@ age E14.5
 antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2365,6 +2433,7 @@ dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
 expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946549
 grant Hardison
 lab PSU-m
 md5sum d0749b9eb8984a9470370f1062881a9f
@@ -2383,7 +2452,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2410,7 +2479,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2447,6 +2516,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 7162abd5a30d7001cf6b3e55c41ca917
@@ -2475,6 +2545,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 0be6760f0c099d735cbe3f18ea71ccc9
@@ -2503,6 +2574,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum e6361824939fc05a0bbe6780cd8a5a61
@@ -2530,6 +2602,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 5400337407d9dfd59a25c0b096a649e2
@@ -2557,6 +2630,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 6943be5291fa757a347253082f16045b
@@ -2584,6 +2658,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 813b3f7d29779c4a58931bbdd1c4e638
@@ -2602,7 +2677,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2611,6 +2686,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum d0d9e168b91be6de5cbd0dcdb350d8a0
@@ -2629,7 +2705,7 @@ age E14.5
 antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2638,6 +2714,7 @@ dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
 expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946547
 grant Hardison
 lab PSU-m
 md5sum 493b17b9718dc381d288868ec0e0d73d
@@ -2656,7 +2733,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2683,7 +2760,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2720,6 +2797,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum 0c8495320ef6c4d58cb35cb934e308bb
@@ -2748,6 +2826,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum aa6dced1893ecfdb0167212dc652b93a
@@ -2776,6 +2855,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum f798745d8c2205315a942155ef2cecd2
@@ -2803,6 +2883,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum defebeba98ef2c036d1741f2ef7baee2
@@ -2830,6 +2911,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum 5600fd7985f83393c8c7449445504d32
@@ -2857,6 +2939,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum fd80615dd6046194540b56cddd1d8261
@@ -2875,7 +2958,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2884,6 +2967,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum 7e540495788697993397c6d30b4663f8
@@ -2902,7 +2986,7 @@ age E14.5
 antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -2911,6 +2995,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
 expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946543
 grant Hardison
 lab PSU-m
 md5sum d3f6b864da6cb423141e87f75ea28cc7
@@ -2989,6 +3074,7 @@ dateSubmitted 2011-12-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946544
 grant Hardison
 lab PSU-m
 md5sum 7ca2f80301586742feb40121510450ac
@@ -3015,6 +3101,7 @@ dateSubmitted 2011-12-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946544
 grant Hardison
 lab PSU-m
 md5sum 0b2fe06fc25a78272216fe84805bd0f1
@@ -3041,6 +3128,7 @@ dateSubmitted 2011-12-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946544
 grant Hardison
 lab PSU-m
 md5sum 05ae0dcd489fec1ece7ea27d7db66bd6
@@ -3067,6 +3155,7 @@ dateSubmitted 2011-12-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946544
 grant Hardison
 lab PSU-m
 md5sum f7455a125f32ed94a555168758881eff
@@ -3093,6 +3182,7 @@ dateSubmitted 2011-12-14
 dccAccession wgEncodeEM002350
 expId 2350
 fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946544
 grant Hardison
 lab PSU-m
 md5sum 0a2245f686dac1de5f325953d7a6383c
@@ -3174,9 +3264,10 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
-md5sum 547f82f1a8862d4ed92ae46d28e8e473
+md5sum ffa498b4a6c54f68b9060d649d00f78f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3201,6 +3292,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum 657359ab743e3db9a241d578b5e33cb6
@@ -3228,6 +3320,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum db17a99182cc0d17ef43f9dc6130758b
@@ -3255,6 +3348,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum 7d6719a9c4c414f68a2353ada28e969a
@@ -3282,6 +3376,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum aa76443f233231944901d1ffbcfa40af
@@ -3309,6 +3404,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum d3cf084ca6cd62c4096090a620d541e8
@@ -3336,6 +3432,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum d6faf7637f750b0521e0901379e73c96
@@ -3363,6 +3460,7 @@ dateSubmitted 2010-12-01
 dccAccession wgEncodeEM001915
 expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig.bigWig
+geoSampleAccession GSM946535
 grant Hardison
 lab PSU-m
 md5sum 0402081b9189ecf14fcbd6aebf95c3af
@@ -3444,6 +3542,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 822ccf2107bbb2f555b90e97a87482f6
@@ -3471,6 +3570,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum af51e1fbaf1bcfc3cb5a3266178e9f8a
@@ -3498,6 +3598,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 4439dc373fdef98f7b3c902efdaa2144
@@ -3525,6 +3626,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum c0c4901d66e286267143164402056679
@@ -3552,6 +3654,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 474132ca22f1f6b900cbc98e841533df
@@ -3579,6 +3682,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 3588543432f82cacad9daf03c0426ccb
@@ -3606,6 +3710,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 62c6e1403276596a04f4ea50282b1cad
@@ -3633,6 +3738,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001919
 expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946533
 grant Hardison
 lab PSU-m
 md5sum 507719492afc3b22ba35500bdfa43684
@@ -3651,7 +3757,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3677,7 +3783,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3712,6 +3818,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum 79795f855925d68ee71201a8263dbbf9
@@ -3739,6 +3846,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum 31758335c847bec3a7ce0b6fd2200011
@@ -3766,6 +3874,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum 2703bdb3c27b84944d7b1ed573811181
@@ -3792,6 +3901,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum f45459ba7e3ad0c6ae9d2c9074a7907d
@@ -3818,6 +3928,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum af5a3510816fb026d43f6f57e7e0744b
@@ -3844,6 +3955,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum 1401916586c5e08806d99a7fa4f6be89
@@ -3862,7 +3974,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3870,6 +3982,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep1.fastq.gz
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum a0019fa558e4a1f8b10346a0571f922e
@@ -3888,7 +4001,7 @@ age E0
 antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -3896,6 +4009,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM002374
 expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep2.fastq.gz
+geoSampleAccession GSM946542
 grant Hardison
 lab PSU-m
 md5sum 7db1737f23992c8d4ffe2584c20f8e61
@@ -3975,6 +4089,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 8495266569b8f694d99973c84daab623
@@ -4001,6 +4116,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 6b97aa1efdccc6f13b3c305d10ff1d13
@@ -4027,6 +4143,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum b00dcff909db93100a76068047d70986
@@ -4054,6 +4171,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 06f651857b523c0ad00c59b2c8259fd2
@@ -4081,6 +4199,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum fd0bb13c0f786edadb183e1ce0c8fb59
@@ -4107,6 +4226,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 3209a1de404dbebdef4ec6342e773a89
@@ -4133,6 +4253,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 27c2ba5832efc1c870fb3768129f4c83
@@ -4159,6 +4280,7 @@ dateSubmitted 2011-09-30
 dccAccession wgEncodeEM002363
 expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946531
 grant Hardison
 lab PSU-m
 md5sum 481649774165d40982002f4896a52255
@@ -4241,6 +4363,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum de41f6602327928024f4513c6acd3029
@@ -4268,6 +4391,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum 349175733fed3023aba3a8985361e016
@@ -4295,6 +4419,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum 7dfc1c6268c03c978e538eae79d4145d
@@ -4323,6 +4448,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum 95311736dad7aadee1117e1417184d2b
@@ -4351,6 +4477,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum 7d372bcf6970101cb4dfc85b6460f901
@@ -4378,6 +4505,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum a5aee54a1bf767a634de6f0f39735e32
@@ -4405,6 +4533,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum c84d4d9e49e81c71f922162c4e07e0cd
@@ -4432,6 +4561,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
 expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946529
 grant Hardison
 lab PSU-m
 md5sum 5a0d2f0725c639e239ba2e6712fa3b33
@@ -4510,6 +4640,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946538
 grant Hardison
 lab PSU-m
 md5sum 8ec58e1f276061d51c08210a218116c6
@@ -4536,6 +4667,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946538
 grant Hardison
 lab PSU-m
 md5sum 70209ff9fa28211bb633a9624836b360
@@ -4562,6 +4694,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946538
 grant Hardison
 lab PSU-m
 md5sum 56355774e5520eacfb730acfa100445e
@@ -4588,6 +4721,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946538
 grant Hardison
 lab PSU-m
 md5sum dfdcb2450a49535e7c6df018b3d85dd6
@@ -4614,6 +4748,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001916
 expId 1916
 fileName wgEncodePsuHistoneG1eInputME0S129InputSig.bigWig
+geoSampleAccession GSM946538
 grant Hardison
 lab PSU-m
 md5sum e3f604047f4fec7ceed6f865235a7610
@@ -4632,7 +4767,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4659,7 +4794,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4695,6 +4830,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum 5deed49d7612e5c970de6ef619766c16
@@ -4723,6 +4859,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum 6de0d748630eec7ad4d5674beadffc37
@@ -4751,6 +4888,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum cb1ff86ef636cf989cec9ea64dafaad9
@@ -4778,6 +4916,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum b324721c73b387e6989b7594c12cb830
@@ -4805,6 +4944,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum 4555dc57db258bd91e150ffa3538ff58
@@ -4832,6 +4972,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig.bigWig
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum 73b1ba09039a4a4ad4f0dfa64360b3ed
@@ -4851,7 +4992,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4859,6 +5000,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep1.fastq.gz
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum ea3c3eeae2cf6a352f316e68f6795caa
@@ -4878,7 +5020,7 @@ age E0
 antibody H3K4me1
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4886,6 +5028,7 @@ dateSubmitted 2011-11-11
 dccAccession wgEncodeEM001918
 expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep2.fastq.gz
+geoSampleAccession GSM946534
 grant Hardison
 lab PSU-m
 md5sum 4cfede6763c10ff5aa97e9df2712fb8e
@@ -4970,6 +5113,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum b28eb096ef613d0382b60188e5108b05
@@ -4998,6 +5142,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum e2fe5a6573836ff0243dfae0721a280c
@@ -5026,6 +5171,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum 633165468d298416ba03a5bba35d5269
@@ -5054,6 +5200,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum 2ab36591bb60e686d1e0b02ddd0a5022
@@ -5082,6 +5229,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum ff5f98ecdde915c491d9195eae9049a1
@@ -5110,6 +5258,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum 4af5be583fc4f63c8feed71cbcd9ea2a
@@ -5138,6 +5287,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum 6bda07c1912ee0845fc2fb89d2a73fc0
@@ -5166,6 +5316,7 @@ dateSubmitted 2010-12-02
 dccAccession wgEncodeEM001920
 expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946519
 grant Hardison
 lab PSU-m
 md5sum 6b42bda7854a6f73b1a3a4a61c21d0f3
@@ -5185,7 +5336,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5212,7 +5363,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5248,6 +5399,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 6b97db8a653fe96f4ebe5e299011d647
@@ -5276,6 +5428,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 46d5fbd7c435a9b5f939d860d76a5dad
@@ -5304,6 +5457,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 0667f697de9ffaeae6e2e00a0f91de6a
@@ -5331,6 +5485,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 69ebc27b7c37de512d212fd46d98ece5
@@ -5358,6 +5513,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 7f892abf189821d31163d7c1ef96448f
@@ -5385,6 +5541,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum 9125da495e8cd7078e19f7d0ad7eb0cf
@@ -5404,7 +5561,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5412,6 +5569,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep1.fastq.gz
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum f1dda95e720324b718f1208afcce7267
@@ -5431,7 +5589,7 @@ age E0
 antibody H3K9me3
 cell G1E-ER4
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -5439,6 +5597,7 @@ dateSubmitted 2011-11-15
 dccAccession wgEncodeEM002377
 expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep2.fastq.gz
+geoSampleAccession GSM946545
 grant Hardison
 lab PSU-m
 md5sum cf1a1955d0e7db25edd926eb622bc979
@@ -5521,6 +5680,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum 29f3599462e37893d0160fc93bc96f8e
@@ -5548,6 +5708,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum c61bdf5834498c6284f34c479d8fecbf
@@ -5575,6 +5736,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum bd3d918795a43081c8ed96cd54822fb7
@@ -5603,6 +5765,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum 414e26a47796f6d33fca93e57d0de455
@@ -5631,6 +5794,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum d53a1de8ad8067e92d53691d7dc61415
@@ -5658,6 +5822,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum fc24f55cf1b4ca22d5c63d4b5da42968
@@ -5685,6 +5850,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum b28d081b007f2928b02b7e731b0c2177
@@ -5712,6 +5878,7 @@ dateSubmitted 2011-09-23
 dccAccession wgEncodeEM001917
 expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig.bigWig
+geoSampleAccession GSM946537
 grant Hardison
 lab PSU-m
 md5sum 6a93d2322bdea2b5f74019f9ce59d0e7
@@ -5747,7 +5914,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5775,7 +5942,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5797,13 +5964,14 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk.broadPeak.gz
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum 6a15b2a7f84a6d8f5b0d43a29537ef05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
@@ -5825,6 +5993,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum 0bc88d37f21ceeae6aafcaa5cab91a07
@@ -5832,7 +6001,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5853,6 +6022,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum d39a2067a9af1b0c297f537751e376f1
@@ -5860,7 +6030,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5882,6 +6052,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum 656450cfb054431079e4a021d5340bcb
@@ -5889,7 +6060,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5911,6 +6082,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum 0d3b563362440819e3125985dfdfdf66
@@ -5918,7 +6090,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5997
 treatment diffProtD_24hr
@@ -5939,6 +6111,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum 3b14b3a8eb2d65dc5cc95c961625d846
@@ -5946,7 +6119,7 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5967,6 +6140,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum d8e59ca68a419545a6e74110f3272761
@@ -5974,7 +6148,7 @@ project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 treatment diffProtD_24hr
@@ -5995,13 +6169,14 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
 expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig.bigWig
+geoSampleAccession GSM946526
 grant Hardison
 lab PSU-m
 md5sum fbdd78417491e80df38aa56e4fdd4196
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
-sex B
+sex M
 strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
@@ -6076,6 +6251,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946520
 grant Hardison
 lab PSU-m
 md5sum 88bd2eae678e6456b565acf78434854c
@@ -6103,6 +6279,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946520
 grant Hardison
 lab PSU-m
 md5sum 77e301ab157025444bf852ba2018891b
@@ -6130,6 +6307,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1.bigWig
+geoSampleAccession GSM946520
 grant Hardison
 lab PSU-m
 md5sum a647363fc3c7a526395f2fd078e0925f
@@ -6157,6 +6335,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM946520
 grant Hardison
 lab PSU-m
 md5sum 41ee6e553da1b76f869a2227e5350e13
@@ -6184,6 +6363,7 @@ dateSubmitted 2011-12-16
 dccAccession wgEncodeEM001921
 expId 1921
 fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig.bigWig
+geoSampleAccession GSM946520
 grant Hardison
 lab PSU-m
 md5sum bab3b99c521c19487b65a4e850ee2546
@@ -6267,6 +6447,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum e3aa47a44bcde38deebc00d35c87b394
@@ -6294,6 +6475,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum 714dc0667fb34bd2ba0cad39dd81460b
@@ -6321,6 +6503,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum b5ef52eecca4a3c193f2c9988d550ab6
@@ -6349,6 +6532,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum aab87d38398c735f87137a780a7903ff
@@ -6377,6 +6561,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum 5c026a6a64039f07af408b3ccc055567
@@ -6404,6 +6589,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum 6c8f5737f565e5e97f7989442beaafb2
@@ -6431,6 +6617,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum afce68ee008e25d047bb4515bb83473b
@@ -6458,6 +6645,7 @@ dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
 expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946525
 grant Hardison
 lab PSU-m
 md5sum ffcbeb157e018886f80c2ade44ceffb9
@@ -6540,6 +6728,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 98af5f3a72904eb655143cb287841a4d
@@ -6567,6 +6756,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 350dda4f5b28cb5a24b5db3b97f0dfdc
@@ -6594,6 +6784,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 1505b6be50bdaffe4a1964723275f17e
@@ -6622,6 +6813,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 81b1ac9e6900c7597fb32385d0ef90b3
@@ -6650,6 +6842,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 5f7e20216d052ebe741aaa328f46a864
@@ -6677,6 +6870,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 4d8baf05099c9579b315db67b7c795a2
@@ -6704,6 +6898,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 8aa4d520feda3bf7c6524f817c8e05b6
@@ -6731,6 +6926,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
 expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946527
 grant Hardison
 lab PSU-m
 md5sum 139286a4574f20f18681fe5a32ea455d
@@ -6749,7 +6945,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6776,7 +6972,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6813,6 +7009,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum 3c21fe7c4c6623aa80e114cbfca3cb59
@@ -6841,6 +7038,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum cb06367abfe9a5bcfa1cf673618aa38b
@@ -6869,6 +7067,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum 0239535eab6225e239d8eb9df7f60ae9
@@ -6896,6 +7095,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum acdbe5f4b0d9096b790b8ea4cf4be732
@@ -6923,6 +7123,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum d0d807d32da01b7cf37488b0971c9ce8
@@ -6950,6 +7151,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum 18b831c524be022a02eee9567d7876b3
@@ -6968,7 +7170,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -6977,6 +7179,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum 83b53c358b002959fa4d1dc418716654
@@ -6995,7 +7198,7 @@ age E14.5
 antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7004,6 +7207,7 @@ dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
 expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946541
 grant Hardison
 lab PSU-m
 md5sum 482b429f5ef6ea16313ca5275d5a1a34
@@ -7022,7 +7226,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7049,7 +7253,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7086,6 +7290,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 4132641494809f778d1f10fe9317c71a
@@ -7114,6 +7319,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 7f2c496fbf6d467e996dcbe2e49b3845
@@ -7142,6 +7348,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum ba7eff0d9c6a3b4ee355bf2aeeff35b6
@@ -7169,6 +7376,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum b1caada2317031c7bd2bed9de38a7589
@@ -7196,6 +7404,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 03eb64c0c37b8c212248a0aa8af52fd5
@@ -7223,6 +7432,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 6723fa046ee63c88d5ca9ebf9d55d178
@@ -7241,7 +7451,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7250,6 +7460,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 68bca405495b6a8f1a6c7e49f9664a1d
@@ -7268,7 +7479,7 @@ age E14.5
 antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7277,6 +7488,7 @@ dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
 expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946523
 grant Hardison
 lab PSU-m
 md5sum 36133e23edd18a025777a9ebef81150a
@@ -7295,7 +7507,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7322,7 +7534,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7359,6 +7571,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum 641ebece6900a187bc1141d5baa3d4c9
@@ -7387,6 +7600,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum cbcd0486657984ee738d014ce99db859
@@ -7415,6 +7629,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum a57ffb2c0283a659ea991a9ad2d9931e
@@ -7442,6 +7657,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum 511dbd1a412e341e4018a98554249b8c
@@ -7469,6 +7685,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum 7dc2e56f3769c49cda394b78cb97be4b
@@ -7496,6 +7713,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum 592314238e2a4f2649fe340e289bef94
@@ -7514,7 +7732,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7523,6 +7741,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum b37a24a5919ebf89b0cf1292a1e16f36
@@ -7541,7 +7760,7 @@ age E14.5
 antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
+control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -7550,6 +7769,7 @@ dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
 expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1RawDataRep2.fastq.gz
+geoSampleAccession GSM946540
 grant Hardison
 lab PSU-m
 md5sum 16d3d530fee229ac53172bcf2a6c3673
@@ -7631,6 +7851,7 @@ dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM002352
 expId 2352
 fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM946539
 grant Hardison
 lab PSU-m
 md5sum b28f0eb807d7a26c9ce281d9ac825349
@@ -7658,6 +7879,7 @@ dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM002352
 expId 2352
 fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM946539
 grant Hardison
 lab PSU-m
 md5sum 01c1545dcbed2b0e2a5e7698789922f0
@@ -7685,6 +7907,7 @@ dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM002352
 expId 2352
 fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM946539
 grant Hardison
 lab PSU-m
 md5sum 782b3673b4f75b9597a64e4ff899a92f
@@ -7712,6 +7935,7 @@ dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM002352
 expId 2352
 fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM946539
 grant Hardison
 lab PSU-m
 md5sum 3160224d283ca3efbd13a8c72b92c497
@@ -7739,6 +7963,7 @@ dateUnrestricted 2012-09-16
 dccAccession wgEncodeEM002352
 expId 2352
 fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputSig.bigWig
+geoSampleAccession GSM946539
 grant Hardison
 lab PSU-m
 md5sum 74a96128dbf01ef416d1ae4ce193ea13
@@ -7751,193 +7976,4 @@ subId 5239
 tableName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1.bam,wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1.bam.bai
-grant Hardison
-lab PSU-m
-md5sum 793fcd334f2f550ff3e708cf73b0378a,d02a7fe73853c7b96b9c55db937a3787
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view Alignments
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2.bam,wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2.bam.bai
-grant Hardison
-lab PSU-m
-md5sum fcec7eef6d8170bd6f87c4b3db28b565,c1601d01ef7a358cd6bac3f9abaa93c5
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view Alignments
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep1
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-md5sum eb321a714a1fa531257682f66cc6ba03
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view RawData
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep2
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-md5sum e0146ae40f4d03cd9ce9203218953d06
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view RawData
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep1
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep1.bigWig
-grant Hardison
-lab PSU-m
-md5sum b0e6e13af5f44865c3e2dcbf59800d53
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view RepSignal
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep2
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep2.bigWig
-grant Hardison
-lab PSU-m
-md5sum 8b87fe200d2f725e150180c71ca8d091
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex U
-strain C57BL/6
-subId 5240
-view RepSignal
-
-metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
-objType table
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuHistone
-control Input
-controlId wgEncodeEM001929
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-16
-dccAccession wgEncodeEM001929
-expId 1929
-fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig.bigWig
-grant Hardison
-lab PSU-m
-md5sum a920b3ea13270fb08a1ac15e1c1afab0
-project wgEncode
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex U
-strain C57BL/6
-subId 5240
-tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
-view Signal
-
-# MAGIC: 1428255089
+# MAGIC: 689895366
