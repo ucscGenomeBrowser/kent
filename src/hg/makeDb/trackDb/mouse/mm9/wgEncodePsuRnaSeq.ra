@@ -1,7 +1,7 @@
 track wgEncodePsuRnaSeq
 compositeTrack on
-shortLabel PSU RnaSeq
-longLabel ENCODE PSU Hardison RnaSeq
+shortLabel PSU RNA-seq
+longLabel RNA-seq from ENCODE/PSU
 group regulation
 subGroup1 view Views Signal=Signal MinusRawSignal=Minus_Raw_Signal PlusRawSignal=Plus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) FVP=FV-progenitor FVLS=FVL-stem MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
@@ -832,7 +832,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 14hr A 2
-        longLabel G1E-ER4 Estradiol 1 4hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
+        longLabel G1E-ER4 Estradiol 14 hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
         subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bam
         color 153,38,0

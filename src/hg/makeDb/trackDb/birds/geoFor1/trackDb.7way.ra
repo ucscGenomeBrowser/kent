@@ -6,7 +6,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade birds=Birds vert=Vertebrate all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility hide
+visibility full
 type bed 4
 group compGeno
 priority 103.29
@@ -45,19 +45,19 @@ priority 103.29
     view phyloP
     visibility full
     subTrack cons7way
-    viewLimits -20.0:7.532
-    viewLimitsMax -20:7.532
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
 
-        track phyloP7wayGlire
+        track phyloP7wayBirds
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP clade=birds
-        shortLabel Glire Cons
-        longLabel Glire Basewise Conservation by PhyloP
+        shortLabel Birds Cons
+        longLabel Birds Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.728 1.271
+        type wig -4.169 0.508
         maxHeightPixels 100:50:11
-        viewLimits -3:1.271
+        viewLimits -3.08:0.508
         autoScale off
         spanList 1
         windowingFunction mean
@@ -69,12 +69,12 @@ priority 103.29
         subTrack cons7wayViewphyloP on
         subGroups view=phyloP clade=vert
         shortLabel Vertebrate Cons
-        longLabel Vertebrate Basewise Conservation by PhyloP
+        longLabel Vertebrate Basewise Conservation by PhyloP (human, mouse, finch)
         noInherit on
         configurable on
-        type wig -5.566 4.914
+        type wig -1.282 0.673
         maxHeightPixels 100:50:11
-        viewLimits -2.3:2.48
+        viewLimits -0.91:0.673
         autoScale off
         spanList 1
         windowingFunction mean
@@ -82,16 +82,16 @@ priority 103.29
         altColor 120,40,40
         priority 3
 
-        track phyloP7wayAll
+        track phyloP7way
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP clade=all
         shortLabel 7 vertebrates Cons
         longLabel 7 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -20 7.532
+        type wig -4.711 0.934
         maxHeightPixels 100:50:11
-        viewLimits -4.5:4.5
+        viewLimits -3.107:0.934
         autoScale off
         spanList 1
         windowingFunction mean
@@ -103,14 +103,14 @@ priority 103.29
     track cons7wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility hide
+    visibility full
     subTrack cons7way
 
-        track phastCons7wayGlire
-        subTrack cons7wayViewphastcons off
+        track phastCons7wayBirds
+        subTrack cons7wayViewphastcons on
         subGroups view=phastcons clade=birds
-        shortLabel Glire Cons
-        longLabel Glire Conservation by PhastCons
+        shortLabel Birds Cons
+        longLabel Birds Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -123,10 +123,10 @@ priority 103.29
         priority 10
 
         track phastCons7wayVertebrate
-        subTrack cons7wayViewphastcons on
+        subTrack cons7wayViewphastcons off
         subGroups view=phastcons clade=vert
         shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
+        longLabel Vertebrate Conservation by PhastCons (human, mouse, finch)
         noInherit on
         configurable on
         type wig 0 1
@@ -158,11 +158,11 @@ priority 103.29
     track cons7wayViewelements
     shortLabel Conserved Elements
     view elements
-    visibility hide
+    visibility dense
     subTrack cons7way
 
-        track phastConsElements7wayGlire
-        subTrack cons7wayViewelements off
+        track phastConsElements7wayBirds
+        subTrack cons7wayViewelements on
         subGroups view=elements clade=birds
         shortLabel Bird El
         longLabel Birds Conserved Elements
@@ -175,14 +175,14 @@ priority 103.29
         subTrack cons7wayViewelements on
         subGroups view=elements clade=vert
         shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
+        longLabel Vertebrate Conserved Elements (human, mouse, finch)
         noInherit on
         type bed 5 .
         color 130,30,60
         priority 22
 
         track phastConsElements7way
-        subTrack cons7wayViewelements off
+        subTrack cons7wayViewelements on
         subGroups view=elements clade=all
         shortLabel 7 vertebrates El
         longLabel 7 vertebrates Conserved Elements

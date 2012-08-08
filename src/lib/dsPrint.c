@@ -13,7 +13,9 @@
 
 // The stack of dyString buffers is only accessible locally
 static struct dyString *dsStack = NULL;
-#define dsAssertToken(token) assert((int)(long long)dsStack == token)
+// It is desirable to return a unique token but NOT give access to the dyString it is based on
+#define dsPointerToToken(pointer) (int)((long)(pointer) & 0xffffffff)
+#define dsAssertToken(token) assert(dsPointerToToken(dsStack) == token)
 
 // This module defaults to STDOUT but an alternative can be registered
 static FILE *dsOut = NULL;
@@ -30,7 +32,7 @@ if (initialBufSize <= 0)
     initialBufSize = 2048; // presume large
 struct dyString *ds = dyStringNew(initialBufSize);
 slAddHead(&dsStack,ds);
-return (int)(long long)ds;
+return dsPointerToToken(ds);
 }
 
 
@@ -146,7 +148,7 @@ int ix = 0;
 
 for (; ds != NULL; ds = ds->next, ++ix)
     {
-    if ((int)(long long)ds == token)
+    if (dsPointerToToken(ds) == token)
         return ix;
     }
 return -1;
@@ -233,7 +235,7 @@ if (dsStack != NULL)
     {
     while (dsStack != NULL)
         {
-        int token = (int)(long long)dsStack;
+        int token = dsPointerToToken(dsStack);
         len = dsPrintFlushAndClose(token); // Only the last length is needed!
         }
     }
@@ -256,7 +258,7 @@ char *dsPrintCannibalizeAndCloseAll()
 {
 while (dsStack != NULL && dsStack->next != NULL)
     {
-    int token = (int)(long long)dsStack;
+    int token = dsPointerToToken(dsStack);
     dsPrintFlushAndClose(token); // Flushes each to the next lower buffer
     }
 if (dsStack == NULL)
