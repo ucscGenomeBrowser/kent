@@ -168,7 +168,7 @@ wt->useCount += 1;
 for (node = chain->head; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
-    verbose(2, "  %s\n", word);
+    verbose(2, "  adding %s\n", word);
     wt = wordTreeAddFollowing(wt, word);
     }
 }
@@ -261,15 +261,15 @@ struct wordTree *picked = NULL;
 
 /* Debug output. */
     {
-    uglyf("   pickRandomOnOutTarget(");
+    verbose(2, "   pickRandomOnOutTarget(");
     struct wordTree *wt;
     for (wt = list; wt != NULL; wt = wt->next)
         {
 	if (wt != list)
-	    uglyf(" ");
-	uglyf("%s:%d", wt->word, wt->outTarget);
+	    verbose(2, " ");
+	verbose(2, "%s:%d", wt->word, wt->outTarget);
 	}
-    uglyf(") total %d\n", wordTreeSumOutTargets(list));
+    verbose(2, ") total %d\n", wordTreeSumOutTargets(list));
     }
 
 /* Figure out total number of outputs left, and a random number between 0 and that total. */
@@ -277,7 +277,7 @@ int total = wordTreeSumOutTargets(list);
 if (total > 0)
     {
     int threshold = rand() % total; 
-    uglyf("      threshold %d\n", threshold);
+    verbose(2, "      threshold %d\n", threshold);
 
     /* Loop through list returning selection corresponding to random threshold. */
     int binStart = 0;
@@ -286,11 +286,11 @@ if (total > 0)
 	{
 	int size = wt->outTarget;
 	int binEnd = binStart + size;
-	uglyf("      %s size %d, binEnd %d\n", wt->word, size, binEnd);
+	verbose(2, "      %s size %d, binEnd %d\n", wt->word, size, binEnd);
 	if (threshold < binEnd)
 	    {
 	    picked = wt;
-	    uglyf("      picked %s\n", wt->word);
+	    verbose(2, "      picked %s\n", wt->word);
 	    break;
 	    }
 	binStart = binEnd;
@@ -353,13 +353,13 @@ struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNo
  * have statistics for what comes next given the words in list, then it returns
  * NULL. */
 {
-uglyf(" predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
+verbose(2, " predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
 struct dlNode *node;
 for (node = list; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
     wt = wordTreeFindInList(wt->children, word);
-    uglyf("   wordTreeFindInList(%s) = %p %s\n", word, wt, wordTreeString(wt));
+    verbose(2, "   wordTreeFindInList(%s) = %p %s\n", word, wt, wordTreeString(wt));
     if (wt == NULL || wt->children == NULL)
         break;
     }
@@ -458,6 +458,7 @@ for (;;)
     }
 dlListFree(&ll);
 carefulClose(&f);
+verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
 }
 
 static void wordTreeSort(struct wordTree *wt)
@@ -538,8 +539,6 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 
 wordTreeSort(wt);  // Make output of chain file prettier
-verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
-
 return wt;
 }
 
