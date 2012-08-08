@@ -1,10 +1,10 @@
 track wgEncodePsuRnaSeq
 compositeTrack on
-shortLabel PSU RnaSeq
-longLabel ENCODE PSU Hardison RnaSeq
+shortLabel PSU RNA-seq
+longLabel RNA-seq from ENCODE/PSU
 group regulation
 subGroup1 view Views Signal=Signal MinusRawSignal=Minus_Raw_Signal PlusRawSignal=Plus_Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) FVP=FV-progenitor FVLS=FVL-stem MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
+subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast FVP=FV-progenitor FVLS=FVL-stem G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
 subGroup3 sex Sex F=F M=M U=U B=B
 subGroup4 age Age E0=E0 E14HALF=E14.5 IMMORTAL=immortalized ADULT810WKS=adult-10-12wks ADULT5WKS=adult-5wks
 subGroup5 strain Strain s129=129 s2A4B=B10.H-2aH-4bp/Wts BALBCJ=BALB/cJ CD1=CD-1 C57BL6J=C57BL/6J UKN=Unknown
@@ -15,7 +15,7 @@ filterComposite dimZ=all dimA=multi
 dimensionAchecked R1X41,R1X45,R1X55,R2X99D
 dimensions dimensionX=cellType dimensionY=rep dimensionZ=treatment dimensionA=readType
 sortOrder cellType=+ treatment=+ readType=+ rep=+ view=-
-fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type rep=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex treatment=treatment age=age
 dragAndDrop subTracks
 priority 0
@@ -832,7 +832,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 14hr A 2
-        longLabel G1E-ER4 Estradiol 1 4hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
+        longLabel G1E-ER4 Estradiol 14 hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
         subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bam
         color 153,38,0

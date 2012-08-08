@@ -17,12 +17,10 @@ include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.release2.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)
-include wgEncodePsuTfbs.patch.ra beta,public
-include wgEncodePsuTfbs.release2.ra alpha
+include wgEncodePsuTfbs.release2.ra
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra public
-include wgEncodePsuHistone.release2.ra alpha,beta
+include wgEncodePsuHistone.release2.ra
 
 # LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.release2.ra beta,public

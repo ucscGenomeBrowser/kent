@@ -197,9 +197,6 @@ if (list != NULL)
     sqlDisconnect(&conn2);
     }
 
-/* Do SAM-T02 sub-section */
-doSamT02(swissProtAcc, database);
-
 /* Do modBase link. */
     {
     hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");

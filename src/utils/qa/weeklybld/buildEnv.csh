@@ -1,6 +1,6 @@
-setenv BRANCHNN 270
-setenv TODAY 2012-07-17             # v270 final
-setenv LASTWEEK 2012-06-26          # v269 final
+setenv BRANCHNN 271
+setenv TODAY 2012-08-07             # v271 final
+setenv LASTWEEK 2012-07-17          # v270 final
 setenv REVIEWDAY  2012-07-24        # v271 preview
 setenv LASTREVIEWDAY 2012-07-03     # v270 preview
 setenv REVIEW2DAY 2012-07-31        # v271 preview2
