@@ -832,7 +832,7 @@ noInherit on
         track wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hAlnRep2
         parent wgEncodePsuRnaSeqViewAlignments off
         shortLabel G1E-ER4 14hr A 2
-        longLabel G1E-ER4 Estradiol 1 4hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
+        longLabel G1E-ER4 Estradiol 14 hr 2x99D TC RNA-seq Alignments Rep 2 from ENCODE/PSU
         subGroups view=Alignments age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=eDIFFD14H rep=rep2
         type bam
         color 153,38,0

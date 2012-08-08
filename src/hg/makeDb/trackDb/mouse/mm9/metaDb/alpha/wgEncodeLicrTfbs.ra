@@ -169,6 +169,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
 dateUnrestricted 2013-02-25
+dccAccession wgEncodeEM003163
+expId 3163
 fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -197,6 +199,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
 dateUnrestricted 2013-02-25
+dccAccession wgEncodeEM003163
+expId 3163
 fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -225,6 +229,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
 dateUnrestricted 2013-02-25
+dccAccession wgEncodeEM003163
+expId 3163
 fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -253,6 +259,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
 dateUnrestricted 2013-02-25
+dccAccession wgEncodeEM003163
+expId 3163
 fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -281,6 +289,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-25
 dateUnrestricted 2013-02-25
+dccAccession wgEncodeEM003163
+expId 3163
 fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -2013,6 +2023,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-07
+dccAccession wgEncodeEM003164
+expId 3164
 fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -2041,6 +2053,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-07
+dccAccession wgEncodeEM003164
+expId 3164
 fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -2069,6 +2083,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-07
+dccAccession wgEncodeEM003164
+expId 3164
 fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -2097,11 +2113,14 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-07
+dccAccession wgEncodeEM003164
+expId 3164
 fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 01/12/2012 FISH A Lane 5-6
 md5sum 137be8b67e4459a5f3b29413373da7a5
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2124,11 +2143,14 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-07
+dccAccession wgEncodeEM003164
+expId 3164
 fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
 md5sum 8c4671ec882cdead6236d794876f15ac
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -5050,11 +5072,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5108,11 +5132,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5197,11 +5223,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5256,11 +5284,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5373,11 +5403,13 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002482
+expId 2482
 fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5462,11 +5494,13 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002482
+expId 2482
 fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5550,11 +5584,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5608,11 +5644,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5697,11 +5735,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5756,11 +5796,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8545,6 +8587,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum f231ffb8c9dc1ec2e222bb93041097ed,6264d991b8ebdf0ebd0427773e8a2e14
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8574,6 +8617,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 42edbb82dc96a37ef2571d24767d1958,87321416ccf0aec973cb3444393a47c1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8604,6 +8648,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum d78be60ce4073b12151aed92856d34fc
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8634,6 +8679,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 717f817d91049541fb6d4289e225d5b1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8664,6 +8710,7 @@ grant Ren
 lab LICR-m
 labVersion Pooled & filtered
 md5sum 0ceca399c1aaf77cb69661bf34df4d69
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -8800,11 +8847,13 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9275,11 +9324,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -9366,11 +9417,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9426,11 +9479,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9608,11 +9663,13 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001459
+expId 1459
 fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -10889,11 +10946,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -10947,11 +11006,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11036,11 +11097,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11095,11 +11158,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11212,11 +11277,13 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002494
+expId 2494
 fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11301,11 +11368,13 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002494
+expId 2494
 fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11389,11 +11458,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11447,11 +11518,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11536,11 +11609,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11595,11 +11670,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11646,4 +11723,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1625644955
+# MAGIC: -1823836636
