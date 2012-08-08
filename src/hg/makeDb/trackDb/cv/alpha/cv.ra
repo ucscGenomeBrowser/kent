@@ -217,7 +217,7 @@ termId BTO:0000938
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000938
 sex M
 tier 2
-protocol missing
+protocol Cellular_Dynamics_International_Batch_1:H1_Neurons_Round1.pdf Cellular_Dynamics_International_Batch_2:H1_Neurons_Round2.pdf  
 
 term LHCN-M2
 tag LHCNM2
