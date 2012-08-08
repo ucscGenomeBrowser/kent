@@ -11637,9 +11637,9 @@ label RBBP5 (A300-109A)
 term REST
 tag REST
 type Antibody
-target GST fusion amino acids 801-1097 of human REST
+target REST
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
-targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes.
+targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes. Target is GST fusion amino acids 801-1097 of human REST.
 vendorName Millipore
 vendorId 17-641
 orderUrl http://www.millipore.com/catalogue/item/17-641
