@@ -42,7 +42,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off 
         shortLabel T-Naive 8w Hs 1
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -60,8 +60,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgf3134RiiiMImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off 
-        shortLabel 3134 Immt Hs 1
-        longLabel 3134 immortalized RIII DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        shortLabel 3134 Hs 1
+        longLabel 3134 RIII DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type broadPeak
         color 0,158,115
@@ -70,7 +70,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots
         shortLabel Brain 8w Hs 1
-        longLabel Whole Brain adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Whole Brain C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 105,105,105
@@ -80,7 +80,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLiverC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots 
         shortLabel Liver 8w Hs 1
-        longLabel Liver adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 230,159,0
@@ -88,8 +88,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel 416B Immt Hs 1
-        longLabel 416B immortalized B6D2F1/J DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        shortLabel 416B Hs 1
+        longLabel 416B B6D2F1/J DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -99,7 +99,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel B-cell_CD19+ Hs 1
-        longLabel B-cell (CD19+) adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -108,7 +108,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel B-cell_CD43- Hs 1
-        longLabel B-cell (CD43-) adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -117,7 +117,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfHeartC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots 
         shortLabel Heart 8w Hs 1
-        longLabel Heart adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Heart C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -126,7 +126,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfKidneyC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Kidney 8w Hs 1
-        longLabel Kidney adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Kidney C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 204,121,167
@@ -135,7 +135,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLungC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Lung 8w Hs 1
-        longLabel Lung adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Lung  C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         # subId=5246 dateSubmitted=2011-12-17
@@ -143,7 +143,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfMelUknImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots 
         shortLabel MEL Immt Hs 1
-        longLabel MEL immortalized DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel MEL DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -153,7 +153,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDgfViewHotspots off
         shortLabel T-Naive 8w Hs 2
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Hotspots Rep 2 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Hotspots Rep 2 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep2
         type broadPeak
         color 86,180,233
@@ -162,7 +162,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThymusC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Thymus 8w Hs 1
-        longLabel Thymus adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Thymus  C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -171,7 +171,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel TReg 8w Hs 1
-        longLabel TReg adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel TReg C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -180,7 +180,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThelpaC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel THelp-Act 8w Hs 1
-        longLabel THelper-Activated adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel THelper-Activated C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -189,7 +189,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregaC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel TReg-Act 8w Hs 1
-        longLabel TReg-Activated adult-8wks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel TReg-Activated C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -198,7 +198,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfA20BalbcannMImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel A20 Immt Hs 1
-        longLabel A20 immortalized BALB/cAnN DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel A20 BALB/cAnN DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=A20 sex=M strain=BALBCANN treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -207,7 +207,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfEscj7129s1ME0HotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ES-CJ7 E0 Hs 1
-        longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel ES-CJ7 129S1/SVImJ DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -216,7 +216,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfNih3t3NihsMImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel NIH-3T3 Immt Hs 1
-        longLabel NIH-3T3 immortalized NIH/Swiss DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel NIH-3T3 NIH/Swiss DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -225,7 +225,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfRetinaC57bl6MNew1daysHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Retina 1day Hs 1
-        longLabel Retina newborn-1days C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Retina C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 105,105,105
@@ -234,7 +234,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ZhBTc4 E0 Hs 1
-        longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola diffProtB 24hr DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type broadPeak
         color 65,105,225
@@ -243,7 +243,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0HotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ZhBTc4 E0 Hs 1
-        longLabel ZhBTc4 E0 129/Ola DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -264,7 +264,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel T-Naive 8w Pk 1
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -283,7 +283,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgf3134RiiiMImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel 3134 Immt Pk 1
-        longLabel 3134 immortalized RIII DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel 3134 RIII DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type narrowPeak
         color 0,158,115
@@ -292,7 +292,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks 
         shortLabel Brain 8w Pk 1
-        longLabel WholeBrain adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel WholeBrain C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 105,105,105
@@ -302,7 +302,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLiverC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks
         shortLabel Liver 8w Pk 1
-        longLabel Liver adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 230,159,0
@@ -310,8 +310,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel 416B Immt Pk 1
-        longLabel 416B immortalized B6D2F1/J DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        shortLabel 416B Pk 1
+        longLabel 416B B6D2F1/J DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -321,7 +321,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel B-cell_CD19+ Pk 1
-        longLabel B-cell (CD19+) adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -330,7 +330,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel B-cell_CD43- Pk 1
-        longLabel B-cell (CD43-) adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -339,7 +339,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfHeartC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks 
         shortLabel Heart 8w Pk 1
-        longLabel Heart adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Heart C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 153,38,0
@@ -348,7 +348,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfKidneyC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Kidney 8w Pk 1
-        longLabel Kidney adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Kidney C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 204,121,167
@@ -357,7 +357,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLungC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Lung 8w Pk 1
-        longLabel Lung adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Lung  C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         # subId=5246 dateSubmitted=2011-12-17
@@ -365,7 +365,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfMelUknImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks 
         shortLabel MEL Immt Pk 1
-        longLabel MEL immortalized DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel MEL  DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -375,7 +375,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDgfViewPeaks off
         shortLabel T-Naive 8w Pk 2
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Peaks Rep 2 from ENCODE/UW 
+        longLabel T-Naive  C57BL/6 DNase-DGF Peaks Rep 2 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep2
         type narrowPeak
         color 86,180,233
@@ -384,7 +384,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThymusC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Thymus 8w Pk 1
-        longLabel Thymus adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Thymus  C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -393,7 +393,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel TReg 8w Pk 1
-        longLabel TReg adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel TReg C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -402,7 +402,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThelpaC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel THelp-Act 8w Pk 1
-        longLabel THelper-Activated adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel THelper-Activated C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -411,7 +411,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregaC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel TReg-Act 8w Pk 1
-        longLabel TReg-Activated adult-8wks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel TReg-Activated C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -420,7 +420,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfA20BalbcannMImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel A20 Immt Pk 1
-        longLabel A20 immortalized BALB/cAnN DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel A20 BALB/cAnN DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=A20 sex=M strain=BALBCANN treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -429,7 +429,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfEscj7129s1ME0PkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ES-CJ7 E0 Pk 1
-        longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel ES-CJ7 129S1/SVImJ DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -438,7 +438,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfNih3t3NihsMImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel NIH-3T3 Immt Pk 1
-        longLabel NIH-3T3 immortalized NIH/Swiss DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel NIH-3T3 NIH/Swiss DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -447,7 +447,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfRetinaC57bl6MNew1daysPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Retina 1day Pk 1
-        longLabel Retina newborn-1days C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel Retina C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
         color 105,105,105
@@ -456,7 +456,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ZhBTc4 E0 Pk 1
-        longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola diffProtB 24hr DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type narrowPeak
         color 65,105,225
@@ -465,7 +465,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0PkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ZhBTc4 E0 Pk 1
-        longLabel ZhBTc4 E0 129/Ola DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -486,7 +486,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel T-Naive 8w Sg 1
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 147010.000000
         color 86,180,233
@@ -505,7 +505,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgf3134RiiiMImmortalSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel 3134 Immt Sg 1
-        longLabel 3134 immortalized RIII DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel 3134 RIII DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type bigWig 1.000000 134493.000000
         color 0,158,115
@@ -514,7 +514,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfWbrainC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal 
         shortLabel Brain 8w Sg 1
-        longLabel WholeBrain adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel WholeBrain C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 44749.000000
         color 105,105,105
@@ -524,7 +524,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLiverC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal
         shortLabel Liver 8w Sg 1
-        longLabel Liver adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 35245.000000
         color 230,159,0
@@ -533,7 +533,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgf416bB6d2f1jImmortalSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel 416B Immt Sg 1
-        longLabel 416B immortalized B6D2F1/J DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel 416B B6D2F1/J DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type bigWig 1.000000 137025.000000
         color 86,180,233
@@ -543,7 +543,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel B-cell_CD19+ Sg 1
-        longLabel B-cell (CD19+) adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 102599.000000
         color 86,180,233
@@ -552,7 +552,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel B-cell_CD43- Sg 1
-        longLabel B-cell (CD43-) adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 62266.000000
         color 86,180,233
@@ -561,7 +561,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfHeartC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal
         shortLabel Heart 8w Sg 1
-        longLabel Heart adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Heart C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 75815.000000
         color 153,38,0
@@ -570,7 +570,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfKidneyC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel Kidney 8w Sg 1
-        longLabel Kidney adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Kidney C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 71303.000000
         color 204,121,167
@@ -579,7 +579,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLungC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel Lung 8w Sg 1
-        longLabel Lung adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Lung C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 44724.000000
         # subId=5246 dateSubmitted=2011-12-17
@@ -587,7 +587,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfMelUknImmortalSigRep1
         parent wgEncodeUwDgfViewSignal
         shortLabel MEL Immt Sg 1
-        longLabel MEL immortalized DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel MEL DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 300871.000000
         color 86,180,233
@@ -597,7 +597,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDgfViewSignal off
         shortLabel T-Naive 8w Sg 2
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Signal Rep 2 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Signal Rep 2 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep2
         type bigWig 1.000000 111160.000000
         color 86,180,233
@@ -606,7 +606,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThymusC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel Thymus 8w Sg 1
-        longLabel Thymus adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Thymus C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 103179.000000
         color 86,180,233
@@ -615,7 +615,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel TReg 8w Sg 1
-        longLabel TReg adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel TReg C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 62472.000000
         color 86,180,233
@@ -624,7 +624,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThelpaC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel THelp-Act 8w Sg 1
-        longLabel THelper-Activated adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel THelper-Activated C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 184749.000000
         color 86,180,233
@@ -633,7 +633,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregaC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel TReg-Act 8w Sg 1
-        longLabel TReg-Activated adult-8wks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel TReg-Activated C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 270816.000000
         color 86,180,233
@@ -642,7 +642,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfA20BalbcannMImmortalSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel A20 Immt Sg 1
-        longLabel A20 immortalized BALB/cAnN DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel A20 BALB/cAnN DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=A20 sex=M strain=BALBCANN treatment=NONE rep=rep1
         type bigWig 1.000000 143918.000000
         color 86,180,233
@@ -651,7 +651,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfEscj7129s1ME0SigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ES-CJ7 E0 Sg 1
-        longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel ES-CJ7 129S1/SVImJ DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type bigWig 1.000000 79700.000000
         color 65,105,225
@@ -660,7 +660,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfNih3t3NihsMImmortalSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel NIH-3T3 Immt Sg 1
-        longLabel NIH-3T3 immortalized NIH/Swiss DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel NIH-3T3 NIH/Swiss DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS treatment=NONE rep=rep1
         type bigWig 1.000000 114005.000000
         color 86,180,233
@@ -669,7 +669,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfRetinaC57bl6MNew1daysSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel Retina 1day Sg 1
-        longLabel Retina newborn-1days C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel Retina C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 112503.000000
         color 105,105,105
@@ -678,7 +678,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ZhBTc4 E0 Sg 1
-        longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola diffProtB 24hr DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 130305.000000
         color 65,105,225
@@ -687,7 +687,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0SigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ZhBTc4 E0 Sg 1
-        longLabel ZhBTc4 E0 129/Ola DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type bigWig 1.000000 90713.000000
         color 65,105,225
@@ -708,7 +708,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel T-Naive 8w Rw 1
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel T-Naive C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 712972.000000
         color 86,180,233
@@ -717,7 +717,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfWbrainC57bl6ME14halfRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel Brain E14.5 Rw 1
-        longLabel WholeBrain E14.5 C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel WholeBrain E14.5 C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=E14HALF cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 288905.000000
         color 105,105,105
@@ -726,8 +726,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgf3134RiiiMImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
-        shortLabel 3134 Immt Rw 1
-        longLabel 3134 immortalized RIII DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        shortLabel 3134 Rw 1
+        longLabel 3134  RIII DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=Cel3134 sex=M strain=RIII treatment=NONE rep=rep1
         type bigWig 1.000000 340336.000000
         color 0,158,115
@@ -736,7 +736,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfWbrainC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel Brain 8w Rw 1
-        longLabel WholeBrain adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel WholeBrain C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=WBRAIN sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 191994.000000
         color 105,105,105
@@ -746,7 +746,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLiverC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel Liver 8w Rw 1
-        longLabel Liver adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Liver C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 244216.000000
         color 230,159,0
@@ -755,7 +755,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgf416bB6d2f1jImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel 416B Immt Rw 1
-        longLabel 416B immortalized B6D2F1/J DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel 416B B6D2F1/J DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type bigWig 1.000000 466076.000000
         color 86,180,233
@@ -765,7 +765,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel B-cell_CD19+ Rw 1
-        longLabel B-cell (CD19+) adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD19+) C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 785440.000000
         color 86,180,233
@@ -774,7 +774,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel B-cell_CD43- Rw 1
-        longLabel B-cell (CD43-) adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel B-cell (CD43-) C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 395435.000000
         color 86,180,233
@@ -784,7 +784,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfHeartC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel Heart 8w Rw 1
-        longLabel Heart adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Heart C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 379588.000000
         color 153,38,0
@@ -793,7 +793,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfKidneyC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel Kidney 8w Rw 1
-        longLabel Kidney adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Kidney C57BL/6 DNase-DGF Raw Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 267973.000000
         color 204,121,167
@@ -802,7 +802,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfLungC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel Lung 8w Rw 1
-        longLabel Lung adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Lung C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 377717.000000
         # subId=5246 dateSubmitted=2011-12-17
@@ -810,7 +810,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfMelUknImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel MEL Immt Rw 1
-        longLabel MEL immortalized DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel MEL Nase-DGF Raw Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 974470.000000
         color 86,180,233
@@ -820,7 +820,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawRep2
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel T-Naive 8w Rw 2
-        longLabel T-Naive adult-8wks C57BL/6 DNase-DGF Raw signal Rep 2 from ENCODE/UW 
+        longLabel T-Naive  C57BL/6 DNase-DGF Raw  Rep 2 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 treatment=NONE rep=rep2
         type bigWig 1.000000 607383.000000
         color 86,180,233
@@ -829,7 +829,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThymusC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel Thymus 8w Rw 1
-        longLabel Thymus adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Thymus  C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 609152.000000
         color 86,180,233
@@ -838,7 +838,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel TReg 8w Rw 1
-        longLabel TReg adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel TReg  C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 384314.000000
         color 86,180,233
@@ -847,7 +847,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfThelpaC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel THelp-Act 8w Rw 1
-        longLabel THelper-Activated adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel THelper-Activated C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 708959.000000
         color 86,180,233
@@ -856,7 +856,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfTregaC57bl6MAdult8wksRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel TReg-Act 8w Rw 1
-        longLabel TReg-Activated adult-8wks C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel TReg-Activated C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 1174126.000000
         color 86,180,233
@@ -864,8 +864,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfA20BalbcannMImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
-        shortLabel A20 Immt Rw 1
-        longLabel A20 immortalized BALB/cAnN DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        shortLabel A20 Rw 1
+        longLabel A20 BALB/cAnN DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=A20 sex=M strain=BALBCANN treatment=NONE rep=rep1
         type bigWig 1.000000 801343.000000
         color 86,180,233
@@ -874,7 +874,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfEscj7129s1ME0RawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ES-CJ7 E0 Rw 1
-        longLabel ES-CJ7 E0 129S1/SVImJ DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel ES-CJ7 129S1/SVImJ DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type bigWig 1.000000 425541.000000
         color 65,105,225
@@ -882,8 +882,8 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfNih3t3NihsMImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal off
-        shortLabel NIH-3T3 Immt Rw 1
-        longLabel NIH-3T3 immortalized NIH/Swiss DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        shortLabel NIH-3T3 Rw 1
+        longLabel NIH-3T3 NIH/Swiss DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS treatment=NONE rep=rep1
         type bigWig 1.000000 730682.000000
         color 86,180,233
@@ -892,7 +892,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfRetinaC57bl6MNew1daysRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel Retina 1day Rw 1
-        longLabel Retina newborn-1days C57BL/6 DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel Retina  C57BL/6 DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 882041.000000
         color 105,105,105
@@ -901,7 +901,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ZhBTc4 E0 Rw 1
-        longLabel ZhBTc4 E0 129/Ola diffProtB 24hr DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola diffProtB 24hr DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 759516.000000
         color 65,105,225
@@ -910,7 +910,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0RawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ZhBTc4 E0 Rw 1
-        longLabel ZhBTc4 E0 129/Ola DNase-DGF Raw signal Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 129/Ola DNase-DGF Raw  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=NONE rep=rep1
         type bigWig 1.000000 563374.000000
         color 65,105,225

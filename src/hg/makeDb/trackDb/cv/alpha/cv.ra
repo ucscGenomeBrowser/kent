@@ -217,7 +217,7 @@ termId BTO:0000938
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000938
 sex M
 tier 2
-protocol missing
+protocol Cellular_Dynamics_International_Batch_1:H1_Neurons_Round1.pdf Cellular_Dynamics_International_Batch_2:H1_Neurons_Round2.pdf  
 
 term LHCN-M2
 tag LHCNM2
@@ -8288,6 +8288,7 @@ term AP-2alpha
 tag AP2ALPHA
 type Antibody
 target AP-2alpha
+targetClass TFSS
 antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin. Antibody Target: AP-2alpha
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2alpha is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
 vendorName Santa Cruz Biotech
@@ -8303,6 +8304,7 @@ term AP-2gamma
 tag AP2GAMMA
 type Antibody
 target AP-2gamma
+targetClass TFSS
 antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin. Antibody Target: AP-2gamma
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 vendorName Santa Cruz Biotech
@@ -8412,6 +8414,7 @@ term ATF3
 tag ATF3
 type Antibody
 target ATF3
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of ATF3 of human origin. Antibody Target: ATF3
 targetDescription Activating transcription factor 3. A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
@@ -8445,6 +8448,7 @@ term BAF155
 tag BAF155
 type Antibody
 target BAF155
+targetClass ChromRem
 antibodyDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin. Antibody Target: BAF155
 targetDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
@@ -8461,6 +8465,7 @@ term BAF170
 tag BAF170
 type Antibody
 target BAF170
+targetClass ChromRem
 antibodyDescription BAF170 (H-116) is a rabbit polyclonal antibody raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: BAF170
 targetDescription BAF170 (Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
@@ -8476,6 +8481,7 @@ term BATF
 tag BATF
 type Antibody
 target BATF
+targetClass TFSS
 antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Recommended for detection of B-ATF of m, r and h origin by WB, IP and ELISA. Antibody Target: BATF
 targetDescription The protein encoded by this gene is a nuclear basic leucine zipper protein that belongs to the AP-1/ATF superfamily of transcription factors. The leucine zipper of this protein mediates dimerization with members of the Jun family of proteins. This protein is thought to be a negative regulator of AP-1/ATF transcriptional events.
 vendorName Santa Cruz Biotech
@@ -8491,6 +8497,7 @@ term BCL11A
 tag BCL11A
 type Antibody
 target BCL11A
+targetClass TFSS
 antibodyDescription Mouse monoclonal [18B12DE6] to Ctip1. Raised against a cocktail of BCL11A fusion proteins. Reacts with human and mouse. Tested for ICC/IF, IHC-P, IP, WB. Antibody Target: BCL11A
 targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. Functions as a myeloid and B-cell proto-oncogene. May play important roles in leukemogenesis and hematopoiesis. An essential factor in lymphopoiesis,is required for B-cell formation in fetal liver. May function as a modulator of the transcriptional repression activity of ARP1 (By similarity)
 vendorName Abcam
@@ -8522,6 +8529,7 @@ term BCL3
 tag BCL3
 type Antibody
 target BCL3
+targetClass TFSS
 antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA. Antibody Target: BCL3
 targetDescription This gene is a proto-oncogene candidate. It is identified by its translocation into the immunoglobulin alpha-locus in some cases of B-cell leukemia. The protein encoded by this gene contains seven ankyrin repeats, which are most closely related to those found in I kappa B proteins. This protein functions as a transcriptional co-activator that activates through its association with NF-kappa B homodimers. The expression of this gene can be induced by NF-kappa B, which forms a part of the autoregulatory loop that controls the nuclear residence of p50 NF-kappa B. (Provided by RefSeq).
 vendorName Santa Cruz Biotech
@@ -8537,6 +8545,7 @@ term BCLAF1_(SC-101388)
 tag BCLAF1
 type Antibody
 target BCLAF1
+targetClass TFSS
 antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin. Antibody Target: BCLAF1
 targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq).
 vendorName Santa Cruz Biotech
@@ -8552,6 +8561,7 @@ term BDP1
 tag BDP1
 type Antibody
 target BDP1
+targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH. Antibody Target: BDP1
 targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
@@ -8567,6 +8577,7 @@ term BHLHE40
 tag BHLHE40
 type Antibody
 target BHLHE40
+targetClass TFSS
 antibodyDescription Dec-1(S-8) is a mouse monoclonal IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of m and h origin by WB, IP and ELISA. Antibody Target: BHLHE40
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
 vendorName Santa Cruz Biotech
@@ -8582,6 +8593,7 @@ term BHLHE40_(NB100-1800)
 tag BHLHE40c
 type Antibody
 target BHLHE40
+targetClass TFSS
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 vendorName Novus
@@ -8598,6 +8610,7 @@ term BRCA1_(A300-000A)
 tag BRCA1
 type Antibody
 target BRCA1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal recognizing a region between residue 1800 and the C-terminus (residue 1863) of human Breast Cancer Gene 1. Antibody Target: BRCA1
 targetDescription Nuclear phosphoprotein that plays a role in maintaining genomic stability, and acts as a tumor suppressor. Associates with RNA polymerase II, and through the C-terminal domain, also interacts with histone deacetylase complexes. Plays a role in transcription, DNA repair of double-stranded breaks, and recombination. Mutations in this gene are responsible for approximately 40% of inherited breast cancers and more than 80% of inherited breast and ovarian cancers.
 vendorName Bethyl Labratories
@@ -8613,6 +8626,7 @@ term BRF1
 tag BRF1
 type Antibody
 target BRF1
+targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533-547) coupled to keyhole limpet haemocyanin. Antibody Target: BRF1
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
@@ -8628,6 +8642,7 @@ term BRF2
 tag BRF2
 type Antibody
 target BRF2
+targetClass Pol3F
 antibodyDescription Antibody 4295 against Brf2 was raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
 targetDescription Brf2 is a component of an alternate form of the RNA Polymerase III transcription factor TFIIIB.
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
@@ -8643,6 +8658,7 @@ term Brg1
 tag BRG1
 type Antibody
 target BRG1
+targetClass ChromRem
 antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1
 targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
@@ -8674,6 +8690,7 @@ term c-Fos
 tag CFOS
 type Antibody
 target c-Fos
+targetClass TFSS
 antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin. Antibody Target: c-Fos
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
 vendorName Santa Cruz Biotech
@@ -8689,6 +8706,7 @@ term c-Jun
 tag CJUN
 type Antibody
 target c-Jun
+targetClass TFSS
 antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin. Antibody Target: c-Jun
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
 vendorName Santa Cruz Biotech
@@ -8719,6 +8737,7 @@ term c-Myc
 tag CMYC
 type Antibody
 target c-Myc
+targetClass TFSS
 antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin. Antibody Target: c-Myc
 targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
 vendorName Santa Cruz Biotech
@@ -8767,6 +8786,7 @@ term CCNT2
 tag CCNT2
 type Antibody
 target CCNT2
+targetClass Other
 antibodyDescription Goal polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA. Antibody Target: CCNT2
 targetDescription CycT2 is one of three cyclins that can form a heterodimer with cyclin-dependent kinase 9 (CDK9). The heterodimer is known as positive elongation factor b (P-TEFb) and is responsible for the phosphophorylation of Ser2 of the heptad repeat in the C-terminal domain of RNA polymerase II as well as the negative elongation factors DSIF (hSpt4/hSpt5) and NELF. Phosphorylation of RNA polymerase II and the negative elongation factors by P-TEFb promotes elongation. CycT2 contains a leucine rich domain capable of binding to the C-terminal domain of RNA polymerase II.
 vendorName Santa Cruz Biotechnology
@@ -8814,6 +8834,7 @@ term CEBPB
 tag CEBPB
 type Antibody
 target CEBPB
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: CEBPB
 targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
@@ -8829,6 +8850,7 @@ label CEBPB (sc-150)
 term CEBPB_(SC-150)
 tag CEBPBSC150
 type Antibody
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin. Antibody Target: CEBPB
 target CEBPB
 targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions.  It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma.  The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes.  In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
@@ -8907,11 +8929,11 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
 validation Human_-_CHD1_(NB100-60411)(Immunoprecipitation,IP-Mass_spec):human_CHD1_NB100-60411_validation_Snyder.pdf
 label CHD1 (NB100-60411)
 
-
 term CHD2_(AB68301)
 tag CHD2
 type Antibody
 target CHD2
+targetClass ChromRem
 antibodyDescription Rabbit polyclonal to CHD2 Synthetic peptide derived from within residues 1250 - 1350 of Human CHD2. Antibody Target: CHD2
 targetDescription CHD family of proteins are characterized by presence of chromo (chromatin organization modifier) domains and SNF2-related helicase/ATPase domains. CHD genes alter gene expression possibly by modification of chromatin structure thus altering access of the transcriptional apparatus to its chromosomal DNA template.
 orderUrl http://www.abcam.com/CHD2-antibody-ab68301.html
@@ -9005,6 +9027,7 @@ term CTCF
 tag CTCF
 type Antibody
 target CTCF
+targetClass TFSS
 antibodyDescription rabbit polyclonal. Antibody Target: CTCF
 targetDescription CTCF zinc finger transcription factor. A sequence specific DNA binding protein that functions as an insulator, blocking enhancer activity. It has also been suggested to block the spreading of chromatin structure in certain instances.
 orderUrl http://www.millipore.com/catalogue/item/07-729
@@ -9021,6 +9044,7 @@ term CTCF_(SC-15914)
 tag CTCFb
 type Antibody
 target CTCF
+targetClass TFSS
 antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin. Antibody Target: CTCF
 targetDescription Transcriptional regulator with 11 highly conserved zinc finger domains. Depending on context, can bind a histone acetyltransferase (HAT)-containing complex and function as transcriptional activator or bind a histone deacetylase (HDAC)-containing complex and function as transcriptional repressor. Involved in transcriptional regulation by binding to chromatin insulators and preventing interaction between promoter and nearby enhancers and silencers. Preferentially interacts with unmethylated DNA, preventing spreading of CpG methylation. Can dimerize, mediating long-range chromatin looping. When bound to chromatin, provides an anchor point for nucleosomes positioning. Involved in sister chromatid cohesion. Associates with both centromeres and chromosomal arms during metaphase and required for cohesin localization to CTCF sites.
 orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
@@ -9036,6 +9060,7 @@ term CTCF_(SC-5916)
 tag CTCFc
 type Antibody
 target CTCF
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of CTCF of human origin. Antibody Target: CTCF
 targetDescription This gene is a member of the BORIS + CTCF gene family and encodes a transcriptional regulator protein with 11 highly conserved zinc finger (ZF) domains. This nuclear protein is able to use different combinations of the ZF domains to bind different DNA target sequences and proteins. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -9052,6 +9077,7 @@ term CTCFL_(SC-98982)
 tag CTCFL
 type Antibody
 target CTCFL
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 91-210 mapping within an internal region of BORIS(CTCFL) of human origin. Antibody Target: CTCFL
 targetDescription CCCTC-binding factor (CTCF), an 11-zinc-finger factor involved in gene regulation, utilizes different zinc fingers to bind varying DNA target sites. CTCF forms methylation-sensitive insulators that regulate X-chromosome inactivation.  This gene is a paralog of CTCF and appears to be expressed primarily in the cytoplasm of spermatocytes, unlike CTCF which is expressed primarily in the nucleus of somatic cells.  CTCF and the protein encoded by this gene are normally expressed in a mutually exclusive pattern that correlates with resetting of methylation marks during male germ cell differentiation. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -9114,6 +9140,7 @@ term E2F1
 tag E2F1
 type Antibody
 target E2F1
+targetClass TFSS
 antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP. Antibody Target: E2F1
 targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
 orderUrl http://www.millipore.com/catalogue/item/05-379#
@@ -9130,6 +9157,7 @@ tag E2F4
 type Antibody
 target E2F4
 targetDescription mapping at the C-terminus of E2F4 of human origin
+targetClass TFSS
 antibodyDescription rabbit polyclonal. Antibody Target: E2F4
 vendorName Santa Cruz Biotech
 vendorId sc-866
@@ -9145,6 +9173,7 @@ tag E2F6
 type Antibody
 target E2F6
 targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq).
+targetClass TFSS
 antibodyDescription   Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin. Antibody Target: E2F6
 vendorName Santa Cruz Biotech
 vendorId sc-22823
@@ -9160,6 +9189,7 @@ term EBF1_(SC-137065)
 tag EBF1
 type Antibody
 target EBF1
+targetClass TFSS
 antibodyDescription  Mouse monoclonal IgG, raised against a.a. 1-300 mapping at the N-terminus of EBF of human origin. Antibody Target: EBF1
 targetDescription  Early B-cell factor 1.  Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 vendorName Santa Cruz Biotech
@@ -9223,6 +9253,7 @@ label CDKN1B (eGFP-CDKN1B)
 term eGFP-E2F1
 tag E2F1
 type Antibody
+targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1. Antibody Target: eGFP-E2F1
 target eGFP-E2F1
 targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses (provided by RefSeq)
@@ -9271,6 +9302,7 @@ label ELF1 (eGFP-ELF1)
 term eGFP-ESR
 tag ESR
 type Antibody
+targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA. Antibody Target: eGFP-ESR
 target eGFP-ESR
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
@@ -9288,6 +9320,7 @@ term eGFP-FOS
 tag FOSe
 type Antibody
 target FOS
+targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: FOS
 targetDescription Fos
 vendorName Kevin White
@@ -9304,6 +9337,7 @@ term eGFP-GATA2
 tag GATA2e
 type Antibody
 target GATA2
+targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
@@ -9320,6 +9354,7 @@ term eGFP-HDAC8
 tag HDAC8e
 type Antibody
 target HDAC8
+targetClass HISase
 antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
@@ -9368,6 +9403,7 @@ term eGFP-JunB
 tag JUNBe
 type Antibody
 target JunB
+targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
@@ -9384,6 +9420,7 @@ term eGFP-JunD
 tag JUNDe
 type Antibody
 target JunD
+targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
@@ -9449,6 +9486,7 @@ term eGFP-NR4A1
 tag NR4A1e
 type Antibody
 target NR4A1
+targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
@@ -9496,6 +9534,7 @@ label SMARCA2 (eGFP-SMARCA2)
 term eGFP-STAT1
 tag STAT1
 type Antibody
+targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1. Antibody Target: eGFP-STAT1
 target eGFP-STAT1
 targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6 (provided by RefSeq)
@@ -9513,6 +9552,7 @@ term ELF1_(SC-631)
 tag ELF1
 type Antibody
 target  ELF1
+targetClass TFSS
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Elf-1 of human origin. Antibody Target:  ELF1
 targetDescription  This gene encodes an E26 transformation-specific related transcription factor.  The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes.  Alternative splicing results in multiple transcript variants. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -9529,6 +9569,7 @@ term ELK4
 tag ELK4
 type Antibody
 target ELK4
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: ELK4
 targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily. (provided by RefSeq)
 orderUrl http://datasheets.scbt.com/sc-13030.pdf
@@ -9544,6 +9585,7 @@ term ERalpha_a
 tag ERAA
 type Antibody
 target ERalpha_a
+targetClass TFSS
 antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ERalpha_a
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -9560,6 +9602,7 @@ term ERalpha_b
 tag ERAB
 type Antibody
 target ERalpha_b
+targetClass TFSS
 antibodyDescription Monoclonal antibody raised in mouse against the NH2 terminus of the human ER (estrogen receptor alpha), using a KLH-conjugated synthetic peptide (Q19-K32). Antibody Target: ERalpha_b
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 vendorName Diagenode
@@ -9591,6 +9634,7 @@ term ERRA
 tag ERRA
 type Antibody
 target ERRA
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. Antibody Target: ERRA
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
@@ -9622,6 +9666,7 @@ term ETS1
 tag ETS1
 type Antibody
 target ETS1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: ETS1
 targetDescription ETS transcriptions factors, such as ETS1, regulate numerous genes and are involved in stem cell development, cell senescence and death, and tumorigenesis
 vendorName Santa Cruz Biotech
@@ -9938,6 +9983,7 @@ term GCN5
 tag GCN5
 type Antibody
 target GCN5
+targetClass HISase
 antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Laszlo Tora
@@ -9954,6 +10000,7 @@ term GR
 tag GR
 type Antibody
 target GR
+targetClass TFSS
 targetDescription Glucocorticoid Receptor
 antibodyDescription Rabbit Polyclonal. Antibody Target: GR
 vendorName Santa Cruz Biotech
@@ -9985,6 +10032,7 @@ term GTF2B
 tag GTF2B
 type Antibody
 target GTF2B
+targetClass TFNS
 antibodyDescription rabbit polyclonal IgG, 200 ?g/ml. epitope mapping near the C-terminus of TFIIB of human origin. Antibody Target: GTF2B
 targetDescription DNA- binding general transcription factor
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
@@ -10000,6 +10048,7 @@ term GTF2F1_(AB28179)
 tag GTF2F1
 type Antibody
 target GTF2F1
+targetClass TFNS
 antibodyDescription Rabbit polyclonal to TFIIF - Recombinant full length protein - RAP 74 subunit of TF11F. Antibody Target: GTF2F1
 targetDescription RNA polymerase II transcription factor TFIIF is a heterodimer with 2 subunits: one, referred to as RAP74. TFIIF appears to assist TFIIB in recruiting RNA polymerase II into a preinitiation complex. It also affects RNA transcription by suppressing transient pausing of the polymerase at locations on the DNA template.
 orderUrl http://www.abcam.com/TFIIF-antibody-ChIP-Grade-ab28179.html
@@ -10482,6 +10531,7 @@ term HEY1
 tag HEY1
 type Antibody
 target HEY1
+targetClass TFSS
 antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
 targetDescription This gene encodes a nuclear protein belonging to the hairy and enhancer of split-related (HESR) family of basic helix-loop-helix (bHLH)-type transcriptional repressors. Expression of this gene is induced by the Notch and c-Jun signal transduction pathways. Two similar and redundant genes in mouse are required for embryonic cardiovascular development, and are also implicated in neurogenesis and somitogenesis. Alternative splicing results in multiple transcript variants.
 vendorName Santa Cruz Biotech
@@ -10497,6 +10547,7 @@ term HMGN3
 tag HMGN3
 type Antibody
 target HMGN3
+targetClass TFNS
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
 orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
@@ -10514,6 +10565,7 @@ term HNF4A
 tag HNF4A
 type Antibody
 target HNF4A
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG. Antibody Target: HNF4A
 targetDescription epitope mapping at the C-terminus of Rab 11 of human origin
 orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
@@ -10529,6 +10581,7 @@ term HNF4A_(SC-8987)
 tag HNF4ASC8987
 type Antibody
 target HNF4A
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin. Antibody Target: HNF4A
 targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq).
 orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
@@ -10545,6 +10598,7 @@ term HNF4G_(SC-6558)
 tag HNF4G
 type Antibody
 target HNF4G
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin. Antibody Target: HNF4G
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
 vendorName Santa Cruz Biotech
@@ -10577,6 +10631,7 @@ term HSF1
 tag HSF1
 type Antibody
 target HSF1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: HSF1
 targetDescription epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
 orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
@@ -10608,6 +10663,7 @@ term Ini1
 tag INI1
 type Antibody
 target INI1
+targetClass ChromRem
 antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
 targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
@@ -10623,6 +10679,7 @@ term IRF1
 tag IRF1
 type Antibody
 target IRF1
+targetClass TFSS
 antibodyDescription IRF-1 (C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin. Antibody Target: IRF1
 targetDescription Interferon regulatory factor 1 is a member of the interferon regulatory transcription factor (IRF) family. IRF1 serves as an activator of interferons alpha and beta transcription and also functions as a transcription activator of genes induced by interferons alpha, beta, and gamma. IRF1 has been shown to play roles in regulating apoptosis and tumor suppression.
 vendorName Santa Cruz Biotech
@@ -10638,6 +10695,7 @@ term IRF3
 tag IRF3
 type Antibody
 target IRF3
+targetClass TFSS
 antibodyDescription Rabbit polyclonal; epitope corresponding to amino acids 1-425 of IRF-3 of human origin. Antibody Target: IRF3
 targetDescription Mediates interferon-stimulated response element (ISRE) promoter activation. DsRNA leads to IRF3 phosphorylation on the C-terminal serine/threonine cluster. This induces a conformational change, leading to its dimerization, nuclear localization and association with CREB binding protein (CREBBP) to form dsRNA-activated factor 1 (DRAF1), a complex which activates the transcription of genes under the control of ISRE.
 vendorName Santa Cruz Biotech
@@ -10653,6 +10711,7 @@ term  IRF4_(SC-6059)
 tag IRF4
 type Antibody
 target  IRF4
+targetClass TFSS
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin. Antibody Target:  IRF4
 targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq).
 vendorName Santa Cruz Biotech
@@ -10718,6 +10777,7 @@ term JunD
 tag JUND
 type Antibody
 target JunD
+targetClass TFSS
 antibodyDescription rabbit polyclonal IgG. Antibody Target: JunD
 targetDescription The protein encoded by this intronless gene is a member of the JUN family, and a functional component of the AP1 transcription factor complex. It has been proposed to protect cells from p53-dependent senescence and apoptosis. Alternate translation initiation site usage results in the production of different isoforms. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -10733,6 +10793,7 @@ term KAP1
 tag KAP1
 type Antibody
 target KAP1
+targetClass HISase
 antibodyDescription rabbit polyclonal. Antibody Target: KAP1
 targetDescription KRAB Associated Protein 1, helps regulate transcriptional repression
 vendorName Abcam
@@ -10795,6 +10856,7 @@ term MafF_(M8194)
 tag MAFF
 type Antibody
 target MafF
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family. Antibody Target: MafF
 targetDescription The protein encoded by this gene is a (bZIP) transcription factor that lacks a transactivation domain. It is known to bind the US-2 DNA element in the promoter of the oxytocin receptor (OTR) gene and most likely heterodimerizes with other leucine zipper-containing proteins to enhance expression of the OTR gene during term pregnancy. Can also form homodimers, and since it lacks a transactivation domain, the homodimer may act as a repressor of transcription. May also be involved in the cellular stress response.
 vendorName Sigma-Aldrich
@@ -10811,6 +10873,7 @@ term MafK_(ab50322)
 tag MAFK
 type Antibody
 target MafK
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK. Antibody Target: MafK
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 vendorName Abcam
@@ -10827,6 +10890,7 @@ term MafK_(SC-477)
 tag MAFKb
 type Antibody
 target MafK
+targetClass TFSS
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin. Antibody Target: MafK
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 vendorName Santa Cruz Biotech
@@ -10843,6 +10907,7 @@ term Max
 tag MAX
 type Antibody
 target Max
+targetClass TFSS
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. Antibody Target: Max
 targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 vendorName Santa Cruz Biotech
@@ -10901,10 +10966,27 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
 validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
 label Med26 (sc-48776)
 
+term MEF2_(sc-17785)
+tag MEF2SC17785
+type Antibody
+antibodyDescription mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2
+target MEF2
+targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of proteins plays a role in myogenesis.
+vendorName Santa Cruz Biotech
+vendorId sc-17785
+orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
+lab Wold
+lots missing
+targetId Genecard:MEF2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
+validation 
+label MEF2 (sc-17785)
+
 term MEF2A
 tag MEF2A
 type Antibody
 target MEF2A
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. Antibody Target: MEF2A
 targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscme-specific, growth factor-induced, and stress-induced genes.
 vendorName Santa Cruz Biotech
@@ -10921,6 +11003,7 @@ term MEF2C_(SC-13268)
 tag MEF2C
 type Antibody
 target MEF2C
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of MEF2C of human origin. Antibody Target: MEF2C
 targetDescription This locus encodes a member of the MADS box transcription enhancer factor 2 (MEF2) family of proteins, which play a role in myogenesis. The encoded protein, MEF2 polypeptide C, has both trans-activating and DNA binding activities.  This protein may play a role in maintaining the differentiated state of muscle cells. Mutations and deletions at this locus have been associated with severe mental retardation, stereotypic movements, epilepsy, and cerebral malformation.  Alternatively spliced transcript variants have been described. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -10997,26 +11080,11 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Myog
 validation  Mouse_-_:missing
 label Myogenin (sc-12732)
 
-term MEF2_(sc-17785)
-tag MEF2SC17785
-type Antibody
-antibodyDescription mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2
-target MEF2
-targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of proteins plays a role in myogenesis.
-vendorName Santa Cruz Biotech
-vendorId sc-17785
-orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
-lab Wold
-lots missing
-targetId Genecard:MEF2A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation 
-label MEF2 (sc-17785)
-
 term NANOG_(SC-33759)
 tag NANOG
 type Antibody
 target NANOG
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin. Antibody Target: NANOG
 targetDescription Transcription regulator involved in inner cell mass and embryonic stem (ES) cells proliferation and self-renewal.  Imposes pluripotency on ES cells and prevents their differentiation towards extraembryonic endoderm and trophectoderm lineages.  Blocks bone morphogenetic protein-induced mesoderm differentiation of ES cells by physically interacting with SMAD1 and interfering with the recruitment of coactivators to the active SMAD transcriptional complexes (By similarity).  Acts as a transcriptional activator or repressor (By similarity).  Binds optimally to the DNA consensus sequence 5'-TAAT[GT][GT]-3' or 5'-[CG][GA][CG]C[GC]ATTAN[GC]-3' (By similarity).  When overexpressed, promotes cells to enter into S phase and proliferation (By similarity) (provided by RefSeq).
 vendorName Santa Cruz Biotech
@@ -11049,6 +11117,7 @@ term NELFe
 tag NELFE
 type Antibody
 target NELFe
+targetClass TFNS
 antibodyDescription NELFe (RDBP). Antibody Target: NELFe
 targetDescription NELFe (RDBP) is a part of the negative elongation factor complex which binds to RNAPII to suppress elongation.
 orderUrl http://www.scbt.com/datasheet-32912-nelf-e-h-140-antibody.html
@@ -11080,6 +11149,7 @@ term NF-E2
 tag NFE2
 type Antibody
 target NF-E2
+targetClass TFSS
 antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of NF-E2 of mouse origin and recommended for detection of protein of rat, mouse and human origin. Antibody Target: NF-E2
 targetDescription Nuclear factor, erythroid-derived 2
 vendorName Santa Cruz Biotech
@@ -11096,6 +11166,7 @@ term NF-E2_(SC-22827)
 tag NFE2b
 type Antibody
 target NF-E2
+targetClass TFSS
 antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin. Antibody Target: NF-E2
 targetDescription Transcription factor NF-E2 45 kDa subunit is a component of the NF-E2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NF-E2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein.
 vendorName Santa Cruz Biotech
@@ -11128,6 +11199,7 @@ tag NFKB
 type Antibody
 target NFKB
 targetDescription Epitope mapping at the C-terminus of NF-kappa-B p65 of human origin, recommended for detection of NFkB p65 of m, r and h origin by WB, IP, IF and ELISA
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: NFKB
 vendorName Santa Cruz Biotech
 vendorId sc-372
@@ -11143,6 +11215,7 @@ tag NFYA
 type Antibody
 target NF-YA
 targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+targetClass TFSS
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA. Antibody Target: NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId missing
@@ -11158,6 +11231,7 @@ tag NFYB
 type Antibody
 target NF-YB
 targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+targetClass TFSS
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB. Antibody Target: NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId missing
@@ -11172,6 +11246,7 @@ term Nrf1
 tag NRF1
 type Antibody
 target NRF1
+targetClass TFSS
 antibodyDescription Mouse monoclonal, Immunogen corresponding to amino acids 201-286 of Human NRF1. Antibody Target: NRF1
 targetDescription NRF1 is the mammalian homolog to the erect wing (ewg) Drosophila protein that is required for proper development of the central nervous system and indirect flight muscles. In mammals NRF1 functions as a transcription factor that activates the expression of the EIF2S1 (EIF-alpha) gene. This protein links the transcriptional modulation of key metabolic genes to cellular growth and development, and has been implicated in the control of nuclear genes required for respiration, heme biosynthesis and mitochondrialDNA transcription and replication. NRF1 forms a homodimer and binds DNA as a dimer. NRF1 shows a nuclear localization and is expressed widely in embryonic, fetal and adult tissues. Phosphorylation of NRF1 enhances DNA binding.
 vendorName Abcam
@@ -11202,6 +11277,7 @@ term NRSF
 tag NRSF
 type Antibody
 target NRSF
+targetClass TFSS
 antibodyDescription Mouse monoclonal. Antibody Target: NRSF
 targetDescription Neuron-restrictive silencer transcription factor
 vendorName David Anderson, Caltech
@@ -11252,6 +11328,7 @@ tag P300
 type Antibody
 target P300
 targetDescription EP300(c-20)
+targetClass HISase
 antibodyDescription Rabbit Polyclonal. Antibody Target: P300
 vendorName Santa Cruz Biotech
 vendorId sc-585
@@ -11266,6 +11343,7 @@ term P300_KAT3B
 tag P300KAT3B
 type Antibody
 target P300_KAT3B
+targetClass HISase
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 vendorName Bethyl
@@ -11283,6 +11361,7 @@ tag P300b
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
+targetClass HISase
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: P300
 vendorName Santa Cruz Biotech
 vendorId sc-584
@@ -11298,6 +11377,7 @@ tag P300c
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
+targetClass HISase
 antibodyDescription mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
 vendorName Santa Cruz Biotech
 vendorId sc-48343
@@ -11312,6 +11392,7 @@ term PAX5-C20
 tag PAX5
 type Antibody
 target PAX5
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: PAX5
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -11327,6 +11408,7 @@ term PAX5-N19
 tag PAX5b
 type Antibody
 target PAX5
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, 200 micrograms /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA. Antibody Target: PAX5
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -11342,6 +11424,7 @@ term PAX5_(N-15)
 tag PAX5c
 type Antibody
 target PAX5
+targetClass TFSS
 antibodyDescription rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5. Antibody Target: PAX5
 targetDescription The PAX5 gene is a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA binding motif, known as the paired box. The PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation. The PAX5 gene encodes the B cell lineage specific activator protein (BSAP) that is expressed at early, but not late stages of B cell differentiation.
 vendorName Abcam
@@ -11358,6 +11441,7 @@ tag PBX3
 type Antibody
 target PBX3
 targetDescription Pbx 3 (D-17)
+targetClass TFSS
 antibodyDescription Rabbit Polyclonal IgG. Antibody Target: PBX3
 vendorName Santa Cruz Biotech
 vendorId sc-891
@@ -11388,6 +11472,7 @@ term PGC1A
 tag PGC1A
 type Antibody
 target PGC1A
+targetClass TFSS
 antibodyDescription rabbit polyclonal IgG. Antibody Target: PGC1A
 targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
@@ -11469,6 +11554,7 @@ tag POL2
 type Antibody
 target POL2
 targetDescription RNA Polymerase II
+targetClass Pol2
 antibodyDescription mouse monoclonal, clone 8WG16. Antibody Target: POL2
 vendorName Covance
 vendorId MMS-126R
@@ -11484,6 +11570,7 @@ term Pol2(b)
 tag POL2b
 type Antibody
 target POL2B
+targetClass Pol2
 antibodyDescription mouse monoclonal, clone CTD4H8. Antibody Target: POL2B
 targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5' gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
@@ -11515,6 +11602,7 @@ term Pol2(phosphoS2)
 tag POL2S2
 type Antibody
 target POL2S2
+targetClass Pol2
 antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POL2S2
 targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
 vendorName Abcam
@@ -11545,6 +11633,7 @@ term POU5F1_(SC-9081)
 tag POU5F1
 type Antibody
 target POU5F1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin. Antibody Target: POU5F1
 targetDescription This gene encodes a transcription factor containing a POU homeodomain.  This transcription factor plays a role in embryonic development, especially during early embryogenesis, and it is necessary for embryonic stem cell pluripotency.  A translocation of this gene with the Ewing's sarcoma gene, t(6;22)(p21;q12), has been linked to tumor formation.  Alternative splicing, as well as usage of alternative translation initiation codons, results in multiple isoforms, one of which initiates at a non-AUG (CUG) start codon.  Related pseudogenes have been identified on chromosomes 1, 3, 8, 10, and 12 (provided by RefSeq).
 vendorName Santa Cruz Biotech
@@ -11561,6 +11650,7 @@ term POU2F2
 tag POU2F2
 type Antibody
 target POU2F2
+targetClass TFSS
 antibodyDescription Oct-2(C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Recommended for detection of Oct-2 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: POU2F2
 targetDescription Transcription factor that specifically binds to the octamer motif (5'-ATTTGCAT-3'). Regulates transcription in a number of tissues in addition to activating immunoglobulin gene expression. Modulates transcription transactivation by NR3C1, AR and PGR. Isoform 5 activates the U2 small nuclear RNA (snRNA) promoter.
 vendorName Santa Cruz Biotech
@@ -11576,6 +11666,7 @@ term PRDM1_(9115)
 tag PRDM1
 type Antibody
 target PRDM1
+targetClass TFSS
 antibodyDescription Rabbit Monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1. Antibody Target: PRDM1
 targetDescription Transcriptional repressor that binds specifically to the PRDI element in the promoter of the beta-interferon gene. Drives the maturation of B-lymphocytes into Ig secreting cells.
 vendorName Cell Signaling Technology
@@ -11592,6 +11683,7 @@ tag PU1
 type Antibody
 target PU1
 targetDescription PU.1 (H-135)
+targetClass TFSS
 antibodyDescription Rabbit Polyclonal IgG. Antibody Target: PU1
 vendorName Santa Cruz Biotech
 vendorId sc-22805
@@ -11606,6 +11698,7 @@ term Rad21
 tag RAD21
 type Antibody
 target RAD21
+targetClass DNARep
 targetDescription Synthetic peptide (Human) conjugated to KLH - which represents a portion of human Rad21 encoded within exon 14
 antibodyDescription Rabbit polyclonal. Antibody Target: RAD21
 orderUrl http://www.abcam.com/index.html?datasheet=992
@@ -11637,9 +11730,9 @@ label RBBP5 (A300-109A)
 term REST
 tag REST
 type Antibody
-target GST fusion amino acids 801-1097 of human REST
+target REST
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
-targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes.
+targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes. Target is GST fusion amino acids 801-1097 of human REST.
 vendorName Millipore
 vendorId 17-641
 orderUrl http://www.millipore.com/catalogue/item/17-641
@@ -11670,6 +11763,7 @@ term RFX5_(200-401-194)
 tag RFX5
 type Antibody
 target RFX5
+targetClass TFSS
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin. Antibody Target: RFX5
 orderUrl http://rockland-inc.com/store/Transcription-Factor-Antibodies-200-401-194-O4L_9248.aspx
@@ -11685,6 +11779,7 @@ term RPC155
 tag RPC155
 type Antibody
 target RPC155
+targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
 targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
 vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
@@ -11716,6 +11811,7 @@ term RXRA
 tag RXRA
 type Antibody
 target RXRA
+targetClass TFSS
 antibodyDescription RXRa(D-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Recommended for detection of RXRalpha of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: RXRA
 targetDescription Retinoid X receptors (RXRs) and retinoic acid receptors (RARs), are nuclear receptors that mediate the biological effects of retinoids by their involvement in retinoic acid-mediated gene activation. These receptors exert their action by binding, as homodimers or heterodimers, to specific sequences in the promoters of target genes and regulating their transcription. The protein encoded by this gene is a member of the steroid and thyroid hormone receptor superfamily of transcriptional regulators.
 vendorName Santa Cruz Biotech
@@ -11747,6 +11843,7 @@ term SETDB1
 tag SETDB1
 type Antibody
 target SETDB1
+targetClass HISase
 antibodyDescription Rabbit polyclonal. Antibody Target: SETDB1
 targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
 vendorName Proteintech Group
@@ -11777,6 +11874,7 @@ label  SETDB1 (sc-66884)
 term SIN3A_(NB600-1263)
 tag SIN3ANB6001263
 type Antibody
+targetClass HISase
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
@@ -11794,6 +11892,7 @@ term Sin3Ak-20
 tag SIN3AK20
 type Antibody
 target SIN3AK20
+targetClass HISase
 antibodyDescription Rabbit polyclonal, Sin3A (k-20). Antibody Target: SIN3AK20
 targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
 vendorName Santa Cruz Biotech
@@ -11809,6 +11908,7 @@ term SIRT6
 tag SIRT6
 type Antibody
 target SIRT6
+targetClass HISase
 antibodyDescription Rabbit polyclonal. Antibody Target: SIRT6
 targetDescription A synthetic peptide made to an internal region of the human SIRT6 protein
 vendorName Abcam
@@ -11823,6 +11923,7 @@ label SIRT6 (ab48192)
 term SIRT6_(ab62739)
 tag SIRT6AB62739
 type Antibody
+targetClass HISase
 antibodyDescription Rabbit polyclonal, raised against a synthetic peptide: GLPEIFDPPEELERK conjugated to KLH by a Cysteine residue linker, corresponding to N terminal amino acids 19-33 of Human SIRT6
 target SIRT6
 targetDescription NAD-dependent protein deacetylase. Has deacetylase activity towards Lys-9 and Lys-56 of histone H3. Modulates acetylation of histone H3 in telomeric chromatin during the S-phase of the cell cycle. Deacetylates Lys-9 of histone H3 at NF-kappa-B target promoters and may down-regulate the expression of a subset of NF-kappa-B target genes.
@@ -11840,6 +11941,7 @@ term SIX5
 tag SIX5
 type Antibody
 target SIX5
+targetClass TFSS
 antibodyDescription Six5 (K-20) Goat polyclonal IgG, 200?g/ml. Epitope mapping near the C-terminus of Six5 of human origin. Recommended for detection of Six5 of human origin by WB, IF and ELISA. Antibody Target: SIX5
 targetDescription The protein encoded by this gene is a homeodomain-containing transcription factor that appears to function in the regulation of organogenesis. This gene is located downstream of the dystrophia myotonica-protein kinase gene. Mutations in this geneare a cause of branchiootorenal syndrome type 2.
 vendorName Santa Cruz Biotech
@@ -11871,6 +11973,7 @@ term SP1
 tag SP1
 type Antibody
 target SP1
+targetClass TFSS
 antibodyDescription Sp1(E-3) is a mouse monoclonal antibody raised against amino acids 121-345 mapping near the N-terminus of Sp1 ofhuman origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA. Antibody Target: SP1
 targetDescription SP1 is a transcription factor that binds to GC box promoters elements and selectively activates mRNA synthesis from genes that contain functional recognition sites. It can interact with G/C-rich motifs from the serotonin receptor promoter.
 vendorName Santa Cruz Biotech
@@ -11886,6 +11989,7 @@ term SP2_(SC-643)
 tag SP2
 type Antibody
 target SP2
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping near the N-terminus of SP2 of human origin. Antibody Target: SP2
 targetDescription This gene encodes a member of the Sp subfamily of Sp/XKLF transcription factors.  Sp family proteins are sequence-specific DNA-binding proteins characterized by an amino-terminal trans-activation domain and three carboxy-terminal zinc finger motifs. This protein contains the least conserved DNA-binding domain within the Sp subfamily of proteins, and its DNA sequence specificity differs from the other Sp proteins.  It localizes primarily within subnuclear foci associated with the nuclear matrix, and can activate or in some cases repress expression from different promoters. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -11918,6 +12022,7 @@ term SPT20
 tag SPT20
 type Antibody
 target SPT20
+targetClass HISase
 antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
@@ -11935,6 +12040,7 @@ tag SREBP1
 type Antibody
 target SREBP1
 targetDescription Sterol regulatory element binding transcription factor 1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: SREBP1
 vendorName Santa Cruz Biotech
 vendorId sc-8984
@@ -11950,6 +12056,7 @@ tag SREBP2
 type Antibody
 target SREBP2
 targetDescription Sterol regulatory element binding transcription factor 2
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: SREBP2
 vendorName Cayman Chemical
 vendorId 10007663
@@ -11965,6 +12072,7 @@ tag SRF
 type Antibody
 target SRF
 targetDescription Serum response transcription factor
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: SRF
 vendorName Santa Cruz Biotech
 vendorId sc-335
@@ -11981,6 +12089,7 @@ tag STAT1
 type Antibody
 target STAT1
 targetDescription transcription factor, activated by interferon signalling
+targetClass TFSS
 antibodyDescription rabbit polyclonal to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
 vendorName Santa Cruz Biotech
 vendorId sc-345
@@ -11997,6 +12106,7 @@ tag STAT2
 type Antibody
 target STAT2
 targetDescription peptide mapping at c-terminus of Human STAT2 p-113 (C-20) X
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: STAT2
 vendorName Santa Cruz Biotech
 vendorId sc-476x
@@ -12012,6 +12122,7 @@ tag STAT3
 type Antibody
 target STAT3
 targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis.
+targetClass TFSS
 antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin. Antibody Target: STAT3
 vendorName Santa Cruz Biotech
 vendorId sc-482
@@ -12041,6 +12152,7 @@ label STAT5A (sc-74442)
 term SUZ12_(05-1317)
 tag SUZ12051317
 type Antibody
+targetClass HISase
 antibodyDescription Recombinant protein corresponding to human SUZ12. Antibody Target: SUZ12
 target SUZ12
 targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates Lys-9 and Lys-27 residues of histone H3.
@@ -12059,6 +12171,7 @@ tag SUZ12
 type Antibody
 target SUZ12
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
+targetClass HISase
 antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
 vendorName Antibody made by Farnham lab
 vendorId SUZ12
@@ -12074,6 +12187,7 @@ tag TAF1
 type Antibody
 target TAF1
 targetDescription TAF1 RNA polymerase II, TATA box binding protein (TBP)-associated factor, 250kDa. Also designated TAF250.
+targetClass TFNS
 antibodyDescription Mouse monoclonal (p250). Antibody Target: TAF1
 vendorName Santa Cruz Biotech
 vendorId sc-735
@@ -12089,6 +12203,7 @@ term  TAF7_(SC-101167)
 tag TAF7
 type Antibody
 target  TAF7
+targetClass TFNS
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin. Antibody Target:  TAF7
 targetDescription  The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq).
 vendorName Santa Cruz Biotech
@@ -12104,6 +12219,7 @@ label  TAF7 (sc-101167)
 term TAL1_(SC-12984)
 tag TAL1
 type Antibody
+targetClass TFSS
 antibodyDescription goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin. Antibody Target: TAL1
 vendorName Santa Cruz Biotech
 vendorId sc-12984
@@ -12163,6 +12279,7 @@ term TBP
 tag TBP
 type Antibody
 target TBP
+targetClass TFNS
 antibodyDescription Mouse monoclonal. Immunogen is synthetic peptide conjugated to KLH derived from within residues 1 - 100 of HumanTATA binding protein TBP. Antibody Target: TBP
 targetDescription General transcription factor that functions at the core of the DNA-binding multiprotein factor TFIID. Binding of TFIID to the TATA box is the initial transcriptional step of the pre-initiation complex (PIC), playing a role in the activation of eukaryotic genes transcribed by RNA polymerase II. Component of the transcription factor SL1/TIF-IB complex, which is involved in the assembly of the PIC (preinitiation complex) during RNA polymerase I-dependent transcription.
 vendorName abcam
@@ -12177,6 +12294,7 @@ label TBP (ab62126)
 term TBP_(sc-273)
 tag TBPSC273
 type Antibody
+targetClass TFNS
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
 targetDescription TBP is an integral subunit of the TFIID complex. TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
@@ -12194,6 +12312,7 @@ term TCF12
 tag TCF12
 type Antibody
 target TCF12
+targetClass TFSS
 antibodyDescription HEB (A-20) Rabbit polyclonal IgG, 200 ?g/ml. Epitope mapping within the C-terminus of HEB of human origin. Antibody Target: TCF12
 targetDescription The protein encoded by this gene is a member of the basic helix-loop-helix (bHLH) E-protein family that recognizes the consensus binding site (E-box) CANNTG. This encoded protein is expressed in many tissues, among them skeletal muscle, thymus, B- and T-cells, and may participate in regulating lineage-specific gene expression through the formation of heterodimers with other bHLH E-proteins. Several alternatively spliced transcript variants of this gene have been described, but the full-length nature of some of these variants has not been determined.
 vendorName Santa Cruz Biotech
@@ -12260,6 +12379,7 @@ tag TCF7L2
 type Antibody
 target TCF7L2
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+targetClass TFSS
 antibodyDescription Rabbit monoclonal. Antibody Target: TCF7L2
 vendorName Cell Signaling Technology
 vendorId 2569
@@ -12323,6 +12443,7 @@ term TFIIIC-110
 tag TF3C110
 type Antibody
 target TFIIIC-110
+targetClass Pol3F
 antibodyDescription rabbit polyclonal. Antibody Target: TFIIIC-110
 targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
 vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
@@ -12338,6 +12459,7 @@ term THAP1_(SC-98174)
 tag THAP1
 type Antibody
 target THAP1
+targetClass TFSS
 antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of THAP1 of human origin. Antibody Target: THAP1
 targetDescription The protein encoded by this gene contains a THAP domain, a conserved DNA-binding domain.  This protein colocalizes with the apoptosis response protein PAWR/PAR-4 in promyelocytic leukemia (PML) nuclear bodies, and functions as a proapoptotic factor that links PAWR to PML nuclear bodies.  Alternatively spliced transcript variants encoding distinct isoforms have been observed. (provided by RefSeq)
 vendorName Santa Cruz Biotech
@@ -12370,6 +12492,7 @@ term TR4
 tag TR4
 type Antibody
 target TR4
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: TR4
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
@@ -12450,6 +12573,7 @@ term USF-1
 tag USF1
 type Antibody
 target USF1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal, USF-1 (C-20). Antibody Target: USF1
 targetDescription The ubiquitously expressed cellular upstream stimulatory factor (USF) consists of USF-1 and USF-2 polypeptides which independently exhibit site-specific DNA binding and are members of the c-Myc-related family of regulatory factors containing helix-loop-helix domains. USF also contains a leucine repeat that is required for efficient DNA binding. USF was originally identified as an up- stream stimulatory factor that binds the core sequence CACGTG in the adeno- virus late promoter. These findings, together with the demonstration of coop- erative interaction between USF and the initiator-binding protein, TFII-I, raises the possibility of a more general involvement of USF in transcriptional regula- tion. While expression of both USF-1 and USF-2 species is ubiquitous, different ratios of USF homo- and heterodimers are found in different cell types.
 vendorName Santa Cruz Biotech
@@ -12465,6 +12589,7 @@ term USF1_(SC-8983)
 tag USF1b
 type Antibody
 target  USF1
+targetClass TFSS
 antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 75-160 mapping within internal region of USF1 of human origin. Antibody Target:  USF1
 targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. This gene has been linked to familial combined hyperlipidemia (FCHL). Two transcript variants encoding distinct isoforms have been identified for this gene. (provided by RefSeq).
 vendorName Santa Cruz Biotech
@@ -12481,6 +12606,7 @@ term USF2
 tag USF2
 type Antibody
 target USF2
+targetClass TFSS
 antibodyDescription Mouse monoclonal. Immunogen corresponds to amino acids 1-101 of Human USF2. Antibody Target: USF2
 targetDescription Encodes a member of the basic helix-loop-helix leucine zipper family. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs (5'-CACGTG-3').
 vendorName abcam
@@ -12496,6 +12622,7 @@ term USF2_(C-20)
 tag USF2b
 type Antibody
 target  USF2
+targetClass TFSS
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin.  Recommended for detection of USF-2 p44 of mouse, rat and human. Antibody Target:  USF2
 targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. Two transcript variants encoding distinct isoforms have been identified for this gene (RefSeq).
 vendorName Santa Cruz Biotech
@@ -12512,6 +12639,7 @@ term WHIP
 tag WHIP
 type Antibody
 target WHIP
+targetClass DNARep
 antibodyDescription Rabbit polyclonal; Immunogen:Synthetic peptide: SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WHIP
 targetDescription Interacts with the N-terminal portion of Werner protein containing the exonuclease domain, shows homology to replication factor C family proteins, and is conserved from E. coli to human. Studies in yeast suggest that this gene may influence the aging process. Functions as a modulator for initiation or reinitiation events during DNA polymerase delta-mediated DNA synthesis. Has an intrinsic ATPase activity that functions as a sensor of DNA damage or of arrested replication forks and regulates the extent of DNA synthesis.
 vendorName Abcam
@@ -12527,6 +12655,7 @@ term XRCC4
 tag XRCC4
 type Antibody
 target XRCC4
+targetClass DNARep
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
 antibodyDescription Rabbit polyclonal. Antibody Target: XRCC4
 orderUrl http://www.abcam.com/index.html?datasheet=145
@@ -12542,6 +12671,7 @@ term YY1
 tag YY1
 type Antibody
 target YY1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: YY1
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 vendorName Santa Cruz Biotech
@@ -12557,6 +12687,7 @@ term YY1_(SC-281)
 tag YY1SC281
 type Antibody
 target YY1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin. Antibody Target: YY1
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 vendorName Santa Cruz Biotech
@@ -12572,6 +12703,7 @@ term ZBTB33
 tag ZBTB33
 type Antibody
 target ZBTB33
+targetClass TFSS
 antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA. Antibody Target: ZBTB33
 targetDescription KAISO is a transcriptional regulator that binds, via its zinc fingers, to DNA sequences containing methylated CGCG or to the consensus KAISO-binding site (KBS) TCCTGCNA
 vendorName Santa Cruz Biotech
@@ -12587,6 +12719,7 @@ term ZBTB7A_(SC-34508)
 tag ZBTB7A
 type Antibody
 target  ZBTB7A
+targetClass TFSS
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of LRF of human origin. Antibody Target:  ZBTB7A
 targetDescription  Plays a key role in the instruction of early lymphoid progenitors to develop into B lineage by repressing T-cell instructive Notch signals (By similarity).
 vendorName Santa Cruz Biotech
@@ -12618,6 +12751,7 @@ term ZEB1_(SC-25388)
 tag ZEB1
 type Antibody
 target ZEB1
+targetClass TFSS
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin. Antibody Target: ZEB1
 targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq).
 vendorName Santa Cruz Biotech
@@ -12650,6 +12784,7 @@ term Znf143_(16618-1-AP)
 tag ZNF143
 type Antibody
 target Znf143
+targetClass TFSS
 antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein. Antibody Target: Znf143
 targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8
 vendorName Proteintech
@@ -12698,6 +12833,7 @@ tag ZNF263
 type Antibody
 target ZNF263
 targetDescription ZNF263 (NP_005732, 201 a.a. ~ 299 a.a) partial recombinant protein with GST tag.
+targetClass TFSS
 antibodyDescription Mouse polyclonal. Antibody Target: ZNF263
 vendorName Novus Biologicals
 vendorId H00010127-A01
@@ -12712,6 +12848,7 @@ term ZNF274
 tag ZNF274
 type Antibody
 target ZNF274
+targetClass TFSS
 antibodyDescription Mouse polyclonal antibody raised against a partial recombinant ZNF274 (GST-fusion of a.a.420-531 of human ZNF274 protein). Works in IP, WB and ELISA. Antibody Target: ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor. It localizes predominantly to the nucleolus.
 vendorName ABNOVA
@@ -12727,6 +12864,7 @@ label ZNF274 (H00010782-A01)
 term ZNF274_(M01)
 tag ZNF274M01
 type Antibody
+targetClass TFSS
 antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein). Antibody Target: ZNF274
 target ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
@@ -12759,6 +12897,7 @@ term ZZZ3
 tag ZZZ3
 type Antibody
 target ZZZ3
+targetClass TFSS
 antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/Tora
@@ -13102,6 +13241,7 @@ term Mxi1_(AF4185)
 tag MXI1
 type Antibody
 target Mxi1
+targetClass TFSS
 targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
 antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: Mxi1
 vendorName R&D Systems
@@ -16712,7 +16852,7 @@ cvDefined yes
 validate cv or control
 priority 190
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
-optionalVars label,validation,targetUrl,lots,deprecated
+optionalVars label,validation,targetUrl,lots,deprecated,tagetClass
 
 term attic
 tag ATTIC

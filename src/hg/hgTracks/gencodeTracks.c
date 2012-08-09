@@ -25,18 +25,6 @@ struct gencodeQuery
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
 };
 
-#if 0// FIXME
-/* function used to get hightlight color for an item */
-typedef Color (highlightFunc*)(struct highlightColoring coloring, struct linkedFeatures *lf);
-
-struct highlightColoring
-/* object that lets us try different coloring options. */
-{
-    Color color;                // constant color
-    highlightFunc highlighter;  // callback function to generate color
-}
-#endif
-
 static struct gencodeQuery *gencodeQueryNew(void)
 /* construct a new gencodeQuery object */
 {
@@ -79,20 +67,6 @@ static void gencodeQueryEndSubWhere(struct gencodeQuery *gencodeQuery)
 {
 dyStringAppend(gencodeQuery->where, ")");
 }
-
-#if 0 // FIXME
-static Color highlightColorConstant(struct highlightColoring coloring, struct linkedFeatures *lf)
-/* get a constant highlight color */
-{
-return coloring.color;
-}
-
-static Color highlightColorContrast(struct highlightColoring coloring, struct linkedFeatures *lf)
-/* get compute a highlight color that is high-contrast */
-{
-return coloring.color;
-}
-#endif
 
 static char *tslSymToNumStr(char *tslSym)
 /* convert a transcription support level string (tsl1..tsl5, tslN), to 
@@ -385,12 +359,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 gencodeQueryFree(&gencodeQuery);
+genePredAssignConfiguredName(tg);
 
 if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 else
     slReverse(&lfList);
 tg->items = lfList;
+genePredAssignConfiguredName(tg);
 }
 
 static char *gencodeGeneName(struct track *tg, void *item)
