@@ -8,14 +8,14 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.ra beta,public
-include wgEncodeGencodeV10.ra beta,public
-include wgEncodeGencodeV12.ra beta,public
+include wgEncodeGencodeV7.ra public
+include wgEncodeGencodeV10.ra public
+include wgEncodeGencodeV12.ra public
 
 # GENCODE trackDb changes in transition to public to support highlighting
-include wgEncodeGencodeV7.release3.ra alpha
-include wgEncodeGencodeV10.release3.ra alpha
-include wgEncodeGencodeV12.release3.ra alpha
+include wgEncodeGencodeV7.release3.ra alpha,beta
+include wgEncodeGencodeV10.release3.ra alpha,beta
+include wgEncodeGencodeV12.release3.ra alpha,beta
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra
@@ -112,8 +112,7 @@ include wgEncodeCshlShortRnaSeq.release3.ra
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.release3.ra public
-include wgEncodeCaltechRnaSeq.release4.ra alpha,beta
+include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.release2.ra beta,public
