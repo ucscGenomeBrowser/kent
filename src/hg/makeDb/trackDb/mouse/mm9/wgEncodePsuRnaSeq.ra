@@ -388,7 +388,7 @@ noInherit on
 
         track wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
-        shortLabel G1E-ER4 Ohr M 1
+        shortLabel G1E-ER4 0hr M 1
         longLabel G1E-ER4 Estradiol 0 hr 2x99D TC RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
         subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig -1764097.000000 -1.000000
