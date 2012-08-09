@@ -39,7 +39,6 @@ wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV9
 wgEncodeGencodeUniProt wgEncodeGencodeUniProtV9
 wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV9
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV9
 
     track wgEncodeGencodeV9ViewGenes
     shortLabel Genes
