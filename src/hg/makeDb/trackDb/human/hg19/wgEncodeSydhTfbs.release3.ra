@@ -588,12 +588,12 @@ html wgEncodeSydhTfbs.release3
         color 0,107,27
         # subId=2544 dateSubmitted=2010-10-20
 
-        #track wgEncodeSydhTfbsMcf10aesStat3TamStdPk
-        #parent wgEncodeSydhTfbsViewPeaks off
-        #shortLabel MCF1 TAM STA3 Std
-        #longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Peaks from ENCODE/SYDH
-        #subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=TAM
-        #type narrowPeak
+        track wgEncodeSydhTfbsMcf10aesStat3TamStdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel MCF1 TAM STA3 Std
+        longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=TAM
+        type narrowPeak
         # subId=2547 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesPol2TamStdPk
@@ -668,7 +668,7 @@ html wgEncodeSydhTfbs.release3
         #parent wgEncodeSydhTfbsViewPeaks off
         #shortLabel MCF1 Et12 STA3 Sd
         #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Peaks from ENCODE/SYDH
-        #subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #subGroups view=Peaks factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=ETOH01c
         #type narrowPeak
         # subId=3253 dateSubmitted=2011-01-14
 
@@ -1418,13 +1418,13 @@ html wgEncodeSydhTfbs.release3
         color 46,0,184
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsK562JundStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel K562 JunD Std
-        longLabel K562 JunD Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=JUND cellType=t1K562 control=STD treatment=aNONE
-        type narrowPeak
-        color 46,0,184
+        #track wgEncodeSydhTfbsK562JundStdPk
+        #parent wgEncodeSydhTfbsViewPeaks off
+        #shortLabel K562 JunD Std
+        #longLabel K562 JunD Standard ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=JUND cellType=t1K562 control=STD treatment=aNONE
+        #type narrowPeak
+        #color 46,0,184
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562MaxStdPk
@@ -4193,12 +4193,12 @@ html wgEncodeSydhTfbs.release3
         color 0,107,27
         # subId=2544 dateSubmitted=2010-10-20
 
-        #track wgEncodeSydhTfbsMcf10aesStat3TamStdSig
-        #parent wgEncodeSydhTfbsViewSignal off
-        #shortLabel MCF1 TAM STA3 Std
-        #longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Signal from ENCODE/SYDH
-        #subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=TAM
-        #type bigWig 1.000000 15726.000000
+        track wgEncodeSydhTfbsMcf10aesStat3TamStdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF1 TAM STA3 Std
+        longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=TAM
+        type bigWig 1.000000 15726.000000
         # subId=2547 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsMcf10aesPol2TamStdSig
@@ -5374,13 +5374,13 @@ html wgEncodeSydhTfbs.release3
         color 46,0,184
         # subId=3056 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsK562JundStdSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 JunD Std
-        longLabel K562 JunD Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=JUND cellType=t1K562 control=STD treatment=aNONE
-        type bigWig 0.000000 10844.400391
-        color 46,0,184
+        #track wgEncodeSydhTfbsK562JundStdSig
+        #parent wgEncodeSydhTfbsViewSignal off
+        #shortLabel K562 JunD Std
+        #longLabel K562 JunD Standard ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=JUND cellType=t1K562 control=STD treatment=aNONE
+        #type bigWig 0.000000 10844.400391
+        #color 46,0,184
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562MaxStdSig
@@ -5784,7 +5784,7 @@ html wgEncodeSydhTfbs.release3
         #parent wgEncodeSydhTfbsViewSignal off
         #shortLabel MCF1 Et12 STA3 Sd
         #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Signal from ENCODE/SYDH
-        #subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #subGroups view=Signal factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=ETOH01c
         #type bigWig 1.000000 12103.000000
         # subId=3253 dateSubmitted=2011-01-14
 
