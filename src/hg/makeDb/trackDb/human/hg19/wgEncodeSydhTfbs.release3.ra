@@ -592,7 +592,7 @@ html wgEncodeSydhTfbs.release3
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF1 TAM STA3 Std
         longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Peaks factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=TAM
         type narrowPeak
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -668,7 +668,7 @@ html wgEncodeSydhTfbs.release3
         #parent wgEncodeSydhTfbsViewPeaks off
         #shortLabel MCF1 Et12 STA3 Sd
         #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Peaks from ENCODE/SYDH
-        #subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #subGroups view=Peaks factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=ETOH01c
         #type narrowPeak
         # subId=3253 dateSubmitted=2011-01-14
 
@@ -4197,7 +4197,7 @@ html wgEncodeSydhTfbs.release3
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF1 TAM STA3 Std
         longLabel MCF10A STAT3 Standard 4-hydroxytamoxifen 36hr ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=TAM
+        subGroups view=Signal factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=TAM
         type bigWig 1.000000 15726.000000
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -5784,7 +5784,7 @@ html wgEncodeSydhTfbs.release3
         #parent wgEncodeSydhTfbsViewSignal off
         #shortLabel MCF1 Et12 STA3 Sd
         #longLabel MCF10A STAT3 Standard EtOH .01% 36h 12h ChIP-Seq Signal from ENCODE/SYDH
-        #subGroups view=Signal factor=STAT3 cellType=MCF10AES control=STD treatment=ETOH01c
+        #subGroups view=Signal factor=STAT3 cellType=t3MCF10AERSRC control=STD treatment=ETOH01c
         #type bigWig 1.000000 12103.000000
         # subId=3253 dateSubmitted=2011-01-14
 
