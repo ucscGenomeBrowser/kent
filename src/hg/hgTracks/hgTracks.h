@@ -1195,6 +1195,10 @@ void affyTxnPhase2Methods(struct track *track);
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
 
+void genePredAssignConfiguredName(struct track *tg);
+/* Set name on genePred in "extra" field to gene name, accession, or both,
+ * depending, on UI on all items in track */
+
 void loadGenePredWithConfiguredName(struct track *tg);
 /* Convert gene pred info in window to linked feature. Include name
  * in "extra" field (gene name, accession, or both, depending on UI) */
