@@ -2570,26 +2570,25 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way/geoFor1.
       /usr/local/apache/htdocs-hgdownload/goldenPath/geoFor1/phyloP7way
 
     ###########################################################################
-    ## create upstream refGene maf files XXX - there is no appropriate gene
-    ## track yet
-    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/maf
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/geoFor1/bed/multiz7way/downloads/multiz7way
     # bash script
 #!/bin/sh
+export geneTbl="xenoRefGene"
 for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
-    featureBits geoFor1 refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+    featureBits geoFor1 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
         | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
         | /cluster/bin/$MACHTYPE/mafFrags geoFor1 multiz7way \
                 stdin stdout \
                 -orgs=/hive/data/genomes/geoFor1/bed/multiz7way/species.list \
-        | gzip -c > upstream${S}.maf.gz
-    echo "done upstream${S}.maf.gz"
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    199m45.558s
+    #   real    7m22.875s
 
     md5sum *.nh *.maf.gz > md5sum.txt
-    #   real    27m59.778s
 
     # obtain the README.txt from mm10/multiz60way and update for this
     #   situation
