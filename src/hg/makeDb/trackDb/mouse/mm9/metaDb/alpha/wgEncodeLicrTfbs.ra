@@ -4792,7 +4792,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2
@@ -4852,7 +4852,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdPk
@@ -4943,7 +4943,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2
@@ -5004,7 +5004,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdSig
@@ -5123,7 +5123,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7040
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep1
@@ -5214,7 +5214,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7040
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdSig
@@ -5304,7 +5304,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2
@@ -5364,7 +5364,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdPk
@@ -5455,7 +5455,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2
@@ -5516,7 +5516,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig
@@ -8567,7 +8567,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7042
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -9044,7 +9044,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
@@ -9137,7 +9137,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -9199,7 +9199,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
@@ -9383,7 +9383,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7048
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
@@ -10666,7 +10666,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2
@@ -10726,7 +10726,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdPk
@@ -10817,7 +10817,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2
@@ -10878,7 +10878,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
@@ -10997,7 +10997,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7034
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep1
@@ -11088,7 +11088,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7034
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdSig
@@ -11178,7 +11178,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2
@@ -11238,7 +11238,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdPk
@@ -11329,7 +11329,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2
@@ -11390,7 +11390,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
